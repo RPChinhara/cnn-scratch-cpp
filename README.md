@@ -13,4 +13,8 @@ Dora is an AI project that aims to behave like a cat. Currently, it's just a sim
 git clone https://github.com/kaihugo/dora.git
 cd dora
 build.bat
+bin\dora.exe
 ```
+
+## License
+dora is licensed under a MIT License.
