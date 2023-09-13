@@ -3,10 +3,10 @@
 
 #include <cassert>
 
-Tensor clip_by_value(const Tensor& in, f32 clip_val_min, f32 clip_val_max) {
+Tensor clip_by_value(const Tensor& in, float clip_val_min, float clip_val_max) {
     assert(clip_val_min <= clip_val_max);
     Tensor out = in;
-    for (u32 i = 0; i < in._size; ++i) {
+    for (unsigned int i = 0; i < in._size; ++i) {
         if (in[i] < clip_val_min)
             out[i] = clip_val_min;
         else if (in[i] > clip_val_max)
@@ -15,10 +15,10 @@ Tensor clip_by_value(const Tensor& in, f32 clip_val_min, f32 clip_val_max) {
     return out;
 }
 
-Tensor slice(const Tensor& in, const u32 begin, const u32 size) {
+Tensor slice(const Tensor& in, const unsigned int begin, const unsigned int size) {
     Tensor out = Tensor( { 0.0f }, { size - begin, in._shape.back() });
-    u32 idx = 0;
-    for (u32 i = begin * in._shape.back(); i < in._shape.back() * size; ++i) {
+    unsigned int idx = 0;
+    for (unsigned int i = begin * in._shape.back(); i < in._shape.back() * size; ++i) {
         out[idx] = in[i];
         ++idx;
     }

@@ -7,9 +7,9 @@ Tensor categorical_crossentropy_prime(const Tensor& y_true, const Tensor& y_pred
     return (y_pred - y_true);
 }
 
-Tensor l1_prime(const f32 lambda, const Tensor& w) {
+Tensor l1_prime(const float lambda, const Tensor& w) {
     Tensor out = w;
-    for (u32 i = 0; i < w._size; ++i) {
+    for (unsigned int i = 0; i < w._size; ++i) {
         if (w[i] < 0.0f) 
             out[i] = -1.0f;
         else if (w[i] == 0.0f) 
@@ -20,7 +20,7 @@ Tensor l1_prime(const f32 lambda, const Tensor& w) {
     return lambda * out;
 }
 
-Tensor l2_prime(const f32 lambda, const Tensor& w) {
+Tensor l2_prime(const float lambda, const Tensor& w) {
     return lambda * w;
 }
 
@@ -31,7 +31,7 @@ Tensor mean_squared_error_prime(const Tensor& y_true, const Tensor& y_pred) {
 
 Tensor relu_prime(const Tensor& in) {
     Tensor out = in;
-    for (u32 i = 0; i < in._size; ++i) {
+    for (unsigned int i = 0; i < in._size; ++i) {
         if (in[i] < 0.0f)
             out[i] = 0.0f;
         else if (in[i] > 0.0f)

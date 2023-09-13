@@ -3,7 +3,7 @@
 
 #include <random>
 
-Tensor shuffle(const Tensor& in, const u32 random_state) {
+Tensor shuffle(const Tensor& in, const unsigned int random_state) {
     //   0   1   2   3 -> in_shape.back() - 1 x i + i + k = 0,  in_shape.back() - 1 x i + i + k = 1
     //   4   5   6   7 -> in_shape.back() - 1 x i + i + k = 4,  in_shape.back() - 1 x i + i + k = 5
     //   8   9  10  11 -> in_shape.back() - 1 x i + i + k = 8
@@ -17,10 +17,10 @@ Tensor shuffle(const Tensor& in, const u32 random_state) {
     Tensor out = in;
     std::mt19937 rng(random_state);
 
-    for (u32 i = in._shape.front() - 1; i > 0; --i) {
-        std::uniform_int_distribution<u32> dist(0, i);
-        u32 j = dist(rng);
-        for (u32 k = 0; k < in._shape.back(); ++k) {
+    for (unsigned int i = in._shape.front() - 1; i > 0; --i) {
+        std::uniform_int_distribution<unsigned int> dist(0, i);
+        unsigned int j = dist(rng);
+        for (unsigned int k = 0; k < in._shape.back(); ++k) {
             float temp = out[(in._shape.back() - 1) * i + i + k];
             out[(in._shape.back() - 1) * i + i + k] = out[(in._shape.back() - 1) * j + j + k];
             out[(in._shape.back() - 1) * j + j + k] = temp;

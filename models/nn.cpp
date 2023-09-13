@@ -22,17 +22,17 @@
 #define L1L2_REGULARIZATION_ENABLED     0
 #define MOMENTUM_ENABLED                0
 
-constexpr auto ACCURACY                                = &categorical_accuracy;
-constexpr u16 BATCH_SIZE                               = 8;
-constexpr u16 EPOCHS                                   = 100;
-[[maybe_unused]] constexpr f32 GRADIENT_CLIP_THRESHOLD = 8.0f;
-constexpr std::array<u16, 4> LAYERS                    = { 4, 32, 32, 3 };
-f32 LEARNING_RATE                                      = 0.01f;
-constexpr auto LOSS                                    = &categorical_crossentropy;
-[[maybe_unused]] constexpr f32 L1_LAMBDA               = 0.05f;
-[[maybe_unused]] constexpr f32 L2_LAMBDA               = 0.06f;
-[[maybe_unused]] constexpr f32 MOMENTUM                = 0.1f;
-[[maybe_unused]] constexpr u16 PATIENCE                = 12;
+constexpr auto ACCURACY                                  = &categorical_accuracy;
+constexpr unsigned short BATCH_SIZE                      = 8;
+constexpr unsigned short EPOCHS                          = 100;
+[[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
+constexpr std::array<unsigned short, 4> LAYERS           = { 4, 32, 32, 3 };
+float LEARNING_RATE                                      = 0.01f;
+constexpr auto LOSS                                      = &categorical_crossentropy;
+[[maybe_unused]] constexpr float L1_LAMBDA               = 0.05f;
+[[maybe_unused]] constexpr float L2_LAMBDA               = 0.06f;
+[[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
+[[maybe_unused]] constexpr unsigned short PATIENCE       = 12;
 
 using TensorArray = std::array<Tensor, LAYERS.size() - 1>;
 
@@ -40,7 +40,7 @@ TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const
     TensorArray z;
     TensorArray a;
 
-    for (u16 i = 0; i < LAYERS.size() - 1; ++i) {
+    for (unsigned short i = 0; i < LAYERS.size() - 1; ++i) {
         if (i == 0) {
             z[i] = (matmul(input, w[i]) + b[i]);
             a[i] = (relu(z[i]));
@@ -60,7 +60,7 @@ std::pair<TensorArray, TensorArray> init_parameters() {
     TensorArray w;
     TensorArray b;
 
-    for (u32 i = 0; i < LAYERS.size() - 1; ++i) {
+    for (unsigned int i = 0; i < LAYERS.size() - 1; ++i) {
         w[i] = normal_distribution({ LAYERS[i], LAYERS[i + 1] }, 0.0f, 2.0f);
         b[i] = zeros({ 1, LAYERS[i + 1] });
     }
@@ -115,7 +115,7 @@ int main() {
 
     // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
     // TODO: Use cross-validation technique?
-    for (u16 i = 1; i <= EPOCHS; ++i) {
+    for (unsigned short i = 1; i <= EPOCHS; ++i) {
         #if LEARNING_RATE_SCHEDULER_ENABLED
             if (i > 10 && i < 20)
                 LEARNING_RATE = 0.009f;
@@ -134,7 +134,7 @@ int main() {
         TensorArray  a;
 
         // TODO: For loop used for mimi batch gradient process multiple examples in parallel utilizing GPUs. That's the main reason facilitating mini-batch training (use std::thread).
-        for (u32 j = 0; j < train_temp.x_first._shape.front(); j += BATCH_SIZE) {
+        for (unsigned int j = 0; j < train_temp.x_first._shape.front(); j += BATCH_SIZE) {
             Tensor x_batch = slice(x_shuffled, j, j + BATCH_SIZE);
             y_batch        = slice(y_shuffled, j, j + BATCH_SIZE);
 
@@ -145,7 +145,7 @@ int main() {
 
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-            for (u16 i = LAYERS.size() - 1; 0 < i; --i) {
+            for (unsigned short i = LAYERS.size() - 1; 0 < i; --i) {
                 if (i == LAYERS.size() - 1)
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
@@ -154,25 +154,25 @@ int main() {
                 // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
 
-            for (u16 i = LAYERS.size() - 1; 0 < i; --i) {
+            for (unsigned short i = LAYERS.size() - 1; 0 < i; --i) {
                 if (i == 1)
                     dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
                 else
                     dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
             }
 
-            for (u16 i = 0; i < LAYERS.size() - 1; ++i) {
+            for (unsigned short i = 0; i < LAYERS.size() - 1; ++i) {
                 dl_db.push_back(sum(dl_dz[i], 0));
             }
 
             #if GRADIENT_CLIPPING_ENABLED
-                for (u16 i = 0; i < LAYERS.size() - 1; ++i) {
+                for (unsigned short i = 0; i < LAYERS.size() - 1; ++i) {
                     dl_dw[i] = clip_by_value(dl_dw[i], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
                     dl_db[i] = clip_by_value(dl_db[i], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
                 }
             #endif
 
-            for (s16 i = LAYERS.size() - 2; 0 <= i; --i) {
+            for (short i = LAYERS.size() - 2; 0 <= i; --i) {
                 w[i] -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
                 b[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
             }
@@ -225,7 +225,7 @@ int main() {
                 b_m[0] = MOMENTUM * b_m[0] - LEARNING_RATE * dl_db1;
 
                 #if 1 // Standard
-                    for (s16 i = LAYERS.size() - 2; 0 <= i; --i) {
+                    for (short i = LAYERS.size() - 2; 0 <= i; --i) {
                         w[i] += w_m[i];
                         b[i] += b_m[i];
                     }
@@ -262,8 +262,8 @@ int main() {
 
         // TODO: It seems like early stopping is legit regularization so it might be wise to write this function in regularizer files.
         #if EARLY_STOPPING_ENABLED
-            static u16 epochs_without_improvement = 0;
-            static f32 best_val_loss = std::numeric_limits<f32>::max();
+            static unsigned short epochs_without_improvement = 0;
+            static float best_val_loss = std::numeric_limits<float>::max();
 
             if (LOSS(val_test.y_first, a.back()) < best_val_loss) {
                 best_val_loss = LOSS(val_test.y_first, a.back());

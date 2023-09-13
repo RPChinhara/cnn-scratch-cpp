@@ -11,7 +11,7 @@ Tensor relu(const Tensor& in) {
 
 Tensor sigmoid(const Tensor& in) {
     Tensor out = in;
-    for (u32 i = 0; i < in._size; ++i)
+    for (unsigned int i = 0; i < in._size; ++i)
         out[i] = 1.0f / (1.0f + std::expf(-in[i]));
     return out;
 }
@@ -23,7 +23,7 @@ Tensor softmax(const Tensor& in) {
 
 Tensor softplus(const Tensor& in) {
     Tensor out = in;
-    for (u32 i = 0; i < in._size; ++i)
+    for (unsigned int i = 0; i < in._size; ++i)
         out[i] = std::logf(std::expf(in[i]) + 1.0f);
     return out;
 }

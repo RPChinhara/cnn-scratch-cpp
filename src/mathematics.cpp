@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-static constexpr s32 NUM_PROCS = 128 + (32 * 1);
+static constexpr int NUM_PROCS = 128 + (32 * 1);
 
 static void chk_cuda(cudaError_t code, const bool abort = true) {
    if (code != cudaSuccess) {
@@ -16,12 +16,12 @@ static void chk_cuda(cudaError_t code, const bool abort = true) {
 
 Tensor argmax(const Tensor& in) {
 	Tensor out  = Tensor({ 0.0f }, { in._shape.front() });
-	u16 idx     = 0;
-	f32 max     = std::numeric_limits<f32>::lowest();
-	u32 max_idx = 0;
+	unsigned short idx     = 0;
+	float max     = std::numeric_limits<float>::lowest();
+	unsigned int max_idx = 0;
 	
-	for (u32 i = 0; i < in._shape.front(); ++i) {
-		for (u32 j = 0; j < in._shape.back(); ++j) {
+	for (unsigned int i = 0; i < in._shape.front(); ++i) {
+		for (unsigned int j = 0; j < in._shape.back(); ++j) {
 			if (in[idx] > max) {
 				max     = in[idx];
 				max_idx = j;
@@ -29,19 +29,19 @@ Tensor argmax(const Tensor& in) {
 			++idx;
 		}
 		out[i] = max_idx;
-		max = std::numeric_limits<f32>::lowest();
+		max = std::numeric_limits<float>::lowest();
 	}
 	return out;
 }
 
 Tensor exp(const Tensor& in) {
-	f32 **in_out = new f32*[sizeof(f32 *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(f32) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(f32) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(f32) * in._size, cudaMemcpyHostToDevice));
+	float **in_out = new float*[sizeof(float *) * 2];
+	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	exp<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(f32) * in._size, cudaMemcpyDeviceToHost));
+	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
@@ -49,28 +49,28 @@ Tensor exp(const Tensor& in) {
 }
 
 Tensor log(const Tensor& in) {
-	f32 **in_out = new f32*[sizeof(f32 *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(f32) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(f32) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(f32) * in._size, cudaMemcpyHostToDevice));
+	float **in_out = new float*[sizeof(float *) * 2];
+	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	log<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(f32) * in._size, cudaMemcpyDeviceToHost));
+	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
 	return out;
 }
 
-Tensor max(const Tensor& in, const u16 axis) {
+Tensor max(const Tensor& in, const unsigned short axis) {
 	assert(axis == 0 || axis == 1);
 	Tensor out;
 	if (axis == 0) {
 		out = Tensor({ 0.0f }, { 1, in._shape.back()});
-		for (u16 i = 0; i < in._shape.back(); ++i) {
-			u16 idx = i;
-			f32 max = std::numeric_limits<f32>::lowest();
-			for (u16 j = 0; j < in._shape.front(); ++j) {
+		for (unsigned short i = 0; i < in._shape.back(); ++i) {
+			unsigned short idx = i;
+			float max = std::numeric_limits<float>::lowest();
+			for (unsigned short j = 0; j < in._shape.front(); ++j) {
 				if (in[idx] > max) 
 					max = in[idx];
 				idx += in._shape.back();
@@ -79,10 +79,10 @@ Tensor max(const Tensor& in, const u16 axis) {
 		}
 	} else if (axis == 1) {
 		out = Tensor({ 0.0f }, { in._shape.front(), 1});
-		u16 idx = 0;
-		for (u16 i = 0; i < in._shape.front(); ++i) {
-			f32 max = std::numeric_limits<f32>::lowest();
-			for (u16 j = 0; j < in._shape.back(); ++j) {
+		unsigned short idx = 0;
+		for (unsigned short i = 0; i < in._shape.front(); ++i) {
+			float max = std::numeric_limits<float>::lowest();
+			for (unsigned short j = 0; j < in._shape.back(); ++j) {
 				if (in[idx] > max) 
 					max = in[idx];
 				++idx;
@@ -94,15 +94,15 @@ Tensor max(const Tensor& in, const u16 axis) {
 }
 
 Tensor maximum(const Tensor& in1, const Tensor& in2) {
-	f32 **in_out = new f32*[sizeof(f32 *) * 3];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(f32) * in1._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(f32) * in1._size));
-	chk_cuda(cudaMalloc((void**) &in_out[2], sizeof(f32) * in1._size));
-	chk_cuda(cudaMemcpy(in_out[0], in1._elem, sizeof(f32) * in1._size, cudaMemcpyHostToDevice));
-	chk_cuda(cudaMemcpy(in_out[1], in2._elem, sizeof(f32) * in1._size, cudaMemcpyHostToDevice));
+	float **in_out = new float*[sizeof(float *) * 3];
+	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in1._size));
+	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in1._size));
+	chk_cuda(cudaMalloc((void**) &in_out[2], sizeof(float) * in1._size));
+	chk_cuda(cudaMemcpy(in_out[0], in1._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice));
+	chk_cuda(cudaMemcpy(in_out[1], in2._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice));
 	maximum<<<in1._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in_out[2], in1._size);
 	Tensor out = in1;
-	chk_cuda(cudaMemcpy(out._elem, in_out[2], sizeof(f32) * in1._size, cudaMemcpyDeviceToHost));
+	chk_cuda(cudaMemcpy(out._elem, in_out[2], sizeof(float) * in1._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
 	cudaFree(in_out[2]);
@@ -116,10 +116,10 @@ Tensor mean(const Tensor& in) {
 
 Tensor min(const Tensor& in) {
 	Tensor out = Tensor({ 0.0f }, { 1, in._shape.back() });
-	for (u16 i = 0; i < in._shape.back(); ++i) {
-		u16 idx = i;
-		f32 min = std::numeric_limits<f32>::max();
-		for (u16 j = 0; j < in._shape.front(); ++j) {
+	for (unsigned short i = 0; i < in._shape.back(); ++i) {
+		unsigned short idx = i;
+		float min = std::numeric_limits<float>::max();
+		for (unsigned short j = 0; j < in._shape.front(); ++j) {
 			if (in[idx] < min) 
 				min = in[idx];
 			idx += in._shape.back();
@@ -130,20 +130,20 @@ Tensor min(const Tensor& in) {
 }
 
 Tensor square(const Tensor& in) {
-	f32 **in_out = new f32*[sizeof(f32 *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(f32) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(f32) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(f32) * in._size, cudaMemcpyHostToDevice));
+	float **in_out = new float*[sizeof(float *) * 2];
+	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	square<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(f32) * in._size, cudaMemcpyDeviceToHost));
+	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
 	return out;
 }
 
-Tensor sum(const Tensor& in, const u16 axis) {
+Tensor sum(const Tensor& in, const unsigned short axis) {
     // TODO: Add a feature that it can take None like axis = None like np.sum?
 
 	assert(axis == 0 || axis == 1);
@@ -154,7 +154,7 @@ Tensor sum(const Tensor& in, const u16 axis) {
 		} else if (axis == 1) {
 			out = Tensor({ 0.0f }, { 1, 1 });
 			float sum = 0.0f;
-			for (u32 i = 0; i < in._size; ++i) {
+			for (unsigned int i = 0; i < in._size; ++i) {
 				sum += in[i];
 			}
 			out[0] = sum;
@@ -162,18 +162,18 @@ Tensor sum(const Tensor& in, const u16 axis) {
 	} else {
 		if (axis == 0) {
 			out = Tensor({ 0.0f }, { 1, in._shape.back() });
-			for (u32 i = 0; i < in._shape.back(); ++i) {
-				u16 idx = i;
-				for (u32 j = 0; j < in._shape.front(); ++j) {
+			for (unsigned int i = 0; i < in._shape.back(); ++i) {
+				unsigned short idx = i;
+				for (unsigned int j = 0; j < in._shape.front(); ++j) {
 					out[i] += in[idx];
 					idx += in._shape.back();
 				}
 			}
 		} else if (axis == 1) {
 			out = Tensor({ 0.0f }, { in._shape.front(), 1 });
-			u16 idx = 0;
-			for (u32 i = 0; i < in._shape.front(); ++i) {
-				for (u32 j = 0; j < in._shape.back(); ++j) {
+			unsigned short idx = 0;
+			for (unsigned int i = 0; i < in._shape.front(); ++i) {
+				for (unsigned int j = 0; j < in._shape.back(); ++j) {
 					out[i] += in[idx];
 					++idx;
 				}
