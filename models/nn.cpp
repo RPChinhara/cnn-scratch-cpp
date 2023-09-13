@@ -152,10 +152,27 @@ int main() {
             }
 
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
-                if (i == 1)
-                    dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
-                else
-                    dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
+                #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
+                    if (i == 1)
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]));
+                    else
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]));
+                #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
+                    if (i == 1)
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[0]));
+                    else
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[i - 1]));
+                #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
+                    if (i == 1)
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0]));
+                    else
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]) + l2_prime(L2_LAMBDA, w[i - 1]));
+                #else
+                    if (i == 1)
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
+                    else
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
+                #endif
             }
 
             for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
@@ -286,7 +303,7 @@ int main() {
             }
 
             if (epochs_without_improvement >= PATIENCE) {
-                std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << PATIENCE << " epochs." << std::endl;
+                std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << static_cast<unsigned short>(PATIENCE) << " epochs." << std::endl;
                 break;
             }
         #endif
