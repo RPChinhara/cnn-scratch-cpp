@@ -50,10 +50,10 @@ TrainTest train_test_split(const Tensor x, const Tensor y, const float test_size
     Tensor new_y = shuffle(y, random_state);
 
     TrainTest train_test;
-    train_test.x_first = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * (1.0 - test_size))), x._shape.back() });
-    train_test.x_second  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * test_size)), x._shape.back() });
-    train_test.y_first = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y._shape.front() * (1.0 - test_size))), y._shape.back() });
-    train_test.y_second  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y._shape.front() * test_size)), y._shape.back() });
+    train_test.x_first  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * (1.0 - test_size))), x._shape.back() });
+    train_test.x_second = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * test_size)), x._shape.back() });
+    train_test.y_first  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y._shape.front() * (1.0 - test_size))), y._shape.back() });
+    train_test.y_second = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y._shape.front() * test_size)), y._shape.back() });
 
     for (unsigned int i = 0; i < train_test.x_first._size; ++i)
         train_test.x_first[i] = new_x[i];

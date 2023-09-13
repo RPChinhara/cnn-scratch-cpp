@@ -16,8 +16,8 @@ static void chk_cuda(cudaError_t code, const bool abort = true) {
 
 Tensor argmax(const Tensor& in) {
 	Tensor out  = Tensor({ 0.0f }, { in._shape.front() });
-	unsigned short idx     = 0;
-	float max     = std::numeric_limits<float>::lowest();
+	unsigned short idx = 0;
+	float max = std::numeric_limits<float>::lowest();
 	unsigned int max_idx = 0;
 	
 	for (unsigned int i = 0; i < in._shape.front(); ++i) {
