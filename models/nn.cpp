@@ -26,13 +26,13 @@ constexpr auto ACCURACY                                  = &categorical_accuracy
 constexpr unsigned short BATCH_SIZE                      = 8;
 constexpr unsigned short EPOCHS                          = 100;
 [[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
-constexpr std::array<unsigned short, 4> LAYERS           = { 4, 32, 32, 3 };
+constexpr std::array<unsigned char, 4> LAYERS            = { 4, 32, 32, 3 };
 float LEARNING_RATE                                      = 0.01f;
 constexpr auto LOSS                                      = &categorical_crossentropy;
 [[maybe_unused]] constexpr float L1_LAMBDA               = 0.05f;
 [[maybe_unused]] constexpr float L2_LAMBDA               = 0.06f;
 [[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
-[[maybe_unused]] constexpr unsigned short PATIENCE       = 12;
+[[maybe_unused]] constexpr unsigned char PATIENCE        = 12;
 
 using TensorArray = std::array<Tensor, LAYERS.size() - 1>;
 
@@ -40,7 +40,7 @@ TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const
     TensorArray z;
     TensorArray a;
 
-    for (unsigned short i = 0; i < LAYERS.size() - 1; ++i) {
+    for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
         if (i == 0) {
             z[i] = (matmul(input, w[i]) + b[i]);
             a[i] = (relu(z[i]));
@@ -145,7 +145,7 @@ int main() {
 
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-            for (unsigned short i = LAYERS.size() - 1; 0 < i; --i) {
+            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
                 if (i == LAYERS.size() - 1)
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
@@ -154,25 +154,25 @@ int main() {
                 // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
 
-            for (unsigned short i = LAYERS.size() - 1; 0 < i; --i) {
+            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
                 if (i == 1)
                     dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
                 else
                     dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
             }
 
-            for (unsigned short i = 0; i < LAYERS.size() - 1; ++i) {
+            for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
                 dl_db.push_back(sum(dl_dz[i], 0));
             }
 
             #if GRADIENT_CLIPPING_ENABLED
-                for (unsigned short i = 0; i < LAYERS.size() - 1; ++i) {
+                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
                     dl_dw[i] = clip_by_value(dl_dw[i], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
                     dl_db[i] = clip_by_value(dl_db[i], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
                 }
             #endif
 
-            for (short i = LAYERS.size() - 2; 0 <= i; --i) {
+            for (char i = LAYERS.size() - 2; 0 <= i; --i) {
                 w[i] -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
                 b[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
             }
@@ -262,7 +262,7 @@ int main() {
 
         // TODO: It seems like early stopping is legit regularization so it might be wise to write this function in regularizer files.
         #if EARLY_STOPPING_ENABLED
-            static unsigned short epochs_without_improvement = 0;
+            static unsigned char epochs_without_improvement = 0;
             static float best_val_loss = std::numeric_limits<float>::max();
 
             if (LOSS(val_test.y_first, a.back()) < best_val_loss) {
