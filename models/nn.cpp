@@ -15,12 +15,12 @@
 #include <random>
 
 #define EARLY_STOPPING_ENABLED          1
-#define GRADIENT_CLIPPING_ENABLED       0
+#define GRADIENT_CLIPPING_ENABLED       1
 #define LEARNING_RATE_SCHEDULER_ENABLED 1
 #define L1_REGULARIZATION_ENABLED       0
 #define L2_REGULARIZATION_ENABLED       0
 #define L1L2_REGULARIZATION_ENABLED     0
-#define MOMENTUM_ENABLED                0
+#define MOMENTUM_ENABLED                1
 
 constexpr auto ACCURACY                                  = &categorical_accuracy;
 constexpr unsigned short BATCH_SIZE                      = 8;
@@ -117,12 +117,9 @@ int main() {
     // TODO: Use cross-validation technique?
     for (unsigned short i = 1; i <= EPOCHS; ++i) {
         #if LEARNING_RATE_SCHEDULER_ENABLED
-            if (i > 10 && i < 20)
-                LEARNING_RATE = 0.009f;
-            else if (i > 20 && i < 30)
-                LEARNING_RATE = 0.005f;
-            else
-                LEARNING_RATE = 0.001f;
+            if (i > 10 && i < 20)      LEARNING_RATE = 0.009f;
+            else if (i > 20 && i < 30) LEARNING_RATE = 0.005f;
+            else                       LEARNING_RATE = 0.001f;
         #endif
 
         std::random_device rd;
@@ -172,10 +169,26 @@ int main() {
                 }
             #endif
 
-            for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                w[i] -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
-                b[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
-            }
+            #if MOMENTUM_ENABLED
+                for (char i = LAYERS.size() - 2; 0 <= i; --i) {
+                    w_m[i] = MOMENTUM * w_m[i] - LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
+                    b_m[i] = MOMENTUM * b_m[i] - LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
+                }
+
+                #if 1 // Standard
+                    for (char i = LAYERS.size() - 2; 0 <= i; --i) {
+                        w[i] += w_m[i];
+                        b[i] += b_m[i];
+                    }
+                #else // Nesterov
+                    // TODO: Handle nestrov for momentum.
+                #endif
+            #else
+                for (char i = LAYERS.size() - 2; 0 <= i; --i) {
+                    w[i] -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
+                    b[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
+                }
+            #endif
 
            /* Tensor dl_dz3 = categorical_crossentropy_prime(y_batch, a.back()); // dl/dz3 = dl/dy dy/dz3
             Tensor dl_dz2 = matmul(dl_dz3, w[2].T()) * relu_prime(a[1]); // dl/dz2 = dl_dz3 dz3/da2 da2/z2
