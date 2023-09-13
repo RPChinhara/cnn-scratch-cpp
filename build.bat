@@ -1,7 +1,8 @@
 @echo off
 set NVCC=nvcc
-set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++17 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Ox -Xcompiler /Z7
-set SRC=..\src\activations.cpp ^
+set FLAGS=-I ..\src -o model -arch sm_75 --optimize 3 -std c++17 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Ox -Xcompiler /Z7
+set SRC=..\models\nn.cpp ^
+        ..\src\activations.cpp ^
         ..\src\arrays.cpp ^
         ..\src\datasets.cpp ^
         ..\src\derivatives.cpp ^
@@ -9,7 +10,6 @@ set SRC=..\src\activations.cpp ^
         ..\src\kernels.cpp ^
         ..\src\linalg.cpp ^
         ..\src\losses.cpp ^
-        ..\src\main.cpp ^
         ..\src\mathematics.cpp ^
         ..\src\metrics.cpp ^
         ..\src\preprocessing.cpp ^

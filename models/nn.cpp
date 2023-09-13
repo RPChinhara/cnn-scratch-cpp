@@ -90,11 +90,7 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
     }
 }
 
-int main() {
-    // load_cifar10();
-    // TODO: I could try datsets like Air Quality.
-    // AirPassengers air_passengers = load_air_passengers();
-    
+int main() { 
     Iris iris            = load_iris();
     Tensor x             = iris.features;
     Tensor y             = iris.target;
