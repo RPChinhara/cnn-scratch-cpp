@@ -142,14 +142,20 @@ int main() {
 
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
-                if (i == LAYERS.size() - 1)
-                    dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
-                else
+            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {                     // dl/dz3 = dl/dy dy/dz3
+                if (i == LAYERS.size() - 1)                                             // dl/dz2 = dl_dz3 dz3/da2 da2/z2
+                    dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back())); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
+                else {
+                    std::cout << i << std::endl;
                     dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - i], w[i].T()) * relu_prime(a[i - 1]));
+                }
 
                 // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
+
+            Tensor dl_dz3 = categorical_crossentropy_prime(y_batch, a.back()); // dl/dz3 = dl/dy dy/dz3
+            Tensor dl_dz2 = matmul(dl_dz3, w[2].T()) * relu_prime(a[1]); // dl/dz2 = dl_dz3 dz3/da2 da2/z2
+            Tensor dl_dz1 = matmul(dl_dz2, w[1].T()) * relu_prime(a[0]); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
 
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
                 #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
@@ -175,9 +181,9 @@ int main() {
                 #endif
             }
 
-            for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
-                dl_db.push_back(sum(dl_dz[i], 0));
-            }
+            for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) { // dl/db3 = dl_dz3 dz3/b3
+                dl_db.push_back(sum(dl_dz[i], 0));                  // dl/db2 = dl_dz2 dz2/b2
+            }                                                       // dl/db1 = dl_dz1 dz1/b1
 
             #if GRADIENT_CLIPPING_ENABLED
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
@@ -186,6 +192,8 @@ int main() {
                 }
             #endif
 
+            // TODO: Don't I have to add regularizer for the biases as well like tf.keras.layers.Dense does?
+            // TODO: What is kernel_constraint and bias_constraint?
             #if !MOMENTUM_ENABLED
                 for (char i = LAYERS.size() - 2; 0 <= i; --i) {
                     w[i] -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
@@ -207,10 +215,7 @@ int main() {
                 #endif
             #endif
 
-           /* Tensor dl_dz3 = categorical_crossentropy_prime(y_batch, a.back()); // dl/dz3 = dl/dy dy/dz3
-            Tensor dl_dz2 = matmul(dl_dz3, w[2].T()) * relu_prime(a[1]); // dl/dz2 = dl_dz3 dz3/da2 da2/z2
-            Tensor dl_dz1 = matmul(dl_dz2, w[1].T()) * relu_prime(a[0]); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
-
+           /* 
             #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                 Tensor dl_dw3 = matmul(a[1].T(), dl_dz3) + l1_prime(L1_LAMBDA, w.back()); // dl/dw3 = d/w3 (categorical_crossentropy) + d/w3 (l1) = dl_dz3 dz3/dw3 + dl1/w3
                 Tensor dl_dw2 = matmul(a[0].T(), dl_dz2) + l1_prime(L1_LAMBDA, w[1]); // dl/dw2 = d/w2 (categorical_crossentropy) + d/w2 (l1) = dl_dz2 dz2/dw2 + dl1/w2
@@ -228,51 +233,8 @@ int main() {
                 Tensor dl_dw2 = matmul(a[0].T(), dl_dz2); // dl/dw2 = dl_dz2 dz2/dw2
                 Tensor dl_dw1 = matmul(x_batch.T(), dl_dz1); // dl/dw1 = dl_dz1 dz1/dw1
             #endif
-
-            Tensor dl_db3 = sum(dl_dz3, 0); // dl/db3 = d/b3 (categorical_crossentropy) = dl_dz3 dz3/b3
-            Tensor dl_db2 = sum(dl_dz2, 0); // dl/db2 = d/b2 (categorical_crossentropy) = dl_dz2 dz2/b2
-            Tensor dl_db1 = sum(dl_dz1, 0); // dl/db1 = d/b1 (categorical_crossentropy) = dl_dz1 dz1/b1
-
-            #if GRADIENT_CLIPPING_ENABLED
-                dl_dw3 = clip_by_value(dl_dw3, -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                dl_dw2 = clip_by_value(dl_dw2, -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                dl_dw1 = clip_by_value(dl_dw1, -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-
-                dl_db3 = clip_by_value(dl_db3, -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                dl_db2 = clip_by_value(dl_db2, -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                dl_db1 = clip_by_value(dl_db1, -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-            #endif
-
-            // TODO: Don't I have to add regularizer for the biases as well like tf.keras.layers.Dense does?
-            // TODO: What is kernel_constraint and bias_constraint?
-            #if MOMENTUM_ENABLED
-                w_m[2] = MOMENTUM * w_m[2] - LEARNING_RATE * dl_dw3;
-                w_m[1] = MOMENTUM * w_m[1] - LEARNING_RATE * dl_dw2;
-                w_m[0] = MOMENTUM * w_m[0] - LEARNING_RATE * dl_dw1;
-
-                b_m[2] = MOMENTUM * b_m[2] - LEARNING_RATE * dl_db3;
-                b_m[1] = MOMENTUM * b_m[1] - LEARNING_RATE * dl_db2;
-                b_m[0] = MOMENTUM * b_m[0] - LEARNING_RATE * dl_db1;
-
-                #if 1 // Standard
-                    for (short i = LAYERS.size() - 2; 0 <= i; --i) {
-                        w[i] += w_m[i];
-                        b[i] += b_m[i];
-                    }
-                #endif
-
-                // TODO: Handle nestrov for momentum.
-                #if 0 // Nesterov
-                #endif
-            #else
-                w[2] -= LEARNING_RATE * dl_dw3;
-                w[1] -= LEARNING_RATE * dl_dw2;
-                w[0] -= LEARNING_RATE * dl_dw1;
-
-                b[2] -= LEARNING_RATE * dl_db3;
-                b[1] -= LEARNING_RATE * dl_db2;
-                b[0] -= LEARNING_RATE * dl_db1;
-            #endif*/
+           
+            */
         }
 
         #define LOG_EPOCH(i, EPOCHS) std::cout << "Epoch " << (i) << "/" << (EPOCHS)
