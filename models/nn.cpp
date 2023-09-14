@@ -17,9 +17,9 @@
 #define EARLY_STOPPING_ENABLED          1
 #define GRADIENT_CLIPPING_ENABLED       1
 #define LEARNING_RATE_SCHEDULER_ENABLED 1
-#define L1_REGULARIZATION_ENABLED       1
+#define L1_REGULARIZATION_ENABLED       0
 #define L2_REGULARIZATION_ENABLED       0
-#define L1L2_REGULARIZATION_ENABLED     0
+#define L1L2_REGULARIZATION_ENABLED     1
 #define MOMENTUM_ENABLED                1
 
 constexpr auto ACCURACY                                  = &categorical_accuracy;
@@ -102,15 +102,9 @@ int main() {
     val_test.x_first   = min_max_scaler(val_test.x_first);
     val_test.x_second  = min_max_scaler(val_test.x_second);
 
-    // TODO: Maybe use w_b.first and w_b.second directly rather than copy into w and b?
     auto w_b = init_parameters();
-    TensorArray w = w_b.first;
-    TensorArray b = w_b.second;
-
     #if MOMENTUM_ENABLED
         auto w_b_m = init_parameters();
-        TensorArray w_m = w_b_m.first;
-        TensorArray b_m = w_b_m.second;
     #endif
 
     // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
@@ -136,7 +130,7 @@ int main() {
             y_batch        = slice(y_shuffled, j, j + BATCH_SIZE);
 
             // regularizer::dropout(0.1f, x);
-            a = forward_propagation(x_batch, w, b);
+            a = forward_propagation(x_batch, w_b.first, w_b.second);
 
             // TODO: Implement Adam and AdamW.
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
@@ -149,7 +143,7 @@ int main() {
                 if (i == LAYERS.size() - 1)
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - i], w[i].T()) * relu_prime(a[i - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - i], w_b.first[i].T()) * relu_prime(a[i - 1]));
 
                 // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
@@ -160,21 +154,21 @@ int main() {
                 // dl/dw1 = dl_dz1 dz1/dw1 (+ dl1/w1 or + dl2/w1 or + dl1/w1 + dl2/w1)
                 if (i == 1) {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[0]));
                     #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w_b.first[0]));
                     #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[0]) + l2_prime(L2_LAMBDA, w_b.first[0]));
                     #else
                         dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
                     #endif
                 } else {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]));
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[i - 1]));
                     #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[i - 1]));
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w_b.first[i - 1]));
                     #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]) + l2_prime(L2_LAMBDA, w[i - 1]));
+                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[i - 1]) + l2_prime(L2_LAMBDA, w_b.first[i - 1]));
                     #else
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
                     #endif
@@ -199,19 +193,19 @@ int main() {
             // TODO: What is kernel_constraint and bias_constraint?
             #if !MOMENTUM_ENABLED
                 for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                    w[i] -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
-                    b[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
+                    w_b.first[i]  -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
+                    w_b.second[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
                 }
             #else
                 for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                    w_m[i] = MOMENTUM * w_m[i] - LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
-                    b_m[i] = MOMENTUM * b_m[i] - LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
+                    w_b_m.first[i]  = MOMENTUM * w_b_m.first[i] - LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
+                    w_b_m.second[i] = MOMENTUM * w_b_m.second[i] - LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
                 }
 
                 #if 1 // Standard
                     for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                        w[i] += w_m[i];
-                        b[i] += b_m[i];
+                        w_b.first[i]  += w_b_m.first[i];
+                        w_b.second[i] += w_b_m.second[i];
                     }
                 #else // Nesterov
                     // TODO: Handle nestrov for momentum.
@@ -223,13 +217,13 @@ int main() {
 
         #if L1_REGULARIZATION_ENABLED || L2_REGULARIZATION_ENABLED || L1L2_REGULARIZATION_ENABLED
             LOG_EPOCH(i, EPOCHS);
-            log_metrics("training", y_batch, a.back(), &w);
+            log_metrics("training", y_batch, a.back(), &w_b.first);
         #else
             LOG_EPOCH(i, EPOCHS);
             log_metrics("training", y_batch, a.back());
         #endif
 
-        a = forward_propagation(val_test.x_first, w, b);
+        a = forward_propagation(val_test.x_first, w_b.first, w_b.second);
 
         log_metrics("val", val_test.y_first, a.back());
         std::cout << std::endl;
@@ -253,7 +247,7 @@ int main() {
         #endif
     }
 
-    auto a = forward_propagation(val_test.x_second, w, b);
+    auto a = forward_propagation(val_test.x_second, w_b.first, w_b.second);
 
     std::cout << std::endl;
     log_metrics("test", val_test.y_second, a.back());
