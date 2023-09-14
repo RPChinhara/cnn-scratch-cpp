@@ -141,7 +141,7 @@ int main() {
             // TODO: Implement Adam and AdamW.
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {                     // dl/dz3 = dl/dy dy/dz3
+            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {                     // dl/dz3 = dl/dy dy/dz3 // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
                 if (i == LAYERS.size() - 1)                                             // dl/dz2 = dl_dz3 dz3/da2 da2/z2
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back())); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
                 else
