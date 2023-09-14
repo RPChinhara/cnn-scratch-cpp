@@ -145,38 +145,32 @@ int main() {
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {                     // dl/dz3 = dl/dy dy/dz3
                 if (i == LAYERS.size() - 1)                                             // dl/dz2 = dl_dz3 dz3/da2 da2/z2
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back())); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
-                else {
-                    std::cout << i << std::endl;
+                else
                     dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - i], w[i].T()) * relu_prime(a[i - 1]));
-                }
 
                 // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
 
-            Tensor dl_dz3 = categorical_crossentropy_prime(y_batch, a.back()); // dl/dz3 = dl/dy dy/dz3
-            Tensor dl_dz2 = matmul(dl_dz3, w[2].T()) * relu_prime(a[1]); // dl/dz2 = dl_dz3 dz3/da2 da2/z2
-            Tensor dl_dz1 = matmul(dl_dz2, w[1].T()) * relu_prime(a[0]); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
-
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
                 #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                    if (i == 1)
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]));
-                    else
+                    if (i == 1)                                                                                           // dl/dw3 = dl_dz3 dz3/dw3 + dl1/w3
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0])); // dl/dw2 = dl_dz2 dz2/dw2 + dl1/w2
+                    else                                                                                                  // dl/dw1 = dl_dz1 dz1/dw1 + dl1/w1
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]));
                 #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                    if (i == 1)
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[0]));
-                    else
+                    if (i == 1)                                                                                           // dl/dw3 = dl_dz3 dz3/dw3 + dl2/w3
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[0])); // dl/dw2 = dl_dz2 dz2/dw2 + dl2/w2
+                    else                                                                                                  // dl/dw1 = dl_dz1 dz1/dw1 + dl2/w1
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[i - 1]));
                 #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                    if (i == 1)
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0]));
-                    else
+                    if (i == 1)                                                                                                                       // dl/dw3 = dl_dz3 dz3/dw3 + dl1/w3 + dl2/w3
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0])); // dl/dw2 = dl_dz2 dz2/dw2 + dl1/w2 + dl2/w2
+                    else                                                                                                                              // dl/dw1 = dl_dz1 dz1/dw1 + dl1/w1 + dl2/w1
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]) + l2_prime(L2_LAMBDA, w[i - 1]));
                 #else
-                    if (i == 1)
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
-                    else
+                    if (i == 1)                                                               // dl/dw3 = dl_dz3 dz3/dw3
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i])); // dl/dw2 = dl_dz2 dz2/dw2
+                    else                                                                      // dl/dw1 = dl_dz1 dz1/dw1
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
                 #endif
             }
@@ -214,27 +208,6 @@ int main() {
                     // TODO: Handle nestrov for momentum.
                 #endif
             #endif
-
-           /* 
-            #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                Tensor dl_dw3 = matmul(a[1].T(), dl_dz3) + l1_prime(L1_LAMBDA, w.back()); // dl/dw3 = d/w3 (categorical_crossentropy) + d/w3 (l1) = dl_dz3 dz3/dw3 + dl1/w3
-                Tensor dl_dw2 = matmul(a[0].T(), dl_dz2) + l1_prime(L1_LAMBDA, w[1]); // dl/dw2 = d/w2 (categorical_crossentropy) + d/w2 (l1) = dl_dz2 dz2/dw2 + dl1/w2
-                Tensor dl_dw1 = matmul(x_batch.T(), dl_dz1) + l1_prime(L1_LAMBDA, w[0]); // dl/dw1 = d/w1 (categorical_crossentropy) + d/w1 (l1) = dl_dz1 dz1/dw1 + dl1/w1
-            #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                Tensor dl_dw3 = matmul(a[1].T(), dl_dz3) + l2_prime(L2_LAMBDA, w.back()); // dl/dw3 = d/w3 (categorical_crossentropy) + d/w3 (l1) = dl_dz3 dz3/dw3 + dl1/w3
-                Tensor dl_dw2 = matmul(a[0].T(), dl_dz2) + l2_prime(L2_LAMBDA, w[1]); // dl/dw2 = d/w2 (categorical_crossentropy) + d/w2 (l1) = dl_dz2 dz2/dw2 + dl1/w2
-                Tensor dl_dw1 = matmul(x_batch.T(), dl_dz1) + l2_prime(L2_LAMBDA, w[0]); // dl/dw1 = d/w1 (categorical_crossentropy) + d/w1 (l1) = dl_dz1 dz1/dw1 + dl1/w1
-            #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                Tensor dl_dw3 = matmul(a[1].T(), dl_dz3) + l1_prime(L1_LAMBDA, w.back()) + l2_prime(L2_LAMBDA, w.back()); // dl/dw3 = d/w3 (categorical_crossentropy) + d/w3 (l1) = dl_dz3 dz3/dw3 + dl1/w3
-                Tensor dl_dw2 = matmul(a[0].T(), dl_dz2) + l1_prime(L1_LAMBDA, w[1]) + l2_prime(L2_LAMBDA, w[1]); // dl/dw2 = d/w2 (categorical_crossentropy) + d/w2 (l1) = dl_dz2 dz2/dw2 + dl1/w2
-                Tensor dl_dw1 = matmul(x_batch.T(), dl_dz1) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0]); // dl/dw1 = d/w1 (categorical_crossentropy) + d/w1 (l1) = dl_dz1 dz1/dw1 + dl1/w1
-            #else
-                Tensor dl_dw3 = matmul(a[1].T(), dl_dz3); // dl/dw3 = dl_dz3 dz3/dw3
-                Tensor dl_dw2 = matmul(a[0].T(), dl_dz2); // dl/dw2 = dl_dz2 dz2/dw2
-                Tensor dl_dw1 = matmul(x_batch.T(), dl_dz1); // dl/dw1 = dl_dz1 dz1/dw1
-            #endif
-           
-            */
         }
 
         #define LOG_EPOCH(i, EPOCHS) std::cout << "Epoch " << (i) << "/" << (EPOCHS)
