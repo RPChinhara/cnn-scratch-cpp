@@ -17,7 +17,7 @@
 #define EARLY_STOPPING_ENABLED          1
 #define GRADIENT_CLIPPING_ENABLED       1
 #define LEARNING_RATE_SCHEDULER_ENABLED 1
-#define L1_REGULARIZATION_ENABLED       0
+#define L1_REGULARIZATION_ENABLED       1
 #define L2_REGULARIZATION_ENABLED       0
 #define L1L2_REGULARIZATION_ENABLED     0
 #define MOMENTUM_ENABLED                1
@@ -81,7 +81,7 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
             #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1(L1_LAMBDA, (*w)[0]) + l1(L1_LAMBDA, (*w)[1]) + l1(L1_LAMBDA, (*w)[2]) + l2(L2_LAMBDA, (*w)[0]) + l2(L2_LAMBDA, (*w)[1]) + l2(L2_LAMBDA, (*w)[2]) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #else
-                std::cerr << "\nChoose only one regularization." << std::endl;
+                std::cerr << std::endl << __FILE__ << "(" << __LINE__ << ")" << ": error: choose only one regularization" << std::endl;
                 exit(1);
             #endif
         }
@@ -92,15 +92,15 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
 
 int main() {
     Iris iris = load_iris();
-    Tensor x  = iris.features;
-    Tensor y  = iris.target;
+    Tensor x = iris.features;
+    Tensor y = iris.target;
 
-    y                    = one_hot(y, 3);
+    y = one_hot(y, 3);
     TrainTest train_temp = train_test_split(x, y, 0.2, 42);
     TrainTest val_test   = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
-    train_temp.x_first   = min_max_scaler(train_temp.x_first);
-    val_test.x_first     = min_max_scaler(val_test.x_first);
-    val_test.x_second    = min_max_scaler(val_test.x_second);
+    train_temp.x_first = min_max_scaler(train_temp.x_first);
+    val_test.x_first   = min_max_scaler(val_test.x_first);
+    val_test.x_second  = min_max_scaler(val_test.x_second);
 
     // TODO: Maybe use w_b.first and w_b.second directly rather than copy into w and b?
     auto w_b = init_parameters();
@@ -141,9 +141,13 @@ int main() {
             // TODO: Implement Adam and AdamW.
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {                     // dl/dz3 = dl/dy dy/dz3 // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
-                if (i == LAYERS.size() - 1)                                             // dl/dz2 = dl_dz3 dz3/da2 da2/z2
-                    dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back())); // dl/dz1 = dl_dz2 dz2/da1 da1/z1
+            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
+                // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
+                // dl/dz3 = dl/dy dy/dz3
+                // dl/dz2 = dl_dz3 dz3/da2 da2/z2
+                // dl/dz1 = dl_dz2 dz2/da1 da1/z1
+                if (i == LAYERS.size() - 1)
+                    dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
                     dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - i], w[i].T()) * relu_prime(a[i - 1]));
 
@@ -151,32 +155,38 @@ int main() {
             }
 
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
-                #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                    if (i == 1)                                                                                           // dl/dw3 = dl_dz3 dz3/dw3 + dl1/w3
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0])); // dl/dw2 = dl_dz2 dz2/dw2 + dl1/w2
-                    else                                                                                                  // dl/dw1 = dl_dz1 dz1/dw1 + dl1/w1
+                // dl/dw3 = dl_dz3 dz3/dw3 (+ dl1/w3 or + dl2/w3 or + dl1/w3 + dl2/w3)
+                // dl/dw2 = dl_dz2 dz2/dw2 (+ dl1/w2 or + dl2/w2 or + dl1/w2 + dl2/w2)
+                // dl/dw1 = dl_dz1 dz1/dw1 (+ dl1/w1 or + dl2/w1 or + dl1/w1 + dl2/w1)
+                if (i == 1) {
+                    #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]));
+                    #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[0]));
+                    #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0]));
+                    #else
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
+                    #endif
+                } else {
+                    #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]));
-                #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                    if (i == 1)                                                                                           // dl/dw3 = dl_dz3 dz3/dw3 + dl2/w3
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[0])); // dl/dw2 = dl_dz2 dz2/dw2 + dl2/w2
-                    else                                                                                                  // dl/dw1 = dl_dz1 dz1/dw1 + dl2/w1
+                    #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w[i - 1]));
-                #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                    if (i == 1)                                                                                                                       // dl/dw3 = dl_dz3 dz3/dw3 + dl1/w3 + dl2/w3
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[0]) + l2_prime(L2_LAMBDA, w[0])); // dl/dw2 = dl_dz2 dz2/dw2 + dl1/w2 + dl2/w2
-                    else                                                                                                                              // dl/dw1 = dl_dz1 dz1/dw1 + dl1/w1 + dl2/w1
+                    #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w[i - 1]) + l2_prime(L2_LAMBDA, w[i - 1]));
-                #else
-                    if (i == 1)                                                               // dl/dw3 = dl_dz3 dz3/dw3
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i])); // dl/dw2 = dl_dz2 dz2/dw2
-                    else                                                                      // dl/dw1 = dl_dz1 dz1/dw1
+                    #else
                         dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
-                #endif
+                    #endif
+                }
             }
 
-            for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) { // dl/db3 = dl_dz3 dz3/b3
-                dl_db.push_back(sum(dl_dz[i], 0));                  // dl/db2 = dl_dz2 dz2/b2
-            }                                                       // dl/db1 = dl_dz1 dz1/b1
+            for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
+                // dl/db3 = dl_dz3 dz3/b3
+                // dl/db2 = dl_dz2 dz2/b2
+                // dl/db1 = dl_dz1 dz1/b1
+                dl_db.push_back(sum(dl_dz[i], 0));
+            }
 
             #if GRADIENT_CLIPPING_ENABLED
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
