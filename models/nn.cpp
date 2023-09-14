@@ -74,12 +74,20 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
             std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
         } else {
             #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                // TODO: Adding l1 is manual now meaning it can't adapt to any number of hidden layers. I have to fix this.
-                std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1(L1_LAMBDA, (*w)[0]) + l1(L1_LAMBDA, (*w)[1]) + l1(L1_LAMBDA, (*w)[2]) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
+                float l1;
+                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
+                    l1 += l1(L1_LAMBDA, (*w)[i]);
+                std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l2(L2_LAMBDA, (*w)[0]) + l2(L2_LAMBDA, (*w)[1]) + l2(L2_LAMBDA, (*w)[2]) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
+                float l2;
+                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
+                    l2 += l2(L2_LAMBDA, (*w)[i]);
+                std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1(L1_LAMBDA, (*w)[0]) + l1(L1_LAMBDA, (*w)[1]) + l1(L1_LAMBDA, (*w)[2]) + l2(L2_LAMBDA, (*w)[0]) + l2(L2_LAMBDA, (*w)[1]) + l2(L2_LAMBDA, (*w)[2]) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
+                float l1l2;
+                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) 
+                    l1l2 += l1(L1_LAMBDA, (*w)[i]) + l2(L2_LAMBDA, (*w)[i]);
+                std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #else
                 std::cerr << std::endl << __FILE__ << "(" << __LINE__ << ")" << ": error: choose only one regularization" << std::endl;
                 exit(1);
