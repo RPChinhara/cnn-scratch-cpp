@@ -90,10 +90,11 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
     }
 }
 
-int main() { 
-    Iris iris            = load_iris();
-    Tensor x             = iris.features;
-    Tensor y             = iris.target;
+int main() {
+    Iris iris = load_iris();
+    Tensor x  = iris.features;
+    Tensor y  = iris.target;
+
     y                    = one_hot(y, 3);
     TrainTest train_temp = train_test_split(x, y, 0.2, 42);
     TrainTest val_test   = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
@@ -102,7 +103,6 @@ int main() {
     val_test.x_second    = min_max_scaler(val_test.x_second);
 
     // TODO: Maybe use w_b.first and w_b.second directly rather than copy into w and b?
-
     auto w_b = init_parameters();
     TensorArray w = w_b.first;
     TensorArray b = w_b.second;
@@ -139,7 +139,6 @@ int main() {
             a = forward_propagation(x_batch, w, b);
 
             // TODO: Implement Adam and AdamW.
-
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {                     // dl/dz3 = dl/dy dy/dz3
