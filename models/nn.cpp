@@ -26,11 +26,11 @@ constexpr auto ACCURACY                                  = &categorical_accuracy
 constexpr unsigned short BATCH_SIZE                      = 8;
 constexpr unsigned short EPOCHS                          = 100;
 [[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
-constexpr std::array<unsigned char, 4> LAYERS            = { 4, 32, 32, 3 };
+constexpr std::array<unsigned short, 3> LAYERS           = { 4, 128, 3 };
 float LEARNING_RATE                                      = 0.01f;
 constexpr auto LOSS                                      = &categorical_crossentropy;
-[[maybe_unused]] constexpr float L1_LAMBDA               = 0.05f;
-[[maybe_unused]] constexpr float L2_LAMBDA               = 0.06f;
+[[maybe_unused]] constexpr float L1_LAMBDA               = 0.01f;
+[[maybe_unused]] constexpr float L2_LAMBDA               = 0.01f;
 [[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
 [[maybe_unused]] constexpr unsigned char PATIENCE        = 12;
 
@@ -47,8 +47,6 @@ TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const
         } else {
             z[i] = (matmul(a[i - 1], w[i]) + b[i]);
             if (i == 1)
-                a[i] = (relu(z[i]));
-            else
                 a[i] = (softmax(z[i]));
         }
     }
