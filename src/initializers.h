@@ -4,7 +4,6 @@
 
 class Tensor;
 
-// TODO: Are ones and zeros really needed?
 Tensor glorot_normal_distribution(const std::vector<unsigned int>& shape);
 Tensor glorot_uniform_distribution(const std::vector<unsigned int>& shape);
 Tensor he_normal_distribution(const std::vector<unsigned int>& shape);
