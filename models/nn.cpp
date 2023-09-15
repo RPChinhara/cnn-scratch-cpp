@@ -26,7 +26,7 @@ constexpr auto ACCURACY                                  = &categorical_accuracy
 constexpr unsigned short BATCH_SIZE                      = 8;
 constexpr unsigned short EPOCHS                          = 100;
 [[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
-constexpr std::array<unsigned char, 4> LAYERS            = { 4, 32, 32, 3 };
+std::vector<unsigned char> LAYERS                        = { 4, 8, 8, 8, 32, 32, 3 };
 float LEARNING_RATE                                      = 0.01f;
 constexpr auto LOSS                                      = &categorical_crossentropy;
 [[maybe_unused]] constexpr float L1_LAMBDA               = 0.05f;
@@ -34,7 +34,7 @@ constexpr auto LOSS                                      = &categorical_crossent
 [[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
 [[maybe_unused]] constexpr unsigned char PATIENCE        = 12;
 
-using TensorArray = std::array<Tensor, LAYERS.size() - 1>;
+using TensorArray = std::vector<Tensor>;
 
 TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b) {
     TensorArray z;
