@@ -26,7 +26,7 @@ constexpr auto ACCURACY                                  = &categorical_accuracy
 constexpr unsigned short BATCH_SIZE                      = 8;
 constexpr unsigned short EPOCHS                          = 100;
 [[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
-std::vector<unsigned char> LAYERS                        = { 4, 8, 8, 8, 32, 32, 3 };
+constexpr std::array<unsigned char, 4> LAYERS            = { 4, 32, 32, 3 };
 float LEARNING_RATE                                      = 0.01f;
 constexpr auto LOSS                                      = &categorical_crossentropy;
 [[maybe_unused]] constexpr float L1_LAMBDA               = 0.05f;
@@ -34,7 +34,7 @@ constexpr auto LOSS                                      = &categorical_crossent
 [[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
 [[maybe_unused]] constexpr unsigned char PATIENCE        = 12;
 
-using TensorArray = std::vector<Tensor>;
+using TensorArray = std::array<Tensor, LAYERS.size() - 1>;
 
 TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b) {
     TensorArray z;
@@ -74,17 +74,17 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
             std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
         } else {
             #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                float l1;
+                float l1 = 0.0f;
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
                     l1 += l1(L1_LAMBDA, (*w)[i]);
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                float l2;
+                float l2 = 0.0f;
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
                     l2 += l2(L2_LAMBDA, (*w)[i]);
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                float l1l2;
+                float l1l2 = 0.0f;
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) 
                     l1l2 += l1(L1_LAMBDA, (*w)[i]) + l2(L2_LAMBDA, (*w)[i]);
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
