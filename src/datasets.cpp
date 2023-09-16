@@ -131,3 +131,7 @@ Iris load_iris() {
 
     return iris;
 }
+
+Mnist load_mnist() {
+    return Mnist();
+}

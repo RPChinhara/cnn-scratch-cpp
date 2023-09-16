@@ -22,7 +22,7 @@
 #define L1L2_REGULARIZATION_ENABLED     1
 #define MOMENTUM_ENABLED                1
 
-constexpr std::array<unsigned short, 3> LAYERS           = { 4, 128, 3 };
+constexpr std::array<unsigned short, 3> LAYERS = { 4, 128, 3 };
 
 constexpr auto ACCURACY = &categorical_accuracy;
 constexpr auto LOSS     = &categorical_crossentropy;
@@ -35,8 +35,8 @@ float LEARNING_RATE                 = 0.01f;
 [[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
 [[maybe_unused]] constexpr unsigned char PATIENCE        = 12;
 
-[[maybe_unused]] constexpr float L1_LAMBDA               = 0.01f;
-[[maybe_unused]] constexpr float L2_LAMBDA               = 0.01f;
+[[maybe_unused]] constexpr float L1_LAMBDA = 0.01f;
+[[maybe_unused]] constexpr float L2_LAMBDA = 0.01f;
 
 [[maybe_unused]] constexpr float BETA_1  = 0.9f;
 [[maybe_unused]] constexpr float BETA_2  = 0.999f;

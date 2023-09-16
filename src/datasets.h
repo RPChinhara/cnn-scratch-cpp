@@ -22,7 +22,13 @@ struct Iris {
     Tensor target;
 };
 
+struct Mnist {
+    Tensor features;
+    Tensor target;
+};
+
 AirPassengers load_air_passengers();
 Cifar10       load_cifar10();
 Imdb          load_imdb();
 Iris          load_iris();
+Mnist         load_mnist();
