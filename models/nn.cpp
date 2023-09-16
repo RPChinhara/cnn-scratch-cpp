@@ -22,17 +22,28 @@
 #define L1L2_REGULARIZATION_ENABLED     1
 #define MOMENTUM_ENABLED                1
 
-constexpr auto ACCURACY                                  = &categorical_accuracy;
-constexpr unsigned short BATCH_SIZE                      = 8;
-constexpr unsigned short EPOCHS                          = 100;
-[[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
 constexpr std::array<unsigned short, 3> LAYERS           = { 4, 128, 3 };
-float LEARNING_RATE                                      = 0.01f;
-constexpr auto LOSS                                      = &categorical_crossentropy;
-[[maybe_unused]] constexpr float L1_LAMBDA               = 0.01f;
-[[maybe_unused]] constexpr float L2_LAMBDA               = 0.01f;
+
+constexpr auto ACCURACY = &categorical_accuracy;
+constexpr auto LOSS     = &categorical_crossentropy;
+
+constexpr unsigned short BATCH_SIZE = 8;
+constexpr unsigned short EPOCHS     = 100;
+float LEARNING_RATE                 = 0.01f;
+
+[[maybe_unused]] constexpr float GRADIENT_CLIP_THRESHOLD = 8.0f;
 [[maybe_unused]] constexpr float MOMENTUM                = 0.1f;
 [[maybe_unused]] constexpr unsigned char PATIENCE        = 12;
+
+[[maybe_unused]] constexpr float L1_LAMBDA               = 0.01f;
+[[maybe_unused]] constexpr float L2_LAMBDA               = 0.01f;
+
+[[maybe_unused]] constexpr float BETA_1  = 0.9f;
+[[maybe_unused]] constexpr float BETA_2  = 0.999f;
+[[maybe_unused]] constexpr float EPSILON = 1e-8f;
+[[maybe_unused]] constexpr float M_T     = 0;
+[[maybe_unused]] constexpr float V_T     = 0;
+[[maybe_unused]] constexpr float T       = 0;
 
 using TensorArray = std::array<Tensor, LAYERS.size() - 1>;
 
@@ -197,6 +208,7 @@ int main() {
 
             // TODO: Don't I have to add regularizer for the biases as well like tf.keras.layers.Dense does?
             // TODO: What is kernel_constraint and bias_constraint?
+            // TODO: I could create a file called optimizer, and put below codes as SDG same for upcoming Adam and AdamW.
             #if !MOMENTUM_ENABLED
                 for (char i = LAYERS.size() - 2; 0 <= i; --i) {
                     w_b.first[i]  -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
