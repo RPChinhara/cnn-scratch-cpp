@@ -155,8 +155,8 @@ int main() {
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
                 // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
                 // dl/dz3 = dl/dy dy/dz3
-                // dl/dz2 = dl_dz3 dz3/da2 da2/z2
-                // dl/dz1 = dl_dz2 dz2/da1 da1/z1
+                // dl/dz2 = dl/dz3 dz3/da2 da2/z2
+                // dl/dz1 = dl/dz2 dz2/da1 da1/z1
                 if (i == LAYERS.size() - 1)
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
@@ -166,9 +166,9 @@ int main() {
             }
 
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
-                // dl/dw3 = dl_dz3 dz3/dw3 (+ dl1/w3 or + dl2/w3 or + dl1/w3 + dl2/w3)
-                // dl/dw2 = dl_dz2 dz2/dw2 (+ dl1/w2 or + dl2/w2 or + dl1/w2 + dl2/w2)
-                // dl/dw1 = dl_dz1 dz1/dw1 (+ dl1/w1 or + dl2/w1 or + dl1/w1 + dl2/w1)
+                // dl/dw3 = dl/dz3 dz3/dw3 (+ dl1/w3 or + dl2/w3 or + dl1/w3 + dl2/w3)
+                // dl/dw2 = dl/dz2 dz2/dw2 (+ dl1/w2 or + dl2/w2 or + dl1/w2 + dl2/w2)
+                // dl/dw1 = dl/dz1 dz1/dw1 (+ dl1/w1 or + dl2/w1 or + dl1/w1 + dl2/w1)
                 if (i == 1) {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                         dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[0]));
@@ -193,9 +193,9 @@ int main() {
             }
 
             for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
-                // dl/db3 = dl_dz3 dz3/b3
-                // dl/db2 = dl_dz2 dz2/b2
-                // dl/db1 = dl_dz1 dz1/b1
+                // dl/db3 = dl/dz3 dz3/b3
+                // dl/db2 = dl/dz2 dz2/b2
+                // dl/db1 = dl/dz1 dz1/b1
                 dl_db.push_back(sum(dl_dz[i], 0));
             }
 
