@@ -113,8 +113,8 @@ int main() {
     Tensor y = iris.target;
 
     y = one_hot(y, 3);
-    TrainTest train_temp = train_test_split(x, y, 0.2, 42);
-    TrainTest val_test   = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
+    TrainTest2 train_temp = train_test_split(x, y, 0.2, 42);
+    TrainTest2 val_test   = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
     train_temp.x_first = min_max_scaler(train_temp.x_first);
     val_test.x_first   = min_max_scaler(val_test.x_first);
     val_test.x_second  = min_max_scaler(val_test.x_second);

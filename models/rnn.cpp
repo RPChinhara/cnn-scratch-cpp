@@ -22,5 +22,8 @@ int main() {
     // Normalize the dataset (scaling to [0, 1] range)
     air_passengers = min_max_scaler(air_passengers);
 
-    std::cout << air_passengers << std::endl;
+    // Split the data into training and testing sets
+    TrainTest train_temp = train_test_split(air_passengers, 0.33, 42); // TODO: Don't forget to shuffle in train_test_split!
+    std::cout << train_temp.x_first << std::endl;
+    std::cout << train_temp.x_second << std::endl;
 }
