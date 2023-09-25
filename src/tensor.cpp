@@ -3,7 +3,6 @@
 
 #include <cassert>
 
-// TODO: Maybe in the future, shapes (1, 3) -> 2-dimentional and (3) -> 1-dimentional should be integrated and thought of as same shapes so only accept 2-dimentional? I mean does it need to support 1-dimentional? I suppose it only needs 2-dimentional.
 Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape) {
     assert(elem.size() != 0);
     
