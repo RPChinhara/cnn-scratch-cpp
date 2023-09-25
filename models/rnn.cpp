@@ -16,5 +16,6 @@
 
 int main() {
     // TODO: I could try datsets like Air Quality.
-    AirPassengers air_passengers = load_air_passengers();
+    Tensor air_passengers = load_air_passengers();
+    std::cout << air_passengers << std::endl;
 }

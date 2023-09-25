@@ -1,7 +1,7 @@
 @echo off
 set NVCC=nvcc
 set FLAGS=-I ..\src -o model -arch sm_75 --optimize 3 -std c++17 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Ox -Xcompiler /Z7
-set SRC=..\models\nn.cpp ^
+set SRC=..\models\rnn.cpp ^
         ..\src\activations.cpp ^
         ..\src\arrays.cpp ^
         ..\src\datasets.cpp ^

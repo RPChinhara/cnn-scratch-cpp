@@ -4,8 +4,37 @@
 #include <sstream>
 #include <vector>
 
-AirPassengers load_air_passengers() {
-    return AirPassengers();
+Tensor load_air_passengers() {
+    std::ifstream file("datasets/air_passengers.csv");
+
+    if (!file.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    std::string line;
+
+    // Skip the first line.
+    std::getline(file, line);
+
+    int idx = 0;
+    Tensor dataset = Tensor({ 0.0 }, { 144, 1 });
+
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string value;
+        
+        // Skip the first column which is date.
+        std::getline(ss, value, ',');
+
+        std::getline(ss, value, ',');
+        dataset[idx] = std::stof(value);
+        ++idx;
+    }
+
+    file.close();
+
+    return dataset;
 }
 
 Cifar10 load_cifar10() {
@@ -82,10 +111,10 @@ Iris load_iris() {
     // Skip the first line.
     std::getline(file, line);
 
-    Tensor features  = Tensor({ 0.0 }, { 150, 4 });
-    Tensor target    = Tensor({ 0.0 }, { 150, 1 });
     int idx_features = 0;
     int idx_target   = 0;
+    Tensor features = Tensor({ 0.0 }, { 150, 4 });
+    Tensor target   = Tensor({ 0.0 }, { 150, 1 });
 
     while (std::getline(file, line)) {
         std::stringstream ss(line);
