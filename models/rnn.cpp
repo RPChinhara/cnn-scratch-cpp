@@ -14,8 +14,13 @@
 #include <array>
 #include <random>
 
+// TODO: I could try a dataset like Air Quality.
 int main() {
-    // TODO: I could try datsets like Air Quality.
+    // Load the Air Passengers dataset
     Tensor air_passengers = load_air_passengers();
+
+    // Normalize the dataset (scaling to [0, 1] range)
+    air_passengers = min_max_scaler(air_passengers);
+
     std::cout << air_passengers << std::endl;
 }
