@@ -14,6 +14,19 @@
 #include <array>
 #include <random>
 
+constexpr std::array<unsigned short, 3> LAYERS = { 1, 64, 1 };
+
+// Tensor make_sequences_labels(Tensor& tensor const Tensor& tensor) {
+//     int idx = 0;
+//     for (int i = 0; i < (train_test.x_first._size - sequence_length) * sequence_length; ++i) {
+//         if (i % sequence_length == 0 && i != 0)
+//             idx -= sequence_length - 1;
+//         tensor[i] = train_test.x_first[idx];
+//         // X_train[i] = i <= sequence_length ? train_test.x_first[idx] : train_test.x_first[idx - sequence_length - 1];
+//         ++idx;
+//     }
+// }
+
 // TODO: I could try a dataset like Air Quality.
 int main() {
     // Load the Air Passengers dataset
@@ -29,6 +42,8 @@ int main() {
     unsigned int sequence_length = 12; // Use the previous 12 months to predict the next month
     Tensor X_train = Tensor({ 0.0f }, { train_test.x_first._size - sequence_length, sequence_length, 1 });
     Tensor y_train = Tensor({ 0.0f }, { train_test.x_first._size - sequence_length, 1 });
+    Tensor X_test  = Tensor({ 0.0f }, { train_test.x_second._size - sequence_length, sequence_length, 1 });
+    Tensor y_test  = Tensor({ 0.0f }, { train_test.x_second._size - sequence_length, 1 });
 
     int idx = 0;
     for (int i = 0; i < (train_test.x_first._size - sequence_length) * sequence_length; ++i) {
@@ -43,6 +58,19 @@ int main() {
         y_train[i] = train_test.x_first[i + sequence_length];
     }
 
-    std::cout << X_train << std::endl;
-    std::cout << y_train << std::endl;
+    idx = 0;
+    for (int i = 0; i < (train_test.x_second._size - sequence_length) * sequence_length; ++i) {
+        if (i % sequence_length == 0 && i != 0)
+            idx -= sequence_length - 1;
+        X_test[i] = train_test.x_second[idx];
+        // X_train[i] = i <= sequence_length ? train_test.x_first[idx] : train_test.x_first[idx - sequence_length - 1];
+        ++idx;
+    }
+
+    for (int i = 0; i < train_test.x_second._size - sequence_length; ++i) {
+        y_test[i] = train_test.x_second[i + sequence_length];
+    }
+
+    std::cout << X_test << std::endl;
+    std::cout << y_test << std::endl;
 }
