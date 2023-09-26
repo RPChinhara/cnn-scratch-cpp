@@ -253,7 +253,7 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in) {
                     os << in[i] << " ";
         } else {
             std::vector<int> num_elem_each_batch = get_num_elem_each_batch(in._shape);
-            unsigned int num_elem_most_inner_mat          = get_num_elem_most_inner_mat(in._shape);
+            unsigned int num_elem_most_inner_mat = get_num_elem_most_inner_mat(in._shape);
 
 
             for (unsigned int i = 0; i < in._size; ++i) {

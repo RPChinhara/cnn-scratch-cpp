@@ -24,7 +24,7 @@ public:
     Tensor T() const;
 
     float                    *_elem = nullptr;
-    unsigned int              _num_ch_dim;
+    unsigned int              _num_ch_dim; // TODO: Change to _num_channel_dims
     std::vector<unsigned int> _shape;
     unsigned int              _size;
 };

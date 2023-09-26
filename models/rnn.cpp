@@ -27,16 +27,23 @@ int main() {
 
     // Create sequences and corresponding labels for training
     short sequence_length = 12; // Use the previous 12 months to predict the next month
-    Tensor X_train = Tensor({ 0.0f }, { 84, 12, 1 });
-    Tensor y_train = Tensor({ 0.0f }, { 84, 1 });
+    Tensor X_train = Tensor({ 0.0f }, { train_data.x_first._size, sequence_length, 1 });
+    Tensor y_train = Tensor({ 0.0f }, { train_data.x_first._size, 1 });
 
-    for (unsigned char i = 0; i < 84 * 3; ++i) {
-        X_train[i] = train_test.x_first[i];
-        if (i > sequence_length && i % sequence_length == 0)
-            X_train[i] = train_test.x_first[i - 11];
+    // TODO: use int for all for loop in this project
+    int idx = 0;
+    for (int i = 0; i < 84 * 12; ++i) {
+        X_train[i] = train_test.x_first[idx];
+        if (i % sequence_length == 0 && i != 0) {
+            idx = (i == sequence_length) ? i - 11 : i - (11 * 2);
+            std::cout << "i: " << i << std::endl;
+            std::cout << "idx: " << idx << std::endl;
+            continue;
+        }
+        ++idx;
     }
 
-    for (unsigned char i = 0; i < train_test.x_first._size - sequence_length; ++i) {
+    for (int i = 0; i < train_test.x_first._size - sequence_length; ++i) {
         y_train[i] = train_test.x_first[i + sequence_length];
     }
 
@@ -48,4 +55,5 @@ int main() {
 
     std::cout << X_train << std::endl;
     std::cout << y_train << std::endl;
+    std::cout << y_train._num_ch_dim << std::endl;
 }
