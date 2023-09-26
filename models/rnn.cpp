@@ -45,6 +45,8 @@ int main() {
     Tensor X_test  = Tensor({ 0.0f }, { train_test.x_second._size - sequence_length, sequence_length, 1 });
     Tensor y_test  = Tensor({ 0.0f }, { train_test.x_second._size - sequence_length, 1 });
 
+    // TODO: Prepare validation dataset, and review what is the best relation with train dataset
+
     int idx = 0;
     for (int i = 0; i < (train_test.x_first._size - sequence_length) * sequence_length; ++i) {
         if (i % sequence_length == 0 && i != 0)
