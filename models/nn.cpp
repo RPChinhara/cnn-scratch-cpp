@@ -152,6 +152,7 @@ int main() {
             // TODO: Implement Adam and AdamW.
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
+            // TODO: I need to change i to k
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
                 // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
                 // dl/dz3 = dl/dy dy/dz3

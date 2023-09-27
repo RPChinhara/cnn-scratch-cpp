@@ -16,13 +16,17 @@
 
 constexpr std::array<unsigned short, 3> LAYERS = { 1, 64, 1 };
 
+constexpr unsigned short EPOCHS = 1;
+float LEARNING_RATE             = 0.1f;
+unsigned int SEQUENCE_LENGTH    = 12; // Use the previous 12 months to predict the next month
+
 // Tensor make_sequences_labels(Tensor& tensor const Tensor& tensor) {
 //     int idx = 0;
-//     for (int i = 0; i < (train_test.x_first._size - sequence_length) * sequence_length; ++i) {
-//         if (i % sequence_length == 0 && i != 0)
-//             idx -= sequence_length - 1;
+//     for (int i = 0; i < (train_test.x_first._size - SEQUENCE_LENGTH) * SEQUENCE_LENGTH; ++i) {
+//         if (i % SEQUENCE_LENGTH == 0 && i != 0)
+//             idx -= SEQUENCE_LENGTH - 1;
 //         tensor[i] = train_test.x_first[idx];
-//         // X_train[i] = i <= sequence_length ? train_test.x_first[idx] : train_test.x_first[idx - sequence_length - 1];
+//         // X_train[i] = i <= SEQUENCE_LENGTH ? train_test.x_first[idx] : train_test.x_first[idx - SEQUENCE_LENGTH - 1];
 //         ++idx;
 //     }
 // }
@@ -39,40 +43,64 @@ int main() {
     TrainTest train_test = train_test_split(air_passengers, 0.33, 42); // TODO: Don't forget to shuffle in train_test_split!
 
     // Create sequences and corresponding labels for training
-    unsigned int sequence_length = 12; // Use the previous 12 months to predict the next month
-    Tensor X_train = Tensor({ 0.0f }, { train_test.x_first._size - sequence_length, sequence_length, 1 });
-    Tensor y_train = Tensor({ 0.0f }, { train_test.x_first._size - sequence_length, 1 });
-    Tensor X_test  = Tensor({ 0.0f }, { train_test.x_second._size - sequence_length, sequence_length, 1 });
-    Tensor y_test  = Tensor({ 0.0f }, { train_test.x_second._size - sequence_length, 1 });
+    Tensor X_train = Tensor({ 0.0f }, { train_test.x_first._size - SEQUENCE_LENGTH, SEQUENCE_LENGTH, 1 });
+    Tensor y_train = Tensor({ 0.0f }, { train_test.x_first._size - SEQUENCE_LENGTH, 1 });
+    Tensor X_test  = Tensor({ 0.0f }, { train_test.x_second._size - SEQUENCE_LENGTH, SEQUENCE_LENGTH, 1 });
+    Tensor y_test  = Tensor({ 0.0f }, { train_test.x_second._size - SEQUENCE_LENGTH, 1 });
 
     // TODO: Prepare validation dataset, and review what is the best relation with train dataset
 
     int idx = 0;
-    for (int i = 0; i < (train_test.x_first._size - sequence_length) * sequence_length; ++i) {
-        if (i % sequence_length == 0 && i != 0)
-            idx -= sequence_length - 1;
+    for (int i = 0; i < (train_test.x_first._size - SEQUENCE_LENGTH) * SEQUENCE_LENGTH; ++i) {
+        if (i % SEQUENCE_LENGTH == 0 && i != 0)
+            idx -= SEQUENCE_LENGTH - 1;
         X_train[i] = train_test.x_first[idx];
-        // X_train[i] = i <= sequence_length ? train_test.x_first[idx] : train_test.x_first[idx - sequence_length - 1];
+        // X_train[i] = i <= SEQUENCE_LENGTH ? train_test.x_first[idx] : train_test.x_first[idx - SEQUENCE_LENGTH - 1];
         ++idx;
     }
 
-    for (int i = 0; i < train_test.x_first._size - sequence_length; ++i) {
-        y_train[i] = train_test.x_first[i + sequence_length];
+    for (int i = 0; i < train_test.x_first._size - SEQUENCE_LENGTH; ++i) {
+        y_train[i] = train_test.x_first[i + SEQUENCE_LENGTH];
     }
 
     idx = 0;
-    for (int i = 0; i < (train_test.x_second._size - sequence_length) * sequence_length; ++i) {
-        if (i % sequence_length == 0 && i != 0)
-            idx -= sequence_length - 1;
+    for (int i = 0; i < (train_test.x_second._size - SEQUENCE_LENGTH) * SEQUENCE_LENGTH; ++i) {
+        if (i % SEQUENCE_LENGTH == 0 && i != 0)
+            idx -= SEQUENCE_LENGTH - 1;
         X_test[i] = train_test.x_second[idx];
-        // X_train[i] = i <= sequence_length ? train_test.x_first[idx] : train_test.x_first[idx - sequence_length - 1];
+        // X_train[i] = i <= SEQUENCE_LENGTH ? train_test.x_first[idx] : train_test.x_first[idx - SEQUENCE_LENGTH - 1];
         ++idx;
     }
 
-    for (int i = 0; i < train_test.x_second._size - sequence_length; ++i) {
-        y_test[i] = train_test.x_second[i + sequence_length];
+    for (int i = 0; i < train_test.x_second._size - SEQUENCE_LENGTH; ++i) {
+        y_test[i] = train_test.x_second[i + SEQUENCE_LENGTH];
     }
 
-    std::cout << X_test << std::endl;
-    std::cout << y_test << std::endl;
+    // Initialize weights and biases
+    Tensor wxh = normal_distribution({ LAYERS[1], LAYERS[0] });
+    Tensor whh = normal_distribution({ LAYERS[1], LAYERS[1] });
+    Tensor why = normal_distribution({ LAYERS[2], LAYERS[1] });
+
+    Tensor bh = zeros({ LAYERS[1], 1 });
+    Tensor by = zeros({ 1, 1 });
+
+    for (int i = 1; i <= EPOCHS; ++i) {
+        Tensor hprev = zeros({ LAYERS[1], 1 });
+
+        for (int j = 0; j < 2; ++j) {
+            Tensor x = Tensor({ 0.0f }, { SEQUENCE_LENGTH, 1 });
+            unsigned int idx = 0;
+
+            for (int k = 0; k < SEQUENCE_LENGTH; ++k) {
+                x[k] = X_train[idx];
+                ++idx;
+            }
+            float target = y_train[j];
+
+            std::cout << x << std::endl;
+            std::cout << target << std::endl;
+        }
+    }
+
+    // TODO: use auto for for loop?
 }
