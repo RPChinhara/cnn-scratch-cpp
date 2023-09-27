@@ -183,6 +183,20 @@ Tensor sum(const Tensor& in, const unsigned short axis) {
 	return out;
 }
 
+Tensor tanh(const Tensor& in) {
+	float **in_out = new float*[sizeof(float *) * 2];
+	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
+	tanh<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
+	Tensor out = in;
+	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
+	cudaFree(in_out[0]);
+	cudaFree(in_out[1]);
+    delete[] in_out;
+	return out;
+}
+
 Tensor variance(const Tensor& in) {
 	return Tensor();
 }

@@ -42,3 +42,9 @@ __global__ void square(float *in, float *out, unsigned int n) {
     if (id < n)
         out[id] = powf(in[id], 2.0f);
 }
+
+__global__ void tanh(float *in, float *out, unsigned int n) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+    if (id < n)
+        out[id] = tanhf(in[id]);
+}

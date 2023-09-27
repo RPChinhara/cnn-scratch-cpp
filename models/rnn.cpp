@@ -13,6 +13,7 @@
 
 #include <array>
 #include <random>
+#include <math.h>
 
 constexpr std::array<unsigned short, 3> LAYERS = { 1, 64, 1 };
 
@@ -104,6 +105,10 @@ int main() {
     }
     
     std::cout << x_train << std::endl;
+
+    //   x = tf.constant([-float("inf"), -5, -0.5, 1, 1.2, 2, 3, float("inf")])
+    Tensor fd = Tensor({ -INFINITY, -5, -0.5, 1, 1.2, 2, 3, INFINITY }, { 1, 8 });
+    std::cout << tanh(fd) << std::endl;
 
     // TODO: use auto for for loop?
 }
