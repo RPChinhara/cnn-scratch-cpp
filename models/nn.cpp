@@ -235,6 +235,7 @@ int main() {
             #endif
         }
 
+        // TODO: Make progress bar.
         #define LOG_EPOCH(i, EPOCHS) std::cout << "Epoch " << (i) << "/" << (EPOCHS)
 
         #if L1_REGULARIZATION_ENABLED || L2_REGULARIZATION_ENABLED || L1L2_REGULARIZATION_ENABLED
