@@ -107,6 +107,7 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
     }
 }
 
+// TODO: Looks like ChatGPT is not 100% correct according to output it has given when prompted how to implement rnn from scratch so I need to check wheather my nn is correctly implemented espeacially forward and backpropagation part.
 int main() {
     Iris iris = load_iris();
     Tensor x = iris.features;
