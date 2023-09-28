@@ -44,6 +44,7 @@ int main() {
     TrainTest train_test = train_test_split(air_passengers, 0.33, 42); // TODO: Don't forget to shuffle in train_test_split!
 
     // Create sequences and corresponding labels for training
+    // TODO: Maybe I don't need to make 3d tensor as x eventually I'm extracting x as in 2d tensor which just rewinding what I'm doing in below for loops. I mean it llooks like it's all about matrix multipication which is 2d?
     Tensor x_train = Tensor({ 0.0f }, { train_test.x_first._size - SEQUENCE_LENGTH, SEQUENCE_LENGTH, 1 });
     Tensor y_train = Tensor({ 0.0f }, { train_test.x_first._size - SEQUENCE_LENGTH, 1 });
     Tensor x_test  = Tensor({ 0.0f }, { train_test.x_second._size - SEQUENCE_LENGTH, SEQUENCE_LENGTH, 1 });
@@ -86,7 +87,7 @@ int main() {
     Tensor by = zeros({ 1, 1 });
 
     for (int i = 1; i <= EPOCHS; ++i) {
-        Tensor hprev = zeros({ LAYERS[1], 1 });
+        Tensor hideen_state = zeros({ LAYERS[1], 1 });
         unsigned int idx = 0;
 
         for (int j = 0; j < x_train._shape[0]; ++j) {
@@ -98,6 +99,12 @@ int main() {
             }
 
             float target = y_train[j];
+
+            // Forward propagation
+            Tensor h      = tanh(matmul(wxh, x) + matmul(whh, hprev) + bh);
+            Tensor y_pred = matmul(why, h) + by;
+            // h = np.tanh(np.dot(Wxh, x) + np.dot(Whh, hprev) + bh)
+            // y_pred = np.dot(Why, h) + by
 
             std::cout << x << std::endl;
             std::cout << target << std::endl;
