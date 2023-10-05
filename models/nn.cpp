@@ -84,18 +84,24 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
         } else {
             #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                 float l1 = 0.0f;
+
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
                     l1 += l1(L1_LAMBDA, (*w)[i]);
+
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                 float l2 = 0.0f;
+
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
                     l2 += l2(L2_LAMBDA, (*w)[i]);
+
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
                 float l1l2 = 0.0f;
+                
                 for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) 
                     l1l2 += l1(L1_LAMBDA, (*w)[i]) + l2(L2_LAMBDA, (*w)[i]);
+                
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #else
                 std::cerr << std::endl << __FILE__ << "(" << __LINE__ << ")" << ": error: choose only one regularization" << std::endl;
