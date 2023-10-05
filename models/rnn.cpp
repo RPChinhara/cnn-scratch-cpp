@@ -101,6 +101,7 @@ int main() {
             float target = y_train[j];
 
             // Forward propagation
+            // TODO: tanh should be placed in activations file?
             Tensor h      = tanh(matmul(wxh, x) + matmul(whh, hprev) + bh);
             Tensor y_pred = matmul(why, h) + by;
             // h = np.tanh(np.dot(Wxh, x) + np.dot(Whh, hprev) + bh)
