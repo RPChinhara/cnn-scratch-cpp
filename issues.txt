@@ -1,0 +1,23 @@
+
+1. Dora:
+    -Needs body parts e.g., arms, legs.
+        -Make scientific devices based on *1.
+    -Able to talk through audio.
+2. Graphics:
+    -Play Mario game (RL).
+3. Command Prompt:
+    -Conversational Agents (RL).
+    -Transformer Architecture
+        -Model Size: 1 million parameters.
+        -Training Data: WebText, a dataset scraped from the internet, Scientific papers.
+    -Translation.
+    -Question-answering.
+    -Coding.
+    -AlphaZero (RL).
+    -Content Recommendations (RL).
+    -Drug Discovery (RL).
+    -Multimodal models (CNN, LSTM, GAN).
+    -Eble to draw (GAN).
+    -*1 Discover new theories in Scinece (Phyiscs, Mathematics, Chemistry).
+    -Continuousness?
+    -Emotion?
