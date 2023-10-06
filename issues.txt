@@ -5,19 +5,21 @@
     -Able to talk through audio.
 2. Graphics:
     -Play Mario game (RL).
+    -Create dora character in the filed for UI purpose.
 3. Command Prompt:
     -Conversational Agents (RL).
-    -Transformer Architecture
-        -Model Size: 1 million parameters.
+    -Transformer Architecture (GPT series or BERT?)
+        -Model Size: 1 million parameters. Later, try  billions or even hundreds of billions of parameters?
         -Training Data: WebText, a dataset scraped from the internet, Scientific papers.
     -Translation.
     -Question-answering.
+    -Sentiment analysis.
     -Coding.
     -AlphaZero (RL).
     -Content Recommendations (RL).
     -Drug Discovery (RL).
     -Multimodal models (CNN, LSTM, GAN).
     -Eble to draw (GAN).
-    -*1 Discover new theories in Scinece (Phyiscs, Mathematics, Chemistry).
+    -*1 Discover new theories in Scinece, and come up with new scientific devices (Phyiscs, Mathematics, Chemistry).
     -Continuousness?
     -Emotion?
