@@ -1,16 +1,19 @@
 
-1. Dora:
+1. Dora (strong AI):
     -Needs body parts e.g., arms, legs.
         -Make scientific devices based on *1.
     -Able to talk through audio.
 2. Graphics:
+    -Let a character live his life in the world e.g., inside room playing game, sleeping.
     -Play Mario game (RL).
-    -Create dora character in the filed for UI purpose.
 3. Command Prompt:
     -Conversational Agents (RL).
     -Transformer Architecture (GPT series or BERT?)
         -Model Size: 1 million parameters. Later, try  billions or even hundreds of billions of parameters?
         -Training Data: WebText, a dataset scraped from the internet, Scientific papers.
+    -unsupervised learning.
+    -Neuroscience
+    -Cognitive Science.
     -Translation.
     -Question-answering.
     -Sentiment analysis.
@@ -21,5 +24,6 @@
     -Multimodal models (CNN, LSTM, GAN).
     -Eble to draw (GAN).
     -*1 Discover new theories in Scinece, and come up with new scientific devices (Phyiscs, Mathematics, Chemistry).
+        Study Existing Theories -> Identify Shortcomings or Gaps -> Develop Mathematical Framework -> Make Predictions -> Seek Peer Review -> Experimental Verification -> Iterate and Refine. Can it do it?
     -Continuousness?
     -Emotion?
