@@ -5,6 +5,7 @@
     -Able to talk through audio.
 2. Graphics:
     -Let a character live his life in the world e.g., inside room playing game, sleeping.
+        -Has life, hunger, weight, and thirstiness maybe more medically detailed be added e.g., blood pressure.
     -Play Mario game (RL).
 3. Command Prompt:
     -Conversational Agents (RL).
@@ -27,3 +28,7 @@
         Study Existing Theories -> Identify Shortcomings or Gaps -> Develop Mathematical Framework -> Make Predictions -> Seek Peer Review -> Experimental Verification -> Iterate and Refine. Can it do it?
     -Continuousness?
     -Emotion?
+    -Able to make games from simple to AAA class.
+
+Insights
+ -I thought NLP is the core of the AGI, but it might not as the case for Computer vision, and other things like continuousness be as dogs which don't use as high level language as we do, yet behave as more high intelligent creatures better than ChatGPT.
