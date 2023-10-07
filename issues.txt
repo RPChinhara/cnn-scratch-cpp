@@ -6,6 +6,7 @@
 2. Graphics:
     -Let a character live his life in the world e.g., inside room playing game, sleeping.
         -Has life, hunger, weight, and thirstiness maybe more medically detailed be added e.g., blood pressure.
+        -How can he act like a mosquito?
     -Play Mario game (RL).
 3. Command Prompt:
     -Conversational Agents (RL).
