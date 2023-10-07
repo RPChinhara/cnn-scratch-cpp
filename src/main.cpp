@@ -13,6 +13,8 @@
 
 #include <array>
 #include <random>
+#include <windows.h>
+// #pragma comment (lib, "User32.lib")
 
 #define EARLY_STOPPING_ENABLED          1
 #define GRADIENT_CLIPPING_ENABLED       1
@@ -113,8 +115,17 @@ void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_
     }
 }
 
+LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    switch(uMsg) {
+        case WM_CLOSE:
+            PostQuitMessage(0);
+            return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
 // TODO: Looks like ChatGPT is not 100% correct according to output it has given when prompted how to implement rnn from scratch so I need to check wheather my nn is correctly implemented espeacially forward and backpropagation part.
-int main() {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     Iris iris = load_iris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -285,6 +296,41 @@ int main() {
 
     std::cout << a.back() << std::endl << std::endl << val_test.y_second << std::endl;
 
-    while (true)   
-        std::cout << "Life: 100 - Hunger:100 - Height: 175cm - Weight: 65kg - Thirstiness: 100" << std::endl;
+    // while (true)   
+    //     std::cout << "Life: 100 - Hunger:100 - Height: 175cm - Weight: 65kg - Thirstiness: 100" << std::endl;
+    
+    const char CLASS_NAME[] = "Sample Window Class";
+
+    WNDCLASS wc = {};
+    wc.lpfnWndProc = WindowProcedure;
+    wc.hInstance = hInstance;
+    wc.lpszClassName = CLASS_NAME;
+
+    RegisterClass(&wc);
+
+    HWND hwnd = CreateWindowEx(
+        0,
+        CLASS_NAME,
+        "Sample Window",
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+        NULL,
+        NULL,
+        hInstance,
+        NULL
+    );
+
+    if (hwnd == NULL) {
+        return 0;
+    }
+
+    ShowWindow(hwnd, nCmdShow);
+
+    MSG msg = {};
+    while (GetMessage(&msg, NULL, 0, 0)) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+
+    return 0;
 }
