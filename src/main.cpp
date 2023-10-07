@@ -67,6 +67,7 @@ TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const
     return a;
 }
 
+// TODO: maybe rename evetything to use camel case so that it'd much with Win API?
 std::pair<TensorArray, TensorArray> init_parameters() {
     TensorArray w;
     TensorArray b;
