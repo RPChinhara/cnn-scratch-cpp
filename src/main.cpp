@@ -16,6 +16,7 @@
 #include <windows.h>
 // #pragma comment (lib, "User32.lib")
 
+// Hyperparameters
 #define EARLY_STOPPING_ENABLED          1
 #define GRADIENT_CLIPPING_ENABLED       1
 #define LEARNING_RATE_SCHEDULER_ENABLED 1
@@ -125,12 +126,17 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-// TODO: Looks like ChatGPT is not 100% correct according to output it has given when prompted how to implement rnn from scratch so I need to check wheather my nn is correctly implemented espeacially forward and backpropagation part.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    // Create a console for logging otherwise I can't when WinMain() is used as the entry point because it doesn't use the standard console for input and output
+    AllocConsole();
+    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+
+    // Load the Iris dataset
     Iris iris = load_iris();
     Tensor x = iris.features;
     Tensor y = iris.target;
 
+    // Preprocess the dataset
     y = one_hot(y, 3);
     TrainTest2 train_temp = train_test_split(x, y, 0.2, 42);
     TrainTest2 val_test   = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
@@ -138,20 +144,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.x_first   = min_max_scaler(val_test.x_first);
     val_test.x_second  = min_max_scaler(val_test.x_second);
 
+    // Init parameters
     auto w_b = init_parameters();
     #if MOMENTUM_ENABLED
         auto w_b_m = init_parameters();
     #endif
 
-    // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
-    // TODO: Use cross-validation technique?
+    // Training
     for (unsigned short i = 1; i <= EPOCHS; ++i) {
+        // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
+        // TODO: Use cross-validation technique?
+
+        // Set learning rate scheduler
         #if LEARNING_RATE_SCHEDULER_ENABLED
             if (i > 10 && i < 20)      LEARNING_RATE = 0.009f;
             else if (i > 20 && i < 30) LEARNING_RATE = 0.005f;
             else                       LEARNING_RATE = 0.001f;
         #endif
 
+        // Shuffle the dataset
         std::random_device rd;
         auto rd_num = rd();
         Tensor x_shuffled = shuffle(train_temp.x_first, rd_num);
@@ -160,16 +171,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         Tensor y_batch;
         TensorArray  a;
 
-        // TODO: For loop used for mimi batch gradient process multiple examples in parallel utilizing GPUs. That's the main reason facilitating mini-batch training (use std::thread).
+        // SGD (Mini-batch gradient descent)
         for (unsigned int j = 0; j < train_temp.x_first._shape.front(); j += BATCH_SIZE) {
+            // TODO: For loop used for mimi batch gradient process multiple examples in parallel utilizing GPUs. That's the main reason facilitating mini-batch training (use std::thread).
+            
+            // Slice the dataset previously shuffled
             Tensor x_batch = slice(x_shuffled, j, j + BATCH_SIZE);
             y_batch        = slice(y_shuffled, j, j + BATCH_SIZE);
 
             // regularizer::dropout(0.1f, x);
             a = forward_propagation(x_batch, w_b.first, w_b.second);
+            
+            // Backpropagation
+            std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
             // TODO: Implement Adam and AdamW.
-            std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
             // TODO: I need to change i to k
             for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
@@ -232,6 +248,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             // TODO: Don't I have to add regularizer for the biases as well like tf.keras.layers.Dense does?
             // TODO: What is kernel_constraint and bias_constraint?
             // TODO: I could create a file called optimizer, and put below codes as SDG same for upcoming Adam and AdamW.
+
+            // Updating the parameters
             #if !MOMENTUM_ENABLED
                 for (char i = LAYERS.size() - 2; 0 <= i; --i) {
                     w_b.first[i]  -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
@@ -255,6 +273,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
         // TODO: Make progress bar.
+
+        // Logging the metrics
         #define LOG_EPOCH(i, EPOCHS) std::cout << "Epoch " << (i) << "/" << (EPOCHS)
 
         #if L1_REGULARIZATION_ENABLED || L2_REGULARIZATION_ENABLED || L1L2_REGULARIZATION_ENABLED
@@ -271,6 +291,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         std::cout << std::endl;
 
         // TODO: It seems like early stopping is legit regularization so it might be wise to write this function in regularizer files.
+
+        // Early stopping
         #if EARLY_STOPPING_ENABLED
             static unsigned char epochs_without_improvement = 0;
             static float best_val_loss = std::numeric_limits<float>::max();
@@ -289,17 +311,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         #endif
     }
 
+    // Prediction
     auto a = forward_propagation(val_test.x_second, w_b.first, w_b.second);
 
+    // Logging the metrics
     std::cout << std::endl;
     log_metrics("test", val_test.y_second, a.back());
     std::cout << std::endl << std::endl;
 
+    // Comparing the y train and y test
     std::cout << a.back() << std::endl << std::endl << val_test.y_second << std::endl;
 
+    // Logging Biological conditions
     // while (true)   
     //     std::cout << "Life: 100 - Hunger:100 - Height: 175cm - Weight: 65kg - Thirstiness: 100" << std::endl;
     
+    // Making the window
     const char CLASS_NAME[] = "Sample Window Class";
 
     WNDCLASS wc = {};
