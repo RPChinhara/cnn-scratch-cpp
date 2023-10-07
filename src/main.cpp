@@ -283,5 +283,8 @@ int main() {
     log_metrics("test", val_test.y_second, a.back());
     std::cout << std::endl << std::endl;
 
-    std::cout << a.back() << std::endl << std::endl << val_test.y_second;
+    std::cout << a.back() << std::endl << std::endl << val_test.y_second << std::endl;
+
+    while (true)   
+        std::cout << "Life: 100 - Hunger:100 - Height: 175cm - Weight: 65kg - Thirstiness: 100" << std::endl;
 }
