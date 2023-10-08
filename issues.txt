@@ -4,10 +4,22 @@
         -Make scientific devices based on *1.
     -Able to talk through audio.
 2. Graphics:
+    -Check Comparison of reinforcement learning algorithms on https://en.wikipedia.org/wiki/Reinforcement_learning
+    -Lists of RL algorithms
+        -Traditional techniques
+            -Q-Learning
+            -SARSA, 
+            -basic Policy Gradient methods
+        -Modern techniques
+            -reinforcement learning with human feedback (RLHF) 
+            -Deep Q Network (DQN) probably use this one?
+            -Deep deterministic policy gradient (DDPG)
+            -TRPO and PPO, SAC, and HER 
     -Let a character live his life in the world e.g., inside room playing game, sleeping.
         -Has life, hunger, weight, and thirstiness maybe more medically detailed be added e.g., blood pressure.
         -He needs to earn money to buy food.
         -He looks and behaves like human being has 2 arms, legs.
+        -biological brains are hardwired to interpret signals such as pain and hunger as negative reinforcements, and interpret pleasure and food intake as positive reinforcements. I
         -How can he act like a mosquito?
         -Can he surived meaning keep all the status as high as possible e.g., life, weight.
     -Play Mario game (RL).
@@ -36,3 +48,4 @@
 
 Insights
  -I thought NLP is the core of the AGI, but it might not as the case for Computer vision, and other things like continuousness be as dogs which don't use as high level language as we do, yet behave as more high intelligent creatures better than ChatGPT.
+ -Read a paper Reward is enough
