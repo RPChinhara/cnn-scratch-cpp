@@ -187,61 +187,63 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             // TODO: Implement Adam and AdamW.
 
-            // TODO: I need to change i to k
-            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
+            // Calculate dl/dz
+            for (unsigned char k = LAYERS.size() - 1; 0 < k; --k) {
                 // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
                 // dl/dz3 = dl/dy dy/dz3
                 // dl/dz2 = dl/dz3 dz3/da2 da2/z2
                 // dl/dz1 = dl/dz2 dz2/da1 da1/z1
 
-                if (i == LAYERS.size() - 1)
+                if (k == LAYERS.size() - 1)
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - i], w_b.first[i].T()) * relu_prime(a[i - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(LAYERS.size() - 2) - k], w_b.first[k].T()) * relu_prime(a[k - 1]));
 
                 // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
 
-            for (unsigned char i = LAYERS.size() - 1; 0 < i; --i) {
+            // Calculate dl/dw
+            for (unsigned char k = LAYERS.size() - 1; 0 < k; --k) {
                 // dl/dw3 = dl/dz3 dz3/dw3 (+ dl1/w3 or + dl2/w3 or + dl1/w3 + dl2/w3)
                 // dl/dw2 = dl/dz2 dz2/dw2 (+ dl1/w2 or + dl2/w2 or + dl1/w2 + dl2/w2)
                 // dl/dw1 = dl/dz1 dz1/dw1 (+ dl1/w1 or + dl2/w1 or + dl1/w1 + dl2/w1)
 
-                if (i == 1) {
+                if (k == 1) {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[0]));
                     #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w_b.first[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - k]) + l2_prime(L2_LAMBDA, w_b.first[0]));
                     #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[0]) + l2_prime(L2_LAMBDA, w_b.first[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[0]) + l2_prime(L2_LAMBDA, w_b.first[0]));
                     #else
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - i]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(LAYERS.size() - 1) - k]));
                     #endif
                 } else {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[i - 1]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(LAYERS.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[k - 1]));
                     #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l2_prime(L2_LAMBDA, w_b.first[i - 1]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(LAYERS.size() - 1) - k]) + l2_prime(L2_LAMBDA, w_b.first[k - 1]));
                     #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]) + l1_prime(L1_LAMBDA, w_b.first[i - 1]) + l2_prime(L2_LAMBDA, w_b.first[i - 1]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(LAYERS.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[k - 1]) + l2_prime(L2_LAMBDA, w_b.first[k - 1]));
                     #else
-                        dl_dw.push_back(matmul(a[i - 2].T(), dl_dz[(LAYERS.size() - 1) - i]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(LAYERS.size() - 1) - k]));
                     #endif
                 }
             }
 
-            for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
+            // Calculate dl/db
+            for (unsigned char k = 0; k < LAYERS.size() - 1; ++k) {
                 // dl/db3 = dl/dz3 dz3/b3
                 // dl/db2 = dl/dz2 dz2/b2
                 // dl/db1 = dl/dz1 dz1/b1
                 
-                dl_db.push_back(sum(dl_dz[i], 0));
+                dl_db.push_back(sum(dl_dz[k], 0));
             }
 
             #if GRADIENT_CLIPPING_ENABLED
-                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) {
-                    dl_dw[i] = clip_by_value(dl_dw[i], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                    dl_db[i] = clip_by_value(dl_db[i], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
+                for (unsigned char k = 0; k < LAYERS.size() - 1; ++k) {
+                    dl_dw[k] = clip_by_value(dl_dw[k], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
+                    dl_db[k] = clip_by_value(dl_db[k], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
                 }
             #endif
 
@@ -251,20 +253,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             // Updating the parameters
             #if !MOMENTUM_ENABLED
-                for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                    w_b.first[i]  -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
-                    w_b.second[i] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
+                for (char k = LAYERS.size() - 2; 0 <= k; --k) {
+                    w_b.first[k]  -= LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - k];
+                    w_b.second[k] -= LEARNING_RATE * dl_db[(LAYERS.size() - 2) - k];
                 }
             #else
-                for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                    w_b_m.first[i]  = MOMENTUM * w_b_m.first[i] - LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - i];
-                    w_b_m.second[i] = MOMENTUM * w_b_m.second[i] - LEARNING_RATE * dl_db[(LAYERS.size() - 2) - i];
+                for (char k = LAYERS.size() - 2; 0 <= k; --k) {
+                    w_b_m.first[k]  = MOMENTUM * w_b_m.first[k] - LEARNING_RATE * dl_dw[(LAYERS.size() - 2) - k];
+                    w_b_m.second[k] = MOMENTUM * w_b_m.second[k] - LEARNING_RATE * dl_db[(LAYERS.size() - 2) - k];
                 }
 
                 #if 1 // Standard
-                    for (char i = LAYERS.size() - 2; 0 <= i; --i) {
-                        w_b.first[i]  += w_b_m.first[i];
-                        w_b.second[i] += w_b_m.second[i];
+                    for (char k = LAYERS.size() - 2; 0 <= k; --k) {
+                        w_b.first[k]  += w_b_m.first[k];
+                        w_b.second[k] += w_b_m.second[k];
                     }
                 #else // Nesterov
                     // TODO: Handle nestrov for momentum.
@@ -319,7 +321,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     log_metrics("test", val_test.y_second, a.back());
     std::cout << std::endl << std::endl;
 
-    // Comparing the y train and y test
+    // Comparing the y_train and y_test
     std::cout << a.back() << std::endl << std::endl << val_test.y_second << std::endl;
 
     // Logging Biological conditions
