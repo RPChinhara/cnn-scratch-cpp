@@ -22,6 +22,16 @@
         -biological brains are hardwired to interpret signals such as pain and hunger as negative reinforcements, and interpret pleasure and food intake as positive reinforcements. I
         -How can he act like a mosquito?
         -Can he surived meaning keep all the status as high as possible e.g., life, weight.
+        -maximising survival time, minimising pain, maximising healthy food, avoiding accidents
+        -I need to take weather into account
+        -he needs to escape from pradetors e.g., lion, crocodile
+        -Social intelligence is the ability to understand and interact effectively with other agents. This ability is often formalised, using game theory.
+        -it may become injured
+        -How to teach him a thing is scary or cute.
+        -Build human aged between 3 ~ 5.
+        -How to teach him words like banana actually showing banana. Not like how chatGPT is recoginising banana (predicting probable next words).
+        -ability to imitate
+        -memory, imagination, common sense, attention, reasoning, creativity
     -Play Mario game (RL).
 3. Command Prompt:
     -Conversational Agents (RL).
@@ -49,3 +59,5 @@
 Insights
  -I thought NLP is the core of the AGI, but it might not as the case for Computer vision, and other things like continuousness be as dogs which don't use as high level language as we do, yet behave as more high intelligent creatures better than ChatGPT.
  -Read a paper Reward is enough
+ -game theory is important?
+ -Get ideas from wild animal like the one in Africa.
