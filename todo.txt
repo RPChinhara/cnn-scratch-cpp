@@ -1,10 +1,11 @@
 - Plan:
     - First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
+        -Start with negative hunger.
     - Use different algorithms like DQN to improve it.
     - Start making newly born baby with graphics.
 
 - Insights:
-    - I thought NLP is the core of the AGI, but it might not as the case for Computer vision, and other things like continuousness be as dogs which don't use as high level language as we do, yet behave as more high intelligent creatures better than ChatGPT.
+    - I thought NLP is the core of the AGI, but it might not as the case for Computer vision, and other things like continuousness be as dogs which don't use as high level language as we do, yet behave as more high intelligent creatures better than ChatGPT. Like it is quite dumb that it dosen't know what apple is, but if I could teach RL what it is it might be able to recoginise what it is like human does.
     - Read a paper Reward is enough
     - game theory is important?
     - Get ideas from wild animal like the one in Africa.
@@ -19,10 +20,14 @@
         - Might be in nature.
     - Agents:
         - Might be newly born baby.
-    -Algorithms:
+    - Algorithms:
         - Maybe PPO or DQN? Check Comparison of reinforcement learning algorithms on https://en.wikipedia.org/wiki/Reinforcement_learning
         - also check out reinforcement learning with human feedback (RLHF) 
-    - Policy:
+    - Ideas / Objectives:
+        -online, offline learning?
+        -knowledge, learning, perception, social intelligence, language, generalisation, imitation, and general intelligence.
+        - multi-objective learning, risk-sensitive objectives, or objectives that are specified by a human-in-the-loop.
+        - multiple agents, multiple environments?
         - Has life, hunger, weight, and thirstiness maybe more medically detailed be added e.g., blood pressure.
         - He needs to earn money to buy food.
         - He looks and behaves like human being has 2 arms, legs.
@@ -41,6 +46,7 @@
         - memory, imagination, common sense, attention, reasoning, creativity
         - *1 Discover new theories in Scinece, and come up with new scientific devices (Phyiscs, Mathematics, Chemistry).
         Study Existing Theories - > Identify Shortcomings or Gaps - > Develop Mathematical Framework - > Make Predictions - > Seek Peer Review - > Experimental Verification - > Iterate and Refine. Can it do it?
+        - For example, consider a signal that provides +1 reward to the agent each time a round-shaped pebble is collected. In order to maximise this reward signal effectively, an agent may need to classify pebbles, to manipulate pebbles, to navigate to pebble beaches, to store pebbles, to understand waves and tides and their effect on pebble distribution, to persuade people to help collect pebbles, to use tools and vehicles to collect greater quantities, to quarry and shape new pebbles, to discover and build new technologies for collecting pebbles, or to build a corporation that collects pebbles.
         - Able to make games from simple to AAA class.
         - Play Mario game (RL).
         - Conversational Agents (RL).
