@@ -328,6 +328,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // while (true)   
     //     std::cout << "Life: 100 - Hunger:100 - Height: 175cm - Weight: 65kg - Thirstiness: 100" << std::endl;
     
+    // Q-learning
+    unsigned int n_observations = 16;
+    unsigned int n_actions      = 4;
+    
+    // Initialize the Q-table to 0
+    Tensor q_table = zeros({ n_observations, n_actions });
+    std::cout << q_table << std::endl;
+
     // Making the window
     const char CLASS_NAME[] = "Sample Window Class";
 
