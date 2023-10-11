@@ -2,6 +2,8 @@
     - First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
         - Q-Learning -> Deep Q-Network (DQN) -> Double DQN (DDQN) -> Dueling DQN -> Deep Deterministic Policy Gradient (DDPG)
         - Start with negative hunger.
+        - text-based environments
+        - reference OpenAI's Gym (Gymnasium now?)
     - Use different algorithms like DQN to improve it.
     - Start making newly born baby with graphics.
 
@@ -10,6 +12,7 @@
     - Read a paper Reward is enough
     - game theory is important?
     - Get ideas from wild animal like the one in Africa.
+    - RL is typically not used for classification problems. It would be like trying to teach someone to recognize animals by showing them a picture of a dog, not telling them what it is, letting them guess, and then giving them a treat if they're right or a gentle admonishment if they're wrong. However, there are complex problems that have elements of both RL and classification. For example, in a robotic control problem, the robot might need to classify objects in its environment (using supervised learning) and then decide how to interact with them based on that classification (using reinforcement learning).
 
 - AGI:
     - Needs body parts e.g., arms, legs.
