@@ -17,7 +17,8 @@ set SRC=..\src\activations.cpp ^
         ..\src\preprocessing.cpp ^
         ..\src\random.cpp ^
         ..\src\regularizations.cpp ^
-        ..\src\tensor.cpp
+        ..\src\tensor.cpp ^
+        ..\src\window.cpp
 
 if not exist bin mkdir bin
 pushd bin
