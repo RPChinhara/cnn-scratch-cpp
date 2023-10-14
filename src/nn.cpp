@@ -6,6 +6,7 @@
 #include "linalg.h"
 #include "mathematics.h"
 #include "random.h"
+#include "regularizations.h"
 
 #include <random>
 
@@ -22,17 +23,15 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
         auto w_b_m = init_parameters();
     #endif
 
-    std::cout << "done init_parameters" << std::endl;
-
     for (unsigned short i = 1; i <= this->epochs; ++i) {
         // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
         // TODO: Use cross-validation technique?
 
         // Set learning rate scheduler
         #if LEARNING_RATE_SCHEDULER_ENABLED
-            if (i > 10 && i < 20)      LEARNING_RATE = 0.009f;
-            else if (i > 20 && i < 30) LEARNING_RATE = 0.005f;
-            else                       LEARNING_RATE = 0.001f;
+            if (i > 10 && i < 20)      this->learning_rate = 0.009f;
+            else if (i > 20 && i < 30) this->learning_rate = 0.005f;
+            else                       this->learning_rate = 0.001f;
         #endif
 
         // Shuffle the dataset
@@ -117,7 +116,6 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
                 for (unsigned char k = 0; k < this->layers.size() - 1; ++k) {
                     dl_dw[k] = clip_by_value(dl_dw[k], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
                     dl_db[k] = clip_by_value(dl_db[k], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                    std::cout << "Jkjkjk" << std::endl;
                 }
             #endif
 
@@ -128,8 +126,6 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
             // Updating the parameters
             #if !MOMENTUM_ENABLED
                 for (char k = this->layers.size() - 2; 0 <= k; --k) {
-                    std::cout << w_b.first[k] << std::endl;
-
                     w_b.first[k]  -= this->learning_rate * dl_dw[(this->layers.size() - 2) - k];
                     w_b.second[k] -= this->learning_rate * dl_db[(this->layers.size() - 2) - k];
                 }
@@ -231,21 +227,21 @@ void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor
             #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                 float l1 = 0.0f;
 
-                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
+                for (unsigned char i = 0; i < this->layers.size() - 1; ++i)
                     l1 += l1(L1_LAMBDA, (*w)[i]);
 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                 float l2 = 0.0f;
 
-                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i)
+                for (unsigned char i = 0; i < this->layers.size() - 1; ++i)
                     l2 += l2(L2_LAMBDA, (*w)[i]);
 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
                 float l1l2 = 0.0f;
                 
-                for (unsigned char i = 0; i < LAYERS.size() - 1; ++i) 
+                for (unsigned char i = 0; i < this->layers.size() - 1; ++i) 
                     l1l2 += l1(L1_LAMBDA, (*w)[i]) + l2(L2_LAMBDA, (*w)[i]);
                 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
