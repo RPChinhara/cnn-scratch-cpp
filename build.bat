@@ -13,6 +13,7 @@ set SRC=..\src\activations.cpp ^
         ..\src\main.cpp ^
         ..\src\mathematics.cpp ^
         ..\src\metrics.cpp ^
+        ..\src\nn.cpp ^
         ..\src\preprocessing.cpp ^
         ..\src\random.cpp ^
         ..\src\regularizations.cpp ^
