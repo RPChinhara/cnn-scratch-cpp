@@ -23,6 +23,7 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
         auto w_b_m = init_parameters();
     #endif
 
+    // TODO: I don't think I need to use this-> here same for other places.
     for (unsigned short i = 1; i <= this->epochs; ++i) {
         // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
         // TODO: Use cross-validation technique?
@@ -82,21 +83,21 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
 
                 if (k == 1) {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(l1_lambda, w_b.first[0]));
                     #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]) + l2_prime(L2_LAMBDA, w_b.first[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]) + l2_prime(l2_lambda, w_b.first[0]));
                     #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[0]) + l2_prime(L2_LAMBDA, w_b.first[0]));
+                        dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(l1_lambda, w_b.first[0]) + l2_prime(l2_lambda, w_b.first[0]));
                     #else
                         dl_dw.push_back(matmul(x_batch.T(), dl_dz[(this->layers.size() - 1) - k]));
                     #endif
                 } else {
                     #if L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[k - 1]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(l1_lambda, w_b.first[k - 1]));
                     #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]) + l2_prime(L2_LAMBDA, w_b.first[k - 1]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]) + l2_prime(l2_lambda, w_b.first[k - 1]));
                     #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
-                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(L1_LAMBDA, w_b.first[k - 1]) + l2_prime(L2_LAMBDA, w_b.first[k - 1]));
+                        dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]) + l1_prime(l1_lambda, w_b.first[k - 1]) + l2_prime(l2_lambda, w_b.first[k - 1]));
                     #else
                         dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(this->layers.size() - 1) - k]));
                     #endif
@@ -114,8 +115,8 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
 
             #if GRADIENT_CLIPPING_ENABLED
                 for (unsigned char k = 0; k < this->layers.size() - 1; ++k) {
-                    dl_dw[k] = clip_by_value(dl_dw[k], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
-                    dl_db[k] = clip_by_value(dl_db[k], -GRADIENT_CLIP_THRESHOLD, GRADIENT_CLIP_THRESHOLD);
+                    dl_dw[k] = clip_by_value(dl_dw[k], -gradient_clip_threshold, gradient_clip_threshold);
+                    dl_db[k] = clip_by_value(dl_db[k], -gradient_clip_threshold, gradient_clip_threshold);
                 }
             #endif
 
@@ -131,8 +132,8 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
                 }
             #else
                 for (char k = this->layers.size() - 2; 0 <= k; --k) {
-                    w_b_m.first[k]  = MOMENTUM * w_b_m.first[k] - this->learning_rate * dl_dw[(this->layers.size() - 2) - k];
-                    w_b_m.second[k] = MOMENTUM * w_b_m.second[k] - this->learning_rate * dl_db[(this->layers.size() - 2) - k];
+                    w_b_m.first[k]  = momentum * w_b_m.first[k] - this->learning_rate * dl_dw[(this->layers.size() - 2) - k];
+                    w_b_m.second[k] = momentum * w_b_m.second[k] - this->learning_rate * dl_db[(this->layers.size() - 2) - k];
                 }
 
                 #if 1 // Standard
@@ -178,8 +179,8 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
                 epochs_without_improvement += 1;
             }
 
-            if (epochs_without_improvement >= PATIENCE) {
-                std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << static_cast<unsigned short>(PATIENCE) << " epochs." << std::endl;
+            if (epochs_without_improvement >= patience) {
+                std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << static_cast<unsigned short>(patience) << " epochs." << std::endl;
                 break;
             }
         #endif
@@ -240,21 +241,21 @@ void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor
                 float l1 = 0.0f;
 
                 for (unsigned char i = 0; i < this->layers.size() - 1; ++i)
-                    l1 += l1(L1_LAMBDA, (*w)[i]);
+                    l1 += l1(l1_lambda, (*w)[i]);
 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L1L2_REGULARIZATION_ENABLED
                 float l2 = 0.0f;
 
                 for (unsigned char i = 0; i < this->layers.size() - 1; ++i)
-                    l2 += l2(L2_LAMBDA, (*w)[i]);
+                    l2 += l2(l2_lambda, (*w)[i]);
 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #elif L1L2_REGULARIZATION_ENABLED && !L1_REGULARIZATION_ENABLED && !L2_REGULARIZATION_ENABLED
                 float l1l2 = 0.0f;
                 
                 for (unsigned char i = 0; i < this->layers.size() - 1; ++i) 
-                    l1l2 += l1(L1_LAMBDA, (*w)[i]) + l2(L2_LAMBDA, (*w)[i]);
+                    l1l2 += l1(l1_lambda, (*w)[i]) + l2(l2_lambda, (*w)[i]);
                 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #else

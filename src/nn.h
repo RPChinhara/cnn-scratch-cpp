@@ -27,26 +27,20 @@ public:
 private:
     float (*ACCURACY)(const Tensor& y_true, const Tensor& y_pred) = &categorical_accuracy;
     float (*LOSS)(const Tensor& y_true, const Tensor& y_pred)     = &categorical_crossentropy;
+
+    std::vector<unsigned int> layers;
+    
     unsigned short batch_size = 8;
     unsigned short epochs     = 100;
     float learning_rate       = 0.01f;
-    std::vector<unsigned int> layers;
 
-    // TODO: write in lower case
-    float GRADIENT_CLIP_THRESHOLD = 8.0f;
-    float MOMENTUM                = 0.1f;
-    unsigned char PATIENCE        = 12;
+    float gradient_clip_threshold = 8.0f;
+    float momentum                = 0.1f;
+    unsigned char patience        = 12;
     
-    float L1_LAMBDA = 0.01f;
-    float L2_LAMBDA = 0.01f;
+    float l1_lambda = 0.01f;
+    float l2_lambda = 0.01f;
     
-    float BETA_1  = 0.9f;
-    float BETA_2  = 0.999f;
-    float EPSILON = 1e-8f;
-    float M_T     = 0;
-    float V_T     = 0;
-    float T       = 0;
-
     TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b);
     std::pair<TensorArray, TensorArray> init_parameters();
     void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred, const TensorArray *w = nullptr);
