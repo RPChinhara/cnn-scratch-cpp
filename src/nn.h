@@ -27,24 +27,25 @@ public:
 private:
     float (*ACCURACY)(const Tensor& y_true, const Tensor& y_pred) = &categorical_accuracy;
     float (*LOSS)(const Tensor& y_true, const Tensor& y_pred)     = &categorical_crossentropy;
-    unsigned short epochs     = 100;
     unsigned short batch_size = 8;
+    unsigned short epochs     = 100;
     float learning_rate       = 0.01f;
     std::vector<unsigned int> layers;
 
-    [[maybe_unused]] float GRADIENT_CLIP_THRESHOLD = 8.0f;
-    [[maybe_unused]] float MOMENTUM                = 0.1f;
-    [[maybe_unused]] unsigned char PATIENCE        = 12;
+    // TODO: write in lower case
+    float GRADIENT_CLIP_THRESHOLD = 8.0f;
+    float MOMENTUM                = 0.1f;
+    unsigned char PATIENCE        = 12;
     
-    [[maybe_unused]] float L1_LAMBDA = 0.01f;
-    [[maybe_unused]] float L2_LAMBDA = 0.01f;
+    float L1_LAMBDA = 0.01f;
+    float L2_LAMBDA = 0.01f;
     
-    [[maybe_unused]] float BETA_1  = 0.9f;
-    [[maybe_unused]] float BETA_2  = 0.999f;
-    [[maybe_unused]] float EPSILON = 1e-8f;
-    [[maybe_unused]] float M_T     = 0;
-    [[maybe_unused]] float V_T     = 0;
-    [[maybe_unused]] float T       = 0;
+    float BETA_1  = 0.9f;
+    float BETA_2  = 0.999f;
+    float EPSILON = 1e-8f;
+    float M_T     = 0;
+    float V_T     = 0;
+    float T       = 0;
 
     TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b);
     std::pair<TensorArray, TensorArray> init_parameters();

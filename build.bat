@@ -15,6 +15,7 @@ set SRC=..\src\activations.cpp ^
         ..\src\metrics.cpp ^
         ..\src\nn.cpp ^
         ..\src\preprocessing.cpp ^
+        ..\src\q_learning.cpp ^
         ..\src\random.cpp ^
         ..\src\regularizations.cpp ^
         ..\src\tensor.cpp ^

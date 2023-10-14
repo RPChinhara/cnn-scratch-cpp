@@ -188,6 +188,18 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
     return w_b;
 }
 
+void NN::predict(const Tensor& test_x, const Tensor& test_y, const TensorArray& w, const TensorArray& b) {
+    auto a = forward_propagation(test_x, w, b);
+
+    // Logging the metrics
+    std::cout << std::endl;
+    log_metrics("test", test_y, a.back());
+    std::cout << std::endl << std::endl;
+
+    // Comparing the y_train and y_test
+    std::cout << a.back() << std::endl << std::endl << test_y << std::endl;
+}
+
 TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b) {
     TensorArray z;
     TensorArray a;
@@ -253,16 +265,4 @@ void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor
     } else {
         std::cout << data << " loss: " << LOSS(y_true, y_pred) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
     }
-}
-
-void NN::predict(const Tensor& test_x, const Tensor& test_y, const TensorArray& w, const TensorArray& b) {
-    auto a = forward_propagation(test_x, w, b);
-
-    // Logging the metrics
-    std::cout << std::endl;
-    log_metrics("test", test_y, a.back());
-    std::cout << std::endl << std::endl;
-
-    // Comparing the y_train and y_test
-    std::cout << a.back() << std::endl << std::endl << test_y << std::endl;
 }
