@@ -7,7 +7,7 @@
 #include <vector>
 
 // Hyperparameters
-// TODO: Stop using those, and create functions for each of them? like momentum(), learning_rate_scheduler()?
+// TODO: Stop using those, and create functions for each of them? like momentum(), learning_rate_scheduler() or just use booling ?
 #define EARLY_STOPPING_ENABLED          1
 #define GRADIENT_CLIPPING_ENABLED       1
 #define LEARNING_RATE_SCHEDULER_ENABLED 1
