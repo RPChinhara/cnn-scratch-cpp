@@ -10,8 +10,6 @@
 
 #include <random>
 
-using TensorArray = std::vector<Tensor>;
-
 NN::NN(const std::vector<unsigned int>& layers, float learning_rate) {
     this->layers = layers;
     this->learning_rate = learning_rate;
