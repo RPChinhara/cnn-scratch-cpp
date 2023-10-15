@@ -20,7 +20,7 @@ using TensorArray = std::vector<Tensor>;
 
 class NN {
 public:
-    NN(const std::vector<unsigned int>& layers);
+    NN(const std::vector<unsigned int>& layers, float learning_rate);
     void train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y);
     void predict(const Tensor& test_x, const Tensor& test_y);
 
@@ -34,7 +34,7 @@ private:
     
     unsigned short batch_size = 8;
     unsigned short epochs     = 100;
-    float learning_rate       = 0.01f;
+    float learning_rate;
 
     float gradient_clip_threshold = 8.0f;
     float momentum                = 0.1f;

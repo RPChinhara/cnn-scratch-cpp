@@ -12,8 +12,9 @@
 
 using TensorArray = std::vector<Tensor>;
 
-NN::NN(const std::vector<unsigned int>& layers) {
+NN::NN(const std::vector<unsigned int>& layers, float learning_rate) {
     this->layers = layers;
+    this->learning_rate = learning_rate;
 }
 
 void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y) {

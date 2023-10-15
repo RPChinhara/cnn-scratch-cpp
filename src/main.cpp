@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.x_second  = min_max_scaler(val_test.x_second);
 
     // Train and test neural network
-    NN nn = NN({ 4, 128, 3 });
+    NN nn = NN({ 4, 128, 3 }, 0.01f);
     nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
     nn.predict(val_test.x_second, val_test.y_second);
     
