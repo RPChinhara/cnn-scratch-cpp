@@ -16,11 +16,11 @@ NN::NN(const std::vector<unsigned int>& layers) {
     this->layers = layers;
 }
 
-std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y) {
-     // Init parameters
-    auto w_b = init_parameters();
+void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y) {
+    // Init parameters
+    w_b = init_parameters();
     #if MOMENTUM_ENABLED
-        auto w_b_m = init_parameters();
+        w_b_m = init_parameters();
     #endif
 
     // TODO: I don't think I need to use this-> here same for other places.
@@ -185,12 +185,10 @@ std::pair<TensorArray, TensorArray> NN::train(const Tensor& train_x, const Tenso
             }
         #endif
     }
-
-    return w_b;
 }
 
-void NN::predict(const Tensor& test_x, const Tensor& test_y, const TensorArray& w, const TensorArray& b) {
-    auto a = forward_propagation(test_x, w, b);
+void NN::predict(const Tensor& test_x, const Tensor& test_y) {
+    auto a = forward_propagation(test_x, w_b.first, w_b.second);
 
     // Logging the metrics
     std::cout << std::endl;

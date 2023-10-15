@@ -23,8 +23,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Train and test neural network
     NN nn = NN({ 4, 128, 3 });
-    auto w_b = nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-    nn.predict(val_test.x_second, val_test.y_second, w_b.first, w_b.second);
+    nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
+    nn.predict(val_test.x_second, val_test.y_second);
     
     // Making the window
     try {
