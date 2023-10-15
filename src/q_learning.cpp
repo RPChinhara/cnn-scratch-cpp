@@ -20,22 +20,22 @@ void QLearning::choose_action(unsigned int state) {
 //         return np.random.randint(0, self.n_actions)
 
     // Exploit
-    if np.random.rand() > exploration_rate:
-    // Explore
+    // if np.random.rand() > exploration_rate:
+    // // Explore
 
-    // create
-    np.random.rand()
-    np.random.randint(
+    // // create
+    // np.random.rand()
+    // np.random.randint(
 }
 
 void QLearning::update(unsigned int state, unsigned int action, float reward, float next_state) {
-    # Q-learning update rule
-        best_next_action = np.argmax(self.q_table[next_state, :])
-        q_target = reward + self.discount_factor * self.q_table[next_state, best_next_action]
-        q_delta = q_target - self.q_table[state, action]
-        self.q_table[state, action] += self.learning_rate * q_delta
+    // # Q-learning update rule
+    //     best_next_action = np.argmax(self.q_table[next_state, :])
+    //     q_target = reward + self.discount_factor * self.q_table[next_state, best_next_action]
+    //     q_delta = q_target - self.q_table[state, action]
+    //     self.q_table[state, action] += self.learning_rate * q_delta
         
-        # Exploration rate decay
-        if self.exploration_rate > self.exploration_min:
-            self.exploration_rate *= self.exploration_decay
+    //     # Exploration rate decay
+    //     if self.exploration_rate > self.exploration_min:
+    //         self.exploration_rate *= self.exploration_decay
 }
