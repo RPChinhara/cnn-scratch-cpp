@@ -47,8 +47,8 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
             // TODO: For loop used for mimi batch gradient process multiple examples in parallel utilizing GPUs. That's the main reason facilitating mini-batch training (use std::thread).
             
             // Slice the dataset previously shuffled
-            Tensor x_batch = slice(x_shuffled, j, j + batch_size);
-            y_batch        = slice(y_shuffled, j, j + batch_size);
+            Tensor x_batch = slice(x_shuffled, j, batch_size);
+            y_batch        = slice(y_shuffled, j, batch_size);
 
             // regularizer::dropout(0.1f, x);
             a = forward_propagation(x_batch, w_b.first, w_b.second);

@@ -18,23 +18,18 @@ QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learni
 
 unsigned int QLearning::choose_action(unsigned int state) {
     // Exploit
-    std::random_device rd;  // Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+    std::random_device rd;
+    std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
 
-    std::cout << q_table << std::endl;
-    std::cout << q_table._shape[0] << std::endl;
-    Tensor sliced_q_table = slice(q_table, state, 1);
-    std::cout << sliced_q_table << std::endl;
-
-    // if (dis_1(gen) > exploration_rate) {
-    //     Tensor sliced_q_table = slice(q_table, state, 1);
-    // 	unsigned int max = std::numeric_limits<unsigned int>::lowest();
-    //     for(int i = 0; i < sliced_q_table._size; ++i)
-    //         if (sliced_q_table[i] > max)
-    //             max = sliced_q_table[i];
-    //     return max;
-    // }
+    if (dis_1(gen) > exploration_rate) {
+        Tensor sliced_q_table = slice(q_table, state, 1);
+    	unsigned int max = std::numeric_limits<unsigned int>::lowest();
+        for(int i = 0; i < sliced_q_table._size; ++i)
+            if (sliced_q_table[i] > max)
+                max = sliced_q_table[i];
+        return max;
+    }
 
     // Explore
     std::uniform_int_distribution<int> dis_2(0, n_actions - 1);
