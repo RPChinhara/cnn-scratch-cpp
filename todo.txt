@@ -28,6 +28,9 @@
         - Maybe PPO or DQN? Check Comparison of reinforcement learning algorithms on https://en.wikipedia.org/wiki/Reinforcement_learning
         - also check out reinforcement learning with human feedback (RLHF) 
     - Ideas / Objectives:
+        - First create a body in 2D resembles Stardew Valley, Terraria, pokemon. In 3D, Minecraft?
+        - Research and observe animals in nature.
+        - how childs learn to speak?
         - what is Markov decision process (MDP)
         - what is inverse reinforcement learning (IRL) and RHIP a new IRL algorithm?
         - Imitation Learning

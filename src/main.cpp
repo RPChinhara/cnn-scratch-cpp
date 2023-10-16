@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.predict(val_test.x_second, val_test.y_second);
 
     // Q-learining
-    QLearning q_learning = QLearning(1, 1, 1, 1, 1, 1, 1);
+    QLearning q_learning = QLearning(5, 3);
     q_learning.choose_action(3);
 
     // Making the window
