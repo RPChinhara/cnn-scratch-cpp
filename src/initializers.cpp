@@ -164,7 +164,7 @@ Tensor uniform_distribution(const std::vector<unsigned int>& shape, const float 
     set_size(out, shape);
     out._elem = new float[out._size];
 
-    std::uniform_int_distribution<unsigned int> dist(min_val, max_val);
+    std::uniform_real_distribution<> dist(min_val, max_val);
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());

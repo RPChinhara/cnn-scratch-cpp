@@ -1,8 +1,8 @@
 #pragma once
 
-#include "tensor.h"
 #include "losses.h"
 #include "metrics.h"
+#include "tensor.h"
 
 #include <vector>
 
