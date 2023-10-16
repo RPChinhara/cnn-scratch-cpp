@@ -28,6 +28,7 @@ unsigned int QLearning::choose_action(unsigned int state) {
         for(int i = 0; i < sliced_q_table._size; ++i)
             if (sliced_q_table[i] > max)
                 max = sliced_q_table[i];
+            
         return max;
     }
 
@@ -36,14 +37,22 @@ unsigned int QLearning::choose_action(unsigned int state) {
     return dis_2(gen);
 }
 
-void QLearning::update(unsigned int state, unsigned int action, float reward, float next_state) {
-    // # Q-learning update rule
-    //     best_next_action = np.argmax(self.q_table[next_state, :])
-    //     q_target = reward + self.discount_factor * self.q_table[next_state, best_next_action]
-    //     q_delta = q_target - self.q_table[state, action]
-    //     self.q_table[state, action] += self.learning_rate * q_delta
+void QLearning::update(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
+    // Q-learning update rule
+    Tensor sliced_q_table = slice(q_table, next_state, 1);
+    unsigned int max = std::numeric_limits<unsigned int>::lowest();
+    for(int i = 0; i < sliced_q_table._size; ++i)
+        if (sliced_q_table[i] > max)
+            max = sliced_q_table[i];
+
+    unsigned int best_next_action = max;
+    unsigned int idx = best_next_action ? next_state == 0 : (next_state * q_table._shape.back()) + best_next_action;
+    float q_target = reward + discount_factor * q_table[idx];
+    idx = action ? state == 0 : (state * q_table._shape.back()) + action;
+    float q_delta = q_target - q_table[idx];
+    q_table[idx] += learning_rate * q_delta;
         
-    //     # Exploration rate decay
-    //     if self.exploration_rate > self.exploration_min:
-    //         self.exploration_rate *= self.exploration_decay
+    // Exploration rate decay
+    if (exploration_rate > exploration_min)
+        exploration_rate *= exploration_decay;
 }

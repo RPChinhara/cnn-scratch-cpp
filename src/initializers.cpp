@@ -14,6 +14,7 @@ static void set_shape(Tensor& in, const std::vector<unsigned int>& shape) {
     in._shape.reserve(shape.size());
     for (unsigned int elem : shape)
         assert(elem != 0);
+
     in._shape = std::move(shape);
 }
 
@@ -22,9 +23,11 @@ static void set_size(Tensor& in, const std::vector<unsigned int>& shape) {
         unsigned int num_elem = 1;
         for (unsigned int elem : shape)
             num_elem *= elem;
+
         in._size = num_elem;
-    } else
+    } else {
         in._size = 1;
+    }
 }
 
 static void set_num_ch_dim(Tensor& in,  const std::vector<unsigned int>& shape) {
@@ -32,8 +35,10 @@ static void set_num_ch_dim(Tensor& in,  const std::vector<unsigned int>& shape) 
         in._num_ch_dim = 1;
         for (int i = 0; i < shape.size() - 1; ++i)
             in._num_ch_dim *= shape[i];
-    } else
+
+    } else {
         in._num_ch_dim = 0;
+    }
 }
 
 Tensor glorot_normal_distribution(const std::vector<unsigned int>& shape) {
@@ -49,6 +54,7 @@ Tensor glorot_normal_distribution(const std::vector<unsigned int>& shape) {
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -66,6 +72,7 @@ Tensor glorot_uniform_distribution(const std::vector<unsigned int>& shape) {
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -81,6 +88,7 @@ Tensor he_normal_distribution(const std::vector<unsigned int>& shape) {
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -96,6 +104,7 @@ Tensor he_uniform_distribution(const std::vector<unsigned int>& shape) {
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -111,6 +120,7 @@ Tensor lecun_normal_distribution(const std::vector<unsigned int>& shape) {
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -126,6 +136,7 @@ Tensor lecun_uniform_distribution(const std::vector<unsigned int>& shape) {
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -140,6 +151,7 @@ Tensor normal_distribution(const std::vector<unsigned int>& shape, const float m
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+    
     set_num_ch_dim(out, shape);
     return out;
 }
@@ -168,6 +180,7 @@ Tensor uniform_distribution(const std::vector<unsigned int>& shape, const float 
 
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = dist(gen());
+    
     set_num_ch_dim(out, shape);
     return out;
 }
