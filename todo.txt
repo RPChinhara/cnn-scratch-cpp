@@ -11,6 +11,12 @@
         - I need to take weather into account
         - he needs to escape from pradetors e.g., lion, crocodile so it may become injured
         - How to teach him a thing is scary or cute.
+        - Add date e.g., time, day
+        - Odor e.g., take a shower
+        - Getting a haircut
+        - Brushing teeth
+        - Stress level -> play sports to reduce it
+        - How old are they? Do they age at all?
     - Start making newly born baby with graphics.
 
 - Insights:
