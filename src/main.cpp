@@ -4,6 +4,8 @@
 #include "q_learning.h"
 #include "window.h"
 
+#include <random>
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Create a console for logging otherwise I can't when WinMain() is used as the entry point because it doesn't use the standard console for input and output
     AllocConsole();
@@ -30,6 +32,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Q-learining
     QLearning q_learning = QLearning(5, 3);
     q_learning.choose_action(3);
+
+    for (int i = 0; i < 1000; ++i) {
+        std::uniform_int_distribution<int> state(0, 5 - 1);
+        bool done = false;
+
+        while (!done) {
+            
+        }
+    }
 
     // Making the window
     try {
