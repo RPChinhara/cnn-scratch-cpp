@@ -8,6 +8,7 @@ public:
     unsigned int choose_action(unsigned int state);
     void update(unsigned int state, unsigned int action, float reward, unsigned int next_state);
 
+    Tensor q_table;
 private:
     unsigned int n_states;
     unsigned int n_actions;
@@ -16,5 +17,4 @@ private:
     float exploration_rate;
     float exploration_decay;
     float exploration_min;
-    Tensor q_table;
 };
