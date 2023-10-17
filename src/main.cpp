@@ -32,7 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Q-learining
     // Assuming we have 5 states and 3 actions
-    QLearning q_learner = QLearning(5, 3);
+    QLearning agent = QLearning(5, 3);
 
     for (int i = 0; i < 10; ++i) {
         std::random_device rd;
@@ -41,14 +41,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         bool done  = false;
 
         while (!done) {
-            unsigned int action = q_learner.choose_action(state(gen));
+            unsigned int action = agent.choose_action(state(gen));
 
             // Here you would take the action in the environment and get the next_state and reward.
             // This is just a placeholder example:
             auto next_state = std::uniform_int_distribution<unsigned int>(0, 5 - 1);
             auto reward = -1 ? action != 2 : 1; // Assume action 2 is the "correct" action for demonstration
 
-            q_learner.update(state(gen), action, reward, next_state(gen));
+            agent.update(state(gen), action, reward, next_state(gen));
 
             state = next_state;
 
@@ -58,22 +58,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 done = true;
             }
         }
-        std::cout << q_learner.q_table << std::endl;
+        std::cout << agent.q_table << std::endl;
     }
 
     // Using the environment:
     Environment env = Environment("hello");
 
-    // state = env.reset();
-    // env.render()
+    std::string state = env.reset();
+    env.render();
 
-    // // Example action: guessing the letter "h" for the 0th position
-    // next_state, reward, done = env.step((0, 'h'))
-    // env.render()
+    // Example action: guessing the letter "h" for the 0th position
+    auto result = env.step({0, 'h'});
+    std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
+    env.render();
 
-    // And so on...
+    result = env.step({1, 'e'});
+    std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
+    env.render();
 
-    std::vector<int> myVector(5, 0); // Creates a vector of size 5 with all elements initialized to 0
+    state = env.reset();
+    std::cout << state << std::endl;
+    env.render();
+
+    result = env.step({2, 'l'});
+    std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
+    env.render();
 
     // Making the window
     try {
