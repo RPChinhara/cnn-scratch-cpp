@@ -19,6 +19,7 @@
         - How old are they? Do they age at all?
         - Get a partner and make babies.
         - He has to educate himself to solve problems associated with Pythysics or in naturaly to survibe.
+        - The book 'Why Greatness Cannot Be Planned' proposes to follow the interesting and the novel instead. The authors developed an algorithm called novelty search, where instead of optimizing an objective, the agent just tries out behaviors that are as novel to it as possible
     - Start making newly born baby with graphics.
 
 - Insights:
