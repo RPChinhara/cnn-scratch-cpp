@@ -2,6 +2,7 @@
 #include "nn.h"
 #include "preprocessing.h"
 #include "q_learning.h"
+#include "environment.h"
 #include "window.h"
 
 #include <random>
@@ -31,23 +32,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Q-learining
     // Assuming we have 5 states and 3 actions
-    QLearning q_learning = QLearning(5, 3);
+    QLearning q_learner = QLearning(5, 3);
 
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 10; ++i) {
         std::random_device rd;
         std::mt19937 gen(rd());
         auto state = std::uniform_int_distribution<unsigned int>(0, 5 - 1); // Start with a random state
         bool done  = false;
 
         while (!done) {
-            unsigned int action = q_learning.choose_action(state(gen));
+            unsigned int action = q_learner.choose_action(state(gen));
 
             // Here you would take the action in the environment and get the next_state and reward.
             // This is just a placeholder example:
             auto next_state = std::uniform_int_distribution<unsigned int>(0, 5 - 1);
             auto reward = -1 ? action != 2 : 1; // Assume action 2 is the "correct" action for demonstration
 
-            q_learning.update(state(gen), action, reward, next_state(gen));
+            q_learner.update(state(gen), action, reward, next_state(gen));
 
             state = next_state;
 
@@ -57,8 +58,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 done = true;
             }
         }
-        std::cout << q_learning.q_table << std::endl;
+        std::cout << q_learner.q_table << std::endl;
     }
+
+    // Using the environment:
+    Environment env = Environment("hello");
+
+    // state = env.reset();
+    // env.render()
+
+    // // Example action: guessing the letter "h" for the 0th position
+    // next_state, reward, done = env.step((0, 'h'))
+    // env.render()
+
+    // And so on...
+
+    std::vector<int> myVector(5, 0); // Creates a vector of size 5 with all elements initialized to 0
 
     // Making the window
     try {
