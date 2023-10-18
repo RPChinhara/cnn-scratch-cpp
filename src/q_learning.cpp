@@ -17,6 +17,7 @@ QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learni
 }
 
 unsigned int QLearning::choose_action(unsigned int state) {
+    // TODO: Use epsilon-greedy policy or other policies?
     // Exploit
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -38,7 +39,14 @@ unsigned int QLearning::choose_action(unsigned int state) {
 }
 
 void QLearning::update(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
-    // Q-learning update rule
+    // Q-learning update rule -> Q(s, a) = Q(s, a) + α * [R + γ * max(Q(s', a')) - Q(s, a)]
+    // Q(s, a) is the Q-value of state-action pair (s, a).
+    // α is the learning rate, which controls how much the Q-values are updated based on new information.
+    // R is the immediate reward received after taking action a in state s.
+    // γ is the discount factor, which determines the importance of future rewards.
+    // s' is the next state after taking action a.
+    // a' is the action that maximizes the Q-value in the next state s'.
+
     Tensor sliced_q_table = slice(q_table, next_state, 1);
     unsigned int max = std::numeric_limits<unsigned int>::lowest();
     for(int i = 0; i < sliced_q_table._size; ++i)
