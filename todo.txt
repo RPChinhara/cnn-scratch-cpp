@@ -18,6 +18,8 @@
         - Stress level -> play sports to reduce it
         - How old are they? Do they age at all?
         - Get a partner and make babies.
+        - He needs to go to the toilet, get sun(vitamin c)
+        - Has most recent and future goals example of former would be to go for a walk to reduce stress level, and for former will be to solve Physics problems.
         - He has to educate himself to solve problems associated with Pythysics or in naturaly to survibe.
         - The book 'Why Greatness Cannot Be Planned' proposes to follow the interesting and the novel instead. The authors developed an algorithm called novelty search, where instead of optimizing an objective, the agent just tries out behaviors that are as novel to it as possible, but I realized that paper 'Reward is Enough' came 6 years after this so not sure...
     - Start making newly born baby with graphics.

@@ -1,6 +1,7 @@
 #include "environment.h"
 
 #include <iostream>
+#include <windows.h>
 
 Environment::Environment(const std::string& secret_word) {
     this->secret_word = secret_word;
@@ -24,8 +25,10 @@ std::string Environment::reset() {
 }
 
 std::tuple<std::string, int, bool> Environment::step(const std::pair<int, char>& action) {
-    if (done)
-        std::cerr << "The game is over. Please reset the environment." << std::endl;
+    if (done) {
+        MessageBox(NULL, "The game is over. Please reset the environment.", "Error", MB_ICONERROR | MB_OK);
+        ExitProcess(1);
+    }
 
     // Unpack the action, which is expected to be a tuple of (position, letter)
     int position = action.first;

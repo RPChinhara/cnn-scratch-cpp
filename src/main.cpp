@@ -72,18 +72,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
     env.render();
 
-    result = env.step({1, 'e'});
-    std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
-    env.render();
-
-    state = env.reset();
-    std::cout << state << std::endl;
-    env.render();
-
-    result = env.step({2, 'l'});
-    std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
-    env.render();
-
     // Making the window
     try {
         Window window(hInstance, nCmdShow);

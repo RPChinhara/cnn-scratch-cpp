@@ -255,6 +255,7 @@ void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor
                 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #else
+                // TODO: I need to use MessageBox() like the one in Environment::step()
                 std::cerr << std::endl << __FILE__ << "(" << __LINE__ << ")" << ": error: choose only one regularization" << std::endl;
                 exit(1);
             #endif
