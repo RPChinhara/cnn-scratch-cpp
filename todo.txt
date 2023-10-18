@@ -22,6 +22,8 @@
         - Has most recent and future goals example of former would be to go for a walk to reduce stress level, and for former will be to solve Physics problems.
         - He has to educate himself to solve problems associated with Pythysics or in naturaly to survibe.
         - The book 'Why Greatness Cannot Be Planned' proposes to follow the interesting and the novel instead. The authors developed an algorithm called novelty search, where instead of optimizing an objective, the agent just tries out behaviors that are as novel to it as possible, but I realized that paper 'Reward is Enough' came 6 years after this so not sure...
+        - While the agent interacting with the environment it should train nn for like classification tasks?
+        - Maybe in the future the agent can add new actions he came up with?
     - Start making newly born baby with graphics.
 
 - Insights:

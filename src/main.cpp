@@ -54,12 +54,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             // Just an example to end the loop
             if (reward == 1) {
-                std::cout << action << std::endl;
                 done = true;
             }
         }
-        std::cout << agent.q_table << std::endl;
     }
+
+    std::cout << agent.q_table << std::endl;
 
     // Using the environment:
     Environment env = Environment("hello");
