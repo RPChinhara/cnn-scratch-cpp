@@ -24,6 +24,11 @@
         - The book 'Why Greatness Cannot Be Planned' proposes to follow the interesting and the novel instead. The authors developed an algorithm called novelty search, where instead of optimizing an objective, the agent just tries out behaviors that are as novel to it as possible, but I realized that paper 'Reward is Enough' came 6 years after this so not sure...
         - While the agent interacting with the environment it should train nn for like classification tasks?
         - Maybe in the future the agent can add new actions he came up with?
+        - Done = true if the agent found new physics theory or go to toilet or earn money ?
+        - Observe possible things irl that could become states in q learning
+        - Ideal plan is the agent interacts env like 2d pokemon world -> 3d pokemon or GTA world -> VR, but I guess I can accomplish the physics goal with 2d pokemon world so delete terraria idea. In 2d pokemon world add dialogues maybe using LLMs so that the agent can manipulate language which is super important. First, create one small city like the one in Pokemon?
+        - Add memory like using nn for classification task?
+        - 体力、眠たさも追加？　借入もstate, 経済、治安、会社に就職
     - Start making newly born baby with graphics.
 
 - Insights:
