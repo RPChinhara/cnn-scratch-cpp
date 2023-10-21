@@ -34,6 +34,7 @@
         - Get a reward if his height grew, and learned new language
         - Meybe he dosen’t have to be baby might be already an adult?
         - Maybe there might be RL within Rl? e.g., within the states he decide to do puzzle game in order to learn new words at this point use another RL? I mean human is also like that meaning it’s like layers of RL. In order to live, you have to work, and within the work you have to do certatin tasks.
+        - Start simple maybe actions would be just eat, sleep, excersise or something. I need to write a program when for example if sleep action is chose the agent has to walk up to the bed and go to bed.
     - Start making newly born baby with graphics.
 
 - Insights:
