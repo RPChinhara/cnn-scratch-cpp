@@ -29,6 +29,11 @@
         - Ideal plan is the agent interacts env like 2d pokemon world -> 3d pokemon or GTA world -> VR, but I guess I can accomplish the physics goal with 2d pokemon world so delete terraria idea. In 2d pokemon world add dialogues maybe using LLMs so that the agent can manipulate language which is super important. First, create one small city like the one in Pokemon?
         - Add memory like using nn for classification task?
         - 体力、眠たさも追加？　借入もstate, 経済、治安、会社に就職
+        Start from a baby maybe who has parents
+        - Starts from a house
+        - Get a reward if his height grew, and learned new language
+        - Meybe he dosen’t have to be baby might be already an adult?
+        - Maybe there might be RL within Rl? e.g., within the states he decide to do puzzle game in order to learn new words at this point use another RL? I mean human is also like that meaning it’s like layers of RL. In order to live, you have to work, and within the work you have to do certatin tasks.
     - Start making newly born baby with graphics.
 
 - Insights:
