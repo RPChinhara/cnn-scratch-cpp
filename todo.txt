@@ -1,5 +1,15 @@
 - Plan:
     - First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
+        - What is considered done?
+        - Get reward when successefully eaten
+        - First create cat like creature? Where goals are to juat live(but for how long?) and eat.
+        - What about creating myself e.g., wake up at the mansion, get reward when went for a walk, eaten.
+        - Goals (live 80 years, solve physics probs)
+        - Looks adult, but brain in immatur       
+        - First start a goal of living 10 days by working to earn money and eat
+        - Goals (live 10 days, learn 10 words using nested RL)
+        - Earn ¥300000 per month, but can’t able to if he’s not humble enough(party too much,
+
         - Q-Learning -> Deep Q-Network (DQN) -> Double DQN (DDQN) -> Dueling DQN -> Deep Deterministic Policy Gradient (DDPG)
         - text-based environments
         - reference OpenAI's Gym (Gymnasium now?)

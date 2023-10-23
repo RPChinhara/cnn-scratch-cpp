@@ -17,7 +17,6 @@ QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learni
 }
 
 unsigned int QLearning::choose_action(unsigned int state) {
-    // TODO: Use epsilon-greedy policy or other policies?
     // Exploit (it'd return return index of highest value within the specified index of row which is state)
     std::random_device rd;
     std::mt19937 gen(rd());
