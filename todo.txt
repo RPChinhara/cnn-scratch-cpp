@@ -5,44 +5,31 @@
         - First create cat like creature? Where goals are to juat live(but for how long?) and eat.
         - What about creating myself e.g., wake up at the mansion, get reward when went for a walk, eaten.
         - Goals (live 80 years, solve physics probs)
-        - Looks adult, but brain in immatur       
+        - Looks adult, but brain in immature. Meybe he dosen’t have to be baby might be already an adult?
         - First start a goal of living 10 days by working to earn money and eat
         - Goals (live 10 days, learn 10 words using nested RL)
-        - Earn ¥300000 per month, but can’t able to if he’s not humble enough(party too much,
+        - Earn ¥300000 per month, but can’t able to if he’s not humble enough (party too much, not living healthy enouth)
 
         - Q-Learning -> Deep Q-Network (DQN) -> Double DQN (DDQN) -> Dueling DQN -> Deep Deterministic Policy Gradient (DDPG)
         - text-based environments
         - reference OpenAI's Gym (Gymnasium now?)
         - Simulate the agent was born in urban city as we are.
-        - Has life(Start with negative hunger), hunger, weight, and thirstiness maybe more medically detailed be added e.g., blood pressure.
-        - He needs to earn money to buy food.
         - Can he surived meaning keep all the status as high as possible e.g., life, weight.
         - maximising survival time, minimising pain, maximising healthy food, avoiding accidents
-        - I need to take weather into account
         - he needs to escape from pradetors e.g., lion, crocodile so it may become injured
         - How to teach him a thing is scary or cute.
-        - Add date e.g., time, day
-        - Odor e.g., take a shower
-        - Getting a haircut
-        - Brushing teeth
-        - Stress level -> play sports to reduce it
-        - How old are they? Do they age at all?
-        - Get a partner and make babies.
-        - He needs to go to the toilet, get sun(vitamin c)
         - Has most recent and future goals example of former would be to go for a walk to reduce stress level, and for former will be to solve Physics problems.
         - He has to educate himself to solve problems associated with Pythysics or in naturaly to survibe.
         - The book 'Why Greatness Cannot Be Planned' proposes to follow the interesting and the novel instead. The authors developed an algorithm called novelty search, where instead of optimizing an objective, the agent just tries out behaviors that are as novel to it as possible, but I realized that paper 'Reward is Enough' came 6 years after this so not sure...
         - While the agent interacting with the environment it should train nn for like classification tasks?
         - Maybe in the future the agent can add new actions he came up with?
         - Done = true if the agent found new physics theory or go to toilet or earn money ?
-        - Observe possible things irl that could become states in q learning
         - Ideal plan is the agent interacts env like 2d pokemon world -> 3d pokemon or GTA world -> VR, but I guess I can accomplish the physics goal with 2d pokemon world so delete terraria idea. In 2d pokemon world add dialogues maybe using LLMs so that the agent can manipulate language which is super important. First, create one small city like the one in Pokemon?
         - Add memory like using nn for classification task?
-        - 体力、眠たさも追加？　借入もstate, 経済、治安、会社に就職
-        Start from a baby maybe who has parents
+        - 経済、治安、会社に就職
+        - Start from a baby maybe who has parents
         - Starts from a house
         - Get a reward if his height grew, and learned new language
-        - Meybe he dosen’t have to be baby might be already an adult?
         - Maybe there might be RL within Rl? e.g., within the states he decide to do puzzle game in order to learn new words at this point use another RL? I mean human is also like that meaning it’s like layers of RL. In order to live, you have to work, and within the work you have to do certatin tasks.
         - Start simple maybe actions would be just eat, sleep, excersise or something. I need to write a program when for example if sleep action is chose the agent has to walk up to the bed and go to bed.
     - Start making newly born baby with graphics.

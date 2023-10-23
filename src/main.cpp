@@ -31,10 +31,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.predict(val_test.x_second, val_test.y_second);
 
     // Q-learining
-    // Assuming we have 5 states and 3 actions
-    QLearning agent = QLearning(5, 3);
+    // states
+    // - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, odor, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma)
+    // - weather conditions, time of day
+    // - saving, debt
+    unsigned int num_states   = 1000;
 
-    for (int i = 0; i < 10; ++i) {
+    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, hydrate, work(earn money), study, get a haircut, brush teeth, take a bath/shower, play some sports, get sun, drinking, smoking, check health status
+    unsigned int num_actions  = 1000;
+
+    unsigned int num_episodes = 1000;
+    QLearning agent = QLearning(num_states, num_actions);
+
+    for (int i = 0; i < num_episodes; ++i) {
         std::random_device rd;
         std::mt19937 gen(rd());
         auto state = std::uniform_int_distribution<unsigned int>(0, 5 - 1); // Start with a random state
