@@ -1,6 +1,6 @@
 - Plan:
     - First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
-        - What is considered done?
+        - What is considered done? Maybe it dosen't need to be done as it's not real living things which have ages.
         - Get reward when successefully eaten
         - First create cat like creature? Where goals are to juat live(but for how long?) and eat.
         - What about creating myself e.g., wake up at the mansion, get reward when went for a walk, eaten.
