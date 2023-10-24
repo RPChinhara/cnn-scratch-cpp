@@ -32,19 +32,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Q-learining
     // states
-    // - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, odor, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma)
+    // - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, odor, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma), pain
     // - weather conditions, time of day
     // - saving, debt
-    // first start with three states which are hunger
-    // hunger: low
-    // thirstiness: low
-    // hunger: low
-    // thirstiness: high
-    // hunger: high
-    // thirstiness: low
-    // hunger: high
-    // thirstiness: high
-    unsigned int num_states   = 1000;
+    // first start with three states which are hunger, thirstiness, and mental health each have 3 states (low, medium, high) which means result in 3 * 3 * 3 = 9 states.
+    unsigned int num_states   = 9;
 
     // actions - EAT(meat, vegetable), EXERCISE, SLEEP, hydrate, work(earn money), study, get a haircut, brush teeth, take a bath/shower, play some sports, get sun, drinking, smoking, check health status
     unsigned int num_actions  = 1000;
