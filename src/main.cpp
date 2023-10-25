@@ -31,15 +31,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.predict(val_test.x_second, val_test.y_second);
 
     // Q-learining
-    // states
-    // - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, odor, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma), pain
-    // - weather conditions, time of day
-    // - saving, debt
+    // states - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity
+    // - weather conditions, temperature, time of day, location
+    // - financial status (income, savings, and debt), education level
     // first start with three states which are hunger, thirstiness, and mental health each have 3 states (low, medium, high) which means result in 3 * 3 * 3 = 9 states.
-    unsigned int num_states   = 9;
+    unsigned int num_states = 9;
 
-    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, hydrate, work(earn money), study, get a haircut, brush teeth, take a bath/shower, play some sports, get sun, drinking, smoking, check health status
-    unsigned int num_actions  = 1000;
+    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, check health status, socialize, healthcare, shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel)
+    unsigned int num_actions = 1000;
 
     unsigned int num_episodes = 1000;
     QLearning agent = QLearning(num_states, num_actions);
