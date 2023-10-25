@@ -31,15 +31,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.predict(val_test.x_second, val_test.y_second);
 
     // Q-learining
-    // states - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity
-    // - weather conditions, temperature, time of day, location
-    // - financial status (income, savings, and debt), education level
-    // first start with three states which are hunger, thirstiness, and mental health each have 3 states (low, medium, high) which means result in 3 * 3 * 3 = 9 states.
-    unsigned int num_states = 9;
+    // states - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(cacer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature, time of day, location, financial status (income, savings, and debt), education level.
+    // first start with 3 states which are hunger, thirstiness, and mental health each have 5 states (very hungry, hungry, neutral, full, very full), (very thirsty, thirsty, neutral, satisfied, very satisfied), (very stressed, stressed, neutral, content, happy) which means 5 (hunger) * 5 (thirstiness) * 5 (mental health) = 125 states.
+    unsigned int num_states = 125;
 
-    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, check health status, socialize, healthcare, shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel)
-    unsigned int num_actions = 1000;
-
+    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE, hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, check health status, healthcare, shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel)
+    // first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
+    // TODO: I could go more detail e.g., 
+    // Food Type: Specify the type of food the agent can choose to eat, such as healthy options (vegetables, fruits, lean proteins) or unhealthy options (fast food, sugary snacks).
+    // Portion Size: Define different portion sizes (small, medium, large) for the agent's meals.
+    // Meal Timing: Determine when the agent can eat (breakfast, lunch, dinner, snacks).
+    unsigned int num_actions = 81;
+    
     unsigned int num_episodes = 1000;
     QLearning agent = QLearning(num_states, num_actions);
 
