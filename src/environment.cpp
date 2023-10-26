@@ -35,12 +35,19 @@ std::tuple<std::string, int, bool> Environment::step(const std::pair<int, char>&
     return std::make_tuple("cat", 0, done); // 0 reward for failure
 }
 
-void Environment::calculate_reward() {
-
+int Environment::calculate_reward() {
+    // Define rewards and penalties based on the environment's state
+    if (thirsty_days > max_thirsty_days)
+        return -1; // Penalize for being very thirsty for too long
+    else if (days_lived >= max_days)
+        return 1; // Reward for living the desired number of days
+    else
+        return 0; // No additional reward or penalty
 }
 
-void Environment::check_termination() {
-
+bool Environment::check_termination() {
+    // Check if the termination conditions are met
+    return days_lived >= max_days || thirsty_days > max_thirsty_days;
 }
 
 std::string Environment::update_thirstiness(int action) {
