@@ -11,7 +11,9 @@ public:
     std::unordered_map<std::string, std::string> reset();
     std::tuple<std::string, int, bool> step(const std::pair<int, char>& action);
 private:
-    void update_thirstiness();
+    void calculate_reward();
+    void check_termination();
+    std::string update_thirstiness(int action);
 
     unsigned short days_lived;
     unsigned short thirsty_days;

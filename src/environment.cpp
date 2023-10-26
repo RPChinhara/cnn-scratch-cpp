@@ -35,6 +35,22 @@ std::tuple<std::string, int, bool> Environment::step(const std::pair<int, char>&
     return std::make_tuple("cat", 0, done); // 0 reward for failure
 }
 
-void Environment::update_thirstiness() {
+void Environment::calculate_reward() {
 
+}
+
+void Environment::check_termination() {
+
+}
+
+std::string Environment::update_thirstiness(int action) {
+    // Implement how thirstiness changes based on agent's actions
+    if (action == 0)
+        return "neutral";
+    else if (action == 1)
+        return "thirsty";
+    else if (action == 2)
+        return "very thirsty";
+    else
+        return "unknown";
 }
