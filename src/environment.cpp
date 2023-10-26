@@ -3,12 +3,13 @@
 #include <iostream>
 #include <windows.h>
 
-Environment::Environment(const std::string& secret_word) {
-    this->secret_word = secret_word;
-    current_guess.insert(current_guess.end(), secret_word.length(), '_');
-    max_attempts = secret_word.length() * 2;
-    attempts_made = 0;
-    done = false;
+Environment::Environment() {
+    // new
+    days_lived                   = 0;
+    thirsty_days                 = 0;
+    max_days                     = 50;
+    max_thirsty_days             = 3;
+    current_state["thirstiness"] = "neutral";
 }
 
 void Environment::render() {
@@ -16,12 +17,13 @@ void Environment::render() {
     std::cout << "Attempts made: " << this->attempts_made << std::endl;
 }
 
-std::string Environment::reset() {
-    current_guess.clear();
-    current_guess.insert(current_guess.end(), secret_word.length(), '_');
-    attempts_made = 0;
-    done = false;
-    return insert_space(current_guess);
+std::unordered_map<std::string, std::string> Environment::reset() {
+    // new
+    days_lived                   = 0;
+    thirsty_days                 = 0;
+    current_state["thirstiness"] = "neutral";
+
+    return current_state;
 }
 
 std::tuple<std::string, int, bool> Environment::step(const std::pair<int, char>& action) {

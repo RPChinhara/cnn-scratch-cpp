@@ -83,15 +83,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << agent.q_table << std::endl;
 
     // Using the environment:
-    // Environment env = Environment("hello");
+    Environment env = Environment();
 
-    // std::string state = env.reset();
-    // env.render();
-
-    // // Example action: guessing the letter "h" for the 0th position
-    // auto result = env.step({0, 'h'});
-    // std::cout << "next_state: " << std::get<0>(result) << " reward: " << std::get<1>(result) << " done: " << std::get<2>(result) << std::endl;
-    // env.render();
+    auto state = env.reset();
+    env.render();
 
     // Making the window
     try {
