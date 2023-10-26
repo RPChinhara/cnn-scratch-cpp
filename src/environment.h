@@ -9,7 +9,7 @@ public:
     Environment();
     void render();
     std::unordered_map<std::string, std::string> reset();
-    std::tuple<std::string, int, bool> step(const std::pair<int, char>& action);
+    std::tuple<std::string, int, bool> step(int action);
 private:
     int calculate_reward();
     bool check_termination();

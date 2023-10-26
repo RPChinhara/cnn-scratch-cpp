@@ -24,15 +24,27 @@ std::unordered_map<std::string, std::string> Environment::reset() {
     return current_state;
 }
 
-std::tuple<std::string, int, bool> Environment::step(const std::pair<int, char>& action) {
-    if (true) {
+std::tuple<std::string, int, bool> Environment::step(int action) {
+    // Reduce thirstiness based on action level and update other states
+    current_state["thirstiness"] = update_thirstiness(action);
+    days_lived += 1;
+
+    // Check if the agent has been very thirsty for too long
+    if (current_state["thirstiness"] == "very thirsty")
+        thirsty_days += 1;
+    else
+        thirsty_days = 0;
+    
+    // Define rewards and penalties
+    int reward = calculate_reward();
+    bool done  = check_termination();
+
+    if (done) {
         MessageBox(NULL, "The game is over. Please reset the environment.", "Error", MB_ICONERROR | MB_OK);
         ExitProcess(1);
     }
 
-    bool done = false;
-
-    return std::make_tuple("cat", 0, done); // 0 reward for failure
+    return std::make_tuple(current_state["thirstiness"], reward, done);
 }
 
 int Environment::calculate_reward() {
