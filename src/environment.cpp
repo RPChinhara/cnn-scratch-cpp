@@ -4,6 +4,8 @@
 #include <windows.h>
 
 Environment::Environment() {
+    num_states                     = 125;
+    num_actions                    = 81;
     days_lived                     = 0;
     thirsty_days                   = 0;
     max_days                       = 50;

@@ -52,8 +52,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // | (Full, Very Satisfied, Happy)              | ?         | ?            | ?          | ?              | ... |
     // | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
     
-    unsigned int num_episodes = 1000;
     QLearning agent = QLearning(num_states, num_actions);
+
+    unsigned int num_episodes = 1000;
 
     for (int i = 0; i < num_episodes; ++i) {
         std::random_device rd;

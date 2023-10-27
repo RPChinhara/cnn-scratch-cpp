@@ -17,9 +17,11 @@ private:
     bool check_termination();
     int update_thirstiness(int action);
 
-    unsigned short days_lived;
-    unsigned short thirsty_days;
-    unsigned short max_days; // The desired number of days to live
-    unsigned short max_thirsty_days;  // Number of consecutive days to tolerate thirstiness
+    int num_states; // Total number of states (5 * 5 * 5)
+    int num_actions; // Total number of action combinations (3^4)
+    int days_lived;
+    int thirsty_days;
+    int max_days; // The desired number of days to live
+    int max_thirsty_days;  // Number of consecutive days to tolerate thirstiness
     States current_state;
 };
