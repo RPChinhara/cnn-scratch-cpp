@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     for (int i = 0; i < num_episodes; ++i) {
         // auto state = env.reset();
         bool done = false;
-        int total_reward = 0;
+        // int total_reward = 0;
 
         std::random_device rd;
         std::mt19937 gen(rd());

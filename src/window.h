@@ -11,5 +11,5 @@ private:
     static const char CLASS_NAME[];
     HWND hwnd;
     HINSTANCE hInstance;
-    static LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

@@ -2,11 +2,12 @@
 
 #include <stdexcept>
 
-const char Window::CLASS_NAME[] = "Sample Window Class";
+const char Window::CLASS_NAME[] = "WINDOW";
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
+    // Create a window class
     WNDCLASS wc = {};
-    wc.lpfnWndProc = WindowProcedure;
+    wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
     wc.lpszClassName = CLASS_NAME;
 
@@ -14,16 +15,20 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
         throw std::runtime_error("Failed to register window class");
     }
 
+    // Create a window
     hwnd = CreateWindowEx(
-        0,
-        CLASS_NAME,
-        "Sample Window",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-        NULL,
-        NULL,
-        hInstance,
-        NULL
+        0,                   // Optional window styles
+        CLASS_NAME,          // Window class name
+        "",                  // Window title
+        WS_OVERLAPPEDWINDOW, // Window style
+        CW_USEDEFAULT,       // X position
+        CW_USEDEFAULT,       // Y position
+        800,                 // Width
+        600,                 // Height
+        NULL,                // Parent window
+        NULL,                // Menu
+        hInstance,           // Instance handle
+        NULL                 // Additional application data
     );
 
     if (hwnd == NULL) {
@@ -34,6 +39,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
 }
 
 int Window::messageLoop() {
+    // Main message loop
     MSG msg = {};
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -43,8 +49,7 @@ int Window::messageLoop() {
     return static_cast<int>(msg.wParam);
 }
 
-LRESULT CALLBACK Window::WindowProcedure(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    // Handle your window messages here
-    // For simplicity, we'll forward all messages to the default procedure
+LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    // Handle window messages here
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
