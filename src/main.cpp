@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // first start with 3 states which are hunger, thirstiness, and mental health each have 5 states (very hungry, hungry, neutral, full, very full), (very thirsty, thirsty, neutral, satisfied, very satisfied), (very stressed, stressed, neutral, content, happy) which means 5 (hunger) * 5 (thirstiness) * 5 (mental health) = 125 states.
     unsigned int num_states = 125;
 
-    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE, hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel)
+    // actions - EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel)
     // first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
     // TODO: I could go more detail e.g., 
     // Food Type: Specify the type of food the agent can choose to eat, such as healthy options (vegetables, fruits, lean proteins) or unhealthy options (fast food, sugary snacks).
@@ -85,8 +85,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Using the environment:
     Environment env = Environment();
 
-    auto state = env.reset();
-    env.render();
+    for (int i = 0; i < num_episodes; ++i) {
+        auto state = env.reset();
+        bool done = false;
+        int total_reward = 0;
+
+        env.render();
+
+        while (!done) {
+
+        }
+    }
 
     // Making the window
     try {

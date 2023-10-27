@@ -4,33 +4,39 @@
 #include <windows.h>
 
 Environment::Environment() {
-    days_lived                   = 0;
-    thirsty_days                 = 0;
-    max_days                     = 50;
-    max_thirsty_days             = 3;
-    current_state["thirstiness"] = "neutral";
+    days_lived                     = 0;
+    thirsty_days                   = 0;
+    max_days                       = 50;
+    max_thirsty_days               = 3;
+    current_state["hunger"]        = 2;
+    current_state["thirstiness"]   = 2;
+    current_state["mental health"] = 2;
 }
 
 void Environment::render() {
-    std::cout << "Current guess: " << std::endl;
-    std::cout << "Attempts made: " << std::endl;
+    std::cout << "Current hunger: " << current_state["hunger"] << std::endl;
+    std::cout << "Current thirstiness: " << current_state["thirstiness"] << std::endl;
+    std::cout << "Current mental health: " << current_state["mental health"] << std::endl;
+    std::cout << "Current days lived: " << days_lived << std::endl;
+    std::cout << "Current thirsty days: " << thirsty_days << std::endl;
 }
 
-std::unordered_map<std::string, std::string> Environment::reset() {
-    days_lived                   = 0;
-    thirsty_days                 = 0;
-    current_state["thirstiness"] = "neutral";
-
+States Environment::reset() {
+    days_lived                     = 0;
+    thirsty_days                   = 0;
+    current_state["hunger"]        = 2;
+    current_state["thirstiness"]   = 2;
+    current_state["mental health"] = 2;
     return current_state;
 }
 
-std::tuple<std::string, int, bool> Environment::step(int action) {
+std::tuple<States, int, bool> Environment::step(int action) {
     // Reduce thirstiness based on action level and update other states
     current_state["thirstiness"] = update_thirstiness(action);
     days_lived += 1;
 
     // Check if the agent has been very thirsty for too long
-    if (current_state["thirstiness"] == "very thirsty")
+    if (current_state["thirstiness"] == 2)
         thirsty_days += 1;
     else
         thirsty_days = 0;
@@ -44,7 +50,7 @@ std::tuple<std::string, int, bool> Environment::step(int action) {
         ExitProcess(1);
     }
 
-    return std::make_tuple(current_state["thirstiness"], reward, done);
+    return std::make_tuple(current_state, reward, done);
 }
 
 int Environment::calculate_reward() {
@@ -62,14 +68,14 @@ bool Environment::check_termination() {
     return days_lived >= max_days || thirsty_days > max_thirsty_days;
 }
 
-std::string Environment::update_thirstiness(int action) {
+int Environment::update_thirstiness(int action) {
     // Implement how thirstiness changes based on agent's actions
     if (action == 0)
-        return "neutral";
+        return 2;
     else if (action == 1)
-        return "thirsty";
+        return 1;
     else if (action == 2)
-        return "very thirsty";
+        return 3;
     else
-        return "unknown";
+        return 5;
 }
