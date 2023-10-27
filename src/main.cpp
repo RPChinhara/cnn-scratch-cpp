@@ -52,15 +52,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // | (Full, Very Satisfied, Happy)              | ?         | ?            | ?          | ?              | ... |
     // | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
     
+    Environment env = Environment();
     QLearning agent = QLearning(num_states, num_actions);
 
     unsigned int num_episodes = 1000;
 
     for (int i = 0; i < num_episodes; ++i) {
+        // auto state = env.reset();
+        bool done = false;
+        int total_reward = 0;
+
         std::random_device rd;
         std::mt19937 gen(rd());
         auto state = std::uniform_int_distribution<unsigned int>(0, 5 - 1); // Start with a random state
-        bool done  = false;
 
         while (!done) {
             unsigned int action = agent.choose_action(state(gen));
@@ -82,21 +86,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     std::cout << agent.q_table << std::endl;
-
-    // Using the environment:
-    Environment env = Environment();
-
-    for (int i = 0; i < num_episodes; ++i) {
-        auto state = env.reset();
-        bool done = false;
-        int total_reward = 0;
-
-        env.render();
-
-        while (!done) {
-
-        }
-    }
 
     // Making the window
     try {
