@@ -1,7 +1,7 @@
 @echo off
 
 set NVCC=nvcc
-set FLAGS=-I ..\src -o dora -lUser32 -arch sm_75 --optimize 3 -std c++17 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Ox -Xcompiler /Z7
+set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++17 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Ox -Xcompiler /Z7
 set SRC=..\src\activations.cpp ^
         ..\src\arrays.cpp ^
         ..\src\datasets.cpp ^

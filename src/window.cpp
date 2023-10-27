@@ -51,5 +51,6 @@ int Window::messageLoop() {
 
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     // Handle window messages here
+  
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

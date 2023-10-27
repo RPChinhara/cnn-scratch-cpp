@@ -2,6 +2,10 @@
 
 #include <windows.h>
 
+// Link the necessary libraries
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "User32.lib")
+
 class Window {
 public:
     Window(HINSTANCE hInst, int nCmdShow);
