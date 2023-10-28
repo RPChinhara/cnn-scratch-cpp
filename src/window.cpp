@@ -64,12 +64,14 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
             // Draw a rectangle
-            RECT agent = { 25, 525, 50, 550 }; // Left, Top, Right, Bottom coordinates
-            RECT food  = { 25, 25, 50, 50 };
-            RECT water = { 725, 25, 750, 50 };
+            RECT agent  = { 25, 525, 50, 550 }; // Left, Top, Right, Bottom coordinates
+            RECT food   = { 25, 25, 50, 50 };
+            RECT water  = { 725, 25, 750, 50 };
+            RECT people = { 725, 525, 750, 550 };
             FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
             FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
             FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
+            FillRect(hdc, &people, CreateSolidBrush(RGB(255, 165, 0)));
             EndPaint(hwnd, &ps);
             return 0;
         }
