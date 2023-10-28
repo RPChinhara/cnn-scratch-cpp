@@ -9,10 +9,7 @@
 
 const char Window::CLASS_NAME[] = "WINDOW";
 
-Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL), pFactory(NULL), pRenderTarget(NULL) {
-    // Initialize COM
-    CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-
+Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     // Create a window class
     WNDCLASS wc = {};
     wc.lpfnWndProc = WindowProc;
@@ -42,23 +39,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL), pF
     }
 
     ShowWindow(hwnd, nCmdShow);
-
-    // Initialize Direct2D
-    D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory);
-
-    // Create a Direct2D render target
-    D2D1_RENDER_TARGET_PROPERTIES rtProps = D2D1::RenderTargetProperties(
-        D2D1_RENDER_TARGET_TYPE_DEFAULT,
-        D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_PREMULTIPLIED)
-    );
-
-    pFactory->CreateHwndRenderTarget(
-        rtProps,
-        D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(800, 600)),
-        &pRenderTarget
-    );
-
-    InvalidateRect(hwnd, NULL, FALSE);
+    UpdateWindow(hwnd);
 }
 
 int Window::messageLoop() {
@@ -72,81 +53,21 @@ int Window::messageLoop() {
     return static_cast<int>(msg.wParam);
 }
 
-LRESULT Window::HandleMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
-       case WM_CREATE: {
-        Window* pWindow = nullptr;
-
-        CREATESTRUCT* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
-        pWindow = static_cast<Window*>(pCreate->lpCreateParams);
-        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
-        return pWindow->HandleMessage(hwnd, uMsg, wParam, lParam); // Handle WM_CREATE here
-        }
+        case WM_CLOSE:
+            PostQuitMessage(0);
+            return 0;
         case WM_PAINT: {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-
-            // Clear the background
-            pRenderTarget->BeginDraw();
-            pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
-
-            // Draw a red rectangle as a simple 2D character
-            ID2D1SolidColorBrush* pBrush = NULL;
-            pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Blue), &pBrush);
-
-            D2D1_RECT_F rect = D2D1::RectF(100.0f, 100.0f, 200.0f, 200.0f);
-            pRenderTarget->FillRectangle(&rect, pBrush);
-
-            pBrush->Release();
-            pRenderTarget->EndDraw();
-
+            // Draw a rectangle
+            RECT rect = { 50, 50, 100, 100 }; // Left, Top, Right, Bottom coordinates
+            FillRect(hdc, &rect, (HBRUSH)(COLOR_WINDOW + 2)); // Use the default window background color
             EndPaint(hwnd, &ps);
-            break;
+            return 0;
         }
-        case WM_CLOSE: {
-            DestroyWindow(hwnd);
-            break;
-        }
-        case WM_DESTROY: {
-            // Release resources
-            if (pRenderTarget != nullptr) {
-                pRenderTarget->Release();
-                pRenderTarget = nullptr;
-            }
-
-            if (pFactory != nullptr) {
-                pFactory->Release();
-                pFactory = nullptr;
-            }
-
-            CoUninitialize();
-            PostQuitMessage(0);
-            break;
-        }
-        default: {
+        default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
-        }
-    }
-    return 0;
-}
-
-LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    // Retrieve the Window instance associated with this hwnd
-    Window* pWindow = nullptr;
-
-    if (uMsg == WM_NCCREATE) {
-        CREATESTRUCT* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
-        pWindow = static_cast<Window*>(pCreate->lpCreateParams);
-        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
-    } else {
-        // MessageBox(NULL, "The game is over. Please reset the environment.", "Error", MB_ICONERROR | MB_OK);
-        pWindow = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-    }
-
-    if (pWindow) {
-        MessageBox(NULL, "The game is over. Please reset the environment.", "Error", MB_ICONERROR | MB_OK);
-        return pWindow->HandleMessage(hwnd, uMsg, wParam, lParam);
-    } else {
-        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 }
