@@ -4,6 +4,7 @@
 
 // Link the necessary libraries
 #pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "Gdi32.lib")
 #pragma comment(lib, "Ole32.lib")
 #pragma comment(lib, "User32.lib")
 
@@ -59,11 +60,16 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             PostQuitMessage(0);
             return 0;
         case WM_PAINT: {
+            // TODO: Use Direct2D next, and Direct3D 9/10 for 3D?
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
             // Draw a rectangle
-            RECT rect = { 50, 50, 100, 100 }; // Left, Top, Right, Bottom coordinates
-            FillRect(hdc, &rect, (HBRUSH)(COLOR_WINDOW + 2)); // Use the default window background color
+            RECT agent = { 25, 525, 50, 550 }; // Left, Top, Right, Bottom coordinates
+            RECT food  = { 25, 25, 50, 50 };
+            RECT water = { 725, 25, 750, 50 };
+            FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
+            FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
+            FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
             EndPaint(hwnd, &ps);
             return 0;
         }

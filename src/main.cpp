@@ -26,7 +26,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.x_second  = min_max_scaler(val_test.x_second);
 
     // Train and test neural network
-    // NN nn = NN({ 4, 128, 3 }, 0.01f);
+    NN nn = NN({ 4, 128, 3 }, 0.01f);
     // nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
     // nn.predict(val_test.x_second, val_test.y_second);
 
@@ -52,38 +52,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // | (Full, Very Satisfied, Happy)              | ?         | ?            | ?          | ?              | ... |
     // | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
     
-    // Environment env = Environment();
-    // QLearning agent = QLearning(num_states, num_actions);
+    Environment env = Environment();
+    QLearning agent = QLearning(num_states, num_actions);
 
-    // unsigned int num_episodes = 1000;
+    unsigned int num_episodes = 1000;
 
-    // for (int i = 0; i < num_episodes; ++i) {
-    //     // auto state = env.reset();
-    //     bool done = false;
-    //     // int total_reward = 0;
+    for (int i = 0; i < num_episodes; ++i) {
+        // auto state = env.reset();
+        bool done = false;
+        // int total_reward = 0;
 
-    //     std::random_device rd;
-    //     std::mt19937 gen(rd());
-    //     auto state = std::uniform_int_distribution<unsigned int>(0, 5 - 1); // Start with a random state
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        auto state = std::uniform_int_distribution<unsigned int>(0, 5 - 1); // Start with a random state
 
-    //     while (!done) {
-    //         unsigned int action = agent.choose_action(state(gen));
+        while (!done) {
+            unsigned int action = agent.choose_action(state(gen));
 
-    //         // Here you would take the action in the environment and get the next_state and reward.
-    //         // This is just a placeholder example:
-    //         auto next_state = std::uniform_int_distribution<unsigned int>(0, 5 - 1);
-    //         auto reward = -1 ? action != 2 : 1; // Assume action 2 is the "correct" action for demonstration
+            // Here you would take the action in the environment and get the next_state and reward.
+            // This is just a placeholder example:
+            auto next_state = std::uniform_int_distribution<unsigned int>(0, 5 - 1);
+            auto reward = -1 ? action != 2 : 1; // Assume action 2 is the "correct" action for demonstration
 
-    //         agent.update(state(gen), action, reward, next_state(gen));
+            agent.update(state(gen), action, reward, next_state(gen));
 
-    //         state = next_state;
+            state = next_state;
 
-    //         // Just an example to end the loop
-    //         if (reward == 1) {
-    //             done = true;
-    //         }
-    //     }
-    // }
+            // Just an example to end the loop
+            if (reward == 1) {
+                done = true;
+            }
+        }
+    }
 
     // std::cout << agent.q_table << std::endl;
 
