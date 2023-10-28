@@ -26,9 +26,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.x_second  = min_max_scaler(val_test.x_second);
 
     // Train and test neural network
-    NN nn = NN({ 4, 128, 3 }, 0.01f);
-    nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-    nn.predict(val_test.x_second, val_test.y_second);
+    // NN nn = NN({ 4, 128, 3 }, 0.01f);
+    // nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
+    // nn.predict(val_test.x_second, val_test.y_second);
 
     // Q-learining
     // states - hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature, time of day, location, financial status (income, savings, and debt), education level.
