@@ -1,6 +1,7 @@
 #include "window.h"
 
 #include <stdexcept>
+#include <iostream>
 
 // Link the necessary libraries
 #pragma comment(lib, "d2d1.lib")
@@ -12,8 +13,8 @@ static int window_width  = 1920;
 static int window_height = 1080;
 const char Window::CLASS_NAME[] = "WINDOW";
 
-static RECT agent  = { 5, 985, 55, 1035 }; // Left, Top, Right, Bottom coordinates
-static RECT agent2 = { 1850, 985, 1900, 1035 };
+static RECT agent  = { 5, 895, 55, 945 }; // Left, Top, Right, Bottom coordinates
+static RECT agent2 = { 1850, 895, 1900, 945 };
 static RECT food   = { 5, 5, 55, 55 };
 static RECT water  = { 1850, 4, 1900, 50 };
 
@@ -67,7 +68,9 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     wc.hInstance = hInstance;
     wc.lpszClassName = CLASS_NAME;
 
-    RegisterClass(&wc);
+    if (!RegisterClass(&wc)) {
+        MessageBox(NULL, "Window Registration Failed!", "Error", MB_ICONERROR);
+    }
 
     // Create a window
     hwnd = CreateWindowEx(
@@ -86,7 +89,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     );
 
     if (hwnd == NULL) {
-        throw std::runtime_error("Failed to create window");
+        MessageBox(NULL, "Window Creation Failed!", "Error", MB_ICONERROR);
     }
 
     ShowWindow(hwnd, nCmdShow);
@@ -121,8 +124,8 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                 } else if (IsColliding(agent, water)) {
                     ResolveCollision(agent, water);
                 } else {
-                    agent.left += 10; // Move the agent 10 pixels to the right
-                    agent.right += 10;
+                    agent.left += 5; // Move the agent 10 pixels to the right
+                    agent.right += 5;
                 }
 
                  // Check for boundary collision
@@ -131,18 +134,18 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                 InvalidateRect(hwnd, NULL, TRUE); // Redraw the updated rectangle
             }
             if (key == VK_LEFT) {
-                agent.left -= 10;
-                agent.right -= 10;
+                agent.left -= 5;
+                agent.right -= 5;
                 InvalidateRect(hwnd, NULL, TRUE);
             }
             if (key == VK_UP) {
-                agent.top -= 10;
-                agent.bottom -= 10;
+                agent.top -= 5;
+                agent.bottom -= 5;
                 InvalidateRect(hwnd, NULL, TRUE);
             }
             if (key == VK_DOWN) {
-                agent.top += 10;
-                agent.bottom += 10;
+                agent.top += 5;
+                agent.bottom += 5;
                 InvalidateRect(hwnd, NULL, TRUE);
             }
             return 0;
