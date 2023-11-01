@@ -27,8 +27,8 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
         WS_OVERLAPPEDWINDOW, // Window style
         CW_USEDEFAULT,       // X position
         CW_USEDEFAULT,       // Y position
-        800,                 // Width
-        600,                 // Height
+        1920,                // Width
+        1080,                // Height
         NULL,                // Parent window
         NULL,                // Menu
         hInstance,           // Instance handle
@@ -56,22 +56,23 @@ int Window::messageLoop() {
 
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
-        case WM_CLOSE:
+        case WM_CLOSE: {
             PostQuitMessage(0);
             return 0;
+        }
         case WM_PAINT: {
             // TODO: Use Direct2D next, and Direct3D 9/10 for 3D?
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
             // Draw a rectangle
-            RECT agent  = { 25, 525, 50, 550 }; // Left, Top, Right, Bottom coordinates
-            RECT food   = { 25, 25, 50, 50 };
-            RECT water  = { 725, 25, 750, 50 };
-            RECT people = { 725, 525, 750, 550 };
+            RECT agent  = { 5, 985, 55, 1035 }; // Left, Top, Right, Bottom coordinates
+            RECT agent2 = { 1850, 985, 1900, 1035 };
+            RECT food   = { 5, 5, 55, 55 };
+            RECT water  = { 1850, 4, 1900, 50 };
             FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
+            FillRect(hdc, &agent2, CreateSolidBrush(RGB(0, 0, 0)));
             FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
             FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
-            FillRect(hdc, &people, CreateSolidBrush(RGB(255, 165, 0)));
             EndPaint(hwnd, &ps);
             return 0;
         }
