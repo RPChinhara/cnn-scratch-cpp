@@ -10,6 +10,11 @@
 
 const char Window::CLASS_NAME[] = "WINDOW";
 
+static RECT agent  = { 5, 985, 55, 1035 }; // Left, Top, Right, Bottom coordinates
+static RECT agent2 = { 1850, 985, 1900, 1035 };
+static RECT food   = { 5, 5, 55, 55 };
+static RECT water  = { 1850, 4, 1900, 50 };
+
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     // Create a window class
     WNDCLASS wc = {};
@@ -60,15 +65,42 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             PostQuitMessage(0);
             return 0;
         }
+        case WM_KEYDOWN: {
+            // Check which key was pressed
+            int key = wParam;
+            if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
+                agent.left += 10; // Move the agent 10 pixels to the right
+                agent.right += 10;
+                InvalidateRect(hwnd, &agent, TRUE); // Redraw the updated rectangle
+            }
+            if (key == VK_LEFT) {
+                agent.left -= 10;
+                agent.right -= 10;
+                InvalidateRect(hwnd, &agent, TRUE);
+            }
+            if (key == VK_UP) {
+                agent.top -= 10;
+                agent.bottom -= 10;
+                InvalidateRect(hwnd, &agent, TRUE);
+            }
+            if (key == VK_DOWN) {
+                agent.top += 10;
+                agent.bottom += 10;
+                InvalidateRect(hwnd, &agent, TRUE);
+            }
+            return 0;
+        }
         case WM_PAINT: {
             // TODO: Use Direct2D next, and Direct3D 9/10 for 3D?
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
+            
+            // Clear the entire client area with a background color (e.g., white)
+            RECT clientRect;
+            GetClientRect(hwnd, &clientRect);
+            FillRect(hdc, &clientRect, CreateSolidBrush(RGB(255, 255, 255)));
+            
             // Draw a rectangle
-            RECT agent  = { 5, 985, 55, 1035 }; // Left, Top, Right, Bottom coordinates
-            RECT agent2 = { 1850, 985, 1900, 1035 };
-            RECT food   = { 5, 5, 55, 55 };
-            RECT water  = { 1850, 4, 1900, 50 };
             FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
             FillRect(hdc, &agent2, CreateSolidBrush(RGB(0, 0, 0)));
             FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
