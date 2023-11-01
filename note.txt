@@ -23,16 +23,17 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
--create class Agent?
--should other agent randomly moving?
+- how to hide the taskbar when window is displayed?
+- create class Agent?
+- should other agent randomly moving?
 - First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
 ニャーと声を発する
--仕切りを作る
--俺が餌あげないと死ぬ
--実際の時間と合わせる　while done
--the while loop never ends unless he gain great amout of rewards
--State is speak so speak up the objects in front of him before that use classification to determine what it is.
--Why do we say back ‘Hello’?
+- 仕切りを作る
+- 俺が餌あげないと死ぬ
+- 実際の時間と合わせる　while done
+- the while loop never ends unless he gain great amout of rewards
+- State is speak so speak up the objects in front of him before that use classification to determine what it is.
+- Why do we say back ‘Hello’?
 - What is considered done? Maybe it dosen't need to be done as it's not real living things which have ages.
 - Get reward when successefully eaten
 - First create cat like creature? Where goals are to juat live(but for how long?) and eat.
