@@ -9,8 +9,8 @@ public:
     int messageLoop();
     
 private:
-    static const char CLASS_NAME[];
     HWND hwnd;
     HINSTANCE hInstance;
+    static const char CLASS_NAME[];
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

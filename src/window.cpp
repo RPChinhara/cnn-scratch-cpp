@@ -8,12 +8,57 @@
 #pragma comment(lib, "Ole32.lib")
 #pragma comment(lib, "User32.lib")
 
+static int window_width  = 1920;
+static int window_height = 1080;
 const char Window::CLASS_NAME[] = "WINDOW";
 
 static RECT agent  = { 5, 985, 55, 1035 }; // Left, Top, Right, Bottom coordinates
 static RECT agent2 = { 1850, 985, 1900, 1035 };
 static RECT food   = { 5, 5, 55, 55 };
 static RECT water  = { 1850, 4, 1900, 50 };
+
+void CheckBoundaryCollision(RECT& rect) {
+    // Check and handle collisions with the window boundaries
+    if (rect.left < 0) {
+        rect.left = 0;
+        rect.right = rect.left + (rect.right - rect.left);
+    }
+    if (rect.top < 0) {
+        rect.top = 0;
+        rect.bottom = rect.top + (rect.bottom - rect.top);
+    }
+    if (rect.right > window_width) {
+        rect.right = window_width;
+        rect.left = rect.right - (rect.right - rect.left);
+    }
+    if (rect.bottom > window_height) {
+        rect.bottom = window_height;
+        rect.top = rect.bottom - (rect.bottom - rect.top);
+    }
+}
+
+bool IsColliding(const RECT& rect1, const RECT& rect2) {
+    // Check for collision between two rectangles
+    return (rect1.left < rect2.right &&
+            rect1.right > rect2.left &&
+            rect1.top < rect2.bottom &&
+            rect1.bottom > rect2.top);
+}
+
+void ResolveCollision(RECT& movingRect, const RECT& staticRect) {
+    // Determine the horizontal and vertical distances between rectangles
+    int horizontalDistance = std::min(abs(staticRect.right - movingRect.left), abs(movingRect.right - staticRect.left));
+    int verticalDistance = std::min(abs(staticRect.bottom - movingRect.top), abs(movingRect.bottom - staticRect.top));
+
+    if (horizontalDistance < 10 || verticalDistance < 10) {
+        // If the rectangles are too close, stop the moving rectangle
+        return;
+    }
+
+    // Move the rectangle to the right
+    movingRect.left += 10;
+    movingRect.right += 10;
+}
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     // Create a window class
@@ -32,8 +77,8 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
         WS_OVERLAPPEDWINDOW, // Window style
         CW_USEDEFAULT,       // X position
         CW_USEDEFAULT,       // Y position
-        1920,                // Width
-        1080,                // Height
+        window_width,        // Width
+        window_height,       // Height
         NULL,                // Parent window
         NULL,                // Menu
         hInstance,           // Instance handle
@@ -69,8 +114,20 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             // Check which key was pressed
             int key = wParam;
             if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
-                agent.left += 10; // Move the agent 10 pixels to the right
-                agent.right += 10;
+                
+                // Check for collision with the static rectangle
+                if (IsColliding(agent, agent2)) {
+                    ResolveCollision(agent, agent2); // Resolve the collision by adjusting the position of the moving rectangle
+                } else if (IsColliding(agent, water)) {
+                    ResolveCollision(agent, water);
+                } else {
+                    agent.left += 10; // Move the agent 10 pixels to the right
+                    agent.right += 10;
+                }
+
+                 // Check for boundary collision
+                CheckBoundaryCollision(agent);
+
                 InvalidateRect(hwnd, NULL, TRUE); // Redraw the updated rectangle
             }
             if (key == VK_LEFT) {
