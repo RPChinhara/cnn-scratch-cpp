@@ -127,8 +127,8 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             FillRect(hdc, &clientRect, CreateSolidBrush(RGB(34, 139, 34)));
 
             // Draw a rectangle
-            FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
-            FillRect(hdc, &agent2, CreateSolidBrush(RGB(0, 0, 0)));
+            FillRect(hdc, &agent, CreateSolidBrush(RGB(218, 171, 145)));
+            FillRect(hdc, &agent2, CreateSolidBrush(RGB(218, 171, 145)));
             FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
             FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
 
