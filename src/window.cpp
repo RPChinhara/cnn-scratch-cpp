@@ -124,7 +124,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             // Clear the entire client area with a background color (e.g., white)
             RECT clientRect;
             GetClientRect(hwnd, &clientRect);
-            FillRect(hdc, &clientRect, CreateSolidBrush(RGB(255, 255, 255)));
+            FillRect(hdc, &clientRect, CreateSolidBrush(RGB(0, 255, 0)));
 
             // Draw a rectangle
             FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
