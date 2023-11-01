@@ -71,23 +71,49 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
                 agent.left += 10; // Move the agent 10 pixels to the right
                 agent.right += 10;
-                InvalidateRect(hwnd, &agent, TRUE); // Redraw the updated rectangle
+                InvalidateRect(hwnd, NULL, TRUE); // Redraw the updated rectangle
             }
             if (key == VK_LEFT) {
                 agent.left -= 10;
                 agent.right -= 10;
-                InvalidateRect(hwnd, &agent, TRUE);
+                InvalidateRect(hwnd, NULL, TRUE);
             }
             if (key == VK_UP) {
                 agent.top -= 10;
                 agent.bottom -= 10;
-                InvalidateRect(hwnd, &agent, TRUE);
+                InvalidateRect(hwnd, NULL, TRUE);
             }
             if (key == VK_DOWN) {
                 agent.top += 10;
                 agent.bottom += 10;
-                InvalidateRect(hwnd, &agent, TRUE);
+                InvalidateRect(hwnd, NULL, TRUE);
             }
+            return 0;
+        }
+        case WM_SIZE: {
+            // RECT clientRect;
+            // GetClientRect(hwnd, &clientRect);
+            // // Handle window resizing
+            // int clientWidth = LOWORD(lParam);
+            // int clientHeight = HIWORD(lParam);
+
+            // // Calculate the position of the agent as a percentage of the client area
+            // agentXPercent = 0.005; // 0.5% from the left
+            // agentYPercent = 0.995; // 99.5% from the top
+
+            // // Calculate the new positions and sizes of your rectangles here
+            // agentWidth = static_cast<int>(clientWidth * 50 / clientWidth);
+            // agentHeight = static_cast<int>(clientHeight * 50 / clientHeight);
+
+            // agent2 = {
+            //     static_cast<int>(clientRect.right * agentXPercent),
+            //     static_cast<int>(clientRect.bottom * agentYPercent) - agentHeight,
+            //     static_cast<int>(clientRect.right * agentXPercent) + agentWidth,
+            //     static_cast<int>(clientRect.bottom * agentYPercent)
+            // };
+
+            // Redraw the scene
+            InvalidateRect(hwnd, NULL, TRUE);
             return 0;
         }
         case WM_PAINT: {
@@ -99,12 +125,13 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             RECT clientRect;
             GetClientRect(hwnd, &clientRect);
             FillRect(hdc, &clientRect, CreateSolidBrush(RGB(255, 255, 255)));
-            
+
             // Draw a rectangle
             FillRect(hdc, &agent, CreateSolidBrush(RGB(0, 0, 0)));
             FillRect(hdc, &agent2, CreateSolidBrush(RGB(0, 0, 0)));
             FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
             FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
+
             EndPaint(hwnd, &ps);
             return 0;
         }

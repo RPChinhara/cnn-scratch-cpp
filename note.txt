@@ -28,6 +28,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 -仕切りを作る
 -俺が餌あげないと死ぬ
 -実際の時間と合わせる　while done
+-the while loop never ends unless he gain great amout of rewards
 -State is speak so speak up the objects in front of him before that use classification to determine what it is.
 -Why do we say back ‘Hello’?
 - What is considered done? Maybe it dosen't need to be done as it's not real living things which have ages.
