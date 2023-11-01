@@ -25,7 +25,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 [Insights]
 - how to hide the taskbar when window is displayed?
 - create class Agent?
-- should other agent randomly moving?
+- should other agent randomly moving? NPCs are moving in GTA, but not in Pokemon. IRL obviously people or everything is moving.   
 - First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
 ニャーと声を発する
 - 仕切りを作る
