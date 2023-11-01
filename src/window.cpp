@@ -73,8 +73,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     }
 
     // Create a window
-    hwnd = CreateWindowEx(
-        0,                   // Optional window styles
+    hwnd = CreateWindow(
         CLASS_NAME,          // Window class name
         "",                  // Window title
         WS_OVERLAPPEDWINDOW, // Window style
