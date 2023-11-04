@@ -23,6 +23,8 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- add music to the simulation like Pikemon
+- When action is set talk, set states as current situation such as holding a leaf sets alphabet as actions so that it can chose a word ‘leaf!’ Like baby would say.
 - how to hide the taskbar when window is displayed?
 - create class Agent?
 - should other agent randomly moving? NPCs are moving in GTA, but not in Pokemon. IRL obviously people or everything is moving.   
