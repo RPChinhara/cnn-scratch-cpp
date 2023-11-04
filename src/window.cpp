@@ -14,10 +14,11 @@ static int window_width  = 1920;
 static int window_height = 1080;
 const char Window::CLASS_NAME[] = "WINDOW";
 
-static RECT agent  = { 5, 895, 55, 945 }; // Left, Top, Right, Bottom coordinates
+static RECT agent  = { 7, 895, 57, 945 }; // Left, Top, Right, Bottom coordinates
 static RECT agent2 = { 1850, 895, 1900, 945 };
 static RECT food   = { 5, 5, 55, 55 };
 static RECT water  = { 1850, 4, 1900, 50 };
+static RECT bed    = { 5, 865, 60, 965 };
 
 void CheckBoundaryCollision(RECT& rect) {
     // Check and handle collisions with the window boundaries
@@ -209,6 +210,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             FillRect(hdc, &clientRect, CreateSolidBrush(RGB(34, 139, 34)));
 
             // Draw a rectangle
+            FillRect(hdc, &bed, CreateSolidBrush(RGB(255, 255, 255)));
             FillRect(hdc, &agent, CreateSolidBrush(RGB(218, 171, 145)));
             FillRect(hdc, &agent2, CreateSolidBrush(RGB(218, 171, 145)));
             FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));

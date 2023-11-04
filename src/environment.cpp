@@ -4,15 +4,15 @@
 #include <windows.h>
 
 Environment::Environment() {
-    num_states                     = 125;
-    num_actions                    = 81;
+    num_states                     = 125; // Total number of states (5 * 5 * 5)
+    num_actions                    = 81; // Total number of action combinations (3^4)
     days_lived                     = 0;
     thirsty_days                   = 0;
     max_days                       = 50;
     max_thirsty_days               = 3;
-    current_state["hunger"]        = 2;
-    current_state["thirstiness"]   = 2;
-    current_state["mental health"] = 2;
+    current_state["hunger"]        = 2; // neutral
+    current_state["thirstiness"]   = 2; // neutral 
+    current_state["mental health"] = 2; // neutral
 }
 
 void Environment::render() {
