@@ -70,6 +70,10 @@ bool Environment::check_termination() {
     return days_lived >= max_days || thirsty_days > max_thirsty_days;
 }
 
+int Environment::map_state(int hunger, int thirstiness, int mental_health) {
+    return hunger * 25 + thirstiness * 5 + mental_health;
+}
+
 int Environment::update_thirstiness(int action) {
     // Implement how thirstiness changes based on agent's actions
     if (action == 0)

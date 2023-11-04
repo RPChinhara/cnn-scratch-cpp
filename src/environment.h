@@ -15,6 +15,7 @@ public:
 private:
     int calculate_reward();
     bool check_termination();
+    int map_state(int hunger, int thirstiness, int mental_health);
     int update_thirstiness(int action);
 
     int num_states; // Total number of states (5 * 5 * 5)
