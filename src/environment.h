@@ -8,9 +8,8 @@ using States = std::unordered_map<std::string, int>;
 
 class Environment {
 public:
-    Environment();
     void render();
-    States reset();
+    int reset();
     std::tuple<States, int, bool> step(int action);
 private:
     int calculate_reward();
@@ -18,11 +17,13 @@ private:
     int map_state(int hunger, int thirstiness, int mental_health);
     int update_thirstiness(int action);
 
-    int num_states; // Total number of states (5 * 5 * 5)
-    int num_actions; // Total number of action combinations (3^4)
-    int days_lived;
-    int thirsty_days;
-    int max_days; // The desired number of days to live
-    int max_thirsty_days;  // Number of consecutive days to tolerate thirstiness
-    States current_state;
+    std::vector<std::string> states  = { "hungry", "neutral", "full" };
+    std::vector<std::string> actions = { "eat", "do_nothing" };
+    int num_states                   = states.size(); 
+    int num_actions                  = actions.size();
+    int current_state                = 1; // corresponds to "neutral"
+    int max_days                     = 50;
+    int max_days_without_eating      = 43;
+    int days_lived                   = 0;
+    int days_without_eating          = 0;
 };

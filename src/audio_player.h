@@ -1,5 +1,6 @@
 #include <dsound.h>
 
+// TODO: What is the best name fot file and class?
 class AudioPlayer {
 public:
     AudioPlayer(HWND hwnd);
