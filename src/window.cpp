@@ -95,6 +95,10 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     UpdateWindow(hwnd);
 }
 
+HWND Window::get_hwnd() {
+    return hwnd;
+}
+
 int Window::messageLoop() {
     // Main message loop
     MSG msg = {};
