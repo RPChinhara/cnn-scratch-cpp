@@ -6,7 +6,6 @@
 class Window {
 public:
     Window(HINSTANCE hInst, int nCmdShow);
-    HWND get_hwnd();
     int messageLoop();
 private:
     HWND hwnd;

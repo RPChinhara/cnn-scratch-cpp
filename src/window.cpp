@@ -1,4 +1,5 @@
 #include "window.h"
+#include "audio_player.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -95,13 +96,31 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     UpdateWindow(hwnd);
 }
 
-HWND Window::get_hwnd() {
-    return hwnd;
-}
-
 int Window::messageLoop() {
     // Main message loop
     MSG msg = {};
+    AudioPlayer soundPlayer(hwnd);
+
+    if (!soundPlayer.Initialize()) {
+        // Handle initialization error
+        MessageBox(NULL, "1", "Error", MB_ICONERROR);
+        return -1;
+    }
+
+    if (!soundPlayer.LoadAudioData("assets\\mixkit-city-traffic-background-ambience-2930.wav")) {
+        // Handle audio data loading error
+        MessageBox(NULL, "2", "Error", MB_ICONERROR);
+        return -1;
+    }
+    
+    // TODO: No sound playing
+    // Play the sound
+    if (!soundPlayer.PlaySound()) {
+        // Handle sound playback error
+        MessageBox(NULL, "Failed to play sound!", "Error", MB_ICONERROR);
+        return -1;
+    }
+
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);

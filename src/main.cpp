@@ -1,4 +1,3 @@
-#include "audio_player.h"
 #include "datasets.h"
 #include "nn.h"
 #include "preprocessing.h"
@@ -73,26 +72,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Initialize the Windows application
     try {
         Window window(hInstance, nCmdShow);
-        HWND hwnd = window.get_hwnd();
-
-        AudioPlayer soundPlayer(hwnd);
-        if (!soundPlayer.Initialize()) {
-            // Handle initialization error
-            MessageBox(NULL, "1", "Error", MB_ICONERROR);
-            return -1;
-        }
-
-        if (!soundPlayer.LoadAudioData("assets\\ambient-piano-logo-165357.mp3")) {
-           // Handle audio data loading error
-            MessageBox(NULL, "2", "Error", MB_ICONERROR);
-            return -1;
-        }
-
-        MessageBox(NULL, "3", "Error", MB_ICONERROR);
-
-        // TODO: No sound playing
-        soundPlayer.PlaySound();
-        
         return window.messageLoop();
     } catch (const std::exception& e) {
         // Handle the error, e.g., show an error message
