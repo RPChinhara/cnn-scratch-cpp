@@ -1,16 +1,13 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
 #include <vector>
-
-using States = std::unordered_map<std::string, int>;
 
 class Environment {
 public:
     void render();
     int reset();
-    std::tuple<States, int, bool> step(int action);
+    std::tuple<int, int, bool> step(const std::string& action);
 private:
     int calculate_reward();
     bool check_termination();

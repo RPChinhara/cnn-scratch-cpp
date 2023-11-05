@@ -1,6 +1,7 @@
 #include "environment.h"
 
 #include <iostream>
+#include <windows.h>
 
 void Environment::render() {
     std::cout << "Days Lived: " << days_lived << std::endl;
@@ -16,27 +17,23 @@ int Environment::reset() {
     return 0;
 }
 
-// std::tuple<States, int, bool> Environment::step(int action) {
-//     // // Reduce thirstiness based on action level and update other states
-//     // current_state["thirstiness"] = update_thirstiness(action);
-//     // days_lived += 1;
+std::tuple<int, int, bool> Environment::step(const std::string& action) {
+    // Use std::find to search for the action in the actions
+    auto it = std::find(actions.begin(), actions.end(), action);
 
-//     // // Check if the agent has been very thirsty for too long
-//     // if (current_state["thirstiness"] == 2)
-//     //     thirsty_days += 1;
-//     // else
-//     //     thirsty_days = 0;
+    if (it == actions.end()) {
+        MessageBox(NULL, "Invalid action.", "Error", MB_ICONERROR);
+        ExitProcess(1);
+    }
     
-//     // // Define rewards and penalties
-//     // int reward = calculate_reward();
-//     // bool done  = check_termination();
+    // TODO: if the action was "eat", and current state was "full" it should be penalized
+    // Implement how the state changes based on the agent's actions
+    if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
+        current_state = std::min(current_state + 1, num_states - 1);
+    else if (action == "do_nothing" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
+        current_state = std::max(current_state - 1, 0);
 
-//     // if (done) {
-//     //     MessageBox(NULL, "The game is over. Please reset the environment.", "Error", MB_ICONERROR | MB_OK);
-//     //     ExitProcess(1);
-//     // }
-
-    //TODO: I could implement update_thirstiness() which implements how thirstiness changes based on agent's actions e.g.,
+    // TODO: I could implement update_thirstiness() which implements how thirstiness changes based on agent's actions e.g.,
     // if (action == 0)
     //     return 2;
     // else if (action == 1)
@@ -46,8 +43,8 @@ int Environment::reset() {
     // else
     //     return 5;
 
-//     return std::make_tuple();
-// }
+    return std::make_tuple(1, 1, true);
+}
 
 int Environment::calculate_reward() {
     // Define rewards and penalties based on the environment's state
