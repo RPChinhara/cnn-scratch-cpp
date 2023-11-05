@@ -3,11 +3,9 @@
 #include <iostream>
 
 void Environment::render() {
-    // std::cout << "Current hunger: " << current_state["hunger"] << std::endl;
-    // std::cout << "Current thirstiness: " << current_state["thirstiness"] << std::endl;
-    // std::cout << "Current mental health: " << current_state["mental health"] << std::endl;
-    // std::cout << "Current days lived: " << days_lived << std::endl;
-    // std::cout << "Current thirsty days: " << thirsty_days << std::endl;
+    std::cout << "Days Lived: " << days_lived << std::endl;
+    std::cout << "Current State: " << current_state << std::endl;
+    std::cout << "Days Without Eating: " << days_without_eating << std::endl;
 }
 
 int Environment::reset() {
@@ -41,23 +39,19 @@ int Environment::reset() {
 //     return std::make_tuple();
 // }
 
-    // int Environment::calculate_reward() {
-    //     // // Define rewards and penalties based on the environment's state
-    //     // if (thirsty_days > max_thirsty_days)
-    //     //     return -1; // Penalize for being very thirsty for too long
-    //     // else if (days_lived >= max_days)
-    //     //     return 1; // Reward for living the desired number of days
-    //     // else
-    //     //     return 0; // No additional reward or penalty
-    // }
+// int Environment::calculate_reward() {
+//     // // Define rewards and penalties based on the environment's state
+//     // if (thirsty_days > max_thirsty_days)
+//     //     return -1; // Penalize for being very thirsty for too long
+//     // else if (days_lived >= max_days)
+//     //     return 1; // Reward for living the desired number of days
+//     // else
+//     //     return 0; // No additional reward or penalty
+// }
 
-    // bool Environment::check_termination() {
-    //     // Check if the termination conditions are met
-    //     // return days_lived >= max_days || thirsty_days > max_thirsty_days;
-    // }
-
-int Environment::map_state(int hunger, int thirstiness, int mental_health) {
-    return hunger * 25 + thirstiness * 5 + mental_health;
+bool Environment::check_termination() {
+    // Check if the termination conditions are met
+    return days_lived >= max_days;
 }
 
 int Environment::update_thirstiness(int action) {

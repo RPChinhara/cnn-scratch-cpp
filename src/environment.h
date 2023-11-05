@@ -14,7 +14,6 @@ public:
 private:
     int calculate_reward();
     bool check_termination();
-    int map_state(int hunger, int thirstiness, int mental_health);
     int update_thirstiness(int action);
 
     std::vector<std::string> states  = { "hungry", "neutral", "full" };
