@@ -12,7 +12,7 @@ int Environment::reset() {
     // Reset the environment to its initial state
     days_lived          = 0;
     days_without_eating = 0;
-    current_state       = 1;
+    current_state       = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
     return 0;
 }
 
@@ -36,32 +36,30 @@ int Environment::reset() {
 //     //     ExitProcess(1);
 //     // }
 
+    //TODO: I could implement update_thirstiness() which implements how thirstiness changes based on agent's actions e.g.,
+    // if (action == 0)
+    //     return 2;
+    // else if (action == 1)
+    //     return 1;
+    // else if (action == 2)
+    //     return 3;
+    // else
+    //     return 5;
+
 //     return std::make_tuple();
 // }
 
-// int Environment::calculate_reward() {
-//     // // Define rewards and penalties based on the environment's state
-//     // if (thirsty_days > max_thirsty_days)
-//     //     return -1; // Penalize for being very thirsty for too long
-//     // else if (days_lived >= max_days)
-//     //     return 1; // Reward for living the desired number of days
-//     // else
-//     //     return 0; // No additional reward or penalty
-// }
+int Environment::calculate_reward() {
+    // Define rewards and penalties based on the environment's state
+    if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
+        return -1; // Penalize for being hungry
+    else if (days_lived >= max_days)
+        return 1; // Reward for living the desired number of days
+    else
+        return 0; // No additional reward or penalty
+}
 
 bool Environment::check_termination() {
     // Check if the termination conditions are met
     return days_lived >= max_days;
-}
-
-int Environment::update_thirstiness(int action) {
-    // Implement how thirstiness changes based on agent's actions
-    if (action == 0)
-        return 2;
-    else if (action == 1)
-        return 1;
-    else if (action == 2)
-        return 3;
-    else
-        return 5;
 }
