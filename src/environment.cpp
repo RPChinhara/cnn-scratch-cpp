@@ -11,11 +11,10 @@ void Environment::render() {
 }
 
 int Environment::reset() {
-    // days_lived                     = 0;
-    // thirsty_days                   = 0;
-    // current_state["hunger"]        = 2;
-    // current_state["thirstiness"]   = 2;
-    // current_state["mental health"] = 2;
+    // Reset the environment to its initial state
+    days_lived          = 0;
+    days_without_eating = 0;
+    current_state       = 1;
     return 0;
 }
 

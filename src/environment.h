@@ -22,8 +22,8 @@ private:
     int num_states                   = states.size(); 
     int num_actions                  = actions.size();
     int current_state                = 1; // corresponds to "neutral"
-    int max_days                     = 50;
-    int max_days_without_eating      = 43;
     int days_lived                   = 0;
     int days_without_eating          = 0;
+    int max_days                     = 50;
+    int max_days_without_eating      = 43;
 };
