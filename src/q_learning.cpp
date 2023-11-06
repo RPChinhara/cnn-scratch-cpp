@@ -22,22 +22,23 @@ unsigned int QLearning::choose_action(unsigned int state) {
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
 
-    if (dis_1(gen) > exploration_rate) {
+    if (dis_1(gen) < exploration_rate) {
+        // Explore: Random action
+        std::uniform_int_distribution<int> dis_2(0, n_actions - 1); // (if n_action is 3 then it'd return 0, 1, 2)
+        return dis_2(gen);
+    } else {
+        // Exploit: Greedy action
         Tensor sliced_q_table = slice(q_table, state, 1);
-    	unsigned int max = std::numeric_limits<unsigned int>::lowest();
+        unsigned int max = std::numeric_limits<unsigned int>::lowest();
         for(int i = 0; i < sliced_q_table._size; ++i)
             if (sliced_q_table[i] > max)
                 max = i;
             
         return max;
     }
-
-    // Explore (if n_action is 3 then it'd return 0, 1, 2)
-    std::uniform_int_distribution<int> dis_2(0, n_actions - 1);
-    return dis_2(gen);
 }
 
-void QLearning::update(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
+void QLearning::update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
     // Q-learning update rule -> Q(s, a) = Q(s, a) + α * [R + γ * max(Q(s', a')) - Q(s, a)]
     // Q(s, a) is the Q-value of state-action pair (s, a).
     // α is the learning rate, which controls how much the Q-values are updated based on new information.
@@ -60,6 +61,6 @@ void QLearning::update(unsigned int state, unsigned int action, float reward, un
     q_table[idx] += learning_rate * q_delta;
         
     // Exploration rate decay
-    if (exploration_rate > exploration_min)
-        exploration_rate *= exploration_decay;
+    // if (exploration_rate > exploration_min)
+    //     exploration_rate *= exploration_decay;
 }

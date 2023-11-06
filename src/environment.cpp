@@ -5,8 +5,8 @@
 
 void Environment::render() {
     std::cout << "Days Lived: " << days_lived << std::endl;
-    std::cout << "Current State: " << current_state << std::endl;
-    std::cout << "Days Without Eating: " << days_without_eating << std::endl;
+    std::cout << "Current State: " << states[current_state] << std::endl;
+    std::cout << "Days Without Eating: " << days_without_eating << " days" << std::endl << std::endl;
 }
 
 int Environment::reset() {
@@ -14,7 +14,7 @@ int Environment::reset() {
     days_lived          = 0;
     days_without_eating = 0;
     current_state       = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
-    return 0;
+    return current_state;
 }
 
 std::tuple<int, int, bool> Environment::step(const std::string& action) {
