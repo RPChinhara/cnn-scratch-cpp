@@ -64,13 +64,14 @@ int Environment::calculate_reward() {
     // Define rewards and penalties based on the environment's state
     if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) || days_without_eating >= max_days_without_eating)
         return -1; // Penalize for being hungry
-    else if (days_lived >= max_days)
+    else if (days_lived >= max_days) {
+        days_lived = 0;
         return 1; // Reward for living the desired number of days
-    else
+    } else
         return 0; // No additional reward or penalty
 }
 
 bool Environment::check_termination() {
     // Check if the termination conditions are met
-    return days_lived >= max_days || days_without_eating >= max_days_without_eating;
+    return days_without_eating >= max_days_without_eating;
 }
