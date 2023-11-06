@@ -62,10 +62,8 @@ std::tuple<int, int, bool> Environment::step(const std::string& action) {
 
 int Environment::calculate_reward() {
     // Define rewards and penalties based on the environment's state
-    if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
+    if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) || days_without_eating >= max_days_without_eating)
         return -1; // Penalize for being hungry
-    else if (days_without_eating >= max_days_without_eating)
-        return -1;
     else if (days_lived >= max_days)
         return 1; // Reward for living the desired number of days
     else
