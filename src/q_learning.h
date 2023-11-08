@@ -8,7 +8,7 @@ public:
     unsigned int choose_action(unsigned int state);
     void update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state);
 
-    Tensor q_table;
+    Tensor q_table; //TODO: make it private?
 private:
     unsigned int n_states;
     unsigned int n_actions;

@@ -24,16 +24,21 @@ unsigned int QLearning::choose_action(unsigned int state) {
     if (dis_1(gen) < exploration_rate) {
         // Explore: Random action
         std::uniform_int_distribution<int> dis_2(0, n_actions - 1); // (if n_action is 3 then it'd return 0, 1, 2)
+        std::cout << dis_2(gen) << std::endl;
         return dis_2(gen);
     } else {
         // Exploit: Greedy action (it'd return return index of highest value within the specified index of row which is state)
         Tensor sliced_q_table = slice(q_table, state, 1);
+        unsigned int max_idx = 0;
         unsigned int max = std::numeric_limits<unsigned int>::lowest();
-        for(int i = 0; i < sliced_q_table._size; ++i)
-            if (sliced_q_table[i] > max)
-                max = i;
+        for(int i = 0; i < sliced_q_table._size; ++i) {
+            if (sliced_q_table[i] > max) {
+                max = sliced_q_table[i];
+                max_idx = i;
+            }
+        }
             
-        return max;
+        return max_idx;
     }
 }
 
@@ -47,17 +52,26 @@ void QLearning::update_q_table(unsigned int state, unsigned int action, float re
     // a' is the action that maximizes the Q-value in the next state s'.
 
     Tensor sliced_q_table = slice(q_table, next_state, 1);
-    unsigned int max = std::numeric_limits<unsigned int>::lowest();
+    float next_max_q = std::numeric_limits<float>::lowest();
     for(int i = 0; i < sliced_q_table._size; ++i)
-        if (sliced_q_table[i] > max)
-            max = i;
+        if (sliced_q_table[i] > next_max_q)
+            next_max_q = sliced_q_table[i];
 
-    unsigned int best_next_action = max;
-    unsigned int idx = best_next_action ? next_state == 0 : (next_state * q_table._shape.back()) + best_next_action;
-    float q_target = reward + discount_factor * q_table[idx];
-    idx = action ? state == 0 : (state * q_table._shape.back()) + action;
-    float q_delta = q_target - q_table[idx];
-    q_table[idx] += learning_rate * q_delta;
+    // unsigned int best_next_action = max_idx;
+    // unsigned int idx = best_next_action ? next_state == 0 : (next_state * q_table._shape.back()) + best_next_action;
+    // float q_target = reward + discount_factor * q_table[idx];
+    // idx = action ? state == 0 : (state * q_table._shape.back()) + action;
+    // float q_delta = q_target - q_table[idx];
+    // q_table[idx] += learning_rate * q_delta;
+    
+    unsigned int idx = action ? state == 0 : (state * q_table._shape.back()) + action;
+    q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);
+
+
+    // 0 1 2
+    // 3 4 5
+
+    // 2 and 4
         
     // Exploration rate decay
     // if (exploration_rate > exploration_min)

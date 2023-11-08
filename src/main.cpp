@@ -5,6 +5,8 @@
 #include "environment.h"
 #include "window.h"
 
+#include "arrays.h"
+
 #include <random>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -52,12 +54,47 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             // Agent updates the Q-table
             agent.update_q_table(state, action, reward, next_state);
+            std::cout << agent.q_table << std::endl;
 
             total_reward += reward;
             state = next_state;
         }
         std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
     }
+
+    int max_idx;
+    auto q_table = Tensor({ 1, 2, 3, 4, 6, 5 }, { 3, 2 });
+    Tensor sliced_q_table = slice(q_table, 2, 1);
+    unsigned int max = std::numeric_limits<unsigned int>::lowest();
+    for(int i = 0; i < sliced_q_table._size; ++i) {
+        if (sliced_q_table[i] > max) {
+
+            max = sliced_q_table[i];
+            max_idx = i;
+            std::cout << sliced_q_table[i] << " " << max << " " << max_idx << std::endl;
+        }
+    }
+        
+    std::cout << q_table << std::endl;
+    std::cout << sliced_q_table << std::endl;
+    std::cout << max_idx << std::endl;
+
+    int max_idx2;
+    auto q_table2 = Tensor({ 1, 2, 3, 4, 2, 5 }, { 3, 2 });
+    Tensor sliced_q_table2 = slice(q_table2, 2, 1);
+    unsigned int max2 = std::numeric_limits<unsigned int>::lowest();
+    for(int i = 0; i < sliced_q_table2._size; ++i) {
+        if (sliced_q_table2[i] > max2) {
+
+            max2 = sliced_q_table2[i];
+            max_idx2 = i;
+            std::cout << sliced_q_table2[i] << " " << max2 << " " << max_idx2 << std::endl;
+        }
+    }
+        
+    std::cout << q_table2 << std::endl;
+    std::cout << sliced_q_table2 << std::endl;
+    std::cout << max_idx2 << std::endl;
 
     // Initialize the Windows application
     try {
