@@ -31,7 +31,7 @@ std::tuple<int, int, bool> Environment::step(const std::string& action) {
     // Implement how the state changes based on the agent's actions
     if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full"))) // TODO: simplify this code using lambda?
         current_state = std::min(current_state + 1, num_states - 1);
-    else if (action == "do_nothing" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
+    else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
         current_state = std::max(current_state - 1, 0);
 
     // Increment days lived by 1

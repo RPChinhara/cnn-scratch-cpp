@@ -43,9 +43,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         while (!done) {
             unsigned int action = agent.choose_action(state);
+            std::cout << "action: " << action << std::endl;
 
             // Agent takes the selected action and observes the environment
-            // auto result = env.step(env.actions[action]);
             auto [next_state, reward, temp_done] = env.step(env.actions[action]);
             done = temp_done;
             env.render();
