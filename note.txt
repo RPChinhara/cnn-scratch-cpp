@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- Try open-ended RL?
 - Try opengym to how real rl works
 - Add news, and nationality as states
 - Why I mentioned about recent news kn Kishida president? It because he’s the current president of Japan, about he reduced taxes became news on medias, Japan is in ressesion(current economic status in Japan), I was interested
