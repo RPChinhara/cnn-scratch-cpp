@@ -23,7 +23,16 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+<<<<<<< HEAD
 - Try open-ended RL?
+=======
+- Recheck if everything is properly implemented by comparing with numpy ver
+- At last, actually do this in graphics
+- Maybe in the future hide the food and water? As in the real nature animals have to work hard to get those rewards. e.g., crocodiles hunting zebras
+- 植物はどうやって生きてる？　例、木など
+- Add drive as an Action
+- Add pains, and good feeling as states
+>>>>>>> 82bbb12f84e33c997fc751bf0645b5c440c702be
 - Try opengym to how real rl works
 - Add news, and nationality as states
 - Why I mentioned about recent news kn Kishida president? It because he’s the current president of Japan, about he reduced taxes became news on medias, Japan is in ressesion(current economic status in Japan), I was interested
