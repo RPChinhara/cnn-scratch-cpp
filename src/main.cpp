@@ -10,6 +10,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
+#if 0
     // Feedforward neural network
     // Load the Iris dataset
     Iris iris = load_iris();
@@ -26,9 +27,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // Train and test the neural network
     NN nn = NN({ 4, 128, 3 }, 0.01f);
-    // nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-    // nn.predict(val_test.x_second, val_test.y_second);
+    nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
+    nn.predict(val_test.x_second, val_test.y_second);
+#endif
 
+#if 0
     // Reinforcement learning (Q-learining)
     Environment env = Environment();
     QLearning agent = QLearning(env.num_states, env.num_actions);
@@ -61,6 +64,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
         std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
     }
+#endif
 
     // Initialize the Windows application
     try {
@@ -68,7 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return window.messageLoop();
     } catch (const std::exception& e) {
         // Handle the error, e.g., show an error message
-        MessageBox(NULL, e.what(), "Error", MB_ICONERROR | MB_OK);
+        MessageBox(nullptr, e.what(), "Error", MB_ICONERROR | MB_OK);
         return -1;
     }
 }

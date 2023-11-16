@@ -21,7 +21,7 @@ static RECT food   = { 5, 5, 55, 55 };
 static RECT water  = { 1850, 4, 1900, 50 };
 static RECT bed    = { 5, 865, 60, 965 };
 
-Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
+Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) {
     // Create a window class
     WNDCLASS wc = {};
     wc.lpfnWndProc = WindowProc;
@@ -29,7 +29,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
     wc.lpszClassName = CLASS_NAME;
 
     if (!RegisterClass(&wc)) {
-        MessageBox(NULL, "Window Registration Failed!", "Error", MB_ICONERROR);
+        MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
     }
 
     // Create a window
@@ -41,14 +41,14 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(NULL) {
         CW_USEDEFAULT,       // Y position
         window_width,        // Width
         window_height,       // Height
-        NULL,                // Parent window
-        NULL,                // Menu
+        nullptr,                // Parent window
+        nullptr,                // Menu
         hInstance,           // Instance handle
-        NULL                 // Additional application data
+        nullptr                 // Additional application data
     );
 
-    if (hwnd == NULL) {
-        MessageBox(NULL, "Window Creation Failed!", "Error", MB_ICONERROR);
+    if (hwnd == nullptr) {
+        MessageBox(nullptr, "Window Creation Failed!", "Error", MB_ICONERROR);
     }
 
     ShowWindow(hwnd, nCmdShow);
@@ -62,13 +62,13 @@ int Window::messageLoop() {
 
     if (!soundPlayer.Initialize()) {
         // Handle initialization error
-        MessageBox(NULL, "1", "Error", MB_ICONERROR);
+        MessageBox(nullptr, "1", "Error", MB_ICONERROR);
         return -1;
     }
 
     if (!soundPlayer.LoadAudioData("assets\\mixkit-city-traffic-background-ambience-2930.wav")) {
         // Handle audio data loading error
-        MessageBox(NULL, "2", "Error", MB_ICONERROR);
+        MessageBox(nullptr, "2", "Error", MB_ICONERROR);
         return -1;
     }
     
@@ -76,11 +76,11 @@ int Window::messageLoop() {
     // Play the sound
     if (!soundPlayer.PlaySound()) {
         // Handle sound playback error
-        MessageBox(NULL, "Failed to play sound!", "Error", MB_ICONERROR);
+        MessageBox(nullptr, "Failed to play sound!", "Error", MB_ICONERROR);
         return -1;
     }
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
@@ -112,22 +112,22 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                  // Check for boundary collision
                 CheckBoundaryCollision(agent, window_width, window_height);
 
-                InvalidateRect(hwnd, NULL, TRUE); // Redraw the updated rectangle
+                InvalidateRect(hwnd, nullptr, TRUE); // Redraw the updated rectangle
             }
             if (key == VK_LEFT) {
                 agent.left -= 5;
                 agent.right -= 5;
-                InvalidateRect(hwnd, NULL, TRUE);
+                InvalidateRect(hwnd, nullptr, TRUE);
             }
             if (key == VK_UP) {
                 agent.top -= 5;
                 agent.bottom -= 5;
-                InvalidateRect(hwnd, NULL, TRUE);
+                InvalidateRect(hwnd, nullptr, TRUE);
             }
             if (key == VK_DOWN) {
                 agent.top += 5;
                 agent.bottom += 5;
-                InvalidateRect(hwnd, NULL, TRUE);
+                InvalidateRect(hwnd, nullptr, TRUE);
             }
             return 0;
         }
@@ -154,7 +154,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             // };
 
             // Redraw the scene
-            InvalidateRect(hwnd, NULL, TRUE);
+            InvalidateRect(hwnd, nullptr, TRUE);
             return 0;
         }
         case WM_PAINT: {

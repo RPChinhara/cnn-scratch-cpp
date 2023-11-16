@@ -23,7 +23,7 @@ std::tuple<int, int, bool> Environment::step(const std::string& action) {
 
     // If action is not in actions
     if (it == actions.end()) {
-        MessageBox(NULL, "Invalid action.", "Error", MB_ICONERROR);
+        MessageBox(nullptr, "Invalid action.", "Error", MB_ICONERROR);
         ExitProcess(1);
     }
     
