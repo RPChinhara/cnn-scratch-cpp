@@ -1,5 +1,6 @@
 #include "window.h"
 #include "audio_player.h"
+#include "entities.h"
 #include "physics.h"
 
 #include <stdexcept>
@@ -14,12 +15,6 @@
 const char Window::CLASS_NAME[] = "EnvWindow";
 int Window::window_width  = 1920;
 int Window::window_height = 1080;
-
-static RECT agent  = { 7, 895, 57, 945 }; // Left, Top, Right, Bottom coordinates
-static RECT agent2 = { 1850, 895, 1900, 945 };
-static RECT food   = { 5, 5, 55, 55 };
-static RECT water  = { 1850, 4, 1900, 50 };
-static RECT bed    = { 5, 865, 60, 965 };
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) {
     // Create a window class
