@@ -5,8 +5,6 @@
 #include "environment.h"
 #include "window.h"
 
-#include <random>
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     // Create a console for logging otherwise I can't when WinMain() is used as the entry point because it doesn't use the standard console for input and output
     AllocConsole();
