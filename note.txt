@@ -1,10 +1,10 @@
 [States]
-- hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ), climate(wind) time of day, location, financial status (income, savings, and debt), education level.
+- hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality.
 
 NOTE: First start with 3 states which are hunger, thirstiness, and mental health each have 5 states (very hungry, hungry, neutral, full, very full), (very thirsty, thirsty, neutral, satisfied, very satisfied), (very stressed, stressed, neutral, content, happy) which means 5 (hunger) * 5 (thirstiness) * 5 (mental health) = 125 states.
 
 [Actions]
-- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house.
+- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive.
 
 NOTE: Similar to actions, first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
 
@@ -23,18 +23,12 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
-<<<<<<< HEAD
 - Try open-ended RL?
-=======
 - Recheck if everything is properly implemented by comparing with numpy ver
 - At last, actually do this in graphics
 - Maybe in the future hide the food and water? As in the real nature animals have to work hard to get those rewards. e.g., crocodiles hunting zebras
 - 植物はどうやって生きてる？　例、木など
-- Add drive as an Action
-- Add pains, and good feeling as states
->>>>>>> 82bbb12f84e33c997fc751bf0645b5c440c702be
 - Try opengym to how real rl works
-- Add news, and nationality as states
 - Why I mentioned about recent news kn Kishida president? It because he’s the current president of Japan, about he reduced taxes became news on medias, Japan is in ressesion(current economic status in Japan), I was interested
 - Make a global variables called is_action_up, down, left, and right will be switched in WindowsProc()
 - 法に沿っていきる。
