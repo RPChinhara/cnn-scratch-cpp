@@ -32,8 +32,8 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
         CLASS_NAME,          // Window class name
         "",                  // Window title
         WS_OVERLAPPEDWINDOW, // Window style
-        CW_USEDEFAULT,       // X position
-        CW_USEDEFAULT,       // Y position
+        0,                   // X position
+        0,                   // Y position
         window_width,        // Width
         window_height,       // Height
         nullptr,             // Parent window
