@@ -47,7 +47,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
     }
 
     ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd);
+    UpdateWindow(hwnd); // TODO: Maybe I can delete this?
 }
 
 int Window::messageLoop() {
