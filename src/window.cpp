@@ -11,9 +11,9 @@
 #pragma comment(lib, "Ole32.lib")
 #pragma comment(lib, "User32.lib")
 
-static int window_width  = 1920;
-static int window_height = 1080;
-const char Window::CLASS_NAME[] = "WINDOW";
+const char Window::CLASS_NAME[] = "EnvWindow";
+int Window::window_width  = 1920;
+int Window::window_height = 1080;
 
 static RECT agent  = { 7, 895, 57, 945 }; // Left, Top, Right, Bottom coordinates
 static RECT agent2 = { 1850, 895, 1900, 945 };
@@ -41,10 +41,10 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
         CW_USEDEFAULT,       // Y position
         window_width,        // Width
         window_height,       // Height
-        nullptr,                // Parent window
-        nullptr,                // Menu
+        nullptr,             // Parent window
+        nullptr,             // Menu
         hInstance,           // Instance handle
-        nullptr                 // Additional application data
+        nullptr              // Additional application data
     );
 
     if (hwnd == nullptr) {
