@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- Make transpose()
 - Try open-ended RL?
 - Recheck if everything is properly implemented by comparing with numpy ver
 - At last, actually do this in graphics
