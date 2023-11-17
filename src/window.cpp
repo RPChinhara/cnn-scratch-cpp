@@ -90,6 +90,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             return 0;
         }
         case WM_KEYDOWN: {
+            // TODO: Size of bottom border get enlarged when moving the agent.
             // Check which key was pressed
             int key = wParam;
             if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
