@@ -1,10 +1,10 @@
 [States]
-- hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality.
+- hunger(start with negative hunger?), thirstiness, mental health, blood pressure, blood glucose level, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality.
 
 NOTE: First start with 3 states which are hunger, thirstiness, and mental health each have 5 states (very hungry, hungry, neutral, full, very full), (very thirsty, thirsty, neutral, satisfied, very satisfied), (very stressed, stressed, neutral, content, happy) which means 5 (hunger) * 5 (thirstiness) * 5 (mental health) = 125 states.
 
 [Actions]
-- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive.
+- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff.
 
 NOTE: Similar to actions, first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
 
@@ -36,11 +36,9 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 - Make a global variables called is_action_up, down, left, and right will be switched in WindowsProc()
 - 法に沿っていきる。
 - Reference nature behaviors watching videos on YouTube.
-- He can move stuff.
-- Consider tide?
 - He has to escape from the hunters/predators.
 - Draw days lived, current_state, days_without_eating, and location on the simulation screen?
-- add music to the simulation like Pikemon
+- add music to the simulation like Pokemon
 - When action is set talk, set states as current situation such as holding a leaf sets alphabet as actions so that it can chose a word ‘leaf!’ Like baby would say.
 - how to hide the taskbar when window is displayed?
 - create class Agent?
