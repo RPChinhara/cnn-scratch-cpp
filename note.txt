@@ -23,7 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
-- Yann says RL requires insane amout of trias. How can I reduce this?
+- Yann says RL requires insane amout of trias. How can I reduce this? He also says idea that humans and animals possess common sense, and their behavior is motivated by specific goals or objectives, which are often referred to as drives. Common sense here implies a practical understanding of the world and the ability to make decisions based on that understanding. The mention of "drives" suggests that both humans and animals are guided by their inherent needs, instincts, or motivations when determining their actions.
 - use PowerPlay? https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00313/full
 - consider using Entity-Component-System (ECS) in the future
 - Try automatically inventing or discovering problems in a way inspired by the playful behavior of animals and humans (PowerPlay).
