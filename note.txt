@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- consider using Entity-Component-System (ECS) in the future
 - Try automatically inventing or discovering problems in a way inspired by the playful behavior of animals and humans (PowerPlay).
 - Run environments the GPU instead of CPU for like multi-agent reinforcement learning (MARL) research.
 - Make transpose()

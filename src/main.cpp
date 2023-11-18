@@ -1,8 +1,6 @@
 #include "datasets.h"
-#include "environment.h"
 #include "nn.h"
 #include "preprocessing.h"
-#include "q_learning.h"
 #include "window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -29,41 +27,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     NN nn = NN({ 4, 128, 3 }, 0.01f);
     nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
     nn.predict(val_test.x_second, val_test.y_second);
-#endif
-
-#if 0
-    // Reinforcement learning (Q-learining)
-    Environment env = Environment();
-    QLearning agent = QLearning(env.num_states, env.num_actions);
-
-    unsigned int num_episodes = 1000;
-
-    std::cout << "------------------- HEAD -------------------" << std::endl;
-
-    for (int i = 0; i < num_episodes; ++i) {
-        auto state = env.reset();
-        bool done = false;
-        int total_reward = 0;
-
-        while (!done) {
-            unsigned int action = agent.choose_action(state);
-            std::cout << "action: " << action << std::endl;
-
-            // Agent takes the selected action and observes the environment
-            auto [next_state, reward, temp_done] = env.step(env.actions[action]);
-            done = temp_done;
-
-            // Agent updates the Q-table
-            agent.update_q_table(state, action, reward, next_state);
-            std::cout << agent.q_table << std::endl << std::endl;
-
-            env.render();
-
-            total_reward += reward;
-            state = next_state;
-        }
-        std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
-    }
 #endif
 
     // Initialize the Windows application

@@ -1,10 +1,13 @@
 #include "window.h"
 #include "audio_player.h"
 #include "entities.h"
+#include "environment.h"
 #include "physics.h"
+#include "q_learning.h"
 
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
+#include <thread>
 
 // Link the necessary libraries
 #pragma comment(lib, "d2d1.lib")
@@ -52,7 +55,6 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
 
 int Window::messageLoop() {
     // Main message loop
-    MSG msg = {};
     AudioPlayer soundPlayer(hwnd);
 
     if (!soundPlayer.Initialize()) {
@@ -75,17 +77,65 @@ int Window::messageLoop() {
         return -1;
     }
 
-    while (GetMessage(&msg, nullptr, 0, 0)) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+    // NOTE: Consider creating Window::rl_thread(), and make a variable std::thread rlThread(&Window::rl_thread, this);. Also, I might need to carefully manage shared resources and synchronization to avoid potential issues such as data races.
+    std::thread rl_thread([this]() {
+        // Reinforcement learning (Q-learining)
+        Environment env = Environment();
+        QLearning agent = QLearning(env.num_states, env.num_actions);
+
+        unsigned int num_episodes = 1000;
+
+        std::cout << "------------------- HEAD -------------------" << std::endl;
+
+        for (int i = 0; i < num_episodes; ++i) {
+            auto state = env.reset();
+            bool done = false;
+            int total_reward = 0;
+
+            while (!done) {
+                unsigned int action = agent.choose_action(state);
+                std::cout << "action: " << action << std::endl;
+
+                // Agent takes the selected action and observes the environment
+                auto [next_state, reward, temp_done] = env.step(env.actions[action]);
+                done = temp_done;
+
+                // Agent updates the Q-table
+                agent.update_q_table(state, action, reward, next_state);
+                std::cout << agent.q_table << std::endl << std::endl;
+
+                env.render();
+
+                total_reward += reward;
+                state = next_state;
+            }
+
+            std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
+        }
+    });
+
+    while(true) {
+        MSG msg = {};
+
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+
+            if (msg.message == WM_QUIT) {
+                // Handle quitting the application
+                rl_thread.join(); // Wait for the RL thread to finish before exiting
+                return static_cast<int>(msg.wParam);
+            }
+        }
     }
 
-    return static_cast<int>(msg.wParam);
+    return 0;
 }
 
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
-        case WM_CLOSE: {
+        case WM_CLOSE:
+        case WM_DESTROY: {
             PostQuitMessage(0);
             return 0;
         }
