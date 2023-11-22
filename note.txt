@@ -23,6 +23,8 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- Psychologists distinguish between extrinsic motivation, which means being moved to do something because of some specific rewarding outcome, and intrinsic motivation, which refers to being moved to do something because it is inherently enjoyable. Intrinsic motivation leads organisms to engage in exploration, play, and other behavior driven by curiosity in the absence of explicit reward. [...] Although these arguments are compelling, developmental approaches to artificial agent design have been slow to penetrate the mainstream of the machine learning community.
+- an agent should address new goals forever
 - Yann says RL requires insane amount of trials. How can I reduce this? He also says idea that humans and animals possess common sense, and their behavior is motivated by specific goals or objectives, which are often referred to as drives. Common sense here implies a practical understanding of the world and the ability to make decisions based on that understanding. The mention of "drives" suggests that both humans and animals are guided by their inherent needs, instincts, or motivations when determining their actions.
 - use PowerPlay? https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00313/full
 - consider using Entity-Component-System (ECS) in the future
