@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- Learn Psychology, Neuroscience, Ethology, Anthropology, Biology, Sociology to get an incentive for to comprehend human behaviour.
 - なぜルビーは走る
 - Psychologists distinguish between extrinsic motivation, which means being moved to do something because of some specific rewarding outcome, and intrinsic motivation, which refers to being moved to do something because it is inherently enjoyable. Intrinsic motivation leads organisms to engage in exploration, play, and other behavior driven by curiosity in the absence of explicit reward. [...] Although these arguments are compelling, developmental approaches to artificial agent design have been slow to penetrate the mainstream of the machine learning community.
 - an agent should address new goals forever
