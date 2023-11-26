@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- I need to set the camera focused on him, and spawn objects e.g., food, water, possible friends, and predators etc to let him explore the environment.
 - I need to save parameters such as weights, biases, and Q-table. How do you do in TF?
 - Learning about why animals and human's primary purposes for living I guess making good environment might be key? If they need to adapt to environment, it needs to change over time e.g., global warming, we have to adapt to new techs.
 - While primary purposes for both human and animals are driven by the principles of survival(finding food, avoiding predators, and adapting to environmental challenges(Natural selection favors traits that enhance an organism's chances of survival and reproduction in a given environment)) and reproduction. However, humans often seek additional sources of meaning and purpose. These may include personal fulfillment, relationships, contributions to society.
