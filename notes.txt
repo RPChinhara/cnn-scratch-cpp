@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- While primary purposes for both human and animals are driven by the principles of survival and reproduction. However, humans often seek additional sources of meaning and purpose. These may include personal fulfillment, relationships, contributions to society.
 - All the behaviors are influenced by a combination of biological, psychological, social, and cultural factors.
 - Learn how human memory works, and integrate memory for him?
 - He needs to take various nutrition such as carbohydrates, proteins, fats, vitamins, and minerals through food these adequate nutrition is crucial for energy production, growth, and the maintenance and repair of bodily tissues so perhaps in the future I have to program so that not he only eats, but have to eat in good balance.
