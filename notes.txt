@@ -23,6 +23,7 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
+- Experts say the current models need 'Search system', but what it is?
 - How to let him have curiosity for Science e.g., Mathematics, AI, Physics so that he will try to solve problems within these fields.
 - I need to set the camera focused on him, and spawn objects e.g., food, water, possible friends, and predators etc to let him explore the environment.
 - I need to save parameters such as weights, biases, and Q-table. How do you do in TF?
