@@ -4,7 +4,7 @@
 NOTE: First start with 3 states which are hunger, thirstiness, and mental health each have 5 states (very hungry, hungry, neutral, full, very full), (very thirsty, thirsty, neutral, satisfied, very satisfied), (very stressed, stressed, neutral, content, happy) which means 5 (hunger) * 5 (thirstiness) * 5 (mental health) = 125 states.
 
 [Actions]
-- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduce(mating?).
+- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduction(such as mating, parenting, and ensuring the survival of their offspring).
 
 NOTE: Similar to actions, first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
 
@@ -23,7 +23,8 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 | (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
 
 [Insights]
-- While primary purposes for both human and animals are driven by the principles of survival and reproduction. However, humans often seek additional sources of meaning and purpose. These may include personal fulfillment, relationships, contributions to society.
+- Learning about why animals and human's primary purposes for living I guess making good environment might be key? If they need to adapt to environment, it needs to change over time e.g., global warming, we have to adapt to new techs.
+- While primary purposes for both human and animals are driven by the principles of survival(finding food, avoiding predators, and adapting to environmental challenges(Natural selection favors traits that enhance an organism's chances of survival and reproduction in a given environment)) and reproduction. However, humans often seek additional sources of meaning and purpose. These may include personal fulfillment, relationships, contributions to society.
 - All the behaviors are influenced by a combination of biological, psychological, social, and cultural factors.
 - Learn how human memory works, and integrate memory for him?
 - He needs to take various nutrition such as carbohydrates, proteins, fats, vitamins, and minerals through food these adequate nutrition is crucial for energy production, growth, and the maintenance and repair of bodily tissues so perhaps in the future I have to program so that not he only eats, but have to eat in good balance.
