@@ -76,6 +76,10 @@ int Window::messageLoop() {
         return -1;
     }
 
+    // TODO: He needs to make sounds like cats do.
+    // TODO: 実際の時間と合わせる
+    // TODO: Recheck if everything is properly implemented by comparing with numpy ver
+    
     // NOTE: Consider creating Window::rl_thread(), and make a variable std::thread rlThread(&Window::rl_thread, this);. Also, I might need to carefully manage shared resources and synchronization to avoid potential issues such as data races.
     std::thread rl_thread([this]() {
         // Reinforcement learning (Q-learining)
@@ -139,6 +143,8 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             return 0;
         }
         case WM_KEYDOWN: {
+            // TODO: He may need to classify the objects before take actions e.g., if it's food he'd eat.
+            // TODO: How to implement five senses specially touch, smell, taste as these could influence fudamental actions like eating the right food.
             // Check which key was pressed
             int key = wParam;
             if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
@@ -203,6 +209,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         }
         case WM_PAINT: {
             // TODO: Use Direct2D next, and Direct3D 9 or Direct3D 10 for 3D?
+            // TODO: Draw days lived, current_state, days_without_eating, and location on the simulation screen? or create menu?
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
             
