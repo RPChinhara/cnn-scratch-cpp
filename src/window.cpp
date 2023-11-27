@@ -30,6 +30,8 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
         MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
     }
 
+    // TODO: How to hide the taskbar when window is displayed?
+
     // Create a window
     hwnd = CreateWindow(
         CLASS_NAME,          // Window class name
@@ -76,10 +78,12 @@ int Window::messageLoop() {
         return -1;
     }
 
+    // TODO: I need to introduce sounds in order so that it resembles real world, e.g., sounds of possible predators so that it can scare him.
     // TODO: He needs to make sounds like cats do.
     // TODO: 実際の時間と合わせる
     // TODO: Recheck if everything is properly implemented by comparing with numpy ver
-    
+    // TODO: I need to set the camera focused on him, and spawn objects e.g., food, water, possible friends, and predators, etc to let him explore the environment.
+
     // NOTE: Consider creating Window::rl_thread(), and make a variable std::thread rlThread(&Window::rl_thread, this);. Also, I might need to carefully manage shared resources and synchronization to avoid potential issues such as data races.
     std::thread rl_thread([this]() {
         // Reinforcement learning (Q-learining)
@@ -146,6 +150,8 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             // TODO: He may need to classify the objects before take actions e.g., if it's food he'd eat.
             // TODO: How to implement five senses specially touch, smell, taste as these could influence fudamental actions like eating the right food.
             // Check which key was pressed
+
+            // TODO: Possibly foward I he needs to run in that case I need to set pixes for example 5 pixels for walk, and 10 pixels for run.
             int key = wParam;
             if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
                 
