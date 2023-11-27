@@ -8,20 +8,6 @@ NOTE: First start with 3 states which are hunger, thirstiness, and mental health
 
 NOTE: Similar to actions, first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
 
-TODO: I could go more detail e.g., 
-Food Type: Specify the type of food the agent can choose to eat, such as healthy options (vegetables, fruits, lean proteins) or unhealthy options (fast food, sugary snacks).
-Portion Size: Define different portion sizes (small, medium, large) for the agent's meals.
-Meal Timing: Determine when the agent can eat (breakfast, lunch, dinner, snacks).
-
-Q-table would have 125 (states) * 81 (action combinations) rows and columns, resulting in a total of 10,125 cells in the table.
-| State (Hunger, Thirstiness, Mental Health) | Eat (Low) | Eat (Medium) | Eat (High) | Exercise (Low) | ... |
-|--------------------------------------------|-----------|--------------|------------|----------------|-----|
-| (Very Hungry, Very Thirsty, Stressed)      | ?         | ?            | ?          | ?              | ... |
-| (Very Hungry, Very Thirsty, Neutral)       | ?         | ?            | ?          | ?              | ... |
-| ...                                        | ...       | ...          | ...        | ...            | ... |
-| (Full, Very Satisfied, Happy)              | ?         | ?            | ?          | ?              | ... |
-| (Very Full, Very Satisfied, Happy)         | ?         | ?            | ?          | ?              | ... |
-
 [Insights]
 - Experts say the current models need 'Search system', but what it is?
 - How to let him have curiosity for Science e.g., Mathematics, AI, Physics so that he will try to solve problems within these fields.
@@ -59,7 +45,6 @@ Q-table would have 125 (states) * 81 (action combinations) rows and columns, res
 - how to hide the taskbar when window is displayed?
 - create class Agent?
 - should other agent randomly moving? NPCs are moving in GTA, but not in Pokemon. IRL obviously people or everything is moving.   
-- First create survival agent who tried to keep the life with no graphics, and maybe start off with Q-Learning.
 ニャーと声を発する
 - 仕切りを作る
 - 俺が餌あげないと死ぬ
