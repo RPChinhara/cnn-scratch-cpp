@@ -7,10 +7,10 @@
 // TODO: Try open-ended RL?
 // TODO: Use PowerPlay? https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00313/full
 // TODO: Try automatically inventing or discovering problems in a way inspired by the playful behavior of animals and humans (PowerPlay).
-// TODO: When action is set talk, set states as current situation such as holding a leaf sets alphabet as actions so that it can chose a word ‘leaf!’ Like baby would say.
 // TODO: Run environments the GPU instead of CPU for like multi-agent reinforcement learning (MARL) research.
 // TODO: The book 'Why Greatness Cannot Be Planned' proposes to follow the interesting and the novel instead. The authors developed an algorithm called novelty search, where instead of optimizing an objective, the agent just tries out behaviors that are as novel to it as possible, but I realized that paper 'Reward is Enough' came 6 years after this so not sure...
 // TODO: Maybe there might be RL within Rl? e.g., within the states he decide to do puzzle game in order to learn new words at this point use another RL? I mean human is also like that meaning it’s like layers of RL. In order to live, you have to work, and within the work you have to do certatin tasks.
+// TODO: When actions is set talk, set states as current situation such as holding a leaf sets alphabet as actions so that it can chose a word 'lead!' like baby would say.
 
 void Environment::render() {
     std::cout << "Days Lived: " << days_lived << std::endl;
