@@ -21,7 +21,7 @@ public:
     friend Tensor operator-(const float sca, const Tensor& o);
     friend Tensor operator*(const float sca, const Tensor& o);
     friend std::ostream& operator<<(std::ostream& os, const Tensor& o);
-    Tensor T() const;
+    Tensor T() const; // TODO: Make transpose() instead?
 
     float                    *_elem = nullptr;
     unsigned int              _num_ch_dim; // TODO: Change to _num_channel_dims
