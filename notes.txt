@@ -1,12 +1,8 @@
 [States]
 - hunger(the primary biological drive for eating is hunger, which is controlled by the hypothalamus in the brain. When the body's energy stores are depleted, signals are sent to the brain to initiate the feeling of hunger, motivating an individual to seek and consume food), thirst(dehydration or a decrease in the body's water content triggers the sensation of thirst), mental health, blood pressure, blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), emotions(such as stress, boredom, sadness, or happiness), self-esteem level(influences psychological well-being), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
 
-NOTE: First start with 3 states which are hunger, thirstiness, and mental health each have 5 states (very hungry, hungry, neutral, full, very full), (very thirsty, thirsty, neutral, satisfied, very satisfied), (very stressed, stressed, neutral, content, happy) which means 5 (hunger) * 5 (thirstiness) * 5 (mental health) = 125 states.
-
 [Actions]
 - EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduction(such as mating, parenting, and ensuring the survival of their offspring).
-
-NOTE: Similar to actions, first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
 
 [Insights]
 - Experts say the current models need 'Search system', but what it is?
