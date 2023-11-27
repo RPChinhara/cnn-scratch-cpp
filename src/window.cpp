@@ -50,7 +50,6 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
     }
 
     ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd); // TODO: Maybe I can delete this?
 }
 
 int Window::messageLoop() {
@@ -140,7 +139,6 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             return 0;
         }
         case WM_KEYDOWN: {
-            // TODO: Size of bottom border get enlarged when moving the agent.
             // Check which key was pressed
             int key = wParam;
             if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
@@ -204,7 +202,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             return 0;
         }
         case WM_PAINT: {
-            // TODO: Use Direct2D next, and Direct3D 9/10 for 3D?
+            // TODO: Use Direct2D next, and Direct3D 9 or Direct3D 10 for 3D?
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
             

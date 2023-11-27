@@ -8,7 +8,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
     // Feedforward neural network
     // Load the Iris dataset
     Iris iris = load_iris();
