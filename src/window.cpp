@@ -106,19 +106,31 @@ int Window::messageLoop() {
                 std::cout << "action: " << action << std::endl;
 
                 // Change agent's position according to the action
-                if (action == 2) {
-                    agent.top -= 5;  // Move the agent 10 pixels to the top
-                    agent.bottom -= 5;
-                } else if (action == 3) {
-                    agent.top += 5;
-                    agent.bottom += 5;
-                } else if (action == 4) {
-                    agent.left -= 5;
-                    agent.right -= 5;
-                } else if (action == 5) {
-                    agent.left += 5;
-                    agent.right += 5;
-                }
+                // if (action == 2) {
+                //     agent.top -= 5;  // Move the agent 10 pixels to the top
+                //     agent.bottom -= 5;
+                // } else if (action == 3) {
+                //     agent.top += 5;
+                //     agent.bottom += 5;
+                // } else if (action == 4) {
+                //     agent.left -= 5;
+                //     agent.right -= 5;
+                // } else if (action == 5) {
+                //     agent.left += 5;
+                //     agent.right += 5;
+                // }
+
+                // CheckBoundaryCollision(agent, window_width, window_height);
+
+                // Check for collision with the static rectangle
+                // if (IsColliding(agent, agent2)) {
+                //     ResolveCollision(agent, agent2); // Resolve the collision by adjusting the position of the moving rectangle
+                // } else if (IsColliding(agent, water)) {
+                //     ResolveCollision(agent, water);
+                // } else {
+                //     agent.left += 5; // Move the agent 10 pixels to the right
+                //     agent.right += 5;
+                // }
 
                 // Agent takes the selected action and observes the environment
                 auto [next_state, reward, temp_done] = env.step(env.actions[action]);
@@ -163,51 +175,14 @@ int Window::messageLoop() {
 }
 
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    // TODO: He may need to classify the objects before take actions e.g., if it's food he'd eat.
+    // TODO: How to implement five senses specially touch, smell, taste as these could influence fudamental actions like eating the right food.
+    // TODO: Possibly foward I he needs to run in that case I need to set pixes for example 5 pixels for walk, and 10 pixels for run.
+
     switch (uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-        case WM_KEYDOWN: {
-            // TODO: He may need to classify the objects before take actions e.g., if it's food he'd eat.
-            // TODO: How to implement five senses specially touch, smell, taste as these could influence fudamental actions like eating the right food.
-            // Check which key was pressed
-
-            // TODO: Possibly foward I he needs to run in that case I need to set pixes for example 5 pixels for walk, and 10 pixels for run.
-            int key = wParam;
-            if (key == VK_RIGHT) { // Move right when the right arrow key is pressed
-                
-                // Check for collision with the static rectangle
-                if (IsColliding(agent, agent2)) {
-                    ResolveCollision(agent, agent2); // Resolve the collision by adjusting the position of the moving rectangle
-                } else if (IsColliding(agent, water)) {
-                    ResolveCollision(agent, water);
-                } else {
-                    agent.left += 5; // Move the agent 10 pixels to the right
-                    agent.right += 5;
-                }
-
-                 // Check for boundary collision
-                CheckBoundaryCollision(agent, window_width, window_height);
-
-                InvalidateRect(hwnd, nullptr, TRUE); // Redraw the updated rectangle
-            }
-            if (key == VK_LEFT) {
-                agent.left -= 5;
-                agent.right -= 5;
-                InvalidateRect(hwnd, nullptr, TRUE);
-            }
-            if (key == VK_UP) {
-                agent.top -= 5;
-                agent.bottom -= 5;
-                InvalidateRect(hwnd, nullptr, TRUE);
-            }
-            if (key == VK_DOWN) {
-                agent.top += 5;
-                agent.bottom += 5;
-                InvalidateRect(hwnd, nullptr, TRUE);
-            }
-            return 0;
-        }
         case WM_PAINT: {
             // TODO: Use Direct2D next, and Direct3D 9 or Direct3D 10 for 3D?
             // TODO: Draw days lived, current_state, days_without_eating, and location on the simulation screen? or create menu?
@@ -229,35 +204,11 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             EndPaint(hwnd, &ps);
             return 0;
         }
-        case WM_SIZE: {
-            // RECT clientRect;
-            // GetClientRect(hwnd, &clientRect);
-            // // Handle window resizing
-            // int clientWidth = LOWORD(lParam);
-            // int clientHeight = HIWORD(lParam);
-
-            // // Calculate the position of the agent as a percentage of the client area
-            // agentXPercent = 0.005; // 0.5% from the left
-            // agentYPercent = 0.995; // 99.5% from the top
-
-            // // Calculate the new positions and sizes of your rectangles here
-            // agentWidth = static_cast<int>(clientWidth * 50 / clientWidth);
-            // agentHeight = static_cast<int>(clientHeight * 50 / clientHeight);
-
-            // agent2 = {
-            //     static_cast<int>(clientRect.right * agentXPercent),
-            //     static_cast<int>(clientRect.bottom * agentYPercent) - agentHeight,
-            //     static_cast<int>(clientRect.right * agentXPercent) + agentWidth,
-            //     static_cast<int>(clientRect.bottom * agentYPercent)
-            // };
-
-            // Redraw the scene
-            InvalidateRect(hwnd, nullptr, TRUE);
-            return 0;
-        }
         case WM_UPDATE_DISPLAY:
             // Redraw the window or perform other UI updates
             InvalidateRect(hwnd, nullptr, TRUE);
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            UpdateWindow(hwnd);
             return 0;
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
