@@ -9,6 +9,9 @@
 #include <stdexcept>
 #include <thread>
 
+// Define a custom message to trigger UI updates
+#define WM_UPDATE_DISPLAY (WM_USER + 1)
+
 // Link the necessary libraries
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "Gdi32.lib")
@@ -88,7 +91,7 @@ int Window::messageLoop() {
     std::thread rl_thread([this]() {
         // Reinforcement learning (Q-learining)
         Environment env = Environment();
-        QLearning agent = QLearning(env.num_states, env.num_actions);
+        QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
         unsigned int num_episodes = 1000;
 
@@ -100,21 +103,42 @@ int Window::messageLoop() {
             int total_reward = 0;
 
             while (!done) {
-                unsigned int action = agent.choose_action(state);
+                unsigned int action = q_learning.choose_action(state);
                 std::cout << "action: " << action << std::endl;
+
+                // Change agent's position according to the action
+                if (action == 2) {
+                    agent.top -= 5;  // Move the agent 10 pixels to the top
+                    agent.bottom -= 5;
+                } else if (action == 3) {
+                    agent.top += 5;
+                    agent.bottom += 5;
+                } else if (action == 4) {
+                    agent.left -= 5;
+                    agent.right -= 5;
+                } else if (action == 5) {
+                    agent.left += 5;
+                    agent.right += 5;
+                }
 
                 // Agent takes the selected action and observes the environment
                 auto [next_state, reward, temp_done] = env.step(env.actions[action]);
                 done = temp_done;
 
                 // Agent updates the Q-table
-                agent.update_q_table(state, action, reward, next_state);
-                std::cout << agent.q_table << std::endl << std::endl;
+                q_learning.update_q_table(state, action, reward, next_state);
+                std::cout << q_learning.q_table << std::endl << std::endl;
 
                 env.render();
 
                 total_reward += reward;
                 state = next_state;
+
+                // Communicate with the main thread to update the display if needed
+                PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
+
+                // Sleep or yield to give the main thread a chance to process the message
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
@@ -141,11 +165,9 @@ int Window::messageLoop() {
 
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
-        case WM_CLOSE:
-        case WM_DESTROY: {
+        case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-        }
         case WM_KEYDOWN: {
             // TODO: He may need to classify the objects before take actions e.g., if it's food he'd eat.
             // TODO: How to implement five senses specially touch, smell, taste as these could influence fudamental actions like eating the right food.
@@ -187,6 +209,27 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             }
             return 0;
         }
+        case WM_PAINT: {
+            // TODO: Use Direct2D next, and Direct3D 9 or Direct3D 10 for 3D?
+            // TODO: Draw days lived, current_state, days_without_eating, and location on the simulation screen? or create menu?
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd, &ps);
+            
+            // Clear the entire client area with a background color (e.g., white)
+            RECT clientRect;
+            GetClientRect(hwnd, &clientRect);
+            FillRect(hdc, &clientRect, CreateSolidBrush(RGB(34, 139, 34)));
+
+            // Draw a rectangle
+            FillRect(hdc, &bed, CreateSolidBrush(RGB(255, 255, 255)));
+            FillRect(hdc, &agent, CreateSolidBrush(RGB(218, 171, 145)));
+            FillRect(hdc, &agent2, CreateSolidBrush(RGB(218, 171, 145)));
+            FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
+            FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
+
+            EndPaint(hwnd, &ps);
+            return 0;
+        }
         case WM_SIZE: {
             // RECT clientRect;
             // GetClientRect(hwnd, &clientRect);
@@ -213,27 +256,10 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             InvalidateRect(hwnd, nullptr, TRUE);
             return 0;
         }
-        case WM_PAINT: {
-            // TODO: Use Direct2D next, and Direct3D 9 or Direct3D 10 for 3D?
-            // TODO: Draw days lived, current_state, days_without_eating, and location on the simulation screen? or create menu?
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hwnd, &ps);
-            
-            // Clear the entire client area with a background color (e.g., white)
-            RECT clientRect;
-            GetClientRect(hwnd, &clientRect);
-            FillRect(hdc, &clientRect, CreateSolidBrush(RGB(34, 139, 34)));
-
-            // Draw a rectangle
-            FillRect(hdc, &bed, CreateSolidBrush(RGB(255, 255, 255)));
-            FillRect(hdc, &agent, CreateSolidBrush(RGB(218, 171, 145)));
-            FillRect(hdc, &agent2, CreateSolidBrush(RGB(218, 171, 145)));
-            FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
-            FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
-
-            EndPaint(hwnd, &ps);
+        case WM_UPDATE_DISPLAY:
+            // Redraw the window or perform other UI updates
+            InvalidateRect(hwnd, nullptr, TRUE);
             return 0;
-        }
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
