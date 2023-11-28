@@ -85,7 +85,6 @@ int Window::messageLoop() {
     // TODO: He needs to make sounds like cats do.
     // TODO: 実際の時間と合わせる
     // TODO: Recheck if everything is properly implemented by comparing with numpy ver
-    // TODO: I need to set the camera focused on him, and spawn objects e.g., food, water, possible friends, and predators, etc to let him explore the environment.
 
     // NOTE: Consider creating Window::rl_thread(), and make a variable std::thread rlThread(&Window::rl_thread, this);. Also, I might need to carefully manage shared resources and synchronization to avoid potential issues such as data races.
     std::thread rl_thread([this]() {
