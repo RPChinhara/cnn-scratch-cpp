@@ -21,6 +21,7 @@
 const char Window::CLASS_NAME[] = "EnvWindow";
 int Window::window_width  = 1920;
 int Window::window_height = 1080;
+std::mutex Window::agentMutex; // Initialize the static mutex
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) {
     // Create a window class
@@ -32,8 +33,6 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
     if (!RegisterClass(&wc)) {
         MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
     }
-
-    // TODO: How to hide the taskbar when window is displayed?
 
     // Create a window
     hwnd = CreateWindow(
@@ -105,22 +104,27 @@ int Window::messageLoop() {
                 unsigned int action = q_learning.choose_action(state);
                 std::cout << "action: " << action << std::endl;
 
-                // Change agent's position according to the action
-                // if (action == 2) {
-                //     agent.top -= 5;  // Move the agent 10 pixels to the top
-                //     agent.bottom -= 5;
-                // } else if (action == 3) {
-                //     agent.top += 5;
-                //     agent.bottom += 5;
-                // } else if (action == 4) {
-                //     agent.left -= 5;
-                //     agent.right -= 5;
-                // } else if (action == 5) {
-                //     agent.left += 5;
-                //     agent.right += 5;
-                // }
+                // TODO: Maybe I don't need it after all?
+                // Lock the mutex before modifying the agent rectangle
+                // std::lock_guard<std::mutex> lock(agentMutex);
 
-                // CheckBoundaryCollision(agent, window_width, window_height);
+                // TODO: I think I could use enum for the action?
+                // Change agent's position according to the action
+                if (action == 2) {
+                    agent.top -= 5;  // Move the agent 10 pixels to the top
+                    agent.bottom -= 5;
+                } else if (action == 3) {
+                    agent.top += 5;
+                    agent.bottom += 5;
+                } else if (action == 4) {
+                    agent.left -= 5;
+                    agent.right -= 5;
+                } else if (action == 5) {
+                    agent.left += 5;
+                    agent.right += 5;
+                }
+
+                CheckBoundaryCollision(agent, window_width, window_height);
 
                 // Check for collision with the static rectangle
                 // if (IsColliding(agent, agent2)) {
@@ -165,7 +169,7 @@ int Window::messageLoop() {
 
             if (msg.message == WM_QUIT) {
                 // Handle quitting the application
-                rl_thread.join(); // Wait for the RL thread to finish before exiting
+                // rl_thread.join(); // Wait for the RL thread to finish before exiting
                 return static_cast<int>(msg.wParam);
             }
         }
@@ -184,32 +188,47 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             PostQuitMessage(0);
             return 0;
         case WM_PAINT: {
-            // TODO: Use Direct2D next, and Direct3D 9 or Direct3D 10 for 3D?
-            // TODO: Draw days lived, current_state, days_without_eating, and location on the simulation screen? or create menu?
+            // Lock the mutex before reading the agent rectangle
+            // std::lock_guard<std::mutex> lock(agentMutex);
+
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            
+
             // Clear the entire client area with a background color (e.g., white)
             RECT clientRect;
             GetClientRect(hwnd, &clientRect);
-            FillRect(hdc, &clientRect, CreateSolidBrush(RGB(34, 139, 34)));
+            HBRUSH greenBrush = CreateSolidBrush(RGB(34, 139, 34));
+            FillRect(hdc, &clientRect, greenBrush);
+            DeleteObject(greenBrush);  // Release the brush
 
-            // Draw a rectangle
-            FillRect(hdc, &bed, CreateSolidBrush(RGB(255, 255, 255)));
-            FillRect(hdc, &agent, CreateSolidBrush(RGB(218, 171, 145)));
-            FillRect(hdc, &agent2, CreateSolidBrush(RGB(218, 171, 145)));
-            FillRect(hdc, &food, CreateSolidBrush(RGB(255, 0, 0)));
-            FillRect(hdc, &water, CreateSolidBrush(RGB(0, 0, 255)));
+            HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
+            FillRect(hdc, &bed, whiteBrush);
+            DeleteObject(whiteBrush);
+
+            HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
+            FillRect(hdc, &agent, pinkBrush);
+            FillRect(hdc, &agent2, pinkBrush);
+            DeleteObject(pinkBrush);
+
+            HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
+            FillRect(hdc, &food, redBrush);
+            DeleteObject(redBrush);
+
+            HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
+            FillRect(hdc, &water, blueBrush);
+            DeleteObject(blueBrush);
 
             EndPaint(hwnd, &ps);
             return 0;
         }
-        case WM_UPDATE_DISPLAY:
+        case WM_UPDATE_DISPLAY: {
+            // Lock the mutex before reading the agent rectangle
+            // std::lock_guard<std::mutex> lock(agentMutex);
+
             // Redraw the window or perform other UI updates
             InvalidateRect(hwnd, nullptr, TRUE);
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-            UpdateWindow(hwnd);
             return 0;
+        }
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
