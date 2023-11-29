@@ -13,6 +13,6 @@ private:
     static const char CLASS_NAME[];
     static int window_width;
     static int window_height;
-    static std::mutex agentMutex; // Mutex to synchronize access to agent
+    static std::mutex agentMutex;
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
