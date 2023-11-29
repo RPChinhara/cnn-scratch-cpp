@@ -62,7 +62,6 @@ TrainTest train_test_split(const Tensor& x, const float test_size, const unsigne
     return feature;
 }
 
-// TODO: It only works for case when y is one hot encoded. (I don't think this is true after all?)
 TrainTest2 train_test_split(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_state) {
     Tensor new_x = shuffle(x, random_state);
     Tensor new_y = shuffle(y, random_state);

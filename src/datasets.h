@@ -25,5 +25,5 @@ struct Mnist {
 Tensor load_air_passengers();
 Cifar10 load_cifar10();
 Imdb load_imdb();
-Iris load_iris(); // TODO: I could return like std::pair<Tensor, Tensor>? Which is better returning by class or this?
+Iris load_iris();
 Mnist load_mnist();

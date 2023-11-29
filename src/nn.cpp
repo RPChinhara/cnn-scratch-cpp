@@ -23,9 +23,6 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
     #endif
 
     for (unsigned short i = 1; i <= epochs; ++i) {
-        // TODO: Try batch normalization again (I saw it was used in SOTA model in a paper so I might need to work on this).
-        // TODO: Use cross-validation technique?
-
         // Set learning rate scheduler
         #if LEARNING_RATE_SCHEDULER_ENABLED
             if (i > 10 && i < 20)      learning_rate = 0.009f;
@@ -44,8 +41,6 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
 
         // SGD (Mini-batch gradient descent)
         for (unsigned int j = 0; j < train_x._shape.front(); j += batch_size) {
-            // TODO: For loop used for mimi batch gradient process multiple examples in parallel utilizing GPUs. That's the main reason facilitating mini-batch training (use std::thread).
-            
             // Slice the dataset previously shuffled
             Tensor x_batch = slice(x_shuffled, j, batch_size);
             y_batch        = slice(y_shuffled, j, batch_size);
@@ -56,11 +51,8 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
             // Backpropagation
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-            // TODO: Implement Adam and AdamW.
-
             // Calculate dl/dz
             for (unsigned char k = layers.size() - 1; 0 < k; --k) {
-                // TODO: Don't I really have to multiply by relu_prime for dy/dz3?
                 // dl/dz3 = dl/dy dy/dz3
                 // dl/dz2 = dl/dz3 dz3/da2 da2/z2
                 // dl/dz1 = dl/dz2 dz2/da1 da1/z1
@@ -69,8 +61,6 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                     dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
                 else
                     dl_dz.push_back(matmul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * relu_prime(a[k - 1]));
-
-                // TODO: I could use above '(LAYERS.size() - 2) - i' so that I don't have to use idx, and this applies to other functions use idx. 
             }
 
             // Calculate dl/dw
@@ -118,10 +108,6 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                 }
             #endif
 
-            // TODO: Don't I have to add regularizer for the biases as well like tf.keras.layers.Dense does?
-            // TODO: What is kernel_constraint and bias_constraint?
-            // TODO: I could create a file called optimizer, and put below codes as SDG same for upcoming Adam and AdamW.
-
             // Updating the parameters
             #if !MOMENTUM_ENABLED
                 for (char k = layers.size() - 2; 0 <= k; --k) {
@@ -140,12 +126,9 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                         w_b.second[k] += w_b_m.second[k];
                     }
                 #else // Nesterov
-                    // TODO: Handle nestrov for momentum.
                 #endif
             #endif
         }
-
-        // TODO: Make progress bar.
 
         // Logging the metrics
         #define LOG_EPOCH(i, EPOCH) std::cout << "Epoch " << (i) << "/" << (EPOCH)
@@ -162,8 +145,6 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
 
         log_metrics("val", val_y, a.back());
         std::cout << std::endl;
-
-        // TODO: It seems like early stopping is legit regularization so it might be wise to write this function in regularizer files.
 
         // Early stopping
         #if EARLY_STOPPING_ENABLED
@@ -215,7 +196,6 @@ TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, c
     return a;
 }
 
-// TODO: maybe rename evetything to use camel case so that it'd much with Win API?
 std::pair<TensorArray, TensorArray> NN::init_parameters() {
     TensorArray w;
     TensorArray b;
@@ -255,7 +235,6 @@ void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor
                 
                 std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) + l1l2 << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
             #else
-                // TODO: I need to use MessageBox() like the one in Environment::step()
                 std::cerr << std::endl << __FILE__ << "(" << __LINE__ << ")" << ": error: choose only one regularization" << std::endl;
                 exit(1);
             #endif

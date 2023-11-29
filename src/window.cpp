@@ -79,7 +79,6 @@ int Window::messageLoop() {
         return -1;
     }
 
-    // NOTE: Consider creating Window::rl_thread(), and make a variable std::thread rlThread(&Window::rl_thread, this);. Also, I might need to carefully manage shared resources and synchronization to avoid potential issues such as data races.
     std::thread rl_thread([this]() {
         // Reinforcement learning (Q-learining)
         Environment env = Environment();
@@ -98,11 +97,9 @@ int Window::messageLoop() {
                 unsigned int action = q_learning.choose_action(state);
                 std::cout << "action: " << action << std::endl;
 
-                // TODO: Maybe I don't need it after all?
                 // Lock the mutex before modifying the agent rectangle
                 // std::lock_guard<std::mutex> lock(agentMutex);
 
-                // TODO: I think I could use enum for the action?
                 // Change agent's position according to the action
                 if (action == 2) {
                     agent.top -= 5;  // Move the agent 10 pixels to the top

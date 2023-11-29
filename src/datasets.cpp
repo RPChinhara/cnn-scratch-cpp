@@ -75,8 +75,6 @@ Cifar10 load_cifar10() {
 }
 
 Imdb load_imdb() {
-    //TODO: I need to make TextVectorization which maps text features to integer sequences.
-
     std::ifstream file("datasets/imdb.csv");
 
     if (!file.is_open()) {

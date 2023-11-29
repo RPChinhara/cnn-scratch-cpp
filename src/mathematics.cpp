@@ -144,8 +144,6 @@ Tensor square(const Tensor& in) {
 }
 
 Tensor sum(const Tensor& in, const unsigned short axis) {
-    // TODO: Add a feature that it can take None like axis = None like np.sum?
-
 	assert(axis == 0 || axis == 1);
 	Tensor out;
 	if (in._shape.size() == 1 || in._shape.front() == 1) {

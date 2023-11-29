@@ -27,9 +27,8 @@ std::tuple<int, int, bool> Environment::step(const std::string& action) {
         ExitProcess(1);
     }
     
-    // TODO: if the action was "eat", and current state was "full" it should be penalized
     // Implement how the state changes based on the agent's actions
-    if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full"))) // TODO: simplify this code using lambda?
+    if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
         current_state = std::min(current_state + 1, num_states - 1);
     else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
         current_state = std::max(current_state - 1, 0);
@@ -42,16 +41,6 @@ std::tuple<int, int, bool> Environment::step(const std::string& action) {
         days_without_eating = 0;
     else
         days_without_eating += 1;
-
-    // TODO: I could implement update_thirstiness() which implements how thirstiness changes based on agent's actions e.g.,
-    // if (action == 0)
-    //     return 2;
-    // else if (action == 1)
-    //     return 1;
-    // else if (action == 2)
-    //     return 3;
-    // else
-    //     return 5;
 
     // Calculate the reward based on the environment's state
     int reward = calculate_reward();

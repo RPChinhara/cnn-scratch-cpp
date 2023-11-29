@@ -3,7 +3,6 @@
 
 #include <random>
 
-// TODO: Not generating correctly.
 void dropout(const float rate, const Tensor& in) {
     std::random_device rd;
     std::mt19937 generator(rd());

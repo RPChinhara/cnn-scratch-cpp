@@ -8,8 +8,7 @@ public:
     unsigned int choose_action(unsigned int state);
     void update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state);
 
-    // TODO: I need to save parameters such as weights, biases, and Q-table. How do you do in TF?
-    Tensor q_table; //TODO: make it private?
+    Tensor q_table;
 private:
     unsigned int n_states;
     unsigned int n_actions;
