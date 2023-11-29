@@ -79,9 +79,6 @@ int Window::messageLoop() {
         return -1;
     }
 
-    // TODO: 実際の時間と合わせる
-    // TODO: Recheck if everything is properly implemented by comparing with numpy ver
-
     // NOTE: Consider creating Window::rl_thread(), and make a variable std::thread rlThread(&Window::rl_thread, this);. Also, I might need to carefully manage shared resources and synchronization to avoid potential issues such as data races.
     std::thread rl_thread([this]() {
         // Reinforcement learning (Q-learining)

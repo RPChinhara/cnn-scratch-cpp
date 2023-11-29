@@ -2,8 +2,6 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-// TODO: Implement kernel functions for existing functions for better performance.
-
 Tensor relu(const Tensor& in) {
     Tensor zeros = Tensor({ 0.0 }, { in._shape });
     return maximum(in, zeros);

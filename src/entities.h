@@ -1,7 +1,5 @@
 #pragma once
 
-// TODO: Consider using Entity-Component-System (ECS) in the future?
-
 // NOTE: The dimensions of the client area (the inner content area) of the window is 1904 x 1041, on the other hand the size of the entire window (including borders and title bar) is 1920 x 1080 as it set when creating the Windows application. Retrieve by those codes below.
 // RECT windowRect;
 // GetWindowRect(hwnd, &windowRect);
