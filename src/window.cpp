@@ -72,7 +72,6 @@ int Window::messageLoop() {
         return -1;
     }
     
-    // TODO: No sound playing
     // Play the sound
     if (!soundPlayer.PlaySound()) {
         // Handle sound playback error
@@ -80,8 +79,6 @@ int Window::messageLoop() {
         return -1;
     }
 
-    // TODO: I need to introduce sounds in order so that it resembles real world, e.g., sounds of possible predators so that it can scare him.
-    // TODO: He needs to make sounds like cats do.
     // TODO: 実際の時間と合わせる
     // TODO: Recheck if everything is properly implemented by comparing with numpy ver
 
@@ -179,10 +176,6 @@ int Window::messageLoop() {
 }
 
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    // TODO: He may need to classify the objects before take actions e.g., if it's food he'd eat.
-    // TODO: How to implement five senses specially touch, smell, taste as these could influence fudamental actions like eating the right food.
-    // TODO: Possibly foward I he needs to run in that case I need to set pixes for example 5 pixels for walk, and 10 pixels for run.
-
     switch (uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);
