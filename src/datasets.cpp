@@ -5,7 +5,7 @@
 #include <vector>
 
 Tensor load_air_passengers() {
-    std::ifstream file("datasets/air_passengers.csv");
+    std::ifstream file("datasets\\air_passengers.csv");
 
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
@@ -40,7 +40,7 @@ Tensor load_air_passengers() {
 Cifar10 load_cifar10() {
 
      // Open the binary data file.
-    std::ifstream dataFile("datasets/cifar10/data_batch_1.bin", std::ios::binary);
+    std::ifstream dataFile("datasets\\cifar10\\data_batch_1.bin", std::ios::binary);
 
     if (!dataFile.is_open()) {
         std::cerr << "Error opening data file." << std::endl;
@@ -75,7 +75,7 @@ Cifar10 load_cifar10() {
 }
 
 Imdb load_imdb() {
-    std::ifstream file("datasets/imdb.csv");
+    std::ifstream file("datasets\\imdb.csv");
 
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;
@@ -97,7 +97,7 @@ Imdb load_imdb() {
 }
 
 Iris load_iris() {
-    std::ifstream file("datasets/iris.csv");
+    std::ifstream file("datasets\\iris.csv");
 
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;

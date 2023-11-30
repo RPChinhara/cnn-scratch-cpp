@@ -1,5 +1,4 @@
 #include "window.h"
-#include "audio_player.h"
 #include "entities.h"
 #include "environment.h"
 #include "physics.h"
@@ -11,8 +10,9 @@
 
 #define WM_UPDATE_DISPLAY (WM_USER + 1)
 
-#pragma comment(lib, "Gdi32.lib")
-#pragma comment(lib, "User32.lib")
+#pragma comment(lib, "gdi32.lib")
+#pragma comment(lib, "user32.lib")
+#pragma comment(lib, "winmm.lib")
 
 const char Window::CLASS_NAME[] = "EnvWindow";
 int Window::window_width  = 1920;
@@ -51,23 +51,6 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
 }
 
 int Window::messageLoop() {
-    AudioPlayer soundPlayer(hwnd);
-
-    if (!soundPlayer.Initialize()) {
-        MessageBox(nullptr, "1", "Error", MB_ICONERROR);
-        return -1;
-    }
-
-    if (!soundPlayer.LoadAudioData("assets\\mixkit-city-traffic-background-ambience-2930.wav")) {
-        MessageBox(nullptr, "2", "Error", MB_ICONERROR);
-        return -1;
-    }
-    
-    if (!soundPlayer.PlaySound()) {
-        MessageBox(nullptr, "Failed to play sound!", "Error", MB_ICONERROR);
-        return -1;
-    }
-
     std::thread rl_thread([this]() {
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
@@ -82,6 +65,11 @@ int Window::messageLoop() {
             int total_reward = 0;
 
             while (!done) {
+                PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
+                // Sleep to allow the sound to play (you can adjust this)
+                Sleep(60000);  // Play for 5 seconds
+                
                 unsigned int action = q_learning.choose_action(state);
                 std::cout << "action: " << action << std::endl;
 
