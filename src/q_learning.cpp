@@ -22,11 +22,9 @@ unsigned int QLearning::choose_action(unsigned int state) {
     std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
 
     if (dis_1(gen) < exploration_rate) {
-        // Explore: Random action
-        std::uniform_int_distribution<int> dis_2(0, n_actions - 1); // (if n_action is 3 then it'd return 0, 1, 2)
+        std::uniform_int_distribution<int> dis_2(0, n_actions - 1);
         return dis_2(gen);
     } else {
-        // Exploit: Greedy action (it'd return return index of highest value within the specified index of row which is state)
         Tensor sliced_q_table = slice(q_table, state, 1);
         unsigned int max_idx = 0;
         unsigned int max = std::numeric_limits<unsigned int>::lowest();
@@ -42,10 +40,9 @@ unsigned int QLearning::choose_action(unsigned int state) {
 }
 
 void QLearning::update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
-    // Update the Q-table using Q-learning update rule which is Q(s, a) = Q(s, a) + α * [R + γ * max(Q(s', a')) - Q(s, a)]
-    
     Tensor sliced_q_table = slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
+
     for(int i = 0; i < sliced_q_table._size; ++i)
         if (sliced_q_table[i] > next_max_q)
             next_max_q = sliced_q_table[i];
@@ -55,7 +52,6 @@ void QLearning::update_q_table(unsigned int state, unsigned int action, float re
     std::cout << "idx: " << idx << std::endl;
     q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);
         
-    // Exploration rate decay
     // if (exploration_rate > exploration_min)
     //     exploration_rate *= exploration_decay;
 }
