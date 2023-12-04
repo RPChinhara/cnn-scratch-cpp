@@ -18,6 +18,7 @@ Tensor l1_prime(const float lambda, const Tensor& w) {
         else if (w[i] > 1.0f) 
             out[i] = 1.0f;
     }
+
     return lambda * out;
 }
 
@@ -31,7 +32,7 @@ Tensor mean_squared_error_prime(const Tensor& y_true, const Tensor& y_pred) {
 
 Tensor relu_prime(const Tensor& in) {
     Tensor out = in;
-    
+
     for (unsigned int i = 0; i < in._size; ++i) {
         if (in[i] < 0.0f)
             out[i] = 0.0f;
@@ -40,6 +41,7 @@ Tensor relu_prime(const Tensor& in) {
         else if (in[i] == 0.0f)
             out[i] = 0.0f;
     }
+    
     return out;
 }
 

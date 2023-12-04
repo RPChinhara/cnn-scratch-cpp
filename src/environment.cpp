@@ -10,7 +10,6 @@ void Environment::render() {
 }
 
 int Environment::reset() {
-    // Reset the environment to its initial state
     days_lived          = 0;
     days_without_eating = 0;
     current_state       = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));

@@ -12,6 +12,7 @@ static std::mt19937 gen() {
 
 static void set_shape(Tensor& in, const std::vector<unsigned int>& shape) {
     in._shape.reserve(shape.size());
+
     for (unsigned int elem : shape)
         assert(elem != 0);
 
@@ -21,6 +22,7 @@ static void set_shape(Tensor& in, const std::vector<unsigned int>& shape) {
 static void set_size(Tensor& in, const std::vector<unsigned int>& shape) {
     if (in._shape.size() > 0) {
         unsigned int num_elem = 1;
+
         for (unsigned int elem : shape)
             num_elem *= elem;
 
@@ -33,6 +35,7 @@ static void set_size(Tensor& in, const std::vector<unsigned int>& shape) {
 static void set_num_ch_dim(Tensor& in,  const std::vector<unsigned int>& shape) {
     if (in._shape.size() > 0) {
         in._num_ch_dim = 1;
+        
         for (int i = 0; i < shape.size() - 1; ++i)
             in._num_ch_dim *= shape[i];
 
