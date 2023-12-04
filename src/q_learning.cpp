@@ -28,7 +28,8 @@ unsigned int QLearning::choose_action(unsigned int state) {
         Tensor sliced_q_table = slice(q_table, state, 1);
         unsigned int max_idx = 0;
         unsigned int max = std::numeric_limits<unsigned int>::lowest();
-        for(int i = 0; i < sliced_q_table._size; ++i) {
+        
+        for (int i = 0; i < sliced_q_table._size; ++i) {
             if (sliced_q_table[i] > max) {
                 max = sliced_q_table[i];
                 max_idx = i;
@@ -43,7 +44,7 @@ void QLearning::update_q_table(unsigned int state, unsigned int action, float re
     Tensor sliced_q_table = slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
 
-    for(int i = 0; i < sliced_q_table._size; ++i)
+    for (int i = 0; i < sliced_q_table._size; ++i)
         if (sliced_q_table[i] > next_max_q)
             next_max_q = sliced_q_table[i];
 
