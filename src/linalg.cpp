@@ -14,9 +14,9 @@ static void chk_cuda(cudaError_t code, const bool abort = true) {
 
 Tensor matmul(const Tensor& in1, const Tensor& in2) {
     assert(in1._shape.back() == in2._shape.front());
-    int m = in1._shape.front(); // Dimension of A
-    int n = in1._shape.back();  // Dimension of B (shared dimension)
-    int k = in2._shape.back();  // Dimension of C
+    int m = in1._shape.front();
+    int n = in1._shape.back();
+    int k = in2._shape.back();
 
     float *A, *B, *C;
     cudaMalloc(&A, m * n * sizeof(float));
@@ -40,11 +40,10 @@ Tensor matmul(const Tensor& in1, const Tensor& in2) {
 }
 
 static unsigned int get_batch_size(const std::vector<unsigned int>& shape) {
-    // It must be a matrix.
     assert(shape.size() > 1);
     unsigned int batch_size = 1;
+
     for (unsigned short i = 0; i < shape.size() - 2; ++i)
-        // Multiply each digits except digits for most inner matrix e.g., { 2, 2, 4, 3 }, then it'd be 4.
         batch_size *= shape[i];
     return batch_size;
 }
@@ -62,11 +61,13 @@ Tensor transpose(const Tensor& in) {
 
     // Reset '_num_ch_dim'.
     out._num_ch_dim = 1;
+
     for (int i = 0; i < out._shape.size() - 1; ++i)
         out._num_ch_dim *= out._shape[i];
     
     // Create first index of each rows e.g., if the Tensor's elements = [1, 2, 3, 4, 5, 6] and shape = [2, 3], then it'd be [0, 3] which is indexes of each first rows.
     std::vector<unsigned short> rows;
+    
     for (unsigned short i = 0; i < in._num_ch_dim; ++i)
         rows.push_back(i * in._shape.back());
 

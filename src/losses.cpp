@@ -16,6 +16,7 @@ float categorical_crossentropy(const Tensor& y_true, const Tensor& y_pred) {
 
 float mean_squared_error(const Tensor& y_true, const Tensor& y_pred) {
     float sum = 0.0f;
+    
     for (unsigned int i = 0; i < y_true._size; ++i)
         sum += std::powf(y_true[i] - y_pred[i], 2.0f);
     return sum / y_true._size;
