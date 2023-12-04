@@ -25,7 +25,6 @@ Tensor l2_prime(const float lambda, const Tensor& w) {
 }
 
 Tensor mean_squared_error_prime(const Tensor& y_true, const Tensor& y_pred) {
-    // 2 / n * (y_pred - y_true) where n is number of columns (features). If it's hard to imagine think if y_true and y_pred had shape (1, some number of features), then it's weird n to be number of rows which is always 1 in this case. In addition to this, reasons why n is size of y_true and y_pred in losses::mse() is that it has to return scaler, also it actually number of columns meaning if y_true and y_pred were matrix which is most of the case it has to take averages of each row (deviding by number of columns), and add all of them up, and devide by number of rows which results n to be size of y_true and y_pred (number of columns * number of rows) after all in mse.
     return (2.0f / y_true._shape.back()) * (y_pred - y_true);
 }
 
