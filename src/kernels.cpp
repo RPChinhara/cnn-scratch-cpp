@@ -24,6 +24,7 @@ __global__ void matmul(float *in1, float *in2, float *out, int m, int n, int k) 
 
     if (i < m && j < k) {
         float sum = 0.0;
+        
         for (unsigned int l = 0; l < n; l++)
             sum += in1[i * n + l] * in2[l * k + j];
         out[i * k + j] = sum;

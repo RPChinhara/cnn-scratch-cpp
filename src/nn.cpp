@@ -52,7 +52,7 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
             // Calculate dl/dz
-            for (unsigned char k = layers.size() - 1; 0 < k; --k) {
+            for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 // dl/dz3 = dl/dy dy/dz3
                 // dl/dz2 = dl/dz3 dz3/da2 da2/z2
                 // dl/dz1 = dl/dz2 dz2/da1 da1/z1
@@ -64,7 +64,7 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
             }
 
             // Calculate dl/dw
-            for (unsigned char k = layers.size() - 1; 0 < k; --k) {
+            for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 // dl/dw3 = dl/dz3 dz3/dw3 (+ dl1/w3 or + dl2/w3 or + dl1/w3 + dl2/w3)
                 // dl/dw2 = dl/dz2 dz2/dw2 (+ dl1/w2 or + dl2/w2 or + dl1/w2 + dl2/w2)
                 // dl/dw1 = dl/dz1 dz1/dw1 (+ dl1/w1 or + dl2/w1 or + dl1/w1 + dl2/w1)
@@ -110,18 +110,18 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
 
             // Updating the parameters
             #if !MOMENTUM_ENABLED
-                for (char k = layers.size() - 2; 0 <= k; --k) {
+                for (char k = layers.size() - 2; k >= 0; --k) {
                     w_b.first[k]  -= learning_rate * dl_dw[(layers.size() - 2) - k];
                     w_b.second[k] -= learning_rate * dl_db[(layers.size() - 2) - k];
                 }
             #else
-                for (char k = layers.size() - 2; 0 <= k; --k) {
+                for (char k = layers.size() - 2; k >= 0; --k) {
                     w_b_m.first[k]  = momentum * w_b_m.first[k] - learning_rate * dl_dw[(layers.size() - 2) - k];
                     w_b_m.second[k] = momentum * w_b_m.second[k] - learning_rate * dl_db[(layers.size() - 2) - k];
                 }
 
                 #if 1 // Standard
-                    for (char k = layers.size() - 2; 0 <= k; --k) {
+                    for (char k = layers.size() - 2; k >= 0; --k) {
                         w_b.first[k]  += w_b_m.first[k];
                         w_b.second[k] += w_b_m.second[k];
                     }
