@@ -67,9 +67,11 @@ Tensor max(const Tensor& in, const unsigned short axis) {
 	Tensor out;
 	if (axis == 0) {
 		out = Tensor({ 0.0f }, { 1, in._shape.back()});
+
 		for (unsigned short i = 0; i < in._shape.back(); ++i) {
 			unsigned short idx = i;
 			float max = std::numeric_limits<float>::lowest();
+
 			for (unsigned short j = 0; j < in._shape.front(); ++j) {
 				if (in[idx] > max) 
 					max = in[idx];
@@ -80,8 +82,10 @@ Tensor max(const Tensor& in, const unsigned short axis) {
 	} else if (axis == 1) {
 		out = Tensor({ 0.0f }, { in._shape.front(), 1});
 		unsigned short idx = 0;
+
 		for (unsigned short i = 0; i < in._shape.front(); ++i) {
 			float max = std::numeric_limits<float>::lowest();
+
 			for (unsigned short j = 0; j < in._shape.back(); ++j) {
 				if (in[idx] > max) 
 					max = in[idx];
@@ -90,6 +94,7 @@ Tensor max(const Tensor& in, const unsigned short axis) {
 			out[i] = max;
 		}
 	}
+
 	return out;
 }
 
@@ -116,9 +121,11 @@ Tensor mean(const Tensor& in) {
 
 Tensor min(const Tensor& in) {
 	Tensor out = Tensor({ 0.0f }, { 1, in._shape.back() });
+
 	for (unsigned short i = 0; i < in._shape.back(); ++i) {
 		unsigned short idx = i;
 		float min = std::numeric_limits<float>::max();
+
 		for (unsigned short j = 0; j < in._shape.front(); ++j) {
 			if (in[idx] < min) 
 				min = in[idx];
@@ -152,6 +159,7 @@ Tensor sum(const Tensor& in, const unsigned short axis) {
 		} else if (axis == 1) {
 			out = Tensor({ 0.0f }, { 1, 1 });
 			float sum = 0.0f;
+			
 			for (unsigned int i = 0; i < in._size; ++i) {
 				sum += in[i];
 			}
@@ -160,8 +168,10 @@ Tensor sum(const Tensor& in, const unsigned short axis) {
 	} else {
 		if (axis == 0) {
 			out = Tensor({ 0.0f }, { 1, in._shape.back() });
+
 			for (unsigned int i = 0; i < in._shape.back(); ++i) {
 				unsigned short idx = i;
+
 				for (unsigned int j = 0; j < in._shape.front(); ++j) {
 					out[i] += in[idx];
 					idx += in._shape.back();
@@ -170,6 +180,7 @@ Tensor sum(const Tensor& in, const unsigned short axis) {
 		} else if (axis == 1) {
 			out = Tensor({ 0.0f }, { in._shape.front(), 1 });
 			unsigned short idx = 0;
+
 			for (unsigned int i = 0; i < in._shape.front(); ++i) {
 				for (unsigned int j = 0; j < in._shape.back(); ++j) {
 					out[i] += in[idx];
