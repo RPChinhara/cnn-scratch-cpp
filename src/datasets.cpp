@@ -43,6 +43,7 @@ Iris load_iris() {
         ++idx_features;
 
         std::getline(ss, value);
+        
         if (value == "Iris-setosa") {
             target[idx_target] = 0.0f;
             ++idx_target;
