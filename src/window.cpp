@@ -1,7 +1,10 @@
 #include "window.h"
+#include "datasets.h"
 #include "entities.h"
 #include "environment.h"
+#include "nn.h"
 #include "physics.h"
+#include "preprocessing.h"
 #include "q_learning.h"
 
 #include <iostream>
@@ -52,6 +55,22 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
 
 int Window::messageLoop() {
     std::thread rl_thread([this]() {
+#if 1
+        Iris iris = load_iris();
+        Tensor x = iris.features;
+        Tensor y = iris.target;
+
+        y = one_hot(y, 3);
+        TrainTest train_temp = train_test_split(x, y, 0.2, 42);
+        TrainTest val_test = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
+        train_temp.x_first = min_max_scaler(train_temp.x_first);
+        val_test.x_first = min_max_scaler(val_test.x_first);
+        val_test.x_second = min_max_scaler(val_test.x_second);
+
+        NN nn = NN({ 4, 128, 3 }, 0.01f);
+        nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
+        nn.predict(val_test.x_second, val_test.y_second);
+#endif
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
