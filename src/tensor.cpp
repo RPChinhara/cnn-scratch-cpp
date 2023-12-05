@@ -74,13 +74,8 @@ Tensor Tensor::operator+(const Tensor& o) const {
             out[i] = _elem[i] + o[i];
     } else {
         assert(_shape.back() == o._shape.back());
-        unsigned short idx = 0;
-        for (unsigned int i = 0; i < out._size; ++i) {
-            if (idx == o._shape.back())
-                idx = 0;
-            out[i] = _elem[i] + o[idx];
-            ++idx;
-        }
+        for (unsigned int i = 0; i < out._size; ++i)
+            out[i] = _elem[i] + o[i % o._shape.back()];
     }
     return out;
 }
