@@ -2,7 +2,6 @@
 #include "activations.h"
 #include "arrays.h"
 #include "derivatives.h"
-#include "initializers.h"
 #include "linalg.h"
 #include "mathematics.h"
 #include "random.h"

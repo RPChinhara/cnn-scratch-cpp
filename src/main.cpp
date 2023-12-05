@@ -1,8 +1,8 @@
 #include "window.h"
-#include "initializers.h"
+#include "random.h"
 #include "tensor.h"
 #include "linalg.h"
-#include "initializers.h"
+#include "arrays.h"
 
 #include <iostream>
 

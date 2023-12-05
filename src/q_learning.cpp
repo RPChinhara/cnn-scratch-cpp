@@ -1,6 +1,5 @@
 #include "q_learning.h"
 #include "arrays.h"
-#include "initializers.h"
 #include "mathematics.h"
 
 #include <random>
@@ -28,7 +27,7 @@ unsigned int QLearning::choose_action(unsigned int state) {
         Tensor sliced_q_table = slice(q_table, state, 1);
         unsigned int max_idx = 0;
         unsigned int max = std::numeric_limits<unsigned int>::lowest();
-        
+
         for (int i = 0; i < sliced_q_table._size; ++i) {
             if (sliced_q_table[i] > max) {
                 max = sliced_q_table[i];

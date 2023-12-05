@@ -7,7 +7,6 @@ set SRC=..\src\activations.cpp ^
         ..\src\datasets.cpp ^
         ..\src\derivatives.cpp ^
         ..\src\environment.cpp ^
-        ..\src\initializers.cpp ^
         ..\src\kernels.cpp ^
         ..\src\linalg.cpp ^
         ..\src\losses.cpp ^
