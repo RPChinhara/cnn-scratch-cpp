@@ -65,6 +65,7 @@ Tensor log(const Tensor& in) {
 Tensor max(const Tensor& in, const unsigned short axis) {
 	assert(axis == 0 || axis == 1);
 	Tensor out;
+
 	if (axis == 0) {
 		out = Tensor({ 0.0f }, { 1, in._shape.back()});
 
@@ -153,6 +154,7 @@ Tensor square(const Tensor& in) {
 Tensor sum(const Tensor& in, const unsigned short axis) {
 	assert(axis == 0 || axis == 1);
 	Tensor out;
+
 	if (in._shape.size() == 1 || in._shape.front() == 1) {
 		if (axis == 0) {
 			out = in;

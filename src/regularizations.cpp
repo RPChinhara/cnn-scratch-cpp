@@ -18,14 +18,18 @@ void dropout(const float rate, const Tensor& in) {
 
 float l1(const float lambda, const Tensor& weight) {
     float sum = 0.0f;
+
     for (unsigned int i = 0; i < weight._size; ++i)
         sum += std::fabs(weight[i]);
+
     return lambda * sum;
 }
 
 float l2(const float lambda, const Tensor& weight) {
     float sum = 0.0f;
+
     for (unsigned int i = 0; i < weight._size; ++i)
-        sum += std::powf(weight[i], 2.0f); 
+        sum += std::powf(weight[i], 2.0f);
+    
     return lambda / 2.0f * sum;
 }

@@ -19,7 +19,7 @@ private:
     int calculate_reward();
     bool check_termination();
     std::vector<std::string> states;
-    int current_state = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral")); // Index of neutral
+    int current_state = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
     int days_lived = 0;
     int days_without_eating = 0;
     int max_days = 50;

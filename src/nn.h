@@ -6,7 +6,6 @@
 
 #include <vector>
 
-// Hyperparameters
 #define EARLY_STOPPING_ENABLED          1
 #define GRADIENT_CLIPPING_ENABLED       1
 #define LEARNING_RATE_SCHEDULER_ENABLED 1
@@ -25,19 +24,19 @@ public:
 
 private:
     float (*ACCURACY)(const Tensor& y_true, const Tensor& y_pred) = &categorical_accuracy;
-    float (*LOSS)(const Tensor& y_true, const Tensor& y_pred)     = &categorical_crossentropy;
+    float (*LOSS)(const Tensor& y_true, const Tensor& y_pred) = &categorical_crossentropy;
 
     std::vector<unsigned int> layers;
     std::pair<TensorArray, TensorArray> w_b;
     std::pair<TensorArray, TensorArray> w_b_m;
     
     unsigned short batch_size = 8;
-    unsigned short epochs     = 100;
+    unsigned short epochs = 100;
     float learning_rate;
 
     float gradient_clip_threshold = 8.0f;
-    float momentum                = 0.1f;
-    unsigned char patience        = 12;
+    float momentum = 0.1f;
+    unsigned char patience = 12;
     
     float l1_lambda = 0.01f;
     float l2_lambda = 0.01f;
