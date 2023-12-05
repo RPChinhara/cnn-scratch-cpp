@@ -51,42 +51,27 @@ static unsigned int get_batch_size(const std::vector<unsigned int>& shape) {
 Tensor transpose(const Tensor& in) {
     assert(in._shape.size() >= 2);
 
-    Tensor out = Tensor({ 0.0f }, { in._shape });
+    Tensor out = Tensor({ 0.0f }, { in._shape.back(), in._shape[in._shape.size() - 2] });
 
-    // Switch last two dimensions.
-    unsigned int tmp{};
-    tmp = out._shape.back();
-    out._shape[in._shape.size() - 1] = out._shape[in._shape.size() - 2];
-    out._shape[in._shape.size() - 2] = tmp;
-
-    // Reset '_num_ch_dim'.
     out._num_ch_dim = 1;
 
     for (int i = 0; i < out._shape.size() - 1; ++i)
         out._num_ch_dim *= out._shape[i];
     
-    // Create first index of each rows e.g., if the Tensor's elements = [1, 2, 3, 4, 5, 6] and shape = [2, 3], then it'd be [0, 3] which is indexes of each first rows.
-    std::vector<unsigned short> rows;
+    std::vector<unsigned short> idx_rows;
     
     for (unsigned short i = 0; i < in._num_ch_dim; ++i)
-        rows.push_back(i * in._shape.back());
+        idx_rows.push_back(i * in._shape.back());
 
     unsigned short batch_size = get_batch_size(in._shape);
-    
-    // Assing values from each elements from rows.
-    unsigned int num_elems{};
-    // Loop through number batches of 't'.
+
+    unsigned int idx{};
     for (unsigned int i = 0; i < batch_size; ++i) {
-        // Loop through number of rows of 't'.
-        for (unsigned int j{}; j < out._shape[out._shape.size() - 2]; ++j) {
-            // Loop through number of colums of 't'.
-            for (unsigned int k{}; k < out._shape.back(); ++k) {
-                // Multiply by (i * out._shape.back()) so that 'rows' will change for every batches otherwise it will loop through for a same matrix.
-                // Assign each elements from rows.
-                out[num_elems] = in[rows[k + (i * out._shape.back())]];
-                // Increment each index.
-                rows[k + (i * out._shape.back())] += 1;
-                ++num_elems;
+        for (unsigned int j = 0; j < out._shape[out._shape.size() - 2]; ++j) {
+            for (unsigned int k = 0; k < out._shape.back(); ++k) {
+                out[idx] = in[idx_rows[k + (i * out._shape.back())]];
+                idx_rows[k + (i * out._shape.back())] += 1;
+                ++idx;
             }
         }
     }
