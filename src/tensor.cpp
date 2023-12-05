@@ -88,11 +88,9 @@ Tensor Tensor::operator+(const Tensor& o) const {
 Tensor Tensor::operator-(const Tensor& o) const {
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
-        // Element wise subtraction.
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] - o[i];
     } else if (_shape.back() == o._shape.back()) {
-        // Broadcasting subtraction (number of columns are same).
         unsigned short idx = 0;
         for (unsigned int i = 0; i < out._size; ++i) {
             if (idx == o._shape.back())
@@ -101,7 +99,6 @@ Tensor Tensor::operator-(const Tensor& o) const {
             ++idx;
         }
     } else if (_shape.front() == o._shape.front()) {
-        // Broadcasting subtraction (number of rows are same).
         unsigned short idx = 0;
         for (unsigned int i = 0; i < _shape.front(); ++i) {
             for (unsigned int j = 0; j < _shape.back(); ++j) {
@@ -116,11 +113,9 @@ Tensor Tensor::operator-(const Tensor& o) const {
 Tensor Tensor::operator*(const Tensor& o) const {
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
-        // Element wise multiplication.
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] * o[i];
     } else {
-        // Broadcasting multiplication.
         assert(_shape.back() == o._shape.back());
         unsigned short idx = 0;
         for (unsigned int i = 0; i < out._size; ++i) {
@@ -136,11 +131,9 @@ Tensor Tensor::operator*(const Tensor& o) const {
 Tensor Tensor::operator/(const Tensor& o) const {
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
-        // Element wise division.
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] / o[i];
     } else {
-        // Broadcasting division.
         unsigned short idx = 0;
         if (_shape.back() == o._shape.back()) {
             for (unsigned int i = 0; i < out._size; ++i) {
@@ -204,7 +197,6 @@ Tensor operator*(const float sca, const Tensor& o) {
     return out;    
 }
 
-// Get number of elements of most inner of the 'shape' e.g., if [2, 2, 3], then it'd be 6.
 static unsigned int get_num_elem_most_inner_mat(const std::vector<unsigned int>& shape) {
     unsigned int last_shape        = shape[shape.size() - 1];
     unsigned int second_last_shape = shape[shape.size() - 2];
