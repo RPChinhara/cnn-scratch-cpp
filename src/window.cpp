@@ -22,7 +22,8 @@ int Window::window_width  = 1920;
 int Window::window_height = 1080;
 std::mutex Window::agentMutex;
 
-Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) {
+Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
+{
     WNDCLASS wc = {};
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
@@ -53,7 +54,8 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr) 
     ShowWindow(hwnd, nCmdShow);
 }
 
-int Window::messageLoop() {
+int Window::messageLoop()
+{
     std::thread rl_thread([this]() {
 #if 1
         Iris iris = load_iris();
@@ -156,7 +158,8 @@ int Window::messageLoop() {
     return 0;
 }
 
-LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
     switch (uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);

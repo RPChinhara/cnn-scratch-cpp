@@ -4,13 +4,15 @@
 
 #include <random>
 
-Tensor min_max_scaler(Tensor& dataset) {
+Tensor min_max_scaler(Tensor& dataset)
+{
     auto min_vals = min(dataset);
     auto max_vals = max(dataset, 0);
     return (dataset - min_vals) / (max_vals - min_vals);
 }
 
-Tensor one_hot(const Tensor& in, const unsigned short depth) {
+Tensor one_hot(const Tensor& in, const unsigned short depth)
+{
     Tensor out = Tensor({ 0.0f }, { in._size, depth });
 
     std::vector<float> indices;
@@ -32,7 +34,8 @@ Tensor one_hot(const Tensor& in, const unsigned short depth) {
     return out;
 }
 
-TrainTest train_test_split(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_state) {
+TrainTest train_test_split(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_state)
+{
     Tensor new_x = shuffle(x, random_state);
     Tensor new_y = shuffle(y, random_state);
 

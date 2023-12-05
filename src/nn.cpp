@@ -9,12 +9,14 @@
 
 #include <random>
 
-NN::NN(const std::vector<unsigned int>& layers, float learning_rate) {
+NN::NN(const std::vector<unsigned int>& layers, float learning_rate)
+{
     this->layers = layers;
     this->learning_rate = learning_rate;
 }
 
-void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y) {
+void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y)
+{
     // Init parameters
     w_b = init_parameters();
     #if MOMENTUM_ENABLED
@@ -165,7 +167,8 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
     }
 }
 
-void NN::predict(const Tensor& test_x, const Tensor& test_y) {
+void NN::predict(const Tensor& test_x, const Tensor& test_y)
+{
     auto a = forward_propagation(test_x, w_b.first, w_b.second);
 
     // Logging the metrics
@@ -177,7 +180,8 @@ void NN::predict(const Tensor& test_x, const Tensor& test_y) {
     std::cout << a.back() << std::endl << std::endl << test_y << std::endl;
 }
 
-TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b) {
+TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b)
+{
     TensorArray z;
     TensorArray a;
 
@@ -195,7 +199,8 @@ TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, c
     return a;
 }
 
-std::pair<TensorArray, TensorArray> NN::init_parameters() {
+std::pair<TensorArray, TensorArray> NN::init_parameters()
+{
     TensorArray w;
     TensorArray b;
 
@@ -207,7 +212,8 @@ std::pair<TensorArray, TensorArray> NN::init_parameters() {
     return std::make_pair(w, b);
 }
 
-void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred, const TensorArray *w) {
+void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred, const TensorArray *w)
+{
     if (data != "test") {
         if (!w) {
             std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
