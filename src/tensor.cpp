@@ -6,13 +6,11 @@
 Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape) {
     assert(elem.size() != 0);
     
-    // Set '_shape'.
     _shape.reserve(shape.size());
     for (unsigned int elem : shape)
         assert(elem != 0);
     _shape = std::move(shape);
 
-    // Set '_size'.
     if (_shape.size() > 0) {
         unsigned int num_elem = 1;
         for (unsigned int elem : shape)
@@ -21,7 +19,6 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> sh
     } else
         _size = 1;
 
-    // Set '_elem'.
     if (elem.size() == 1) {
         _elem = new float[_size];
         std::fill(_elem, _elem + _size, *elem.data());
@@ -31,7 +28,6 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> sh
         memcpy(_elem, elem.data(), sizeof(float) * _size);
     } 
 
-    // Set '_num_ch_dim'.
     if (_shape.size() > 0) {
         _num_ch_dim = 1;
         for (int i = 0; i < shape.size() - 1; ++i)
@@ -74,11 +70,9 @@ static bool shape_eq(const std::vector<unsigned int>& shape1, const std::vector<
 Tensor Tensor::operator+(const Tensor& o) const {
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
-        // Element wise addition.
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] + o[i];
     } else {
-        // Broadcasting addition.
         assert(_shape.back() == o._shape.back());
         unsigned short idx = 0;
         for (unsigned int i = 0; i < out._size; ++i) {
