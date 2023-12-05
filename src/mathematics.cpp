@@ -116,10 +116,6 @@ Tensor maximum(const Tensor& in1, const Tensor& in2) {
 	return out;
 }
 
-Tensor mean(const Tensor& in) {
-	return Tensor();
-}
-
 Tensor min(const Tensor& in) {
 	Tensor out = Tensor({ 0.0f }, { 1, in._shape.back() });
 
