@@ -30,9 +30,6 @@ private:
     float momentum = 0.1f;
     unsigned char patience = 12;
     
-    float l1_lambda = 0.01f;
-    float l2_lambda = 0.01f;
-    
     TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b);
     std::pair<TensorArray, TensorArray> init_parameters();
     void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred);
