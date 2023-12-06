@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-Iris load_iris() {
+Iris LoadIris() {
     std::ifstream file("datasets\\iris.csv");
 
     if (!file.is_open()) {
@@ -43,7 +43,7 @@ Iris load_iris() {
         ++idx_features;
 
         std::getline(ss, value);
-        
+
         if (value == "Iris-setosa") {
             target[idx_target] = 0.0f;
             ++idx_target;

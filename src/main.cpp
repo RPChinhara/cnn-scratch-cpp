@@ -17,9 +17,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << 4 % 3 << std::endl;
     std::cout << 5 % 3 << std::endl;
 
-    Tensor a = ones({ 2, 3 });
-    Tensor b = ones({ 2, 3 });
-    Tensor c = ones({ 1, 3 });
+    Tensor a = Ones({ 2, 3 });
+    Tensor b = Ones({ 2, 3 });
+    Tensor c = Ones({ 1, 3 });
     Tensor d = Tensor({ 1, 2, 3, 4, 5, 6 }, { 2, 3 });
     Tensor e = Tensor({ 1, 2, 3, 4, 5, 6 }, { 2, 3 });
     Tensor f = Tensor({ 1, 2, 3 }, { 1, 3 });

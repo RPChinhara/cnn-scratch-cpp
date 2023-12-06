@@ -7,4 +7,4 @@ struct Iris {
     Tensor target;
 };
 
-Iris load_iris();
+Iris LoadIris();

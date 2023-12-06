@@ -12,7 +12,7 @@ QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learni
     this->exploration_rate  = exploration_rate;
     this->exploration_decay = exploration_decay;
     this->exploration_min   = exploration_min;
-    this->q_table           = zeros({ n_states, n_actions });
+    this->q_table           = Zeros({ n_states, n_actions });
 }
 
 unsigned int QLearning::choose_action(unsigned int state) {
@@ -24,7 +24,7 @@ unsigned int QLearning::choose_action(unsigned int state) {
         std::uniform_int_distribution<int> dis_2(0, n_actions - 1);
         return dis_2(rng);
     } else {
-        Tensor sliced_q_table = slice(q_table, state, 1);
+        Tensor sliced_q_table = Slice(q_table, state, 1);
         unsigned int max_idx = 0;
         unsigned int max = std::numeric_limits<unsigned int>::lowest();
 
@@ -40,7 +40,7 @@ unsigned int QLearning::choose_action(unsigned int state) {
 }
 
 void QLearning::update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
-    Tensor sliced_q_table = slice(q_table, next_state, 1);
+    Tensor sliced_q_table = Slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
 
     for (int i = 0; i < sliced_q_table._size; ++i)

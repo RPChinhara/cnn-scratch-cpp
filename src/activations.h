@@ -2,7 +2,7 @@
 
 class Tensor;
 
-Tensor relu(const Tensor& in);
-Tensor sigmoid(const Tensor& in);
-Tensor softmax(const Tensor& in);
-Tensor softplus(const Tensor& in);
+Tensor Relu(const Tensor& in);
+Tensor Sigmoid(const Tensor& in);
+Tensor Softmax(const Tensor& in);
+Tensor Softplus(const Tensor& in);

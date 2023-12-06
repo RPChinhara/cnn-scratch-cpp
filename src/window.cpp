@@ -58,7 +58,7 @@ int Window::messageLoop()
 {
     std::thread rl_thread([this]() {
 #if 1
-        Iris iris = load_iris();
+        Iris iris = LoadIris();
         Tensor x = iris.features;
         Tensor y = iris.target;
 

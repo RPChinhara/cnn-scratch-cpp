@@ -33,8 +33,8 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
         TensorArray  a;
 
         for (unsigned int j = 0; j < train_x._shape.front(); j += batch_size) {
-            Tensor x_batch = slice(x_shuffled, j, batch_size);
-            y_batch        = slice(y_shuffled, j, batch_size);
+            Tensor x_batch = Slice(x_shuffled, j, batch_size);
+            y_batch        = Slice(y_shuffled, j, batch_size);
 
             a = forward_propagation(x_batch, w_b.first, w_b.second);
             
@@ -42,9 +42,9 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
-                    dl_dz.push_back(categorical_crossentropy_prime(y_batch, a.back()));
+                    dl_dz.push_back(PrimeCategoricalCrossentropy(y_batch, a.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * relu_prime(a[k - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * PrimeRelu(a[k - 1]));
             }
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
@@ -58,8 +58,8 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                 dl_db.push_back(sum(dl_dz[k], 0));
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k) {
-                dl_dw[k] = clip_by_value(dl_dw[k], -gradient_clip_threshold, gradient_clip_threshold);
-                dl_db[k] = clip_by_value(dl_db[k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_dw[k] = ClipByValue(dl_dw[k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_db[k] = ClipByValue(dl_db[k], -gradient_clip_threshold, gradient_clip_threshold);
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
@@ -115,11 +115,11 @@ TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, c
     for (unsigned char i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
             z.push_back((matmul(input, w[i]) + b[i]));
-            a.push_back((relu(z[i])));
+            a.push_back((Relu(z[i])));
         } else {
             z.push_back((matmul(a[i - 1], w[i]) + b[i]));
             if (i == 1)
-                a.push_back((softmax(z[i])));
+                a.push_back((Softmax(z[i])));
         }
     }
 
@@ -133,7 +133,7 @@ std::pair<TensorArray, TensorArray> NN::init_parameters()
 
     for (unsigned int i = 0; i < layers.size() - 1; ++i) {
         w.push_back(normal_distribution({ layers[i], layers[i + 1] }, 0.0f, 2.0f));
-        b.push_back(zeros({ 1, layers[i + 1] }));
+        b.push_back(Zeros({ 1, layers[i + 1] }));
     }
 
     return std::make_pair(w, b);
