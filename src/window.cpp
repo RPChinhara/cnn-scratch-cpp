@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <thread>
 
-#define WM_UPDATE_DISPLAY (WM_USER + 1)
+constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
@@ -86,10 +86,8 @@ int Window::messageLoop()
             int total_reward = 0;
 
             while (!done) {
-                PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
-
-                // Sleep to allow the sound to play (you can adjust this)
-                Sleep(60000);  // Play for 5 seconds
+                // PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                // Sleep(60000);
                 
                 unsigned int action = q_learning.choose_action(state);
                 std::cout << "action: " << action << std::endl;
