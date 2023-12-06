@@ -6,14 +6,6 @@
 
 #include <vector>
 
-#define EARLY_STOPPING_ENABLED          1
-#define GRADIENT_CLIPPING_ENABLED       1
-#define LEARNING_RATE_SCHEDULER_ENABLED 1
-#define L1_REGULARIZATION_ENABLED       0
-#define L2_REGULARIZATION_ENABLED       0
-#define L1L2_REGULARIZATION_ENABLED     1
-#define MOMENTUM_ENABLED                1
-
 using TensorArray = std::vector<Tensor>;
 
 class NN {
@@ -43,5 +35,5 @@ private:
     
     TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b);
     std::pair<TensorArray, TensorArray> init_parameters();
-    void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred, const TensorArray *w = nullptr);
+    void log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred);
 };

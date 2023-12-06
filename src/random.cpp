@@ -4,10 +4,10 @@
 #include <random>
 #include <cassert>
 
-static std::mt19937 gen() {
+static std::mt19937 rng() {
     std::random_device rd;
-    std::mt19937 gen(rd());
-    return gen;
+    std::mt19937 rng(rd());
+    return rng;
 }
 
 static void set_shape(Tensor& in, const std::vector<unsigned int>& shape) {
@@ -53,7 +53,7 @@ Tensor normal_distribution(const std::vector<unsigned int>& shape, const float m
     std::normal_distribution<float> dist(mean, stddev);
 
     for (unsigned int i = 0; i < out._size; ++i)
-        out[i] = dist(gen());
+        out[i] = dist(rng());
     
     set_num_ch_dim(out, shape);
     return out;
@@ -85,7 +85,7 @@ Tensor uniform_distribution(const std::vector<unsigned int>& shape, const float 
     std::uniform_real_distribution<> dist(min_val, max_val);
 
     for (unsigned int i = 0; i < out._size; ++i)
-        out[i] = dist(gen());
+        out[i] = dist(rng());
     
     set_num_ch_dim(out, shape);
     return out;

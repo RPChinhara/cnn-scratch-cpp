@@ -17,12 +17,12 @@ QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learni
 
 unsigned int QLearning::choose_action(unsigned int state) {
     std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 rng(rd());
     std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
 
-    if (dis_1(gen) < exploration_rate) {
+    if (dis_1(rng) < exploration_rate) {
         std::uniform_int_distribution<int> dis_2(0, n_actions - 1);
-        return dis_2(gen);
+        return dis_2(rng);
     } else {
         Tensor sliced_q_table = slice(q_table, state, 1);
         unsigned int max_idx = 0;
