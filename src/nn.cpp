@@ -74,10 +74,10 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
         }
         
         std::cout << "Epoch " << i << "/" << epochs;
-        log_metrics("training", y_batch, a.back());
+        std::cout << " - " << "training loss: " << LOSS(y_batch, a.back()) << " - " << "training accuracy: " << ACCURACY(y_batch, a.back());
 
         a = forward_propagation(val_x, w_b.first, w_b.second);
-        log_metrics("val", val_y, a.back());
+        std::cout << " - " << "val loss: " << LOSS(val_y, a.back()) << " - " << "val accuracy: " << ACCURACY(val_y, a.back());
         std::cout << std::endl;
 
         static unsigned char epochs_without_improvement = 0;
@@ -101,7 +101,7 @@ void NN::predict(const Tensor& test_x, const Tensor& test_y)
     auto a = forward_propagation(test_x, w_b.first, w_b.second);
 
     std::cout << std::endl;
-    log_metrics("test", test_y, a.back());
+    std::cout << "test loss: " << LOSS(test_y, a.back()) << " - " << "test accuracy: " << ACCURACY(test_y, a.back());
     std::cout << std::endl << std::endl;
 
     std::cout << a.back() << std::endl << std::endl << test_y << std::endl;
@@ -137,12 +137,4 @@ std::pair<TensorArray, TensorArray> NN::init_parameters()
     }
 
     return std::make_pair(w, b);
-}
-
-void NN::log_metrics(const std::string& data, const Tensor& y_true, const Tensor& y_pred)
-{
-    if (data != "test")
-        std::cout << " - " << data << " loss: " << LOSS(y_true, y_pred) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
-    else
-        std::cout << data << " loss: " << LOSS(y_true, y_pred) << " - " << data << " accuracy: " << ACCURACY(y_true, y_pred);
 }
