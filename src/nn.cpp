@@ -74,16 +74,16 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
         }
         
         std::cout << "Epoch " << i << "/" << epochs;
-        std::cout << " - " << "training loss: " << LOSS(y_batch, a.back()) << " - " << "training accuracy: " << ACCURACY(y_batch, a.back());
+        std::cout << " - training loss: " << categorical_crossentropy(y_batch, a.back()) << " - training accuracy: " << categorical_accuracy(y_batch, a.back());
 
         a = forward_propagation(val_x, w_b.first, w_b.second);
-        std::cout << " - " << "val loss: " << LOSS(val_y, a.back()) << " - " << "val accuracy: " << ACCURACY(val_y, a.back());
+        std::cout << " - val loss: " << categorical_crossentropy(val_y, a.back()) << " - val accuracy: " << categorical_accuracy(val_y, a.back());
         std::cout << std::endl;
 
         static unsigned char epochs_without_improvement = 0;
         static float best_val_loss = std::numeric_limits<float>::max();
-        if (LOSS(val_y, a.back()) < best_val_loss) {
-            best_val_loss = LOSS(val_y, a.back());
+        if (categorical_crossentropy(val_y, a.back()) < best_val_loss) {
+            best_val_loss = categorical_crossentropy(val_y, a.back());
             epochs_without_improvement = 0;
         } else {
             epochs_without_improvement += 1;
@@ -101,7 +101,7 @@ void NN::predict(const Tensor& test_x, const Tensor& test_y)
     auto a = forward_propagation(test_x, w_b.first, w_b.second);
 
     std::cout << std::endl;
-    std::cout << "test loss: " << LOSS(test_y, a.back()) << " - " << "test accuracy: " << ACCURACY(test_y, a.back());
+    std::cout << "test loss: " << categorical_crossentropy(test_y, a.back()) << " - test accuracy: " << categorical_accuracy(test_y, a.back());
     std::cout << std::endl << std::endl;
 
     std::cout << a.back() << std::endl << std::endl << test_y << std::endl;

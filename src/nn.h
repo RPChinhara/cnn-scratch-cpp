@@ -15,9 +15,6 @@ public:
     void predict(const Tensor& test_x, const Tensor& test_y);
 
 private:
-    float (*ACCURACY)(const Tensor& y_true, const Tensor& y_pred) = &categorical_accuracy;
-    float (*LOSS)(const Tensor& y_true, const Tensor& y_pred) = &categorical_crossentropy;
-
     std::vector<unsigned int> layers;
     std::pair<TensorArray, TensorArray> w_b;
     std::pair<TensorArray, TensorArray> w_b_m;
