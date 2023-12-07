@@ -54,7 +54,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
     ShowWindow(hwnd, nCmdShow);
 }
 
-int Window::messageLoop()
+int Window::MessageLoop()
 {
     std::thread rl_thread([this]() {
 #if 1

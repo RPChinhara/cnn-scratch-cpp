@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     try {
         Window window(hInstance, nCmdShow);
-        int result = window.messageLoop();
+        int result = window.MessageLoop();
         FreeConsole();
         return result;
     } catch (const std::exception& e) {

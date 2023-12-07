@@ -7,7 +7,7 @@ class Window
 {
 public:
     Window(HINSTANCE hInst, int nCmdShow);
-    int messageLoop();
+    int MessageLoop();
 private:
     HWND hwnd;
     HINSTANCE hInstance;
