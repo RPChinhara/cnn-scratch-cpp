@@ -4,9 +4,9 @@
 
 Tensor MinMaxScaler(Tensor& dataset)
 {
-    auto minVals = Min(dataset);
-    auto maxVals = Max(dataset, 0);
-    return (dataset - minVals) / (maxVals - minVals);
+    auto min_vals = Min(dataset);
+    auto max_vals = Max(dataset, 0);
+    return (dataset - min_vals) / (max_vals - min_vals);
 }
 
 Tensor OneHot(const Tensor& in, const unsigned short depth)
@@ -32,36 +32,36 @@ Tensor OneHot(const Tensor& in, const unsigned short depth)
     return out;
 }
 
-TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float testSize, const unsigned int randomState)
+TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_state)
 {
-    Tensor xNew = Shuffle(x, randomState);
-    Tensor yNew = Shuffle(y, randomState);
+    Tensor x_new = Shuffle(x, random_state);
+    Tensor y_new = Shuffle(y, random_state);
 
-    TrainTest trainTest;
-    trainTest.xFirst  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * (1.0 - testSize))), x._shape.back() });
-    trainTest.xSecond = Tensor({ 0.0 }, { (unsigned int)(std::ceilf(x._shape.front() * testSize)),          x._shape.back() });
-    trainTest.yFirst  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y._shape.front() * (1.0 - testSize))), y._shape.back() });
-    trainTest.ySecond = Tensor({ 0.0 }, { (unsigned int)(std::ceilf(y._shape.front() * testSize)),          y._shape.back() });
+    TrainTest train_test;
+    train_test.x_first  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * (1.0 - test_size))), x._shape.back() });
+    train_test.x_second = Tensor({ 0.0 }, { (unsigned int)(std::ceilf(x._shape.front() * test_size)),          x._shape.back() });
+    train_test.y_first  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y._shape.front() * (1.0 - test_size))), y._shape.back() });
+    train_test.y_second = Tensor({ 0.0 }, { (unsigned int)(std::ceilf(y._shape.front() * test_size)),          y._shape.back() });
 
-    for (unsigned int i = 0; i < trainTest.xFirst._size; ++i)
-        trainTest.xFirst[i] = xNew[i];
+    for (unsigned int i = 0; i < train_test.x_first._size; ++i)
+        train_test.x_first[i] = x_new[i];
 
     unsigned int idx = 0;
 
-    for (unsigned int i = trainTest.xFirst._size; i < x._size; ++i) {
-        trainTest.xSecond[idx] = xNew[i];
+    for (unsigned int i = train_test.x_first._size; i < x._size; ++i) {
+        train_test.x_second[idx] = x_new[i];
         ++idx;
     }
 
-    for (unsigned int i = 0; i < trainTest.yFirst._size; ++i)
-        trainTest.yFirst[i] = yNew[i];
+    for (unsigned int i = 0; i < train_test.y_first._size; ++i)
+        train_test.y_first[i] = y_new[i];
 
     idx = 0;
 
-    for (unsigned int i = trainTest.yFirst._size; i < y._size; ++i) {
-        trainTest.ySecond[idx] = yNew[i];
+    for (unsigned int i = train_test.y_first._size; i < y._size; ++i) {
+        train_test.y_second[idx] = y_new[i];
         ++idx;
     }
 
-    return trainTest;
+    return train_test;
 }

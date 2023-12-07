@@ -64,14 +64,14 @@ int Window::messageLoop()
 
         y = OneHot(y, 3);
         TrainTest trainTemp = TrainTestSplit(x, y, 0.2, 42);
-        TrainTest valTest = TrainTestSplit(trainTemp.xSecond, trainTemp.ySecond, 0.5, 42);
-        trainTemp.xFirst = MinMaxScaler(trainTemp.xFirst);
-        valTest.xFirst = MinMaxScaler(valTest.xFirst);
-        valTest.xSecond = MinMaxScaler(valTest.xSecond);
+        TrainTest valTest = TrainTestSplit(trainTemp.x_second, trainTemp.y_second, 0.5, 42);
+        trainTemp.x_first = MinMaxScaler(trainTemp.x_first);
+        valTest.x_first = MinMaxScaler(valTest.x_first);
+        valTest.x_second = MinMaxScaler(valTest.x_second);
 
         NN nn = NN({ 4, 128, 3 }, 0.01f);
-        nn.Train(trainTemp.xFirst, trainTemp.yFirst, valTest.xFirst, valTest.yFirst);
-        nn.Predict(valTest.xSecond, valTest.ySecond);
+        nn.Train(trainTemp.x_first, trainTemp.y_first, valTest.x_first, valTest.y_first);
+        nn.Predict(valTest.x_second, valTest.y_second);
 #endif
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
