@@ -20,9 +20,9 @@ private:
     std::pair<TensorArray, TensorArray> weightBias;
     std::pair<TensorArray, TensorArray> weightBiasMomentum;
     
-    unsigned short batchSize = 8;
+    unsigned short batch_size = 8;
     unsigned short epochs = 100;
-    float learningRate;
+    float learning_rate;
 
     float gradientClipThreshold = 8.0f;
     float momentum = 0.1f;
