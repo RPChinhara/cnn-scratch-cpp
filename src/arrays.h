@@ -4,7 +4,7 @@
 
 class Tensor;
 
-Tensor ClipByValue(const Tensor& in, float clipValMin, float clipValMax);
+Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max);
 Tensor Ones(const std::vector<unsigned int>& shape);
 Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size);
 Tensor Zeros(const std::vector<unsigned int>& shape);

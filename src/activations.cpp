@@ -20,8 +20,8 @@ Tensor Sigmoid(const Tensor& in)
 
 Tensor Softmax(const Tensor& in)
 {
-    Tensor expScores = Exp(in - Max(in, 1));
-    return expScores / Sum(expScores, 1);
+    Tensor exp_scores = Exp(in - Max(in, 1));
+    return exp_scores / Sum(exp_scores, 1);
 }
 
 Tensor Softplus(const Tensor& in)
