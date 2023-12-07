@@ -48,6 +48,7 @@ static unsigned int GetBatchSize(const std::vector<unsigned int>& shape)
 
     for (unsigned short i = 0; i < shape.size() - 2; ++i)
         batch_size *= shape[i];
+    
     return batch_size;
 }
 

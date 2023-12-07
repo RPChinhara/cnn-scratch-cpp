@@ -12,6 +12,7 @@ float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
 
     for (unsigned int i = 0; i < y_true._size; ++i)
         sum += y_true[i] * Log(y_pred_clipped)[i];
+
     return -sum / num_samples;
 }
 
@@ -21,5 +22,6 @@ float MeanSquaredError(const Tensor& y_true, const Tensor& y_pred)
     
     for (unsigned int i = 0; i < y_true._size; ++i)
         sum += std::powf(y_true[i] - y_pred[i], 2.0f);
+    
     return sum / y_true._size;
 }
