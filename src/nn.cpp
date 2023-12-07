@@ -44,14 +44,14 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                 if (k == layers.size() - 1)
                     dl_dz.push_back(PrimeCategoricalCrossEntropy(y_batch, a.back()));
                 else
-                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * PrimeRelu(a[k - 1]));
+                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k])) * PrimeRelu(a[k - 1]));
             }
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 if (k == 1)
-                    dl_dw.push_back(MatMul(x_batch.T(), dl_dz[(layers.size() - 1) - k]));
+                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(layers.size() - 1) - k]));
                 else
-                    dl_dw.push_back(MatMul(a[k - 2].T(), dl_dz[(layers.size() - 1) - k]));
+                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[(layers.size() - 1) - k]));
             }
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k)

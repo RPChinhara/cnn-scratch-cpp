@@ -335,7 +335,3 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in) {
 
     return os;
 }
-
-Tensor Tensor::T() const {
-    return Transpose(*this);
-}
