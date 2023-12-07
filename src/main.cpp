@@ -18,6 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << 4 % 3 << std::endl;
     std::cout << 5 % 3 << std::endl;
 
+    Tensor a1 = Ones({ 2, 3, 4, 2 });
     Tensor a = Ones({ 2, 3 });
     Tensor b = Ones({ 2, 3 });
     Tensor c = Ones({ 1, 3 });
@@ -38,6 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << h._num_ch_dim << std::endl;
     std::cout << ffdf << std::endl;
     std::cout << df << std::endl;
+    std::cout << a1 << std::endl;
 
     try {
         Window window(hInstance, nCmdShow);

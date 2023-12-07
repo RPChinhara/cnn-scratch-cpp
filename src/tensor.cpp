@@ -41,10 +41,10 @@ Tensor::Tensor(const Tensor& o)
 {
     float *ptr = new float[o._size];
     memcpy(ptr, o._elem, sizeof(float) * o._size);
-    _elem       = ptr;
+    _elem = ptr;
     _num_ch_dim = o._num_ch_dim;
-    _size       = o._size;
-    _shape      = o._shape;
+    _size = o._size;
+    _shape = o._shape;
 }
 
 Tensor::Tensor(Tensor&& o) noexcept :
@@ -208,17 +208,16 @@ Tensor operator*(const float sca, const Tensor& o)
 
 static unsigned int GetNumElemMostInnerMat(const std::vector<unsigned int>& shape)
 {
-    unsigned int last_shape        = shape[shape.size() - 1];
+    unsigned int last_shape = shape[shape.size() - 1];
     unsigned int second_last_shape = shape[shape.size() - 2];
     return second_last_shape * last_shape;
 }
 
-// Get number of elements for each batch size e.g., if the most inner matrix is [[7, 7, 7], [7, 7, 7]] and shape (2, 2, 2, 2, 3) it'd return 12, 24, and 48.
 static std::vector<int> GetNumElemEachBatch(const std::vector<unsigned int>& shape)
 {
     unsigned int num_elem = GetNumElemMostInnerMat(shape);
     std::vector<int> num_elem_each_batch;
-    // Iterate in reverse order
+
     for (auto it = std::rbegin(shape) + 2; it != std::rend(shape); ++it) {
         num_elem *= *it;
         num_elem_each_batch.push_back(num_elem);
@@ -253,7 +252,6 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
             std::vector<int> num_elem_each_batch = GetNumElemEachBatch(in._shape);
             unsigned int num_elem_most_inner_mat = GetNumElemMostInnerMat(in._shape);
 
-
             for (unsigned int i = 0; i < in._size; ++i) {
                 bool num_elem_each_batch_done{};
                 unsigned short  num_square_brackets{};
@@ -262,36 +260,31 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
                     for (short j = num_elem_each_batch.size() - 1; j >= 0; --j) {
                         if (i % num_elem_each_batch[j] == 0 && i != 0) {
                             num_elem_each_batch_done = true;
-                            // This will be the number of ']' needs for each batches e.g., shape=(2, 2, 2, 2, 3), then
-                            // if it's divisible by 12 add "]]"   0 + 2 where 0 is 'j'.
-                            // if it's divisible by 24 add "]]]"  1 + 2 where 1 is 'j'.
-                            // if it's divisible by 48 add "]]]]" 2 + 2 where 2 is 'j'.
                             num_square_brackets = j + 2;
                             break;
                         }
                     }
                 }
 
-                // Make new lines and add ']' by each cases.
                 if (i % in._shape.back() == 0 && i != 0 && !(i % num_elem_most_inner_mat == 0)) {
-                    // Make new lines and add ']' for each vectors.
                     os << "]\n";
+
                     for (unsigned short i = 0; i < in._shape.size() - 1; ++i)
                         os << " ";
+
                     os << "[";
                 } else if (i % num_elem_most_inner_mat == 0 && i != 0) {
-                    // Make new lines and add ']' for each matrices.
                     if (num_elem_each_batch_done) {
-                        // For each vectors.
                         os << "]";
                         for (unsigned short i = 0; i < num_square_brackets; ++i)
                             os << "]";
+
                         os << "\n";
-                    } else 
+                    } else {
                         os << "]]\n";
+                    }
                 }
 
-                // Make new lines, add spaces, and add '[' for every matrix.
                 if (i % num_elem_most_inner_mat == 0 && i != 0) {
                     if (num_elem_each_batch_done) {
                         for (unsigned short i = 0; i < num_square_brackets; ++i)
@@ -308,20 +301,17 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
                     }
                 }
 
-                // If 'i' is last, then print without a space.
                 if (i == in._size - 1) {
                     os << in[i];
                     continue;
                 }
 
-                // Print elements.
                 if (idx == in._shape.back()) 
                     idx = 0;
 
-                if (in._shape.back() == 1)
+                if (in._shape.back() == 1) {
                     os << in[i];
-                else {
-                    // Print w/o spaces if it's last element of the row.
+                } else {
                     if (idx % (in._shape.back() - 1) == 0 && idx != 0)
                         os << in[i];
                     else
@@ -333,12 +323,10 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
             }
         }
 
-        // Add ']' after the last element.
         for (unsigned short i = 0; i < in._shape.size(); ++i)
             os << "]";
     }
     
-    // Add shape to 'os'.
     os << ", shape=(";
     for (unsigned short i = 0; i < in._shape.size(); ++i) {
         if (i != in._shape.size() - 1)
