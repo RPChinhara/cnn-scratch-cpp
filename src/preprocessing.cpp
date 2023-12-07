@@ -2,13 +2,11 @@
 #include "mathematics.h"
 #include "random.h"
 
-#include <random>
-
 Tensor MinMaxScaler(Tensor& dataset)
 {
-    auto min_vals = Min(dataset);
-    auto max_vals = Max(dataset, 0);
-    return (dataset - min_vals) / (max_vals - min_vals);
+    auto minVals = Min(dataset);
+    auto maxVals = Max(dataset, 0);
+    return (dataset - minVals) / (maxVals - minVals);
 }
 
 Tensor OneHot(const Tensor& in, const unsigned short depth)
