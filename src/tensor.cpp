@@ -63,7 +63,7 @@ Tensor::~Tensor()
         delete[] _elem;
 }
 
-static bool shape_eq(const std::vector<unsigned int>& shape1, const std::vector<unsigned int>& shape2)
+static bool ShapeEqual(const std::vector<unsigned int>& shape1, const std::vector<unsigned int>& shape2)
 {
     bool eq{};
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
@@ -74,7 +74,7 @@ static bool shape_eq(const std::vector<unsigned int>& shape1, const std::vector<
 Tensor Tensor::operator+(const Tensor& o) const
 {
     Tensor out = *this;
-    if (shape_eq(_shape, o._shape)) {
+    if (ShapeEqual(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] + o[i];
     } else {
@@ -88,7 +88,7 @@ Tensor Tensor::operator+(const Tensor& o) const
 Tensor Tensor::operator-(const Tensor& o) const
 {
     Tensor out = *this;
-    if (shape_eq(_shape, o._shape)) {
+    if (ShapeEqual(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] - o[i];
     } else if (_shape.back() == o._shape.back()) {
@@ -114,7 +114,7 @@ Tensor Tensor::operator-(const Tensor& o) const
 Tensor Tensor::operator*(const Tensor& o) const
 {
     Tensor out = *this;
-    if (shape_eq(_shape, o._shape)) {
+    if (ShapeEqual(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] * o[i];
     } else {
@@ -133,7 +133,7 @@ Tensor Tensor::operator*(const Tensor& o) const
 Tensor Tensor::operator/(const Tensor& o) const
 {
     Tensor out = *this;
-    if (shape_eq(_shape, o._shape)) {
+    if (ShapeEqual(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
             out[i] = _elem[i] / o[i];
     } else {
@@ -179,7 +179,7 @@ Tensor Tensor::operator+=(const Tensor& o) const
 
 Tensor Tensor::operator-=(const Tensor& o) const
 {
-    assert(shape_eq(_shape, o._shape));
+    assert(ShapeEqual(_shape, o._shape));
     for (unsigned int i = 0; i < _size; ++i)
         _elem[i] = _elem[i] - o[i];
     return *this;
