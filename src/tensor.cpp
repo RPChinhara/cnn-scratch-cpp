@@ -206,7 +206,7 @@ Tensor operator*(const float sca, const Tensor& o)
     return out;    
 }
 
-static unsigned int get_num_elem_most_inner_mat(const std::vector<unsigned int>& shape)
+static unsigned int GetNumElemMostInnerMat(const std::vector<unsigned int>& shape)
 {
     unsigned int last_shape        = shape[shape.size() - 1];
     unsigned int second_last_shape = shape[shape.size() - 2];
@@ -214,9 +214,9 @@ static unsigned int get_num_elem_most_inner_mat(const std::vector<unsigned int>&
 }
 
 // Get number of elements for each batch size e.g., if the most inner matrix is [[7, 7, 7], [7, 7, 7]] and shape (2, 2, 2, 2, 3) it'd return 12, 24, and 48.
-static std::vector<int> get_num_elem_each_batch(const std::vector<unsigned int>& shape)
+static std::vector<int> GetNumElemEachBatch(const std::vector<unsigned int>& shape)
 {
-    unsigned int num_elem = get_num_elem_most_inner_mat(shape);
+    unsigned int num_elem = GetNumElemMostInnerMat(shape);
     std::vector<int> num_elem_each_batch;
     // Iterate in reverse order
     for (auto it = std::rbegin(shape) + 2; it != std::rend(shape); ++it) {
@@ -250,8 +250,8 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
                 else
                     os << in[i] << " ";
         } else {
-            std::vector<int> num_elem_each_batch = get_num_elem_each_batch(in._shape);
-            unsigned int num_elem_most_inner_mat = get_num_elem_most_inner_mat(in._shape);
+            std::vector<int> num_elem_each_batch = GetNumElemEachBatch(in._shape);
+            unsigned int num_elem_most_inner_mat = GetNumElemMostInnerMat(in._shape);
 
 
             for (unsigned int i = 0; i < in._size; ++i) {
