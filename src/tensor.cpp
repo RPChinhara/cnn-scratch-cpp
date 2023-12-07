@@ -63,12 +63,12 @@ Tensor::~Tensor()
         delete[] elem;
 }
 
-static bool ShapeEqual(const std::vector<unsigned int>& shape1, const std::vector<unsigned int>& shape2)
+static bool ShapeEqual(const std::vector<unsigned int>& shape_1, const std::vector<unsigned int>& shape_2)
 {
-    bool eq{};
-    if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
-         eq = true;
-    return eq;
+    bool equal = false;
+    if (std::equal(shape_1.begin(), shape_1.end(), shape_2.begin()))
+         equal = true;
+    return equal;
 }
 
 Tensor Tensor::operator+(const Tensor& o) const
