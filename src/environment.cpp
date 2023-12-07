@@ -5,17 +5,17 @@
 
 void Environment::Render()
 {
-    std::cout << "Days Lived: " << daysLived << std::endl;
-    std::cout << "Current State: " << states[currentState] << std::endl;
-    std::cout << "Days Without Eating: " << daysWithoutEating << " days" << std::endl << std::endl;
+    std::cout << "Days Lived: " << days_lived << std::endl;
+    std::cout << "Current State: " << states[current_state] << std::endl;
+    std::cout << "Days Without Eating: " << days_without_eating << " days" << std::endl << std::endl;
 }
 
 int Environment::Reset()
 {
-    daysLived = 0;
-    daysWithoutEating = 0;
-    currentState = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
-    return currentState;
+    days_lived = 0;
+    days_without_eating = 0;
+    current_state = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
+    return current_state;
 }
 
 std::tuple<int, int, bool> Environment::Step(const std::string& action)
@@ -27,30 +27,30 @@ std::tuple<int, int, bool> Environment::Step(const std::string& action)
         ExitProcess(1);
     }
     
-    if (action == "eat" && currentState != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
-        currentState = std::min(currentState + 1, numStates - 1);
-    else if (action != "eat" && currentState != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
-        currentState = std::max(currentState - 1, 0);
+    if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
+        current_state = std::min(current_state + 1, num_states - 1);
+    else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
+        current_state = std::max(current_state - 1, 0);
 
-    daysLived += 1;
+    days_lived += 1;
 
     if (action == "eat")
-        daysWithoutEating = 0;
+        days_without_eating = 0;
     else
-        daysWithoutEating += 1;
+        days_without_eating += 1;
 
     int reward = CalculateReward();
     bool done = CheckTermination();
 
-    return std::make_tuple(currentState, reward, done);
+    return std::make_tuple(current_state, reward, done);
 }
 
 int Environment::CalculateReward()
 {
-    if (currentState == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) || daysWithoutEating >= maxDaysWithoutEating) {
+    if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) || days_without_eating >= max_days_without_eating) {
         return -1;
-    } else if (daysLived >= maxDays) {
-        daysLived = 0;
+    } else if (days_lived >= max_days) {
+        days_lived = 0;
         return 1;
     } else {
         return 0;
@@ -59,5 +59,5 @@ int Environment::CalculateReward()
 
 bool Environment::CheckTermination()
 {
-    return daysWithoutEating >= maxDaysWithoutEating;
+    return days_without_eating >= max_days_without_eating;
 }

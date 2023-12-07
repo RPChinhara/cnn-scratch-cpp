@@ -74,7 +74,7 @@ int Window::messageLoop()
         nn.Predict(valTest.xSecond, valTest.ySecond);
 #endif
         Environment env = Environment();
-        QLearning q_learning = QLearning(env.numStates, env.numActions);
+        QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
         unsigned int num_episodes = 1000;
 
@@ -86,8 +86,8 @@ int Window::messageLoop()
             int total_reward = 0;
 
             while (!done) {
-                PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                Sleep(60000);
+                // PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                // Sleep(60000);
                 
                 unsigned int action = q_learning.ChooseAction(state);
                 std::cout << "action: " << action << std::endl;
@@ -180,7 +180,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
             HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
             FillRect(hdc, &agent, pinkBrush);
-            FillRect(hdc, &agent2, pinkBrush);
+            FillRect(hdc, &agent_2, pinkBrush);
             DeleteObject(pinkBrush);
 
             HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
