@@ -3,7 +3,8 @@
 
 #include <cassert>
 
-Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape) {
+Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape)
+{
     assert(elem.size() != 0);
     
     _shape.reserve(shape.size());
@@ -36,7 +37,8 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> sh
         _num_ch_dim = 0;
 }
 
-Tensor::Tensor(const Tensor& o) {
+Tensor::Tensor(const Tensor& o)
+{
     float *ptr = new float[o._size];
     memcpy(ptr, o._elem, sizeof(float) * o._size);
     _elem       = ptr;
@@ -55,19 +57,22 @@ Tensor::Tensor(Tensor&& o) noexcept :
         o._size       = 0;
     }
 
-Tensor::~Tensor() {
+Tensor::~Tensor()
+{
     if (_elem != nullptr) 
         delete[] _elem;
 }
 
-static bool shape_eq(const std::vector<unsigned int>& shape1, const std::vector<unsigned int>& shape2) {
+static bool shape_eq(const std::vector<unsigned int>& shape1, const std::vector<unsigned int>& shape2)
+{
     bool eq{};
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
          eq = true;
     return eq;
 }
 
-Tensor Tensor::operator+(const Tensor& o) const {
+Tensor Tensor::operator+(const Tensor& o) const
+{
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
@@ -80,7 +85,8 @@ Tensor Tensor::operator+(const Tensor& o) const {
     return out;
 }
 
-Tensor Tensor::operator-(const Tensor& o) const {
+Tensor Tensor::operator-(const Tensor& o) const
+{
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
@@ -105,7 +111,8 @@ Tensor Tensor::operator-(const Tensor& o) const {
     return out;
 }
 
-Tensor Tensor::operator*(const Tensor& o) const {
+Tensor Tensor::operator*(const Tensor& o) const
+{
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
@@ -123,7 +130,8 @@ Tensor Tensor::operator*(const Tensor& o) const {
     return out;
 }
 
-Tensor Tensor::operator/(const Tensor& o) const {
+Tensor Tensor::operator/(const Tensor& o) const
+{
     Tensor out = *this;
     if (shape_eq(_shape, o._shape)) {
         for (unsigned int i = 0; i < out._size; ++i)
@@ -151,7 +159,8 @@ Tensor Tensor::operator/(const Tensor& o) const {
     return out;
 }
 
-Tensor& Tensor::operator=(const Tensor& o) {
+Tensor& Tensor::operator=(const Tensor& o)
+{
     float *ptr = new float[o._size];
     memcpy(ptr, o._elem, sizeof(float) * o._size);
     _elem       = ptr;
@@ -161,45 +170,52 @@ Tensor& Tensor::operator=(const Tensor& o) {
     return *this;
 }
 
-Tensor Tensor::operator+=(const Tensor& o) const {
+Tensor Tensor::operator+=(const Tensor& o) const
+{
     for (unsigned int i = 0; i < _size; ++i)
         _elem[i] = _elem[i] + o[i];
     return *this;
 }
 
-Tensor Tensor::operator-=(const Tensor& o) const {
+Tensor Tensor::operator-=(const Tensor& o) const
+{
     assert(shape_eq(_shape, o._shape));
     for (unsigned int i = 0; i < _size; ++i)
         _elem[i] = _elem[i] - o[i];
     return *this;
 }
 
-float& Tensor::operator[](const unsigned int ind) const {
-    return _elem[ind];
+float& Tensor::operator[](const unsigned int idx) const
+{
+    return _elem[idx];
 }
 
-Tensor operator-(const float sca, const Tensor& o) {
+Tensor operator-(const float sca, const Tensor& o)
+{
     Tensor out = o;
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = sca - o[i];
     return out;    
 }
 
-Tensor operator*(const float sca, const Tensor& o) {
+Tensor operator*(const float sca, const Tensor& o)
+{
     Tensor out = o;
     for (unsigned int i = 0; i < out._size; ++i)
         out[i] = sca * o[i];
     return out;    
 }
 
-static unsigned int get_num_elem_most_inner_mat(const std::vector<unsigned int>& shape) {
+static unsigned int get_num_elem_most_inner_mat(const std::vector<unsigned int>& shape)
+{
     unsigned int last_shape        = shape[shape.size() - 1];
     unsigned int second_last_shape = shape[shape.size() - 2];
     return second_last_shape * last_shape;
 }
 
 // Get number of elements for each batch size e.g., if the most inner matrix is [[7, 7, 7], [7, 7, 7]] and shape (2, 2, 2, 2, 3) it'd return 12, 24, and 48.
-static std::vector<int> get_num_elem_each_batch(const std::vector<unsigned int>& shape) {
+static std::vector<int> get_num_elem_each_batch(const std::vector<unsigned int>& shape)
+{
     unsigned int num_elem = get_num_elem_most_inner_mat(shape);
     std::vector<int> num_elem_each_batch;
     // Iterate in reverse order
@@ -210,7 +226,8 @@ static std::vector<int> get_num_elem_each_batch(const std::vector<unsigned int>&
     return num_elem_each_batch;
 }
 
-std::ostream& operator<<(std::ostream& os, const Tensor& in) {
+std::ostream& operator<<(std::ostream& os, const Tensor& in)
+{
     unsigned short idx{};
     if (in._shape.size() == 0) {
         os <<  "Tensor(" << in[0] << ", shape=())";
