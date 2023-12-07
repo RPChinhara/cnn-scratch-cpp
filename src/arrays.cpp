@@ -3,16 +3,16 @@
 
 #include <cassert>
 
-Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
+Tensor ClipByValue(const Tensor& in, float clipValMin, float clipValMax)
 {
-    assert(clip_val_min <= clip_val_max);
+    assert(clipValMin <= clipValMax);
     Tensor out = in;
     
     for (unsigned int i = 0; i < in._size; ++i) {
-        if (in[i] < clip_val_min)
-            out[i] = clip_val_min;
-        else if (in[i] > clip_val_max)
-            out[i] = clip_val_max;
+        if (in[i] < clipValMin)
+            out[i] = clipValMin;
+        else if (in[i] > clipValMax)
+            out[i] = clipValMax;
     }
 
     return out;
