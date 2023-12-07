@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
