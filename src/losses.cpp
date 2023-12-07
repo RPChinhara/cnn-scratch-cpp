@@ -3,23 +3,23 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
+float CategoricalCrossEntropy(const Tensor& yTrue, const Tensor& yPred)
 {
     float sum = 0.0f;
     float epsilon = 1e-15f;
-    unsigned int num_samples = y_true._shape.front();
-    Tensor clipped_y_pred = ClipByValue(y_pred, epsilon, 1.0f - epsilon);
+    unsigned int numSamples = yTrue._shape.front();
+    Tensor yPredClipped = ClipByValue(yPred, epsilon, 1.0f - epsilon);
 
-    for (unsigned int i = 0; i < y_true._size; ++i)
-        sum += y_true[i] * Log(clipped_y_pred)[i];
-    return -sum / num_samples;
+    for (unsigned int i = 0; i < yTrue._size; ++i)
+        sum += yTrue[i] * Log(yPredClipped)[i];
+    return -sum / numSamples;
 }
 
-float MeanSquaredError(const Tensor& y_true, const Tensor& y_pred)
+float MeanSquaredError(const Tensor& yTrue, const Tensor& yPred)
 {
     float sum = 0.0f;
     
-    for (unsigned int i = 0; i < y_true._size; ++i)
-        sum += std::powf(y_true[i] - y_pred[i], 2.0f);
-    return sum / y_true._size;
+    for (unsigned int i = 0; i < yTrue._size; ++i)
+        sum += std::powf(yTrue[i] - yPred[i], 2.0f);
+    return sum / yTrue._size;
 }
