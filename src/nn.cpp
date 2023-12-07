@@ -34,7 +34,7 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
 
         for (unsigned int j = 0; j < train_x._shape.front(); j += batch_size) {
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
-            y_batch        = Slice(y_shuffled, j, batch_size);
+            y_batch = Slice(y_shuffled, j, batch_size);
 
             a = forward_propagation(x_batch, w_b.first, w_b.second);
             
@@ -42,7 +42,7 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
-                    dl_dz.push_back(PrimeCategoricalCrossentropy(y_batch, a.back()));
+                    dl_dz.push_back(PrimeCategoricalCrossEntropy(y_batch, a.back()));
                 else
                     dl_dz.push_back(matmul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * PrimeRelu(a[k - 1]));
             }
@@ -63,27 +63,28 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
-                w_b_m.first[k]  = momentum * w_b_m.first[k] - learning_rate * dl_dw[(layers.size() - 2) - k];
+                w_b_m.first[k] = momentum * w_b_m.first[k] - learning_rate * dl_dw[(layers.size() - 2) - k];
                 w_b_m.second[k] = momentum * w_b_m.second[k] - learning_rate * dl_db[(layers.size() - 2) - k];
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
-                w_b.first[k]  += w_b_m.first[k];
+                w_b.first[k] += w_b_m.first[k];
                 w_b.second[k] += w_b_m.second[k];
             }
         }
         
         std::cout << "Epoch " << i << "/" << epochs;
-        std::cout << " - training loss: " << categorical_crossentropy(y_batch, a.back()) << " - training accuracy: " << categorical_accuracy(y_batch, a.back());
+        std::cout << " - training loss: " << CategoricalCrossEntropy(y_batch, a.back()) << " - training accuracy: " << CategoricalAccuracy(y_batch, a.back());
 
         a = forward_propagation(val_x, w_b.first, w_b.second);
-        std::cout << " - val loss: " << categorical_crossentropy(val_y, a.back()) << " - val accuracy: " << categorical_accuracy(val_y, a.back());
+        std::cout << " - val loss: " << CategoricalCrossEntropy(val_y, a.back()) << " - val accuracy: " << CategoricalAccuracy(val_y, a.back());
         std::cout << std::endl;
 
         static unsigned char epochs_without_improvement = 0;
         static float best_val_loss = std::numeric_limits<float>::max();
-        if (categorical_crossentropy(val_y, a.back()) < best_val_loss) {
-            best_val_loss = categorical_crossentropy(val_y, a.back());
+
+        if (CategoricalCrossEntropy(val_y, a.back()) < best_val_loss) {
+            best_val_loss = CategoricalCrossEntropy(val_y, a.back());
             epochs_without_improvement = 0;
         } else {
             epochs_without_improvement += 1;
@@ -101,7 +102,7 @@ void NN::predict(const Tensor& test_x, const Tensor& test_y)
     auto a = forward_propagation(test_x, w_b.first, w_b.second);
 
     std::cout << std::endl;
-    std::cout << "test loss: " << categorical_crossentropy(test_y, a.back()) << " - test accuracy: " << categorical_accuracy(test_y, a.back());
+    std::cout << "test loss: " << CategoricalCrossEntropy(test_y, a.back()) << " - test accuracy: " << CategoricalAccuracy(test_y, a.back());
     std::cout << std::endl << std::endl;
 
     std::cout << a.back() << std::endl << std::endl << test_y << std::endl;

@@ -3,7 +3,8 @@
 #include <fstream>
 #include <sstream>
 
-Iris LoadIris() {
+Iris LoadIris()
+{
     std::ifstream file("datasets\\iris.csv");
 
     if (!file.is_open()) {

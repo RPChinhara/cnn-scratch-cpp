@@ -2,5 +2,5 @@
 
 class Tensor;
 
-float categorical_crossentropy(const Tensor& y_true, const Tensor& y_pred);
-float mean_squared_error(const Tensor& y_true, const Tensor& y_pred);
+float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
+float MeanSquaredError(const Tensor& y_true, const Tensor& y_pred);
