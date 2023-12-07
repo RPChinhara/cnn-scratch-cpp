@@ -2,7 +2,8 @@
 
 #include "tensor.h"
 
-struct Iris {
+struct Iris
+{
     Tensor features;
     Tensor target;
 };

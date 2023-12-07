@@ -2,7 +2,8 @@
 
 #include "tensor.h"
 
-struct TrainTest {
+struct TrainTest
+{
     Tensor xFirst;
     Tensor xSecond;
     Tensor yFirst;
