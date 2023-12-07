@@ -74,14 +74,14 @@ int Window::messageLoop()
         nn.predict(val_test.x_second, val_test.y_second);
 #endif
         Environment env = Environment();
-        QLearning q_learning = QLearning(env.num_states, env.num_actions);
+        QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         unsigned int num_episodes = 1000;
 
         std::cout << "------------------- HEAD -------------------" << std::endl;
 
         for (int i = 0; i < num_episodes; ++i) {
-            auto state = env.reset();
+            auto state = env.Reset();
             bool done = false;
             int total_reward = 0;
 
@@ -119,13 +119,13 @@ int Window::messageLoop()
                 //     agent.right += 5;
                 // }
 
-                auto [next_state, reward, temp_done] = env.step(env.actions[action]);
+                auto [next_state, reward, temp_done] = env.Step(env.actions[action]);
                 done = temp_done;
 
                 q_learning.update_q_table(state, action, reward, next_state);
                 std::cout << q_learning.q_table << std::endl << std::endl;
 
-                env.render();
+                env.Render();
 
                 total_reward += reward;
                 state = next_state;

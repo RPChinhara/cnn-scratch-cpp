@@ -3,7 +3,8 @@
 
 #include <cassert>
 
-Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max) {
+Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
+{
     assert(clip_val_min <= clip_val_max);
     Tensor out = in;
     
@@ -17,7 +18,8 @@ Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max) {
     return out;
 }
 
-static void SetShape(Tensor& in, const std::vector<unsigned int>& shape) {
+static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
+{
     in._shape.reserve(shape.size());
 
     for (unsigned int elem : shape)
@@ -26,7 +28,8 @@ static void SetShape(Tensor& in, const std::vector<unsigned int>& shape) {
     in._shape = std::move(shape);
 }
 
-static void SetSize(Tensor& in, const std::vector<unsigned int>& shape) {
+static void SetSize(Tensor& in, const std::vector<unsigned int>& shape)
+{
     if (in._shape.size() > 0) {
         unsigned int num_elem = 1;
 
@@ -39,12 +42,14 @@ static void SetSize(Tensor& in, const std::vector<unsigned int>& shape) {
     }
 }
 
-static void SetElem(Tensor& out, const float value) {
+static void SetElem(Tensor& out, const float value)
+{
     out._elem = new float[out._size];
     std::fill(out._elem, out._elem + out._size, value);
 }
 
-static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape) {
+static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape) 
+{
     if (in._shape.size() > 0) {
         in._num_ch_dim = 1;
 
@@ -56,7 +61,8 @@ static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape) {
     }
 }
 
-Tensor Ones(const std::vector<unsigned int>& shape) {
+Tensor Ones(const std::vector<unsigned int>& shape)
+{
     Tensor out = Tensor();
     SetShape(out, shape);
     SetSize(out, shape);
@@ -65,7 +71,8 @@ Tensor Ones(const std::vector<unsigned int>& shape) {
     return out;
 }
 
-Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size) {
+Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size)
+{
     assert(begin < in._shape[0] && begin + size <= in._shape[0]);
     Tensor out = Tensor( { 0.0f }, { size, in._shape.back() });
     unsigned int idx = 0;
@@ -78,7 +85,8 @@ Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size
     return out;
 }
 
-Tensor Zeros(const std::vector<unsigned int>& shape) {
+Tensor Zeros(const std::vector<unsigned int>& shape) 
+{
     Tensor out = Tensor();
     SetShape(out, shape);
     SetSize(out, shape);

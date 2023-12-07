@@ -6,22 +6,22 @@
 class Environment {
 public:
     Environment() : actions({ "eat", "do_nothing", "up", "down", "left", "right" }), states({ "hungry", "neutral", "full" }) {
-        num_states = states.size();
-        num_actions = actions.size();
+        numStates = states.size();
+        numActions = actions.size();
     }
-    void render();
-    int reset();
-    std::tuple<int, int, bool> step(const std::string& action);
+    void Render();
+    int Reset();
+    std::tuple<int, int, bool> Step(const std::string& action);
     std::vector<std::string> actions;
-    int num_states;
-    int num_actions;
+    int numStates;
+    int numActions;
 private:
-    int calculate_reward();
-    bool check_termination();
+    int CalculateReward();
+    bool CheckTermination();
     std::vector<std::string> states;
-    int current_state = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
-    int days_lived = 0;
-    int days_without_eating = 0;
-    int max_days = 50;
-    int max_days_without_eating = 43;
+    int currentState = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
+    int daysLived = 0;
+    int daysWithoutEating = 0;
+    int maxDays = 50;
+    int maxDaysWithoutEating = 43;
 };
