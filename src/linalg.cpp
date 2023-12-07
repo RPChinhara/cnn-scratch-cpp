@@ -13,26 +13,26 @@ static void CheckCuda(cudaError_t code, const bool abort = true)
    }
 }
 
-Tensor MatMul(const Tensor& in1, const Tensor& in2)
+Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 {
-    assert(in1._shape.back() == in2._shape.front());
-    int m = in1._shape.front();
-    int n = in1._shape.back();
-    int k = in2._shape.back();
+    assert(in_1._shape.back() == in_2._shape.front());
+    int m = in_1._shape.front();
+    int n = in_1._shape.back();
+    int k = in_2._shape.back();
 
     float *A, *B, *C;
     cudaMalloc(&A, m * n * sizeof(float));
     cudaMalloc(&B, n * k * sizeof(float));
     cudaMalloc(&C, m * k * sizeof(float));
-	cudaMemcpy(A, in1._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice);
-	cudaMemcpy(B, in2._elem, sizeof(float) * in2._size, cudaMemcpyHostToDevice);
+	cudaMemcpy(A, in_1._elem, sizeof(float) * in_1._size, cudaMemcpyHostToDevice);
+	cudaMemcpy(B, in_2._elem, sizeof(float) * in_2._size, cudaMemcpyHostToDevice);
 
     dim3 block_dim(16, 16);
     dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
 
     MatMul<<<grid_dim, block_dim>>>(A, B, C, m, n, k);
 
-	Tensor out = Tensor({ 0.0f }, { in1._shape.front(), in2._shape.back() });
+	Tensor out = Tensor({ 0.0f }, { in_1._shape.front(), in_2._shape.back() });
 
 	CheckCuda(cudaMemcpy(out._elem, C, sizeof(float) * out._size, cudaMemcpyDeviceToHost));
 	cudaFree(A);
