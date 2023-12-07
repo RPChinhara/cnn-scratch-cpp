@@ -6,8 +6,8 @@ class QLearning
 {
 public:
     QLearning(unsigned int n_states, unsigned int n_actions, float learning_rate = 0.1f, float discount_factor = 0.9f, float exploration_rate = 0.1f, float exploration_decay = 0.995f, float exploration_min = 0.01f);
-    unsigned int choose_action(unsigned int state);
-    void update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state);
+    unsigned int ChooseAction(unsigned int state);
+    void UpdateQtable(unsigned int state, unsigned int action, float reward, unsigned int next_state);
 
     Tensor q_table;
 private:

@@ -89,7 +89,7 @@ int Window::messageLoop()
                 PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 Sleep(60000);
                 
-                unsigned int action = q_learning.choose_action(state);
+                unsigned int action = q_learning.ChooseAction(state);
                 std::cout << "action: " << action << std::endl;
 
                 // std::lock_guard<std::mutex> lock(agentMutex);
@@ -122,7 +122,7 @@ int Window::messageLoop()
                 auto [next_state, reward, temp_done] = env.Step(env.actions[action]);
                 done = temp_done;
 
-                q_learning.update_q_table(state, action, reward, next_state);
+                q_learning.UpdateQtable(state, action, reward, next_state);
                 std::cout << q_learning.q_table << std::endl << std::endl;
 
                 env.Render();

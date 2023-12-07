@@ -4,7 +4,8 @@
 
 #include <random>
 
-QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learning_rate, float discount_factor, float exploration_rate, float exploration_decay, float exploration_min) {
+QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learning_rate, float discount_factor, float exploration_rate, float exploration_decay, float exploration_min)
+{
     this->n_states          = n_states;
     this->n_actions         = n_actions;
     this->learning_rate     = learning_rate;
@@ -15,7 +16,8 @@ QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learni
     this->q_table           = Zeros({ n_states, n_actions });
 }
 
-unsigned int QLearning::choose_action(unsigned int state) {
+unsigned int QLearning::ChooseAction(unsigned int state)
+{
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
@@ -39,7 +41,8 @@ unsigned int QLearning::choose_action(unsigned int state) {
     }
 }
 
-void QLearning::update_q_table(unsigned int state, unsigned int action, float reward, unsigned int next_state) {
+void QLearning::UpdateQtable(unsigned int state, unsigned int action, float reward, unsigned int next_state)
+{
     Tensor sliced_q_table = Slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
 
