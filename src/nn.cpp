@@ -26,8 +26,8 @@ void NN::Train(const Tensor& xTrain, const Tensor& yTrain, const Tensor& xVal, c
 
         std::random_device rd;
         auto rdNum = rd();
-        Tensor xShuffled = shuffle(xTrain, rdNum);
-        Tensor yShuffled = shuffle(yTrain, rdNum);
+        Tensor xShuffled = Shuffle(xTrain, rdNum);
+        Tensor yShuffled = Shuffle(yTrain, rdNum);
 
         Tensor yBatch;
         TensorArray a;
@@ -133,7 +133,7 @@ std::pair<TensorArray, TensorArray> NN::InitParameters()
     TensorArray b;
 
     for (unsigned int i = 0; i < layers.size() - 1; ++i) {
-        w.push_back(normal_distribution({ layers[i], layers[i + 1] }, 0.0f, 2.0f));
+        w.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 2.0f));
         b.push_back(Zeros({ 1, layers[i + 1] }));
     }
 

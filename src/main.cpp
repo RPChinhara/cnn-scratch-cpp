@@ -26,8 +26,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor f = Tensor({ 1, 2, 3 }, { 1, 3 });
     // Tensor g = Tensor({ 1, 2, 3 }, { 1, 0 });
     Tensor h = Tensor({ 1, 2, 3, 5 }, { 1, 4 });
-    Tensor ffdf = normal_distribution( { 2, 3 });
-    Tensor df = uniform_distribution( { 2, 3 });
+    Tensor ffdf = NormalDistribution( { 2, 3 });
+    Tensor df = UniformDistribution( { 2, 3 });
 
     std::cout << a + b << std::endl;
     std::cout << a + c << std::endl;

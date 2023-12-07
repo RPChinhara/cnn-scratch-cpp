@@ -34,8 +34,8 @@ Tensor OneHot(const Tensor& in, const unsigned short depth)
 
 TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float testSize, const unsigned int randomState)
 {
-    Tensor xNew = shuffle(x, randomState);
-    Tensor yNew = shuffle(y, randomState);
+    Tensor xNew = Shuffle(x, randomState);
+    Tensor yNew = Shuffle(y, randomState);
 
     TrainTest trainTest;
     trainTest.xFirst  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x._shape.front() * (1.0 - testSize))), x._shape.back() });

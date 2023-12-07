@@ -4,13 +4,15 @@
 #include <random>
 #include <cassert>
 
-static std::mt19937 rng() {
+static std::mt19937 Rng()
+{
     std::random_device rd;
     std::mt19937 rng(rd());
     return rng;
 }
 
-static void set_shape(Tensor& in, const std::vector<unsigned int>& shape) {
+static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
+{
     in._shape.reserve(shape.size());
 
     for (unsigned int elem : shape)
@@ -19,7 +21,8 @@ static void set_shape(Tensor& in, const std::vector<unsigned int>& shape) {
     in._shape = std::move(shape);
 }
 
-static void set_size(Tensor& in, const std::vector<unsigned int>& shape) {
+static void SetSize(Tensor& in, const std::vector<unsigned int>& shape)
+{
     if (in._shape.size() > 0) {
         unsigned int num_elem = 1;
 
@@ -32,7 +35,8 @@ static void set_size(Tensor& in, const std::vector<unsigned int>& shape) {
     }
 }
 
-static void set_num_ch_dim(Tensor& in,  const std::vector<unsigned int>& shape) {
+static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape)
+{
     if (in._shape.size() > 0) {
         in._num_ch_dim = 1;
 
@@ -44,22 +48,24 @@ static void set_num_ch_dim(Tensor& in,  const std::vector<unsigned int>& shape) 
     }
 }
 
-Tensor normal_distribution(const std::vector<unsigned int>& shape, const float mean, const float stddev) {
+Tensor NormalDistribution(const std::vector<unsigned int>& shape, const float mean, const float stddev)
+{
     Tensor out = Tensor();
-    set_shape(out, shape);
-    set_size(out, shape);
+    SetShape(out, shape);
+    SetSize(out, shape);
     out._elem = new float[out._size];
 
     std::normal_distribution<float> dist(mean, stddev);
 
     for (unsigned int i = 0; i < out._size; ++i)
-        out[i] = dist(rng());
+        out[i] = dist(Rng());
     
-    set_num_ch_dim(out, shape);
+    SetNumChDim(out, shape);
     return out;
 }
 
-Tensor shuffle(const Tensor& in, const unsigned int random_state) {
+Tensor Shuffle(const Tensor& in, const unsigned int random_state)
+{
     Tensor out = in;
     std::mt19937 rng(random_state);
 
@@ -76,17 +82,18 @@ Tensor shuffle(const Tensor& in, const unsigned int random_state) {
     return out;
 }
 
-Tensor uniform_distribution(const std::vector<unsigned int>& shape, const float min_val, const float max_val) {
+Tensor UniformDistribution(const std::vector<unsigned int>& shape, const float min_val, const float max_val)
+{
     Tensor out = Tensor();
-    set_shape(out, shape);
-    set_size(out, shape);
+    SetShape(out, shape);
+    SetSize(out, shape);
     out._elem = new float[out._size];
 
     std::uniform_real_distribution<> dist(min_val, max_val);
 
     for (unsigned int i = 0; i < out._size; ++i)
-        out[i] = dist(rng());
+        out[i] = dist(Rng());
     
-    set_num_ch_dim(out, shape);
+    SetNumChDim(out, shape);
     return out;
 }
