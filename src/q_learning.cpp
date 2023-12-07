@@ -1,5 +1,5 @@
 #include "q_learning.h"
-#include "arrays.h"
+#include "array.h"
 #include "mathematics.h"
 
 #include <random>

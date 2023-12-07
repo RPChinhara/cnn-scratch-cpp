@@ -1,5 +1,5 @@
-#include "activations.h"
-#include "derivatives.h"
+#include "activation.h"
+#include "derivative.h"
 #include "mathematics.h"
 #include "tensor.h"
 

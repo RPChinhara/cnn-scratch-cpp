@@ -2,7 +2,7 @@
 #include "random.h"
 #include "tensor.h"
 #include "linalg.h"
-#include "arrays.h"
+#include "array.h"
 
 #include <iostream>
 

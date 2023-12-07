@@ -1,4 +1,4 @@
-#include "kernels.h"
+#include "kernel.h"
 
 __global__ void Abs(float *in, float *out, unsigned int n)
 {

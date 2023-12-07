@@ -1,4 +1,4 @@
-#include "kernels.h"
+#include "kernel.h"
 #include "linalg.h"
 #include "tensor.h"
 

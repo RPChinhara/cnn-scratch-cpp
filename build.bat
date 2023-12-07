@@ -2,17 +2,17 @@
 
 set NVCC=nvcc
 set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++17 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Ox -Xcompiler /Z7
-set SRC=..\src\activations.cpp ^
-        ..\src\arrays.cpp ^
-        ..\src\datasets.cpp ^
-        ..\src\derivatives.cpp ^
+set SRC=..\src\activation.cpp ^
+        ..\src\array.cpp ^
+        ..\src\dataset.cpp ^
+        ..\src\derivative.cpp ^
         ..\src\environment.cpp ^
-        ..\src\kernels.cpp ^
+        ..\src\kernel.cpp ^
         ..\src\linalg.cpp ^
-        ..\src\losses.cpp ^
+        ..\src\loss.cpp ^
         ..\src\main.cpp ^
         ..\src\mathematics.cpp ^
-        ..\src\metrics.cpp ^
+        ..\src\metric.cpp ^
         ..\src\nn.cpp ^
         ..\src\physics.cpp ^
         ..\src\preprocessing.cpp ^

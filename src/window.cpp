@@ -1,6 +1,6 @@
 #include "window.h"
-#include "datasets.h"
-#include "entities.h"
+#include "dataset.h"
+#include "entity.h"
 #include "environment.h"
 #include "nn.h"
 #include "physics.h"
