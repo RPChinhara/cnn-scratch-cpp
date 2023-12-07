@@ -10,14 +10,14 @@ Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
 
 Tensor PrimeMeanSquaredError(const Tensor& y_true, const Tensor& y_pred)
 {
-    return (2.0f / y_true._shape.back()) * (y_pred - y_true);
+    return (2.0f / y_true.shape.back()) * (y_pred - y_true);
 }
 
 Tensor PrimeRelu(const Tensor& in)
 {
     Tensor out = in;
 
-    for (unsigned int i = 0; i < in._size; ++i) {
+    for (unsigned int i = 0; i < in.size; ++i) {
         if (in[i] < 0.0f)
             out[i] = 0.0f;
         else if (in[i] > 0.0f)

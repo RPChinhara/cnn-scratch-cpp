@@ -8,7 +8,7 @@ Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
     assert(clip_val_min <= clip_val_max);
     Tensor out = in;
     
-    for (unsigned int i = 0; i < in._size; ++i) {
+    for (unsigned int i = 0; i < in.size; ++i) {
         if (in[i] < clip_val_min)
             out[i] = clip_val_min;
         else if (in[i] > clip_val_max)
@@ -20,44 +20,44 @@ Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
 
 static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
 {
-    in._shape.reserve(shape.size());
+    in.shape.reserve(shape.size());
 
     for (unsigned int elem : shape)
         assert(elem != 0);
 
-    in._shape = std::move(shape);
+    in.shape = std::move(shape);
 }
 
 static void SetSize(Tensor& in, const std::vector<unsigned int>& shape)
 {
-    if (in._shape.size() > 0) {
+    if (in.shape.size() > 0) {
         unsigned int num_elem = 1;
 
         for (unsigned int elem : shape)
             num_elem *= elem;
 
-        in._size = num_elem;
+        in.size = num_elem;
     } else {
-        in._size = 1;
+        in.size = 1;
     }
 }
 
 static void SetElem(Tensor& out, const float value)
 {
-    out._elem = new float[out._size];
-    std::fill(out._elem, out._elem + out._size, value);
+    out.elem = new float[out.size];
+    std::fill(out.elem, out.elem + out.size, value);
 }
 
 static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape) 
 {
-    if (in._shape.size() > 0) {
-        in._num_ch_dim = 1;
+    if (in.shape.size() > 0) {
+        in.num_ch_dim = 1;
 
         for (int i = 0; i < shape.size() - 1; ++i)
-            in._num_ch_dim *= shape[i];
+            in.num_ch_dim *= shape[i];
 
     } else {
-        in._num_ch_dim = 0;
+        in.num_ch_dim = 0;
     }
 }
 
@@ -73,11 +73,11 @@ Tensor Ones(const std::vector<unsigned int>& shape)
 
 Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size)
 {
-    assert(begin < in._shape[0] && begin + size <= in._shape[0]);
-    Tensor out = Tensor( { 0.0f }, { size, in._shape.back() });
+    assert(begin < in.shape[0] && begin + size <= in.shape[0]);
+    Tensor out = Tensor( { 0.0f }, { size, in.shape.back() });
     unsigned int idx = 0;
 
-    for (unsigned int i = begin * in._shape.back(); i < (begin * in._shape.back()) + (size * in._shape.back()) ; ++i) {
+    for (unsigned int i = begin * in.shape.back(); i < (begin * in.shape.back()) + (size * in.shape.back()) ; ++i) {
         out[idx] = in[i];
         ++idx;
     }

@@ -32,7 +32,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         Tensor y_batch;
         TensorArray a;
 
-        for (unsigned int j = 0; j < x_train._shape.front(); j += batch_size) {
+        for (unsigned int j = 0; j < x_train.shape.front(); j += batch_size) {
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 

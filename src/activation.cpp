@@ -4,7 +4,7 @@
 
 Tensor Relu(const Tensor& in)
 {
-    Tensor zeros = Tensor({ 0.0 }, { in._shape });
+    Tensor zeros = Tensor({ 0.0 }, { in.shape });
     return Maximum(in, zeros);
 }
 
@@ -12,7 +12,7 @@ Tensor Sigmoid(const Tensor& in)
 {
     Tensor out = in;
 
-    for (unsigned int i = 0; i < in._size; ++i)
+    for (unsigned int i = 0; i < in.size; ++i)
         out[i] = 1.0f / (1.0f + std::expf(-in[i]));
 
     return out;
@@ -28,7 +28,7 @@ Tensor Softplus(const Tensor& in)
 {
     Tensor out = in;
 
-    for (unsigned int i = 0; i < in._size; ++i)
+    for (unsigned int i = 0; i < in.size; ++i)
         out[i] = std::logf(std::expf(in[i]) + 1.0f);
 
     return out;

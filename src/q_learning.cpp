@@ -30,7 +30,7 @@ unsigned int QLearning::ChooseAction(unsigned int state)
         unsigned int max_idx = 0;
         unsigned int max = std::numeric_limits<unsigned int>::lowest();
 
-        for (int i = 0; i < sliced_q_table._size; ++i) {
+        for (int i = 0; i < sliced_q_table.size; ++i) {
             if (sliced_q_table[i] > max) {
                 max = sliced_q_table[i];
                 max_idx = i;
@@ -46,11 +46,11 @@ void QLearning::UpdateQtable(unsigned int state, unsigned int action, float rewa
     Tensor sliced_q_table = Slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
 
-    for (int i = 0; i < sliced_q_table._size; ++i)
+    for (int i = 0; i < sliced_q_table.size; ++i)
         if (sliced_q_table[i] > next_max_q)
             next_max_q = sliced_q_table[i];
 
-    unsigned int idx = state == 0 ? action : (state * q_table._shape.back()) + action;
+    unsigned int idx = state == 0 ? action : (state * q_table.shape.back()) + action;
     std::cout << "state: " << state << std::endl;
     std::cout << "idx: " << idx << std::endl;
     q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);

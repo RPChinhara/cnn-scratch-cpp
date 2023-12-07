@@ -35,8 +35,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << d + e << std::endl;
     std::cout << d + f << std::endl;
     std::cout << Transpose(d) << std::endl;
-    std::cout << d._num_ch_dim << std::endl;
-    std::cout << h._num_ch_dim << std::endl;
+    std::cout << d.num_ch_dim << std::endl;
+    std::cout << h.num_ch_dim << std::endl;
     std::cout << ffdf << std::endl;
     std::cout << df << std::endl;
     std::cout << a1 << std::endl;
