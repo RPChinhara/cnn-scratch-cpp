@@ -11,7 +11,7 @@
 #include <stdexcept>
 #include <thread>
 
-constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
+static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
