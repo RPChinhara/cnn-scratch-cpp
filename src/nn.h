@@ -11,23 +11,23 @@ using TensorArray = std::vector<Tensor>;
 class NN
 {
 public:
-    NN(const std::vector<unsigned int>& layers, float learning_rate);
-    void train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y);
-    void predict(const Tensor& test_x, const Tensor& test_y);
+    NN(const std::vector<unsigned int>& layers, float learningRate);
+    void Train(const Tensor& xTrain, const Tensor& ytrain, const Tensor& xVal, const Tensor& yVal);
+    void Predict(const Tensor& xTest, const Tensor& yTest);
 
 private:
     std::vector<unsigned int> layers;
-    std::pair<TensorArray, TensorArray> w_b;
-    std::pair<TensorArray, TensorArray> w_b_m;
+    std::pair<TensorArray, TensorArray> weightBias;
+    std::pair<TensorArray, TensorArray> weightBiasMomentum;
     
-    unsigned short batch_size = 8;
+    unsigned short batchSize = 8;
     unsigned short epochs = 100;
-    float learning_rate;
+    float learningRate;
 
-    float gradient_clip_threshold = 8.0f;
+    float gradientClipThreshold = 8.0f;
     float momentum = 0.1f;
     unsigned char patience = 12;
     
-    TensorArray forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b);
-    std::pair<TensorArray, TensorArray> init_parameters();
+    TensorArray ForwardPropagation(const Tensor& input, const TensorArray& weight, const TensorArray& bias);
+    std::pair<TensorArray, TensorArray> InitParameters();
 };

@@ -70,8 +70,8 @@ int Window::messageLoop()
         val_test.x_second = min_max_scaler(val_test.x_second);
 
         NN nn = NN({ 4, 128, 3 }, 0.01f);
-        nn.train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-        nn.predict(val_test.x_second, val_test.y_second);
+        nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
+        nn.Predict(val_test.x_second, val_test.y_second);
 #endif
         Environment env = Environment();
         QLearning q_learning = QLearning(env.numStates, env.numActions);

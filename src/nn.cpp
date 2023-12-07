@@ -8,21 +8,21 @@
 
 #include <random>
 
-NN::NN(const std::vector<unsigned int>& layers, float learning_rate)
+NN::NN(const std::vector<unsigned int>& layers, float learningRate)
 {
     this->layers = layers;
-    this->learning_rate = learning_rate;
+    this->learningRate = learningRate;
 }
 
-void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y)
+void NN::Train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y)
 {
-    w_b = init_parameters();
-    w_b_m = init_parameters();
+    weightBias = InitParameters();
+    weightBiasMomentum = InitParameters();
 
     for (unsigned short i = 1; i <= epochs; ++i) {
-        if (i > 10 && i < 20)      learning_rate = 0.009f;
-        else if (i > 20 && i < 30) learning_rate = 0.005f;
-        else                       learning_rate = 0.001f;
+        if (i > 10 && i < 20)      learningRate = 0.009f;
+        else if (i > 20 && i < 30) learningRate = 0.005f;
+        else                       learningRate = 0.001f;
 
         std::random_device rd;
         auto rd_num = rd();
@@ -32,11 +32,11 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
         Tensor y_batch;
         TensorArray  a;
 
-        for (unsigned int j = 0; j < train_x._shape.front(); j += batch_size) {
+        for (unsigned int j = 0; j < train_x._shape.front(); j += batchSize) {
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 
-            a = forward_propagation(x_batch, w_b.first, w_b.second);
+            a = ForwardPropagation(x_batch, weightBias.first, weightBias.second);
             
             std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
@@ -44,7 +44,7 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                 if (k == layers.size() - 1)
                     dl_dz.push_back(PrimeCategoricalCrossEntropy(y_batch, a.back()));
                 else
-                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k])) * PrimeRelu(a[k - 1]));
+                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(weightBias.first[k])) * PrimeRelu(a[k - 1]));
             }
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
@@ -58,25 +58,25 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                 dl_db.push_back(Sum(dl_dz[k], 0));
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k) {
-                dl_dw[k] = ClipByValue(dl_dw[k], -gradient_clip_threshold, gradient_clip_threshold);
-                dl_db[k] = ClipByValue(dl_db[k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_dw[k] = ClipByValue(dl_dw[k], -gradientClipThreshold, gradientClipThreshold);
+                dl_db[k] = ClipByValue(dl_db[k], -gradientClipThreshold, gradientClipThreshold);
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
-                w_b_m.first[k] = momentum * w_b_m.first[k] - learning_rate * dl_dw[(layers.size() - 2) - k];
-                w_b_m.second[k] = momentum * w_b_m.second[k] - learning_rate * dl_db[(layers.size() - 2) - k];
+                weightBiasMomentum.first[k] = momentum * weightBiasMomentum.first[k] - learningRate * dl_dw[(layers.size() - 2) - k];
+                weightBiasMomentum.second[k] = momentum * weightBiasMomentum.second[k] - learningRate * dl_db[(layers.size() - 2) - k];
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
-                w_b.first[k] += w_b_m.first[k];
-                w_b.second[k] += w_b_m.second[k];
+                weightBias.first[k] += weightBiasMomentum.first[k];
+                weightBias.second[k] += weightBiasMomentum.second[k];
             }
         }
         
         std::cout << "Epoch " << i << "/" << epochs;
         std::cout << " - training loss: " << CategoricalCrossEntropy(y_batch, a.back()) << " - training accuracy: " << CategoricalAccuracy(y_batch, a.back());
 
-        a = forward_propagation(val_x, w_b.first, w_b.second);
+        a = ForwardPropagation(val_x, weightBias.first, weightBias.second);
         std::cout << " - val loss: " << CategoricalCrossEntropy(val_y, a.back()) << " - val accuracy: " << CategoricalAccuracy(val_y, a.back());
         std::cout << std::endl;
 
@@ -97,9 +97,9 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
     }
 }
 
-void NN::predict(const Tensor& test_x, const Tensor& test_y)
+void NN::Predict(const Tensor& test_x, const Tensor& test_y)
 {
-    auto a = forward_propagation(test_x, w_b.first, w_b.second);
+    auto a = ForwardPropagation(test_x, weightBias.first, weightBias.second);
 
     std::cout << std::endl;
     std::cout << "test loss: " << CategoricalCrossEntropy(test_y, a.back()) << " - test accuracy: " << CategoricalAccuracy(test_y, a.back());
@@ -108,7 +108,7 @@ void NN::predict(const Tensor& test_x, const Tensor& test_y)
     std::cout << a.back() << std::endl << std::endl << test_y << std::endl;
 }
 
-TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, const TensorArray& b)
+TensorArray NN::ForwardPropagation(const Tensor& input, const TensorArray& w, const TensorArray& b)
 {
     TensorArray z;
     TensorArray a;
@@ -127,7 +127,7 @@ TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, c
     return a;
 }
 
-std::pair<TensorArray, TensorArray> NN::init_parameters()
+std::pair<TensorArray, TensorArray> NN::InitParameters()
 {
     TensorArray w;
     TensorArray b;
