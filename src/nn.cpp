@@ -16,8 +16,8 @@ NN::NN(const std::vector<unsigned int>& layers, float learning_rate)
 
 void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val, const Tensor& y_val)
 {
-    weightBias = InitParameters();
-    weightBiasMomentum = InitParameters();
+    weight_bias = InitParameters();
+    weight_bias_momentum = InitParameters();
 
     for (unsigned short i = 1; i <= epochs; ++i) {
         if (i > 10 && i < 20)      learning_rate = 0.009f;
@@ -25,9 +25,9 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         else                       learning_rate = 0.001f;
 
         std::random_device rd;
-        auto rdNum = rd();
-        Tensor x_shuffled = Shuffle(x_train, rdNum);
-        Tensor y_shuffled = Shuffle(y_train, rdNum);
+        auto rd_num = rd();
+        Tensor x_shuffled = Shuffle(x_train, rd_num);
+        Tensor y_shuffled = Shuffle(y_train, rd_num);
 
         Tensor y_batch;
         TensorArray a;
@@ -36,76 +36,76 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 
-            a = ForwardPropagation(x_batch, weightBias.first, weightBias.second);
+            a = ForwardPropagation(x_batch, weight_bias.first, weight_bias.second);
             
-            std::vector<Tensor> dlDz, dlDw, dlDb;
+            std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
-                    dlDz.push_back(PrimeCategoricalCrossEntropy(y_batch, a.back()));
+                    dl_dz.push_back(PrimeCategoricalCrossEntropy(y_batch, a.back()));
                 else
-                    dlDz.push_back(MatMul(dlDz[(layers.size() - 2) - k], Transpose(weightBias.first[k])) * PrimeRelu(a[k - 1]));
+                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(weight_bias.first[k])) * PrimeRelu(a[k - 1]));
             }
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 if (k == 1)
-                    dlDw.push_back(MatMul(Transpose(x_batch), dlDz[(layers.size() - 1) - k]));
+                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(layers.size() - 1) - k]));
                 else
-                    dlDw.push_back(MatMul(Transpose(a[k - 2]), dlDz[(layers.size() - 1) - k]));
+                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[(layers.size() - 1) - k]));
             }
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k)
-                dlDb.push_back(Sum(dlDz[k], 0));
+                dl_db.push_back(Sum(dl_dz[k], 0));
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k) {
-                dlDw[k] = ClipByValue(dlDw[k], -gradientClipThreshold, gradientClipThreshold);
-                dlDb[k] = ClipByValue(dlDb[k], -gradientClipThreshold, gradientClipThreshold);
+                dl_dw[k] = ClipByValue(dl_dw[k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_db[k] = ClipByValue(dl_db[k], -gradient_clip_threshold, gradient_clip_threshold);
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
-                weightBiasMomentum.first[k] = momentum * weightBiasMomentum.first[k] - learning_rate * dlDw[(layers.size() - 2) - k];
-                weightBiasMomentum.second[k] = momentum * weightBiasMomentum.second[k] - learning_rate * dlDb[(layers.size() - 2) - k];
+                weight_bias_momentum.first[k] = momentum * weight_bias_momentum.first[k] - learning_rate * dl_dw[(layers.size() - 2) - k];
+                weight_bias_momentum.second[k] = momentum * weight_bias_momentum.second[k] - learning_rate * dl_db[(layers.size() - 2) - k];
             }
 
             for (char k = layers.size() - 2; k >= 0; --k) {
-                weightBias.first[k] += weightBiasMomentum.first[k];
-                weightBias.second[k] += weightBiasMomentum.second[k];
+                weight_bias.first[k] += weight_bias_momentum.first[k];
+                weight_bias.second[k] += weight_bias_momentum.second[k];
             }
         }
         
         std::cout << "Epoch " << i << "/" << epochs;
         std::cout << " - training loss: " << CategoricalCrossEntropy(y_batch, a.back()) << " - training accuracy: " << CategoricalAccuracy(y_batch, a.back());
 
-        a = ForwardPropagation(x_val, weightBias.first, weightBias.second);
+        a = ForwardPropagation(x_val, weight_bias.first, weight_bias.second);
         std::cout << " - val loss: " << CategoricalCrossEntropy(y_val, a.back()) << " - val accuracy: " << CategoricalAccuracy(y_val, a.back());
         std::cout << std::endl;
 
-        static unsigned char epochsWithoutImprovement = 0;
-        static float bestValLoss = std::numeric_limits<float>::max();
+        static unsigned char epochs_without_improvement = 0;
+        static float best_val_loss = std::numeric_limits<float>::max();
 
-        if (CategoricalCrossEntropy(y_val, a.back()) < bestValLoss) {
-            bestValLoss = CategoricalCrossEntropy(y_val, a.back());
-            epochsWithoutImprovement = 0;
+        if (CategoricalCrossEntropy(y_val, a.back()) < best_val_loss) {
+            best_val_loss = CategoricalCrossEntropy(y_val, a.back());
+            epochs_without_improvement = 0;
         } else {
-            epochsWithoutImprovement += 1;
+            epochs_without_improvement += 1;
         }
 
-        if (epochsWithoutImprovement >= patience) {
+        if (epochs_without_improvement >= patience) {
             std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << static_cast<unsigned short>(patience) << " epochs." << std::endl;
             break;
         }
     }
 }
 
-void NN::Predict(const Tensor& xTest, const Tensor& yTest)
+void NN::Predict(const Tensor& x_test, const Tensor& y_test)
 {
-    auto a = ForwardPropagation(xTest, weightBias.first, weightBias.second);
+    auto a = ForwardPropagation(x_test, weight_bias.first, weight_bias.second);
 
     std::cout << std::endl;
-    std::cout << "test loss: " << CategoricalCrossEntropy(yTest, a.back()) << " - test accuracy: " << CategoricalAccuracy(yTest, a.back());
+    std::cout << "test loss: " << CategoricalCrossEntropy(y_test, a.back()) << " - test accuracy: " << CategoricalAccuracy(y_test, a.back());
     std::cout << std::endl << std::endl;
 
-    std::cout << a.back() << std::endl << std::endl << yTest << std::endl;
+    std::cout << a.back() << std::endl << std::endl << y_test << std::endl;
 }
 
 TensorArray NN::ForwardPropagation(const Tensor& input, const TensorArray& w, const TensorArray& b)

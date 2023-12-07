@@ -11,20 +11,18 @@ using TensorArray = std::vector<Tensor>;
 class NN
 {
 public:
-    NN(const std::vector<unsigned int>& layers, float learningRate);
-    void Train(const Tensor& xTrain, const Tensor& yTrain, const Tensor& xVal, const Tensor& yVal);
-    void Predict(const Tensor& xTest, const Tensor& yTest);
+    NN(const std::vector<unsigned int>& layers, float learning_rate);
+    void Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val, const Tensor& y_val);
+    void Predict(const Tensor& x_test, const Tensor& y_test);
 
 private:
     std::vector<unsigned int> layers;
-    std::pair<TensorArray, TensorArray> weightBias;
-    std::pair<TensorArray, TensorArray> weightBiasMomentum;
-    
+    std::pair<TensorArray, TensorArray> weight_bias;
+    std::pair<TensorArray, TensorArray> weight_bias_momentum;
     unsigned short batch_size = 8;
     unsigned short epochs = 100;
     float learning_rate;
-
-    float gradientClipThreshold = 8.0f;
+    float gradient_clip_threshold = 8.0f;
     float momentum = 0.1f;
     unsigned char patience = 12;
     
