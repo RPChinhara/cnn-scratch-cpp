@@ -86,8 +86,8 @@ int Window::messageLoop()
             int total_reward = 0;
 
             while (!done) {
-                PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                Sleep(60000);
+                // PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                // Sleep(60000);
                 
                 unsigned int action = q_learning.choose_action(state);
                 std::cout << "action: " << action << std::endl;

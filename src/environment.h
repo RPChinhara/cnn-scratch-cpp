@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 
-class Environment {
+class Environment
+{
 public:
     Environment() : actions({ "eat", "do_nothing", "up", "down", "left", "right" }), states({ "hungry", "neutral", "full" }) {
         numStates = states.size();

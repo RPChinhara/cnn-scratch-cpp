@@ -8,7 +8,8 @@
 
 using TensorArray = std::vector<Tensor>;
 
-class NN {
+class NN
+{
 public:
     NN(const std::vector<unsigned int>& layers, float learning_rate);
     void train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x, const Tensor& val_y);

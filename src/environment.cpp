@@ -12,9 +12,9 @@ void Environment::Render()
 
 int Environment::Reset()
 {
-    daysLived          = 0;
+    daysLived = 0;
     daysWithoutEating = 0;
-    currentState       = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
+    currentState = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
     return currentState;
 }
 

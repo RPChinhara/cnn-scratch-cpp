@@ -3,7 +3,8 @@
 #include <iostream>
 #include <vector>
 
-class Tensor {
+class Tensor
+{
 public:
     Tensor() = default;
     Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape);
