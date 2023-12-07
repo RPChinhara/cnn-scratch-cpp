@@ -3,14 +3,14 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
+Tensor PrimeCategoricalCrossEntropy(const Tensor& yTrue, const Tensor& yPred)
 {
-    return (y_pred - y_true);
+    return (yPred - yTrue);
 }
 
-Tensor PrimeMeanSquaredError(const Tensor& y_true, const Tensor& y_pred)
+Tensor PrimeMeanSquaredError(const Tensor& yTrue, const Tensor& yPred)
 {
-    return (2.0f / y_true._shape.back()) * (y_pred - y_true);
+    return (2.0f / yTrue._shape.back()) * (yPred - yTrue);
 }
 
 Tensor PrimeRelu(const Tensor& in)

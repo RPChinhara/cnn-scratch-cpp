@@ -12,7 +12,7 @@ class NN
 {
 public:
     NN(const std::vector<unsigned int>& layers, float learningRate);
-    void Train(const Tensor& xTrain, const Tensor& ytrain, const Tensor& xVal, const Tensor& yVal);
+    void Train(const Tensor& xTrain, const Tensor& yTrain, const Tensor& xVal, const Tensor& yVal);
     void Predict(const Tensor& xTest, const Tensor& yTest);
 
 private:

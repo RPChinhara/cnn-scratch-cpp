@@ -2,7 +2,7 @@
 
 class Tensor;
 
-Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
-Tensor PrimeMeanSquaredError(const Tensor& y_true, const Tensor& y_pred);
+Tensor PrimeCategoricalCrossEntropy(const Tensor& yTrue, const Tensor& yPred);
+Tensor PrimeMeanSquaredError(const Tensor& yTrue, const Tensor& yPred);
 Tensor PrimeRelu(const Tensor& in);
 Tensor PrimeSigmoid(const Tensor& in);
