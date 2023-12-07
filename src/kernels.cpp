@@ -1,24 +1,28 @@
 #include "kernels.h"
 
-__global__ void abs(float *in, float *out, unsigned int n) {
+__global__ void Abs(float *in, float *out, unsigned int n)
+{
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
         out[id] = fabs(in[id]);
 }
 
-__global__ void exp(float *in, float *out, unsigned int n) {
+__global__ void Exp(float *in, float *out, unsigned int n)
+{
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
         out[id] = expf(in[id]);
 }
 
-__global__ void log(float *in, float *out, unsigned int n) {
+__global__ void Log(float *in, float *out, unsigned int n)
+{
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
         out[id] = logf(in[id]);
 }
 
-__global__ void matmul(float *in1, float *in2, float *out, int m, int n, int k) {
+__global__ void MatMul(float *in1, float *in2, float *out, int m, int n, int k)
+{
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
@@ -31,20 +35,23 @@ __global__ void matmul(float *in1, float *in2, float *out, int m, int n, int k) 
     }
 }
 
-__global__ void maximum(float *in1, float *in2, float *out, unsigned int n) {
+__global__ void Maximum(float *in1, float *in2, float *out, unsigned int n)
+{
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
         for (unsigned int i = id; i < n; ++i)
 	        out[id] = max(in1[id], in2[id]);
 }
 
-__global__ void square(float *in, float *out, unsigned int n) {
+__global__ void Square(float *in, float *out, unsigned int n)
+{
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
         out[id] = powf(in[id], 2.0f);
 }
 
-__global__ void tanh(float *in, float *out, unsigned int n) {
+__global__ void Tanh(float *in, float *out, unsigned int n)
+{
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
         out[id] = tanhf(in[id]);
