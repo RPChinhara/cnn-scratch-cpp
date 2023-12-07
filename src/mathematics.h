@@ -2,13 +2,12 @@
 
 class Tensor;
 
-Tensor argmax(const Tensor& in);
-Tensor exp(const Tensor& in);
-Tensor log(const Tensor& in);
-Tensor max(const Tensor& in, const unsigned short axis);
-Tensor maximum(const Tensor& in1, const Tensor& in2);
-Tensor min(const Tensor& in);
-Tensor square(const Tensor& in);
-Tensor sum(const Tensor& in, const unsigned short axis);
-Tensor tanh(const Tensor& in);
-Tensor variance(const Tensor& in);
+Tensor Argmax(const Tensor& in);
+Tensor Exp(const Tensor& in);
+Tensor Log(const Tensor& in);
+Tensor Max(const Tensor& in, const unsigned short axis);
+Tensor Maximum(const Tensor& in1, const Tensor& in2);
+Tensor Min(const Tensor& in);
+Tensor Square(const Tensor& in);
+Tensor Sum(const Tensor& in, const unsigned short axis);
+Tensor Tanh(const Tensor& in);

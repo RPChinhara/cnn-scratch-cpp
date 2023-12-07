@@ -5,7 +5,7 @@
 Tensor Relu(const Tensor& in)
 {
     Tensor zeros = Tensor({ 0.0 }, { in._shape });
-    return maximum(in, zeros);
+    return Maximum(in, zeros);
 }
 
 Tensor Sigmoid(const Tensor& in)
@@ -20,8 +20,8 @@ Tensor Sigmoid(const Tensor& in)
 
 Tensor Softmax(const Tensor& in)
 {
-    Tensor exp_scores = exp(in - max(in, 1));
-    return exp_scores / sum(exp_scores, 1);
+    Tensor exp_scores = Exp(in - Max(in, 1));
+    return exp_scores / Sum(exp_scores, 1);
 }
 
 Tensor Softplus(const Tensor& in)

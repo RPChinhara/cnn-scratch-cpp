@@ -44,18 +44,18 @@ void NN::train(const Tensor& train_x, const Tensor& train_y, const Tensor& val_x
                 if (k == layers.size() - 1)
                     dl_dz.push_back(PrimeCategoricalCrossEntropy(y_batch, a.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * PrimeRelu(a[k - 1]));
+                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], w_b.first[k].T()) * PrimeRelu(a[k - 1]));
             }
 
             for (unsigned char k = layers.size() - 1; k > 0; --k) {
                 if (k == 1)
-                    dl_dw.push_back(matmul(x_batch.T(), dl_dz[(layers.size() - 1) - k]));
+                    dl_dw.push_back(MatMul(x_batch.T(), dl_dz[(layers.size() - 1) - k]));
                 else
-                    dl_dw.push_back(matmul(a[k - 2].T(), dl_dz[(layers.size() - 1) - k]));
+                    dl_dw.push_back(MatMul(a[k - 2].T(), dl_dz[(layers.size() - 1) - k]));
             }
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k)
-                dl_db.push_back(sum(dl_dz[k], 0));
+                dl_db.push_back(Sum(dl_dz[k], 0));
 
             for (unsigned char k = 0; k < layers.size() - 1; ++k) {
                 dl_dw[k] = ClipByValue(dl_dw[k], -gradient_clip_threshold, gradient_clip_threshold);
@@ -115,10 +115,10 @@ TensorArray NN::forward_propagation(const Tensor& input, const TensorArray& w, c
 
     for (unsigned char i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
-            z.push_back((matmul(input, w[i]) + b[i]));
+            z.push_back((MatMul(input, w[i]) + b[i]));
             a.push_back((Relu(z[i])));
         } else {
-            z.push_back((matmul(a[i - 1], w[i]) + b[i]));
+            z.push_back((MatMul(a[i - 1], w[i]) + b[i]));
             if (i == 1)
                 a.push_back((Softmax(z[i])));
         }

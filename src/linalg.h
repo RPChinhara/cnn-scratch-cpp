@@ -2,5 +2,5 @@
 
 class Tensor;
 
-Tensor matmul(const Tensor& in1, const Tensor& in2);
-Tensor transpose(const Tensor& in);
+Tensor MatMul(const Tensor& in1, const Tensor& in2);
+Tensor Transpose(const Tensor& in);

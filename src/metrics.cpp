@@ -15,8 +15,8 @@ float Accuracy(const Tensor& y_true, const Tensor& y_pred)
 
 float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred)
 {
-    Tensor true_idx = argmax(y_true);
-    Tensor pred_idx = argmax(y_pred);
+    Tensor true_idx = Argmax(y_true);
+    Tensor pred_idx = Argmax(y_pred);
     float equal = 0.0f;
 
     for (unsigned int i = 0; i < true_idx._size; ++i)

@@ -6,7 +6,8 @@
 
 static constexpr int NUM_PROCS = 128 + (32 * 1);
 
-static void chk_cuda(cudaError_t code, const bool abort = true) {
+static void CheckCuda(cudaError_t code, const bool abort = true)
+{
    if (code != cudaSuccess) {
       fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), __FILE__, __LINE__);
       if (abort) 
@@ -14,7 +15,8 @@ static void chk_cuda(cudaError_t code, const bool abort = true) {
    }
 }
 
-Tensor argmax(const Tensor& in) {
+Tensor Argmax(const Tensor& in)
+{
 	Tensor out  = Tensor({ 0.0f }, { in._shape.front() });
 	unsigned short idx = 0;
 	float max = std::numeric_limits<float>::lowest();
@@ -34,35 +36,38 @@ Tensor argmax(const Tensor& in) {
 	return out;
 }
 
-Tensor exp(const Tensor& in) {
+Tensor Exp(const Tensor& in)
+{
 	float **in_out = new float*[sizeof(float *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
+	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	CheckCuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	Exp<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
 	return out;
 }
 
-Tensor log(const Tensor& in) {
+Tensor Log(const Tensor& in)
+{
 	float **in_out = new float*[sizeof(float *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
+	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	CheckCuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	Log<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
 	return out;
 }
 
-Tensor max(const Tensor& in, const unsigned short axis) {
+Tensor Max(const Tensor& in, const unsigned short axis)
+{
 	assert(axis == 0 || axis == 1);
 	Tensor out;
 
@@ -99,16 +104,17 @@ Tensor max(const Tensor& in, const unsigned short axis) {
 	return out;
 }
 
-Tensor maximum(const Tensor& in1, const Tensor& in2) {
+Tensor Maximum(const Tensor& in1, const Tensor& in2)
+{
 	float **in_out = new float*[sizeof(float *) * 3];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in1._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in1._size));
-	chk_cuda(cudaMalloc((void**) &in_out[2], sizeof(float) * in1._size));
-	chk_cuda(cudaMemcpy(in_out[0], in1._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice));
-	chk_cuda(cudaMemcpy(in_out[1], in2._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice));
+	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in1._size));
+	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in1._size));
+	CheckCuda(cudaMalloc((void**) &in_out[2], sizeof(float) * in1._size));
+	CheckCuda(cudaMemcpy(in_out[0], in1._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice));
+	CheckCuda(cudaMemcpy(in_out[1], in2._elem, sizeof(float) * in1._size, cudaMemcpyHostToDevice));
 	Maximum<<<in1._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in_out[2], in1._size);
 	Tensor out = in1;
-	chk_cuda(cudaMemcpy(out._elem, in_out[2], sizeof(float) * in1._size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out._elem, in_out[2], sizeof(float) * in1._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
 	cudaFree(in_out[2]);
@@ -116,7 +122,8 @@ Tensor maximum(const Tensor& in1, const Tensor& in2) {
 	return out;
 }
 
-Tensor min(const Tensor& in) {
+Tensor Min(const Tensor& in)
+{
 	Tensor out = Tensor({ 0.0f }, { 1, in._shape.back() });
 
 	for (unsigned short i = 0; i < in._shape.back(); ++i) {
@@ -133,21 +140,23 @@ Tensor min(const Tensor& in) {
 	return out;
 }
 
-Tensor square(const Tensor& in) {
+Tensor Square(const Tensor& in)
+{
 	float **in_out = new float*[sizeof(float *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
+	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	CheckCuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	Square<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
 	return out;
 }
 
-Tensor sum(const Tensor& in, const unsigned short axis) {
+Tensor Sum(const Tensor& in, const unsigned short axis)
+{
 	assert(axis == 0 || axis == 1);
 	Tensor out;
 
@@ -190,20 +199,17 @@ Tensor sum(const Tensor& in, const unsigned short axis) {
 	return out;
 }
 
-Tensor tanh(const Tensor& in) {
+Tensor Tanh(const Tensor& in)
+{
 	float **in_out = new float*[sizeof(float *) * 2];
-	chk_cuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
-	chk_cuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
-	chk_cuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
+	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in._size));
+	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in._size));
+	CheckCuda(cudaMemcpy(in_out[0], in._elem, sizeof(float) * in._size, cudaMemcpyHostToDevice));
 	Tanh<<<in._size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in._size);
 	Tensor out = in;
-	chk_cuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out._elem, in_out[1], sizeof(float) * in._size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
     delete[] in_out;
 	return out;
-}
-
-Tensor variance(const Tensor& in) {
-	return Tensor();
 }

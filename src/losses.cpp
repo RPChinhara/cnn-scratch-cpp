@@ -11,7 +11,7 @@ float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
     Tensor clipped_y_pred = ClipByValue(y_pred, epsilon, 1.0f - epsilon);
 
     for (unsigned int i = 0; i < y_true._size; ++i)
-        sum += y_true[i] * log(clipped_y_pred)[i];
+        sum += y_true[i] * Log(clipped_y_pred)[i];
     return -sum / num_samples;
 }
 

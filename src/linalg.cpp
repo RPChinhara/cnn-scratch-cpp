@@ -4,7 +4,8 @@
 
 #include <cassert>
 
-static void chk_cuda(cudaError_t code, const bool abort = true) {
+static void CheckCuda(cudaError_t code, const bool abort = true)
+{
    if (code != cudaSuccess) {
       fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), __FILE__, __LINE__);
       if (abort) 
@@ -12,7 +13,8 @@ static void chk_cuda(cudaError_t code, const bool abort = true) {
    }
 }
 
-Tensor matmul(const Tensor& in1, const Tensor& in2) {
+Tensor MatMul(const Tensor& in1, const Tensor& in2)
+{
     assert(in1._shape.back() == in2._shape.front());
     int m = in1._shape.front();
     int n = in1._shape.back();
@@ -32,14 +34,15 @@ Tensor matmul(const Tensor& in1, const Tensor& in2) {
 
 	Tensor out = Tensor({ 0.0f }, { in1._shape.front(), in2._shape.back() });
 
-	chk_cuda(cudaMemcpy(out._elem, C, sizeof(float) * out._size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out._elem, C, sizeof(float) * out._size, cudaMemcpyDeviceToHost));
 	cudaFree(A);
 	cudaFree(B);
 	cudaFree(C);
     return out;
 }
 
-static unsigned int get_batch_size(const std::vector<unsigned int>& shape) {
+static unsigned int GetBatchSize(const std::vector<unsigned int>& shape)
+{
     assert(shape.size() > 1);
     unsigned int batch_size = 1;
 
@@ -48,7 +51,8 @@ static unsigned int get_batch_size(const std::vector<unsigned int>& shape) {
     return batch_size;
 }
 
-Tensor transpose(const Tensor& in) {
+Tensor Transpose(const Tensor& in)
+{
     assert(in._shape.size() >= 2);
 
     Tensor out = Tensor({ 0.0f }, { in._shape.back(), in._shape[in._shape.size() - 2] });
@@ -63,7 +67,7 @@ Tensor transpose(const Tensor& in) {
     for (unsigned short i = 0; i < in._num_ch_dim; ++i)
         idx_rows.push_back(i * in._shape.back());
 
-    unsigned short batch_size = get_batch_size(in._shape);
+    unsigned short batch_size = GetBatchSize(in._shape);
 
     unsigned int idx{};
     for (unsigned int i = 0; i < batch_size; ++i) {
