@@ -1,6 +1,7 @@
 #include "physics.h"
 
-void CheckBoundaryCollision(RECT& rect, int window_width, int window_height) {
+void CheckBoundaryCollision(RECT& rect)
+{
     if (rect.left < 0) {
         rect.left = 0;
         // rect.right = rect.left + (rect.right - rect.left);

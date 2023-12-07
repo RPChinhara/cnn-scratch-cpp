@@ -62,16 +62,16 @@ int Window::messageLoop()
         Tensor x = iris.features;
         Tensor y = iris.target;
 
-        y = one_hot(y, 3);
-        TrainTest train_temp = train_test_split(x, y, 0.2, 42);
-        TrainTest val_test = train_test_split(train_temp.x_second, train_temp.y_second, 0.5, 42);
-        train_temp.x_first = min_max_scaler(train_temp.x_first);
-        val_test.x_first = min_max_scaler(val_test.x_first);
-        val_test.x_second = min_max_scaler(val_test.x_second);
+        y = OneHot(y, 3);
+        TrainTest trainTemp = TrainTestSplit(x, y, 0.2, 42);
+        TrainTest valTest = TrainTestSplit(trainTemp.xSecond, trainTemp.ySecond, 0.5, 42);
+        trainTemp.xFirst = MinMaxScaler(trainTemp.xFirst);
+        valTest.xFirst = MinMaxScaler(valTest.xFirst);
+        valTest.xSecond = MinMaxScaler(valTest.xSecond);
 
         NN nn = NN({ 4, 128, 3 }, 0.01f);
-        nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-        nn.Predict(val_test.x_second, val_test.y_second);
+        nn.Train(trainTemp.xFirst, trainTemp.yFirst, valTest.xFirst, valTest.yFirst);
+        nn.Predict(valTest.xSecond, valTest.ySecond);
 #endif
         Environment env = Environment();
         QLearning q_learning = QLearning(env.numStates, env.numActions);
@@ -108,7 +108,7 @@ int Window::messageLoop()
                     agent.right += 5;
                 }
 
-                CheckBoundaryCollision(agent, window_width, window_height);
+                CheckBoundaryCollision(agent);
 
                 // if (IsColliding(agent, agent2)) {
                 //     ResolveCollision(agent, agent2);
