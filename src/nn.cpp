@@ -110,21 +110,21 @@ void NN::Predict(const Tensor& x_test, const Tensor& y_test)
 
 TensorArray NN::ForwardPropagation(const Tensor& input, const TensorArray& weights, const TensorArray& biases)
 {
-    TensorArray z;
-    TensorArray a;
+    TensorArray logits;
+    TensorArray activations;
 
     for (unsigned char i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
-            z.push_back((MatMul(input, weights[i]) + biases[i]));
-            a.push_back((Relu(z[i])));
+            logits.push_back((MatMul(input, weights[i]) + biases[i]));
+            activations.push_back((Relu(logits[i])));
         } else {
-            z.push_back((MatMul(a[i - 1], weights[i]) + biases[i]));
+            logits.push_back((MatMul(activations[i - 1], weights[i]) + biases[i]));
             if (i == 1)
-                a.push_back((Softmax(z[i])));
+                activations.push_back((Softmax(logits[i])));
         }
     }
 
-    return a;
+    return activations;
 }
 
 std::pair<TensorArray, TensorArray> NN::InitParameters()
@@ -133,7 +133,7 @@ std::pair<TensorArray, TensorArray> NN::InitParameters()
     TensorArray biases;
 
     for (unsigned int i = 0; i < layers.size() - 1; ++i) {
-        weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 6.0f));
+        weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 1.0f));
         biases.push_back(Zeros({ 1, layers[i + 1] }));
     }
 

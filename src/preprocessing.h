@@ -12,4 +12,4 @@ struct TrainTest
 
 Tensor MinMaxScaler(Tensor& dataset);
 Tensor OneHot(const Tensor& in, const unsigned short depth);
-TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_State);
+TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_state);

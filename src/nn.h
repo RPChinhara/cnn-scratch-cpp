@@ -24,7 +24,7 @@ private:
     float learning_rate;
     float gradient_clip_threshold = 8.0f;
     float momentum = 0.1f;
-    unsigned char patience = 12;
+    unsigned char patience = 7;
     
     TensorArray ForwardPropagation(const Tensor& input, const TensorArray& weights, const TensorArray& biases);
     std::pair<TensorArray, TensorArray> InitParameters();
