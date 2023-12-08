@@ -29,8 +29,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor h = Tensor({ 1, 2, 3, 5 }, { 1, 4 });
     Tensor ffdf = NormalDistribution( { 2, 3 });
     Tensor df = UniformDistribution( { 2, 3 });
-	Tensor out  = Tensor({ 0.0f }, { 3 });
-    Tensor out2 = Zeros({ 3 });
 
     // std::cout << a + b << std::endl;
     // std::cout << a + c << std::endl;
@@ -42,8 +40,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // std::cout << ffdf << std::endl;
     // std::cout << df << std::endl;
     // std::cout << a1 << std::endl;
-    std::cout << out << std::endl;
-    std::cout << out2 << std::endl;
 
     try {
         Window window(hInstance, nCmdShow);

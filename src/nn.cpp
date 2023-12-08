@@ -40,32 +40,32 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             
             std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
 
-            for (unsigned char k = layers.size() - 1; k > 0; --k) {
+            for (int k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
                     dloss_dlogits.push_back(PrimeCategoricalCrossEntropy(y_batch, output.back()));
                 else
                     dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * PrimeRelu(output[k - 1]));
             }
 
-            for (unsigned char k = layers.size() - 1; k > 0; --k) {
+            for (int k = layers.size() - 1; k > 0; --k) {
                 if (k == 1)
                     dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(layers.size() - 1) - k]));
                 else
                     dloss_dweights.push_back(MatMul(Transpose(output[k - 2]), dloss_dlogits[(layers.size() - 1) - k]));
             }
 
-            for (unsigned char k = 0; k < layers.size() - 1; ++k)
+            for (int k = 0; k < layers.size() - 1; ++k)
                 dloss_dbiases.push_back(Sum(dloss_dlogits[k], 0));
 
-            for (unsigned char k = 0; k < layers.size() - 1; ++k) {
+            for (int k = 0; k < layers.size() - 1; ++k) {
                 dloss_dweights[k] = ClipByValue(dloss_dweights[k], -gradient_clip_threshold, gradient_clip_threshold);
                 dloss_dbiases[k] = ClipByValue(dloss_dbiases[k], -gradient_clip_threshold, gradient_clip_threshold);
             }
 
-            for (char k = layers.size() - 2; k >= 0; --k) {
+            for (int k = layers.size() - 2; k >= 0; --k) {
                 weights_biases_momentum.first[k] = momentum * weights_biases_momentum.first[k] - learning_rate * dloss_dweights[(layers.size() - 2) - k];
                 weights_biases_momentum.second[k] = momentum * weights_biases_momentum.second[k] - learning_rate * dloss_dbiases[(layers.size() - 2) - k];
-                
+
                 weights_biases.first[k] += weights_biases_momentum.first[k];
                 weights_biases.second[k] += weights_biases_momentum.second[k];
             }
@@ -112,7 +112,7 @@ TensorArray NN::ForwardPropagation(const Tensor& input, const TensorArray& weigh
     TensorArray logits;
     TensorArray activations;
 
-    for (unsigned char i = 0; i < layers.size() - 1; ++i) {
+    for (int i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
             logits.push_back((MatMul(input, weights[i]) + biases[i]));
             activations.push_back((Relu(logits[i])));
@@ -131,8 +131,8 @@ std::pair<TensorArray, TensorArray> NN::InitParameters()
     TensorArray weights;
     TensorArray biases;
 
-    for (unsigned int i = 0; i < layers.size() - 1; ++i) {
-        weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 0.2f));
+    for (int i = 0; i < layers.size() - 1; ++i) {
+        weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 0.3f));
         biases.push_back(Zeros({ 1, layers[i + 1] }));
     }
 
