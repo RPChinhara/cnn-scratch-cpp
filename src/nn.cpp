@@ -133,7 +133,7 @@ std::pair<TensorArray, TensorArray> NN::InitParameters()
     TensorArray b;
 
     for (unsigned int i = 0; i < layers.size() - 1; ++i) {
-        w.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 2.0f));
+        w.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 6.0f));
         b.push_back(Zeros({ 1, layers[i + 1] }));
     }
 
