@@ -65,9 +65,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             for (char k = layers.size() - 2; k >= 0; --k) {
                 weights_biases_momentum.first[k] = momentum * weights_biases_momentum.first[k] - learning_rate * dloss_dweights[(layers.size() - 2) - k];
                 weights_biases_momentum.second[k] = momentum * weights_biases_momentum.second[k] - learning_rate * dloss_dbiases[(layers.size() - 2) - k];
-            }
-
-            for (char k = layers.size() - 2; k >= 0; --k) {
+                
                 weights_biases.first[k] += weights_biases_momentum.first[k];
                 weights_biases.second[k] += weights_biases_momentum.second[k];
             }
