@@ -17,8 +17,8 @@ public:
 
 private:
     std::vector<unsigned int> layers;
-    std::pair<TensorArray, TensorArray> weight_bias;
-    std::pair<TensorArray, TensorArray> weight_bias_momentum;
+    std::pair<TensorArray, TensorArray> weights_biases;
+    std::pair<TensorArray, TensorArray> weights_biases_momentum;
     unsigned short batch_size = 8;
     unsigned short epochs = 100;
     float learning_rate;
@@ -26,6 +26,6 @@ private:
     float momentum = 0.1f;
     unsigned char patience = 12;
     
-    TensorArray ForwardPropagation(const Tensor& input, const TensorArray& weight, const TensorArray& bias);
+    TensorArray ForwardPropagation(const Tensor& input, const TensorArray& weights, const TensorArray& biases);
     std::pair<TensorArray, TensorArray> InitParameters();
 };
