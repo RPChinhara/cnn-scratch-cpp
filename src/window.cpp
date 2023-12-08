@@ -18,8 +18,8 @@ static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 #pragma comment(lib, "winmm.lib")
 
 const char Window::CLASS_NAME[] = "EnvWindow";
-int Window::window_width  = 1920;
-int Window::window_height = 1080;
+size_t Window::window_width  = 1920;
+size_t Window::window_height = 1080;
 std::mutex Window::agentMutex;
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
