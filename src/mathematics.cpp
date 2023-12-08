@@ -18,7 +18,8 @@ static void CheckCuda(cudaError_t code, const bool abort = true)
 
 Tensor Argmax(const Tensor& in)
 {
-	Tensor out  = Tensor({ 0.0f }, { in.shape.front() });
+	Tensor out  = Zeros({ in.shape.front() });
+
 	unsigned short idx = 0;
 	float max = std::numeric_limits<float>::lowest();
 	unsigned int max_idx = 0;

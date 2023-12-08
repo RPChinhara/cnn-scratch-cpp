@@ -11,12 +11,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
-    std::cout << 0 % 3 << std::endl;
-    std::cout << 1 % 3 << std::endl;
-    std::cout << 2 % 3 << std::endl;
-    std::cout << 3 % 3 << std::endl;
-    std::cout << 4 % 3 << std::endl;
-    std::cout << 5 % 3 << std::endl;
+    // std::cout << 0 % 3 << std::endl;
+    // std::cout << 1 % 3 << std::endl;
+    // std::cout << 2 % 3 << std::endl;
+    // std::cout << 3 % 3 << std::endl;
+    // std::cout << 4 % 3 << std::endl;
+    // std::cout << 5 % 3 << std::endl;
 
     Tensor a1 = Ones({ 2, 3, 4, 2 });
     Tensor a = Ones({ 2, 3 });
@@ -32,16 +32,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Tensor out  = Tensor({ 0.0f }, { 3 });
     Tensor out2 = Zeros({ 3 });
 
-    std::cout << a + b << std::endl;
-    std::cout << a + c << std::endl;
-    std::cout << d + e << std::endl;
-    std::cout << d + f << std::endl;
-    std::cout << Transpose(d) << std::endl;
-    std::cout << d.num_ch_dim << std::endl;
-    std::cout << h.num_ch_dim << std::endl;
-    std::cout << ffdf << std::endl;
-    std::cout << df << std::endl;
-    std::cout << a1 << std::endl;
+    // std::cout << a + b << std::endl;
+    // std::cout << a + c << std::endl;
+    // std::cout << d + e << std::endl;
+    // std::cout << d + f << std::endl;
+    // std::cout << Transpose(d) << std::endl;
+    // std::cout << d.num_ch_dim << std::endl;
+    // std::cout << h.num_ch_dim << std::endl;
+    // std::cout << ffdf << std::endl;
+    // std::cout << df << std::endl;
+    // std::cout << a1 << std::endl;
     std::cout << out << std::endl;
     std::cout << out2 << std::endl;
 
