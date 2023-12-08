@@ -20,11 +20,11 @@ private:
     std::pair<TensorArray, TensorArray> weights_biases;
     std::pair<TensorArray, TensorArray> weights_biases_momentum;
     unsigned short batch_size = 8;
-    unsigned short epochs = 100;
+    unsigned short epochs = 200;
     float learning_rate;
     float gradient_clip_threshold = 8.0f;
     float momentum = 0.1f;
-    unsigned char patience = 7;
+    unsigned char patience = 3;
     
     TensorArray ForwardPropagation(const Tensor& input, const TensorArray& weights, const TensorArray& biases);
     std::pair<TensorArray, TensorArray> InitParameters();
