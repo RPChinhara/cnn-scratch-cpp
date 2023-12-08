@@ -11,7 +11,7 @@ static std::mt19937 Rng()
     return rng;
 }
 
-static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
+static void SetShape(Tensor& in, const std::vector<size_t>& shape)
 {
     in.shape.reserve(shape.size());
 
@@ -21,7 +21,7 @@ static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
     in.shape = std::move(shape);
 }
 
-static void SetSize(Tensor& in, const std::vector<unsigned int>& shape)
+static void SetSize(Tensor& in, const std::vector<size_t>& shape)
 {
     if (in.shape.size() > 0) {
         unsigned int num_elem = 1;
@@ -35,7 +35,7 @@ static void SetSize(Tensor& in, const std::vector<unsigned int>& shape)
     }
 }
 
-static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape)
+static void SetNumChDim(Tensor& in,  const std::vector<size_t>& shape)
 {
     if (in.shape.size() > 0) {
         in.num_ch_dim = 1;
@@ -48,7 +48,7 @@ static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape)
     }
 }
 
-Tensor NormalDistribution(const std::vector<unsigned int>& shape, const float mean, const float stddev)
+Tensor NormalDistribution(const std::vector<size_t>& shape, const float mean, const float stddev)
 {
     Tensor out = Tensor();
     SetShape(out, shape);
@@ -82,7 +82,7 @@ Tensor Shuffle(const Tensor& in, const unsigned int random_state)
     return out;
 }
 
-Tensor UniformDistribution(const std::vector<unsigned int>& shape, const float min_val, const float max_val)
+Tensor UniformDistribution(const std::vector<size_t>& shape, const float min_val, const float max_val)
 {
     Tensor out = Tensor();
     SetShape(out, shape);

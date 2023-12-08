@@ -7,7 +7,7 @@ class Tensor
 {
 public:
     Tensor() = default;
-    Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape);
+    Tensor(const std::vector<float> elem, const std::vector<size_t> shape);
     Tensor(const Tensor& o);
     Tensor(Tensor&& o) noexcept;
     ~Tensor();
@@ -24,7 +24,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Tensor& o);
 
     float *elem = nullptr;
-    unsigned int num_ch_dim;
-    std::vector<unsigned int> shape;
+    size_t num_ch_dim;
+    std::vector<size_t> shape;
     unsigned int size;
 };

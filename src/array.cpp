@@ -18,7 +18,7 @@ Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
     return out;
 }
 
-static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
+static void SetShape(Tensor& in, const std::vector<size_t>& shape)
 {
     in.shape.reserve(shape.size());
 
@@ -28,7 +28,7 @@ static void SetShape(Tensor& in, const std::vector<unsigned int>& shape)
     in.shape = std::move(shape);
 }
 
-static void SetSize(Tensor& in, const std::vector<unsigned int>& shape)
+static void SetSize(Tensor& in, const std::vector<size_t>& shape)
 {
     if (in.shape.size() > 0) {
         unsigned int num_elem = 1;
@@ -48,7 +48,7 @@ static void SetElem(Tensor& out, const float value)
     std::fill(out.elem, out.elem + out.size, value);
 }
 
-static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape) 
+static void SetNumChDim(Tensor& in,  const std::vector<size_t>& shape) 
 {
     if (in.shape.size() > 0) {
         in.num_ch_dim = 1;
@@ -61,7 +61,7 @@ static void SetNumChDim(Tensor& in,  const std::vector<unsigned int>& shape)
     }
 }
 
-Tensor Ones(const std::vector<unsigned int>& shape)
+Tensor Ones(const std::vector<size_t>& shape)
 {
     Tensor out = Tensor();
     SetShape(out, shape);
@@ -85,7 +85,7 @@ Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size
     return out;
 }
 
-Tensor Zeros(const std::vector<unsigned int>& shape) 
+Tensor Zeros(const std::vector<size_t>& shape) 
 {
     Tensor out = Tensor();
     SetShape(out, shape);

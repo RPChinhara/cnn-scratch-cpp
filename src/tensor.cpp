@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-Tensor::Tensor(const std::vector<float> elem, const std::vector<unsigned int> shape)
+Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
 {
     assert(elem.size() != 0);
     
@@ -63,7 +63,7 @@ Tensor::~Tensor()
         delete[] elem;
 }
 
-static bool ShapeEqual(const std::vector<unsigned int>& shape_1, const std::vector<unsigned int>& shape_2)
+static bool ShapeEqual(const std::vector<size_t>& shape_1, const std::vector<size_t>& shape_2)
 {
     bool equal = false;
     if (std::equal(shape_1.begin(), shape_1.end(), shape_2.begin()))
@@ -206,14 +206,14 @@ Tensor operator*(const float sca, const Tensor& o)
     return out;    
 }
 
-static unsigned int GetNumElemMostInnerMat(const std::vector<unsigned int>& shape)
+static unsigned int GetNumElemMostInnerMat(const std::vector<size_t>& shape)
 {
     unsigned int last_shape = shape[shape.size() - 1];
     unsigned int second_last_shape = shape[shape.size() - 2];
     return second_last_shape * last_shape;
 }
 
-static std::vector<int> GetNumElemEachBatch(const std::vector<unsigned int>& shape)
+static std::vector<int> GetNumElemEachBatch(const std::vector<size_t>& shape)
 {
     unsigned int num_elem = GetNumElemMostInnerMat(shape);
     std::vector<int> num_elem_each_batch;

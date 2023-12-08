@@ -42,7 +42,7 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
     return out;
 }
 
-static unsigned int GetBatchSize(const std::vector<unsigned int>& shape)
+static unsigned int GetBatchSize(const std::vector<size_t>& shape)
 {
     assert(shape.size() > 1);
     unsigned int batch_size = 1;
