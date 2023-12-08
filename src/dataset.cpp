@@ -1,4 +1,5 @@
 #include "dataset.h"
+#include "array.h"
 
 #include <fstream>
 #include <sstream>
@@ -18,8 +19,8 @@ Iris LoadIris()
 
     int idx_features = 0;
     int idx_target   = 0;
-    Tensor features = Tensor({ 0.0 }, { 150, 4 });
-    Tensor target   = Tensor({ 0.0 }, { 150, 1 });
+    Tensor features = Zeros({ 150, 4 });
+    Tensor target   = Zeros({ 150, 1 });
 
     while (std::getline(file, line)) {
         std::stringstream ss(line);

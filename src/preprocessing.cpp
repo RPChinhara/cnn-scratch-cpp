@@ -1,4 +1,5 @@
 #include "preprocessing.h"
+#include "array.h"
 #include "mathematics.h"
 #include "random.h"
 
@@ -11,7 +12,7 @@ Tensor MinMaxScaler(Tensor& dataset)
 
 Tensor OneHot(const Tensor& in, const unsigned short depth)
 {
-    Tensor out = Tensor({ 0.0f }, { in.size, depth });
+    Tensor out = Zeros({ in.size, depth });
 
     std::vector<float> indices;
 
@@ -38,10 +39,10 @@ TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float test_size
     Tensor y_new = Shuffle(y, random_state);
 
     TrainTest train_test;
-    train_test.x_first  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back() });
-    train_test.x_second = Tensor({ 0.0 }, { (unsigned int)(std::ceilf(x.shape.front() * test_size)),          x.shape.back() });
-    train_test.y_first  = Tensor({ 0.0 }, { (unsigned int)(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back() });
-    train_test.y_second = Tensor({ 0.0 }, { (unsigned int)(std::ceilf(y.shape.front() * test_size)),          y.shape.back() });
+    train_test.x_first  = Zeros({ (unsigned int)(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back() });
+    train_test.x_second = Zeros({ (unsigned int)(std::ceilf(x.shape.front() * test_size)),          x.shape.back() });
+    train_test.y_first  = Zeros({ (unsigned int)(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back() });
+    train_test.y_second = Zeros({ (unsigned int)(std::ceilf(y.shape.front() * test_size)),          y.shape.back() });
 
     for (unsigned int i = 0; i < train_test.x_first.size; ++i)
         train_test.x_first[i] = x_new[i];

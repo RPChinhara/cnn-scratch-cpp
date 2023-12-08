@@ -74,7 +74,7 @@ Tensor Ones(const std::vector<unsigned int>& shape)
 Tensor Slice(const Tensor& in, const unsigned int begin, const unsigned int size)
 {
     assert(begin < in.shape[0] && begin + size <= in.shape[0]);
-    Tensor out = Tensor( { 0.0f }, { size, in.shape.back() });
+    Tensor out = Zeros({ size, in.shape.back() });
     unsigned int idx = 0;
 
     for (unsigned int i = begin * in.shape.back(); i < (begin * in.shape.back()) + (size * in.shape.back()) ; ++i) {

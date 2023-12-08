@@ -1,4 +1,5 @@
 #include "kernel.h"
+#include "array.h"
 #include "mathematics.h"
 #include "tensor.h"
 
@@ -72,7 +73,7 @@ Tensor Max(const Tensor& in, const unsigned short axis)
 	Tensor out;
 
 	if (axis == 0) {
-		out = Tensor({ 0.0f }, { 1, in.shape.back()});
+		out = Zeros({ 1, in.shape.back()});
 
 		for (unsigned short i = 0; i < in.shape.back(); ++i) {
 			unsigned short idx = i;
@@ -86,7 +87,7 @@ Tensor Max(const Tensor& in, const unsigned short axis)
 			out[i] = max;
 		}
 	} else if (axis == 1) {
-		out = Tensor({ 0.0f }, { in.shape.front(), 1});
+		out = Zeros({ in.shape.front(), 1});
 		unsigned short idx = 0;
 
 		for (unsigned short i = 0; i < in.shape.front(); ++i) {
@@ -124,7 +125,7 @@ Tensor Maximum(const Tensor& in_1, const Tensor& in_2)
 
 Tensor Min(const Tensor& in)
 {
-	Tensor out = Tensor({ 0.0f }, { 1, in.shape.back() });
+	Tensor out = Zeros({ 1, in.shape.back() });
 
 	for (unsigned short i = 0; i < in.shape.back(); ++i) {
 		unsigned short idx = i;
@@ -164,7 +165,7 @@ Tensor Sum(const Tensor& in, const unsigned short axis)
 		if (axis == 0) {
 			out = in;
 		} else if (axis == 1) {
-			out = Tensor({ 0.0f }, { 1, 1 });
+			out = Zeros({ 1, 1 });
 			float sum = 0.0f;
 			
 			for (unsigned int i = 0; i < in.size; ++i) {
@@ -174,7 +175,7 @@ Tensor Sum(const Tensor& in, const unsigned short axis)
 		}
 	} else {
 		if (axis == 0) {
-			out = Tensor({ 0.0f }, { 1, in.shape.back() });
+			out = Zeros({ 1, in.shape.back() });
 
 			for (unsigned int i = 0; i < in.shape.back(); ++i) {
 				unsigned short idx = i;
@@ -185,7 +186,7 @@ Tensor Sum(const Tensor& in, const unsigned short axis)
 				}
 			}
 		} else if (axis == 1) {
-			out = Tensor({ 0.0f }, { in.shape.front(), 1 });
+			out = Zeros({ in.shape.front(), 1 });
 			unsigned short idx = 0;
 
 			for (unsigned int i = 0; i < in.shape.front(); ++i) {

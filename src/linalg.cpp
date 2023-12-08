@@ -1,4 +1,5 @@
 #include "kernel.h"
+#include "array.h"
 #include "linalg.h"
 #include "tensor.h"
 
@@ -32,7 +33,7 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 
     MatMul<<<grid_dim, block_dim>>>(A, B, C, m, n, k);
 
-	Tensor out = Tensor({ 0.0f }, { in_1.shape.front(), in_2.shape.back() });
+	Tensor out = Zeros({ in_1.shape.front(), in_2.shape.back() });
 
 	CheckCuda(cudaMemcpy(out.elem, C, sizeof(float) * out.size, cudaMemcpyDeviceToHost));
 	cudaFree(A);
@@ -56,7 +57,7 @@ Tensor Transpose(const Tensor& in)
 {
     assert(in.shape.size() >= 2);
 
-    Tensor out = Tensor({ 0.0f }, { in.shape.back(), in.shape[in.shape.size() - 2] });
+    Tensor out = Zeros({ in.shape.back(), in.shape[in.shape.size() - 2] });
 
     out.num_ch_dim = 1;
 

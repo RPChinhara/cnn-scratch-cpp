@@ -1,10 +1,11 @@
 #include "activation.h"
+#include "array.h"
 #include "mathematics.h"
 #include "tensor.h"
 
 Tensor Relu(const Tensor& in)
 {
-    Tensor zeros = Tensor({ 0.0 }, { in.shape });
+    Tensor zeros = Zeros({ in.shape });
     return Maximum(in, zeros);
 }
 
