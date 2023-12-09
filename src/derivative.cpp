@@ -17,7 +17,7 @@ Tensor PrimeRelu(const Tensor& in)
 {
     Tensor out = in;
 
-    for (unsigned int i = 0; i < in.size; ++i) {
+    for (size_t i = 0; i < in.size; ++i) {
         if (in[i] < 0.0f)
             out[i] = 0.0f;
         else if (in[i] > 0.0f)
