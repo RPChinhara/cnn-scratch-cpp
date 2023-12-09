@@ -3,6 +3,8 @@
 #include "tensor.h"
 #include "linalg.h"
 #include "array.h"
+#include "mathematics.h"
+#include "linalg.h"
 
 #include <iostream>
 
@@ -20,10 +22,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     Tensor a1 = Ones({ 2, 3, 4, 2 });
     Tensor a = Ones({ 2, 3 });
-    Tensor b = Ones({ 2, 3 });
+    Tensor b = Ones({ 3, 2 });
     Tensor c = Ones({ 1, 3 });
-    Tensor d = Tensor({ 1, 2, 3, 4, 5, 6 }, { 2, 3 });
-    Tensor e = Tensor({ 1, 2, 3, 4, 5, 6 }, { 2, 3 });
+    Tensor d = Tensor({ 100, 10, 10, 10, 10, 10 }, { 2, 3 });
+    Tensor e = Tensor({ 1, 23, 33, 4, 5, 6 }, { 2, 3 });
     Tensor f = Tensor({ 1, 2, 3 }, { 1, 3 });
     // Tensor g = Tensor({ 1, 2, 3 }, { 1, 0 });
     Tensor h = Tensor({ 1, 2, 3, 5 }, { 1, 4 });
@@ -39,7 +41,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // std::cout << h.num_ch_dim << std::endl;
     // std::cout << ffdf << std::endl;
     // std::cout << df << std::endl;
-    // std::cout << a1 << std::endl;
+    std::cout << MatMul(a, b) << std::endl;
+    std::cout << Maximum(d, e) << std::endl;
 
     try {
         Window window(hInstance, nCmdShow);
