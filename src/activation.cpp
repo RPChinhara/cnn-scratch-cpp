@@ -13,7 +13,7 @@ Tensor Sigmoid(const Tensor& in)
 {
     Tensor out = in;
 
-    for (unsigned int i = 0; i < in.size; ++i)
+    for (size_t i = 0; i < in.size; ++i)
         out[i] = 1.0f / (1.0f + std::expf(-in[i]));
 
     return out;
@@ -29,7 +29,7 @@ Tensor Softplus(const Tensor& in)
 {
     Tensor out = in;
 
-    for (unsigned int i = 0; i < in.size; ++i)
+    for (size_t i = 0; i < in.size; ++i)
         out[i] = std::logf(std::expf(in[i]) + 1.0f);
 
     return out;

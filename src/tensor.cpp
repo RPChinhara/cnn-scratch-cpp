@@ -185,7 +185,7 @@ Tensor Tensor::operator-=(const Tensor& o) const
     return *this;
 }
 
-float& Tensor::operator[](const unsigned int idx) const
+float& Tensor::operator[](const size_t idx) const
 {
     return elem[idx];
 }

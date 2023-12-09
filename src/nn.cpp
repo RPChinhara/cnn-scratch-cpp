@@ -62,7 +62,6 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
                 dloss_dbiases[k] = ClipByValue(dloss_dbiases[k], -gradient_clip_threshold, gradient_clip_threshold);
             }
 
-
             for (int k = layers.size() - 2; k >= 0; --k) {
                 weights_biases_momentum.first[k] = momentum * weights_biases_momentum.first[k] - learning_rate * dloss_dweights[(layers.size() - 2) - k];
                 weights_biases_momentum.second[k] = momentum * weights_biases_momentum.second[k] - learning_rate * dloss_dbiases[(layers.size() - 2) - k];

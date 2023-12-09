@@ -18,7 +18,7 @@ public:
     Tensor& operator=(const Tensor& o);
     Tensor operator+=(const Tensor& o) const;
     Tensor operator-=(const Tensor& o) const;
-    float& operator[](const unsigned int idx) const;
+    float& operator[](const size_t idx) const;
     friend Tensor operator-(const float sca, const Tensor& o);
     friend Tensor operator*(const float sca, const Tensor& o);
     friend std::ostream& operator<<(std::ostream& os, const Tensor& o);
@@ -26,5 +26,5 @@ public:
     float *elem = nullptr;
     size_t num_ch_dim;
     std::vector<size_t> shape;
-    unsigned int size;
+    size_t size;
 };

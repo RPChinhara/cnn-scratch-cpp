@@ -17,8 +17,8 @@ Iris LoadIris()
 
     std::getline(file, line);
 
-    int idx_features = 0;
-    int idx_target   = 0;
+    size_t idx_features = 0;
+    size_t idx_target   = 0;
     Tensor features = Zeros({ 150, 4 });
     Tensor target   = Zeros({ 150, 1 });
 
