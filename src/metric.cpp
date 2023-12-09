@@ -6,7 +6,7 @@ float Accuracy(const Tensor& y_true, const Tensor& y_pred)
 {
     float count = 0.0f;
 
-    for (unsigned int i = 0; i < y_true.size; ++i)
+    for (size_t i = 0; i < y_true.size; ++i)
         if (std::fabs(y_true[i] - y_pred[i]) < 1e-6f) 
             ++count;
 
@@ -19,7 +19,7 @@ float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred)
     Tensor pred_idx = Argmax(y_pred);
     float equal = 0.0f;
 
-    for (unsigned int i = 0; i < true_idx.size; ++i)
+    for (size_t i = 0; i < true_idx.size; ++i)
         if (true_idx[i] == pred_idx[i])
             ++equal;
 

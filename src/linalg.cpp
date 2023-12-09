@@ -17,9 +17,9 @@ static void CheckCuda(cudaError_t code, const bool abort = true)
 Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 {
     assert(in_1.shape.back() == in_2.shape.front());
-    int m = in_1.shape.front();
-    int n = in_1.shape.back();
-    int k = in_2.shape.back();
+    size_t m = in_1.shape.front();
+    size_t n = in_1.shape.back();
+    size_t k = in_2.shape.back();
 
     float *A, *B, *C;
     cudaMalloc(&A, m * n * sizeof(float));
@@ -42,12 +42,12 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
     return out;
 }
 
-static unsigned int GetBatchSize(const std::vector<size_t>& shape)
+static size_t GetBatchSize(const std::vector<size_t>& shape)
 {
     assert(shape.size() > 1);
-    unsigned int batch_size = 1;
+    size_t batch_size = 1;
 
-    for (unsigned short i = 0; i < shape.size() - 2; ++i)
+    for (size_t i = 0; i < shape.size() - 2; ++i)
         batch_size *= shape[i];
     
     return batch_size;
@@ -61,25 +61,27 @@ Tensor Transpose(const Tensor& in)
 
     out.num_ch_dim = 1;
 
-    for (int i = 0; i < out.shape.size() - 1; ++i)
+    for (size_t i = 0; i < out.shape.size() - 1; ++i)
         out.num_ch_dim *= out.shape[i];
     
-    std::vector<unsigned short> idx_rows;
+    std::vector<size_t> idx_rows;
     
-    for (unsigned short i = 0; i < in.num_ch_dim; ++i)
+    for (size_t i = 0; i < in.num_ch_dim; ++i)
         idx_rows.push_back(i * in.shape.back());
 
-    unsigned short batch_size = GetBatchSize(in.shape);
+    size_t batch_size = GetBatchSize(in.shape);
 
-    unsigned int idx{};
-    for (unsigned int i = 0; i < batch_size; ++i) {
-        for (unsigned int j = 0; j < out.shape[out.shape.size() - 2]; ++j) {
-            for (unsigned int k = 0; k < out.shape.back(); ++k) {
+    size_t idx{};
+
+    for (size_t i = 0; i < batch_size; ++i) {
+        for (size_t j = 0; j < out.shape[out.shape.size() - 2]; ++j) {
+            for (size_t k = 0; k < out.shape.back(); ++k) {
                 out[idx] = in[idx_rows[k + (i * out.shape.back())]];
                 idx_rows[k + (i * out.shape.back())] += 1;
                 ++idx;
             }
         }
     }
+    
 	return out;
 }
