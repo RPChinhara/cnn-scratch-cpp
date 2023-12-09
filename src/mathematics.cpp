@@ -20,12 +20,12 @@ Tensor Argmax(const Tensor& in)
 {
 	Tensor out  = Zeros({ in.shape.front() });
 
-	unsigned short idx = 0;
+	size_t idx = 0;
 	float max = std::numeric_limits<float>::lowest();
-	unsigned int max_idx = 0;
+	size_t max_idx = 0;
 	
-	for (unsigned int i = 0; i < in.shape.front(); ++i) {
-		for (unsigned int j = 0; j < in.shape.back(); ++j) {
+	for (size_t i = 0; i < in.shape.front(); ++i) {
+		for (size_t j = 0; j < in.shape.back(); ++j) {
 			if (in[idx] > max) {
 				max     = in[idx];
 				max_idx = j;
@@ -68,7 +68,7 @@ Tensor Log(const Tensor& in)
 	return out;
 }
 
-Tensor Max(const Tensor& in, const unsigned short axis)
+Tensor Max(const Tensor& in, const size_t axis)
 {
 	assert(axis == 0 || axis == 1);
 	Tensor out;
@@ -76,11 +76,11 @@ Tensor Max(const Tensor& in, const unsigned short axis)
 	if (axis == 0) {
 		out = Zeros({ 1, in.shape.back()});
 
-		for (unsigned short i = 0; i < in.shape.back(); ++i) {
-			unsigned short idx = i;
+		for (size_t i = 0; i < in.shape.back(); ++i) {
+			size_t idx = i;
 			float max = std::numeric_limits<float>::lowest();
 
-			for (unsigned short j = 0; j < in.shape.front(); ++j) {
+			for (size_t j = 0; j < in.shape.front(); ++j) {
 				if (in[idx] > max) 
 					max = in[idx];
 				idx += in.shape.back();
@@ -89,12 +89,12 @@ Tensor Max(const Tensor& in, const unsigned short axis)
 		}
 	} else if (axis == 1) {
 		out = Zeros({ in.shape.front(), 1});
-		unsigned short idx = 0;
+		size_t idx = 0;
 
-		for (unsigned short i = 0; i < in.shape.front(); ++i) {
+		for (size_t i = 0; i < in.shape.front(); ++i) {
 			float max = std::numeric_limits<float>::lowest();
 
-			for (unsigned short j = 0; j < in.shape.back(); ++j) {
+			for (size_t j = 0; j < in.shape.back(); ++j) {
 				if (in[idx] > max) 
 					max = in[idx];
 				++idx;
@@ -128,11 +128,11 @@ Tensor Min(const Tensor& in)
 {
 	Tensor out = Zeros({ 1, in.shape.back() });
 
-	for (unsigned short i = 0; i < in.shape.back(); ++i) {
-		unsigned short idx = i;
+	for (size_t i = 0; i < in.shape.back(); ++i) {
+		size_t idx = i;
 		float min = std::numeric_limits<float>::max();
 
-		for (unsigned short j = 0; j < in.shape.front(); ++j) {
+		for (size_t j = 0; j < in.shape.front(); ++j) {
 			if (in[idx] < min) 
 				min = in[idx];
 			idx += in.shape.back();
@@ -157,7 +157,7 @@ Tensor Square(const Tensor& in)
 	return out;
 }
 
-Tensor Sum(const Tensor& in, const unsigned short axis)
+Tensor Sum(const Tensor& in, const size_t axis)
 {
 	assert(axis == 0 || axis == 1);
 	Tensor out;
@@ -169,7 +169,7 @@ Tensor Sum(const Tensor& in, const unsigned short axis)
 			out = Zeros({ 1, 1 });
 			float sum = 0.0f;
 			
-			for (unsigned int i = 0; i < in.size; ++i) {
+			for (size_t i = 0; i < in.size; ++i) {
 				sum += in[i];
 			}
 			out[0] = sum;
@@ -178,20 +178,20 @@ Tensor Sum(const Tensor& in, const unsigned short axis)
 		if (axis == 0) {
 			out = Zeros({ 1, in.shape.back() });
 
-			for (unsigned int i = 0; i < in.shape.back(); ++i) {
-				unsigned short idx = i;
+			for (size_t i = 0; i < in.shape.back(); ++i) {
+				size_t idx = i;
 
-				for (unsigned int j = 0; j < in.shape.front(); ++j) {
+				for (size_t j = 0; j < in.shape.front(); ++j) {
 					out[i] += in[idx];
 					idx += in.shape.back();
 				}
 			}
 		} else if (axis == 1) {
 			out = Zeros({ in.shape.front(), 1 });
-			unsigned short idx = 0;
+			size_t idx = 0;
 
-			for (unsigned int i = 0; i < in.shape.front(); ++i) {
-				for (unsigned int j = 0; j < in.shape.back(); ++j) {
+			for (size_t i = 0; i < in.shape.front(); ++i) {
+				for (size_t j = 0; j < in.shape.back(); ++j) {
 					out[i] += in[idx];
 					++idx;
 				}
