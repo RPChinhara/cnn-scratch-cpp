@@ -28,9 +28,9 @@ std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
     }
     
     if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
-        current_state = std::min(static_cast<size_t>(current_state + 1), static_cast<size_t>(num_states - 1));
+        current_state = std::min(current_state + 1, num_states - 1);
     else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
-        current_state = std::max(static_cast<size_t>(current_state) - 1, static_cast<size_t>(0));
+        current_state = std::max(current_state - 1, static_cast<size_t>(0));
 
     days_lived += 1;
 

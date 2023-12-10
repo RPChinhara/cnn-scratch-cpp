@@ -14,7 +14,7 @@ public:
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const std::string& action);
     std::vector<std::string> actions;
-    int num_states;
+    size_t num_states;
     size_t num_actions;
 private:
     int CalculateReward();
