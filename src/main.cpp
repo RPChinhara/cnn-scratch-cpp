@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor a = Ones({ 2, 3 });
     Tensor b = Ones({ 3, 2 });
     Tensor c = Ones({ 2, 2, 3 });
-    Tensor d = Tensor({ 100, 10, 10, 10, 10, 10 }, { 2, 3 });
+    Tensor d = Tensor({ 1, 2, 3, 4, 5, 6 }, { 2, 3 });
     Tensor e = Tensor({ 1, 23, 33, 4, 5, 6 }, { 2, 3 });
     Tensor f = Tensor({ 1, 2, 3 }, { 1, 3 });
     // Tensor g = Tensor({ 1, 2, 3 }, { 1, 0 });
@@ -36,7 +36,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // std::cout << a + c << std::endl;
     // std::cout << d + e << std::endl;
     // std::cout << d + f << std::endl;
-    // std::cout << Transpose(d) << std::endl;
+    std::cout << Transpose(d) << std::endl;
     // std::cout << d.num_ch_dim << std::endl;
     // std::cout << h.num_ch_dim << std::endl;
     // std::cout << ffdf << std::endl;

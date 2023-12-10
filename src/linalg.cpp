@@ -71,7 +71,7 @@ Tensor Transpose(const Tensor& in)
 
     size_t batch_size = GetBatchSize(in.shape);
 
-    size_t idx{};
+    size_t idx = 0;
 
     for (size_t i = 0; i < batch_size; ++i) {
         for (size_t j = 0; j < out.shape[out.shape.size() - 2]; ++j) {
