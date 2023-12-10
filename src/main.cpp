@@ -23,14 +23,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor a1 = Ones({ 2, 3, 4, 2 });
     Tensor a = Ones({ 2, 3 });
     Tensor b = Ones({ 3, 2 });
-    Tensor c = Ones({ 1, 3 });
+    Tensor c = Ones({ 2, 2, 3 });
     Tensor d = Tensor({ 100, 10, 10, 10, 10, 10 }, { 2, 3 });
     Tensor e = Tensor({ 1, 23, 33, 4, 5, 6 }, { 2, 3 });
     Tensor f = Tensor({ 1, 2, 3 }, { 1, 3 });
     // Tensor g = Tensor({ 1, 2, 3 }, { 1, 0 });
     Tensor h = Tensor({ 1, 2, 3, 5 }, { 1, 4 });
     Tensor ffdf = NormalDistribution( { 2, 3 });
-    Tensor df = UniformDistribution( { 2, 3 });
+    Tensor df = UniformDistribution( { 2, 3, 3 });
 
     // std::cout << a + b << std::endl;
     // std::cout << a + c << std::endl;
@@ -43,6 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // std::cout << df << std::endl;
     std::cout << MatMul(a, b) << std::endl;
     std::cout << Maximum(d, e) << std::endl;
+    std::cout << c << std::endl;
 
     try {
         Window window(hInstance, nCmdShow);
