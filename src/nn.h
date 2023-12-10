@@ -11,12 +11,12 @@ using TensorArray = std::vector<Tensor>;
 class NN
 {
 public:
-    NN(const std::vector<unsigned int>& layers, float learning_rate);
+    NN(const std::vector<size_t>& layers, float learning_rate);
     void Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val, const Tensor& y_val);
     void Predict(const Tensor& x_test, const Tensor& y_test);
 
 private:
-    std::vector<unsigned int> layers;
+    std::vector<size_t> layers;
     std::pair<TensorArray, TensorArray> weights_biases;
     std::pair<TensorArray, TensorArray> weights_biases_momentum;
     size_t batch_size = 8;

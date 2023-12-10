@@ -8,7 +8,7 @@
 
 #include <random>
 
-NN::NN(const std::vector<unsigned int>& layers, float learning_rate)
+NN::NN(const std::vector<size_t>& layers, float learning_rate)
 {
     this->layers = layers;
     this->learning_rate = learning_rate;
@@ -78,7 +78,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         std::cout << " - val loss: " << CategoricalCrossEntropy(y_val, output.back()) << " - val accuracy: " << CategoricalAccuracy(y_val, output.back());
         std::cout << std::endl;
 
-        static unsigned short epochs_without_improvement = 0;
+        static size_t epochs_without_improvement = 0;
         static float best_val_loss = std::numeric_limits<float>::max();
         float loss = CategoricalCrossEntropy(y_val, output.back());
 
@@ -90,7 +90,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         }
 
         if (epochs_without_improvement >= patience) {
-            std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << static_cast<unsigned short>(patience) << " epochs." << std::endl;
+            std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience << " epochs." << std::endl;
             break;
         }
     }
