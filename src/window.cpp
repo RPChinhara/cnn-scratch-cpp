@@ -89,7 +89,7 @@ int Window::MessageLoop()
                 // PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 // Sleep(60000);
                 
-                unsigned int action = q_learning.ChooseAction(state);
+                size_t action = q_learning.ChooseAction(state);
                 std::cout << "action: " << action << std::endl;
 
                 // std::lock_guard<std::mutex> lock(agentMutex);

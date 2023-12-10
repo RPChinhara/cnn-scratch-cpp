@@ -10,7 +10,7 @@ void Environment::Render()
     std::cout << "Days Without Eating: " << days_without_eating << " days" << std::endl << std::endl;
 }
 
-int Environment::Reset()
+size_t Environment::Reset()
 {
     days_lived = 0;
     days_without_eating = 0;
@@ -18,7 +18,7 @@ int Environment::Reset()
     return current_state;
 }
 
-std::tuple<int, int, bool> Environment::Step(const std::string& action)
+std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
 {
     auto it = std::find(actions.begin(), actions.end(), action);
 
@@ -28,9 +28,9 @@ std::tuple<int, int, bool> Environment::Step(const std::string& action)
     }
     
     if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
-        current_state = std::min(current_state + 1, num_states - 1);
+        current_state = std::min(static_cast<size_t>(current_state + 1), static_cast<size_t>(num_states - 1));
     else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
-        current_state = std::max(current_state - 1, 0);
+        current_state = std::max(static_cast<size_t>(current_state) - 1, static_cast<size_t>(0));
 
     days_lived += 1;
 

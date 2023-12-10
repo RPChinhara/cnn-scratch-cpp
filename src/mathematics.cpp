@@ -5,7 +5,7 @@
 
 #include <cassert>
 
-static constexpr int NUM_PROCS = 128 + (32 * 1);
+static constexpr size_t NUM_PROCS = 128 + (32 * 1);
 
 static void CheckCuda(cudaError_t code, const bool abort = true)
 {
