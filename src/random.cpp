@@ -15,7 +15,7 @@ static void SetShape(Tensor& in, const std::vector<size_t>& shape)
 {
     in.shape.reserve(shape.size());
 
-    for (unsigned int elem : shape)
+    for (size_t elem : shape)
         assert(elem != 0);
 
     in.shape = std::move(shape);
@@ -24,9 +24,9 @@ static void SetShape(Tensor& in, const std::vector<size_t>& shape)
 static void SetSize(Tensor& in, const std::vector<size_t>& shape)
 {
     if (in.shape.size() > 0) {
-        unsigned int num_elem = 1;
+        size_t num_elem = 1;
 
-        for (unsigned int elem : shape)
+        for (size_t elem : shape)
             num_elem *= elem;
 
         in.size = num_elem;
@@ -40,7 +40,7 @@ static void SetNumChDim(Tensor& in,  const std::vector<size_t>& shape)
     if (in.shape.size() > 0) {
         in.num_ch_dim = 1;
 
-        for (int i = 0; i < shape.size() - 1; ++i)
+        for (size_t i = 0; i < shape.size() - 1; ++i)
             in.num_ch_dim *= shape[i];
 
     } else {
@@ -57,23 +57,23 @@ Tensor NormalDistribution(const std::vector<size_t>& shape, const float mean, co
 
     std::normal_distribution<float> dist(mean, stddev);
 
-    for (unsigned int i = 0; i < out.size; ++i)
+    for (size_t i = 0; i < out.size; ++i)
         out[i] = dist(Rng());
     
     SetNumChDim(out, shape);
     return out;
 }
 
-Tensor Shuffle(const Tensor& in, const unsigned int random_state)
+Tensor Shuffle(const Tensor& in, const size_t random_state)
 {
     Tensor out = in;
     std::mt19937 rng(random_state);
 
-    for (unsigned int i = in.shape.front() - 1; i > 0; --i) {
-        std::uniform_int_distribution<unsigned int> dist(0, i);
-        unsigned int j = dist(rng);
+    for (size_t i = in.shape.front() - 1; i > 0; --i) {
+        std::uniform_int_distribution<> dist(0, i);
+        int j = dist(rng);
 
-        for (unsigned int k = 0; k < in.shape.back(); ++k) {
+        for (size_t k = 0; k < in.shape.back(); ++k) {
             float temp = out[(in.shape.back() - 1) * i + i + k];
             out[(in.shape.back() - 1) * i + i + k] = out[(in.shape.back() - 1) * j + j + k];
             out[(in.shape.back() - 1) * j + j + k] = temp;
@@ -91,7 +91,7 @@ Tensor UniformDistribution(const std::vector<size_t>& shape, const float min_val
 
     std::uniform_real_distribution<> dist(min_val, max_val);
 
-    for (unsigned int i = 0; i < out.size; ++i)
+    for (size_t i = 0; i < out.size; ++i)
         out[i] = dist(Rng());
     
     SetNumChDim(out, shape);

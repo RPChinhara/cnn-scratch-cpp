@@ -4,7 +4,7 @@
 
 #include <random>
 
-QLearning::QLearning(unsigned int n_states, unsigned int n_actions, float learning_rate, float discount_factor, float exploration_rate, float exploration_decay, float exploration_min)
+QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, float discount_factor, float exploration_rate, float exploration_decay, float exploration_min)
 {
     this->n_states          = n_states;
     this->n_actions         = n_actions;
