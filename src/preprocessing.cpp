@@ -10,20 +10,20 @@ Tensor MinMaxScaler(Tensor& dataset)
     return (dataset - min_vals) / (max_vals - min_vals);
 }
 
-Tensor OneHot(const Tensor& in, const unsigned short depth)
+Tensor OneHot(const Tensor& in, const size_t depth)
 {
     Tensor out = Zeros({ in.size, depth });
 
     std::vector<float> indices;
 
-    for (unsigned int i = 0; i < in.size; ++i) {
+    for (size_t i = 0; i < in.size; ++i) {
         if (i == 0)
             indices.push_back(in[i]);
         else
             indices.push_back(in[i] + (i * depth));
     }
 
-    for (unsigned int i = 0; i < out.size; ++i) {
+    for (size_t i = 0; i < out.size; ++i) {
         for (auto j : indices) {
             if (i == j)
                 out[i] = 1.0f;
@@ -33,33 +33,33 @@ Tensor OneHot(const Tensor& in, const unsigned short depth)
     return out;
 }
 
-TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float test_size, const unsigned int random_state)
+TrainTest TrainTestSplit(const Tensor& x, const Tensor& y, const float test_size, const size_t random_state)
 {
     Tensor x_new = Shuffle(x, random_state);
     Tensor y_new = Shuffle(y, random_state);
 
     TrainTest train_test;
-    train_test.x_first  = Zeros({ (unsigned int)(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back() });
-    train_test.x_second = Zeros({ (unsigned int)(std::ceilf(x.shape.front() * test_size)),          x.shape.back() });
-    train_test.y_first  = Zeros({ (unsigned int)(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back() });
-    train_test.y_second = Zeros({ (unsigned int)(std::ceilf(y.shape.front() * test_size)),          y.shape.back() });
+    train_test.x_first  = Zeros({ static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back() });
+    train_test.x_second = Zeros({ static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back() });
+    train_test.y_first  = Zeros({ static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back() });
+    train_test.y_second = Zeros({ static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back() });
 
-    for (unsigned int i = 0; i < train_test.x_first.size; ++i)
+    for (size_t i = 0; i < train_test.x_first.size; ++i)
         train_test.x_first[i] = x_new[i];
 
-    unsigned int idx = 0;
+    size_t idx = 0;
 
-    for (unsigned int i = train_test.x_first.size; i < x.size; ++i) {
+    for (size_t i = train_test.x_first.size; i < x.size; ++i) {
         train_test.x_second[idx] = x_new[i];
         ++idx;
     }
 
-    for (unsigned int i = 0; i < train_test.y_first.size; ++i)
+    for (size_t i = 0; i < train_test.y_first.size; ++i)
         train_test.y_first[i] = y_new[i];
 
     idx = 0;
 
-    for (unsigned int i = train_test.y_first.size; i < y.size; ++i) {
+    for (size_t i = train_test.y_first.size; i < y.size; ++i) {
         train_test.y_second[idx] = y_new[i];
         ++idx;
     }
