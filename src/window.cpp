@@ -76,14 +76,14 @@ int Window::MessageLoop()
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
-        unsigned int num_episodes = 1000;
+        size_t num_episodes = 1000;
 
         std::cout << "------------------- HEAD -------------------" << std::endl;
 
-        for (int i = 0; i < num_episodes; ++i) {
+        for (size_t i = 0; i < num_episodes; ++i) {
             auto state = env.Reset();
             bool done = false;
-            int total_reward = 0;
+            size_t total_reward = 0;
 
             while (!done) {
                 // PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
