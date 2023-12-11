@@ -74,7 +74,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             }
         }
         
-        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + " - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, output.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, output.back())));
+        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\nloss: " + std::to_string(CategoricalCrossEntropy(y_batch, output.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, output.back())));
 
         output = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
 
