@@ -22,8 +22,8 @@ static void SetShape(Tensor& in, const std::vector<size_t>& shape)
 {
     in.shape.reserve(shape.size());
 
-    for (size_t elem : shape)
-        assert(elem != 0);
+    for (const size_t& i : shape)
+        assert(i != 0);
 
     in.shape = std::move(shape);
 }
@@ -33,8 +33,8 @@ static void SetSize(Tensor& in, const std::vector<size_t>& shape)
     if (in.shape.size() > 0) {
         size_t num_elem = 1;
 
-        for (size_t elem : shape)
-            num_elem *= elem;
+        for (const size_t& i : shape)
+            num_elem *= i;
 
         in.size = num_elem;
     } else {
@@ -53,8 +53,8 @@ static void SetNumChDim(Tensor& in,  const std::vector<size_t>& shape)
     if (in.shape.size() > 0) {
         in.num_ch_dim = 1;
 
-        for (size_t i = 0; i < shape.size() - 1; ++i)
-            in.num_ch_dim *= shape[i];
+        for (const size_t& i : shape)
+            in.num_ch_dim *= i;
 
     } else {
         in.num_ch_dim = 0;

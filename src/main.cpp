@@ -22,6 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     Tensor a1 = Ones({ 2, 3, 4, 2 });
     Tensor a = Ones({ 2, 3 });
+    Tensor af = Zeros({ 2, 3 });
     Tensor b = Ones({ 3, 2 });
     Tensor c = Ones({ 2, 2, 3 });
     Tensor d = Tensor({ 1, 2, 3, 4, 5, 6 }, { 2, 3 });
@@ -36,14 +37,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // std::cout << a + c << std::endl;
     // std::cout << d + e << std::endl;
     // std::cout << d + f << std::endl;
-    std::cout << Transpose(d) << std::endl;
+    // std::cout << Transpose(d) << std::endl;
     // std::cout << d.num_ch_dim << std::endl;
     // std::cout << h.num_ch_dim << std::endl;
     // std::cout << ffdf << std::endl;
     // std::cout << df << std::endl;
-    std::cout << MatMul(a, b) << std::endl;
-    std::cout << Maximum(d, e) << std::endl;
-    std::cout << c << std::endl;
+    // std::cout << MatMul(a, b) << std::endl;
+    // std::cout << Maximum(d, e) << std::endl;
+    // std::cout << c << std::endl;
+
+    for (int i = 0; i < af.size; ++i) {
+        af[i] += 7.0f;
+    }
+
+    std::cout << af << std::endl;
 
     try {
         Window window(hInstance, nCmdShow);

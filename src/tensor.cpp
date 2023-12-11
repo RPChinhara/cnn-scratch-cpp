@@ -8,14 +8,14 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
     assert(elem.size() != 0);
     
     this->shape.reserve(shape.size());
-    for (size_t elem : shape)
-        assert(elem != 0);
+    for (const size_t& i : shape)
+        assert(i != 0);
     this->shape = std::move(shape);
 
     if (this->shape.size() > 0) {
         size_t num_elem = 1;
-        for (size_t elem : shape)
-            num_elem *= elem;
+        for (const size_t& i : shape)
+            num_elem *= i;
         size = num_elem;
     } else
         size = 1;
@@ -31,8 +31,8 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
 
     if (this->shape.size() > 0) {
         num_ch_dim = 1;
-        for (size_t i = 0; i < shape.size() - 1; ++i)
-            num_ch_dim *= shape[i];
+        for (const size_t& i : shape)
+            num_ch_dim *= i;
     } else
         num_ch_dim = 0;
 }
