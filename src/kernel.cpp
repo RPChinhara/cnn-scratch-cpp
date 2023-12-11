@@ -1,12 +1,5 @@
 #include "kernel.h"
 
-__global__ void Abs(float *in, float *out, size_t n)
-{
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
-    if (id < n)
-        out[id] = fabs(in[id]);
-}
-
 __global__ void Exp(float *in, float *out, size_t n)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
