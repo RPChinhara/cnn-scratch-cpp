@@ -63,17 +63,17 @@ int Window::MessageLoop()
         Tensor y = iris.target;
 
         y = OneHot(y, 3);
-        TrainTest trainTemp = TrainTestSplit(x, y, 0.2, 42);
-        TrainTest valTest = TrainTestSplit(trainTemp.x_second, trainTemp.y_second, 0.5, 42);
-        trainTemp.x_first = MinMaxScaler(trainTemp.x_first);
-        valTest.x_first = MinMaxScaler(valTest.x_first);
-        valTest.x_second = MinMaxScaler(valTest.x_second);
+        TrainTest train_temp = TrainTestSplit(x, y, 0.2, 42);
+        TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, 0.5, 42);
+        train_temp.x_first = MinMaxScaler(train_temp.x_first);
+        val_test.x_first = MinMaxScaler(val_test.x_first);
+        val_test.x_second = MinMaxScaler(val_test.x_second);
 
         NN nn = NN({ 4, 128, 3 }, 0.01f);
 
         auto startTime = std::chrono::high_resolution_clock::now();
 
-        nn.Train(trainTemp.x_first, trainTemp.y_first, valTest.x_first, valTest.y_first);
+        nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
         // Record the end time
         auto endTime = std::chrono::high_resolution_clock::now();
 
@@ -83,7 +83,7 @@ int Window::MessageLoop()
         // Print the duration in microseconds
         std::cout << "Time taken by myFunction: " << duration.count() << " seconds" << std::endl;
 
-        nn.Predict(valTest.x_second, valTest.y_second);
+        nn.Predict(val_test.x_second, val_test.y_second);
 #endif
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
