@@ -22,8 +22,8 @@ public:
     friend Tensor operator*(const float sca, const Tensor& o);
     friend std::ostream& operator<<(std::ostream& os, const Tensor& o);
 
+    size_t size;
+    std::vector<size_t> shape;
     float *elem = nullptr;
     size_t num_ch_dim;
-    std::vector<size_t> shape;
-    size_t size;
 };
