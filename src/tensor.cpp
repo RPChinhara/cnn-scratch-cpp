@@ -3,40 +3,6 @@
 
 #include <cassert>
 
-Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
-{
-    assert(elem.size() != 0);
-    
-    this->shape.reserve(shape.size());
-    for (const size_t& i : shape)
-        assert(i != 0);
-    this->shape = std::move(shape);
-
-    if (this->shape.size() > 0) {
-        size_t num_elem = 1;
-        for (const size_t& i : shape)
-            num_elem *= i;
-        size = num_elem;
-    } else
-        size = 1;
-
-    if (elem.size() == 1) {
-        this->elem = new float[size];
-        std::fill(this->elem, this->elem + size, *elem.data());
-    } else {
-        assert(size == elem.size());
-        this->elem = new float[size];
-        memcpy(this->elem, elem.data(), sizeof(float) * size);
-    } 
-
-    if (this->shape.size() > 0) {
-        num_ch_dim = 1;
-        for (const size_t& i : shape)
-            num_ch_dim *= i;
-    } else
-        num_ch_dim = 0;
-}
-
 Tensor::Tensor(const Tensor& o)
 {
     float *ptr = new float[o.size];

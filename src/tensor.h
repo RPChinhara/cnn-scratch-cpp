@@ -7,7 +7,6 @@ class Tensor
 {
 public:
     Tensor() = default;
-    Tensor(const std::vector<float> elem, const std::vector<size_t> shape);
     Tensor(const Tensor& o);
     Tensor(Tensor&& o) noexcept;
     ~Tensor();
