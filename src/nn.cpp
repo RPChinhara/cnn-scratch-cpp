@@ -33,7 +33,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         Tensor y_shuffled = Shuffle(y_train, rd_num);
 
         Tensor y_batch;
-        TensorArray output;
+        std::vector<Tensor> output;
 
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size) {
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
@@ -115,10 +115,10 @@ void NN::Predict(const Tensor& x_test, const Tensor& y_test)
     std::cout << output.back() << std::endl << std::endl << y_test << std::endl;
 }
 
-TensorArray NN::ForwardPropagation(const Tensor& input, const TensorArray& weights, const TensorArray& biases)
+std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases)
 {
-    TensorArray logits;
-    TensorArray activations;
+    std::vector<Tensor> logits;
+    std::vector<Tensor> activations;
 
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
@@ -134,10 +134,10 @@ TensorArray NN::ForwardPropagation(const Tensor& input, const TensorArray& weigh
     return activations;
 }
 
-std::pair<TensorArray, TensorArray> NN::InitParameters()
+std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
 {
-    TensorArray weights;
-    TensorArray biases;
+    std::vector<Tensor> weights;
+    std::vector<Tensor> biases;
 
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 0.2f));

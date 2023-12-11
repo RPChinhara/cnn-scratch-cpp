@@ -6,8 +6,6 @@
 
 #include <vector>
 
-using TensorArray = std::vector<Tensor>;
-
 class NN
 {
 public:
@@ -17,8 +15,8 @@ public:
 
 private:
     std::vector<size_t> layers;
-    std::pair<TensorArray, TensorArray> weights_biases;
-    std::pair<TensorArray, TensorArray> weights_biases_momentum;
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
     size_t batch_size = 8;
     size_t epochs = 200;
     float learning_rate;
@@ -26,6 +24,6 @@ private:
     float momentum = 0.1f;
     size_t patience = 4;
     
-    TensorArray ForwardPropagation(const Tensor& input, const TensorArray& weights, const TensorArray& biases);
-    std::pair<TensorArray, TensorArray> InitParameters();
+    std::vector<Tensor> ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases);
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
 };
