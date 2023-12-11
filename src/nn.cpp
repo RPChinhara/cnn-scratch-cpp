@@ -7,6 +7,7 @@
 #include "random.h"
 
 #include <random>
+#include <string>
 
 NN::NN(const std::vector<size_t>& layers, float learning_rate)
 {
@@ -16,6 +17,8 @@ NN::NN(const std::vector<size_t>& layers, float learning_rate)
 
 void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val, const Tensor& y_val)
 {
+    std::vector<std::string> buffer;
+    
     weights_biases = InitParameters();
     weights_biases_momentum = InitParameters();
 
@@ -71,28 +74,33 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             }
         }
         
-        std::cout << "Epoch " << i << "/" << epochs;
-        std::cout << " - training loss: " << CategoricalCrossEntropy(y_batch, output.back()) << " - training accuracy: " << CategoricalAccuracy(y_batch, output.back());
+        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + " - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, output.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, output.back())));
 
         output = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
-        std::cout << " - val loss: " << CategoricalCrossEntropy(y_val, output.back()) << " - val accuracy: " << CategoricalAccuracy(y_val, output.back());
-        std::cout << std::endl;
 
-        static size_t epochs_without_improvement = 0;
-        static float best_val_loss = std::numeric_limits<float>::max();
-        float loss = CategoricalCrossEntropy(y_val, output.back());
+        buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, output.back())) + " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, output.back()));
 
-        if (loss < best_val_loss) {
-            best_val_loss = loss;
-            epochs_without_improvement = 0;
-        } else {
-            epochs_without_improvement += 1;
+        if (i % 10 == 0) {
+            for (const auto& message : buffer)
+                std::cout << message << std::endl;
+            buffer.clear();
         }
 
-        if (epochs_without_improvement >= patience) {
-            std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience << " epochs." << std::endl;
-            break;
-        }
+        // static size_t epochs_without_improvement = 0;
+        // static float best_val_loss = std::numeric_limits<float>::max();
+        // float loss = CategoricalCrossEntropy(y_val, output.back());
+
+        // if (loss < best_val_loss) {
+        //     best_val_loss = loss;
+        //     epochs_without_improvement = 0;
+        // } else {
+        //     epochs_without_improvement += 1;
+        // }
+
+        // if (epochs_without_improvement >= patience) {
+        //     std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience << " epochs." << std::endl;
+        //     break;
+        // }
     }
 }
 

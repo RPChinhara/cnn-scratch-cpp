@@ -70,7 +70,19 @@ int Window::MessageLoop()
         valTest.x_second = MinMaxScaler(valTest.x_second);
 
         NN nn = NN({ 4, 128, 3 }, 0.01f);
+
+        auto startTime = std::chrono::high_resolution_clock::now();
+
         nn.Train(trainTemp.x_first, trainTemp.y_first, valTest.x_first, valTest.y_first);
+        // Record the end time
+        auto endTime = std::chrono::high_resolution_clock::now();
+
+        // Calculate the duration
+        auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+
+        // Print the duration in microseconds
+        std::cout << "Time taken by myFunction: " << duration.count() << " seconds" << std::endl;
+
         nn.Predict(valTest.x_second, valTest.y_second);
 #endif
         Environment env = Environment();
