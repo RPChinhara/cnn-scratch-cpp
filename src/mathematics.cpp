@@ -142,21 +142,6 @@ Tensor Min(const Tensor& in)
 	return out;
 }
 
-Tensor Square(const Tensor& in)
-{
-	float **in_out = new float*[sizeof(float *) * 2];
-	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in.size));
-	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in.size));
-	CheckCuda(cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice));
-	Square<<<in.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in.size);
-	Tensor out = in;
-	CheckCuda(cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost));
-	cudaFree(in_out[0]);
-	cudaFree(in_out[1]);
-    delete[] in_out;
-	return out;
-}
-
 Tensor Sum(const Tensor& in, const size_t axis)
 {
 	assert(axis == 0 || axis == 1);
@@ -198,20 +183,5 @@ Tensor Sum(const Tensor& in, const size_t axis)
 			}
 		}
 	}
-	return out;
-}
-
-Tensor Tanh(const Tensor& in)
-{
-	float **in_out = new float*[sizeof(float *) * 2];
-	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in.size));
-	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in.size));
-	CheckCuda(cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice));
-	Tanh<<<in.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in.size);
-	Tensor out = in;
-	CheckCuda(cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost));
-	cudaFree(in_out[0]);
-	cudaFree(in_out[1]);
-    delete[] in_out;
 	return out;
 }

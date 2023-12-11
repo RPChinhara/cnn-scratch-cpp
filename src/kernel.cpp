@@ -34,17 +34,3 @@ __global__ void Maximum(float *in_1, float *in_2, float *out, size_t n)
     if (id < n)
 	    out[id] = max(in_1[id], in_2[id]);
 }
-
-__global__ void Square(float *in, float *out, size_t n)
-{
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
-    if (id < n)
-        out[id] = powf(in[id], 2.0f);
-}
-
-__global__ void Tanh(float *in, float *out, size_t n)
-{
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
-    if (id < n)
-        out[id] = tanhf(in[id]);
-}
