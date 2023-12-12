@@ -33,28 +33,28 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         Tensor y_shuffled = Shuffle(y_train, rd_num);
 
         Tensor y_batch;
-        std::vector<Tensor> output;
+        std::vector<Tensor> activations;
 
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size) {
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 
-            output = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
+            activations = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
             
             std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
 
             for (size_t k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
-                    dloss_dlogits.push_back(PrimeCategoricalCrossEntropy(y_batch, output.back()));
+                    dloss_dlogits.push_back(PrimeCategoricalCrossEntropy(y_batch, activations.back()));
                 else
-                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * PrimeRelu(output[k - 1]));
+                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * PrimeRelu(activations[k - 1]));
             }
 
             for (size_t k = layers.size() - 1; k > 0; --k) {
                 if (k == 1)
                     dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(layers.size() - 1) - k]));
                 else
-                    dloss_dweights.push_back(MatMul(Transpose(output[k - 2]), dloss_dlogits[(layers.size() - 1) - k]));
+                    dloss_dweights.push_back(MatMul(Transpose(activations[k - 2]), dloss_dlogits[(layers.size() - 1) - k]));
             }
 
             for (size_t k = 0; k < layers.size() - 1; ++k)
@@ -74,11 +74,11 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             }
         }
         
-        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\nloss: " + std::to_string(CategoricalCrossEntropy(y_batch, output.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, output.back())));
+        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\nloss: " + std::to_string(CategoricalCrossEntropy(y_batch, activations.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, activations.back())));
 
-        output = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
+        activations = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
 
-        buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, output.back())) + " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, output.back()));
+        buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, activations.back())) + " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, activations.back()));
 
         if (i % 10 == 0) {
             for (const auto& message : buffer)
@@ -106,13 +106,13 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
 
 void NN::Predict(const Tensor& x_test, const Tensor& y_test)
 {
-    auto output = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
+    std::vector<Tensor> activations = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
 
     std::cout << std::endl;
-    std::cout << "test loss: " << CategoricalCrossEntropy(y_test, output.back()) << " - test accuracy: " << CategoricalAccuracy(y_test, output.back());
+    std::cout << "test loss: " << CategoricalCrossEntropy(y_test, activations.back()) << " - test accuracy: " << CategoricalAccuracy(y_test, activations.back());
     std::cout << std::endl << std::endl;
 
-    std::cout << output.back() << std::endl << std::endl << y_test << std::endl;
+    std::cout << activations.back() << std::endl << std::endl << y_test << std::endl;
 }
 
 std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases)
