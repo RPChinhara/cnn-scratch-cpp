@@ -6,6 +6,7 @@
 #include "mathematics.h"
 #include "random.h"
 
+#include <chrono>
 #include <random>
 #include <string>
 
@@ -23,6 +24,8 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
     weights_biases_momentum = InitParameters();
 
     for (size_t i = 1; i <= epochs; ++i) {
+        auto startTime = std::chrono::high_resolution_clock::now();
+
         if (i > 10 && i < 20)      learning_rate = 0.009f;
         else if (i > 20 && i < 30) learning_rate = 0.005f;
         else                       learning_rate = 0.001f;
@@ -73,8 +76,13 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
                 weights_biases.second[k] += weights_biases_momentum.second[k];
             }
         }
+
+        auto endTime = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto remainingMilliseconds = duration - seconds;
         
-        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\nloss: " + std::to_string(CategoricalCrossEntropy(y_batch, activations.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, activations.back())));
+        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" + std::to_string(seconds.count()) + "s " + std::to_string(remainingMilliseconds.count()) + "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, activations.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, activations.back())));
 
         activations = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
 

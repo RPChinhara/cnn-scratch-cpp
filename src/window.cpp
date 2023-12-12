@@ -74,13 +74,10 @@ int Window::MessageLoop()
         auto startTime = std::chrono::high_resolution_clock::now();
 
         nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-        // Record the end time
+        
         auto endTime = std::chrono::high_resolution_clock::now();
 
-        // Calculate the duration
         auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
-
-        // Print the duration in microseconds
         std::cout << "Time taken by myFunction: " << duration.count() << " seconds" << std::endl;
 
         nn.Predict(val_test.x_second, val_test.y_second);
