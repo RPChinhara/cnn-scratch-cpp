@@ -19,6 +19,7 @@ NN::NN(const std::vector<size_t>& layers, float learning_rate)
 void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val, const Tensor& y_val)
 {
     std::vector<std::string> buffer;
+    std::random_device rd;
     
     weights_biases = InitParameters();
     weights_biases_momentum = InitParameters();
@@ -30,7 +31,6 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         else if (i > 20 && i < 30) learning_rate = 0.005f;
         else                       learning_rate = 0.001f;
 
-        std::random_device rd;
         auto rd_num = rd();
         Tensor x_shuffled = Shuffle(x_train, rd_num);
         Tensor y_shuffled = Shuffle(y_train, rd_num);
@@ -130,12 +130,12 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
 
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
-            logits.push_back((MatMul(input, weights[i]) + biases[i]));
-            activations.push_back((Relu(logits[i])));
+            logits.push_back(MatMul(input, weights[i]) + biases[i]);
+            activations.push_back(Relu(logits[i]));
         } else {
-            logits.push_back((MatMul(activations[i - 1], weights[i]) + biases[i]));
+            logits.push_back(MatMul(activations[i - 1], weights[i]) + biases[i]);
             if (i == 1)
-                activations.push_back((Softmax(logits[i])));
+                activations.push_back(Softmax(logits[i]));
         }
     }
 
