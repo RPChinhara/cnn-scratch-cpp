@@ -20,7 +20,10 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
 {
     std::vector<std::string> buffer;
     std::random_device rd;
-    
+    Tensor y_batch;
+    std::vector<Tensor> activations;
+    std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
+
     weights_biases = InitParameters();
     weights_biases_momentum = InitParameters();
 
@@ -35,17 +38,12 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         Tensor x_shuffled = Shuffle(x_train, rd_num);
         Tensor y_shuffled = Shuffle(y_train, rd_num);
 
-        Tensor y_batch;
-        std::vector<Tensor> activations;
-
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size) {
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 
             activations = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
             
-            std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
-
             for (size_t k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
                     dloss_dlogits.push_back(PrimeCategoricalCrossEntropy(y_batch, activations.back()));
@@ -75,6 +73,8 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
                 weights_biases.first[k] += weights_biases_momentum.first[k];
                 weights_biases.second[k] += weights_biases_momentum.second[k];
             }
+
+            dloss_dlogits.clear(), dloss_dweights.clear(), dloss_dbiases.clear();
         }
 
         auto endTime = std::chrono::high_resolution_clock::now();

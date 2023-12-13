@@ -76,12 +76,13 @@ int Window::MessageLoop()
         nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
         
         auto endTime = std::chrono::high_resolution_clock::now();
-
         auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
-        std::cout << "Time taken by myFunction: " << duration.count() << " seconds" << std::endl;
+        std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
 
         nn.Predict(val_test.x_second, val_test.y_second);
 #endif
+
+#if 0
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
@@ -146,6 +147,7 @@ int Window::MessageLoop()
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
         }
+#endif
     });
 
     while(true) {
