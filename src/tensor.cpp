@@ -2,6 +2,7 @@
 #include "linalg.h"
 
 #include <cassert>
+#include <string>
 
 Tensor::Tensor(const Tensor& o)
 {
@@ -195,7 +196,7 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
 {
     size_t idx = 0;
     if (in.shape.size() == 0) {
-        os <<  "Tensor(" << in[0] << ", shape=())";
+        os <<  "Tensor(" << std::to_string(in[0]) << ", shape=())";
         return os;
     } else {
         if (in.num_ch_dim == 1) {
@@ -211,9 +212,9 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
         if (in.num_ch_dim == 1) {
             for (size_t i = 0; i < in.size; ++i)
                 if (i == in.size - 1)
-                    os << in[i];
+                    os << std::to_string(in[i]);
                 else
-                    os << in[i] << " ";
+                    os << std::to_string(in[i]) << " ";
         } else {
             std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(in.shape);
             size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(in.shape);
@@ -268,7 +269,7 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
                 }
 
                 if (i == in.size - 1) {
-                    os << in[i];
+                    os << std::to_string(in[i]);
                     continue;
                 }
 
@@ -276,12 +277,12 @@ std::ostream& operator<<(std::ostream& os, const Tensor& in)
                     idx = 0;
 
                 if (in.shape.back() == 1) {
-                    os << in[i];
+                    os << std::to_string(in[i]);
                 } else {
                     if (idx % (in.shape.back() - 1) == 0 && idx != 0)
-                        os << in[i];
+                        os << std::to_string(in[i]);
                     else
-                        os << in[i] << " ";
+                        os << std::to_string(in[i]) << " ";
                 }
                 ++idx;
 

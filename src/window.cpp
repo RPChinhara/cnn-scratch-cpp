@@ -69,7 +69,7 @@ int Window::MessageLoop()
         val_test.x_first = MinMaxScaler(val_test.x_first);
         val_test.x_second = MinMaxScaler(val_test.x_second);
 
-        NN nn = NN({ 4, 32, 32, 3 }, 0.01f);
+        NN nn = NN({ 4, 128, 3 }, 0.01f);
 
         auto startTime = std::chrono::high_resolution_clock::now();
 

@@ -38,8 +38,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // std::cout << ffdf << std::endl;
     // std::cout << df << std::endl;
     // std::cout << MatMul(a, b) << std::endl;
-    // std::cout << Maximum(d, e) << std::endl;
-    // std::cout << c << std::endl;
+    std::cout << ffdf << std::endl;
+    std::cout << df << std::endl;
 
     for (int i = 0; i < af.size; ++i) {
         af[i] += 7.0f;
