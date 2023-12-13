@@ -66,12 +66,12 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
                 dloss_dbiases[k] = ClipByValue(dloss_dbiases[k], -gradient_clip_threshold, gradient_clip_threshold);
             }
 
-            for (int k = layers.size() - 2; k >= 0; --k) {
-                weights_biases_momentum.first[k] = momentum * weights_biases_momentum.first[k] - learning_rate * dloss_dweights[(layers.size() - 2) - k];
-                weights_biases_momentum.second[k] = momentum * weights_biases_momentum.second[k] - learning_rate * dloss_dbiases[(layers.size() - 2) - k];
+            for (size_t k = layers.size() - 1; k > 0; --k) {
+                weights_biases_momentum.first[k - 1] = momentum * weights_biases_momentum.first[k - 1] - learning_rate * dloss_dweights[(layers.size() - 1) - k];
+                weights_biases_momentum.second[k - 1] = momentum * weights_biases_momentum.second[k - 1] - learning_rate * dloss_dbiases[(layers.size() - 1) - k];
 
-                weights_biases.first[k] += weights_biases_momentum.first[k];
-                weights_biases.second[k] += weights_biases_momentum.second[k];
+                weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
+                weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
             }
 
             dloss_dlogits.clear(), dloss_dweights.clear(), dloss_dbiases.clear();
@@ -134,8 +134,10 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
             activations.push_back(Relu(logits[i]));
         } else {
             logits.push_back(MatMul(activations[i - 1], weights[i]) + biases[i]);
-            if (i == 1)
+            if (i == layers.size() - 2)
                 activations.push_back(Softmax(logits[i]));
+            else
+                activations.push_back(Relu(logits[i]));
         }
     }
 
