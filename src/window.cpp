@@ -57,7 +57,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 int Window::MessageLoop()
 {
     std::thread rl_thread([this]() {
-#if 1
+#if 0
         Iris iris = LoadIris();
         Tensor x = iris.features;
         Tensor y = iris.target;
@@ -82,7 +82,7 @@ int Window::MessageLoop()
         nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 0
+#if 1
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
