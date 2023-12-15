@@ -8,19 +8,17 @@
 #include "q_learning.h"
 
 #include <iostream>
-#include <stdexcept>
 #include <thread>
-
-static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
+static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
+
 const char Window::CLASS_NAME[] = "EnvWindow";
 size_t Window::window_width  = 1920;
 size_t Window::window_height = 1080;
-std::mutex Window::agentMutex;
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 {
@@ -56,6 +54,11 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
+    std::thread sound_thread([this]() {
+        while (true)
+            PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
+    });
+
     std::thread rl_thread([this]() {
 #if 0
         Iris iris = LoadIris();
@@ -96,13 +99,8 @@ int Window::MessageLoop()
             size_t total_reward = 0;
 
             while (!done) {
-                // PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                // Sleep(60000);
-                
                 size_t action = q_learning.ChooseAction(state);
                 std::cout << "action: " << action << std::endl;
-
-                // std::lock_guard<std::mutex> lock(agentMutex);
 
                 if (action == 2) {
                     agent.top -= 5;
@@ -150,6 +148,9 @@ int Window::MessageLoop()
 #endif
     });
 
+    sound_thread.detach();
+    rl_thread.detach();
+
     while(true) {
         MSG msg = {};
 
@@ -158,7 +159,7 @@ int Window::MessageLoop()
             DispatchMessage(&msg);
 
             if (msg.message == WM_QUIT) {
-                // rl_thread.join();
+                FreeConsole();
                 return static_cast<int>(msg.wParam);
             }
         }
@@ -174,8 +175,6 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             PostQuitMessage(0);
             return 0;
         case WM_PAINT: {
-            // std::lock_guard<std::mutex> lock(agentMutex);
-
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
 
@@ -206,8 +205,6 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             return 0;
         }
         case WM_UPDATE_DISPLAY: {
-            // std::lock_guard<std::mutex> lock(agentMutex);
-
             InvalidateRect(hwnd, nullptr, TRUE);
             return 0;
         }
