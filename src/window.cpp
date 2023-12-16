@@ -16,7 +16,7 @@
 
 static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
-const char Window::CLASS_NAME[] = "EnvWindow";
+const char Window::CLASS_NAME[] = "world_window";
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 {
@@ -31,7 +31,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
     hwnd = CreateWindow(
         CLASS_NAME,
-        "",
+        "Dora",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
