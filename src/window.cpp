@@ -17,8 +17,6 @@
 static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 const char Window::CLASS_NAME[] = "EnvWindow";
-size_t Window::window_width  = 1920;
-size_t Window::window_height = 1080;
 
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 {
@@ -35,10 +33,10 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
         CLASS_NAME,
         "",
         WS_OVERLAPPEDWINDOW,
-        0,
-        0,
-        window_width,
-        window_height,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
         nullptr,
         nullptr,
         hInstance,
@@ -47,9 +45,10 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
     if (hwnd == nullptr) {
         MessageBox(nullptr, "Window Creation Failed!", "Error", MB_ICONERROR);
+    } else {
+        ShowWindow(hwnd, SW_MAXIMIZE);
+        UpdateWindow(hwnd);
     }
-
-    ShowWindow(hwnd, nCmdShow);
 }
 
 int Window::MessageLoop()
@@ -86,6 +85,17 @@ int Window::MessageLoop()
 #endif
 
 #if 1
+        RECT client_rect;
+        GetClientRect(hwnd, &client_rect);
+        int client_width = client_rect.right - client_rect.left;
+        int client_height = client_rect.bottom - client_rect.top;
+
+        agent = { 13, (client_height - 13) - 50, 63, client_height - 13 };
+        agent_2 = { (client_width - 5) - 50, (client_height - 5) - 50 , client_width - 5, client_height - 5 };
+        food = { 5, 5, 55, 55 };
+        water = { (client_width - 5) - 50, 5, client_width - 5, 55 };
+        bed = { 5, (client_height - 5) - 60, 71, client_height - 5 };
+
         Environment env = Environment();
         QLearning q_learning = QLearning(env.num_states, env.num_actions);
 
@@ -116,7 +126,7 @@ int Window::MessageLoop()
                     agent.right += 5;
                 }
 
-                CheckBoundaryCollision(agent);
+                CheckBoundaryCollision(agent, client_width, client_height);
 
                 // if (IsColliding(agent, agent2)) {
                 //     ResolveCollision(agent, agent2);
@@ -139,6 +149,7 @@ int Window::MessageLoop()
                 state = next_state;
 
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
+                // InvalidateRect(hwnd, nullptr, TRUE);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
@@ -175,13 +186,14 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             PostQuitMessage(0);
             return 0;
         case WM_PAINT: {
+            RECT client_rect;
             PAINTSTRUCT ps;
+
             HDC hdc = BeginPaint(hwnd, &ps);
 
-            RECT clientRect;
-            GetClientRect(hwnd, &clientRect);
+            GetClientRect(hwnd, &client_rect);
             HBRUSH greenBrush = CreateSolidBrush(RGB(34, 139, 34));
-            FillRect(hdc, &clientRect, greenBrush);
+            FillRect(hdc, &client_rect, greenBrush);
             DeleteObject(greenBrush);
 
             HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
@@ -202,6 +214,7 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             DeleteObject(blueBrush);
 
             EndPaint(hwnd, &ps);
+
             return 0;
         }
         case WM_UPDATE_DISPLAY: {

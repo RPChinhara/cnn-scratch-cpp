@@ -1,8 +1,7 @@
 #include "physics.h"
 
-void CheckBoundaryCollision(RECT& rect)
+void CheckBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
-    LONG client_width = 1904, client_height = 1041;
     LONG agent_width = 50, agent_height = 50;
 
     if (rect.left < 0) {
