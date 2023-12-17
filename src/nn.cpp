@@ -18,8 +18,13 @@ NN::NN(const std::vector<size_t>& layers, float learning_rate)
 
 void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val, const Tensor& y_val)
 {
-    std::vector<std::string> buffer;
+    std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
+    size_t rd_num;
     std::random_device rd;
+    std::vector<std::string> buffer;
+    Tensor x_shuffled;
+    Tensor y_shuffled;
+    Tensor x_batch;
     Tensor y_batch;
     std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
 
@@ -27,18 +32,18 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
     weights_biases_momentum = InitParameters();
 
     for (size_t i = 1; i <= epochs; ++i) {
-        auto startTime = std::chrono::high_resolution_clock::now();
+        startTime = std::chrono::high_resolution_clock::now();
 
         if (i > 10 && i < 20)      learning_rate = 0.009f;
         else if (i > 20 && i < 30) learning_rate = 0.005f;
         else                       learning_rate = 0.001f;
 
-        auto rd_num = rd();
-        Tensor x_shuffled = Shuffle(x_train, rd_num);
-        Tensor y_shuffled = Shuffle(y_train, rd_num);
+        rd_num = rd();
+        x_shuffled = Shuffle(x_train, rd_num);
+        y_shuffled = Shuffle(y_train, rd_num);
 
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size) {
-            Tensor x_batch = Slice(x_shuffled, j, batch_size);
+            x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 
             ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
