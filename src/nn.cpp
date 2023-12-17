@@ -118,19 +118,16 @@ void NN::Predict(const Tensor& x_test, const Tensor& y_test)
 
 std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases)
 {
-    std::vector<Tensor> logits;
     std::vector<Tensor> activations;
 
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
-            logits.push_back(MatMul(input, weights[i]) + biases[i]);
-            activations.push_back(Relu(logits[i]));
+            activations.push_back(Relu(MatMul(input, weights[i]) + biases[i]));
         } else {
-            logits.push_back(MatMul(activations[i - 1], weights[i]) + biases[i]);
             if (i == layers.size() - 2)
-                activations.push_back(Softmax(logits[i]));
+                activations.push_back(Softmax(MatMul(activations[i - 1], weights[i]) + biases[i]));
             else
-                activations.push_back(Relu(logits[i]));
+                activations.push_back(Relu(MatMul(activations[i - 1], weights[i]) + biases[i]));
         }
     }
 
