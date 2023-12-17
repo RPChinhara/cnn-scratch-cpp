@@ -21,7 +21,6 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
     std::vector<std::string> buffer;
     std::random_device rd;
     Tensor y_batch;
-    std::vector<Tensor> activations;
     std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
 
     weights_biases = InitParameters();
@@ -42,7 +41,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             Tensor x_batch = Slice(x_shuffled, j, batch_size);
             y_batch = Slice(y_shuffled, j, batch_size);
 
-            activations = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
+            ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
             
             for (size_t k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
@@ -77,7 +76,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         
         buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" + std::to_string(seconds.count()) + "s " + std::to_string(remainingMilliseconds.count()) + "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, activations.back())) + " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, activations.back())));
 
-        activations = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
+        ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
 
         buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, activations.back())) + " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, activations.back()));
 
@@ -107,7 +106,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
 
 void NN::Predict(const Tensor& x_test, const Tensor& y_test)
 {
-    std::vector<Tensor> activations = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
+    ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
 
     std::cout << std::endl;
     std::cout << "test loss: " << CategoricalCrossEntropy(y_test, activations.back()) << " - test accuracy: " << CategoricalAccuracy(y_test, activations.back());
@@ -116,10 +115,10 @@ void NN::Predict(const Tensor& x_test, const Tensor& y_test)
     std::cout << activations.back() << std::endl << std::endl << y_test << std::endl;
 }
 
-std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases)
+void NN::ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases)
 {
-    std::vector<Tensor> activations;
-
+    activations.clear();
+    
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
             activations.push_back(Relu(MatMul(input, weights[i]) + biases[i]));
@@ -130,8 +129,6 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
                 activations.push_back(Relu(MatMul(activations[i - 1], weights[i]) + biases[i]));
         }
     }
-
-    return activations;
 }
 
 std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
