@@ -15,7 +15,6 @@ public:
 
 private:
     std::vector<size_t> layers;
-    std::vector<Tensor> activations;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
     size_t batch_size = 8;
@@ -25,6 +24,6 @@ private:
     float momentum = 0.1f;
     size_t patience = 4;
     
-    void ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases);
+    std::vector<Tensor> ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases);
     std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
 };
