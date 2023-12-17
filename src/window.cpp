@@ -59,7 +59,7 @@ int Window::MessageLoop()
     });
 
     std::thread rl_thread([this]() {
-#if 0
+#if 1
         Iris iris = LoadIris();
         Tensor x = iris.features;
         Tensor y = iris.target;
@@ -84,7 +84,7 @@ int Window::MessageLoop()
         nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 1
+#if 0
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
         int client_width = client_rect.right - client_rect.left;

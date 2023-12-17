@@ -49,24 +49,17 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
                     dloss_dlogits.push_back(PrimeCategoricalCrossEntropy(y_batch, activations.back()));
                 else
                     dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * PrimeRelu(activations[k - 1]));
-            }
 
-            for (size_t k = layers.size() - 1; k > 0; --k) {
                 if (k == 1)
                     dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(layers.size() - 1) - k]));
                 else
                     dloss_dweights.push_back(MatMul(Transpose(activations[k - 2]), dloss_dlogits[(layers.size() - 1) - k]));
-            }
 
-            for (size_t k = 0; k < layers.size() - 1; ++k)
-                dloss_dbiases.push_back(Sum(dloss_dlogits[k], 0));
+                dloss_dbiases.push_back(Sum(dloss_dlogits[(layers.size() - 1) - k], 0));
 
-            for (size_t k = 0; k < layers.size() - 1; ++k) {
-                dloss_dweights[k] = ClipByValue(dloss_dweights[k], -gradient_clip_threshold, gradient_clip_threshold);
-                dloss_dbiases[k] = ClipByValue(dloss_dbiases[k], -gradient_clip_threshold, gradient_clip_threshold);
-            }
+                dloss_dweights[(layers.size() - 1) - k] = ClipByValue(dloss_dweights[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dloss_dbiases[(layers.size() - 1) - k] = ClipByValue(dloss_dbiases[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
 
-            for (size_t k = layers.size() - 1; k > 0; --k) {
                 weights_biases_momentum.first[k - 1] = momentum * weights_biases_momentum.first[k - 1] - learning_rate * dloss_dweights[(layers.size() - 1) - k];
                 weights_biases_momentum.second[k - 1] = momentum * weights_biases_momentum.second[k - 1] - learning_rate * dloss_dbiases[(layers.size() - 1) - k];
 
@@ -96,7 +89,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
 
         // static size_t epochs_without_improvement = 0;
         // static float best_val_loss = std::numeric_limits<float>::max();
-        // float loss = CategoricalCrossEntropy(y_val, output.back());
+        // float loss = CategoricalCrossEntropy(y_val, activations.back());
 
         // if (loss < best_val_loss) {
         //     best_val_loss = loss;
