@@ -59,7 +59,7 @@ int Window::MessageLoop()
     });
 
     std::thread rl_thread([this]() {
-#if 1
+#if 0
         Iris iris = LoadIris();
         Tensor x = iris.features;
         Tensor y = iris.target;
@@ -84,14 +84,14 @@ int Window::MessageLoop()
         nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 0
+#if 1
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
         int client_width = client_rect.right - client_rect.left;
         int client_height = client_rect.bottom - client_rect.top;
 
         agent = { 13, (client_height - 13) - 50, 63, client_height - 13 };
-        agent_2 = { (client_width - 5) - 50, (client_height - 5) - 50 , client_width - 5, client_height - 5 };
+        agent_2 = { (client_width - 5) - 50, (client_height - 5) - 50, client_width - 5, client_height - 5 };
         food = { 5, 5, 55, 55 };
         water = { (client_width - 5) - 50, 5, client_width - 5, 55 };
         bed = { 5, (client_height - 5) - 60, 71, client_height - 5 };
@@ -127,15 +127,9 @@ int Window::MessageLoop()
                 }
 
                 CheckBoundaryCollision(agent, client_width, client_height);
-
-                // if (IsColliding(agent, agent2)) {
-                //     ResolveCollision(agent, agent2);
-                // } else if (IsColliding(agent, water)) {
-                //     ResolveCollision(agent, water);
-                // } else {
-                //     agent.left += 5;
-                //     agent.right += 5;
-                // }
+                CheckRectanglesCollision(agent, agent_2);
+                CheckRectanglesCollision(agent, food);
+                CheckRectanglesCollision(agent, water);
 
                 auto [next_state, reward, temp_done] = env.Step(env.actions[action]);
                 done = temp_done;
