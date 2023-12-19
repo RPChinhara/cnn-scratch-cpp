@@ -126,10 +126,10 @@ int Window::MessageLoop()
                     agent.right += 5;
                 }
 
-                CheckBoundaryCollision(agent, client_width, client_height);
-                CheckRectanglesCollision(agent, agent_2);
-                CheckRectanglesCollision(agent, food);
-                CheckRectanglesCollision(agent, water);
+                ResolveBoundaryCollision(agent, client_width, client_height);
+                ResolveRectanglesCollision(agent, agent_2);
+                ResolveRectanglesCollision(agent, food);
+                ResolveRectanglesCollision(agent, water);
 
                 auto [next_state, reward, temp_done] = env.Step(env.actions[action]);
                 done = temp_done;
