@@ -1,12 +1,4 @@
 #include "window.h"
-#include "random.h"
-#include "tensor.h"
-#include "linalg.h"
-#include "array.h"
-#include "mathematics.h"
-#include "linalg.h"
-
-#include <iostream>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
