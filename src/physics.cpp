@@ -1,8 +1,8 @@
 #include "physics.h"
 
-#include <iostream>
+#include <algorithm>
 
-void CheckBoundaryCollision(RECT& rect, const int client_width, const int client_height)
+void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
     LONG agent_width = 50, agent_height = 50;
 
@@ -24,7 +24,7 @@ void CheckBoundaryCollision(RECT& rect, const int client_width, const int client
     }
 }
 
-void CheckRectanglesCollision(RECT& rect1, const RECT& rect2)
+void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2)
 {
     if ((rect1.left < rect2.right) && (rect1.right > rect2.left) &&
         (rect1.top < rect2.bottom) && (rect1.bottom > rect2.top)) {
@@ -34,7 +34,6 @@ void CheckRectanglesCollision(RECT& rect1, const RECT& rect2)
 
         if (horizontalOverlap < verticalOverlap) {
             if (rect1.left < rect2.left) {
-                std::cout << "horizontalOverlap: " << horizontalOverlap << std::endl;
                 rect1.left -= horizontalOverlap;
                 rect1.right -= horizontalOverlap;
             } else {
