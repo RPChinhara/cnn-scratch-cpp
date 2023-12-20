@@ -130,12 +130,32 @@ Tensor Tensor::operator/(const Tensor& other) const
 
 Tensor& Tensor::operator=(const Tensor& other)
 {
-    float *ptr = new float[other.size];
-    memcpy(ptr, other.elem, sizeof(float) * other.size);
-    elem       = ptr;
-    num_ch_dim = other.num_ch_dim;
-    size       = other.size;
-    shape      = other.shape;
+    if (this != &other)
+    {
+        delete[] elem;
+        elem = new float[other.size];
+        std::copy(other.elem, other.elem + other.size, elem);
+        num_ch_dim = other.num_ch_dim;
+        size = other.size;
+        shape = other.shape;
+    }
+    return *this;
+}
+
+Tensor& Tensor::operator=(Tensor&& other)
+{
+    if (this != &other) {
+        delete[] elem;
+
+        elem = other.elem;
+        num_ch_dim = other.num_ch_dim;
+        size = other.size;
+        shape = std::move(other.shape);
+
+        other.elem = nullptr;
+        other.num_ch_dim = 0;
+        other.size = 0;
+    }
     return *this;
 }
 

@@ -15,6 +15,7 @@ public:
     Tensor operator*(const Tensor& other) const;
     Tensor operator/(const Tensor& other) const;
     Tensor& operator=(const Tensor& other);
+    Tensor& operator=(Tensor&& other);
     Tensor operator+=(const Tensor& other) const;
     Tensor operator-=(const Tensor& other) const;
     float& operator[](const size_t idx) const;
