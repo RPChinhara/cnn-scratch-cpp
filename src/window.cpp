@@ -53,12 +53,6 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
-    std::thread sound_thread([this]() {
-        while (true)
-            PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
-    });
-
-    std::thread rl_thread([this]() {
 #if 1
         Iris iris = LoadIris();
         Tensor x = iris.features;
@@ -85,6 +79,12 @@ int Window::MessageLoop()
 #endif
 
 #if 1
+    std::thread sound_thread([this]() {
+        while (true)
+            PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
+    });
+
+    std::thread rl_thread([this]() {
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
         int client_width = client_rect.right - client_rect.left;
