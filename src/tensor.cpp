@@ -4,24 +4,24 @@
 #include <cassert>
 #include <string>
 
-Tensor::Tensor(const Tensor& o)
+Tensor::Tensor(const Tensor& other)
 {
-    float *ptr = new float[o.size];
-    memcpy(ptr, o.elem, sizeof(float) * o.size);
+    float *ptr = new float[other.size];
+    memcpy(ptr, other.elem, sizeof(float) * other.size);
     elem = ptr;
-    num_ch_dim = o.num_ch_dim;
-    size = o.size;
-    shape = o.shape;
+    num_ch_dim = other.num_ch_dim;
+    size = other.size;
+    shape = other.shape;
 }
 
-Tensor::Tensor(Tensor&& o) noexcept :
-    elem(o.elem),
-    num_ch_dim(o.num_ch_dim),
-    size(o.size),
-    shape(std::move(o.shape)) {
-        o.elem       = nullptr;
-        o.num_ch_dim = 0;
-        o.size       = 0;
+Tensor::Tensor(Tensor&& other) noexcept :
+    elem(other.elem),
+    num_ch_dim(other.num_ch_dim),
+    size(other.size),
+    shape(std::move(other.shape)) {
+        other.elem       = nullptr;
+        other.num_ch_dim = 0;
+        other.size       = 0;
     }
 
 Tensor::~Tensor()
@@ -38,39 +38,39 @@ static bool ShapeEqual(const std::vector<size_t>& shape_1, const std::vector<siz
     return equal;
 }
 
-Tensor Tensor::operator+(const Tensor& o) const
+Tensor Tensor::operator+(const Tensor& other) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, o.shape)) {
+    if (ShapeEqual(shape, other.shape)) {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] + o[i];
+            out[i] = elem[i] + other[i];
     } else {
-        assert(shape.back() == o.shape.back());
+        assert(shape.back() == other.shape.back());
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] + o[i % o.shape.back()];
+            out[i] = elem[i] + other[i % other.shape.back()];
     }
     return out;
 }
 
-Tensor Tensor::operator-(const Tensor& o) const
+Tensor Tensor::operator-(const Tensor& other) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, o.shape)) {
+    if (ShapeEqual(shape, other.shape)) {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] - o[i];
-    } else if (shape.back() == o.shape.back()) {
+            out[i] = elem[i] - other[i];
+    } else if (shape.back() == other.shape.back()) {
         size_t idx = 0;
         for (size_t i = 0; i < out.size; ++i) {
-            if (idx == o.shape.back())
+            if (idx == other.shape.back())
                 idx = 0;
-            out[i] = elem[i] - o[idx];
+            out[i] = elem[i] - other[idx];
             ++idx;
         }
-    } else if (shape.front() == o.shape.front()) {
+    } else if (shape.front() == other.shape.front()) {
         size_t idx = 0;
         for (size_t i = 0; i < shape.front(); ++i) {
             for (size_t j = 0; j < shape.back(); ++j) {
-                out[idx] = elem[idx] - o[i];
+                out[idx] = elem[idx] - other[i];
                 ++idx;
             }
         }
@@ -78,45 +78,45 @@ Tensor Tensor::operator-(const Tensor& o) const
     return out;
 }
 
-Tensor Tensor::operator*(const Tensor& o) const
+Tensor Tensor::operator*(const Tensor& other) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, o.shape)) {
+    if (ShapeEqual(shape, other.shape)) {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] * o[i];
+            out[i] = elem[i] * other[i];
     } else {
-        assert(shape.back() == o.shape.back());
+        assert(shape.back() == other.shape.back());
         size_t idx = 0;
         for (size_t i = 0; i < out.size; ++i) {
-            if (idx == o.shape.back())
+            if (idx == other.shape.back())
                 idx = 0;
-            out[i] = elem[i] * o[idx];
+            out[i] = elem[i] * other[idx];
             ++idx;
         }
     }
     return out;
 }
 
-Tensor Tensor::operator/(const Tensor& o) const
+Tensor Tensor::operator/(const Tensor& other) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, o.shape)) {
+    if (ShapeEqual(shape, other.shape)) {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] / o[i];
+            out[i] = elem[i] / other[i];
     } else {
         size_t idx = 0;
-        if (shape.back() == o.shape.back()) {
+        if (shape.back() == other.shape.back()) {
             for (size_t i = 0; i < out.size; ++i) {
-                if (idx == o.shape.back())
+                if (idx == other.shape.back())
                     idx = 0;
-                out[i] = elem[i] / o[idx];
+                out[i] = elem[i] / other[idx];
                 ++idx;
             }
-        } else if (shape.front() == o.shape.front()) {
+        } else if (shape.front() == other.shape.front()) {
             for (size_t i = 0; i < out.size; ++i) {
                 if (i == shape.back())
                     ++idx;
-                out[i] = elem[i] / o[idx];
+                out[i] = elem[i] / other[idx];
             }
         } else {
             std::cerr << "Shapes don't much." << std::endl;
@@ -126,29 +126,29 @@ Tensor Tensor::operator/(const Tensor& o) const
     return out;
 }
 
-Tensor& Tensor::operator=(const Tensor& o)
+Tensor& Tensor::operator=(const Tensor& other)
 {
-    float *ptr = new float[o.size];
-    memcpy(ptr, o.elem, sizeof(float) * o.size);
+    float *ptr = new float[other.size];
+    memcpy(ptr, other.elem, sizeof(float) * other.size);
     elem       = ptr;
-    num_ch_dim = o.num_ch_dim;
-    size       = o.size;
-    shape      = o.shape;
+    num_ch_dim = other.num_ch_dim;
+    size       = other.size;
+    shape      = other.shape;
     return *this;
 }
 
-Tensor Tensor::operator+=(const Tensor& o) const
+Tensor Tensor::operator+=(const Tensor& other) const
 {
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] + o[i];
+        elem[i] = elem[i] + other[i];
     return *this;
 }
 
-Tensor Tensor::operator-=(const Tensor& o) const
+Tensor Tensor::operator-=(const Tensor& other) const
 {
-    assert(ShapeEqual(shape, o.shape));
+    assert(ShapeEqual(shape, other.shape));
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] - o[i];
+        elem[i] = elem[i] - other[i];
     return *this;
 }
 
@@ -157,19 +157,19 @@ float& Tensor::operator[](const size_t idx) const
     return elem[idx];
 }
 
-Tensor operator-(const float sca, const Tensor& o)
+Tensor operator-(const float sca, const Tensor& other)
 {
-    Tensor out = o;
+    Tensor out = other;
     for (size_t i = 0; i < out.size; ++i)
-        out[i] = sca - o[i];
+        out[i] = sca - other[i];
     return out;    
 }
 
-Tensor operator*(const float sca, const Tensor& o)
+Tensor operator*(const float sca, const Tensor& other)
 {
-    Tensor out = o;
+    Tensor out = other;
     for (size_t i = 0; i < out.size; ++i)
-        out[i] = sca * o[i];
+        out[i] = sca * other[i];
     return out;    
 }
 

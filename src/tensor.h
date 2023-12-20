@@ -7,20 +7,20 @@ class Tensor
 {
 public:
     Tensor() = default;
-    Tensor(const Tensor& o);
-    Tensor(Tensor&& o) noexcept;
+    Tensor(const Tensor& other);
+    Tensor(Tensor&& other) noexcept;
     ~Tensor();
-    Tensor operator+(const Tensor& o) const;
-    Tensor operator-(const Tensor& o) const;
-    Tensor operator*(const Tensor& o) const;
-    Tensor operator/(const Tensor& o) const;
-    Tensor& operator=(const Tensor& o);
-    Tensor operator+=(const Tensor& o) const;
-    Tensor operator-=(const Tensor& o) const;
+    Tensor operator+(const Tensor& other) const;
+    Tensor operator-(const Tensor& other) const;
+    Tensor operator*(const Tensor& other) const;
+    Tensor operator/(const Tensor& other) const;
+    Tensor& operator=(const Tensor& other);
+    Tensor operator+=(const Tensor& other) const;
+    Tensor operator-=(const Tensor& other) const;
     float& operator[](const size_t idx) const;
-    friend Tensor operator-(const float sca, const Tensor& o);
-    friend Tensor operator*(const float sca, const Tensor& o);
-    friend std::ostream& operator<<(std::ostream& os, const Tensor& o);
+    friend Tensor operator-(const float sca, const Tensor& other);
+    friend Tensor operator*(const float sca, const Tensor& other);
+    friend std::ostream& operator<<(std::ostream& os, const Tensor& other);
 
     size_t size;
     std::vector<size_t> shape;
