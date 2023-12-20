@@ -18,7 +18,7 @@ Tensor::Tensor(Tensor&& other)
     elem = other.elem;
     num_ch_dim = other.num_ch_dim;
     size = other.size;
-    shape = std::move(other.shape);
+    shape = other.shape;
 
     other.elem       = nullptr;
     other.num_ch_dim = 0;
@@ -149,7 +149,7 @@ Tensor& Tensor::operator=(Tensor&& other)
         elem = other.elem;
         num_ch_dim = other.num_ch_dim;
         size = other.size;
-        shape = std::move(other.shape);
+        shape = other.shape;
 
         other.elem = nullptr;
         other.num_ch_dim = 0;

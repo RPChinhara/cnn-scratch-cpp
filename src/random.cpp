@@ -18,7 +18,7 @@ static void SetShape(Tensor& in, const std::vector<size_t>& shape)
     for (const size_t& i : shape)
         assert(i != 0);
 
-    in.shape = std::move(shape);
+    in.shape = shape;
 }
 
 static void SetSize(Tensor& in, const std::vector<size_t>& shape)
