@@ -6,9 +6,8 @@
 
 Tensor::Tensor(const Tensor& other)
 {
-    float *ptr = new float[other.size];
-    memcpy(ptr, other.elem, sizeof(float) * other.size);
-    elem = ptr;
+    elem = new float[other.size];
+    std::copy(other.elem, other.elem + other.size, elem);
     num_ch_dim = other.num_ch_dim;
     size = other.size;
     shape = other.shape;
