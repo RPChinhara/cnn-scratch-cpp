@@ -8,7 +8,7 @@ class Tensor
 public:
     Tensor() = default;
     Tensor(const Tensor& other);
-    Tensor(Tensor&& other) noexcept;
+    Tensor(Tensor&& other);
     ~Tensor();
     Tensor operator+(const Tensor& other) const;
     Tensor operator-(const Tensor& other) const;

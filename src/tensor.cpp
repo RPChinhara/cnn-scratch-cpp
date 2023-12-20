@@ -14,15 +14,17 @@ Tensor::Tensor(const Tensor& other)
     shape = other.shape;
 }
 
-Tensor::Tensor(Tensor&& other) noexcept :
-    elem(other.elem),
-    num_ch_dim(other.num_ch_dim),
-    size(other.size),
-    shape(std::move(other.shape)) {
-        other.elem       = nullptr;
-        other.num_ch_dim = 0;
-        other.size       = 0;
-    }
+Tensor::Tensor(Tensor&& other)
+{
+    elem = other.elem;
+    num_ch_dim = other.num_ch_dim;
+    size = other.size;
+    shape = std::move(other.shape);
+
+    other.elem       = nullptr;
+    other.num_ch_dim = 0;
+    other.size       = 0;
+}
 
 Tensor::~Tensor()
 {
