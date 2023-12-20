@@ -59,7 +59,7 @@ int Window::MessageLoop()
     });
 
     std::thread rl_thread([this]() {
-#if 0
+#if 1
         Iris iris = LoadIris();
         Tensor x = iris.features;
         Tensor y = iris.target;
@@ -163,10 +163,8 @@ int Window::MessageLoop()
             TranslateMessage(&msg);
             DispatchMessage(&msg);
 
-            if (msg.message == WM_QUIT) {
-                FreeConsole();
+            if (msg.message == WM_QUIT)
                 return static_cast<int>(msg.wParam);
-            }
         }
     }
 
