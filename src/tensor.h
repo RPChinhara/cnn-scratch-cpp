@@ -7,15 +7,15 @@ class Tensor
 {
 public:
     Tensor() = default;
+    ~Tensor();
     Tensor(const Tensor& other);
     Tensor(Tensor&& other);
-    ~Tensor();
+    Tensor& operator=(const Tensor& other);
+    Tensor& operator=(Tensor&& other);
     Tensor operator+(const Tensor& other) const;
     Tensor operator-(const Tensor& other) const;
     Tensor operator*(const Tensor& other) const;
     Tensor operator/(const Tensor& other) const;
-    Tensor& operator=(const Tensor& other);
-    Tensor& operator=(Tensor&& other);
     Tensor operator+=(const Tensor& other) const;
     Tensor operator-=(const Tensor& other) const;
     float& operator[](const size_t idx) const;

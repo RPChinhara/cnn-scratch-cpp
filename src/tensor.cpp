@@ -4,6 +4,12 @@
 #include <cassert>
 #include <string>
 
+Tensor::~Tensor()
+{
+    if (elem != nullptr) 
+        delete[] elem;
+}
+
 Tensor::Tensor(const Tensor& other)
 {
     elem = new float[other.size];
@@ -25,10 +31,35 @@ Tensor::Tensor(Tensor&& other)
     other.size       = 0;
 }
 
-Tensor::~Tensor()
+Tensor& Tensor::operator=(const Tensor& other)
 {
-    if (elem != nullptr) 
+    if (this != &other)
+    {
         delete[] elem;
+        elem = new float[other.size];
+        std::copy(other.elem, other.elem + other.size, elem);
+        num_ch_dim = other.num_ch_dim;
+        size = other.size;
+        shape = other.shape;
+    }
+    return *this;
+}
+
+Tensor& Tensor::operator=(Tensor&& other)
+{
+    if (this != &other) {
+        delete[] elem;
+
+        elem = other.elem;
+        num_ch_dim = other.num_ch_dim;
+        size = other.size;
+        shape = other.shape;
+
+        other.elem = nullptr;
+        other.num_ch_dim = 0;
+        other.size = 0;
+    }
+    return *this;
 }
 
 static bool ShapeEqual(const std::vector<size_t>& shape_1, const std::vector<size_t>& shape_2)
@@ -125,37 +156,6 @@ Tensor Tensor::operator/(const Tensor& other) const
         }
     }
     return out;
-}
-
-Tensor& Tensor::operator=(const Tensor& other)
-{
-    if (this != &other)
-    {
-        delete[] elem;
-        elem = new float[other.size];
-        std::copy(other.elem, other.elem + other.size, elem);
-        num_ch_dim = other.num_ch_dim;
-        size = other.size;
-        shape = other.shape;
-    }
-    return *this;
-}
-
-Tensor& Tensor::operator=(Tensor&& other)
-{
-    if (this != &other) {
-        delete[] elem;
-
-        elem = other.elem;
-        num_ch_dim = other.num_ch_dim;
-        size = other.size;
-        shape = other.shape;
-
-        other.elem = nullptr;
-        other.num_ch_dim = 0;
-        other.size = 0;
-    }
-    return *this;
 }
 
 Tensor Tensor::operator+=(const Tensor& other) const
