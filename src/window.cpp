@@ -78,7 +78,7 @@ int Window::MessageLoop()
         nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 1
+#if 0
     std::thread sound_thread([this]() {
         while (true)
             PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
@@ -150,11 +150,11 @@ int Window::MessageLoop()
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
         }
-#endif
     });
 
     sound_thread.detach();
     rl_thread.detach();
+#endif
 
     while(true) {
         MSG msg = {};
