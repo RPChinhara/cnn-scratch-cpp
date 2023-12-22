@@ -5,8 +5,9 @@
 
 void Environment::Render()
 {
-    std::cout << "Days Lived: " << days_lived << std::endl;
-    std::cout << "Current State: " << states[current_state] << std::endl;
+    std::cout << "Current State:       " << states[current_state] << std::endl;
+    std::cout << "Current Action:      " << current_action << std::endl;
+    std::cout << "Days Lived:          " << days_lived << " days" << std::endl;
     std::cout << "Days Without Eating: " << days_without_eating << " days" << std::endl << std::endl;
 }
 
@@ -26,7 +27,11 @@ std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
         MessageBox(nullptr, "Invalid action.", "Error", MB_ICONERROR);
         ExitProcess(1);
     }
+
+    current_action = action;
     
+    Render();
+
     if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
         current_state = std::min(current_state + 1, num_states - 1);
     else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))

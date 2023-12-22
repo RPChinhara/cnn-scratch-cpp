@@ -101,19 +101,17 @@ int Window::MessageLoop()
 
         size_t num_episodes = 1000;
 
-        std::cout << "------------------- HEAD -------------------" << std::endl;
-
         for (size_t i = 0; i < num_episodes; ++i) {
             auto state = env.Reset();
             bool done = false;
-            size_t total_reward = 0;
+            int total_reward = 0;
 
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
+
                 has_collided_with_agent_2 = false;
                 has_collided_with_food = false;
                 has_collided_with_water = false;
-                std::cout << "action: " << action << std::endl;
 
                 if (action == 1) {
                     agent.top -= 5;
@@ -138,9 +136,6 @@ int Window::MessageLoop()
                 done = temp_done;
 
                 q_learning.UpdateQtable(state, action, reward, next_state);
-                std::cout << q_learning.q_table << std::endl << std::endl;
-
-                env.Render();
 
                 total_reward += reward;
                 state = next_state;

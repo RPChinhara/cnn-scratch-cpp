@@ -21,6 +21,7 @@ private:
     bool CheckTermination();
     std::vector<std::string> states;
     size_t current_state = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
+    std::string current_action;
     size_t days_lived = 0;
     size_t days_without_eating = 0;
     size_t max_days = 50;
