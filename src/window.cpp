@@ -53,7 +53,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
-#if 1
+#if 0
         Iris iris = LoadIris();
         Tensor x = iris.features;
         Tensor y = iris.target;
@@ -78,7 +78,7 @@ int Window::MessageLoop()
         nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 0
+#if 1
     std::thread sound_thread([this]() {
         while (true)
             PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
@@ -110,26 +110,29 @@ int Window::MessageLoop()
 
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
+                has_collided_with_agent_2 = false;
+                has_collided_with_food = false;
+                has_collided_with_water = false;
                 std::cout << "action: " << action << std::endl;
 
-                if (action == 2) {
+                if (action == 1) {
                     agent.top -= 5;
                     agent.bottom -= 5;
-                } else if (action == 3) {
+                } else if (action == 2) {
                     agent.top += 5;
                     agent.bottom += 5;
-                } else if (action == 4) {
+                } else if (action == 3) {
                     agent.left -= 5;
                     agent.right -= 5;
-                } else if (action == 5) {
+                } else if (action == 4) {
                     agent.left += 5;
                     agent.right += 5;
                 }
 
                 ResolveBoundaryCollision(agent, client_width, client_height);
-                ResolveRectanglesCollision(agent, agent_2);
-                ResolveRectanglesCollision(agent, food);
-                ResolveRectanglesCollision(agent, water);
+                ResolveRectanglesCollision(agent, agent_2, "agent_2");
+                ResolveRectanglesCollision(agent, food, "food");
+                ResolveRectanglesCollision(agent, water, "water");
 
                 auto [next_state, reward, temp_done] = env.Step(env.actions[action]);
                 done = temp_done;

@@ -6,14 +6,14 @@
 
 QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, float discount_factor, float exploration_rate, float exploration_decay, float exploration_min)
 {
-    this->n_states          = n_states;
-    this->n_actions         = n_actions;
-    this->learning_rate     = learning_rate;
-    this->discount_factor   = discount_factor;
-    this->exploration_rate  = exploration_rate;
+    this->n_states = n_states;
+    this->n_actions = n_actions;
+    this->learning_rate = learning_rate;
+    this->discount_factor = discount_factor;
+    this->exploration_rate = exploration_rate;
     this->exploration_decay = exploration_decay;
-    this->exploration_min   = exploration_min;
-    this->q_table           = Zeros({ n_states, n_actions });
+    this->exploration_min = exploration_min;
+    this->q_table = Zeros({ n_states, n_actions });
 }
 
 size_t QLearning::ChooseAction(size_t state)
