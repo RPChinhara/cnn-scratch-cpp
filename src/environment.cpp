@@ -21,13 +21,6 @@ size_t Environment::Reset()
 
 std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
 {
-    auto it = std::find(actions.begin(), actions.end(), action);
-
-    if (it == actions.end()) {
-        MessageBox(nullptr, "Invalid action.", "Error", MB_ICONERROR);
-        ExitProcess(1);
-    }
-
     current_action = action;
     
     Render();
