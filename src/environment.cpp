@@ -1,14 +1,16 @@
 #include "environment.h"
+#include "entity.h"
 
 #include <iostream>
 #include <windows.h>
 
 void Environment::Render()
 {
-    std::cout << "Current State:       " << states[current_state] << std::endl;
-    std::cout << "Current Action:      " << current_action << std::endl;
-    std::cout << "Days Lived:          " << days_lived << " days" << std::endl;
-    std::cout << "Days Without Eating: " << days_without_eating << " days" << std::endl << std::endl;
+    std::cout << "Current State:         " << states[current_state] << std::endl;
+    std::cout << "Current Action:        " << current_action << std::endl;
+    std::cout << "Days Lived:            " << days_lived << " days" << std::endl;
+    std::cout << "Days Without Drinking: " << days_without_drinking << " days" << std::endl;
+    std::cout << "Days Without Eating:   " << days_without_eating << " days" << std::endl << std::endl;
 }
 
 size_t Environment::Reset()
@@ -37,6 +39,11 @@ std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
     else
         days_without_eating += 1;
 
+    if (action == "drink")
+        days_without_drinking = 0;
+    else
+        days_without_drinking += 1;
+
     int reward = CalculateReward();
     bool done = CheckTermination();
 
@@ -45,10 +52,13 @@ std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
 
 int Environment::CalculateReward()
 {
-    if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) || days_without_eating >= max_days_without_eating) {
+    if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) && days_without_eating >= 3) {
+        std::cout << "-1" << std::endl;
         return -1;
     } else if (days_lived >= max_days) {
         days_lived = 0;
+        return 1;
+    } else if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
         return 1;
     } else {
         return 0;

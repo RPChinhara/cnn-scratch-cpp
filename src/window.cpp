@@ -109,10 +109,6 @@ int Window::MessageLoop()
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
 
-                has_collided_with_agent_2 = false;
-                has_collided_with_food = false;
-                has_collided_with_water = false;
-
                 if (action == 1) {
                     agent.top -= 5;
                     agent.bottom -= 5;
@@ -126,6 +122,10 @@ int Window::MessageLoop()
                     agent.left += 5;
                     agent.right += 5;
                 }
+
+                has_collided_with_agent_2 = false;
+                has_collided_with_food = false;
+                has_collided_with_water = false;
 
                 ResolveBoundaryCollision(agent, client_width, client_height);
                 ResolveRectanglesCollision(agent, agent_2, "agent_2");
