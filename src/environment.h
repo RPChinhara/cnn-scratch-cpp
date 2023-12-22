@@ -6,7 +6,7 @@
 class Environment
 {
 public:
-    Environment() : actions({ "do_nothing", "up", "down", "left", "right" }), states({ "hungry", "neutral", "full" }) {
+    Environment() : actions({ "up", "down", "left", "right" }), states({ "hungry", "neutral", "full" }) {
         num_states = states.size();
         num_actions = actions.size();
     }

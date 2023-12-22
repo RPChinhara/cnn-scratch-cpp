@@ -109,16 +109,16 @@ int Window::MessageLoop()
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
 
-                if (action == 1) {
+                if (action == 0) {
                     agent.top -= 5;
                     agent.bottom -= 5;
-                } else if (action == 2) {
+                } else if (action == 1) {
                     agent.top += 5;
                     agent.bottom += 5;
-                } else if (action == 3) {
+                } else if (action == 2) {
                     agent.left -= 5;
                     agent.right -= 5;
-                } else if (action == 4) {
+                } else if (action == 3) {
                     agent.left += 5;
                     agent.right += 5;
                 }

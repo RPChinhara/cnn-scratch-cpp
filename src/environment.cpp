@@ -27,19 +27,19 @@ std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
     
     Render();
 
-    if (action == "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
+    if (has_collided_with_food && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "full")))
         current_state = std::min(current_state + 1, num_states - 1);
-    else if (action != "eat" && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
+    else if (!has_collided_with_food && current_state != std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")))
         current_state = std::max(current_state - 1, static_cast<size_t>(0));
 
     days_lived += 1;
 
-    if (action == "eat")
+    if (has_collided_with_food)
         days_without_eating = 0;
     else
         days_without_eating += 1;
 
-    if (action == "drink")
+    if (has_collided_with_water)
         days_without_drinking = 0;
     else
         days_without_drinking += 1;
@@ -53,7 +53,6 @@ std::tuple<size_t, int, bool> Environment::Step(const std::string& action)
 int Environment::CalculateReward()
 {
     if (current_state == std::distance(states.begin(), std::find(states.begin(), states.end(), "hungry")) && days_without_eating >= 3) {
-        std::cout << "-1" << std::endl;
         return -1;
     } else if (days_lived >= max_days) {
         days_lived = 0;
