@@ -109,16 +109,16 @@ int Window::MessageLoop()
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
 
-                if (action == 0) {
+                if (action == Action::MOVE_UP) {
                     agent.top -= 5;
                     agent.bottom -= 5;
-                } else if (action == 1) {
+                } else if (action == Action::MOVE_DOWN) {
                     agent.top += 5;
                     agent.bottom += 5;
-                } else if (action == 2) {
+                } else if (action == Action::MOVE_LEFT) {
                     agent.left -= 5;
                     agent.right -= 5;
-                } else if (action == 3) {
+                } else if (action == Action::MOVE_LEFT) {
                     agent.left += 5;
                     agent.right += 5;
                 }
@@ -132,7 +132,7 @@ int Window::MessageLoop()
                 ResolveRectanglesCollision(agent, food, "food");
                 ResolveRectanglesCollision(agent, water, "water");
 
-                auto [next_state, reward, temp_done] = env.Step(env.actions[action]);
+                auto [next_state, reward, temp_done] = env.Step(action);
                 done = temp_done;
 
                 q_learning.UpdateQtable(state, action, reward, next_state);

@@ -14,6 +14,9 @@ public:
     void Predict(const Tensor& x_test, const Tensor& y_test);
 
 private:
+    std::vector<Tensor> ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases);
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
+
     std::vector<size_t> layers;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
@@ -23,7 +26,4 @@ private:
     float gradient_clip_threshold = 8.0f;
     float momentum = 0.1f;
     size_t patience = 4;
-    
-    std::vector<Tensor> ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases);
-    std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
 };

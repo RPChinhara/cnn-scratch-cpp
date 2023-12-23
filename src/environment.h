@@ -1,26 +1,38 @@
 #pragma once
 
 #include <string>
-#include <vector>
+
+enum Action {
+    MOVE_UP,
+    MOVE_DOWN,
+    MOVE_LEFT,
+    MOVE_RIGHT
+};
+
+enum State {
+    HUNGRY,
+    NEUTRAL,
+    FULL,
+};
 
 class Environment
 {
 public:
-    Environment() : actions({ "up", "down", "left", "right" }), states({ "hungry", "neutral", "full" }) {
-        num_states = states.size();
-        num_actions = actions.size();
-    }
     void Render();
     size_t Reset();
-    std::tuple<size_t, int, bool> Step(const std::string& action);
-    std::vector<std::string> actions;
-    size_t num_states;
-    size_t num_actions;
+    std::tuple<size_t, int, bool> Step(const size_t action);
+
+    size_t num_actions = 4;
+    size_t num_states = 3;
+    
 private:
     int CalculateReward();
     bool CheckTermination();
-    std::vector<std::string> states;
-    size_t current_state = std::distance(states.begin(), std::find(states.begin(), states.end(), "neutral"));
+
+    Action actions;
+    State states;
+    size_t current_state = State::NEUTRAL;
+    std::string current_state_str;
     std::string current_action;
     size_t days_lived = 0;
     size_t max_days = 50;
