@@ -22,8 +22,8 @@ public:
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const size_t action);
 
-    size_t num_actions = 4;
-    size_t num_states = 3;
+    size_t numActions = 4;
+    size_t numStates = 3;
     
 private:
     int CalculateReward();
@@ -31,13 +31,13 @@ private:
 
     Action actions;
     State states;
-    size_t current_state = State::NEUTRAL;
-    std::string current_state_str;
-    std::string current_action;
-    size_t days_lived = 0;
-    size_t max_days = 50;
-    size_t days_without_eating = 0;
-    size_t days_without_drinking = 0;
-    size_t max_days_without_eating = 43;
-    size_t max_days_without_drinking = 3;
+    size_t currentState = State::NEUTRAL;
+    std::string currentStateStr;
+    std::string currentAction;
+    size_t daysLived = 0;
+    size_t daysWithoutEating = 0;
+    size_t daysWithoutDrinking = 0;
+    size_t maxDays = 50;
+    size_t maxDaysWithoutEating = 43;
+    size_t maxDaysWithoutDrinking = 3;
 };

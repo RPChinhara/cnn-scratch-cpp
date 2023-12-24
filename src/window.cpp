@@ -97,7 +97,7 @@ int Window::MessageLoop()
         bed = { 5, (client_height - 5) - 60, 71, client_height - 5 };
 
         Environment env = Environment();
-        QLearning q_learning = QLearning(env.num_states, env.num_actions);
+        QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         size_t num_episodes = 1000;
 
