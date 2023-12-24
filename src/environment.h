@@ -34,6 +34,7 @@ private:
     size_t currentState = State::NEUTRAL;
     std::string currentStateStr;
     std::string currentAction;
+    int reward;
     size_t daysLived = 0;
     size_t daysWithoutEating = 0;
     size_t daysWithoutDrinking = 0;

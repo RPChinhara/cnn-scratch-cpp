@@ -144,6 +144,7 @@ int Window::MessageLoop()
                 // InvalidateRect(hwnd, nullptr, TRUE);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                // Sleep(1000);
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;

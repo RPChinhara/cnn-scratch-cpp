@@ -15,6 +15,7 @@ void Environment::Render()
 
     std::cout << "Current State:         " << currentStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
+    std::cout << "Reward:                " << reward << std::endl;
     std::cout << "Days Lived:            " << daysLived << " days" << std::endl;
     std::cout << "Days Without Drinking: " << daysWithoutDrinking << " days" << std::endl;
     std::cout << "Days Without Eating:   " << daysWithoutEating << " days" << std::endl << std::endl;
@@ -55,6 +56,9 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     else if (!has_collided_with_food && currentState != State::HUNGRY)
         currentState = std::max(currentState - 1, static_cast<size_t>(0));
 
+    reward = CalculateReward();
+    bool done = CheckTermination();
+
     daysLived += 1;
 
     if (has_collided_with_food)
@@ -66,9 +70,6 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
         daysWithoutDrinking = 0;
     else
         daysWithoutDrinking += 1;
-
-    int reward = CalculateReward();
-    bool done = CheckTermination();
 
     return std::make_tuple(currentState, reward, done);
 }
