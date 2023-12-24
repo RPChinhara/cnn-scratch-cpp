@@ -128,9 +128,9 @@ int Window::MessageLoop()
                 has_collided_with_water = false;
 
                 ResolveBoundaryCollision(agent, client_width, client_height);
-                ResolveRectanglesCollision(agent, agent_2, "agent_2");
-                ResolveRectanglesCollision(agent, food, "food");
-                ResolveRectanglesCollision(agent, water, "water");
+                ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2);
+                ResolveRectanglesCollision(agent, food, Entity::FOOD);
+                ResolveRectanglesCollision(agent, water, Entity::WATER);
 
                 auto [next_state, reward, temp_done] = env.Step(action);
                 done = temp_done;

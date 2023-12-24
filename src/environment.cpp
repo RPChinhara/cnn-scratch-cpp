@@ -30,15 +30,24 @@ size_t Environment::Reset()
 
 std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 {
-    if (action == Action::MOVE_UP)
-        currentAction = "move_up";
-    else if (action == Action::MOVE_DOWN)
-        currentAction = "move_down";
-    else if (action == Action::MOVE_LEFT)
-        currentAction = "move_left";
-    else if (action == Action::MOVE_LEFT)
-        currentAction = "move_right";
-    
+    switch (action) {
+        case Action::MOVE_UP:
+            currentAction = "move_up";
+            break;
+        case Action::MOVE_DOWN:
+            currentAction = "move_down";
+            break;
+        case Action::MOVE_LEFT:
+            currentAction = "move_left";
+            break;
+        case Action::MOVE_RIGHT:
+            currentAction = "move_right";
+            break;
+        default:
+            MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+            break;
+    }
+
     Render();
 
     if (has_collided_with_food && currentState != State::FULL)
@@ -66,7 +75,7 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
 int Environment::CalculateReward()
 {
-    if (currentState == State::HUNGRY && daysWithoutEating >= 3) {
+    if (currentState == State::HUNGRY && daysWithoutEating >= 3 || currentState == State::FULL && has_collided_with_food) {
         return -1;
     } else if (daysLived >= maxDays) {
         daysLived = 0;

@@ -2,6 +2,14 @@
 
 #include <windows.h>
 
+enum Entity {
+    AGENT,
+    AGENT2,
+    BED,
+    FOOD,
+    WATER
+};
+
 inline RECT agent;
 inline RECT agent_2;
 inline RECT bed;

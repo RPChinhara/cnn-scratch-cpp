@@ -26,19 +26,23 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
     }
 }
 
-void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, const std::string& entity_type)
+void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity)
 {
     if ((rect1.left < rect2.right) && (rect1.right > rect2.left) && (rect1.top < rect2.bottom) && (rect1.bottom > rect2.top)) {
 
-        if (entity_type == "agent_2") {
-            has_collided_with_agent_2 = true;
-            std::cout << "has_collided_with_agent_2" << std::endl;
-        } else if (entity_type == "food") {
-            has_collided_with_food = true;
-            std::cout << "has_collided_with_food" << std::endl;
-        } else if (entity_type == "water") {
-            has_collided_with_water = true;
-            std::cout << "has_collided_with_water" << std::endl;
+        switch (entity) {
+            case AGENT2:
+                has_collided_with_agent_2 = true;
+                break;
+            case FOOD:
+                has_collided_with_food = true;
+                break;
+            case WATER:
+                has_collided_with_water = true;
+                break;
+            default:
+                MessageBox(nullptr, "Unknown entity", "Error", MB_ICONERROR);
+                break;
         }
         
         int horizontalOverlap = std::min(rect1.right, rect2.right) - std::max(rect1.left, rect2.left);
