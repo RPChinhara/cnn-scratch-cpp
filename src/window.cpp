@@ -109,19 +109,14 @@ int Window::MessageLoop()
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
 
-                if (action == Action::MOVE_UP) {
-                    agent.top -= 5;
-                    agent.bottom -= 5;
-                } else if (action == Action::MOVE_DOWN) {
-                    agent.top += 5;
-                    agent.bottom += 5;
-                } else if (action == Action::MOVE_LEFT) {
-                    agent.left -= 5;
-                    agent.right -= 5;
-                } else if (action == Action::MOVE_LEFT) {
-                    agent.left += 5;
-                    agent.right += 5;
-                }
+                if (action == Action::MOVE_UP)
+                    agent.top -= 2, agent.bottom -= 2;
+                else if (action == Action::MOVE_DOWN)
+                    agent.top += 2, agent.bottom += 2;
+                else if (action == Action::MOVE_LEFT)
+                    agent.left -= 2, agent.right -= 2;
+                else if (action == Action::MOVE_LEFT)
+                    agent.left += 2, agent.right += 2;
 
                 has_collided_with_agent_2 = false;
                 has_collided_with_food = false;

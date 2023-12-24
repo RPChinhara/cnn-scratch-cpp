@@ -12,7 +12,13 @@ enum Action {
 enum State {
     HUNGRY,
     NEUTRAL,
-    FULL,
+    FULL
+};
+
+enum Thirst {
+    PARCHED,
+    NORMAL,
+    QUENCHED
 };
 
 class Environment
