@@ -89,7 +89,6 @@ int Environment::CalculateReward()
     if (currentState == State::HUNGRY && daysWithoutEating >= 3) {
         reward += -1;
     } if (currentState == State::FULL && has_collided_with_food) {
-        std::cout << "I'm full!" << std::endl;
         reward += -1;
     } if (daysLived >= maxDays) {
         daysLived = 0;
