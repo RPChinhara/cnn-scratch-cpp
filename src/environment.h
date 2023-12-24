@@ -35,8 +35,6 @@ private:
     int CalculateReward();
     bool CheckTermination();
 
-    Action actions;
-    State states;
     size_t currentState = State::NEUTRAL;
     std::string currentStateStr;
     std::string currentAction;

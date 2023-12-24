@@ -6,12 +6,20 @@
 
 void Environment::Render()
 {
-    if (currentState == State::HUNGRY)
-        currentStateStr = "hungry";
-    else if (currentState == State::NEUTRAL)
-        currentStateStr = "neutral";
-    else if (currentState == State::FULL)
-        currentStateStr = "full";
+    switch (currentState) {
+        case State::HUNGRY:
+            currentStateStr = "hungry";
+            break;
+        case State::NEUTRAL:
+            currentStateStr = "neutral";
+            break;
+        case State::FULL:
+            currentStateStr = "full";
+            break;
+        default:
+            MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
+            break;
+    }
 
     std::cout << "Current State:         " << currentStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
@@ -76,16 +84,23 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
 int Environment::CalculateReward()
 {
-    if (currentState == State::HUNGRY && daysWithoutEating >= 3 || currentState == State::FULL && has_collided_with_food) {
-        return -1;
-    } else if (daysLived >= maxDays) {
+    int reward = 0;
+
+    if (currentState == State::HUNGRY && daysWithoutEating >= 3) {
+        reward += -1;
+    } if (currentState == State::FULL && has_collided_with_food) {
+        std::cout << "I'm full!" << std::endl;
+        reward += -1;
+    } if (daysLived >= maxDays) {
         daysLived = 0;
-        return 1;
-    } else if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-        return 1;
+        reward += 1;
+    } if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food) {
+        reward += 1;
     } else {
-        return 0;
+        reward += 0;
     }
+
+    return reward;
 }
 
 bool Environment::CheckTermination()
