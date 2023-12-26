@@ -22,42 +22,22 @@ size_t QLearning::ChooseAction(size_t state)
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
-    static int idx0 = 0; 
-    static int idx1 = 0;
-    static int idx2 = 0;
-    static int idx3 = 0;
 
-    auto b = dis_1(rng);
-    std::cout << "dis_1: " << b << " exploration_rate: " << exploration_rate << std::endl;
-    if (b < exploration_rate) {
-        std::cout << "exploration" << std::endl;
+    if (dis_1(rng) < exploration_rate) {
         std::uniform_int_distribution<> dis_2(0, n_actions - 1);
-        auto a = dis_2(rng);
-        std::cout << "action: " << a << std::endl;
-
-        if (a == 0) idx0 += 1;
-        if (a == 1) idx1 += 1;
-        if (a == 2) idx2 += 1;
-        if (a == 3) idx3 += 1;
-
-        std::cout << "idx 0: " << idx0 << " idx 1: " << idx1 << " idx 2: " << idx2 << " idx 3: " << idx3 << std::endl;
-        return a;
+        return dis_2(rng);
     } else {
         Tensor sliced_q_table = Slice(q_table, state, 1);
         size_t max_idx = 0;
         float max = std::numeric_limits<float>::lowest();
-
         
         for (size_t i = 0; i < sliced_q_table.size; ++i) {
-            std::cout << "sliced_q_table[i]: " << sliced_q_table[i] << " max: " << max << std::endl;
             if (sliced_q_table[i] > max) {
-                std::cout << sliced_q_table[i] << " is bigger than " << max << std::endl;
                 max = sliced_q_table[i];
                 max_idx = i;
             }
         }
         
-        std::cout << "max idx: " << max_idx << std::endl;
         return max_idx;
     }
 }
