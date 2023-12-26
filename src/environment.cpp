@@ -86,17 +86,18 @@ int Environment::CalculateReward()
 {
     int reward = 0;
 
-    if (currentState == State::HUNGRY && daysWithoutEating >= 3) {
-        reward += -1;
-    } if (currentState == State::FULL && has_collided_with_food) {
-        reward += -1;
-    } if (daysLived >= maxDays) {
+    if (daysLived >= maxDays)
         reward += 1;
-    } if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food) {
+    if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food)
         reward += 1;
-    } else {
+    if (currentState == State::HUNGRY && daysWithoutEating >= 3)
+        reward += -1;
+    if (currentState == State::FULL && has_collided_with_food)
+        reward += -1;
+    if (has_collided_with_wall)
+        reward += -1;
+    else
         reward += 0;
-    }
 
     return reward;
 }

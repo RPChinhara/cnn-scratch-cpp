@@ -68,7 +68,7 @@ int Window::MessageLoop()
     NN nn = NN({ 4, 128, 3 }, 0.01f);
 
     auto startTime = std::chrono::high_resolution_clock::now();
-
+    
     nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
     
     auto endTime = std::chrono::high_resolution_clock::now();
@@ -121,6 +121,7 @@ int Window::MessageLoop()
                 has_collided_with_agent_2 = false;
                 has_collided_with_food = false;
                 has_collided_with_water = false;
+                has_collided_with_wall = false;
 
                 ResolveBoundaryCollision(agent, client_width, client_height);
                 ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2);

@@ -9,18 +9,26 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
     LONG agent_width = 50, agent_height = 50;
 
     if (rect.left < 0) {
+        has_collided_with_wall= true;
+        
         rect.left = 0;
         rect.right = agent_width;
     }
     if (rect.top < 0) {
+        has_collided_with_wall = true;
+
         rect.top = 0;
         rect.bottom = agent_height;
     }
     if (rect.right > client_width) {
+        has_collided_with_wall = true;
+
         rect.right = client_width;
         rect.left = client_width - agent_width;
     }
     if (rect.bottom > client_height) {
+        has_collided_with_wall = true;
+
         rect.bottom = client_height;
         rect.top = client_height - agent_height;
     }

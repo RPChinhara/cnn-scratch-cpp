@@ -19,3 +19,4 @@ inline RECT water;
 inline bool has_collided_with_agent_2 = false;
 inline bool has_collided_with_food = false;
 inline bool has_collided_with_water = false;
+inline bool has_collided_with_wall = false;
