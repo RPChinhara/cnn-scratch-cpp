@@ -110,13 +110,13 @@ int Window::MessageLoop()
                 size_t action = q_learning.ChooseAction(state);
 
                 if (action == Action::MOVE_UP)
-                    agent.top -= 2, agent.bottom -= 2;
+                    agent.top -= 1, agent.bottom -= 1;
                 else if (action == Action::MOVE_DOWN)
-                    agent.top += 2, agent.bottom += 2;
+                    agent.top += 1, agent.bottom += 1;
                 else if (action == Action::MOVE_LEFT)
-                    agent.left -= 2, agent.right -= 2;
-                else if (action == Action::MOVE_LEFT)
-                    agent.left += 2, agent.right += 2;
+                    agent.left -= 1, agent.right -= 1;
+                else if (action == Action::MOVE_RIGHT)
+                    agent.left += 1, agent.right += 1;
 
                 has_collided_with_agent_2 = false;
                 has_collided_with_food = false;
@@ -131,7 +131,7 @@ int Window::MessageLoop()
                 auto [next_state, reward, temp_done] = env.Step(action);
                 done = temp_done;
 
-                q_learning.UpdateQtable(state, action, reward, next_state);
+                q_learning.UpdateQtable(state, action, reward, next_state, done);
 
                 total_reward += reward;
                 state = next_state;

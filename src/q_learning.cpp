@@ -33,7 +33,7 @@ size_t QLearning::ChooseAction(size_t state)
         std::cout << "exploration" << std::endl;
         std::uniform_int_distribution<> dis_2(0, n_actions - 1);
         auto a = dis_2(rng);
-        std::cout << a << std::endl;
+        std::cout << "action: " << a << std::endl;
 
         if (a == 0) idx0 += 1;
         if (a == 1) idx1 += 1;
@@ -45,9 +45,11 @@ size_t QLearning::ChooseAction(size_t state)
     } else {
         Tensor sliced_q_table = Slice(q_table, state, 1);
         size_t max_idx = 0;
-        int max = std::numeric_limits<int>::min();
+        float max = std::numeric_limits<float>::lowest();
 
+        
         for (size_t i = 0; i < sliced_q_table.size; ++i) {
+            std::cout << "sliced_q_table[i]: " << sliced_q_table[i] << " max: " << max << std::endl;
             if (sliced_q_table[i] > max) {
                 std::cout << sliced_q_table[i] << " is bigger than " << max << std::endl;
                 max = sliced_q_table[i];
@@ -60,7 +62,7 @@ size_t QLearning::ChooseAction(size_t state)
     }
 }
 
-void QLearning::UpdateQtable(size_t state, size_t action, int reward, size_t next_state)
+void QLearning::UpdateQtable(size_t state, size_t action, int reward, size_t next_state, bool done)
 {
     Tensor sliced_q_table = Slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
@@ -73,7 +75,10 @@ void QLearning::UpdateQtable(size_t state, size_t action, int reward, size_t nex
     q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);
 
     std::cout << q_table << std::endl << std::endl;
-        
+    
+    if (done)
+        exploration_rate = 1.0f;
+
     if (exploration_rate > exploration_min)
         exploration_rate *= exploration_decay;
 }
