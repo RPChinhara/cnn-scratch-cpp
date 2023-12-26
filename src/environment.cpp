@@ -91,7 +91,6 @@ int Environment::CalculateReward()
     } if (currentState == State::FULL && has_collided_with_food) {
         reward += -1;
     } if (daysLived >= maxDays) {
-        daysLived = 0;
         reward += 1;
     } if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food) {
         reward += 1;
@@ -104,5 +103,8 @@ int Environment::CalculateReward()
 
 bool Environment::CheckTermination()
 {
-    return daysWithoutEating >= maxDaysWithoutEating;
+    if (daysLived >= maxDays)
+        daysLived = 0;
+    
+    return daysWithoutEating >= maxDaysWithoutEating || daysLived >= maxDays;
 }
