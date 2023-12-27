@@ -24,9 +24,6 @@ void Environment::Render()
     std::cout << "Current State:         " << currentStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
     std::cout << "Reward:                " << reward << std::endl;
-    std::cout << "Days Lived:            " << daysLived << " days" << std::endl;
-    std::cout << "Days Without Drinking: " << daysWithoutDrinking << " days" << std::endl;
-    std::cout << "Days Without Eating:   " << daysWithoutEating << " days" << std::endl << std::endl;
 }
 
 size_t Environment::Reset()
@@ -66,8 +63,6 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
     reward = CalculateReward();
     bool done = CheckTermination();
-
-    daysLived += 1;
 
     if (has_collided_with_food)
         daysWithoutEating = 0;
