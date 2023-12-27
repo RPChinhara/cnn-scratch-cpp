@@ -18,6 +18,8 @@ static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 const char Window::CLASS_NAME[] = "WorldWindow";
 
+inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
+
 Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 {
     WNDCLASS wc = {};
@@ -102,7 +104,7 @@ int Window::MessageLoop()
         size_t num_episodes = 1000;
 
         for (size_t i = 0; i < num_episodes; ++i) {
-            auto startTime = std::chrono::high_resolution_clock::now();
+            lifeStartTime = std::chrono::high_resolution_clock::now();
             auto state = env.Reset();
             bool done = false;
             int total_reward = 0;
@@ -128,19 +130,6 @@ int Window::MessageLoop()
                 ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD);
                 ResolveRectanglesCollision(agent, water, Entity::WATER);
-
-                auto endTime = std::chrono::high_resolution_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-
-                auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration % std::chrono::seconds(1)).count();
-                auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count() % 60;
-                auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count() % 60;
-                auto hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
-                auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
-
-                std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-                std::cout << "Days Without Drinking: " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-                std::cout << "Days Without Eating:   " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
 
                 auto [next_state, reward, temp_done] = env.Step(action);
                 done = temp_done;

@@ -1,8 +1,12 @@
 #include "environment.h"
 #include "entity.h"
 
+#include <chrono>
 #include <iostream>
 #include <windows.h>
+
+inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
+inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeEndTime;
 
 void Environment::Render()
 {
@@ -21,9 +25,21 @@ void Environment::Render()
             break;
     }
 
+    auto lifeEndTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(lifeEndTime - lifeStartTime);
+
+    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration % std::chrono::seconds(1)).count();
+    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count() % 60;
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count() % 60;
+    auto hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
+    auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
+
     std::cout << "Current State:         " << currentStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
     std::cout << "Reward:                " << reward << std::endl;
+    std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
+    std::cout << "Days Without Drinking: " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
+    std::cout << "Days Without Eating:   " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
 }
 
 size_t Environment::Reset()
@@ -38,16 +54,19 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 {
     switch (action) {
         case Action::MOVE_UP:
-            currentAction = "move_up";
+            currentAction = "move up";
             break;
         case Action::MOVE_DOWN:
-            currentAction = "move_down";
+            currentAction = "move down";
             break;
         case Action::MOVE_LEFT:
-            currentAction = "move_left";
+            currentAction = "move left";
             break;
         case Action::MOVE_RIGHT:
-            currentAction = "move_right";
+            currentAction = "move right";
+            break;
+        case Action::STATIC:
+            currentAction = "static";
             break;
         default:
             MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
@@ -64,15 +83,15 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     reward = CalculateReward();
     bool done = CheckTermination();
 
-    if (has_collided_with_food)
-        daysWithoutEating = 0;
-    else
-        daysWithoutEating += 1;
+    // if (has_collided_with_food)
+    //     daysWithoutEating = 0;
+    // else
+    //     daysWithoutEating += 1;
 
-    if (has_collided_with_water)
-        daysWithoutDrinking = 0;
-    else
-        daysWithoutDrinking += 1;
+    // if (has_collided_with_water)
+    //     daysWithoutDrinking = 0;
+    // else
+    //     daysWithoutDrinking += 1;
 
     return std::make_tuple(currentState, reward, done);
 }
@@ -85,6 +104,8 @@ int Environment::CalculateReward()
         reward += 1;
     if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food)
         reward += 1;
+    if (currentState == State::HUNGRY && !has_collided_with_food)
+        reward += -1;
     if (currentState == State::HUNGRY && daysWithoutEating >= 3)
         reward += -1;
     if (currentState == State::FULL && has_collided_with_food)

@@ -6,7 +6,8 @@ enum Action {
     MOVE_UP,
     MOVE_DOWN,
     MOVE_LEFT,
-    MOVE_RIGHT
+    MOVE_RIGHT,
+    STATIC
 };
 
 enum State {
@@ -28,7 +29,7 @@ public:
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const size_t action);
 
-    size_t numActions = 4;
+    size_t numActions = 5;
     size_t numStates = 3;
     
 private:
