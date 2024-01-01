@@ -11,6 +11,8 @@ enum Entity {
 };
 
 inline RECT agent;
+inline RECT agent_eye_1;
+inline RECT agent_eye_2;
 inline RECT agent_2;
 inline RECT bed;
 inline RECT food;

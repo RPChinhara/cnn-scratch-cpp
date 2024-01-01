@@ -92,7 +92,12 @@ int Window::MessageLoop()
         int client_width = client_rect.right - client_rect.left;
         int client_height = client_rect.bottom - client_rect.top;
 
+        int eyeWidth = 5;
+        int eyeHeight = 13;
+
         agent = { 13, (client_height - 13) - 50, 63, client_height - 13 };
+        agent_eye_1 = { 23, (client_height - 13) - 50 + 10, 23 + eyeWidth, (client_height - 13) - 50 + 10 + eyeHeight };
+        agent_eye_2 = { 53 - eyeWidth, (client_height - 13) - 50 + 10, 53, (client_height - 13) - 50 + 10 + eyeHeight };
         agent_2 = { (client_width - 5) - 50, (client_height - 5) - 50, client_width - 5, client_height - 5 };
         food = { 5, 5, 55, 55 };
         water = { (client_width - 5) - 50, 5, client_width - 5, 55 };
@@ -194,6 +199,11 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             FillRect(hdc, &agent, pinkBrush);
             FillRect(hdc, &agent_2, pinkBrush);
             DeleteObject(pinkBrush);
+
+            HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
+            FillRect(hdc, &agent_eye_1, blackBrush);
+            FillRect(hdc, &agent_eye_2, blackBrush);
+            DeleteObject(blackBrush);
 
             HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
             FillRect(hdc, &food, redBrush);
