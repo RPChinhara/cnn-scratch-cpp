@@ -3,10 +3,10 @@
 #include <string>
 
 enum Action {
-    MOVE_UP,
-    MOVE_DOWN,
-    MOVE_LEFT,
-    MOVE_RIGHT,
+    MOVE_FORWARD,
+    TURN_LEFT,
+    TURN_RIGHT,
+    TURN_AROUND,
     STATIC
 };
 

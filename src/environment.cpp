@@ -53,17 +53,17 @@ size_t Environment::Reset()
 std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 {
     switch (action) {
-        case Action::MOVE_UP:
-            currentAction = "move up";
+        case Action::MOVE_FORWARD:
+            currentAction = "move forward";
             break;
-        case Action::MOVE_DOWN:
-            currentAction = "move down";
+        case Action::TURN_LEFT:
+            currentAction = "turn left";
             break;
-        case Action::MOVE_LEFT:
-            currentAction = "move left";
+        case Action::TURN_RIGHT:
+            currentAction = "turn right";
             break;
-        case Action::MOVE_RIGHT:
-            currentAction = "move right";
+        case Action::TURN_AROUND:
+            currentAction = "turn around";
             break;
         case Action::STATIC:
             currentAction = "static";
