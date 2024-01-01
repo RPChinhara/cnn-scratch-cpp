@@ -7,7 +7,8 @@
 void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
     LONG agent_width = 50, agent_height = 50;
-    LONG eyeWidth = 5, eyeHeight = 13;
+    // LONG eyeWidth = 5, 
+    LONG eyeHeight = 13;
 
     if (rect.left < 0) {
         has_collided_with_wall= true;

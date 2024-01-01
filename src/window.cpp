@@ -115,15 +115,13 @@ int Window::MessageLoop()
                 size_t action = q_learning.ChooseAction(state);
 
                 switch (action) {
-                    case Action::MOVE_FORWARD: {
+                    case Action::MOVE_FORWARD:
                         switch (orientation) {
-                            case Orientation::FRONT: {
+                            case Orientation::FRONT:
                                 agent.top += 1, agent.bottom += 1;
                                 agent_eye_1.top += 1, agent_eye_1.bottom += 1;
                                 agent_eye_2.top += 1, agent_eye_2.bottom += 1;
-                                std::cout << "fuck you " << std::endl;
                                 break;
-                            }
                             case Orientation::LEFT:
                                 break;
                             case Orientation::RIGHT:
@@ -135,7 +133,6 @@ int Window::MessageLoop()
                                 break;
                         }
                         break;
-                    }
                     case Action::TURN_LEFT:
                         break;
                     case Action::TURN_RIGHT:
@@ -249,10 +246,9 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
             return 0;
         }
-        case WM_UPDATE_DISPLAY: {
+        case WM_UPDATE_DISPLAY:
             InvalidateRect(hwnd, nullptr, TRUE);
             return 0;
-        }
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
