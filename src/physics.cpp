@@ -7,6 +7,7 @@
 void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
     LONG agent_width = 50, agent_height = 50;
+    LONG eyeWidth = 5, eyeHeight = 13;
 
     if (rect.left < 0) {
         has_collided_with_wall= true;
@@ -31,6 +32,12 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
 
         rect.bottom = client_height;
         rect.top = client_height - agent_height;
+
+        agent_eye_1.bottom = client_height - agent_height + 10 + eyeHeight;
+        agent_eye_1.top = client_height - agent_height + 10;
+
+        agent_eye_2.bottom = client_height - agent_height + 10 + eyeHeight;
+        agent_eye_2.top = client_height - agent_height + 10;
     }
 }
 

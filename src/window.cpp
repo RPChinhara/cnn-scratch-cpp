@@ -89,24 +89,21 @@ int Window::MessageLoop()
     std::thread rl_thread([this]() {
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
-        int client_width = client_rect.right - client_rect.left;
-        int client_height = client_rect.bottom - client_rect.top;
+        LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        int eyeWidth = 5;
-        int eyeHeight = 13;
-
-        agent = { 13, (client_height - 13) - 50, 63, client_height - 13 };
-        agent_eye_1 = { 23, (client_height - 13) - 50 + 10, 23 + eyeWidth, (client_height - 13) - 50 + 10 + eyeHeight };
-        agent_eye_2 = { 53 - eyeWidth, (client_height - 13) - 50 + 10, 53, (client_height - 13) - 50 + 10 + eyeHeight };
-        agent_2 = { (client_width - 5) - 50, (client_height - 5) - 50, client_width - 5, client_height - 5 };
-        food = { 5, 5, 55, 55 };
-        water = { (client_width - 5) - 50, 5, client_width - 5, 55 };
-        bed = { 5, (client_height - 5) - 60, 71, client_height - 5 };
+        agent       = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
+        agent_eye_1 = { 23, (client_height - 13) - agent_height + 10, 23 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_eye_2 = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_2     = { (client_width - 5) - agent_width, (client_height - 5) - agent_height, client_width - 5, client_height - 5 };
+        food        = { 5, 5, 5 + food_width, 5 + food_height };
+        water       = { (client_width - 5) - water_width, 5, client_width - 5, 5 + water_height };
+        bed         = { 5, (client_height - 5) - bed_height, 5 + bed_width, client_height - 5 };
 
         Environment env = Environment();
         QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         size_t num_episodes = 1000;
+        Orientation orientation = Orientation::FRONT;
 
         for (size_t i = 0; i < num_episodes; ++i) {
             lifeStartTime = std::chrono::high_resolution_clock::now();
@@ -116,6 +113,41 @@ int Window::MessageLoop()
 
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
+
+                switch (action) {
+                    case Action::MOVE_FORWARD: {
+                        switch (orientation) {
+                            case Orientation::FRONT: {
+                                agent.top += 1, agent.bottom += 1;
+                                agent_eye_1.top += 1, agent_eye_1.bottom += 1;
+                                agent_eye_2.top += 1, agent_eye_2.bottom += 1;
+                                std::cout << "fuck you " << std::endl;
+                                break;
+                            }
+                            case Orientation::LEFT:
+                                break;
+                            case Orientation::RIGHT:
+                                break;
+                            case Orientation::BACK:
+                                break;
+                            default:
+                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                                break;
+                        }
+                        break;
+                    }
+                    case Action::TURN_LEFT:
+                        break;
+                    case Action::TURN_RIGHT:
+                        break;
+                    case Action::TURN_AROUND:
+                        break;
+                    case Action::STATIC:
+                        break;
+                    default:
+                        MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+                        break;
+                }
 
                 // if (action == Action::MOVE_FORWARD)
                 //     agent.top -= 1, agent.bottom -= 1;
