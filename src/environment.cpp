@@ -78,7 +78,7 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
     if (has_collided_with_food && currentState != State::FULL)
         currentState = std::min(currentState + 1, numStates - 1);
-    else if ( hours >= 3 && !has_collided_with_food && currentState != State::HUNGRY)
+    else if (hours >= 3 && currentState != State::HUNGRY)
         currentState = std::max(currentState - 1, static_cast<size_t>(0));
 
     reward = CalculateReward();
