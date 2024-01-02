@@ -91,19 +91,19 @@ int Window::MessageLoop()
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        agent       = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
-        agent_eye_1 = { 23, (client_height - 13) - agent_height + 10, 23 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
-        agent_eye_2 = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
-        agent_2     = { (client_width - 5) - agent_width, (client_height - 5) - agent_height, client_width - 5, client_height - 5 };
-        food        = { 5, 5, 5 + food_width, 5 + food_height };
-        water       = { (client_width - 5) - water_width, 5, client_width - 5, 5 + water_height };
-        bed         = { 5, (client_height - 5) - bed_height, 5 + bed_width, client_height - 5 };
+        agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
+        agent_left_eye  = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_right_eye = { 23, (client_height - 13) - agent_height + 10, 23 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_2         = { (client_width - 5) - agent_width, (client_height - 5) - agent_height, client_width - 5, client_height - 5 };
+        food            = { 5, 5, 5 + food_width, 5 + food_height };
+        water           = { (client_width - 5) - water_width, 5, client_width - 5, 5 + water_height };
+        bed             = { 5, (client_height - 5) - bed_height, 5 + bed_width, client_height - 5 };
+        Orientation orientation = Orientation::FRONT;
 
         Environment env = Environment();
         QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         size_t num_episodes = 1000;
-        Orientation orientation = Orientation::FRONT;
 
         for (size_t i = 0; i < num_episodes; ++i) {
             lifeStartTime = std::chrono::high_resolution_clock::now();
@@ -119,14 +119,23 @@ int Window::MessageLoop()
                         switch (orientation) {
                             case Orientation::FRONT:
                                 agent.top += 1, agent.bottom += 1;
-                                agent_eye_1.top += 1, agent_eye_1.bottom += 1;
-                                agent_eye_2.top += 1, agent_eye_2.bottom += 1;
+                                agent_left_eye.top += 1, agent_left_eye.bottom += 1;
+                                agent_right_eye.top += 1, agent_right_eye.bottom += 1;
                                 break;
                             case Orientation::LEFT:
+                                agent.left += 1, agent.right += 1;
+                                agent_left_eye.left += 1, agent_left_eye.right += 1;
+                                agent_right_eye.left += 1, agent_right_eye.right += 1;
                                 break;
                             case Orientation::RIGHT:
+                                agent.left -= 1, agent.right -= 1;
+                                agent_left_eye.left -= 1, agent_left_eye.right -= 1;
+                                agent_right_eye.left -= 1, agent_right_eye.right -= 1;
                                 break;
                             case Orientation::BACK:
+                                agent.top -= 1, agent.bottom -= 1;
+                                agent_left_eye.top -= 1, agent_left_eye.bottom -= 1;
+                                agent_right_eye.top -= 1, agent_right_eye.bottom -= 1;
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -134,10 +143,85 @@ int Window::MessageLoop()
                         }
                         break;
                     case Action::TURN_LEFT:
+                        switch (orientation) {
+                            case Orientation::FRONT:
+                                orientation = Orientation::LEFT;
+                                render_agent_left_eye = true;
+                                render_agent_right_eye = false;
+                                break;
+                            case Orientation::LEFT:
+                                orientation = Orientation::BACK;
+                                render_agent_left_eye = false;
+                                render_agent_right_eye = false;
+                                break;
+                            case Orientation::RIGHT:
+                                orientation = Orientation::FRONT;
+                                render_agent_left_eye = true;
+                                render_agent_right_eye = true;
+                                break;
+                            case Orientation::BACK:
+                                orientation = Orientation::RIGHT;
+                                render_agent_left_eye = false;
+                                render_agent_right_eye = true;
+                                break;
+                            default:
+                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                                break;
+                        }
                         break;
                     case Action::TURN_RIGHT:
+                        switch (orientation) {
+                            case Orientation::FRONT:
+                                orientation = Orientation::RIGHT;
+                                render_agent_left_eye = false;
+                                render_agent_right_eye = true;
+                                break;
+                            case Orientation::LEFT:
+                                orientation = Orientation::FRONT;
+                                render_agent_left_eye = true;
+                                render_agent_right_eye = true;
+                                break;
+                            case Orientation::RIGHT:
+                                orientation = Orientation::BACK;
+                                render_agent_left_eye = false;
+                                render_agent_right_eye = false;
+                                break;
+                            case Orientation::BACK:
+                                orientation = Orientation::LEFT;
+                                render_agent_left_eye = true;
+                                render_agent_right_eye = false;
+                                break;
+                            default:
+                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                                break;
+                        }
                         break;
                     case Action::TURN_AROUND:
+                        switch (orientation) {
+                            case Orientation::FRONT:
+                                orientation = Orientation::BACK;
+                                render_agent_left_eye = false;
+                                render_agent_right_eye = false;
+                                break;
+                            case Orientation::LEFT:
+                                orientation = Orientation::RIGHT;
+                                render_agent_left_eye = false;
+                                render_agent_right_eye = true;
+                                break;
+                            case Orientation::RIGHT:
+                                orientation = Orientation::LEFT;
+                                render_agent_left_eye = true;
+                                render_agent_right_eye = false;
+                                break;
+                            case Orientation::BACK:
+                                orientation = Orientation::FRONT;
+                                render_agent_left_eye = true;
+                                render_agent_right_eye = true;
+                                break;
+                            default:
+                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                                break;
+                        }
                         break;
                     case Action::STATIC:
                         break;
@@ -145,15 +229,6 @@ int Window::MessageLoop()
                         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
                         break;
                 }
-
-                // if (action == Action::MOVE_FORWARD)
-                //     agent.top -= 1, agent.bottom -= 1;
-                // else if (action == Action::MOVE_DOWN)
-                //     agent.top += 1, agent.bottom += 1;
-                // else if (action == Action::MOVE_LEFT)
-                //     agent.left -= 1, agent.right -= 1;
-                // else if (action == Action::MOVE_RIGHT)
-                //     agent.left += 1, agent.right += 1;
 
                 has_collided_with_agent_2 = false;
                 has_collided_with_food = false;
@@ -176,7 +251,7 @@ int Window::MessageLoop()
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
                 // InvalidateRect(hwnd, nullptr, TRUE);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 // Sleep(1000);
             }
 
@@ -230,8 +305,11 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             DeleteObject(pinkBrush);
 
             HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
-            FillRect(hdc, &agent_eye_1, blackBrush);
-            FillRect(hdc, &agent_eye_2, blackBrush);
+            if (render_agent_left_eye)
+                FillRect(hdc, &agent_left_eye, blackBrush);
+            if (render_agent_right_eye)
+                FillRect(hdc, &agent_right_eye, blackBrush);
+
             DeleteObject(blackBrush);
 
             HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));

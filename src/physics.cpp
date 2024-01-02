@@ -34,11 +34,11 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
         rect.bottom = client_height;
         rect.top = client_height - agent_height;
 
-        agent_eye_1.bottom = client_height - agent_height + 10 + eyeHeight;
-        agent_eye_1.top = client_height - agent_height + 10;
+        agent_left_eye.bottom = client_height - agent_height + 10 + eyeHeight;
+        agent_left_eye.top = client_height - agent_height + 10;
 
-        agent_eye_2.bottom = client_height - agent_height + 10 + eyeHeight;
-        agent_eye_2.top = client_height - agent_height + 10;
+        agent_right_eye.bottom = client_height - agent_height + 10 + eyeHeight;
+        agent_right_eye.top = client_height - agent_height + 10;
     }
 }
 

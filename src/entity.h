@@ -18,8 +18,8 @@ enum Orientation {
 };
 
 inline RECT agent;
-inline RECT agent_eye_1;
-inline RECT agent_eye_2;
+inline RECT agent_left_eye;
+inline RECT agent_right_eye;
 inline RECT agent_2;
 inline RECT bed;
 inline RECT food;
@@ -35,3 +35,6 @@ inline bool has_collided_with_agent_2 = false;
 inline bool has_collided_with_food = false;
 inline bool has_collided_with_water = false;
 inline bool has_collided_with_wall = false;
+
+inline bool render_agent_left_eye = true;
+inline bool render_agent_right_eye = true;
