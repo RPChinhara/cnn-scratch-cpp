@@ -7,14 +7,23 @@
 void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
     LONG agent_width = 50, agent_height = 50;
-    // LONG eyeWidth = 5, 
-    LONG eyeHeight = 13;
+    LONG eyeWidth = 5, LONG eyeHeight = 13;
+
+    // agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
+    // agent_left_eye  = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
+    // agent_right_eye = { 23, (client_height - 13) - agent_height + 10, 23 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
 
     if (rect.left < 0) {
         has_collided_with_wall= true;
         
         rect.left = 0;
         rect.right = agent_width;
+
+        // agent_left_eye.left = client_height - agent_height + 10;
+        // agent_left_eye.right = client_height - agent_height + 10 + eyeHeight;
+
+        // agent_right_eye.left = client_height - agent_height + 10;
+        // agent_right_eye.right = client_height - agent_height + 10 + eyeHeight;
     }
     if (rect.top < 0) {
         has_collided_with_wall = true;
@@ -25,20 +34,26 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
     if (rect.right > client_width) {
         has_collided_with_wall = true;
 
-        rect.right = client_width;
         rect.left = client_width - agent_width;
+        rect.right = client_width;
+
+        // agent_left_eye.left = client_height - agent_height + 10;
+        // agent_left_eye.right = client_height - agent_height + 10 + eyeHeight;
+
+        // agent_right_eye.left = client_height - agent_height + 10;
+        // agent_right_eye.right = client_height - agent_height + 10 + eyeHeight;
     }
     if (rect.bottom > client_height) {
         has_collided_with_wall = true;
 
-        rect.bottom = client_height;
         rect.top = client_height - agent_height;
+        rect.bottom = client_height;
 
-        agent_left_eye.bottom = client_height - agent_height + 10 + eyeHeight;
         agent_left_eye.top = client_height - agent_height + 10;
+        agent_left_eye.bottom = client_height - agent_height + 10 + eyeHeight;
 
-        agent_right_eye.bottom = client_height - agent_height + 10 + eyeHeight;
         agent_right_eye.top = client_height - agent_height + 10;
+        agent_right_eye.bottom = client_height - agent_height + 10 + eyeHeight;
     }
 }
 
