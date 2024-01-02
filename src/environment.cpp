@@ -7,6 +7,7 @@
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeEndTime;
+inline std::chrono::hours::rep hours;
 
 void Environment::Render()
 {
@@ -31,7 +32,7 @@ void Environment::Render()
     auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration % std::chrono::seconds(1)).count();
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count() % 60;
     auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count() % 60;
-    auto hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
+    hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
     std::cout << "Current State:         " << currentStateStr << std::endl;
@@ -77,7 +78,7 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
     if (has_collided_with_food && currentState != State::FULL)
         currentState = std::min(currentState + 1, numStates - 1);
-    else if (!has_collided_with_food && currentState != State::HUNGRY)
+    else if ( hours >= 3 && !has_collided_with_food && currentState != State::HUNGRY)
         currentState = std::max(currentState - 1, static_cast<size_t>(0));
 
     reward = CalculateReward();
@@ -106,7 +107,7 @@ int Environment::CalculateReward()
         reward += 1;
     if (currentState == State::HUNGRY && !has_collided_with_food)
         reward += -1;
-    if (currentState == State::HUNGRY && daysWithoutEating >= 3)
+    if (currentState == State::HUNGRY && hours >= 3)
         reward += -1;
     if (currentState == State::FULL && has_collided_with_food)
         reward += -1;
