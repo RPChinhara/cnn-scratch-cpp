@@ -7,7 +7,8 @@
 void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
     LONG agent_width = 50, agent_height = 50;
-    LONG eyeWidth = 5, LONG eyeHeight = 13;
+    // LONG eyeWidth = 5, 
+    LONG eyeHeight = 13;
 
     // agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
     // agent_left_eye  = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
