@@ -2,14 +2,6 @@
 
 #include <string>
 
-enum Action {
-    MOVE_FORWARD,
-    TURN_LEFT,
-    TURN_RIGHT,
-    TURN_AROUND,
-    STATIC
-};
-
 enum State {
     HUNGRY,
     NEUTRAL,
@@ -22,6 +14,14 @@ enum Thirst {
     QUENCHED
 };
 
+enum Action {
+    MOVE_FORWARD,
+    TURN_LEFT,
+    TURN_RIGHT,
+    TURN_AROUND,
+    STATIC
+};
+
 class Environment
 {
 public:
@@ -29,8 +29,8 @@ public:
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const size_t action);
 
-    size_t numActions = 5;
     size_t numStates = 3;
+    size_t numActions = 5;
     
 private:
     int CalculateReward();
