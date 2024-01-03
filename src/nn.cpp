@@ -3,7 +3,9 @@
 #include "array.h"
 #include "derivative.h"
 #include "linalg.h"
+#include "loss.h"
 #include "mathematics.h"
+#include "metric.h"
 #include "random.h"
 
 #include <chrono>

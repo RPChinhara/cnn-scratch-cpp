@@ -1,7 +1,5 @@
 #pragma once
 
-#include "loss.h"
-#include "metric.h"
 #include "tensor.h"
 
 #include <vector>
