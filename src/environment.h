@@ -8,12 +8,6 @@ enum State {
     FULL
 };
 
-enum Thirst {
-    PARCHED,
-    NORMAL,
-    QUENCHED
-};
-
 enum Action {
     MOVE_FORWARD,
     TURN_LEFT,
