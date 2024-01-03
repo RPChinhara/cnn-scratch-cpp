@@ -2,7 +2,6 @@
 
 #include "entity.h"
 
-#include <string>
 #include <windows.h>
 
 void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height);
