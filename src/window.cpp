@@ -92,8 +92,8 @@ int Window::MessageLoop()
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
         agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
-        agent_left_eye  = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
-        agent_right_eye = { 23, (client_height - 13) - agent_height + 10, 23 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - 13) - agent_height + 10, agent.right - 13, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_right_eye = { 26, (client_height - 13) - agent_height + 10, 26 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_2         = { (client_width - 5) - agent_width, (client_height - 5) - agent_height, client_width - 5, client_height - 5 };
         food            = { 5, 5, 5 + food_width, 5 + food_height };
         water           = { (client_width - 5) - water_width, 5, client_width - 5, 5 + water_height };
