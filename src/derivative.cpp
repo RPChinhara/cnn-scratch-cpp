@@ -8,11 +8,6 @@ Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
     return (y_pred - y_true);
 }
 
-Tensor PrimeMeanSquaredError(const Tensor& y_true, const Tensor& y_pred)
-{
-    return (2.0f / y_true.shape.back()) * (y_pred - y_true);
-}
-
 Tensor PrimeRelu(const Tensor& in)
 {
     Tensor out = in;

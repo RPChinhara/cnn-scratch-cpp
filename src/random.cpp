@@ -81,19 +81,3 @@ Tensor Shuffle(const Tensor& in, const size_t random_state)
     }
     return out;
 }
-
-Tensor UniformDistribution(const std::vector<size_t>& shape, const float min_val, const float max_val)
-{
-    Tensor out = Tensor();
-    SetShape(out, shape);
-    SetSize(out, shape);
-    out.elem = new float[out.size];
-
-    std::uniform_real_distribution<> dist(min_val, max_val);
-
-    for (size_t i = 0; i < out.size; ++i)
-        out[i] = dist(Rng());
-    
-    SetNumChDim(out, shape);
-    return out;
-}
