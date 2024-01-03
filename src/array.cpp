@@ -18,49 +18,6 @@ Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
     return out;
 }
 
-static void SetShape(Tensor& in, const std::vector<size_t>& shape)
-{
-    in.shape.reserve(shape.size());
-
-    for (const size_t& i : shape)
-        assert(i != 0);
-
-    in.shape = shape;
-}
-
-static void SetSize(Tensor& in, const std::vector<size_t>& shape)
-{
-    if (in.shape.size() > 0) {
-        size_t num_elem = 1;
-
-        for (const size_t& i : shape)
-            num_elem *= i;
-
-        in.size = num_elem;
-    } else {
-        in.size = 1;
-    }
-}
-
-static void SetElem(Tensor& out, const float value)
-{
-    out.elem = new float[out.size];
-    std::fill(out.elem, out.elem + out.size, value);
-}
-
-static void SetNumChDim(Tensor& in,  const std::vector<size_t>& shape) 
-{
-    if (in.shape.size() > 0) {
-        in.num_ch_dim = 1;
-
-        for (const size_t& i : shape)
-            in.num_ch_dim *= i;
-
-    } else {
-        in.num_ch_dim = 0;
-    }
-}
-
 Tensor Slice(const Tensor& in, const size_t begin, const size_t size)
 {
     assert(begin < in.shape[0] && begin + size <= in.shape[0]);
@@ -78,9 +35,36 @@ Tensor Slice(const Tensor& in, const size_t begin, const size_t size)
 Tensor Zeros(const std::vector<size_t>& shape) 
 {
     Tensor out = Tensor();
-    SetShape(out, shape);
-    SetSize(out, shape);
-    SetElem(out, 0.0f);
-    SetNumChDim(out, shape);
+
+    out.shape.reserve(shape.size());
+
+    for (const size_t& i : shape)
+        assert(i != 0);
+
+    out.shape = shape;
+
+    if (out.shape.size() > 0) {
+        size_t num_elem = 1;
+
+        for (const size_t& i : shape)
+            num_elem *= i;
+
+        out.size = num_elem;
+    } else {
+        out.size = 1;
+    }
+
+    out.elem = new float[out.size];
+    std::fill(out.elem, out.elem + out.size, 0.0f);
+
+    if (out.shape.size() > 0) {
+        out.num_ch_dim = 1;
+
+        for (const size_t& i : shape)
+            out.num_ch_dim *= i;
+    } else {
+        out.num_ch_dim = 0;
+    }
+
     return out;
 }
