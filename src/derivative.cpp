@@ -28,8 +28,3 @@ Tensor PrimeRelu(const Tensor& in)
 
     return out;
 }
-
-Tensor PrimeSigmoid(const Tensor& in)
-{
-    return in * (1.0f - in);
-}
