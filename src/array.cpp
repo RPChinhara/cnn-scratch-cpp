@@ -61,16 +61,6 @@ static void SetNumChDim(Tensor& in,  const std::vector<size_t>& shape)
     }
 }
 
-Tensor Ones(const std::vector<size_t>& shape)
-{
-    Tensor out = Tensor();
-    SetShape(out, shape);
-    SetSize(out, shape);
-    SetElem(out, 1.0f);
-    SetNumChDim(out, shape);
-    return out;
-}
-
 Tensor Slice(const Tensor& in, const size_t begin, const size_t size)
 {
     assert(begin < in.shape[0] && begin + size <= in.shape[0]);
