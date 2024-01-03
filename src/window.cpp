@@ -55,19 +55,29 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
 
-    y = OneHot(y, 3);
-    TrainTest train_temp = TrainTestSplit(x, y, 0.2, 42);
-    TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, 0.5, 42);
+    size_t depth = 3;
+    float testSize1 = 0.2;
+    float testSize2 = 0.5;
+    size_t randomState = 42;
+
+    y = OneHot(y, depth);
+    TrainTest train_temp = TrainTestSplit(x, y, testSize1, randomState);
+    TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, testSize2, randomState);
     train_temp.x_first = MinMaxScaler(train_temp.x_first);
     val_test.x_first = MinMaxScaler(val_test.x_first);
     val_test.x_second = MinMaxScaler(val_test.x_second);
 
-    NN nn = NN({ 4, 128, 3 }, 0.01f);
+    size_t inputLayer = 4;
+    size_t hiddenLayer = 128;
+    size_t outputLayer = 3;
+    float learningRate = 0.01f;
+
+    NN nn = NN({ inputLayer, hiddenLayer, outputLayer }, learningRate);
 
     auto startTime = std::chrono::high_resolution_clock::now();
     
