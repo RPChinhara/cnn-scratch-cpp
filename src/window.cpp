@@ -55,7 +55,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -114,6 +114,30 @@ int Window::MessageLoop()
             while (!done) {
                 size_t action = q_learning.ChooseAction(state);
 
+                auto FrontConfig = [&]() {
+                    orientation = Orientation::FRONT;
+                    render_agent_left_eye = true;
+                    render_agent_right_eye = true;
+                };
+
+                auto LeftConfig = [&]() {
+                    orientation = Orientation::LEFT;
+                    render_agent_left_eye = true;
+                    render_agent_right_eye = false;
+                };
+
+                auto RightConfig = [&]() {
+                    orientation = Orientation::RIGHT;
+                    render_agent_left_eye = false;
+                    render_agent_right_eye = true;
+                };
+
+                auto BackConfig = [&]() {
+                    orientation = Orientation::BACK;
+                    render_agent_left_eye = false;
+                    render_agent_right_eye = false;
+                };
+
                 switch (action) {
                     case Action::MOVE_FORWARD:
                         switch (orientation) {
@@ -145,24 +169,16 @@ int Window::MessageLoop()
                     case Action::TURN_LEFT:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                orientation = Orientation::LEFT;
-                                render_agent_left_eye = true;
-                                render_agent_right_eye = false;
+                                LeftConfig();
                                 break;
                             case Orientation::LEFT:
-                                orientation = Orientation::BACK;
-                                render_agent_left_eye = false;
-                                render_agent_right_eye = false;
+                                BackConfig();
                                 break;
                             case Orientation::RIGHT:
-                                orientation = Orientation::FRONT;
-                                render_agent_left_eye = true;
-                                render_agent_right_eye = true;
+                                FrontConfig();
                                 break;
                             case Orientation::BACK:
-                                orientation = Orientation::RIGHT;
-                                render_agent_left_eye = false;
-                                render_agent_right_eye = true;
+                                RightConfig();
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -172,24 +188,16 @@ int Window::MessageLoop()
                     case Action::TURN_RIGHT:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                orientation = Orientation::RIGHT;
-                                render_agent_left_eye = false;
-                                render_agent_right_eye = true;
+                                RightConfig();
                                 break;
                             case Orientation::LEFT:
-                                orientation = Orientation::FRONT;
-                                render_agent_left_eye = true;
-                                render_agent_right_eye = true;
+                                FrontConfig();
                                 break;
                             case Orientation::RIGHT:
-                                orientation = Orientation::BACK;
-                                render_agent_left_eye = false;
-                                render_agent_right_eye = false;
+                                BackConfig();
                                 break;
                             case Orientation::BACK:
-                                orientation = Orientation::LEFT;
-                                render_agent_left_eye = true;
-                                render_agent_right_eye = false;
+                                LeftConfig();
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -199,24 +207,16 @@ int Window::MessageLoop()
                     case Action::TURN_AROUND:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                orientation = Orientation::BACK;
-                                render_agent_left_eye = false;
-                                render_agent_right_eye = false;
+                                BackConfig();
                                 break;
                             case Orientation::LEFT:
-                                orientation = Orientation::RIGHT;
-                                render_agent_left_eye = false;
-                                render_agent_right_eye = true;
+                                RightConfig();
                                 break;
                             case Orientation::RIGHT:
-                                orientation = Orientation::LEFT;
-                                render_agent_left_eye = true;
-                                render_agent_right_eye = false;
+                                LeftConfig();
                                 break;
                             case Orientation::BACK:
-                                orientation = Orientation::FRONT;
-                                render_agent_left_eye = true;
-                                render_agent_right_eye = true;
+                                FrontConfig();
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
