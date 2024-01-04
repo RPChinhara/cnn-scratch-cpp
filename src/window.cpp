@@ -154,28 +154,30 @@ int Window::MessageLoop()
                     render_agent_right_eye = false;
                 };
 
+                size_t pixelChange = 1;
+
                 switch (action) {
                     case Action::MOVE_FORWARD:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                agent.top += 1, agent.bottom += 1;
-                                agent_left_eye.top += 1, agent_left_eye.bottom += 1;
-                                agent_right_eye.top += 1, agent_right_eye.bottom += 1;
+                                agent.top += pixelChange, agent.bottom += pixelChange;
+                                agent_left_eye.top += pixelChange, agent_left_eye.bottom += pixelChange;
+                                agent_right_eye.top += pixelChange, agent_right_eye.bottom += pixelChange;
                                 break;
                             case Orientation::LEFT:
-                                agent.left += 1, agent.right += 1;
-                                agent_left_eye.left += 1, agent_left_eye.right += 1;
-                                agent_right_eye.left += 1, agent_right_eye.right += 1;
+                                agent.left += pixelChange, agent.right += pixelChange;
+                                agent_left_eye.left += pixelChange, agent_left_eye.right += pixelChange;
+                                agent_right_eye.left += pixelChange, agent_right_eye.right += pixelChange;
                                 break;
                             case Orientation::RIGHT:
-                                agent.left -= 1, agent.right -= 1;
-                                agent_left_eye.left -= 1, agent_left_eye.right -= 1;
-                                agent_right_eye.left -= 1, agent_right_eye.right -= 1;
+                                agent.left -= pixelChange, agent.right -= pixelChange;
+                                agent_left_eye.left -= pixelChange, agent_left_eye.right -= pixelChange;
+                                agent_right_eye.left -= pixelChange, agent_right_eye.right -= pixelChange;
                                 break;
                             case Orientation::BACK:
-                                agent.top -= 1, agent.bottom -= 1;
-                                agent_left_eye.top -= 1, agent_left_eye.bottom -= 1;
-                                agent_right_eye.top -= 1, agent_right_eye.bottom -= 1;
+                                agent.top -= pixelChange, agent.bottom -= pixelChange;
+                                agent_left_eye.top -= pixelChange, agent_left_eye.bottom -= pixelChange;
+                                agent_right_eye.top -= pixelChange, agent_right_eye.bottom -= pixelChange;
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
