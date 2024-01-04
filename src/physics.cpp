@@ -2,17 +2,11 @@
 #include "entity.h"
 
 #include <algorithm>
-#include <iostream>
 
 void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
 {
     LONG agent_width = 50, agent_height = 50;
-    // LONG eyeWidth = 5, 
-    LONG eyeHeight = 13;
-
-    // agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
-    // agent_left_eye  = { 53 - agent_eye_width, (client_height - 13) - agent_height + 10, 53, (client_height - 13) - agent_height + 10 + agent_eye_height };
-    // agent_right_eye = { 23, (client_height - 13) - agent_height + 10, 23 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
+    LONG eyeWidth = 5, eyeHeight = 13;
 
     if (rect.left < 0) {
         has_collided_with_wall= true;
@@ -20,41 +14,44 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
         rect.left = 0;
         rect.right = agent_width;
 
-        // agent_left_eye.left = client_height - agent_height + 10;
-        // agent_left_eye.right = client_height - agent_height + 10 + eyeHeight;
+        agent_left_eye.left = (rect.right - 13) - eyeWidth;
+        agent_left_eye.right = rect.right - 13;
 
-        // agent_right_eye.left = client_height - agent_height + 10;
-        // agent_right_eye.right = client_height - agent_height + 10 + eyeHeight;
-    }
-    if (rect.top < 0) {
+        agent_right_eye.left = 13;
+        agent_right_eye.right = 13 + eyeWidth;
+    } if (rect.top < 0) {
         has_collided_with_wall = true;
 
         rect.top = 0;
         rect.bottom = agent_height;
-    }
-    if (rect.right > client_width) {
+        
+        agent_left_eye.top = 10;
+        agent_left_eye.bottom = 10 + eyeHeight;
+
+        agent_right_eye.top = 10;
+        agent_right_eye.bottom = 10 + eyeHeight;
+    } if (rect.right > client_width) {
         has_collided_with_wall = true;
 
         rect.left = client_width - agent_width;
         rect.right = client_width;
 
-        // agent_left_eye.left = client_height - agent_height + 10;
-        // agent_left_eye.right = client_height - agent_height + 10 + eyeHeight;
+        agent_left_eye.left = (rect.right - 13) - eyeWidth;
+        agent_left_eye.right = rect.right - 13;
 
-        // agent_right_eye.left = client_height - agent_height + 10;
-        // agent_right_eye.right = client_height - agent_height + 10 + eyeHeight;
-    }
-    if (rect.bottom > client_height) {
+        agent_right_eye.left = rect.left + 13;
+        agent_right_eye.right = (rect.left + 13) + eyeWidth;
+    } if (rect.bottom > client_height) {
         has_collided_with_wall = true;
 
         rect.top = client_height - agent_height;
         rect.bottom = client_height;
 
-        agent_left_eye.top = client_height - agent_height + 10;
-        agent_left_eye.bottom = client_height - agent_height + 10 + eyeHeight;
+        agent_left_eye.top = rect.top + 10;
+        agent_left_eye.bottom = rect.top + 10 + eyeHeight;
 
-        agent_right_eye.top = client_height - agent_height + 10;
-        agent_right_eye.bottom = client_height - agent_height + 10 + eyeHeight;
+        agent_right_eye.top = rect.top + 10;
+        agent_right_eye.bottom = rect.top + 10 + eyeHeight;
     }
 }
 
