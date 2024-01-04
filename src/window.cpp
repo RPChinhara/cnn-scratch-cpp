@@ -14,8 +14,6 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
-static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
-
 const char Window::CLASS_NAME[] = "WorldWindow";
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
@@ -266,8 +264,7 @@ int Window::MessageLoop()
                 total_reward += reward;
                 state = next_state;
 
-                PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
-                // InvalidateRect(hwnd, nullptr, TRUE);
+                InvalidateRect(hwnd, nullptr, TRUE);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
@@ -341,9 +338,6 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
             return 0;
         }
-        case WM_UPDATE_DISPLAY:
-            InvalidateRect(hwnd, nullptr, TRUE);
-            return 0;
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
