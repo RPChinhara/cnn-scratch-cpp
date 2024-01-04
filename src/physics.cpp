@@ -7,6 +7,7 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
 {
     LONG agent_width = 50, agent_height = 50;
     LONG eyeWidth = 5, eyeHeight = 13;
+    LONG agentToEyeWidth = 13, agentToEyeHeight = 10;
 
     if (rect.left < 0) {
         has_collided_with_wall= true;
@@ -14,11 +15,11 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
         rect.left = 0;
         rect.right = agent_width;
 
-        agent_left_eye.left = (rect.right - 13) - eyeWidth;
-        agent_left_eye.right = rect.right - 13;
+        agent_left_eye.left = (rect.right - agentToEyeWidth) - eyeWidth;
+        agent_left_eye.right = rect.right - agentToEyeWidth;
 
-        agent_right_eye.left = 13;
-        agent_right_eye.right = 13 + eyeWidth;
+        agent_right_eye.left = agentToEyeWidth;
+        agent_right_eye.right = agentToEyeWidth + eyeWidth;
     }
 
     if (rect.top < 0) {
@@ -27,11 +28,11 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
         rect.top = 0;
         rect.bottom = agent_height;
 
-        agent_left_eye.top = 10;
-        agent_left_eye.bottom = 10 + eyeHeight;
+        agent_left_eye.top = agentToEyeHeight;
+        agent_left_eye.bottom = agentToEyeHeight + eyeHeight;
 
-        agent_right_eye.top = 10;
-        agent_right_eye.bottom = 10 + eyeHeight;
+        agent_right_eye.top = agentToEyeHeight;
+        agent_right_eye.bottom = agentToEyeHeight + eyeHeight;
     }
 
     if (rect.right > client_width) {
@@ -40,11 +41,11 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
         rect.left = client_width - agent_width;
         rect.right = client_width;
 
-        agent_left_eye.left = (rect.right - 13) - eyeWidth;
-        agent_left_eye.right = rect.right - 13;
+        agent_left_eye.left = (rect.right - agentToEyeWidth) - eyeWidth;
+        agent_left_eye.right = rect.right - agentToEyeWidth;
 
-        agent_right_eye.left = rect.left + 13;
-        agent_right_eye.right = (rect.left + 13) + eyeWidth;
+        agent_right_eye.left = rect.left + agentToEyeWidth;
+        agent_right_eye.right = (rect.left + agentToEyeWidth) + eyeWidth;
     }
 
     if (rect.bottom > client_height) {
@@ -53,11 +54,11 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
         rect.top = client_height - agent_height;
         rect.bottom = client_height;
 
-        agent_left_eye.top = rect.top + 10;
-        agent_left_eye.bottom = rect.top + 10 + eyeHeight;
+        agent_left_eye.top = rect.top + agentToEyeHeight;
+        agent_left_eye.bottom = rect.top + agentToEyeHeight + eyeHeight;
 
-        agent_right_eye.top = rect.top + 10;
-        agent_right_eye.bottom = rect.top + 10 + eyeHeight;
+        agent_right_eye.top = rect.top + agentToEyeHeight;
+        agent_right_eye.bottom = rect.top + agentToEyeHeight + eyeHeight;
     }
 }
 
