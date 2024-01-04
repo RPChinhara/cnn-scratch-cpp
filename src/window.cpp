@@ -101,9 +101,10 @@ int Window::MessageLoop()
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
+        LONG borderToAgent = 13;
         LONG borderToEntities = 5;
 
-        agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
+        agent           = { borderToAgent, (client_height - borderToAgent) - agent_height, borderToAgent + agent_width, client_height - borderToAgent };
         agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - 13) - agent_height + 10, agent.right - 13, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_right_eye = { agent.left + 13, (client_height - 13) - agent_height + 10, (agent.left + 13) + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_2         = { (client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height, client_width - borderToEntities, client_height - borderToEntities };
@@ -264,7 +265,7 @@ int Window::MessageLoop()
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
                 // InvalidateRect(hwnd, nullptr, TRUE);
 
-                // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
