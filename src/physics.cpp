@@ -10,7 +10,7 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
 
     if (rect.left < 0) {
         has_collided_with_wall= true;
-        
+
         rect.left = 0;
         rect.right = agent_width;
 
@@ -19,18 +19,22 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
 
         agent_right_eye.left = 13;
         agent_right_eye.right = 13 + eyeWidth;
-    } if (rect.top < 0) {
+    }
+
+    if (rect.top < 0) {
         has_collided_with_wall = true;
 
         rect.top = 0;
         rect.bottom = agent_height;
-        
+
         agent_left_eye.top = 10;
         agent_left_eye.bottom = 10 + eyeHeight;
 
         agent_right_eye.top = 10;
         agent_right_eye.bottom = 10 + eyeHeight;
-    } if (rect.right > client_width) {
+    }
+
+    if (rect.right > client_width) {
         has_collided_with_wall = true;
 
         rect.left = client_width - agent_width;
@@ -41,7 +45,9 @@ void ResolveBoundaryCollision(RECT& rect, const int client_width, const int clie
 
         agent_right_eye.left = rect.left + 13;
         agent_right_eye.right = (rect.left + 13) + eyeWidth;
-    } if (rect.bottom > client_height) {
+    }
+
+    if (rect.bottom > client_height) {
         has_collided_with_wall = true;
 
         rect.top = client_height - agent_height;
