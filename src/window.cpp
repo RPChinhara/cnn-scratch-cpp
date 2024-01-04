@@ -55,7 +55,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -103,7 +103,7 @@ int Window::MessageLoop()
 
         agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
         agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - 13) - agent_height + 10, agent.right - 13, (client_height - 13) - agent_height + 10 + agent_eye_height };
-        agent_right_eye = { 26, (client_height - 13) - agent_height + 10, 26 + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_right_eye = { agent.left + 13, (client_height - 13) - agent_height + 10, (agent.left + 13) + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_2         = { (client_width - 5) - agent_width, (client_height - 5) - agent_height, client_width - 5, client_height - 5 };
         food            = { 5, 5, 5 + food_width, 5 + food_height };
         water           = { (client_width - 5) - water_width, 5, client_width - 5, 5 + water_height };
@@ -261,7 +261,7 @@ int Window::MessageLoop()
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
                 // InvalidateRect(hwnd, nullptr, TRUE);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
