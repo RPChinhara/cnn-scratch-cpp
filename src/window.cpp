@@ -107,9 +107,10 @@ int Window::MessageLoop()
         agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - 13) - agent_height + 10, agent.right - 13, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_right_eye = { agent.left + 13, (client_height - 13) - agent_height + 10, (agent.left + 13) + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_2         = { (client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height, client_width - borderToEntities, client_height - borderToEntities };
-        food            = { borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height }; // ok
+        food            = { borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height };
         water           = { (client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities, borderToEntities + water_height };
         bed             = { borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width, client_height - borderToEntities };
+        
         Orientation orientation = Orientation::FRONT;
 
         Environment env = Environment();
