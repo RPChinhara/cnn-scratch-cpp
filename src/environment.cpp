@@ -101,7 +101,7 @@ int Environment::CalculateReward()
 {
     int reward = 0;
 
-    if (daysLived >= maxDays)
+    if (daysLived > maxDays)
         reward += 1;
     if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food)
         reward += 1;

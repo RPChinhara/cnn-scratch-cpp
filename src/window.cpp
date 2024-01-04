@@ -266,7 +266,7 @@ int Window::MessageLoop()
 
                 InvalidateRect(hwnd, nullptr, TRUE);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
