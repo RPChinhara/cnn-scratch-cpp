@@ -101,13 +101,15 @@ int Window::MessageLoop()
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
+        LONG borderToEntities = 5;
+
         agent           = { 13, (client_height - 13) - agent_height, 13 + agent_width, client_height - 13 };
         agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - 13) - agent_height + 10, agent.right - 13, (client_height - 13) - agent_height + 10 + agent_eye_height };
         agent_right_eye = { agent.left + 13, (client_height - 13) - agent_height + 10, (agent.left + 13) + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
-        agent_2         = { (client_width - 5) - agent_width, (client_height - 5) - agent_height, client_width - 5, client_height - 5 };
-        food            = { 5, 5, 5 + food_width, 5 + food_height };
-        water           = { (client_width - 5) - water_width, 5, client_width - 5, 5 + water_height };
-        bed             = { 5, (client_height - 5) - bed_height, 5 + bed_width, client_height - 5 };
+        agent_2         = { (client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height, client_width - borderToEntities, client_height - borderToEntities };
+        food            = { borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height }; // ok
+        water           = { (client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities, borderToEntities + water_height };
+        bed             = { borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width, client_height - borderToEntities };
         Orientation orientation = Orientation::FRONT;
 
         Environment env = Environment();
