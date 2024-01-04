@@ -101,12 +101,13 @@ int Window::MessageLoop()
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
+        LONG agentToEye = 13;
         LONG borderToAgent = 13;
         LONG borderToEntities = 5;
 
         agent           = { borderToAgent, (client_height - borderToAgent) - agent_height, borderToAgent + agent_width, client_height - borderToAgent };
-        agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - 13) - agent_height + 10, agent.right - 13, (client_height - 13) - agent_height + 10 + agent_eye_height };
-        agent_right_eye = { agent.left + 13, (client_height - 13) - agent_height + 10, (agent.left + 13) + agent_eye_width, (client_height - 13) - agent_height + 10 + agent_eye_height };
+        agent_left_eye  = { (agent.right - 13) - agent_eye_width, (client_height - borderToAgent) - agent_height + 10, agent.right - 13, (client_height - borderToAgent) - agent_height + 10 + agent_eye_height };
+        agent_right_eye = { agent.left + 13, (client_height - borderToAgent) - agent_height + 10, (agent.left + 13) + agent_eye_width, (client_height - borderToAgent) - agent_height + 10 + agent_eye_height };
         agent_2         = { (client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height, client_width - borderToEntities, client_height - borderToEntities };
         food            = { borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height };
         water           = { (client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities, borderToEntities + water_height };
