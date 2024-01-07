@@ -1,5 +1,4 @@
 #include "tensor.h"
-#include "linalg.h"
 
 #include <cassert>
 #include <string>

@@ -6,7 +6,6 @@ set SRC=..\src\array.cpp ^
         ..\src\dataset.cpp ^
         ..\src\environment.cpp ^
         ..\src\kernel.cpp ^
-        ..\src\linalg.cpp ^
         ..\src\main.cpp ^
         ..\src\mathematics.cpp ^
         ..\src\nn.cpp ^

@@ -32,6 +32,50 @@ Tensor Slice(const Tensor& in, const size_t begin, const size_t size)
     return out;
 }
 
+static size_t GetBatchSize(const std::vector<size_t>& shape)
+{
+    assert(shape.size() > 1);
+    size_t batch_size = 1;
+
+    for (size_t i = 0; i < shape.size() - 2; ++i)
+        batch_size *= shape[i];
+    
+    return batch_size;
+}
+
+Tensor Transpose(const Tensor& in)
+{
+    assert(in.shape.size() >= 2);
+
+    Tensor out = Zeros({ in.shape.back(), in.shape[in.shape.size() - 2] });
+
+    out.num_ch_dim = 1;
+
+    for (size_t i = 0; i < out.shape.size() - 1; ++i)
+        out.num_ch_dim *= out.shape[i];
+    
+    std::vector<size_t> idx_rows;
+    
+    for (size_t i = 0; i < in.num_ch_dim; ++i)
+        idx_rows.push_back(i * in.shape.back());
+
+    size_t batch_size = GetBatchSize(in.shape);
+
+    size_t idx = 0;
+
+    for (size_t i = 0; i < batch_size; ++i) {
+        for (size_t j = 0; j < out.shape[out.shape.size() - 2]; ++j) {
+            for (size_t k = 0; k < out.shape.back(); ++k) {
+                out[idx] = in[idx_rows[k + (i * out.shape.back())]];
+                idx_rows[k + (i * out.shape.back())] += 1;
+                ++idx;
+            }
+        }
+    }
+    
+	return out;
+}
+
 Tensor Zeros(const std::vector<size_t>& shape) 
 {
     Tensor out = Tensor();
