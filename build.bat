@@ -17,7 +17,9 @@ set SRC=..\src\array.cpp ^
         ..\src\window.cpp
         
 if not exist bin mkdir bin
+
 pushd bin
 if not defined DevEnvDir (call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat")
+
 %NVCC% %FLAGS% %SRC%
 popd
