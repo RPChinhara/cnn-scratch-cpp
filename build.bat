@@ -9,7 +9,6 @@ set SRC=..\src\array.cpp ^
         ..\src\linalg.cpp ^
         ..\src\main.cpp ^
         ..\src\mathematics.cpp ^
-        ..\src\metric.cpp ^
         ..\src\nn.cpp ^
         ..\src\physics.cpp ^
         ..\src\preprocessing.cpp ^
