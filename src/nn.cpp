@@ -1,6 +1,5 @@
 #include "nn.h"
 #include "array.h"
-#include "derivative.h"
 #include "linalg.h"
 #include "loss.h"
 #include "mathematics.h"
@@ -163,4 +162,25 @@ Tensor NN::Softmax(const Tensor& in)
 {
     Tensor exp_scores = Exp(in - Max(in, 1));
     return exp_scores / Sum(exp_scores, 1);
+}
+
+Tensor NN::PrimeRelu(const Tensor& in)
+{
+    Tensor out = in;
+
+    for (size_t i = 0; i < in.size; ++i) {
+        if (in[i] < 0.0f)
+            out[i] = 0.0f;
+        else if (in[i] > 0.0f)
+            out[i] = 1.0f;
+        else if (in[i] == 0.0f)
+            out[i] = 0.0f;
+    }
+
+    return out;
+}
+
+Tensor NN::PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
+{
+    return (y_pred - y_true);
 }

@@ -16,6 +16,8 @@ private:
     std::vector<Tensor> ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases);
     Tensor Relu(const Tensor& in);
     Tensor Softmax(const Tensor& in);
+    Tensor PrimeRelu(const Tensor& in);
+    Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
 
     std::vector<size_t> layers;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
