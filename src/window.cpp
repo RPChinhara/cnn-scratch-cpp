@@ -53,7 +53,7 @@ Window::Window(HINSTANCE hInst, int nCmdShow) : hInstance(hInst), hwnd(nullptr)
 
 int Window::MessageLoop()
 {
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
