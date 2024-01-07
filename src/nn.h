@@ -20,7 +20,6 @@ private:
     Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
     Tensor PrimeRelu(const Tensor& in);
     float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
-    float Accuracy(const Tensor& y_true, const Tensor& y_pred);
     float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred);
 
     std::vector<size_t> layers;

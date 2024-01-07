@@ -234,17 +234,6 @@ float NN::CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
     return -sum / num_samples;
 }
 
-float NN::Accuracy(const Tensor& y_true, const Tensor& y_pred)
-{
-    float count = 0.0f;
-
-    for (size_t i = 0; i < y_true.size; ++i)
-        if (std::fabs(y_true[i] - y_pred[i]) < 1e-6f) 
-            ++count;
-
-    return count / y_true.size;
-}
-
 float NN::CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred)
 {
     Tensor true_idx = Argmax(y_true);
