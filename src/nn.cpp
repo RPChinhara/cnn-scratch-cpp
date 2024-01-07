@@ -9,7 +9,7 @@
 #include <random>
 #include <string>
 
-NN::NN(const std::vector<size_t>& layers, float learning_rate)
+NN::NN(const std::vector<size_t>& layers, const float learning_rate)
 {
     this->layers = layers;
     this->learning_rate = learning_rate;
