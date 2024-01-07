@@ -1,5 +1,4 @@
 #include "nn.h"
-#include "activation.h"
 #include "array.h"
 #include "derivative.h"
 #include "linalg.h"
@@ -123,6 +122,19 @@ void NN::Predict(const Tensor& x_test, const Tensor& y_test)
     std::cout << activations.back() << std::endl << std::endl << y_test << std::endl;
 }
 
+std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
+{
+    std::vector<Tensor> weights;
+    std::vector<Tensor> biases;
+
+    for (size_t i = 0; i < layers.size() - 1; ++i) {
+        weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 0.2f));
+        biases.push_back(Zeros({ 1, layers[i + 1] }));
+    }
+
+    return std::make_pair(weights, biases);
+}
+
 std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vector<Tensor>& weights, const std::vector<Tensor>& biases)
 {
     std::vector<Tensor> activations;
@@ -141,15 +153,14 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
     return activations;
 }
 
-std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
+Tensor NN::Relu(const Tensor& in)
 {
-    std::vector<Tensor> weights;
-    std::vector<Tensor> biases;
+    Tensor zeros = Zeros({ in.shape });
+    return Maximum(in, zeros);
+}
 
-    for (size_t i = 0; i < layers.size() - 1; ++i) {
-        weights.push_back(NormalDistribution({ layers[i], layers[i + 1] }, 0.0f, 0.2f));
-        biases.push_back(Zeros({ 1, layers[i + 1] }));
-    }
-
-    return std::make_pair(weights, biases);
+Tensor NN::Softmax(const Tensor& in)
+{
+    Tensor exp_scores = Exp(in - Max(in, 1));
+    return exp_scores / Sum(exp_scores, 1);
 }
