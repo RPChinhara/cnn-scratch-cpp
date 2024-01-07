@@ -18,6 +18,7 @@ private:
     Tensor Softmax(const Tensor& in);
     Tensor PrimeRelu(const Tensor& in);
     Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
+    float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
 
     std::vector<size_t> layers;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
