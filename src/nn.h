@@ -32,5 +32,3 @@ private:
     float momentum = 0.1f;
     size_t patience = 4;
 };
-
-// activation, derivative, loss, metric
