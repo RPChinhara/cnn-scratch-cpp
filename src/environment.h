@@ -25,6 +25,11 @@ public:
 
     size_t numStates = 3;
     size_t numActions = 5;
+
+    size_t num_hunger_levels = 3;
+    size_t num_thirst_levels = 3;
+    size_t num_coordinates = 4;
+    size_t num_actions = 5;
     
 private:
     int CalculateReward();
