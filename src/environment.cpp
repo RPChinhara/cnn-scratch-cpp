@@ -47,9 +47,8 @@ size_t Environment::Reset()
 {
     daysLived = 0;
     daysWithoutEating = 0;
-    auto currentState2 = FlattenState(2, 2, 1869, 958);
-    // currentState = FlattenState(1, 1, agent.left, agent.top);
-    std::cout << "currentState: " << currentState2 << std::endl;
+    // size_t currentState2 = FlattenState(2, 2, 1869, 958);
+    size_t currentState = FlattenState(1, 1, agent.left, agent.top);
     return currentState;
 }
 
