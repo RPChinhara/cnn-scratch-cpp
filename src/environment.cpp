@@ -21,9 +21,9 @@ void Environment::Render()
         case State::FULL:
             currentStateStr = "full";
             break;
-        default:
-            MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
-            break;
+        // default:
+        //     MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
+        //     break;
     }
 
     auto lifeEndTime = std::chrono::high_resolution_clock::now();
@@ -47,7 +47,9 @@ size_t Environment::Reset()
 {
     daysLived = 0;
     daysWithoutEating = 0;
-    currentState = State::NEUTRAL;
+    auto currentState2 = FlattenState(2, 2, 1869, 958);
+    // currentState = FlattenState(1, 1, agent.left, agent.top);
+    std::cout << "currentState: " << currentState2 << std::endl;
     return currentState;
 }
 
@@ -95,6 +97,25 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     //     daysWithoutDrinking += 1;
 
     return std::make_tuple(currentState, reward, done);
+}
+
+size_t Environment::FlattenState(size_t hungerLevel, size_t thirstLevel, LONG left, LONG top) {
+    LONG client_width = 1920, client_height = 1009;
+    LONG minLeft = 0;
+    LONG maxLeft = client_width - agent_width;
+    LONG minTop = 0;
+    LONG maxTop = client_height - agent_height;
+    LONG numLeftLevels = maxLeft - minLeft;
+    LONG numTopLevels = maxTop - minTop;
+
+    if (!(hungerLevel < numHungerLevels))
+        MessageBoxA(nullptr, ("Invalid hunger level. Should be within the range [0, " + std::to_string(numHungerLevels) + ")").c_str(), "Error", MB_ICONERROR);
+    if (!(thirstLevel < numThirstLevels))
+        MessageBox(nullptr, ("Invalid thirst level. Should be within the range [0, " + std::to_string(numThirstLevels) + ")").c_str(), "Error", MB_ICONERROR);
+    if (!(minLeft <= left && left < numLeftLevels) || !(minTop <= top && top < numTopLevels))
+        MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
+
+    return (((hungerLevel) * numThirstLevels + thirstLevel) * static_cast<size_t>(numLeftLevels) + static_cast<size_t>(left)) * static_cast<size_t>(numTopLevels) + static_cast<size_t>(top);
 }
 
 int Environment::CalculateReward()

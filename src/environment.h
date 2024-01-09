@@ -1,6 +1,9 @@
 #pragma once
 
+#include "entity.h"
+
 #include <string>
+#include <windows.h>
 
 enum State {
     HUNGRY,
@@ -23,19 +26,19 @@ public:
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const size_t action);
 
+    size_t numHungerLevels = 3;
+    size_t numThirstLevels = 3;
+
     size_t numStates = 3;
     size_t numActions = 5;
-
-    size_t num_hunger_levels = 3;
-    size_t num_thirst_levels = 3;
-    size_t num_coordinates = 4;
-    size_t num_actions = 5;
     
 private:
+    size_t Environment::FlattenState(size_t hungerLevel, size_t thirstLevel, LONG left,LONG top);
     int CalculateReward();
     bool CheckTermination();
 
-    size_t currentState = State::NEUTRAL;
+    // size_t currentState = FlattenState(1, 1, agent.left, agent.top);
+    size_t currentState = 1;
     std::string currentStateStr;
     std::string currentAction;
     int reward;
