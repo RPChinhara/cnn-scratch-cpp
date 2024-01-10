@@ -13,8 +13,7 @@ set SRC=..\src\array.cpp ^
         ..\src\preprocessing.cpp ^
         ..\src\q_learning.cpp ^
         ..\src\random.cpp ^
-        ..\src\tensor.cpp ^
-        ..\src\window.cpp
+        ..\src\tensor.cpp
         
 if not exist bin mkdir bin
 
