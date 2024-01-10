@@ -74,7 +74,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
     
-    HWND hwnd;
     const char CLASS_NAME[] = "WorldWindow";
 
     WNDCLASS wc = {};
@@ -86,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
     }
 
-    hwnd = CreateWindow(
+    HWND hwnd = CreateWindow(
         CLASS_NAME,
         "Dora",
         WS_OVERLAPPEDWINDOW,
