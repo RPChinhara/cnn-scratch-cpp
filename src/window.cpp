@@ -121,7 +121,7 @@ int Window::MessageLoop()
 
         for (size_t i = 0; i < num_episodes; ++i) {
             lifeStartTime = std::chrono::high_resolution_clock::now();
-            auto state = env.Reset();
+            auto state = env.Reset(); // ok
             bool done = false;
             int total_reward = 0;
 

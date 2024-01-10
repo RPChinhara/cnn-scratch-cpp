@@ -47,8 +47,7 @@ size_t Environment::Reset()
 {
     daysLived = 0;
     daysWithoutEating = 0;
-    // size_t currentState2 = FlattenState(2, 2, 1869, 958);
-    size_t currentState = FlattenState(1, 1, agent.left, agent.top);
+    currentState = FlattenState(hungerLevel, thirstLevel, agent.left, agent.top);
     return currentState;
 }
 
@@ -77,10 +76,15 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
     Render();
 
+    // if (has_collided_with_food && currentState != State::FULL)
+    //     currentState = std::min(currentState + 1, numStates - 1);
+    // else if (hours >= 3 && currentState != State::HUNGRY)
+    //     currentState = std::max(currentState - 1, static_cast<size_t>(0));
+
     if (has_collided_with_food && currentState != State::FULL)
-        currentState = std::min(currentState + 1, numStates - 1);
+        currentState = FlattenState(hungerLevel + 1, thirstLevel, agent.left, agent.top);
     else if (hours >= 3 && currentState != State::HUNGRY)
-        currentState = std::max(currentState - 1, static_cast<size_t>(0));
+        currentState = FlattenState(hungerLevel - 1, thirstLevel, agent.left, agent.top);
 
     reward = CalculateReward();
     bool done = CheckTermination();
@@ -99,14 +103,6 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 }
 
 size_t Environment::FlattenState(size_t hungerLevel, size_t thirstLevel, LONG left, LONG top) {
-    LONG client_width = 1920, client_height = 1009;
-    LONG minLeft = 0;
-    LONG maxLeft = client_width - agent_width;
-    LONG minTop = 0;
-    LONG maxTop = client_height - agent_height;
-    LONG numLeftLevels = maxLeft - minLeft;
-    LONG numTopLevels = maxTop - minTop;
-
     if (!(hungerLevel < numHungerLevels))
         MessageBoxA(nullptr, ("Invalid hunger level. Should be within the range [0, " + std::to_string(numHungerLevels) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(thirstLevel < numThirstLevels))
@@ -114,7 +110,7 @@ size_t Environment::FlattenState(size_t hungerLevel, size_t thirstLevel, LONG le
     if (!(minLeft <= left && left < numLeftLevels) || !(minTop <= top && top < numTopLevels))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
-    return (((hungerLevel) * numThirstLevels + thirstLevel) * static_cast<size_t>(numLeftLevels) + static_cast<size_t>(left)) * static_cast<size_t>(numTopLevels) + static_cast<size_t>(top);
+    return (((hungerLevel) * numThirstLevels + thirstLevel) * numLeftLevels + static_cast<size_t>(left)) * numTopLevels + static_cast<size_t>(top);
 }
 
 int Environment::CalculateReward()

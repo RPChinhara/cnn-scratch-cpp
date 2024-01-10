@@ -11,6 +11,18 @@ enum State {
     FULL
 };
 
+enum ThirstState {
+    THIRSTY,
+    QUENCHED,
+    HYDRATED
+};
+
+// enum HungerState {
+//     HUNGRY,
+//     NEUTRAL,
+//     FULL
+// };
+
 enum Action {
     MOVE_FORWARD,
     TURN_LEFT,
@@ -26,10 +38,18 @@ public:
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const size_t action);
 
+    LONG client_width = 1920, client_height = 1009;
+    LONG minLeft = 0;
+    LONG maxLeft = client_width - agent_width;
+    LONG minTop = 0;
+    LONG maxTop = client_height - agent_height;
+
     size_t numHungerLevels = 3;
     size_t numThirstLevels = 3;
+    size_t numLeftLevels = maxLeft - minLeft;
+    size_t numTopLevels = maxTop - minTop;
 
-    size_t numStates = 3;
+    size_t numStates = numHungerLevels * numThirstLevels * numLeftLevels * numTopLevels;
     size_t numActions = 5;
     
 private:
@@ -37,8 +57,9 @@ private:
     int CalculateReward();
     bool CheckTermination();
 
-    // size_t currentState = FlattenState(1, 1, agent.left, agent.top);
-    size_t currentState = 1;
+    size_t hungerLevel = State::NEUTRAL;
+    size_t thirstLevel = ThirstState::QUENCHED;
+    size_t currentState = FlattenState(hungerLevel, thirstLevel, agent.left, agent.top);
     std::string currentStateStr;
     std::string currentAction;
     int reward;
