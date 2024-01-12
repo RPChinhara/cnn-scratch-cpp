@@ -14,7 +14,7 @@ Environment::Environment(const LONG client_width, const LONG client_height) : cl
 
 void Environment::Render()
 {
-    switch (currentState) {
+    switch (hungerState) {
         case State::HUNGRY:
             currentStateStr = "hungry";
             break;
@@ -24,9 +24,9 @@ void Environment::Render()
         case State::FULL:
             currentStateStr = "full";
             break;
-        // default:
-        //     MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
-        //     break;
+        default:
+            MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
+            break;
     }
 
     auto lifeEndTime = std::chrono::high_resolution_clock::now();
@@ -38,7 +38,8 @@ void Environment::Render()
     hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
-    std::cout << "Current State:         " << currentStateStr << std::endl;
+    std::cout << "Current Thirst State:  " << currentStateStr << std::endl;
+    std::cout << "Current Hunger State:  " << currentStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
     std::cout << "Reward:                " << reward << std::endl;
     std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
