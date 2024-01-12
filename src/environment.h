@@ -59,8 +59,8 @@ private:
     bool CheckTermination();
 
     size_t hungerState = State::NEUTRAL;
-    size_t thirstLevel = ThirstState::QUENCHED;
-    size_t currentState = FlattenState(hungerState, thirstLevel, agent.left, agent.top);
+    size_t thirstState = ThirstState::QUENCHED;
+    size_t currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
     std::string currentStateStr;
     std::string currentAction;
     int reward;

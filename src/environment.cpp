@@ -50,7 +50,7 @@ size_t Environment::Reset()
 {
     daysLived = 0;
     daysWithoutEating = 0;
-    currentState = FlattenState(hungerState, thirstLevel, agent.left, agent.top);
+    currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
     return currentState;
 }
 
@@ -85,9 +85,9 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     //     currentState = std::max(currentState - 1, static_cast<size_t>(0));
 
     if (has_collided_with_food && currentState != State::FULL)
-        currentState = FlattenState(hungerState + 1, thirstLevel, agent.left, agent.top);
+        currentState = FlattenState(hungerState + 1, thirstState, agent.left, agent.top);
     else if (hours >= 3 && currentState != State::HUNGRY)
-        currentState = FlattenState(hungerState - 1, thirstLevel, agent.left, agent.top);
+        currentState = FlattenState(hungerState - 1, thirstState, agent.left, agent.top);
 
     reward = CalculateReward();
     bool done = CheckTermination();
