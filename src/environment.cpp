@@ -108,12 +108,12 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 size_t Environment::FlattenState(size_t hungerState, size_t thirstLevel, LONG left, LONG top) {
     if (!(hungerState < numHungerStates))
         MessageBoxA(nullptr, ("Invalid hunger level. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
-    if (!(thirstLevel < numThirstLevels))
-        MessageBox(nullptr, ("Invalid thirst level. Should be within the range [0, " + std::to_string(numThirstLevels) + ")").c_str(), "Error", MB_ICONERROR);
+    if (!(thirstLevel < numThirstStates))
+        MessageBox(nullptr, ("Invalid thirst level. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(minLeft <= left && left < numLeftLevels) || !(minTop <= top && top < numTopLevels))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
-    return (((hungerState) * numThirstLevels + thirstLevel) * numLeftLevels + static_cast<size_t>(left)) * numTopLevels + static_cast<size_t>(top);
+    return (((hungerState) * numThirstStates + thirstLevel) * numLeftLevels + static_cast<size_t>(left)) * numTopLevels + static_cast<size_t>(top);
 }
 
 int Environment::CalculateReward()
