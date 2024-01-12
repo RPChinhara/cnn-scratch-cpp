@@ -45,12 +45,12 @@ public:
     LONG minTop = 0;
     LONG maxTop = client_height - agent_height;
 
-    size_t numHungerLevels = 3;
+    size_t numHungerStates = 3;
     size_t numThirstLevels = 3;
     size_t numLeftLevels = maxLeft - minLeft;
     size_t numTopLevels = maxTop - minTop;
 
-    size_t numStates = numHungerLevels * numThirstLevels * numLeftLevels * numTopLevels;
+    size_t numStates = numHungerStates * numThirstLevels * numLeftLevels * numTopLevels;
     size_t numActions = 5;
     
 private:

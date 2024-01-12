@@ -106,8 +106,8 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 }
 
 size_t Environment::FlattenState(size_t hungerState, size_t thirstLevel, LONG left, LONG top) {
-    if (!(hungerState < numHungerLevels))
-        MessageBoxA(nullptr, ("Invalid hunger level. Should be within the range [0, " + std::to_string(numHungerLevels) + ")").c_str(), "Error", MB_ICONERROR);
+    if (!(hungerState < numHungerStates))
+        MessageBoxA(nullptr, ("Invalid hunger level. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(thirstLevel < numThirstLevels))
         MessageBox(nullptr, ("Invalid thirst level. Should be within the range [0, " + std::to_string(numThirstLevels) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(minLeft <= left && left < numLeftLevels) || !(minTop <= top && top < numTopLevels))
