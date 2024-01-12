@@ -9,6 +9,9 @@ inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeEndTime;
 inline std::chrono::hours::rep hours;
 
+Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
+}
+
 void Environment::Render()
 {
     switch (currentState) {

@@ -15,7 +15,7 @@
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 
-void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height);
+void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -108,7 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         UpdateWindow(hwnd);
     }
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -169,7 +169,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         
         Orientation orientation = Orientation::FRONT;
 
-        Environment env = Environment();
+        Environment env = Environment(client_width, client_height);
         QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         size_t num_episodes = 1000;

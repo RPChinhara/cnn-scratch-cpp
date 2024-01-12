@@ -34,11 +34,12 @@ enum Action {
 class Environment
 {
 public:
+    Environment(const LONG client_width, const LONG client_height);
     void Render();
     size_t Reset();
     std::tuple<size_t, int, bool> Step(const size_t action);
 
-    LONG client_width = 1920, client_height = 1009;
+    LONG client_width, client_height;
     LONG minLeft = 0;
     LONG maxLeft = client_width - agent_width;
     LONG minTop = 0;

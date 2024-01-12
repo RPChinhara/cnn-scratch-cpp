@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height)
+void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height)
 {
     LONG agent_width = 50, agent_height = 50;
     LONG eyeWidth = 5, eyeHeight = 13;
