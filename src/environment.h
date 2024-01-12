@@ -54,13 +54,13 @@ public:
     size_t numActions = 5;
     
 private:
-    size_t Environment::FlattenState(size_t hungerLevel, size_t thirstLevel, LONG left,LONG top);
+    size_t Environment::FlattenState(size_t hungerState, size_t thirstLevel, LONG left,LONG top);
     int CalculateReward();
     bool CheckTermination();
 
-    size_t hungerLevel = State::NEUTRAL;
+    size_t hungerState = State::NEUTRAL;
     size_t thirstLevel = ThirstState::QUENCHED;
-    size_t currentState = FlattenState(hungerLevel, thirstLevel, agent.left, agent.top);
+    size_t currentState = FlattenState(hungerState, thirstLevel, agent.left, agent.top);
     std::string currentStateStr;
     std::string currentAction;
     int reward;

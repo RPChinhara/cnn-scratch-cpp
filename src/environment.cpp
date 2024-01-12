@@ -50,7 +50,7 @@ size_t Environment::Reset()
 {
     daysLived = 0;
     daysWithoutEating = 0;
-    currentState = FlattenState(hungerLevel, thirstLevel, agent.left, agent.top);
+    currentState = FlattenState(hungerState, thirstLevel, agent.left, agent.top);
     return currentState;
 }
 
@@ -85,9 +85,9 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     //     currentState = std::max(currentState - 1, static_cast<size_t>(0));
 
     if (has_collided_with_food && currentState != State::FULL)
-        currentState = FlattenState(hungerLevel + 1, thirstLevel, agent.left, agent.top);
+        currentState = FlattenState(hungerState + 1, thirstLevel, agent.left, agent.top);
     else if (hours >= 3 && currentState != State::HUNGRY)
-        currentState = FlattenState(hungerLevel - 1, thirstLevel, agent.left, agent.top);
+        currentState = FlattenState(hungerState - 1, thirstLevel, agent.left, agent.top);
 
     reward = CalculateReward();
     bool done = CheckTermination();
@@ -105,15 +105,15 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     return std::make_tuple(currentState, reward, done);
 }
 
-size_t Environment::FlattenState(size_t hungerLevel, size_t thirstLevel, LONG left, LONG top) {
-    if (!(hungerLevel < numHungerLevels))
+size_t Environment::FlattenState(size_t hungerState, size_t thirstLevel, LONG left, LONG top) {
+    if (!(hungerState < numHungerLevels))
         MessageBoxA(nullptr, ("Invalid hunger level. Should be within the range [0, " + std::to_string(numHungerLevels) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(thirstLevel < numThirstLevels))
         MessageBox(nullptr, ("Invalid thirst level. Should be within the range [0, " + std::to_string(numThirstLevels) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(minLeft <= left && left < numLeftLevels) || !(minTop <= top && top < numTopLevels))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
-    return (((hungerLevel) * numThirstLevels + thirstLevel) * numLeftLevels + static_cast<size_t>(left)) * numTopLevels + static_cast<size_t>(top);
+    return (((hungerState) * numThirstLevels + thirstLevel) * numLeftLevels + static_cast<size_t>(left)) * numTopLevels + static_cast<size_t>(top);
 }
 
 int Environment::CalculateReward()
