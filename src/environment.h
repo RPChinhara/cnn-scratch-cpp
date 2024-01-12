@@ -5,23 +5,17 @@
 #include <string>
 #include <windows.h>
 
-enum State {
-    HUNGRY,
-    NEUTRAL,
-    FULL
-};
-
 enum ThirstState {
     THIRSTY,
     QUENCHED,
     HYDRATED
 };
 
-// enum HungerState {
-//     HUNGRY,
-//     NEUTRAL,
-//     FULL
-// };
+enum HungerState {
+    HUNGRY,
+    NEUTRAL,
+    FULL
+};
 
 enum Action {
     MOVE_FORWARD,
@@ -58,8 +52,8 @@ private:
     int CalculateReward();
     bool CheckTermination();
 
-    size_t hungerState = State::NEUTRAL;
     size_t thirstState = ThirstState::QUENCHED;
+    size_t hungerState = HungerState::NEUTRAL;
     size_t currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
     std::string currentStateStr;
     std::string currentAction;

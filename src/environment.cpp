@@ -15,13 +15,13 @@ Environment::Environment(const LONG client_width, const LONG client_height) : cl
 void Environment::Render()
 {
     switch (hungerState) {
-        case State::HUNGRY:
+        case HungerState::HUNGRY:
             currentStateStr = "hungry";
             break;
-        case State::NEUTRAL:
+        case HungerState::NEUTRAL:
             currentStateStr = "neutral";
             break;
-        case State::FULL:
+        case HungerState::FULL:
             currentStateStr = "full";
             break;
         default:
@@ -85,9 +85,9 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
     // else if (hours >= 3 && currentState != State::HUNGRY)
     //     currentState = std::max(currentState - 1, static_cast<size_t>(0));
 
-    if (has_collided_with_food && currentState != State::FULL)
+    if (has_collided_with_food && currentState != HungerState::FULL)
         currentState = FlattenState(hungerState + 1, thirstState, agent.left, agent.top);
-    else if (hours >= 3 && currentState != State::HUNGRY)
+    else if (hours >= 3 && currentState != HungerState::HUNGRY)
         currentState = FlattenState(hungerState - 1, thirstState, agent.left, agent.top);
 
     reward = CalculateReward();
@@ -123,13 +123,13 @@ int Environment::CalculateReward()
 
     if (daysLived > maxDays)
         reward += 1;
-    if (currentState == State::HUNGRY && has_collided_with_food || currentState == State::NEUTRAL && has_collided_with_food)
+    if (currentState == HungerState::HUNGRY && has_collided_with_food || currentState == HungerState::NEUTRAL && has_collided_with_food)
         reward += 1;
-    if (currentState == State::HUNGRY && !has_collided_with_food)
+    if (currentState == HungerState::HUNGRY && !has_collided_with_food)
         reward += -1;
-    if (currentState == State::HUNGRY && hours >= 3)
+    if (currentState == HungerState::HUNGRY && hours >= 3)
         reward += -1;
-    if (currentState == State::FULL && has_collided_with_food)
+    if (currentState == HungerState::FULL && has_collided_with_food)
         reward += -1;
     if (has_collided_with_wall)
         reward += -1;
