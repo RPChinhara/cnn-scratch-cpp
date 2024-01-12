@@ -80,15 +80,13 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 
     Render();
 
-    // if (has_collided_with_food && currentState != State::FULL)
-    //     currentState = std::min(currentState + 1, numStates - 1);
-    // else if (hours >= 3 && currentState != State::HUNGRY)
-    //     currentState = std::max(currentState - 1, static_cast<size_t>(0));
-
-    if (has_collided_with_food && currentState != HungerState::FULL)
-        currentState = FlattenState(hungerState + 1, thirstState, agent.left, agent.top);
-    else if (hours >= 3 && currentState != HungerState::HUNGRY)
-        currentState = FlattenState(hungerState - 1, thirstState, agent.left, agent.top);
+    if (has_collided_with_food && hungerState != HungerState::FULL) {
+        hungerState = std::min(hungerState + 1, numHungerStates - 1);
+        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    } else if (hours >= 3 && hungerState != HungerState::HUNGRY) {
+        hungerState = std::max(hungerState - 1, 0ULL);
+        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    }
 
     reward = CalculateReward();
     bool done = CheckTermination();
