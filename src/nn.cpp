@@ -4,10 +4,17 @@
 #include "mathematics.h"
 #include "random.h"
 
-#include <cassert>
 #include <chrono>
 #include <random>
 #include <string>
+
+Tensor MatMul(const Tensor& in_1, const Tensor& in_2);
+Tensor Relu(const Tensor& in);
+Tensor Softmax(const Tensor& in);
+Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
+Tensor PrimeRelu(const Tensor& in);
+float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
+float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred);
 
 NN::NN(const std::vector<size_t>& layers, const float learning_rate)
 {
@@ -149,100 +156,4 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
     }
 
     return activations;
-}
-
-static void CheckCuda(cudaError_t code, const bool abort = true)
-{
-   if (code != cudaSuccess) {
-      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), __FILE__, __LINE__);
-      if (abort) 
-	  	exit(code);
-   }
-}
-
-Tensor NN::MatMul(const Tensor& in_1, const Tensor& in_2)
-{
-    assert(in_1.shape.back() == in_2.shape.front());
-    size_t m = in_1.shape.front();
-    size_t n = in_1.shape.back();
-    size_t k = in_2.shape.back();
-
-    float *A, *B, *C;
-    cudaMalloc(&A, m * n * sizeof(float));
-    cudaMalloc(&B, n * k * sizeof(float));
-    cudaMalloc(&C, m * k * sizeof(float));
-	cudaMemcpy(A, in_1.elem, sizeof(float) * in_1.size, cudaMemcpyHostToDevice);
-	cudaMemcpy(B, in_2.elem, sizeof(float) * in_2.size, cudaMemcpyHostToDevice);
-
-    dim3 block_dim(16, 16);
-    dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
-
-    ::MatMul<<<grid_dim, block_dim>>>(A, B, C, m, n, k);
-
-	Tensor out = Zeros({ in_1.shape.front(), in_2.shape.back() });
-
-	CheckCuda(cudaMemcpy(out.elem, C, sizeof(float) * out.size, cudaMemcpyDeviceToHost));
-	cudaFree(A);
-	cudaFree(B);
-	cudaFree(C);
-    return out;
-}
-
-Tensor NN::Relu(const Tensor& in)
-{
-    Tensor zeros = Zeros({ in.shape });
-    return Maximum(in, zeros);
-}
-
-Tensor NN::Softmax(const Tensor& in)
-{
-    Tensor exp_scores = Exp(in - Max(in, 1));
-    return exp_scores / Sum(exp_scores, 1);
-}
-
-Tensor NN::PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
-{
-    return (y_pred - y_true);
-}
-
-Tensor NN::PrimeRelu(const Tensor& in)
-{
-    Tensor out = in;
-
-    for (size_t i = 0; i < in.size; ++i) {
-        if (in[i] < 0.0f)
-            out[i] = 0.0f;
-        else if (in[i] > 0.0f)
-            out[i] = 1.0f;
-        else if (in[i] == 0.0f)
-            out[i] = 0.0f;
-    }
-
-    return out;
-}
-
-float NN::CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
-{
-    float sum = 0.0f;
-    float epsilon = 1e-15f;
-    size_t num_samples = y_true.shape.front();
-    Tensor y_pred_clipped = ClipByValue(y_pred, epsilon, 1.0f - epsilon);
-
-    for (size_t i = 0; i < y_true.size; ++i)
-        sum += y_true[i] * Log(y_pred_clipped)[i];
-
-    return -sum / num_samples;
-}
-
-float NN::CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred)
-{
-    Tensor true_idx = Argmax(y_true);
-    Tensor pred_idx = Argmax(y_pred);
-    float equal = 0.0f;
-
-    for (size_t i = 0; i < true_idx.size; ++i)
-        if (true_idx[i] == pred_idx[i])
-            ++equal;
-
-    return equal / true_idx.size;
 }

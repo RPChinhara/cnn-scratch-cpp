@@ -2,7 +2,6 @@
 #include "entity.h"
 #include "environment.h"
 #include "nn.h"
-#include "physics.h"
 #include "preprocessing.h"
 #include "q_learning.h"
 
@@ -15,6 +14,9 @@
 #pragma comment(lib, "winmm.lib")
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
+
+void ResolveBoundaryCollision(RECT& rect, const int client_width, const int client_height);
+void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -106,7 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         UpdateWindow(hwnd);
     }
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
