@@ -110,10 +110,10 @@ size_t Environment::FlattenState(size_t hungerState, size_t thirstState, LONG le
         MessageBoxA(nullptr, ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(thirstState < numThirstStates))
         MessageBox(nullptr, ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(), "Error", MB_ICONERROR);
-    if (!(minLeft <= left && left < numLeftLevels) || !(minTop <= top && top < numTopLevels))
+    if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
-    return (((hungerState) * numThirstStates + thirstState) * numLeftLevels + static_cast<size_t>(left)) * numTopLevels + static_cast<size_t>(top);
+    return (((hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
 }
 
 int Environment::CalculateReward()

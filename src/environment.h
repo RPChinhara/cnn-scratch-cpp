@@ -47,10 +47,10 @@ public:
 
     size_t numHungerStates = 3;
     size_t numThirstStates = 3;
-    size_t numLeftLevels = maxLeft - minLeft;
-    size_t numTopLevels = maxTop - minTop;
+    size_t numLeftStates = maxLeft - minLeft;
+    size_t numTopStates = maxTop - minTop;
 
-    size_t numStates = numHungerStates * numThirstStates * numLeftLevels * numTopLevels;
+    size_t numStates = numHungerStates * numThirstStates * numLeftStates * numTopStates;
     size_t numActions = 5;
     
 private:
