@@ -311,7 +311,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, food, Entity::FOOD);
                 ResolveRectanglesCollision(agent, water, Entity::WATER);
 
-                auto [next_state, reward, temp_done] = env.Step(action);
+                env.Render(action);
+                auto [next_state, reward, temp_done] = env.Step();
                 done = temp_done;
 
                 q_learning.UpdateQtable(state, action, reward, next_state, done);

@@ -29,9 +29,9 @@ class Environment
 {
 public:
     Environment(const LONG client_width, const LONG client_height);
-    void Render();
+    void Render(const size_t action);
     size_t Reset();
-    std::tuple<size_t, int, bool> Step(const size_t action);
+    std::tuple<size_t, int, bool> Step();
 
     LONG client_width, client_height;
     LONG minLeft = 0;

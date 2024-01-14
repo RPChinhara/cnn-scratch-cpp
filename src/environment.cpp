@@ -12,8 +12,29 @@ inline std::chrono::hours::rep hours;
 Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
 }
 
-void Environment::Render()
+void Environment::Render(const size_t action)
 {
+    switch (action) {
+        case Action::MOVE_FORWARD:
+            currentAction = "move forward";
+            break;
+        case Action::TURN_LEFT:
+            currentAction = "turn left";
+            break;
+        case Action::TURN_RIGHT:
+            currentAction = "turn right";
+            break;
+        case Action::TURN_AROUND:
+            currentAction = "turn around";
+            break;
+        case Action::STATIC:
+            currentAction = "static";
+            break;
+        default:
+            MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+            break;
+    }
+
     switch (hungerState) {
         case HungerState::HUNGRY:
             currentStateStr = "hungry";
@@ -53,37 +74,15 @@ size_t Environment::Reset()
     thirstState = ThirstState::QUENCHED;
     hungerState = HungerState::NEUTRAL;
     currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    reward = 0;
     daysLived = 0;
     daysWithoutDrinking = 0;
     daysWithoutEating = 0;
     return currentState;
 }
 
-std::tuple<size_t, int, bool> Environment::Step(const size_t action)
+std::tuple<size_t, int, bool> Environment::Step()
 {
-    switch (action) {
-        case Action::MOVE_FORWARD:
-            currentAction = "move forward";
-            break;
-        case Action::TURN_LEFT:
-            currentAction = "turn left";
-            break;
-        case Action::TURN_RIGHT:
-            currentAction = "turn right";
-            break;
-        case Action::TURN_AROUND:
-            currentAction = "turn around";
-            break;
-        case Action::STATIC:
-            currentAction = "static";
-            break;
-        default:
-            MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
-            break;
-    }
-
-    Render();
-
     if (has_collided_with_food && hungerState != HungerState::FULL) {
         hungerState = std::min(hungerState + 1, numHungerStates - 1);
         currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
