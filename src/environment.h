@@ -55,6 +55,7 @@ private:
     size_t currentState;
     size_t thirstState;
     size_t hungerState;
+    std::string thirstStateStr;
     std::string hungerStateStr;
     std::string actionStr;
     int reward;

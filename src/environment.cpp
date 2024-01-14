@@ -35,6 +35,21 @@ void Environment::Render(const size_t action, float exploration_rate)
             break;
     }
 
+    switch (thirstState) {
+        case ThirstState::THIRSTY:
+            thirstStateStr = "thirsty";
+            break;
+        case ThirstState::QUENCHED:
+            thirstStateStr = "quenched";
+            break;
+        case ThirstState::HYDRATED:
+            thirstStateStr = "hydrated";
+            break;
+        default:
+            MessageBox(nullptr, "Unknown thirst state", "Error", MB_ICONERROR);
+            break;
+    }
+
     switch (hungerState) {
         case HungerState::HUNGRY:
             hungerStateStr = "hungry";
@@ -46,7 +61,7 @@ void Environment::Render(const size_t action, float exploration_rate)
             hungerStateStr = "full";
             break;
         default:
-            MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
+            MessageBox(nullptr, "Unknown hunger state", "Error", MB_ICONERROR);
             break;
     }
 
@@ -60,7 +75,7 @@ void Environment::Render(const size_t action, float exploration_rate)
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
     std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
-    std::cout << "Current Thirst State:  " << hungerStateStr << std::endl;
+    std::cout << "Current Thirst State:  " << thirstStateStr << std::endl;
     std::cout << "Current Hunger State:  " << hungerStateStr << std::endl;
     std::cout << "Current Action:        " << actionStr << std::endl;
     std::cout << "Reward:                " << reward << std::endl;
@@ -84,6 +99,14 @@ size_t Environment::Reset()
 
 std::tuple<size_t, int, bool> Environment::Step()
 {
+    if (has_collided_with_water && thirstState != ThirstState::HYDRATED) {
+        thirstState = std::min(thirstState + 1, numHungerStates - 1);
+        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    } else if (hours >= 3 && thirstState != ThirstState::THIRSTY) {
+        thirstState = std::max(thirstState - 1, 0ULL);
+        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    }
+
     if (has_collided_with_food && hungerState != HungerState::FULL) {
         hungerState = std::min(hungerState + 1, numHungerStates - 1);
         currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
