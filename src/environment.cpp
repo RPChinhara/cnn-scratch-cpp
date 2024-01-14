@@ -37,13 +37,13 @@ void Environment::Render(const size_t action, float exploration_rate)
 
     switch (hungerState) {
         case HungerState::HUNGRY:
-            currentStateStr = "hungry";
+            hungerStateStr = "hungry";
             break;
         case HungerState::NEUTRAL:
-            currentStateStr = "neutral";
+            hungerStateStr = "neutral";
             break;
         case HungerState::FULL:
-            currentStateStr = "full";
+            hungerStateStr = "full";
             break;
         default:
             MessageBox(nullptr, "Unknown state", "Error", MB_ICONERROR);
@@ -60,8 +60,8 @@ void Environment::Render(const size_t action, float exploration_rate)
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
     std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
-    std::cout << "Current Thirst State:  " << currentStateStr << std::endl;
-    std::cout << "Current Hunger State:  " << currentStateStr << std::endl;
+    std::cout << "Current Thirst State:  " << hungerStateStr << std::endl;
+    std::cout << "Current Hunger State:  " << hungerStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
     std::cout << "Reward:                " << reward << std::endl;
     std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
