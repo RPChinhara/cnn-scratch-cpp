@@ -154,11 +154,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        LONG agentToEyeWidth = 13;
-        LONG agentToEyeHeight = 10;
-        LONG borderToAgent = 13;
-        LONG borderToEntities = 5;
-
         agent           = { borderToAgent, (client_height - borderToAgent) - agent_height, borderToAgent + agent_width, client_height - borderToAgent };
         agent_left_eye  = { (agent.right - agentToEyeWidth) - agent_eye_width, (client_height - borderToAgent) - agent_height + agentToEyeHeight, agent.right - agentToEyeWidth, (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height };
         agent_right_eye = { agent.left + agentToEyeWidth, (client_height - borderToAgent) - agent_height + agentToEyeHeight, (agent.left + agentToEyeWidth) + agent_eye_width, (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height };
@@ -322,7 +317,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 InvalidateRect(hwnd, nullptr, TRUE);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;

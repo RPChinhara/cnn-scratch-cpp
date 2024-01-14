@@ -31,6 +31,11 @@ inline LONG bed_width = 66, bed_height = 60;
 inline LONG food_width = 50, food_height = 50;
 inline LONG water_width = 50, water_height = 50;
 
+inline LONG agentToEyeWidth = 13;
+inline LONG agentToEyeHeight = 10;
+inline LONG borderToAgent = 13;
+inline LONG borderToEntities = 5;
+
 inline bool has_collided_with_agent_2 = false;
 inline bool has_collided_with_food = false;
 inline bool has_collided_with_water = false;
