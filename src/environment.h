@@ -48,7 +48,7 @@ public:
     size_t numActions = 5;
     
 private:
-    size_t Environment::FlattenState(size_t hungerState, size_t thirstState, LONG left,LONG top);
+    size_t FlattenState(size_t hungerState, size_t thirstState, LONG left,LONG top);
     int CalculateReward();
     bool CheckTermination();
 
