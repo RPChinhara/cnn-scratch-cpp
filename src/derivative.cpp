@@ -1,11 +1,11 @@
 #include "tensor.h"
 
-Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
+Tensor CategoricalCrossEntropyDerivative(const Tensor& y_true, const Tensor& y_pred)
 {
     return (y_pred - y_true);
 }
 
-Tensor PrimeRelu(const Tensor& in)
+Tensor ReluDerivative(const Tensor& in)
 {
     Tensor out = in;
 

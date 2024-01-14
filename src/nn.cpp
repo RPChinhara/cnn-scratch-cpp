@@ -11,8 +11,8 @@
 Tensor MatMul(const Tensor& in_1, const Tensor& in_2);
 Tensor Relu(const Tensor& in);
 Tensor Softmax(const Tensor& in);
-Tensor PrimeCategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
-Tensor PrimeRelu(const Tensor& in);
+Tensor CategoricalCrossEntropyDerivative(const Tensor& y_true, const Tensor& y_pred);
+Tensor ReluDerivative(const Tensor& in);
 float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
 float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred);
 
@@ -58,9 +58,9 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
             
             for (size_t k = layers.size() - 1; k > 0; --k) {
                 if (k == layers.size() - 1)
-                    dloss_dlogits.push_back(PrimeCategoricalCrossEntropy(y_batch, activations.back()));
+                    dloss_dlogits.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else
-                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * PrimeRelu(activations[k - 1]));
+                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * ReluDerivative(activations[k - 1]));
 
                 if (k == 1)
                     dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(layers.size() - 1) - k]));
