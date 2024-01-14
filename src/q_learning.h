@@ -9,13 +9,14 @@ public:
     size_t ChooseAction(size_t state);
     void UpdateQtable(size_t state, size_t action, int reward, size_t next_state, bool done);
     
+    float exploration_rate;
+
 private:
     Tensor q_table;
     size_t n_states;
     size_t n_actions;
     float learning_rate;
     float discount_factor;
-    float exploration_rate;
     float exploration_decay;
     float exploration_min;
 };

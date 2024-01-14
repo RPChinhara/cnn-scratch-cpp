@@ -12,7 +12,7 @@ inline std::chrono::hours::rep hours;
 Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
 }
 
-void Environment::Render(const size_t action)
+void Environment::Render(const size_t action, float exploration_rate)
 {
     switch (action) {
         case Action::MOVE_FORWARD:
@@ -66,7 +66,8 @@ void Environment::Render(const size_t action)
     std::cout << "Reward:                " << reward << std::endl;
     std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
     std::cout << "Days Without Drinking: " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Days Without Eating:   " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl << std::endl;
+    std::cout << "Days Without Eating:   " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
+    std::cout << "Exploration Rate:      " << exploration_rate << std::endl << std::endl;
 }
 
 size_t Environment::Reset()

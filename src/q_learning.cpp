@@ -54,9 +54,6 @@ void QLearning::UpdateQtable(size_t state, size_t action, int reward, size_t nex
 
     size_t idx = state == 0 ? action : (state * q_table.shape.back()) + action;
     q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);
-
-    // std::cout << "q_table:               " << q_table << std::endl << std::endl;
-    std::cout << "exploration_rate: " << exploration_rate << std::endl << std::endl;
     
     if (exploration_rate <= exploration_min || done)
         exploration_rate = 1.0f;
