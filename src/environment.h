@@ -52,15 +52,15 @@ private:
     int CalculateReward();
     bool CheckTermination();
 
-    size_t thirstState = ThirstState::QUENCHED;
-    size_t hungerState = HungerState::NEUTRAL;
-    size_t currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    size_t currentState;
+    size_t thirstState;
+    size_t hungerState;
     std::string currentStateStr;
     std::string currentAction;
     int reward;
-    size_t daysLived = 0;
-    size_t daysWithoutEating = 0;
-    size_t daysWithoutDrinking = 0;
+    size_t daysLived;
+    size_t daysWithoutEating;
+    size_t daysWithoutDrinking;
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;

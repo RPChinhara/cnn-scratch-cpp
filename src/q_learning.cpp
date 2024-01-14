@@ -1,6 +1,7 @@
 #include "q_learning.h"
 #include "array.h"
 #include "mathematics.h"
+#include "random.h"
 
 #include <iostream>
 #include <random>
@@ -14,7 +15,7 @@ QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, flo
     this->exploration_rate = exploration_rate;
     this->exploration_decay = exploration_decay;
     this->exploration_min = exploration_min;
-    this->q_table = Zeros({ n_states, n_actions });
+    q_table = Zeros({ n_states, n_actions });
 }
 
 size_t QLearning::ChooseAction(size_t state)
@@ -55,8 +56,9 @@ void QLearning::UpdateQtable(size_t state, size_t action, int reward, size_t nex
     q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);
 
     // std::cout << "q_table:               " << q_table << std::endl << std::endl;
+    std::cout << "exploration_rate: " << exploration_rate << std::endl << std::endl;
     
-    if (done)
+    if (exploration_rate <= exploration_min || done)
         exploration_rate = 1.0f;
 
     if (exploration_rate > exploration_min)

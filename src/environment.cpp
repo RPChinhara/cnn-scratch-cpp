@@ -38,6 +38,7 @@ void Environment::Render()
     hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
+    std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
     std::cout << "Current Thirst State:  " << currentStateStr << std::endl;
     std::cout << "Current Hunger State:  " << currentStateStr << std::endl;
     std::cout << "Current Action:        " << currentAction << std::endl;
@@ -49,9 +50,12 @@ void Environment::Render()
 
 size_t Environment::Reset()
 {
-    daysLived = 0;
-    daysWithoutEating = 0;
+    thirstState = ThirstState::QUENCHED;
+    hungerState = HungerState::NEUTRAL;
     currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    daysLived = 0;
+    daysWithoutDrinking = 0;
+    daysWithoutEating = 0;
     return currentState;
 }
 

@@ -72,10 +72,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     AllocConsole();
-
+    
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
-    
+
     const char CLASS_NAME[] = "WorldWindow";
 
     WNDCLASS wc = {};
@@ -176,7 +176,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         for (size_t i = 0; i < num_episodes; ++i) {
             lifeStartTime = std::chrono::high_resolution_clock::now();
-            auto state = env.Reset(); // ok
+            auto state = env.Reset();
             bool done = false;
             int total_reward = 0;
 
