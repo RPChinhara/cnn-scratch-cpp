@@ -16,19 +16,19 @@ void Environment::Render(const size_t action, float exploration_rate)
 {
     switch (action) {
         case Action::MOVE_FORWARD:
-            currentAction = "move forward";
+            actionStr = "move forward";
             break;
         case Action::TURN_LEFT:
-            currentAction = "turn left";
+            actionStr = "turn left";
             break;
         case Action::TURN_RIGHT:
-            currentAction = "turn right";
+            actionStr = "turn right";
             break;
         case Action::TURN_AROUND:
-            currentAction = "turn around";
+            actionStr = "turn around";
             break;
         case Action::STATIC:
-            currentAction = "static";
+            actionStr = "static";
             break;
         default:
             MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
@@ -62,7 +62,7 @@ void Environment::Render(const size_t action, float exploration_rate)
     std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
     std::cout << "Current Thirst State:  " << hungerStateStr << std::endl;
     std::cout << "Current Hunger State:  " << hungerStateStr << std::endl;
-    std::cout << "Current Action:        " << currentAction << std::endl;
+    std::cout << "Current Action:        " << actionStr << std::endl;
     std::cout << "Reward:                " << reward << std::endl;
     std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
     std::cout << "Days Without Drinking: " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
