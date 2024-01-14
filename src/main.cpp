@@ -108,7 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         UpdateWindow(hwnd);
     }
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -144,10 +144,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
-    std::thread sound_thread([]() {
-        while (true)
-            PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
-    });
+    // std::thread sound_thread([]() {
+    //     while (true)
+    //         PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
+    // });
 
     std::thread rl_thread([&hwnd]() {
         RECT client_rect;
@@ -329,7 +329,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     });
 
-    sound_thread.detach();
+    // sound_thread.detach();
     rl_thread.detach();
 #endif
 
