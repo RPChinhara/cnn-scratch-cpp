@@ -307,7 +307,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, water, Entity::WATER);
 
                 env.Render(action, q_learning.exploration_rate);
-                auto [next_state, reward, temp_done] = env.Step();
+                auto [next_state, reward, temp_done] = env.Step(action);
                 done = temp_done;
 
                 q_learning.UpdateQtable(state, action, reward, next_state, done);
@@ -317,7 +317,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 InvalidateRect(hwnd, nullptr, TRUE);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;

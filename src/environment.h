@@ -31,7 +31,7 @@ public:
     Environment(const LONG client_width, const LONG client_height);
     void Render(const size_t action, float exploration_rate);
     size_t Reset();
-    std::tuple<size_t, int, bool> Step();
+    std::tuple<size_t, int, bool> Step(const size_t action);
 
     LONG client_width, client_height;
     LONG minLeft = 0;
@@ -52,6 +52,11 @@ private:
     int CalculateReward();
     bool CheckTermination();
 
+    size_t numMoveForward;
+    size_t numTurnLeft;
+    size_t numTurnRight;
+    size_t numTurnAround;
+    size_t numStatic;
     size_t currentState;
     size_t thirstState;
     size_t hungerState;
