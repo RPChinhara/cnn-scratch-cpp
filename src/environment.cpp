@@ -74,7 +74,7 @@ void Environment::Render(const size_t iteration, const size_t action, float expl
     hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
-    std::cout << "Number of iteration:   " << iteration << std::endl;
+    std::cout << "Number of iterations:  " << iteration << std::endl;
     std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
     std::cout << "Current Left:          " << agent.left << std::endl;
     std::cout << "Current Top:           " << agent.top << std::endl;
