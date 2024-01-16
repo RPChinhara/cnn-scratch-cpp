@@ -77,6 +77,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     freopen_s(&file, "CONOUT$", "w", stdout);
 
     const char CLASS_NAME[] = "WorldWindow";
+    const char WINDOW_NAME[] = "Dora";
 
     WNDCLASS wc = {};
     wc.lpfnWndProc = WindowProc;
@@ -89,7 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     HWND hwnd = CreateWindow(
         CLASS_NAME,
-        "Dora",
+        WINDOW_NAME,
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
