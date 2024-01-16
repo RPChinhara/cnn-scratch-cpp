@@ -49,7 +49,7 @@ public:
     
 private:
     size_t FlattenState(size_t hungerState, size_t thirstState, LONG left,LONG top);
-    int CalculateReward();
+    void CalculateReward();
     bool CheckTermination();
 
     size_t numMoveForward;

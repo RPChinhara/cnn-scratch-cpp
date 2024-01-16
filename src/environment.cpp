@@ -141,7 +141,7 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
         currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
     }
 
-    reward = CalculateReward();
+    CalculateReward();
     bool done = CheckTermination();
 
     // if (has_collided_with_food)
@@ -168,9 +168,9 @@ size_t Environment::FlattenState(size_t hungerState, size_t thirstState, LONG le
     return (((hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
 }
 
-int Environment::CalculateReward()
+void Environment::CalculateReward()
 {
-    int reward = 0;
+    reward = 0;
 
     size_t maxConsecutiveAction = 4;
 
@@ -208,8 +208,6 @@ int Environment::CalculateReward()
     }
     else
         reward += 0;
-
-    return reward;
 }
 
 bool Environment::CheckTermination()
