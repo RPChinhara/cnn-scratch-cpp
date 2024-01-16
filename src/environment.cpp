@@ -208,8 +208,6 @@ void Environment::CalculateReward()
         reward += -1;
         numStatic = 0;
     }
-    else
-        reward += 0;
 }
 
 bool Environment::CheckTermination()
