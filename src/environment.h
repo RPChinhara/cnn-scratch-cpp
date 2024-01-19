@@ -2,6 +2,7 @@
 
 #include "entity.h"
 
+#include <set>
 #include <string>
 #include <windows.h>
 
@@ -70,4 +71,7 @@ private:
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;
+
+    std::set<LONG> seenLefts;
+    std::set<LONG> seenTops;
 };

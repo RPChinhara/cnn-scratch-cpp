@@ -177,6 +177,32 @@ void Environment::CalculateReward()
 
     size_t maxConsecutiveAction = 4;
 
+    if (seenLefts.find(agent.left) != seenLefts.end()) {
+        std::cout << "He's been to this left before." << std::endl;
+        // Perform some action if the number has been seen before
+        // For example, you can break out of the loop
+    } else {
+        // If the number is not seen before, add it to the set
+        seenLefts.insert(agent.left);
+        // Perform some action with the new number
+        std::cout << "This is a new number." << std::endl;
+        // You can also perform other actions here
+        reward += 2;
+    }
+
+    if (seenTops.find(agent.top) != seenTops.end()) {
+        std::cout << "He's been to this left before." << std::endl;
+        // Perform some action if the number has been seen before
+        // For example, you can break out of the loop
+    } else {
+        // If the number is not seen before, add it to the set
+        seenTops.insert(agent.top);
+        // Perform some action with the new number
+        std::cout << "This is a new number." << std::endl;
+        // You can also perform other actions here
+        reward += 2;
+    }
+
     if (daysLived > maxDays)
         reward += 1;
     if (currentState == HungerState::HUNGRY && has_collided_with_food || currentState == HungerState::NEUTRAL && has_collided_with_food)
