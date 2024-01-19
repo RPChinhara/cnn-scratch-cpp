@@ -109,7 +109,7 @@ std::tuple<size_t, int, bool> Environment::Step(const size_t action)
 {
     switch (action) {
         case Action::MOVE_FORWARD:
-            numMoveForward += 1;
+            // numMoveForward += 1;
             break;
         case Action::TURN_LEFT:
             numTurnLeft += 1;
