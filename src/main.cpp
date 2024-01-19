@@ -31,7 +31,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             HDC hdc = BeginPaint(hwnd, &ps);
 
             GetClientRect(hwnd, &client_rect);
-            HBRUSH greenBrush = CreateSolidBrush(RGB(94, 156, 73));
+            HBRUSH greenBrush = CreateSolidBrush(RGB(110, 168, 88));
             FillRect(hdc, &client_rect, greenBrush);
             DeleteObject(greenBrush);
 
