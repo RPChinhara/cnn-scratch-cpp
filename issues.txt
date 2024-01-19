@@ -32,7 +32,7 @@
 - Maybe there might be RL within Rl? e.g., within the states he decide to do puzzle game in order to learn new words at this point use another RL? I mean human is also like that meaning it’s like layers of RL. In order to live, you have to work, and within the work you have to do certatin tasks.
 - Gets reward if he has done new things he hasn’t done before, but in order to do that maybe retreive some new words, or trend things from internet like news and create that environment so that he’s always going to experience new things.
 - I need to make his eyes the idea is that whenever other entites are within certain pixels range add that entites coordinates as states that means states change dynamically, but this is same for us. We see things because we can see at that moment so our states changes also.
-- Can reward be float?
+- Can reward be float? -> Yes it's so change the type to float and adjust and play around.
 - How to solve the issue where he goes to place he already has been before
 - I think I have to utilize done and total reward somehow. Maybe done once gets 10 minutes log rewards, and decides which parametes are best ?
 - Log (new) beside cirrent left and top
