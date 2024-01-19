@@ -13,7 +13,7 @@
 - Change reward values from 1s
 - Add other purposes other than eat and drink water as he has time and already neutral. Maybe, put him in modern society now ?, but waht about cat lol ?
 - Both normdist and zeros are wrong so just use normdist?
-- How many states do we have ask chathpt
+- How many states e.g., hunger, thirst do human have ask chathpt
 - Add predators
 - I need to save  the q table and use that for next training
 - Hunger and thirat have more levels ? Like 0 to 50 at least?
