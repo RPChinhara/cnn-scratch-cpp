@@ -74,4 +74,6 @@ private:
 
     std::set<LONG> seenLefts;
     std::set<LONG> seenTops;
+    bool newLeft;
+    bool newTop;
 };

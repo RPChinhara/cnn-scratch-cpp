@@ -76,8 +76,16 @@ void Environment::Render(const size_t iteration, const size_t action, float expl
 
     std::cout << "Number of iterations:  " << iteration << std::endl;
     std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
-    std::cout << "Current Left:          " << agent.left << std::endl;
-    std::cout << "Current Top:           " << agent.top << std::endl;
+    
+    if (newLeft)
+        std::cout << "Current Left:          " << agent.left << " (new)" << std::endl;
+    else
+        std::cout << "Current Left:          " << agent.left << std::endl;
+    if (newTop)
+        std::cout << "Current Top:           " << agent.top << " (new)" << std::endl;
+    else
+        std::cout << "Current Top:           " << agent.top << std::endl;
+
     std::cout << "Current Thirst State:  " << thirstStateStr << std::endl;
     std::cout << "Current Hunger State:  " << hungerStateStr << std::endl;
     std::cout << "Current Action:        " << actionStr << std::endl;
@@ -174,32 +182,21 @@ size_t Environment::FlattenState(size_t hungerState, size_t thirstState, LONG le
 void Environment::CalculateReward()
 {
     reward = 0.0f;
-
     size_t maxConsecutiveAction = 4;
 
     if (seenLefts.find(agent.left) != seenLefts.end()) {
-        std::cout << "He's been to this left before." << std::endl;
-        // Perform some action if the number has been seen before
-        // For example, you can break out of the loop
+        newLeft = false;
     } else {
-        // If the number is not seen before, add it to the set
         seenLefts.insert(agent.left);
-        // Perform some action with the new number
-        std::cout << "This is a new number." << std::endl;
-        // You can also perform other actions here
+        newLeft = true;
         reward += 2.0f;
     }
 
     if (seenTops.find(agent.top) != seenTops.end()) {
-        std::cout << "He's been to this left before." << std::endl;
-        // Perform some action if the number has been seen before
-        // For example, you can break out of the loop
+        newTop = false;
     } else {
-        // If the number is not seen before, add it to the set
         seenTops.insert(agent.top);
-        // Perform some action with the new number
-        std::cout << "This is a new number." << std::endl;
-        // You can also perform other actions here
+        newTop = true;
         reward += 2.0f;
     }
 
