@@ -19,7 +19,8 @@ enum HungerState {
 };
 
 enum Action {
-    MOVE_FORWARD,
+    WALK,
+    RUN,
     TURN_LEFT,
     TURN_RIGHT,
     TURN_AROUND,
@@ -46,7 +47,7 @@ public:
     size_t numTopStates = (maxTop - minTop) + 1;
 
     size_t numStates = numHungerStates * numThirstStates * numLeftStates * numTopStates;
-    size_t numActions = 5;
+    size_t numActions = 6;
     
 private:
     size_t FlattenState(size_t hungerState, size_t thirstState, LONG left,LONG top);

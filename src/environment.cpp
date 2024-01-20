@@ -15,8 +15,11 @@ Environment::Environment(const LONG client_width, const LONG client_height) : cl
 void Environment::Render(const size_t iteration, const size_t action, float exploration_rate)
 {
     switch (action) {
-        case Action::MOVE_FORWARD:
-            actionStr = "move forward";
+        case Action::WALK:
+            actionStr = "walk";
+            break;
+        case Action::RUN:
+            actionStr = "run";
             break;
         case Action::TURN_LEFT:
             actionStr = "turn left";
@@ -134,8 +137,10 @@ size_t Environment::Reset()
 std::tuple<size_t, float, bool> Environment::Step(const size_t action)
 {
     switch (action) {
-        case Action::MOVE_FORWARD:
+        case Action::WALK:
             // numMoveForward += 1;
+            break;
+        case Action::RUN:
             break;
         case Action::TURN_LEFT:
             numTurnLeft += 1;
@@ -222,7 +227,7 @@ void Environment::CalculateReward()
         reward += 1.0f;
     if (has_collided_with_water)
         reward += 2.5f;
-    if (has_collided_with_water)
+    if (has_collided_with_food)
         reward += 2.5f;
     if (has_collided_with_agent_2)
         reward += 1.5f;
