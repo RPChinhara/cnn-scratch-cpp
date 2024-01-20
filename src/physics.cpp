@@ -1,6 +1,7 @@
 #include "entity.h"
 
 #include <algorithm>
+#include <iostream>
 
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height)
 {
@@ -57,7 +58,7 @@ void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG cl
     }
 }
 
-void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity)
+void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height)
 {
     if ((rect1.left < rect2.right) && (rect1.right > rect2.left) && (rect1.top < rect2.bottom) && (rect1.bottom > rect2.top)) {
 
@@ -88,11 +89,49 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity)
                 rect1.right += horizontalOverlap;
             }
 
-            agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
-            agent_left_eye.right = rect1.right - agentToEyeWidth;
+            if (rect1.left < 0) {
+                rect1.left = 0;
+                rect1.right = agent_width;
 
-            agent_right_eye.left = rect1.left + agentToEyeWidth;
-            agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+                agent_left_eye.right = rect1.right - agentToEyeWidth;
+
+                agent_right_eye.left = agentToEyeWidth;
+                agent_right_eye.right = agentToEyeWidth + agent_eye_width;
+            } else if (rect1.right > client_width) {
+                rect1.left = client_width - agent_width;
+                rect1.right = client_width;
+
+                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+                agent_left_eye.right = rect1.right - agentToEyeWidth;
+
+                agent_right_eye.left = rect1.left + agentToEyeWidth;
+                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+            } else if (rect1.right > rect2.left) {
+                rect1.left = rect2.left - agent_width;
+                rect1.right = rect1.left + agent_width;
+
+                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+                agent_left_eye.right = rect1.right - agentToEyeWidth;
+
+                agent_right_eye.left = rect1.left + agentToEyeWidth;
+                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+            } else if (rect1.left < rect2.right) {
+                rect1.left = rect2.right;
+                rect1.right = rect1.left + agent_width;
+
+                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+                agent_left_eye.right = rect1.right - agentToEyeWidth;
+
+                agent_right_eye.left = rect1.left + agentToEyeWidth;
+                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+            } else {
+                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+                agent_left_eye.right = rect1.right - agentToEyeWidth;
+
+                agent_right_eye.left = rect1.left + agentToEyeWidth;
+                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+            }
         } else {
             if (rect1.top < rect2.top) {
                 rect1.top -= verticalOverlap;
@@ -102,11 +141,49 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity)
                 rect1.bottom += verticalOverlap;
             }
 
-            agent_left_eye.top = rect1.top + agentToEyeHeight;
-            agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+            if (rect1.top < 0) {
+                rect1.top = 0;
+                rect1.bottom = agent_height;
 
-            agent_right_eye.top = rect1.top + agentToEyeHeight;
-            agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent_left_eye.top = agentToEyeHeight;
+                agent_left_eye.bottom = agentToEyeHeight + agent_eye_height;
+
+                agent_right_eye.top = agentToEyeHeight;
+                agent_right_eye.bottom = agentToEyeHeight + agent_eye_height;
+            } else if (rect1.bottom > client_height) {
+                rect1.top = client_height - agent_height;
+                rect1.bottom = client_height;
+
+                agent_left_eye.top = rect1.top + agentToEyeHeight;
+                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+
+                agent_right_eye.top = rect1.top + agentToEyeHeight;
+                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+            } else if (rect2.bottom > rect1.top) {
+                rect1.top = rect2.bottom;
+                rect1.bottom = rect1.top + agent_height;
+
+                agent_left_eye.top = rect1.top + agentToEyeHeight;
+                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+
+                agent_right_eye.top = rect1.top + agentToEyeHeight;
+                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+            } else if (rect1.bottom > rect2.top) {
+                rect1.top = rect2.top - agent_height;
+                rect1.bottom = rect2.top;
+
+                agent_left_eye.top = rect1.top + agentToEyeHeight;
+                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+
+                agent_right_eye.top = rect1.top + agentToEyeHeight;
+                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+            } else {
+                agent_left_eye.top = rect1.top + agentToEyeHeight;
+                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+
+                agent_right_eye.top = rect1.top + agentToEyeHeight;
+                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+            }
         }
     }
 }

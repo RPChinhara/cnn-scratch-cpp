@@ -16,7 +16,7 @@
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
-void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity);
+void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -332,9 +332,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 has_collided_with_wall = false;
 
                 ResolveBoundaryCollision(agent, client_width, client_height);
-                ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2);
-                ResolveRectanglesCollision(agent, food, Entity::FOOD);
-                ResolveRectanglesCollision(agent, water, Entity::WATER);
+                ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2, client_width, client_height);
+                ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
+                ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
 
                 ++iteration;
                 env.Render(iteration, action, q_learning.exploration_rate);
