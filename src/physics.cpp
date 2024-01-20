@@ -87,6 +87,12 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity)
                 rect1.left += horizontalOverlap;
                 rect1.right += horizontalOverlap;
             }
+
+            agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+            agent_left_eye.right = rect1.right - agentToEyeWidth;
+
+            agent_right_eye.left = rect1.left + agentToEyeWidth;
+            agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
         } else {
             if (rect1.top < rect2.top) {
                 rect1.top -= verticalOverlap;
@@ -95,6 +101,12 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity)
                 rect1.top += verticalOverlap;
                 rect1.bottom += verticalOverlap;
             }
+
+            agent_left_eye.top = rect1.top + agentToEyeHeight;
+            agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+
+            agent_right_eye.top = rect1.top + agentToEyeHeight;
+            agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
         }
     }
 }

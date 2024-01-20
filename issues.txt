@@ -6,7 +6,6 @@
 - Hunger and thirst states should have at least 10 levels?
 - Add other entities coordinates as states?
 - Add energy as states
-- Fix the issue that eyes and body get separated. When he collided woth other agents I guess I havent set that uo
 - Get rewards if he gets closer to other entities?
 - Get close to other entities once he’s within certain radius. It seems like people can see objects that are 3 miles away
 - Change reward values from 1s
@@ -36,6 +35,10 @@
 - Add news, and nationality as states
 - An agent should address new goals forever
 - How to fix always choosing first Action in q learning choseAction() issue
+- Maybe log how many times it has collided with food or water ?
+- Get 2.5 rewards if he collided with any entities ?
+- Change 2 from 1.5 for new place reward ?
+- Log number of each collisions.
 
 [States]
 - hunger(the primary biological drive for eating is hunger, which is controlled by the hypothalamus in the brain. When the body's energy stores are depleted, signals are sent to the brain to initiate the feeling of hunger, motivating an individual to seek and consume food), thirst(dehydration or a decrease in the body's water content triggers the sensation of thirst), mental health, blood pressure, blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), emotions(such as stress, boredom, sadness, or happiness), self-esteem level(influences psychological well-being), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
