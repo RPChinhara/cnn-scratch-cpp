@@ -174,7 +174,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             lifeStartTime = std::chrono::high_resolution_clock::now();
             auto state = env.Reset();
             bool done = false;
-            int total_reward = 0;
+            float total_reward = 0;
             size_t iteration = 0;
 
             while (!done) {

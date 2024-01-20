@@ -98,14 +98,14 @@ size_t Environment::Reset()
     thirstState = ThirstState::QUENCHED;
     hungerState = HungerState::NEUTRAL;
     currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
-    reward = 0;
+    reward = 0.0f;
     daysLived = 0;
     daysWithoutDrinking = 0;
     daysWithoutEating = 0;
     return currentState;
 }
 
-std::tuple<size_t, int, bool> Environment::Step(const size_t action)
+std::tuple<size_t, float, bool> Environment::Step(const size_t action)
 {
     switch (action) {
         case Action::MOVE_FORWARD:
@@ -173,7 +173,7 @@ size_t Environment::FlattenState(size_t hungerState, size_t thirstState, LONG le
 
 void Environment::CalculateReward()
 {
-    reward = 0;
+    reward = 0.0f;
 
     size_t maxConsecutiveAction = 4;
 
@@ -187,7 +187,7 @@ void Environment::CalculateReward()
         // Perform some action with the new number
         std::cout << "This is a new number." << std::endl;
         // You can also perform other actions here
-        reward += 2;
+        reward += 2.0f;
     }
 
     if (seenTops.find(agent.top) != seenTops.end()) {
@@ -200,39 +200,39 @@ void Environment::CalculateReward()
         // Perform some action with the new number
         std::cout << "This is a new number." << std::endl;
         // You can also perform other actions here
-        reward += 2;
+        reward += 2.0f;
     }
 
     if (daysLived > maxDays)
-        reward += 1;
+        reward += 1.0f;
     if (currentState == HungerState::HUNGRY && has_collided_with_food || currentState == HungerState::NEUTRAL && has_collided_with_food)
-        reward += 1;
+        reward += 1.0f;
     if (currentState == HungerState::HUNGRY && !has_collided_with_food)
-        reward += -1;
+        reward += -1.0f;
     if (currentState == HungerState::HUNGRY && hours >= 3)
-        reward += -1;
+        reward += -1.0f;
     if (currentState == HungerState::FULL && has_collided_with_food)
-        reward += -1;
+        reward += -1.0f;
     if (has_collided_with_wall)
-        reward += -1;
+        reward += -1.0f;
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
     //     numMoveForward = 0;
     // }
     if (numTurnLeft == maxConsecutiveAction) {
-        reward += -1;
+        reward += -1.0f;
         numTurnLeft = 0;
     }
     if (numTurnRight == maxConsecutiveAction) {
-        reward += -1;
+        reward += -1.0f;
         numTurnRight = 0;
     }
     if (numTurnAround == maxConsecutiveAction) {
-        reward += -1;
+        reward += -1.0f;
         numTurnAround = 0;
     }
     if (numStatic == maxConsecutiveAction) {
-        reward += -1;
+        reward += -1.0f;
         numStatic = 0;
     }
 }
