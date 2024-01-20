@@ -53,6 +53,9 @@ private:
     void CalculateReward();
     bool CheckTermination();
 
+    size_t numWaterCollision;
+    size_t numFoodCollision;
+    size_t numFriendCollision;
     size_t numMoveForward;
     size_t numTurnLeft;
     size_t numTurnRight;

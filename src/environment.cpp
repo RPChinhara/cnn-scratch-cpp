@@ -74,30 +74,48 @@ void Environment::Render(const size_t iteration, const size_t action, float expl
     hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
     auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
-    std::cout << "Number of iterations:  " << iteration << std::endl;
-    std::cout << "Current Flatten State: " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
-    
-    if (newLeft)
-        std::cout << "Current Left:          " << agent.left << " (new)" << std::endl;
-    else
-        std::cout << "Current Left:          " << agent.left << std::endl;
-    if (newTop)
-        std::cout << "Current Top:           " << agent.top << " (new)" << std::endl;
-    else
-        std::cout << "Current Top:           " << agent.top << std::endl;
+    if (has_collided_with_water)
+        numWaterCollision += 1;
+    else if (has_collided_with_food)
+        numFoodCollision += 1;
+    else if (has_collided_with_agent_2)
+        numFriendCollision += 1;
 
-    std::cout << "Current Thirst State:  " << thirstStateStr << std::endl;
-    std::cout << "Current Hunger State:  " << hungerStateStr << std::endl;
-    std::cout << "Current Action:        " << actionStr << std::endl;
-    std::cout << "Reward:                " << reward << std::endl;
-    std::cout << "Days Lived:            " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Days Without Drinking: " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Days Without Eating:   " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Exploration Rate:      " << exploration_rate << std::endl << std::endl;
+    std::string currentLeft;
+    std::string currentTop;
+
+    if (newLeft)
+        currentLeft += "Current Left:                " + std::to_string(agent.left) + " (new)";
+    else
+        currentLeft += "Current Left:                " + std::to_string(agent.left);
+    
+    if (newTop)
+        currentTop += "Current Top:                 " + std::to_string(agent.top) + " (new)";
+    else
+        currentTop += "Current Top:                 " + std::to_string(agent.top);
+
+    std::cout << "Number of iterations:        " << iteration << std::endl;
+    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
+    std::cout << currentLeft << std::endl;
+    std::cout << currentTop << std::endl;
+    std::cout << "Current Thirst State:        " << thirstStateStr << std::endl;
+    std::cout << "Current Hunger State:        " << hungerStateStr << std::endl;
+    std::cout << "Current Action:              " << actionStr << std::endl;
+    std::cout << "Reward:                      " << reward << std::endl;
+    std::cout << "Number Of Water Collisions:  " << numWaterCollision << std::endl;
+    std::cout << "Number Of Food Collisions:   " << numFoodCollision << std::endl;
+    std::cout << "Number Of Friend Collisions: " << numFriendCollision << std::endl;
+    std::cout << "Days Lived:                  " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
+    std::cout << "Days Without Drinking:       " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
+    std::cout << "Days Without Eating:         " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
+    std::cout << "Exploration Rate:            " << exploration_rate << std::endl << std::endl;
 }
 
 size_t Environment::Reset()
 {
+    numWaterCollision = 0;
+    numFoodCollision = 0;
+    numFriendCollision = 0;
     // numMoveForward = 0;
     numTurnLeft = 0;
     numTurnRight = 0;
