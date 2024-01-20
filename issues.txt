@@ -19,7 +19,6 @@
 - Hunger and thirat have more levels ? Like 0 to 50 at least?
 - Watch discovru channels like what they do other than eating and drinking?
 - Add sleep as a state like when ran out of energy? Why people sleep?
-- Get 2 reward if he has gone to where he hasn’t been before because that happens to us
 - Add Mental state. People get sad when lonely. Interact with his friend
 - How animal take care of hygine? Add hygine as state
 - Show chatGPT my code and ask wheather I could use pointer somewhere
