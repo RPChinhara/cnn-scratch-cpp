@@ -220,6 +220,12 @@ void Environment::CalculateReward()
 
     if (daysLived > maxDays)
         reward += 1.0f;
+    if (has_collided_with_water)
+        reward += 2.5f;
+    if (has_collided_with_water)
+        reward += 2.5f;
+    if (has_collided_with_agent_2)
+        reward += 1.5f;
     if (currentState == HungerState::HUNGRY && has_collided_with_food || currentState == HungerState::NEUTRAL && has_collided_with_food)
         reward += 1.0f;
     if (currentState == HungerState::HUNGRY && !has_collided_with_food)
@@ -229,7 +235,7 @@ void Environment::CalculateReward()
     if (currentState == HungerState::FULL && has_collided_with_food)
         reward += -1.0f;
     if (has_collided_with_wall)
-        reward += -1.0f;
+        reward += -2.0f;
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
     //     numMoveForward = 0;

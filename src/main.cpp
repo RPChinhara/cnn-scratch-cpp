@@ -204,7 +204,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     render_agent_right_eye = false;
                 };
 
-                size_t pixelChange = 1;
+                size_t pixelChange = 21;
 
                 switch (action) {
                     case Action::MOVE_FORWARD:
@@ -320,7 +320,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 InvalidateRect(hwnd, nullptr, TRUE);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
