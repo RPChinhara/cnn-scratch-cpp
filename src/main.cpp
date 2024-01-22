@@ -147,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 1
     // std::thread sound_thread([]() {
     //     while (true)
-    //         PlaySound(TEXT("assets\\mixkit-city-traffic-background-ambience-2930.wav"), NULL, SND_FILENAME);
+    //         PlaySound(TEXT("assets\\mixkit-arcade-retro-game-over-213.wav"), NULL, SND_FILENAME);
     // });
 
     std::thread rl_thread([&hwnd]() {
@@ -335,6 +335,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
+                
+                if (has_collided_with_food)
+                    PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
+                if (has_collided_with_water)
+                    PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
                 env.Render(iteration, action, q_learning.exploration_rate);
@@ -355,7 +360,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     });
 
-    // sound_thread.detach();
     rl_thread.detach();
 #endif
 

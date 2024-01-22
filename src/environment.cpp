@@ -237,8 +237,10 @@ void Environment::CalculateReward()
         reward += -1.0f;
     if (currentState == HungerState::HUNGRY && hours >= 3)
         reward += -1.0f;
-    if (currentState == HungerState::FULL && has_collided_with_food)
+    if (currentState == HungerState::FULL && has_collided_with_food) {
+        std::cout << "I'M full" << std::endl;
         reward += -1.0f;
+    }
     if (has_collided_with_wall)
         reward += -2.0f;
     // if (numMoveForward == maxConsecutiveAction) {

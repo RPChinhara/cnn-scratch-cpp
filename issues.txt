@@ -50,7 +50,6 @@
 - I think global variables are messed up especially entity.h and client width and height. Learn how to handle.
 - Get negative rewards if either left, top, right, and bottom are toching the edge, yet he still either choose walk or run actions.
 - Add turn north west, south east and so on as actions so that it is more realistic and smooth ?
-- Add sounds when he eat drink
 - Try functors for like Relu ?
 - Add hp, stamina, weight? Is energy same as hp or stamina
 - Add north east directions map

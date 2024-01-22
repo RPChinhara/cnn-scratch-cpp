@@ -99,6 +99,8 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.left = agentToEyeWidth;
                 agent_right_eye.right = agentToEyeWidth + agent_eye_width;
             } else if (rect1.right > client_width) {
+                std::cout << 1 << " from Physics" << std::endl;
+
                 rect1.left = client_width - agent_width;
                 rect1.right = client_width;
 
@@ -108,26 +110,26 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.left = rect1.left + agentToEyeWidth;
                 agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
             } else if (rect1.right > rect2.left) {
-                std::cout << 1 << std::endl;
-                rect1.left = rect2.left - agent_width;
-                rect1.right = rect1.left + agent_width;
+                std::cout << 2 << " from Physics" << std::endl;
+            //     rect1.left = rect2.left - agent_width;
+            //     rect1.right = rect1.left + agent_width;
 
-                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
-                agent_left_eye.right = rect1.right - agentToEyeWidth;
+            //     agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+            //     agent_left_eye.right = rect1.right - agentToEyeWidth;
 
-                agent_right_eye.left = rect1.left + agentToEyeWidth;
-                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
-            } else if (rect1.left < rect2.right) {
-                std::cout << 2 << std::endl;
+            //     agent_right_eye.left = rect1.left + agentToEyeWidth;
+            //     agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+            // } else if (rect1.left < rect2.right) {
+                std::cout << 3 << " from Physics" << std::endl;
 
-                rect1.left = rect2.right;
-                rect1.right = rect1.left + agent_width;
+                // rect1.left = rect2.right;
+                // rect1.right = rect1.left + agent_width;
 
-                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
-                agent_left_eye.right = rect1.right - agentToEyeWidth;
+                // agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
+                // agent_left_eye.right = rect1.right - agentToEyeWidth;
 
-                agent_right_eye.left = rect1.left + agentToEyeWidth;
-                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+                // agent_right_eye.left = rect1.left + agentToEyeWidth;
+                // agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
             } else {
                 agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
                 agent_left_eye.right = rect1.right - agentToEyeWidth;
@@ -145,6 +147,8 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
             }
 
             if (rect1.top < 0) {
+                std::cout << 4 << " from Physics" << std::endl;
+
                 rect1.top = 0;
                 rect1.bottom = agent_height;
 
@@ -154,6 +158,8 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.top = agentToEyeHeight;
                 agent_right_eye.bottom = agentToEyeHeight + agent_eye_height;
             } else if (rect1.bottom > client_height) {
+                std::cout << 5 << " from Physics" << std::endl;
+
                 rect1.top = client_height - agent_height;
                 rect1.bottom = client_height;
 
@@ -163,27 +169,27 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.top = rect1.top + agentToEyeHeight;
                 agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
             } else if (rect2.bottom > rect1.top) {
-                std::cout << 3 << std::endl;
+                std::cout << 6 << " from Physics" << std::endl;
 
-                rect1.top = rect2.bottom;
-                rect1.bottom = rect1.top + agent_height;
+                // rect1.top = rect2.bottom;
+                // rect1.bottom = rect1.top + agent_height;
 
-                agent_left_eye.top = rect1.top + agentToEyeHeight;
-                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                // agent_left_eye.top = rect1.top + agentToEyeHeight;
+                // agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
 
-                agent_right_eye.top = rect1.top + agentToEyeHeight;
-                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                // agent_right_eye.top = rect1.top + agentToEyeHeight;
+                // agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
             } else if (rect1.bottom > rect2.top) {
-                std::cout << 4 << std::endl;
+                std::cout << 7 << " from Physics" << std::endl;
 
-                rect1.top = rect2.top - agent_height;
-                rect1.bottom = rect2.top;
+                // rect1.top = rect2.top - agent_height;
+                // rect1.bottom = rect2.top;
 
-                agent_left_eye.top = rect1.top + agentToEyeHeight;
-                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                // agent_left_eye.top = rect1.top + agentToEyeHeight;
+                // agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
 
-                agent_right_eye.top = rect1.top + agentToEyeHeight;
-                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                // agent_right_eye.top = rect1.top + agentToEyeHeight;
+                // agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
             } else {
                 agent_left_eye.top = rect1.top + agentToEyeHeight;
                 agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
