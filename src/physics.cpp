@@ -108,6 +108,7 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.left = rect1.left + agentToEyeWidth;
                 agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
             } else if (rect1.right > rect2.left) {
+                std::cout << 1 << std::endl;
                 rect1.left = rect2.left - agent_width;
                 rect1.right = rect1.left + agent_width;
 
@@ -117,6 +118,8 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.left = rect1.left + agentToEyeWidth;
                 agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
             } else if (rect1.left < rect2.right) {
+                std::cout << 2 << std::endl;
+
                 rect1.left = rect2.right;
                 rect1.right = rect1.left + agent_width;
 
@@ -160,6 +163,8 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.top = rect1.top + agentToEyeHeight;
                 agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
             } else if (rect2.bottom > rect1.top) {
+                std::cout << 3 << std::endl;
+
                 rect1.top = rect2.bottom;
                 rect1.bottom = rect1.top + agent_height;
 
@@ -169,6 +174,8 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.top = rect1.top + agentToEyeHeight;
                 agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
             } else if (rect1.bottom > rect2.top) {
+                std::cout << 4 << std::endl;
+
                 rect1.top = rect2.top - agent_height;
                 rect1.bottom = rect2.top;
 
