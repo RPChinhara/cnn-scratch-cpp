@@ -31,7 +31,7 @@ class Environment
 {
 public:
     Environment(const LONG client_width, const LONG client_height);
-    void Render(const size_t iteration, const size_t action, float exploration_rate);
+    void Render(const size_t iteration, const size_t action, float exploration_rate, Direction direction);
     size_t Reset();
     std::tuple<size_t, float, bool> Step(const size_t action);
 

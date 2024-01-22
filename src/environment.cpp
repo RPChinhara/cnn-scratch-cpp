@@ -12,7 +12,7 @@ inline std::chrono::hours::rep hours;
 Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
 }
 
-void Environment::Render(const size_t iteration, const size_t action, float exploration_rate)
+void Environment::Render(const size_t iteration, const size_t action, float exploration_rate, Direction direction)
 {
     switch (action) {
         case Action::WALK:
@@ -97,10 +97,22 @@ void Environment::Render(const size_t iteration, const size_t action, float expl
     else
         currentTop += "Current Top:                 " + std::to_string(agent.top);
 
+    std::string currentDirection;
+
+    if (direction == Direction::NORTH)
+        currentDirection += "north";
+    if (direction == Direction::SOUTH)
+        currentDirection += "south";
+    if (direction == Direction::EAST)
+        currentDirection += "east";
+    if (direction == Direction::WEST)
+        currentDirection += "west";
+
     std::cout << "Number of iterations:        " << iteration << std::endl;
     std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
     std::cout << currentLeft << std::endl;
     std::cout << currentTop << std::endl;
+    std::cout << "Current Direction            " << currentDirection << std::endl;
     std::cout << "Current Thirst State:        " << thirstStateStr << std::endl;
     std::cout << "Current Hunger State:        " << hungerStateStr << std::endl;
     std::cout << "Current Action:              " << actionStr << std::endl;

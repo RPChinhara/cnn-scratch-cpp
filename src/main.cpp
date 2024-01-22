@@ -164,6 +164,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         bed             = { borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width, client_height - borderToEntities };
         
         Orientation orientation = Orientation::FRONT;
+        Direction direction = Direction::SOUTH;
 
         Environment env = Environment(client_width, client_height);
         QLearning q_learning = QLearning(env.numStates, env.numActions);
@@ -182,24 +183,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 auto FrontConfig = [&]() {
                     orientation = Orientation::FRONT;
+                    direction = Direction::SOUTH;
                     render_agent_left_eye = true;
                     render_agent_right_eye = true;
                 };
 
                 auto LeftConfig = [&]() {
                     orientation = Orientation::LEFT;
+                    direction = Direction::WEST;
                     render_agent_left_eye = true;
                     render_agent_right_eye = false;
                 };
 
                 auto RightConfig = [&]() {
                     orientation = Orientation::RIGHT;
+                    direction = Direction::EAST;
                     render_agent_left_eye = false;
                     render_agent_right_eye = true;
                 };
 
                 auto BackConfig = [&]() {
                     orientation = Orientation::BACK;
+                    direction = Direction::NORTH;
                     render_agent_left_eye = false;
                     render_agent_right_eye = false;
                 };
@@ -374,7 +379,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
-                env.Render(iteration, action, q_learning.exploration_rate);
+                env.Render(iteration, action, q_learning.exploration_rate, direction);
                 auto [next_state, reward, temp_done] = env.Step(action);
                 done = temp_done;
 

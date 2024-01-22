@@ -14,7 +14,14 @@ enum Orientation {
     FRONT,
     LEFT,
     RIGHT,
-    BACK,
+    BACK
+};
+
+enum Direction {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
 };
 
 inline RECT agent;
