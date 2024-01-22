@@ -57,6 +57,7 @@ private:
     size_t numWaterCollision;
     size_t numFoodCollision;
     size_t numFriendCollision;
+    size_t numWallCollision;
     size_t numMoveForward;
     size_t numTurnLeft;
     size_t numTurnRight;

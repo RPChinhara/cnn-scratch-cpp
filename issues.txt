@@ -48,11 +48,15 @@
 - If collisions happen continuouslly, it only considers first one e.g., wall collisions.
 - Refactor ResolveRectanglesCollision()
 - I think global variables are messed up especially entity.h and client width and height. Learn how to handle.
-- Get negative rewards if either left, top, right, and bottom are toching the edge, yet he still either choose walk or run actions.
 - Add turn north west, south east and so on as actions so that it is more realistic and smooth ?
 - Try functors for like Relu ?
 - Add hp, stamina, weight? Is energy same as hp or stamina
 - Add north east directions map
+- Perhaps, add eat, drink, or sociolize actions whenever he collided with entites?
+- Refactor following code in main agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
+                                  agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
+                                  agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
+- maybe I don't need to adjust positions of eye in ResolveRectanglesCollision() ?             
 
 [States]
 - hunger(the primary biological drive for eating is hunger, which is controlled by the hypothalamus in the brain. When the body's energy stores are depleted, signals are sent to the brain to initiate the feeling of hunger, motivating an individual to seek and consume food), thirst(dehydration or a decrease in the body's water content triggers the sensation of thirst), mental health, blood pressure, blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), emotions(such as stress, boredom, sadness, or happiness), self-esteem level(influences psychological well-being), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).

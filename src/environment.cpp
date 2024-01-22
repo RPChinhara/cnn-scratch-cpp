@@ -119,6 +119,7 @@ size_t Environment::Reset()
     numWaterCollision = 0;
     numFoodCollision = 0;
     numFriendCollision = 0;
+    numWallCollision = 0;
     // numMoveForward = 0;
     numTurnLeft = 0;
     numTurnRight = 0;
@@ -223,6 +224,11 @@ void Environment::CalculateReward()
         reward += 2.0f;
     }
 
+    if (has_collided_with_wall)
+        ++numWallCollision;
+    else
+        numWallCollision = 0;
+
     if (daysLived > maxDays)
         reward += 1.0f;
     if (has_collided_with_water)
@@ -242,6 +248,8 @@ void Environment::CalculateReward()
         reward += -1.0f;
     }
     if (has_collided_with_wall)
+        reward += -1.5f;
+    if (numWallCollision > 1)
         reward += -2.0f;
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
