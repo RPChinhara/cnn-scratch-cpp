@@ -35,7 +35,6 @@
 - Add news, and nationality as states
 - An agent should address new goals forever
 - How to fix always choosing first Action in q learning choseAction() issue
-- Maybe log how many times it has collided with food or water ?
 - Get 2.5 rewards if he collided with any entities ?
 - Change 2 from 1.5 for new place reward ?
 - Turn functions into cuda kernel if it's possible
