@@ -48,10 +48,6 @@
 - Try functors for like Relu ?
 - Add hp, stamina, weight? Is energy same as hp or stamina
 - Perhaps, add eat, drink, or sociolize actions whenever he collided with entites?
-- Refactor following code in main agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
-                                  agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
-                                  agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
-- maybe I don't need to adjust positions of eye in ResolveRectanglesCollision() ?
 - I think action could be taken as an Action in Render(), Step(), UpdateQtable() ?
 - It looks like I'm having an issue with collisions, and it's called 'tunneling'.
 
