@@ -3,14 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-bool CheckSameCoordinates(const RECT& rect1, const RECT& rect2)
-{
-    if (rect1.left == rect2.right || rect1.right == rect2.left || rect1.top == rect2.bottom || rect1.bottom == rect2.top)
-        return true;
-    else 
-        return false;
-}
-
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height)
 {
     if (rect.left < 0) {

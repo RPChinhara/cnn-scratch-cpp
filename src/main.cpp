@@ -15,7 +15,6 @@
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 
-bool CheckSameCoordinates(const RECT& rect1, const RECT& rect2);
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
 
@@ -213,11 +212,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 size_t pixelChangeRun = 60;
 
                 agent_previous = agent;
-
-                bool sameCoordinates = true;
-                sameCoordinates = CheckSameCoordinates(agent, agent_2);
-                sameCoordinates = CheckSameCoordinates(agent, food);
-                sameCoordinates = CheckSameCoordinates(agent, water);
 
                 switch (action) {
                     case Action::WALK:
