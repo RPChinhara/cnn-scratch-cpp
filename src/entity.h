@@ -25,6 +25,7 @@ enum Direction {
 };
 
 inline RECT agent;
+inline RECT agent_previous;
 inline RECT agent_left_eye;
 inline RECT agent_right_eye;
 inline RECT agent_2;

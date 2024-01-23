@@ -15,6 +15,7 @@
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 
+bool CheckSameCoordinates(const RECT& rect1, const RECT& rect2);
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
 
@@ -39,6 +40,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             FillRect(hdc, &bed, whiteBrush);
             DeleteObject(whiteBrush);
 
+            HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
+            FillRect(hdc, &food, redBrush);
+            DeleteObject(redBrush);
+
+            HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
+            FillRect(hdc, &water, blueBrush);
+            DeleteObject(blueBrush);
+
             HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
             FillRect(hdc, &agent, pinkBrush);
             FillRect(hdc, &agent_2, pinkBrush);
@@ -49,16 +58,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 FillRect(hdc, &agent_left_eye, blackBrush);
             if (render_agent_right_eye)
                 FillRect(hdc, &agent_right_eye, blackBrush);
-
             DeleteObject(blackBrush);
-
-            HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
-            FillRect(hdc, &food, redBrush);
-            DeleteObject(redBrush);
-
-            HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
-            FillRect(hdc, &water, blueBrush);
-            DeleteObject(blueBrush);
 
             EndPaint(hwnd, &ps);
 
@@ -212,45 +212,36 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 size_t pixelChangeWalk = 21;
                 size_t pixelChangeRun = 60;
 
+                agent_previous = agent;
+
+                bool sameCoordinates = true;
+                sameCoordinates = CheckSameCoordinates(agent, agent_2);
+                sameCoordinates = CheckSameCoordinates(agent, food);
+                sameCoordinates = CheckSameCoordinates(agent, water);
+
                 switch (action) {
                     case Action::WALK:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
                                     agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
                                     agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
-                                    break;
-                                }
+                                break;
                             case Orientation::LEFT:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.left += pixelChangeWalk, agent.right += pixelChangeWalk;
                                     agent_left_eye.left += pixelChangeWalk, agent_left_eye.right += pixelChangeWalk;
                                     agent_right_eye.left += pixelChangeWalk, agent_right_eye.right += pixelChangeWalk;
-                                    break;
-                                }
+                                break;
                             case Orientation::RIGHT:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.left -= pixelChangeWalk, agent.right -= pixelChangeWalk;
                                     agent_left_eye.left -= pixelChangeWalk, agent_left_eye.right -= pixelChangeWalk;
                                     agent_right_eye.left -= pixelChangeWalk, agent_right_eye.right -= pixelChangeWalk;
-                                    break;
-                                }
+                                break;
                             case Orientation::BACK:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.top -= pixelChangeWalk, agent.bottom -= pixelChangeWalk;
                                     agent_left_eye.top -= pixelChangeWalk, agent_left_eye.bottom -= pixelChangeWalk;
                                     agent_right_eye.top -= pixelChangeWalk, agent_right_eye.bottom -= pixelChangeWalk;
-                                    break;
-                                }
+                                break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
                                 break;
@@ -259,41 +250,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     case Action::RUN:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.top += pixelChangeRun, agent.bottom += pixelChangeRun;
                                     agent_left_eye.top += pixelChangeRun, agent_left_eye.bottom += pixelChangeRun;
                                     agent_right_eye.top += pixelChangeRun, agent_right_eye.bottom += pixelChangeRun;
-                                    break;
-                                }
+                                break;
                             case Orientation::LEFT:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.left += pixelChangeRun, agent.right += pixelChangeRun;
                                     agent_left_eye.left += pixelChangeRun, agent_left_eye.right += pixelChangeRun;
                                     agent_right_eye.left += pixelChangeRun, agent_right_eye.right += pixelChangeRun;
-                                    break;
-                                }
+                                break;
                             case Orientation::RIGHT:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.left -= pixelChangeRun, agent.right -= pixelChangeRun;
                                     agent_left_eye.left -= pixelChangeRun, agent_left_eye.right -= pixelChangeRun;
                                     agent_right_eye.left -= pixelChangeRun, agent_right_eye.right -= pixelChangeRun;
-                                    break;
-                                }
+                                break;
                             case Orientation::BACK:
-                                if (has_collided_with_agent_2 || has_collided_with_food || has_collided_with_water) {
-                                    break;
-                                } else {
                                     agent.top -= pixelChangeRun, agent.bottom -= pixelChangeRun;
                                     agent_left_eye.top -= pixelChangeRun, agent_left_eye.bottom -= pixelChangeRun;
                                     agent_right_eye.top -= pixelChangeRun, agent_right_eye.bottom -= pixelChangeRun;
-                                    break;
-                                }
+                                break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
                                 break;
@@ -368,15 +343,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 has_collided_with_water = false;
                 has_collided_with_wall = false;
 
-                ResolveBoundaryCollision(agent, client_width, client_height);
                 ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
+                ResolveBoundaryCollision(agent, client_width, client_height);
                 
-                if (has_collided_with_food)
-                    PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
-                if (has_collided_with_water)
-                    PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
+                // if (has_collided_with_food)
+                //     PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
+                // if (has_collided_with_water)
+                //     PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
                 env.Render(iteration, action, q_learning.exploration_rate, direction);

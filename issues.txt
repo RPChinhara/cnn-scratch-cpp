@@ -35,13 +35,10 @@
 - Add news, and nationality as states
 - An agent should address new goals forever
 - How to fix always choosing first Action in q learning choseAction() issue
-- Get 2.5 rewards if he collided with any entities ?
-- Change 2 from 1.5 for new place reward ?
-- Turn functions into cuda kernel if it's possible
+- Turn functions relate in RL into cuda kernel if it's possible
 - Change to friend from agent_2 ?
 - When is condidered done ? When total reward is below certain threshold? After certain time has passed ? Because if I start new episode I could use updated q table.
 - common value for exploration rate ? How should I decay them ?
-- Somehow I get 'Invalid coordinates' error from FlattenState() especially when he goes to most left edge of the window
 - Need to fix he's keeping colliding with food
 - seems like it doesn't transtion to full when collided with food immediatelly
 - If collisions happen continuouslly, it only considers first one e.g., wall collisions.
@@ -56,6 +53,7 @@
                                   agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
 - maybe I don't need to adjust positions of eye in ResolveRectanglesCollision() ?
 - I think action could be taken as an Action in Render(), Step(), UpdateQtable() ?
+- It looks like I'm having an issue with collisions, and it's called 'tunneling'.
 
 [States]
 - hunger(the primary biological drive for eating is hunger, which is controlled by the hypothalamus in the brain. When the body's energy stores are depleted, signals are sent to the brain to initiate the feeling of hunger, motivating an individual to seek and consume food), thirst(dehydration or a decrease in the body's water content triggers the sensation of thirst), mental health, blood pressure, blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), emotions(such as stress, boredom, sadness, or happiness), self-esteem level(influences psychological well-being), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).

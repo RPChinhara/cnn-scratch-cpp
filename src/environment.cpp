@@ -225,7 +225,7 @@ void Environment::CalculateReward()
     } else {
         seenLefts.insert(agent.left);
         newLeft = true;
-        reward += 2.0f;
+        reward += 2.2f;
     }
 
     if (seenTops.find(agent.top) != seenTops.end()) {
@@ -233,7 +233,7 @@ void Environment::CalculateReward()
     } else {
         seenTops.insert(agent.top);
         newTop = true;
-        reward += 2.0f;
+        reward += 2.2f;
     }
 
     if (has_collided_with_wall)
