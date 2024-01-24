@@ -179,7 +179,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             size_t iteration = 0;
 
             while (!done) {
-                size_t action = q_learning.ChooseAction(state);
+                Action action = q_learning.ChooseAction(state);
 
                 auto FrontConfig = [&]() {
                     orientation = Orientation::FRONT;

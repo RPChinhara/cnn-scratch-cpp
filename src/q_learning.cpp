@@ -18,7 +18,7 @@ QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, flo
     q_table = Zeros({ n_states, n_actions });
 }
 
-size_t QLearning::ChooseAction(size_t state)
+Action QLearning::ChooseAction(size_t state)
 {
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -26,7 +26,7 @@ size_t QLearning::ChooseAction(size_t state)
 
     if (dis_1(rng) < exploration_rate) {
         std::uniform_int_distribution<> dis_2(0, n_actions - 1);
-        return dis_2(rng);
+        return static_cast<Action>(dis_2(rng));
     } else {
         Tensor sliced_q_table = Slice(q_table, state, 1);
         size_t max_idx = 0;
@@ -39,7 +39,7 @@ size_t QLearning::ChooseAction(size_t state)
             }
         }
 
-        return max_idx;
+        return static_cast<Action>(max_idx);
     }
 }
 
