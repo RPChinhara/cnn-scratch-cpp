@@ -271,16 +271,16 @@ void Environment::CalculateReward()
         reward += 2.5f;
     if (has_collided_with_agent_2)
         reward += 1.5f;
-    if (currentState == HungerState::HUNGRY && has_collided_with_food || currentState == HungerState::NEUTRAL && has_collided_with_food)
+    if (hungerState == HungerState::HUNGRY && has_collided_with_food || hungerState == HungerState::NEUTRAL && has_collided_with_food)
         reward += 1.0f;
-    if (currentState == HungerState::HUNGRY && !has_collided_with_food)
+    if (hungerState == HungerState::HUNGRY && hours >= 3)
         reward += -1.0f;
-    if (currentState == HungerState::HUNGRY && hours >= 3)
-        reward += -1.0f;
-    if (currentState == HungerState::FULL && has_collided_with_food) {
+    if (hungerState == HungerState::FULL && has_collided_with_food) {
         std::cout << "I'M full" << std::endl;
         reward += -1.0f;
     }
+    if (thirstState == ThirstState::HYDRATED && has_collided_with_water)
+        reward += -1.0f;
     if (has_collided_with_wall)
         reward += -1.5f;
     if (numWallCollision > 1)
