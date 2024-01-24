@@ -18,6 +18,12 @@ enum HungerState {
     FULL
 };
 
+enum EnergyState {
+    LOW,
+    MEDIUM,
+    HIGH
+};
+
 enum Action {
     WALK,
     RUN,
@@ -41,16 +47,17 @@ public:
     LONG minTop = 0;
     LONG maxTop = client_height - agent_height;
 
-    size_t numHungerStates = 3;
     size_t numThirstStates = 3;
+    size_t numHungerStates = 3;
+    size_t numEnergyStates = 3;
     size_t numLeftStates = (maxLeft - minLeft) + 1;
     size_t numTopStates = (maxTop - minTop) + 1;
 
-    size_t numStates = numHungerStates * numThirstStates * numLeftStates * numTopStates;
+    size_t numStates = numThirstStates * numHungerStates * numEnergyStates * numLeftStates * numTopStates;
     size_t numActions = 6;
     
 private:
-    size_t FlattenState(size_t hungerState, size_t thirstState, LONG left,LONG top);
+    size_t FlattenState(size_t hungerState, size_t thirstState, size_t energyState, LONG left,LONG top);
     void CalculateReward();
     bool CheckTermination();
 
@@ -66,8 +73,10 @@ private:
     size_t currentState;
     size_t thirstState;
     size_t hungerState;
+    size_t energyState;
     std::string thirstStateStr;
     std::string hungerStateStr;
+    std::string energyStateStr;
     std::string actionStr;
     float reward;
     size_t daysLived;

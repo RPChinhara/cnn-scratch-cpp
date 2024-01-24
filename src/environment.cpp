@@ -68,6 +68,21 @@ void Environment::Render(const size_t iteration, const size_t action, float expl
             break;
     }
 
+    switch (energyState) {
+        case EnergyState::LOW:
+            energyStateStr = "low";
+            break;
+        case EnergyState::MEDIUM:
+            energyStateStr = "medium";
+            break;
+        case EnergyState::HIGH:
+            energyStateStr = "high";
+            break;
+        default:
+            MessageBox(nullptr, "Unknown energy state", "Error", MB_ICONERROR);
+            break;
+    }
+
     auto lifeEndTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(lifeEndTime - lifeStartTime);
 
@@ -109,12 +124,13 @@ void Environment::Render(const size_t iteration, const size_t action, float expl
         currentDirection += "west";
 
     std::cout << "Number of iterations:        " << iteration << std::endl;
-    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, agent.left, agent.top) << std::endl;
+    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << std::endl;
     std::cout << currentLeft << std::endl;
     std::cout << currentTop << std::endl;
     std::cout << "Current Direction            " << currentDirection << std::endl;
     std::cout << "Current Thirst State:        " << thirstStateStr << std::endl;
     std::cout << "Current Hunger State:        " << hungerStateStr << std::endl;
+    std::cout << "Current Energy State:        " << energyStateStr << std::endl;
     std::cout << "Current Action:              " << actionStr << std::endl;
     std::cout << "Reward:                      " << reward << std::endl;
     std::cout << "Number Of Water Collisions:  " << numWaterCollision << std::endl;
@@ -139,7 +155,8 @@ size_t Environment::Reset()
     numStatic = 0;
     thirstState = ThirstState::QUENCHED;
     hungerState = HungerState::NEUTRAL;
-    currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+    energyState = EnergyState::MEDIUM;
+    currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     reward = 0.0f;
     daysLived = 0;
     daysWithoutDrinking = 0;
@@ -174,18 +191,18 @@ std::tuple<size_t, float, bool> Environment::Step(const size_t action)
 
     if (has_collided_with_water && thirstState != ThirstState::HYDRATED) {
         thirstState = std::min(thirstState + 1, numHungerStates - 1);
-        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     } else if (hours >= 3 && thirstState != ThirstState::THIRSTY) {
         thirstState = std::max(thirstState - 1, 0ULL);
-        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
     if (has_collided_with_food && hungerState != HungerState::FULL) {
         hungerState = std::min(hungerState + 1, numHungerStates - 1);
-        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     } else if (hours >= 3 && hungerState != HungerState::HUNGRY) {
         hungerState = std::max(hungerState - 1, 0ULL);
-        currentState = FlattenState(hungerState, thirstState, agent.left, agent.top);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
     CalculateReward();
@@ -204,15 +221,18 @@ std::tuple<size_t, float, bool> Environment::Step(const size_t action)
     return std::make_tuple(currentState, reward, done);
 }
 
-size_t Environment::FlattenState(size_t hungerState, size_t thirstState, LONG left, LONG top) {
+size_t Environment::FlattenState(size_t hungerState, size_t thirstState, size_t energyState, LONG left, LONG top) {
     if (!(hungerState < numHungerStates))
         MessageBoxA(nullptr, ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(thirstState < numThirstStates))
         MessageBox(nullptr, ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(), "Error", MB_ICONERROR);
+    if (!(energyState < numEnergyStates))
+        MessageBox(nullptr, ("Invalid energy state. Should be within the range [0, " + std::to_string(numEnergyStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
-    return (((hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
+    // return (((hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
+    return ((((energyState) * numHungerStates + hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
 }
 
 void Environment::CalculateReward()
