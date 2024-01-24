@@ -343,10 +343,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
                 
-                // if (has_collided_with_food)
-                //     PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
-                // if (has_collided_with_water)
-                //     PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
+                if (has_collided_with_food)
+                    PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
+                if (has_collided_with_water)
+                    PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
                 env.Render(iteration, action, q_learning.exploration_rate, direction);
