@@ -48,7 +48,6 @@
 - Try functors for like Relu ?
 - Add hp, stamina, weight? Is energy same as hp or stamina
 - Perhaps, add eat, drink, or sociolize actions whenever he collided with entites?
-- I think action could be taken as an Action in Render(), Step(), UpdateQtable() ?
 - It looks like I'm having an issue with collisions, and it's called 'tunneling'.
 - I dont have to use std::vector in nn.cpp
 - I dont think i need to allocate memory dynamically in zeros or in other place i use new keyword
