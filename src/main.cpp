@@ -218,24 +218,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     case Action::WALK:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                    agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
-                                    agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
-                                    agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
+                                agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
+                                agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
+                                agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
                                 break;
                             case Orientation::LEFT:
-                                    agent.left += pixelChangeWalk, agent.right += pixelChangeWalk;
-                                    agent_left_eye.left += pixelChangeWalk, agent_left_eye.right += pixelChangeWalk;
-                                    agent_right_eye.left += pixelChangeWalk, agent_right_eye.right += pixelChangeWalk;
+                                agent.left += pixelChangeWalk, agent.right += pixelChangeWalk;
+                                agent_left_eye.left += pixelChangeWalk, agent_left_eye.right += pixelChangeWalk;
+                                agent_right_eye.left += pixelChangeWalk, agent_right_eye.right += pixelChangeWalk;
                                 break;
                             case Orientation::RIGHT:
-                                    agent.left -= pixelChangeWalk, agent.right -= pixelChangeWalk;
-                                    agent_left_eye.left -= pixelChangeWalk, agent_left_eye.right -= pixelChangeWalk;
-                                    agent_right_eye.left -= pixelChangeWalk, agent_right_eye.right -= pixelChangeWalk;
+                                agent.left -= pixelChangeWalk, agent.right -= pixelChangeWalk;
+                                agent_left_eye.left -= pixelChangeWalk, agent_left_eye.right -= pixelChangeWalk;
+                                agent_right_eye.left -= pixelChangeWalk, agent_right_eye.right -= pixelChangeWalk;
                                 break;
                             case Orientation::BACK:
-                                    agent.top -= pixelChangeWalk, agent.bottom -= pixelChangeWalk;
-                                    agent_left_eye.top -= pixelChangeWalk, agent_left_eye.bottom -= pixelChangeWalk;
-                                    agent_right_eye.top -= pixelChangeWalk, agent_right_eye.bottom -= pixelChangeWalk;
+                                agent.top -= pixelChangeWalk, agent.bottom -= pixelChangeWalk;
+                                agent_left_eye.top -= pixelChangeWalk, agent_left_eye.bottom -= pixelChangeWalk;
+                                agent_right_eye.top -= pixelChangeWalk, agent_right_eye.bottom -= pixelChangeWalk;
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -245,24 +245,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     case Action::RUN:
                         switch (orientation) {
                             case Orientation::FRONT:
-                                    agent.top += pixelChangeRun, agent.bottom += pixelChangeRun;
-                                    agent_left_eye.top += pixelChangeRun, agent_left_eye.bottom += pixelChangeRun;
-                                    agent_right_eye.top += pixelChangeRun, agent_right_eye.bottom += pixelChangeRun;
+                                agent.top += pixelChangeRun, agent.bottom += pixelChangeRun;
+                                agent_left_eye.top += pixelChangeRun, agent_left_eye.bottom += pixelChangeRun;
+                                agent_right_eye.top += pixelChangeRun, agent_right_eye.bottom += pixelChangeRun;
                                 break;
                             case Orientation::LEFT:
-                                    agent.left += pixelChangeRun, agent.right += pixelChangeRun;
-                                    agent_left_eye.left += pixelChangeRun, agent_left_eye.right += pixelChangeRun;
-                                    agent_right_eye.left += pixelChangeRun, agent_right_eye.right += pixelChangeRun;
+                                agent.left += pixelChangeRun, agent.right += pixelChangeRun;
+                                agent_left_eye.left += pixelChangeRun, agent_left_eye.right += pixelChangeRun;
+                                agent_right_eye.left += pixelChangeRun, agent_right_eye.right += pixelChangeRun;
                                 break;
                             case Orientation::RIGHT:
-                                    agent.left -= pixelChangeRun, agent.right -= pixelChangeRun;
-                                    agent_left_eye.left -= pixelChangeRun, agent_left_eye.right -= pixelChangeRun;
-                                    agent_right_eye.left -= pixelChangeRun, agent_right_eye.right -= pixelChangeRun;
+                                agent.left -= pixelChangeRun, agent.right -= pixelChangeRun;
+                                agent_left_eye.left -= pixelChangeRun, agent_left_eye.right -= pixelChangeRun;
+                                agent_right_eye.left -= pixelChangeRun, agent_right_eye.right -= pixelChangeRun;
                                 break;
                             case Orientation::BACK:
-                                    agent.top -= pixelChangeRun, agent.bottom -= pixelChangeRun;
-                                    agent_left_eye.top -= pixelChangeRun, agent_left_eye.bottom -= pixelChangeRun;
-                                    agent_right_eye.top -= pixelChangeRun, agent_right_eye.bottom -= pixelChangeRun;
+                                agent.top -= pixelChangeRun, agent.bottom -= pixelChangeRun;
+                                agent_left_eye.top -= pixelChangeRun, agent_left_eye.bottom -= pixelChangeRun;
+                                agent_right_eye.top -= pixelChangeRun, agent_right_eye.bottom -= pixelChangeRun;
                                 break;
                             default:
                                 MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
