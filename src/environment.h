@@ -6,33 +6,6 @@
 #include <string>
 #include <windows.h>
 
-enum ThirstState {
-    THIRSTY,
-    QUENCHED,
-    HYDRATED
-};
-
-enum HungerState {
-    HUNGRY,
-    NEUTRAL,
-    FULL
-};
-
-enum EnergyState {
-    LOW,
-    MEDIUM,
-    HIGH
-};
-
-enum Action {
-    WALK,
-    RUN,
-    TURN_LEFT,
-    TURN_RIGHT,
-    TURN_AROUND,
-    STATIC
-};
-
 class Environment
 {
 public:
