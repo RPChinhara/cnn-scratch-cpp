@@ -32,7 +32,7 @@ public:
     size_t numActions = 6;
     
 private:
-    size_t FlattenState(size_t hungerState, size_t thirstState, size_t energyState, LONG left,LONG top);
+    size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left,LONG top);
     void CalculateReward(const Action action);
     bool CheckTermination();
 

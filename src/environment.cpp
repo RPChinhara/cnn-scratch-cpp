@@ -238,7 +238,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     return std::make_tuple(currentState, reward, done);
 }
 
-size_t Environment::FlattenState(size_t hungerState, size_t thirstState, size_t energyState, LONG left, LONG top) {
+size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left, LONG top) {
     if (!(hungerState < numHungerStates))
         MessageBoxA(nullptr, ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(thirstState < numThirstStates))
