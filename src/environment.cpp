@@ -14,7 +14,7 @@ inline std::chrono::hours::rep hours;
 Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
 }
 
-void Environment::Render(const size_t iteration, const size_t action, float exploration_rate, Direction direction)
+void Environment::Render(const size_t iteration, Action action, float exploration_rate, Direction direction)
 {
     switch (action) {
         case Action::WALK:
@@ -166,7 +166,7 @@ size_t Environment::Reset()
     return currentState;
 }
 
-std::tuple<size_t, float, bool> Environment::Step(const size_t action)
+std::tuple<size_t, float, bool> Environment::Step(Action action)
 {
     switch (action) {
         case Action::WALK:

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "action.h"
 #include "entity.h"
 
 #include <set>
@@ -10,9 +11,9 @@ class Environment
 {
 public:
     Environment(const LONG client_width, const LONG client_height);
-    void Render(const size_t iteration, const size_t action, float exploration_rate, Direction direction);
+    void Render(const size_t iteration, Action action, float exploration_rate, Direction direction);
     size_t Reset();
-    std::tuple<size_t, float, bool> Step(const size_t action);
+    std::tuple<size_t, float, bool> Step(Action action);
 
     LONG client_width, client_height;
     LONG minLeft = 0;
