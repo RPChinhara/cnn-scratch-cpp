@@ -2,6 +2,7 @@
 
 #include "action.h"
 #include "entity.h"
+#include "state.h"
 
 #include <set>
 #include <string>
@@ -45,9 +46,9 @@ private:
     size_t numTurnAround;
     size_t numStatic;
     size_t currentState;
-    size_t thirstState;
-    size_t hungerState;
-    size_t energyState;
+    ThirstState thirstState;
+    HungerState hungerState;
+    EnergyState energyState;
     std::string thirstStateStr;
     std::string hungerStateStr;
     std::string energyStateStr;

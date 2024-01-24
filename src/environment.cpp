@@ -192,33 +192,33 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     }
 
     if (has_collided_with_water && thirstState != ThirstState::HYDRATED) {
-        thirstState = std::min(thirstState + 1, numHungerStates - 1);
+        thirstState = std::min(static_cast<ThirstState>(thirstState + 1), static_cast<ThirstState>(numHungerStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     } else if (hours >= 3 && thirstState != ThirstState::THIRSTY) {
-        thirstState = std::max(thirstState - 1, 0ULL);
+        thirstState = std::max(static_cast<ThirstState>(thirstState - 1), static_cast<ThirstState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
     if (has_collided_with_food && hungerState != HungerState::FULL) {
-        hungerState = std::min(hungerState + 1, numHungerStates - 1);
+        hungerState = std::min(static_cast<HungerState>(hungerState + 1), static_cast<HungerState>(numHungerStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     } else if (hours >= 3 && hungerState != HungerState::HUNGRY) {
-        hungerState = std::max(hungerState - 1, 0ULL);
+        hungerState = std::max(static_cast<HungerState>(hungerState - 1), static_cast<HungerState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (has_collided_with_food && hungerState != EnergyState::HIGH) {
-        energyState = std::min(energyState + 1, numEnergyStates - 1);
+    if (has_collided_with_food && energyState != EnergyState::HIGH) {
+        energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
     if (hours >= 1 && energyState != EnergyState::LOW) {
-        energyState = std::max(energyState - 1, 0ULL);
+        energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
     if (action == Action::STATIC && energyState != EnergyState::HIGH) {
-        energyState = std::min(energyState + 1, numEnergyStates - 1);
+        energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
