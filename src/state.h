@@ -8,7 +8,7 @@ enum ThirstState {
 
 enum HungerState {
     HUNGRY,
-    NEUTRAL,
+    SATISFIED,
     FULL
 };
 
@@ -16,4 +16,23 @@ enum EnergyState {
     LOW,
     MEDIUM,
     HIGH
+};
+
+enum HealthState {
+    HEALTHY,
+    INJURED,
+    SICK,
+    CRITICAL
+};
+
+enum MentalState {
+    STRESSED,
+    HAPPY
+};
+
+enum EmotionState {
+    HAPPY,
+    SAD,
+    ANGRY,
+    NEUTRAL
 };

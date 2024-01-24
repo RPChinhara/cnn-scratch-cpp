@@ -59,8 +59,8 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
         case HungerState::HUNGRY:
             hungerStateStr = "hungry";
             break;
-        case HungerState::NEUTRAL:
-            hungerStateStr = "neutral";
+        case HungerState::SATISFIED:
+            hungerStateStr = "satisfied";
             break;
         case HungerState::FULL:
             hungerStateStr = "full";
@@ -156,7 +156,7 @@ size_t Environment::Reset()
     numTurnAround = 0;
     numStatic = 0;
     thirstState = ThirstState::QUENCHED;
-    hungerState = HungerState::NEUTRAL;
+    hungerState = HungerState::SATISFIED;
     energyState = EnergyState::MEDIUM;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     reward = 0.0f;
@@ -207,7 +207,22 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    CalculateReward();
+    if (has_collided_with_food && hungerState != EnergyState::HIGH) {
+        energyState = std::min(energyState + 1, numEnergyStates - 1);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (hours >= 1 && energyState != EnergyState::LOW) {
+        energyState = std::max(energyState - 1, 0ULL);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (action == Action::STATIC && energyState != EnergyState::HIGH) {
+        energyState = std::min(energyState + 1, numEnergyStates - 1);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    CalculateReward(action);
     bool done = CheckTermination();
 
     // if (has_collided_with_food)
@@ -233,11 +248,11 @@ size_t Environment::FlattenState(size_t hungerState, size_t thirstState, size_t 
     if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
-    // return (((hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
+    // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
     return ((((energyState) * numHungerStates + hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
 }
 
-void Environment::CalculateReward()
+void Environment::CalculateReward(const Action action)
 {
     reward = 0.0f;
     size_t maxConsecutiveAction = 4;
@@ -265,26 +280,41 @@ void Environment::CalculateReward()
 
     if (daysLived > maxDays)
         reward += 1.0f;
-    if (has_collided_with_water)
-        reward += 2.5f;
+
+    if (has_collided_with_water == ThirstState::THIRSTY && has_collided_with_water)
+        reward += 1.5f;
+    if (has_collided_with_water == ThirstState::QUENCHED && has_collided_with_water)
+        reward += 0.7f;
+    if (thirstState == ThirstState::HYDRATED && has_collided_with_water)
+        reward += -1.0f;
+
     if (has_collided_with_food)
         reward += 2.5f;
-    if (has_collided_with_agent_2)
-        reward += 1.5f;
-    if (hungerState == HungerState::HUNGRY && has_collided_with_food || hungerState == HungerState::NEUTRAL && has_collided_with_food)
+    if (hungerState == HungerState::HUNGRY && has_collided_with_food)
+        reward += 1.25f;
+    if (hungerState == HungerState::SATISFIED && has_collided_with_food)
         reward += 1.0f;
     if (hungerState == HungerState::HUNGRY && hours >= 3)
         reward += -1.0f;
     if (hungerState == HungerState::FULL && has_collided_with_food) {
-        std::cout << "I'M full" << std::endl;
         reward += -1.0f;
+
+    if (has_collided_with_agent_2)
+        reward += 1.5f;
     }
-    if (thirstState == ThirstState::HYDRATED && has_collided_with_water)
-        reward += -1.0f;
+
+    if (energyState == EnergyState::LOW && action == Action::STATIC)
+        reward += 2.0f;
+    if (energyState == EnergyState::MEDIUM && action == Action::STATIC)
+        reward += 1.0f;
+    if (energyState == EnergyState::LOW && action == Action::RUN)
+        reward += -2.0f;
+
     if (has_collided_with_wall)
         reward += -1.5f;
     if (numWallCollision > 1)
         reward += -2.0f;
+
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
     //     numMoveForward = 0;

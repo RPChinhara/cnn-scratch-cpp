@@ -32,7 +32,7 @@ public:
     
 private:
     size_t FlattenState(size_t hungerState, size_t thirstState, size_t energyState, LONG left,LONG top);
-    void CalculateReward();
+    void CalculateReward(const Action action);
     bool CheckTermination();
 
     size_t numWaterCollision;
