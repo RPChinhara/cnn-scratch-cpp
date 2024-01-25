@@ -39,7 +39,6 @@
 - When is condidered done ? When total reward is below certain threshold? After certain time has passed ? Because if I start new episode I could use updated q table.
 - common value for exploration rate ? How should I decay them ?
 - Need to fix he's keeping colliding with food
-- seems like it doesn't transtion to full when collided with food immediatelly
 - If collisions happen continuouslly, it only considers first one e.g., wall collisions.
 - Refactor ResolveRectanglesCollision()
 - I think global variables are messed up especially entity.h and client width and height. Learn how to handle.
