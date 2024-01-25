@@ -20,7 +20,6 @@
 - Add Mental state. People get sad when lonely. Interact with his friend
 - How animal take care of hygine? Add hygine as state
 - Show chatGPT my code and ask wheather I could use pointer somewhere
-- Maybe return pointer to tensor from like relu?m
 - Add body and env tempertures
 - Should it grow like human? A Baby to an adult
 - Log learning rate as well?
