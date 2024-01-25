@@ -71,14 +71,35 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
     }
 
     switch (energyState) {
-        case EnergyState::LOW:
-            energyStateStr = "low";
+        case EnergyState::LEVEL1:
+            energyStateStr = "level 1";
             break;
-        case EnergyState::MEDIUM:
-            energyStateStr = "medium";
+        case EnergyState::LEVEL2:
+            energyStateStr = "level 2";
             break;
-        case EnergyState::HIGH:
-            energyStateStr = "high";
+        case EnergyState::LEVEL3:
+            energyStateStr = "level 3";
+            break;
+        case EnergyState::LEVEL4:
+            energyStateStr = "level 4";
+            break;
+        case EnergyState::LEVEL5:
+            energyStateStr = "level 5";
+            break;
+        case EnergyState::LEVEL6:
+            energyStateStr = "level 6";
+            break;
+        case EnergyState::LEVEL7:
+            energyStateStr = "level 7";
+            break;
+        case EnergyState::LEVEL8:
+            energyStateStr = "level 8";
+            break;
+        case EnergyState::LEVEL9:
+            energyStateStr = "level 9";
+            break;
+        case EnergyState::LEVEL10:
+            energyStateStr = "level 10";
             break;
         default:
             MessageBox(nullptr, "Unknown energy state", "Error", MB_ICONERROR);
@@ -157,7 +178,7 @@ size_t Environment::Reset()
     numStatic = 0;
     thirstState = ThirstState::QUENCHED;
     hungerState = HungerState::SATISFIED;
-    energyState = EnergyState::MEDIUM;
+    energyState = EnergyState::LEVEL5;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     reward = 0.0f;
     daysLived = 0;
@@ -207,20 +228,20 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (has_collided_with_food && energyState != EnergyState::HIGH) {
+    if (has_collided_with_food && energyState != EnergyState::LEVEL10) {
         energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (hours >= 1 && energyState != EnergyState::LOW) {
+    if (hours >= 1 && energyState != EnergyState::LEVEL1) {
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (action == Action::STATIC && energyState != EnergyState::HIGH) {
-        energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
-        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
-    }
+    // if (action == Action::STATIC && energyState != EnergyState::LEVEL10) {
+    //     energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
+    //     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    // }
 
     CalculateReward(action);
     bool done = CheckTermination();
@@ -303,11 +324,11 @@ void Environment::CalculateReward(const Action action)
         reward += 1.5f;
     }
 
-    if (energyState == EnergyState::LOW && action == Action::STATIC)
+    if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
         reward += 2.0f;
-    if (energyState == EnergyState::MEDIUM && action == Action::STATIC)
+    if (energyState == EnergyState::LEVEL2 && action == Action::STATIC)
         reward += 1.0f;
-    if (energyState == EnergyState::LOW && action == Action::RUN)
+    if (energyState == EnergyState::LEVEL1 && action == Action::RUN)
         reward += -2.0f;
 
     if (has_collided_with_wall)

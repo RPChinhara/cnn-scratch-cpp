@@ -24,7 +24,7 @@ public:
 
     size_t numThirstStates = 3;
     size_t numHungerStates = 3;
-    size_t numEnergyStates = 3;
+    size_t numEnergyStates = 10;
     size_t numLeftStates = (maxLeft - minLeft) + 1;
     size_t numTopStates = (maxTop - minTop) + 1;
 
