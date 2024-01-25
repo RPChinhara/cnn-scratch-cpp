@@ -49,7 +49,6 @@
 - Add hp, stamina, weight? Is energy same as hp or stamina
 - Perhaps, add eat, drink, or sociolize actions whenever he collided with entites?
 - It looks like I'm having an issue with collisions, and it's called 'tunneling'.
-- I dont have to use std::vector in nn.cpp
 - I dont think i need to allocate memory dynamically in zeros or in other place i use new keyword
 - Consider adding the time of day as a state. Maybe I need to make environment so that it has morning and night like in real life.
 - Order in FlattenState() should be fixed.
