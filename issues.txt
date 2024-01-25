@@ -61,6 +61,13 @@
 - If he keeps energy level in 1 and certain time has passed, he will die.
 - Maybe reduce energy level after certain number of time he either walk/run.
 - Make entity class for each entites in RL ? like Food, Water so on, and each includes mem variables size_t flags? Instead of just using RECT
+- How to make tensors lazy ?
+- Enable vectorization in your compiler settings. This allows the compiler to automatically use SIMD instructions when appropriate.
+- Besides SIMD, explore other compiler intrinsics for specific architectures. These can provide low-level control over certain instructions and optimizations.
+- Make functiona inside training loop in both nn and RL?
+- How to not or optimize dunamic allocation in Zero()
+- Learn Data locality
+- Hide hithub change
 
 [States]
 - hunger(the primary biological drive for eating is hunger, which is controlled by the hypothalamus in the brain. When the body's energy stores are depleted, signals are sent to the brain to initiate the feeling of hunger, motivating an individual to seek and consume food), thirst(dehydration or a decrease in the body's water content triggers the sensation of thirst), mental health, blood pressure, blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), emotions(such as stress, boredom, sadness, or happiness), self-esteem level(influences psychological well-being), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).

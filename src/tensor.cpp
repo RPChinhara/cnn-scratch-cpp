@@ -150,7 +150,7 @@ Tensor Tensor::operator/(const Tensor& other) const
                 out[i] = elem[i] / other[idx];
             }
         } else {
-            std::cerr << "Shapes don't much." << std::endl;
+            std::cerr << "Shapes don't much." << '\n';
             std::exit(EXIT_FAILURE);
         }
     }

@@ -139,7 +139,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
-    std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+    std::cout << "Time taken: " << duration.count() << " seconds" << '\n';
 
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
@@ -363,7 +363,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
-            std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << std::endl << std::endl;
+            std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << "\n\n";
         }
     });
 

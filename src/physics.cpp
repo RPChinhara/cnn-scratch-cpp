@@ -6,8 +6,8 @@
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height)
 {
     if (rect.left < 0) {
-        std::cout << 1 <<  " ResolveBoundaryCollision" << std::endl;
-        std::cout << rect.left << std::endl;
+        std::cout << 1 <<  " ResolveBoundaryCollision" << '\n';
+        std::cout << rect.left << '\n';
         has_collided_with_wall= true;
 
         rect.left = 0;
@@ -21,8 +21,8 @@ void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG cl
     }
 
     if (rect.top < 0) {
-        std::cout << 2 <<  " ResolveBoundaryCollision" << std::endl;
-        std::cout << rect.top << std::endl;
+        std::cout << 2 <<  " ResolveBoundaryCollision" << '\n';
+        std::cout << rect.top << '\n';
 
         has_collided_with_wall = true;
 
@@ -37,8 +37,8 @@ void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG cl
     }
 
     if (rect.right > client_width) {
-        std::cout << 3 <<  " ResolveBoundaryCollision" << std::endl;
-        std::cout << rect.right << std::endl;
+        std::cout << 3 <<  " ResolveBoundaryCollision" << '\n';
+        std::cout << rect.right << '\n';
 
         has_collided_with_wall = true;
 
@@ -53,8 +53,8 @@ void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG cl
     }
 
     if (rect.bottom > client_height) {
-        std::cout << 4 <<  " ResolveBoundaryCollision" << std::endl;
-        std::cout << rect.bottom << std::endl;
+        std::cout << 4 <<  " ResolveBoundaryCollision" << '\n';
+        std::cout << rect.bottom << '\n';
 
         has_collided_with_wall = true;
 
@@ -93,39 +93,39 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
 
         if (horizontalOverlap < verticalOverlap) {
             if (rect1.left < rect2.left && agent_previous.left < rect2.left) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.1 << " from Physics" << std::endl;
-                std::cout << horizontalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.1 << " from Physics" << '\n';
+                std::cout << horizontalOverlap << '\n';
 
                 rect1.left -= horizontalOverlap;
                 rect1.right -= horizontalOverlap;
             } else if (rect1.left < rect2.left && agent_previous.left > rect2.left) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.2 << " from Physics" << std::endl;
-                std::cout << horizontalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.2 << " from Physics" << '\n';
+                std::cout << horizontalOverlap << '\n';
 
                 rect1.left += horizontalOverlap;
                 rect1.right += horizontalOverlap;
             } else if (rect1.left > rect2.left && agent_previous.left > rect2.left) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.3 << " from Physics" << std::endl;
-                std::cout << horizontalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.3 << " from Physics" << '\n';
+                std::cout << horizontalOverlap << '\n';
 
                 rect1.left += horizontalOverlap;
                 rect1.right += horizontalOverlap;
             } else if (rect1.left > rect2.left && agent_previous.left < rect2.left) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.4 << " from Physics" << std::endl;
-                std::cout << horizontalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.4 << " from Physics" << '\n';
+                std::cout << horizontalOverlap << '\n';
 
                 rect1.left -= horizontalOverlap;
                 rect1.right -= horizontalOverlap;
             } else if (rect1.left == rect2.right || rect1.right == rect2.left) {
-                std::cout << " do nothing " << std::endl;
+                std::cout << " do nothing " << '\n';
             }
 
             if (rect1.left < 0) {
-                std::cout << 1 << " from Physics" << std::endl;
+                std::cout << 1 << " from Physics" << '\n';
                 rect1.left = agent_previous.left;
                 rect1.right = agent_previous.right;
 
@@ -135,7 +135,7 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.left = rect1.left + agentToEyeWidth;
                 agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
             } else if (rect1.right > client_width) {
-                std::cout << 2 << " from Physics" << std::endl;
+                std::cout << 2 << " from Physics" << '\n';
 
                 rect1.left = agent_previous.left;
                 rect1.right = agent_previous.right;
@@ -154,39 +154,39 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
             }
         } else {
             if (rect1.top < rect2.top && agent_previous.top < rect2.top) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.5 << " from Physics" << std::endl;
-                std::cout << verticalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.5 << " from Physics" << '\n';
+                std::cout << verticalOverlap << '\n';
 
                 rect1.top -= verticalOverlap;
                 rect1.bottom -= verticalOverlap;
             } else if (rect1.top < rect2.top && agent_previous.top > rect2.top) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.6 << " from Physics" << std::endl;
-                std::cout << verticalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.6 << " from Physics" << '\n';
+                std::cout << verticalOverlap << '\n';
 
                 rect1.top += verticalOverlap;
                 rect1.bottom += verticalOverlap;
             } else if (rect1.top > rect2.top && agent_previous.top > rect2.top) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.7 << " from Physics" << std::endl;
-                std::cout << verticalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.7 << " from Physics" << '\n';
+                std::cout << verticalOverlap << '\n';
 
                 rect1.top += verticalOverlap;
                 rect1.bottom += verticalOverlap;
             } else if (rect1.top > rect2.top && agent_previous.top > rect2.top) {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << std::endl;
-                std::cout << 0.8 << " from Physics" << std::endl;
-                std::cout << verticalOverlap << std::endl;
+                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << 0.8 << " from Physics" << '\n';
+                std::cout << verticalOverlap << '\n';
 
                 rect1.top -= verticalOverlap;
                 rect1.bottom -= verticalOverlap;
             } else if (rect1.top == rect2.bottom || rect1.bottom == rect2.top) {
-                std::cout << " do nothing " << std::endl;
+                std::cout << " do nothing " << '\n';
             }
 
             if (rect1.top < 0) {
-                std::cout << 3 << " from Physics" << std::endl;
+                std::cout << 3 << " from Physics" << '\n';
 
                 rect1.top = agent_previous.top;
                 rect1.bottom = agent_previous.bottom;
@@ -197,7 +197,7 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
                 agent_right_eye.top = rect1.top + agentToEyeHeight;
                 agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
             } else if (rect1.bottom > client_height) {
-                std::cout << 4 << " from Physics" << std::endl;
+                std::cout << 4 << " from Physics" << '\n';
 
                 rect1.top = agent_previous.top;
                 rect1.bottom = agent_previous.bottom;

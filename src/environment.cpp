@@ -146,23 +146,23 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
     if (direction == Direction::WEST)
         currentDirection += "west";
 
-    std::cout << "Number of iterations:        " << iteration << std::endl;
-    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << std::endl;
-    std::cout << currentLeft << std::endl;
-    std::cout << currentTop << std::endl;
-    std::cout << "Current Direction            " << currentDirection << std::endl;
-    std::cout << "Current Thirst State:        " << thirstStateStr << std::endl;
-    std::cout << "Current Hunger State:        " << hungerStateStr << std::endl;
-    std::cout << "Current Energy State:        " << energyStateStr << std::endl;
-    std::cout << "Current Action:              " << actionStr << std::endl;
-    std::cout << "Reward:                      " << reward << std::endl;
-    std::cout << "Number Of Water Collisions:  " << numWaterCollision << std::endl;
-    std::cout << "Number Of Food Collisions:   " << numFoodCollision << std::endl;
-    std::cout << "Number Of Friend Collisions: " << numFriendCollision << std::endl;
-    std::cout << "Days Lived:                  " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Days Without Drinking:       " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Days Without Eating:         " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << std::endl;
-    std::cout << "Exploration Rate:            " << exploration_rate << std::endl << std::endl;
+    std::cout << "Number of iterations:        " << iteration << '\n';
+    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << '\n';
+    std::cout << currentLeft << '\n';
+    std::cout << currentTop << '\n';
+    std::cout << "Current Direction            " << currentDirection << '\n';
+    std::cout << "Current Thirst State:        " << thirstStateStr << '\n';
+    std::cout << "Current Hunger State:        " << hungerStateStr << '\n';
+    std::cout << "Current Energy State:        " << energyStateStr << '\n';
+    std::cout << "Current Action:              " << actionStr << '\n';
+    std::cout << "Reward:                      " << reward << '\n';
+    std::cout << "Number Of Water Collisions:  " << numWaterCollision << '\n';
+    std::cout << "Number Of Food Collisions:   " << numFoodCollision << '\n';
+    std::cout << "Number Of Friend Collisions: " << numFriendCollision << '\n';
+    std::cout << "Days Lived:                  " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Days Without Drinking:       " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Days Without Eating:         " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Exploration Rate:            " << exploration_rate << "\n\n";
 }
 
 size_t Environment::Reset()

@@ -94,7 +94,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
 
         if (i % 10 == 0) {
             for (const auto& message : buffer)
-                std::cout << message << std::endl;
+                std::cout << message << '\n';
             buffer.clear();
         }
 
@@ -110,7 +110,7 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
         // }
 
         // if (epochs_without_improvement >= patience) {
-        //     std::cout << std::endl << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience << " epochs." << std::endl;
+        //     std::cout << '\n' << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience << " epochs." << '\n';
         //     break;
         // }
     }
@@ -120,11 +120,11 @@ void NN::Predict(const Tensor& x_test, const Tensor& y_test)
 {
     std::vector<Tensor> activations = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
 
-    std::cout << std::endl;
+    std::cout << '\n';
     std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, activations.back())) << " - test accuracy: " << std::to_string(CategoricalAccuracy(y_test, activations.back()));
-    std::cout << std::endl << std::endl;
+    std::cout << "\n\n";
 
-    std::cout << activations.back() << std::endl << std::endl << y_test << std::endl;
+    std::cout << activations.back() << "\n\n" << y_test << '\n';
 }
 
 std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
