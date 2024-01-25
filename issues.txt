@@ -38,7 +38,6 @@
 - Change to friend from agent_2 ?
 - When is condidered done ? When total reward is below certain threshold? After certain time has passed ? Because if I start new episode I could use updated q table.
 - common value for exploration rate ? How should I decay them ?
-- Need to fix he's keeping colliding with food
 - If collisions happen continuouslly, it only considers first one e.g., wall collisions.
 - Refactor ResolveRectanglesCollision()
 - I think global variables are messed up especially entity.h and client width and height. Learn how to handle.
