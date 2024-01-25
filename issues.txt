@@ -64,7 +64,7 @@
 - How to make tensors lazy ?
 - Enable vectorization in your compiler settings. This allows the compiler to automatically use SIMD instructions when appropriate.
 - Besides SIMD, explore other compiler intrinsics for specific architectures. These can provide low-level control over certain instructions and optimizations.
-- Make functiona inside training loop in both nn and RL?
+- Make functiona inline training loop in both nn and RL?
 - How to not or optimize dunamic allocation in Zero()
 - Learn Data locality
 - Hide hithub change
