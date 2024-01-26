@@ -10,13 +10,14 @@
 #include <iostream>
 #include <stdio.h>
 #include <thread>
+#include <iomanip>
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
 #define DEBUG
-#define NEURAL_NETWORK
+#define FEEDFORWARD_NEURAL_NETWORK
 // #define REINFORCEMENT_LEARNING
 
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
@@ -122,12 +123,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << "after" << std::endl;;
 
     Tensor b = Relu(a);
-    Tensor c = Tensor({2, 3, 4, 4, 4, 4}, { 2, 3 });
-    std::cout << c << std::endl;;
+    Tensor y_true = Tensor({ 1, 1, 1, 1, 1, 0, 1, 0, 1}, { 3, 3 });
+    Tensor y_pred = Tensor({ 0.1, 0.9, 0.05, 0.9, 0.05, 0.05, 0.05, 0.05, 0.9 }, { 3, 3 });
 
+    std::cout << std::setprecision(9) << CategoricalCrossEntropy(y_true, y_pred) << std::endl;;
+    
 #endif
 
-#ifdef NEURAL_NETWORK
+#ifdef FEEDFORWARD_NEURAL_NETWORK
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
