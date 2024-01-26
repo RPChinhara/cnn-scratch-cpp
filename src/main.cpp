@@ -5,6 +5,7 @@
 #include "nn.h"
 #include "preprocessing.h"
 #include "q_learning.h"
+#include <array.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -14,10 +15,15 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
+#define DEBUG
+#define NEURAL_NETWORK
+// #define REINFORCEMENT_LEARNING
+
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
+Tensor Relu(const Tensor& in);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -109,7 +115,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         UpdateWindow(hwnd);
     }
 
-#if 0
+#ifdef DEBUG
+    std::cout << "before" << std::endl;;
+    Tensor a = Zeros({ 2, 3});
+    std::cout << "after" << std::endl;;
+
+    Tensor b = Relu(a);
+#endif
+
+#ifdef NEURAL_NETWORK
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -144,7 +158,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 1
+#ifdef REINFORCEMENT_LEARNING
     // std::thread sound_thread([]() {
     //     while (true)
     //         PlaySound(TEXT("assets\\mixkit-arcade-retro-game-over-213.wav"), NULL, SND_FILENAME);

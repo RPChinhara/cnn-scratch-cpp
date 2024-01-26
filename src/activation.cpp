@@ -4,8 +4,7 @@
 
 Tensor Relu(const Tensor& in)
 {
-    Tensor zeros = Zeros({ in.shape });
-    return Maximum(in, zeros);
+    return Maximum(in, Zeros({ in.shape }));
 }
 
 Tensor Softmax(const Tensor& in)

@@ -35,6 +35,7 @@ Tensor Argmax(const Tensor& in)
 		out[i] = max_idx;
 		max = std::numeric_limits<float>::lowest();
 	}
+
 	return out;
 }
 
@@ -44,12 +45,17 @@ Tensor Exp(const Tensor& in)
 	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in.size));
 	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in.size));
 	CheckCuda(cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice));
+	
 	Exp<<<in.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in.size);
+
+	// Tensor out = std::move(const_cast<Tensor&>(in));
 	Tensor out = in;
 	CheckCuda(cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
+
     delete[] in_out;
+
 	return out;
 }
 
@@ -59,12 +65,17 @@ Tensor Log(const Tensor& in)
 	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in.size));
 	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in.size));
 	CheckCuda(cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice));
+
 	Log<<<in.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in.size);
+
+	// Tensor out = std::move(const_cast<Tensor&>(in));
 	Tensor out = in;
 	CheckCuda(cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
+	
     delete[] in_out;
+
 	return out;
 }
 
@@ -114,13 +125,19 @@ Tensor Maximum(const Tensor& in_1, const Tensor& in_2)
 	CheckCuda(cudaMalloc((void**) &in_out[2], sizeof(float) * in_1.size));
 	CheckCuda(cudaMemcpy(in_out[0], in_1.elem, sizeof(float) * in_1.size, cudaMemcpyHostToDevice));
 	CheckCuda(cudaMemcpy(in_out[1], in_2.elem, sizeof(float) * in_1.size, cudaMemcpyHostToDevice));
+	
 	Maximum<<<in_1.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in_out[2], in_1.size);
+
+	// Tensor out = std::move(const_cast<Tensor&>(in_1));
 	Tensor out = in_1;
+
 	CheckCuda(cudaMemcpy(out.elem, in_out[2], sizeof(float) * in_1.size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
 	cudaFree(in_out[2]);
+
 	delete[] in_out;
+
 	return out;
 }
 
@@ -139,6 +156,7 @@ Tensor Min(const Tensor& in)
 		}
 		out[i] = min;
 	}
+
 	return out;
 }
 
@@ -183,5 +201,6 @@ Tensor Sum(const Tensor& in, const size_t axis)
 			}
 		}
 	}
+
 	return out;
 }
