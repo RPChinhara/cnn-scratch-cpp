@@ -64,7 +64,6 @@
 - Besides SIMD, explore other compiler intrinsics for specific architectures. These can provide low-level control over certain instructions and optimizations.
 - How to not or optimize dunamic allocation in Zero()
 - Learn Data locality
-- Hide hithub change
 - Actions could be diveded into various levels e.g., Eat (Low), Eat (Medium), Eat (High), Exercise (Low).
 - Log fps
 
