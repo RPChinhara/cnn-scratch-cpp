@@ -24,6 +24,7 @@ inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
 Tensor Relu(const Tensor& in);
+float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -121,6 +122,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << "after" << std::endl;;
 
     Tensor b = Relu(a);
+    Tensor c = Tensor({2, 3, 4, 4, 4, 4}, { 2, 3 });
+    std::cout << c << std::endl;;
+
 #endif
 
 #ifdef NEURAL_NETWORK
