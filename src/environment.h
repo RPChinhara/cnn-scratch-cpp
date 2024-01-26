@@ -59,7 +59,6 @@ private:
     std::string actionStr;
 
     float reward;
-    
 
     size_t daysLived;
     size_t daysWithoutEating;
