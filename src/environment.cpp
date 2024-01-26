@@ -10,6 +10,7 @@
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeEndTime;
 inline std::chrono::hours::rep hours;
+inline std::chrono::hours::rep days;
 
 Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
 }
@@ -134,7 +135,7 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count() % 60;
     auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count() % 60;
     hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
-    auto days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
+    days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
 
     if (has_collided_with_water)
         numWaterCollision += 1;
@@ -205,6 +206,8 @@ size_t Environment::Reset()
     daysLived = 0;
     daysWithoutDrinking = 0;
     daysWithoutEating = 0;
+    energyLevelBelow3 = false;
+
     return currentState;
 }
 
@@ -262,6 +265,11 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
+
+    if (energyState < EnergyState::LEVEL4)
+        energyLevelBelow3 = true;
+    else if (energyState > EnergyState::LEVEL3)
+        energyLevelBelow3 = false;
 
     // if (action == Action::STATIC && energyState != EnergyState::LEVEL10) {
     //     energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
@@ -387,6 +395,9 @@ bool Environment::CheckTermination()
 {
     if (daysLived >= maxDays)
         daysLived = 0;
+
+    if (days == 60 && energyLevelBelow3)
+        return true;
     
     return daysWithoutEating >= maxDaysWithoutEating || daysLived >= maxDays;
 }

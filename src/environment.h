@@ -48,6 +48,7 @@ private:
     size_t numStatic;
 
     size_t currentState;
+
     ThirstState thirstState;
     HungerState hungerState;
     EnergyState energyState;
@@ -59,12 +60,15 @@ private:
 
     float reward;
     
+
     size_t daysLived;
     size_t daysWithoutEating;
     size_t daysWithoutDrinking;
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;
+
+    bool energyLevelBelow3;
 
     std::set<LONG> seenLefts;
     std::set<LONG> seenTops;
