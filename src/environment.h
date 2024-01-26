@@ -40,26 +40,34 @@ private:
     size_t numFoodCollision;
     size_t numFriendCollision;
     size_t numWallCollision;
+
     size_t numMoveForward;
     size_t numTurnLeft;
     size_t numTurnRight;
     size_t numTurnAround;
     size_t numStatic;
+
     size_t currentState;
+
     ThirstState thirstState;
     HungerState hungerState;
     EnergyState energyState;
+
     std::string thirstStateStr;
     std::string hungerStateStr;
     std::string energyStateStr;
     std::string actionStr;
+
     float reward;
+
     size_t daysLived;
     size_t daysWithoutEating;
     size_t daysWithoutDrinking;
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;
+
+    bool energyLevelBelow3;
 
     std::set<LONG> seenLefts;
     std::set<LONG> seenTops;
