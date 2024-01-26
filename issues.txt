@@ -20,6 +20,7 @@
     - If action was sleep, sleep the program for like 8 hours? Yet, he might be eaten by predator if he wasn't sleeping on the bed/house.
 - Add Mental state. People get sad when lonely. Interact with his friend
 - How animal take care of hygine? Add hygine as state
+    - wash himself with the water.
 - Show chatGPT my code and ask wheather I could use pointer somewhere
 - Add body and environment tempertures
 - Should it grow like human? A Baby to an adult
