@@ -22,7 +22,7 @@ public:
     LONG minTop = 0;
     LONG maxTop = client_height - agent_height;
 
-    size_t numThirstStates = 3;
+    size_t numThirstStates = 10;
     size_t numHungerStates = 3;
     size_t numEnergyStates = 10;
     size_t numLeftStates = (maxLeft - minLeft) + 1;
@@ -40,20 +40,25 @@ private:
     size_t numFoodCollision;
     size_t numFriendCollision;
     size_t numWallCollision;
+
     size_t numMoveForward;
     size_t numTurnLeft;
     size_t numTurnRight;
     size_t numTurnAround;
     size_t numStatic;
+
     size_t currentState;
     ThirstState thirstState;
     HungerState hungerState;
     EnergyState energyState;
+
     std::string thirstStateStr;
     std::string hungerStateStr;
     std::string energyStateStr;
     std::string actionStr;
+
     float reward;
+    
     size_t daysLived;
     size_t daysWithoutEating;
     size_t daysWithoutDrinking;

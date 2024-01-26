@@ -41,14 +41,35 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
     }
 
     switch (thirstState) {
-        case ThirstState::THIRSTY:
-            thirstStateStr = "thirsty";
+        case ThirstState::LEVEL1:
+            thirstStateStr = "level 1";
             break;
-        case ThirstState::QUENCHED:
-            thirstStateStr = "quenched";
+        case ThirstState::LEVEL2:
+            thirstStateStr = "level 2";
             break;
-        case ThirstState::HYDRATED:
-            thirstStateStr = "hydrated";
+        case ThirstState::LEVEL3:
+            thirstStateStr = "level 3";
+            break;
+        case ThirstState::LEVEL4:
+            thirstStateStr = "level 4";
+            break;
+        case ThirstState::LEVEL5:
+            thirstStateStr = "level 5";
+            break;
+        case ThirstState::LEVEL6:
+            thirstStateStr = "level 6";
+            break;
+        case ThirstState::LEVEL7:
+            thirstStateStr = "level 7";
+            break;
+        case ThirstState::LEVEL8:
+            thirstStateStr = "level 8";
+            break;
+        case ThirstState::LEVEL9:
+            thirstStateStr = "level 9";
+            break;
+        case ThirstState::LEVEL10:
+            thirstStateStr = "level 10";
             break;
         default:
             MessageBox(nullptr, "Unknown thirst state", "Error", MB_ICONERROR);
@@ -176,7 +197,7 @@ size_t Environment::Reset()
     numTurnRight = 0;
     numTurnAround = 0;
     numStatic = 0;
-    thirstState = ThirstState::QUENCHED;
+    thirstState = ThirstState::LEVEL5;
     hungerState = HungerState::SATISFIED;
     energyState = EnergyState::LEVEL5;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -212,11 +233,15 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
             break;
     }
 
-    if (has_collided_with_water && thirstState != ThirstState::HYDRATED) {
-        thirstState = std::min(static_cast<ThirstState>(thirstState + 1), static_cast<ThirstState>(numHungerStates - 1));
+    size_t thirstStateSizeT = static_cast<size_t>(thirstState);
+
+    if (has_collided_with_water && thirstState != ThirstState::LEVEL10) {
+        thirstStateSizeT = std::min((thirstStateSizeT + 1), numHungerStates - 1);
+        thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
-    } else if (hours >= 3 && thirstState != ThirstState::THIRSTY) {
-        thirstState = std::max(static_cast<ThirstState>(thirstState - 1), static_cast<ThirstState>(0));
+    } else if (hours >= 3 && thirstState != ThirstState::LEVEL1) {
+        thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
+        thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
@@ -260,17 +285,17 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 }
 
 size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left, LONG top) {
-    if (!(hungerState < numHungerStates))
+    if (!(static_cast<size_t>(hungerState) < numHungerStates))
         MessageBoxA(nullptr, ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
-    if (!(thirstState < numThirstStates))
+    if (!(static_cast<size_t>(thirstState) < numThirstStates))
         MessageBox(nullptr, ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(), "Error", MB_ICONERROR);
-    if (!(energyState < numEnergyStates))
+    if (!(static_cast<size_t>(energyState) < numEnergyStates))
         MessageBox(nullptr, ("Invalid energy state. Should be within the range [0, " + std::to_string(numEnergyStates) + ")").c_str(), "Error", MB_ICONERROR);
     if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
 
     // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
-    return ((((energyState) * numHungerStates + hungerState) * numThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
+    return ((((energyState) * numHungerStates + hungerState) * numThirstStates + static_cast<size_t>(thirstState)) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
 }
 
 void Environment::CalculateReward(const Action action)
@@ -302,11 +327,11 @@ void Environment::CalculateReward(const Action action)
     if (daysLived > maxDays)
         reward += 1.0f;
 
-    if (has_collided_with_water == ThirstState::THIRSTY && has_collided_with_water)
+    if (ThirstState::LEVEL1 < thirstState && thirstState < ThirstState::LEVEL5 && has_collided_with_water)
         reward += 1.5f;
-    if (has_collided_with_water == ThirstState::QUENCHED && has_collided_with_water)
+    if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL10 && has_collided_with_water)
         reward += 0.7f;
-    if (thirstState == ThirstState::HYDRATED && has_collided_with_water)
+    if (thirstState == ThirstState::LEVEL10 && has_collided_with_water)
         reward += -1.0f;
 
     if (has_collided_with_food)
