@@ -56,24 +56,25 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
 
             activations = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
             
-            for (size_t k = layers.size() - 1; k > 0; --k) {
-                if (k == layers.size() - 1)
+            size_t numLayers = layers.size() - 1;
+            for (size_t k = numLayers; k > 0; --k) {
+                if (k == numLayers)
                     dloss_dlogits.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else
                     dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * ReluDerivative(activations[k - 1]));
 
                 if (k == 1)
-                    dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(layers.size() - 1) - k]));
+                    dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(numLayers) - k]));
                 else
-                    dloss_dweights.push_back(MatMul(Transpose(activations[k - 2]), dloss_dlogits[(layers.size() - 1) - k]));
+                    dloss_dweights.push_back(MatMul(Transpose(activations[k - 2]), dloss_dlogits[(numLayers) - k]));
 
-                dloss_dbiases.push_back(Sum(dloss_dlogits[(layers.size() - 1) - k], 0));
+                dloss_dbiases.push_back(Sum(dloss_dlogits[(numLayers) - k], 0));
 
-                dloss_dweights[(layers.size() - 1) - k] = ClipByValue(dloss_dweights[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
-                dloss_dbiases[(layers.size() - 1) - k] = ClipByValue(dloss_dbiases[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dloss_dweights[(numLayers) - k] = ClipByValue(dloss_dweights[(numLayers) - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dloss_dbiases[(numLayers) - k] = ClipByValue(dloss_dbiases[(numLayers) - k], -gradient_clip_threshold, gradient_clip_threshold);
 
-                weights_biases_momentum.first[k - 1] = momentum * weights_biases_momentum.first[k - 1] - learning_rate * dloss_dweights[(layers.size() - 1) - k];
-                weights_biases_momentum.second[k - 1] = momentum * weights_biases_momentum.second[k - 1] - learning_rate * dloss_dbiases[(layers.size() - 1) - k];
+                weights_biases_momentum.first[k - 1] = momentum * weights_biases_momentum.first[k - 1] - learning_rate * dloss_dweights[(numLayers) - k];
+                weights_biases_momentum.second[k - 1] = momentum * weights_biases_momentum.second[k - 1] - learning_rate * dloss_dbiases[(numLayers) - k];
 
                 weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
