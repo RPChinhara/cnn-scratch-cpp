@@ -5,7 +5,7 @@
 #include "nn.h"
 #include "preprocessing.h"
 #include "q_learning.h"
-#include <array.h>
+#include "array.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -118,16 +118,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
 #ifdef DEBUG
-    std::cout << "before" << std::endl;;
-    Tensor a = Zeros({ 2, 3});
-    std::cout << "after" << std::endl;;
-
-    Tensor b = Relu(a);
-    Tensor y_true = Tensor({ 1, 1, 1, 1, 1, 0, 1, 0, 1}, { 3, 3 });
-    Tensor y_pred = Tensor({ 0.1, 0.9, 0.05, 0.9, 0.05, 0.05, 0.05, 0.05, 0.9 }, { 3, 3 });
-
-    std::cout << std::setprecision(9) << CategoricalCrossEntropy(y_true, y_pred) << std::endl;;
-    
+    Tensor a = Zeros({ 2, 3 });
+    Tensor b = Zeros({ 2, 4, 3 });
+    std::cout << a << std::endl;;
+    std::cout << b << std::endl;;
 #endif
 
 #ifdef FEEDFORWARD_NEURAL_NETWORK

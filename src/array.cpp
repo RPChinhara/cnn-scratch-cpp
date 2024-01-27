@@ -2,6 +2,7 @@
 #include "tensor.h"
 
 #include <cassert>
+#include <numeric>
 
 Tensor ClipByValue(const Tensor& in, float clip_val_min, float clip_val_max)
 {
@@ -85,16 +86,10 @@ Tensor Zeros(const std::vector<size_t>& shape)
 
     out.shape = shape;
 
-    if (out.shape.size() > 0) {
-        size_t num_elem = 1;
-
-        for (const size_t& i : shape)
-            num_elem *= i;
-
-        out.size = num_elem;
-    } else {
+    if (out.shape.size() > 0)
+        out.size = std::accumulate(out.shape.begin(), out.shape.end(), 1ULL, std::multiplies<size_t>());
+    else
         out.size = 1;
-    }
 
     out.elem = new float[out.size];
     std::fill(out.elem, out.elem + out.size, 0.0f);
