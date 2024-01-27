@@ -128,9 +128,7 @@ Tensor Maximum(const Tensor& in_1, const Tensor& in_2)
 	
 	Maximum<<<in_1.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in_out[2], in_1.size);
 
-	// Tensor out = std::move(const_cast<Tensor&>(in_1));
-	Tensor out = in_1;
-
+	Tensor out = std::move(const_cast<Tensor&>(in_1));
 	CheckCuda(cudaMemcpy(out.elem, in_out[2], sizeof(float) * in_1.size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
