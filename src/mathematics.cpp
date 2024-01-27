@@ -5,15 +5,6 @@
 
 #include <cassert>
 
-static void CheckCuda(cudaError_t code, const bool abort = true)
-{
-   if (code != cudaSuccess) {
-      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), __FILE__, __LINE__);
-      if (abort) 
-	  	exit(code);
-   }
-}
-
 Tensor Argmax(const Tensor& in)
 {
 	Tensor out  = Zeros({ in.shape.front() });
@@ -40,16 +31,20 @@ Tensor Argmax(const Tensor& in)
 Tensor Exp(const Tensor& in)
 {
 	float *in2, *out2;
-	CheckCuda(cudaMalloc((void**)&in2, in.size * sizeof(float)));
-	CheckCuda(cudaMalloc((void**)&out2, in.size * sizeof(float)));
-	CheckCuda(cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice));
+	cudaMalloc((void**)&in2, in.size * sizeof(float));
+	cudaMalloc((void**)&out2, in.size * sizeof(float));
+	cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 	
-	int blockSize = 256;
+	int blockSize = 128;
     int gridSize = (in.size + blockSize - 1) / blockSize;
 	Exp<<<gridSize, blockSize>>>(in2, out2, in.size);
 
+	cudaError_t cudaError = cudaGetLastError();
+    if (cudaError != cudaSuccess)
+        std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+
 	Tensor out = in;
-	CheckCuda(cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost));
+	cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaFree(in2);
 	cudaFree(out2);
 
@@ -59,16 +54,20 @@ Tensor Exp(const Tensor& in)
 Tensor Log(const Tensor& in)
 {
 	float *in2, *out2;
-	CheckCuda(cudaMalloc((void**)&in2, in.size * sizeof(float)));
-	CheckCuda(cudaMalloc((void**)&out2, in.size * sizeof(float)));
-	CheckCuda(cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice));
+	cudaMalloc((void**)&in2, in.size * sizeof(float));
+	cudaMalloc((void**)&out2, in.size * sizeof(float));
+	cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 
-	int blockSize = 256;
+	int blockSize = 128;
     int gridSize = (in.size + blockSize - 1) / blockSize;
 	Log<<<gridSize, blockSize>>>(in2, out2, in.size);
 
+	cudaError_t cudaError = cudaGetLastError();
+    if (cudaError != cudaSuccess)
+        std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+
 	Tensor out = in;
-	CheckCuda(cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost));
+	cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaFree(in2);
 	cudaFree(out2);
 	

@@ -10,7 +10,7 @@ Tensor Relu(const Tensor& in)
 	cudaMalloc((void**)&out2, in.size * sizeof(float));
 	cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 
-    int blockSize = 256;
+    int blockSize = 128;
     int gridSize = (in.size + blockSize - 1) / blockSize;
 	Relu<<<gridSize, blockSize>>>(in2, out2, in.size);
 

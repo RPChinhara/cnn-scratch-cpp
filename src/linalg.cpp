@@ -4,15 +4,6 @@
 
 #include <cassert>
 
-static void CheckCuda(cudaError_t code, const bool abort = true)
-{
-   if (code != cudaSuccess) {
-      fprintf(stderr,"GPUassert: %s %s %d\n", cudaGetErrorString(code), __FILE__, __LINE__);
-      if (abort) 
-	  	exit(code);
-   }
-}
-
 Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 {
     assert(in_1.shape.back() == in_2.shape.front());
@@ -32,9 +23,13 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 
     MatMul<<<grid_dim, block_dim>>>(A, B, C, m, n, k);
 
+    cudaError_t cudaError = cudaGetLastError();
+    if (cudaError != cudaSuccess)
+        std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+
 	Tensor out = Zeros({ in_1.shape.front(), in_2.shape.back() });
 
-	CheckCuda(cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost));
+	cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaFree(A);
 	cudaFree(B);
 	cudaFree(C);
