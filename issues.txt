@@ -68,7 +68,6 @@
 - Log fps
 - Add verbose arg to switch wheather to log metrics or not.
 - Why NumPy is fast?
-- try CMake again.
 - fix not being able to change the batch size like to 32 that's why it's stayed in 8
 - I may only need axis 1 pattern for Max()
 
