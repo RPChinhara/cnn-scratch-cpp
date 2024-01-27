@@ -25,7 +25,7 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
     } else {
         assert(size == elem.size());
         this->elem = new float[size];
-        memcpy(this->elem, elem.data(), sizeof(float) * size);
+        memcpy(this->elem, elem.data(), size * sizeof(float));
     } 
 
     if (this->shape.size() > 0) {

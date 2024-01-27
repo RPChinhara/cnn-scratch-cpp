@@ -6,9 +6,9 @@
 Tensor Relu(const Tensor& in)
 {
     float **in_out = new float*[sizeof(float *) * 2];
-	cudaMalloc((void**) &in_out[0], sizeof(float) * in.size);
-	cudaMalloc((void**) &in_out[1], sizeof(float) * in.size);
-	cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice);
+	cudaMalloc((void**) &in_out[0], in.size * sizeof(float));
+	cudaMalloc((void**) &in_out[1], in.size * sizeof(float));
+	cudaMemcpy(in_out[0], in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 
     int blockSize = 512;
     int gridSize = (in.size + blockSize - 1) / blockSize;
@@ -19,7 +19,7 @@ Tensor Relu(const Tensor& in)
         std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
 
 	Tensor out = in;
-	cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost);
+	cudaMemcpy(out.elem, in_out[1], in.size * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaFree(in_out[0]);
 	cudaFree(in_out[1]);
 	

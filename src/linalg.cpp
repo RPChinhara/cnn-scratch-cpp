@@ -24,8 +24,8 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
     cudaMalloc(&A, m * n * sizeof(float));
     cudaMalloc(&B, n * k * sizeof(float));
     cudaMalloc(&C, m * k * sizeof(float));
-	cudaMemcpy(A, in_1.elem, sizeof(float) * in_1.size, cudaMemcpyHostToDevice);
-	cudaMemcpy(B, in_2.elem, sizeof(float) * in_2.size, cudaMemcpyHostToDevice);
+	cudaMemcpy(A, in_1.elem, in_1.size * sizeof(float), cudaMemcpyHostToDevice);
+	cudaMemcpy(B, in_2.elem, in_2.size * sizeof(float), cudaMemcpyHostToDevice);
 
     dim3 block_dim(16, 16);
     dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
@@ -34,7 +34,7 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 
 	Tensor out = Zeros({ in_1.shape.front(), in_2.shape.back() });
 
-	CheckCuda(cudaMemcpy(out.elem, C, sizeof(float) * out.size, cudaMemcpyDeviceToHost));
+	CheckCuda(cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost));
 	cudaFree(A);
 	cudaFree(B);
 	cudaFree(C);

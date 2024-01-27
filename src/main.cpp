@@ -25,6 +25,7 @@ void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG cl
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
 Tensor Relu(const Tensor& in);
 float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
+Tensor MatMul(const Tensor& in_1, const Tensor& in_2);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -118,7 +119,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 #ifdef DEBUG
     Tensor a = Tensor({ -3.0, 2.0, 440.0, 2.0 }, {1, 4});
-    std::cout << Relu(a) << std::endl;;
+    Tensor b = Tensor({ 2, 4, 2, 2 }, { 2, 2});
+    Tensor c = Tensor({ 2, 4, 2, 2 }, { 2, 2});
+    std::cout << MatMul(b, c) << std::endl;;
 #endif
 
 #ifdef FEEDFORWARD_NEURAL_NETWORK
