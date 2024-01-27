@@ -5,7 +5,6 @@
 #include "nn.h"
 #include "preprocessing.h"
 #include "q_learning.h"
-#include "array.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -118,10 +117,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
 #ifdef DEBUG
-    Tensor a = Zeros({ 2, 3 });
-    Tensor b = Zeros({ 2, 4, 3 });
-    std::cout << a << std::endl;;
-    std::cout << b << std::endl;;
+    Tensor a = Tensor({ -3.0, 2.0, 440.0, 2.0 }, {1, 4});
+    std::cout << Relu(a) << std::endl;;
 #endif
 
 #ifdef FEEDFORWARD_NEURAL_NETWORK

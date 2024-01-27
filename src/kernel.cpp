@@ -28,9 +28,9 @@ __global__ void MatMul(float *in_1, float *in_2, float *out, size_t m, size_t n,
     }
 }
 
-__global__ void Maximum(float *in_1, float *in_2, float *out, size_t n)
+__global__ void Relu(float *in, float *out, size_t n)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     if (id < n)
-	    out[id] = max(in_1[id], in_2[id]);
+	    out[id] = fmaxf(0.0f, in[id]);
 }

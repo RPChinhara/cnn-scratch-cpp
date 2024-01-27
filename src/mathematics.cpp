@@ -117,28 +117,6 @@ Tensor Max(const Tensor& in, const size_t axis)
 	return out;
 }
 
-Tensor Maximum(const Tensor& in_1, const Tensor& in_2)
-{
-	float **in_out = new float*[sizeof(float *) * 3];
-	CheckCuda(cudaMalloc((void**) &in_out[0], sizeof(float) * in_1.size));
-	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in_1.size));
-	CheckCuda(cudaMalloc((void**) &in_out[2], sizeof(float) * in_1.size));
-	CheckCuda(cudaMemcpy(in_out[0], in_1.elem, sizeof(float) * in_1.size, cudaMemcpyHostToDevice));
-	CheckCuda(cudaMemcpy(in_out[1], in_2.elem, sizeof(float) * in_1.size, cudaMemcpyHostToDevice));
-	
-	Maximum<<<in_1.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in_out[2], in_1.size);
-
-	Tensor out = std::move(const_cast<Tensor&>(in_1));
-	CheckCuda(cudaMemcpy(out.elem, in_out[2], sizeof(float) * in_1.size, cudaMemcpyDeviceToHost));
-	cudaFree(in_out[0]);
-	cudaFree(in_out[1]);
-	cudaFree(in_out[2]);
-
-	delete[] in_out;
-
-	return out;
-}
-
 Tensor Min(const Tensor& in)
 {
 	Tensor out = Zeros({ 1, in.shape.back() });
