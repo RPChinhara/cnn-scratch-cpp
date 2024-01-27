@@ -5,8 +5,6 @@
 
 #include <cassert>
 
-static constexpr size_t NUM_PROCS = 128 + (32 * 1);
-
 static void CheckCuda(cudaError_t code, const bool abort = true)
 {
    if (code != cudaSuccess) {
@@ -46,9 +44,10 @@ Tensor Exp(const Tensor& in)
 	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in.size));
 	CheckCuda(cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice));
 	
-	Exp<<<in.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in.size);
+	int blockSize = 512;
+    int gridSize = (in.size + blockSize - 1) / blockSize;
+	Exp<<<gridSize, blockSize>>>(in_out[0], in_out[1], in.size);
 
-	// Tensor out = std::move(const_cast<Tensor&>(in));
 	Tensor out = in;
 	CheckCuda(cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
@@ -66,9 +65,10 @@ Tensor Log(const Tensor& in)
 	CheckCuda(cudaMalloc((void**) &in_out[1], sizeof(float) * in.size));
 	CheckCuda(cudaMemcpy(in_out[0], in.elem, sizeof(float) * in.size, cudaMemcpyHostToDevice));
 
-	Log<<<in.size / NUM_PROCS + 1, NUM_PROCS>>>(in_out[0], in_out[1], in.size);
+	int blockSize = 512;
+    int gridSize = (in.size + blockSize - 1) / blockSize;
+	Log<<<gridSize, blockSize>>>(in_out[0], in_out[1], in.size);
 
-	// Tensor out = std::move(const_cast<Tensor&>(in));
 	Tensor out = in;
 	CheckCuda(cudaMemcpy(out.elem, in_out[1], sizeof(float) * in.size, cudaMemcpyDeviceToHost));
 	cudaFree(in_out[0]);
