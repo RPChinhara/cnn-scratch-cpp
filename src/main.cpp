@@ -86,6 +86,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     freopen_s(&file, "CONOUT$", "w", stdout);
 
 #ifdef DEBUG
+    float *cat;
+    cat = new float[5];
+
+    for (int i = 0; i < 5; i++) {
+        cat[i] = i;
+        std::cout << cat[i] << std::endl;
+    }
     Tensor a = Tensor({ -3.0, 2.0, 440.0, 2.0 }, {1, 4});
     Tensor b = Tensor({ 2, 4, 2, 2 }, { 2, 2});
     Tensor c = Tensor({ 2, 4, 2, 2 }, { 2, 2});
