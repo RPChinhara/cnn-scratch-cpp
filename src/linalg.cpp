@@ -20,7 +20,6 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
 
     dim3 block_dim(16, 16);
     dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
-
     MatMul<<<grid_dim, block_dim>>>(A, B, C, m, n, k);
 
     cudaError_t cudaError = cudaGetLastError();
@@ -28,10 +27,10 @@ Tensor MatMul(const Tensor& in_1, const Tensor& in_2)
         std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
 
 	Tensor out = Zeros({ in_1.shape.front(), in_2.shape.back() });
-
 	cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaFree(A);
 	cudaFree(B);
 	cudaFree(C);
+
     return out;
 }

@@ -116,6 +116,45 @@ Tensor Tensor::operator+(const Tensor& other) const
     return out;
 }
 
+// Tensor Tensor::operator+(const Tensor& other) const
+// {
+//     Tensor out;
+//     if (ShapeEqual(shape, other.shape)) {
+//         out = *this;
+//         std::cout << "1" << std::endl;
+//         for (size_t i = 0; i < out.size; ++i)
+//             out[i] = elem[i] + other[i];
+//     } else {
+//         // std::cout << "2" << std::endl;
+
+//         assert(shape.back() == other.shape.back());
+
+//         float *A, *B, *C;
+//         cudaMalloc((void**)&A, this->size * sizeof(float));
+//         cudaMalloc((void**)&B, this->size * sizeof(float));
+//         cudaMalloc((void**)&C, this->size * sizeof(float));
+//         cudaMemcpy(A, elem, this->size * sizeof(float), cudaMemcpyHostToDevice);
+//         cudaMemcpy(B, other.elem, other.size * sizeof(float), cudaMemcpyHostToDevice);
+
+//         int blockSize = 128;
+//         int gridSize = (this->size + blockSize - 1) / blockSize;
+//         OperatorPlus<<<gridSize, blockSize>>>(A, B, C, other.shape.back(), this->size);
+
+//         cudaError_t cudaError = cudaGetLastError();
+//         if (cudaError != cudaSuccess)
+//             std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+
+//         out = *this;
+//         cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
+//         cudaFree(A);
+//         cudaFree(B);
+//         cudaFree(C);
+
+//     }
+
+//     return out;
+// }
+
 Tensor Tensor::operator-(const Tensor& other) const
 {
     Tensor out = *this;
