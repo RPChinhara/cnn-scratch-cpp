@@ -15,18 +15,11 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
-#define DEBUG
-#define FEEDFORWARD_NEURAL_NETWORK
-// #define REINFORCEMENT_LEARNING
-
 inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
 
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
-Tensor Relu(const Tensor& in);
 float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
-Tensor MatMul(const Tensor& in_1, const Tensor& in_2);
-Tensor Softmax(const Tensor& in);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -85,24 +78,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#ifdef DEBUG
-    float *cat;
-    cat = new float[5];
-
-    for (int i = 0; i < 5; i++) {
-        cat[i] = i;
-        std::cout << cat[i] << std::endl;
-    }
-    Tensor a = Tensor({ -3.0, 2.0, 440.0, 2.0 }, {1, 4});
-    Tensor b = Tensor({ 2, 4, 2, 2 }, { 2, 2});
-    Tensor c = Tensor({ 2, 4, 2, 2 }, { 2, 2});
-    std::cout << Softmax(b) << std::endl;
-    // Tensor(
-    //     [[0.119203 0.880797]
-    //     [0.500000 0.500000]], shape=(2, 2))
+#if 1
+    int a = 10;
+    int *ptr1 = &a;      // ptr1 holds the address of x
+    int **ptr2 = &ptr1;  // ptr2 holds the address of ptr1
+    std::cout << &a << std::endl;
+    std::cout << &ptr1 << std::endl;
+    std::cout << &ptr2 << std::endl;
+    std::cout << *ptr1 << std::endl;
+    std::cout << *ptr2 << std::endl;
+    std::cout << ptr1 << std::endl;
+    std::cout << ptr2 << std::endl;
 #endif
 
-#ifdef FEEDFORWARD_NEURAL_NETWORK
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -137,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#ifdef REINFORCEMENT_LEARNING
+#if 0
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
