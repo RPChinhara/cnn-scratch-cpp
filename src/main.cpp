@@ -19,7 +19,6 @@ inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime
 
 void ResolveBoundaryCollision(RECT& rect, const LONG client_width, const LONG client_height);
 void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, const LONG client_width, const LONG client_height);
-float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -91,7 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << ptr2 << std::endl;
 #endif
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
