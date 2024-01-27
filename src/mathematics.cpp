@@ -91,6 +91,7 @@ Tensor Max(const Tensor& in, const size_t axis)
 					max = in[idx];
 				idx += in.shape.back();
 			}
+
 			out[i] = max;
 		}
 	} else if (axis == 1) {
@@ -105,6 +106,7 @@ Tensor Max(const Tensor& in, const size_t axis)
 					max = in[idx];
 				++idx;
 			}
+			
 			out[i] = max;
 		}
 	}

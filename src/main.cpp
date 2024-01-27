@@ -26,6 +26,7 @@ void ResolveRectanglesCollision(RECT& rect1, const RECT& rect2, Entity entity, c
 Tensor Relu(const Tensor& in);
 float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
 Tensor MatMul(const Tensor& in_1, const Tensor& in_2);
+Tensor Softmax(const Tensor& in);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -121,7 +122,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor a = Tensor({ -3.0, 2.0, 440.0, 2.0 }, {1, 4});
     Tensor b = Tensor({ 2, 4, 2, 2 }, { 2, 2});
     Tensor c = Tensor({ 2, 4, 2, 2 }, { 2, 2});
-    std::cout << MatMul(b, c) << std::endl;;
+    std::cout << Softmax(b) << std::endl;;
+    // Tensor(
+    //     [[0.119203 0.880797]
+    //     [0.500000 0.500000]], shape=(2, 2))
 #endif
 
 #ifdef FEEDFORWARD_NEURAL_NETWORK
