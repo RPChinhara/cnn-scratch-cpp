@@ -39,43 +39,39 @@ Tensor Argmax(const Tensor& in)
 
 Tensor Exp(const Tensor& in)
 {
-	float **in_out = new float*[sizeof(float *) * 2];
-	CheckCuda(cudaMalloc((void**) &in_out[0], in.size * sizeof(float)));
-	CheckCuda(cudaMalloc((void**) &in_out[1], in.size * sizeof(float)));
-	CheckCuda(cudaMemcpy(in_out[0], in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice));
+	float *in2, *out2;
+	CheckCuda(cudaMalloc((void**)&in2, in.size * sizeof(float)));
+	CheckCuda(cudaMalloc((void**)&out2, in.size * sizeof(float)));
+	CheckCuda(cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice));
 	
 	int blockSize = 256;
     int gridSize = (in.size + blockSize - 1) / blockSize;
-	Exp<<<gridSize, blockSize>>>(in_out[0], in_out[1], in.size);
+	Exp<<<gridSize, blockSize>>>(in2, out2, in.size);
 
 	Tensor out = in;
-	CheckCuda(cudaMemcpy(out.elem, in_out[1], in.size * sizeof(float), cudaMemcpyDeviceToHost));
-	cudaFree(in_out[0]);
-	cudaFree(in_out[1]);
-
-    delete[] in_out;
+	CheckCuda(cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost));
+	cudaFree(in2);
+	cudaFree(out2);
 
 	return out;
 }
 
 Tensor Log(const Tensor& in)
 {
-	float **in_out = new float*[sizeof(float *) * 2];
-	CheckCuda(cudaMalloc((void**) &in_out[0], in.size * sizeof(float)));
-	CheckCuda(cudaMalloc((void**) &in_out[1], in.size * sizeof(float)));
-	CheckCuda(cudaMemcpy(in_out[0], in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice));
+	float *in2, *out2;
+	CheckCuda(cudaMalloc((void**)&in2, in.size * sizeof(float)));
+	CheckCuda(cudaMalloc((void**)&out2, in.size * sizeof(float)));
+	CheckCuda(cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice));
 
 	int blockSize = 256;
     int gridSize = (in.size + blockSize - 1) / blockSize;
-	Log<<<gridSize, blockSize>>>(in_out[0], in_out[1], in.size);
+	Log<<<gridSize, blockSize>>>(in2, out2, in.size);
 
 	Tensor out = in;
-	CheckCuda(cudaMemcpy(out.elem, in_out[1], in.size * sizeof(float), cudaMemcpyDeviceToHost));
-	cudaFree(in_out[0]);
-	cudaFree(in_out[1]);
+	CheckCuda(cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost));
+	cudaFree(in2);
+	cudaFree(out2);
 	
-    delete[] in_out;
-
 	return out;
 }
 
