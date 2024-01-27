@@ -85,44 +85,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE* file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-    const char CLASS_NAME[] = "WorldWindow";
-    const char WINDOW_NAME[] = "Dora";
-
-    WNDCLASS wc = {};
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = CLASS_NAME;
-
-    if (!RegisterClass(&wc)) {
-        MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
-    }
-
-    HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        nullptr,
-        nullptr,
-        hInstance,
-        nullptr
-    );
-
-    if (hwnd == nullptr) {
-        MessageBox(nullptr, "Window Creation Failed!", "Error", MB_ICONERROR);
-    } else {
-        ShowWindow(hwnd, SW_MAXIMIZE);
-        UpdateWindow(hwnd);
-    }
-
 #ifdef DEBUG
     Tensor a = Tensor({ -3.0, 2.0, 440.0, 2.0 }, {1, 4});
     Tensor b = Tensor({ 2, 4, 2, 2 }, { 2, 2});
     Tensor c = Tensor({ 2, 4, 2, 2 }, { 2, 2});
-    std::cout << Softmax(b) << std::endl;;
+    std::cout << Softmax(b) << std::endl;
     // Tensor(
     //     [[0.119203 0.880797]
     //     [0.500000 0.500000]], shape=(2, 2))
@@ -164,6 +131,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #ifdef REINFORCEMENT_LEARNING
+    const char CLASS_NAME[] = "WorldWindow";
+    const char WINDOW_NAME[] = "Dora";
+
+    WNDCLASS wc = {};
+    wc.lpfnWndProc = WindowProc;
+    wc.hInstance = hInstance;
+    wc.lpszClassName = CLASS_NAME;
+
+    if (!RegisterClass(&wc)) {
+        MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
+    }
+
+    HWND hwnd = CreateWindow(
+        CLASS_NAME,
+        WINDOW_NAME,
+        WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        nullptr,
+        nullptr,
+        hInstance,
+        nullptr
+    );
+
+    if (hwnd == nullptr) {
+        MessageBox(nullptr, "Window Creation Failed!", "Error", MB_ICONERROR);
+    } else {
+        ShowWindow(hwnd, SW_MAXIMIZE);
+        UpdateWindow(hwnd);
+    }
+
     // std::thread sound_thread([]() {
     //     while (true)
     //         PlaySound(TEXT("assets\\mixkit-arcade-retro-game-over-213.wav"), NULL, SND_FILENAME);
