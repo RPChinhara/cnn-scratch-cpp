@@ -8,8 +8,6 @@ Tensor NormalDistribution(const std::vector<size_t>& shape, const float mean, co
 {
     Tensor out = Tensor();
 
-    out.shape.reserve(shape.size());
-
     for (const size_t& i : shape)
         assert(i != 0);
 

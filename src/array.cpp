@@ -80,8 +80,6 @@ Tensor Zeros(const std::vector<size_t>& shape)
 {
     Tensor out = Tensor();
 
-    out.shape.reserve(shape.size());
-
     for (const size_t& i : shape)
         assert(i != 0);
 

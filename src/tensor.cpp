@@ -7,7 +7,6 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
 {
     assert(elem.size() != 0);
     
-    this->shape.reserve(shape.size());
     for (const size_t& i : shape)
         assert(i != 0);
     this->shape = std::move(shape);
