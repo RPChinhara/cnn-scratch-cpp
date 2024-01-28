@@ -65,8 +65,7 @@ Tensor::Tensor(Tensor&& other)
 
 Tensor& Tensor::operator=(const Tensor& other)
 {
-    if (this != &other)
-    {
+    if (this != &other) {
         delete[] elem;
         elem = new float[other.size];
         std::copy(other.elem, other.elem + other.size, elem);
