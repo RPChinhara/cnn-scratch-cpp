@@ -1,6 +1,7 @@
 #pragma once
 
-enum Action {
+enum Action
+{
     WALK,
     RUN,
     TURN_LEFT,

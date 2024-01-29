@@ -58,12 +58,12 @@ void NN::Train(const Tensor& x_train, const Tensor& y_train, const Tensor& x_val
                 if (k == numLayers)
                     dloss_dlogits.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else
-                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k])) * ReluDerivative(activations[k - 1]));
+                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k], Transpose(weights_biases.first[k]), Device::CPU) * ReluDerivative(activations[k - 1]));
 
                 if (k == 1)
-                    dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(numLayers) - k]));
+                    dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(numLayers) - k], Device::CPU));
                 else
-                    dloss_dweights.push_back(MatMul(Transpose(activations[k - 2]), dloss_dlogits[(numLayers) - k]));
+                    dloss_dweights.push_back(MatMul(Transpose(activations[k - 2]), dloss_dlogits[(numLayers) - k], Device::CPU));
 
                 dloss_dbiases.push_back(Sum(dloss_dlogits[(numLayers) - k], 0));
 
@@ -144,12 +144,12 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
 
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
-            activations.push_back(Relu(MatMul(input, weights[i]) + biases[i]));
+            activations.push_back(Relu(MatMul(input, weights[i], Device::CPU) + biases[i]));
         } else {
             if (i == layers.size() - 2)
-                activations.push_back(Softmax(MatMul(activations[i - 1], weights[i]) + biases[i]));
+                activations.push_back(Softmax(MatMul(activations[i - 1], weights[i], Device::CPU) + biases[i]));
             else
-                activations.push_back(Relu(MatMul(activations[i - 1], weights[i]) + biases[i]));
+                activations.push_back(Relu(MatMul(activations[i - 1], weights[i], Device::CPU) + biases[i]));
         }
     }
 

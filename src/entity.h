@@ -2,7 +2,8 @@
 
 #include <windows.h>
 
-enum Entity {
+enum Entity
+{
     AGENT,
     AGENT2,
     BED,
@@ -10,14 +11,16 @@ enum Entity {
     WATER
 };
 
-enum Orientation {
+enum Orientation
+{
     FRONT,
     LEFT,
     RIGHT,
     BACK
 };
 
-enum Direction {
+enum Direction
+{
     NORTH,
     SOUTH,
     EAST,

@@ -1,6 +1,7 @@
 #pragma once
 
-enum class ThirstState {
+enum class ThirstState
+{
     LEVEL1,
     LEVEL2,
     LEVEL3,
@@ -13,13 +14,15 @@ enum class ThirstState {
     LEVEL10
 };
 
-enum HungerState {
+enum HungerState
+{
     HUNGRY,
     SATISFIED,
     FULL
 };
 
-enum EnergyState {
+enum EnergyState
+{
     LEVEL1,
     LEVEL2,
     LEVEL3,
@@ -32,14 +35,16 @@ enum EnergyState {
     LEVEL10
 };
 
-enum HealthState {
+enum HealthState
+{
     HEALTHY,
     INJURED,
     SICK,
     CRITICAL
 };
 
-enum class MentalState {
+enum class MentalState
+{
     CALM,
     RELAXED,
     CONTENT,
@@ -53,7 +58,8 @@ enum class MentalState {
     NEUTRAL
 };
 
-enum EmotionState {
+enum EmotionState
+{
     HAPPY,
     SAD,
     ANGRY,

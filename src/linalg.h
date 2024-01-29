@@ -2,4 +2,10 @@
 
 class Tensor;
 
-Tensor MatMul(const Tensor& in1, const Tensor& in2);
+enum Device
+{
+    CPU,
+    GPU
+};
+
+Tensor MatMul(const Tensor& in1, const Tensor& in2, Device device);
