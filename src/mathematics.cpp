@@ -2,6 +2,7 @@
 #include "array.h"
 #include "mathematics.h"
 #include "tensor.h"
+#include "windows.h"
 
 #include <cassert>
 
@@ -28,50 +29,80 @@ Tensor Argmax(const Tensor& in)
 	return out;
 }
 
-Tensor Exp(const Tensor& in)
+Tensor Exp(const Tensor& in, Device device)
 {
-	float *in2, *out2;
-	cudaMalloc((void**)&in2, in.size * sizeof(float));
-	cudaMalloc((void**)&out2, in.size * sizeof(float));
-	cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
-	
-	int blockSize = 128;
-    int gridSize = (in.size + blockSize - 1) / blockSize;
-	Exp<<<gridSize, blockSize>>>(in2, out2, in.size);
+	switch (device) {
+		case Device::CPU: {
+			Tensor out = in;
 
-	cudaError_t cudaError = cudaGetLastError();
-    if (cudaError != cudaSuccess)
-        std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+			for (size_t i = 0; i < out.size; ++i)
+				out.elem[i] = expf(in.elem[i]);
 
-	Tensor out = in;
-	cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
-	cudaFree(in2);
-	cudaFree(out2);
+			return out;
+		}
+		case Device::GPU: {
+			float *in2, *out2;
+			cudaMalloc((void**)&in2, in.size * sizeof(float));
+			cudaMalloc((void**)&out2, in.size * sizeof(float));
+			cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
+			
+			int blockSize = 128;
+			int gridSize = (in.size + blockSize - 1) / blockSize;
+			Exp<<<gridSize, blockSize>>>(in2, out2, in.size);
 
-	return out;
+			cudaError_t cudaError = cudaGetLastError();
+			if (cudaError != cudaSuccess)
+				std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+
+			Tensor out = in;
+			cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
+			cudaFree(in2);
+			cudaFree(out2);
+
+			return out;
+		}
+		default:
+            MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
+            return Tensor();
+	}
 }
 
-Tensor Log(const Tensor& in)
+Tensor Log(const Tensor& in, Device device)
 {
-	float *in2, *out2;
-	cudaMalloc((void**)&in2, in.size * sizeof(float));
-	cudaMalloc((void**)&out2, in.size * sizeof(float));
-	cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
+	switch (device) {
+		case Device::CPU: {
+			Tensor out = in;
 
-	int blockSize = 128;
-    int gridSize = (in.size + blockSize - 1) / blockSize;
-	Log<<<gridSize, blockSize>>>(in2, out2, in.size);
+			for (size_t i = 0; i < in.size; ++i)
+				out.elem[i] = logf(in.elem[i]);
 
-	cudaError_t cudaError = cudaGetLastError();
-    if (cudaError != cudaSuccess)
-        std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+			return out;
+		}
+		case Device::GPU: {
+			float *in2, *out2;
+			cudaMalloc((void**)&in2, in.size * sizeof(float));
+			cudaMalloc((void**)&out2, in.size * sizeof(float));
+			cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 
-	Tensor out = in;
-	cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
-	cudaFree(in2);
-	cudaFree(out2);
-	
-	return out;
+			int blockSize = 128;
+			int gridSize = (in.size + blockSize - 1) / blockSize;
+			Log<<<gridSize, blockSize>>>(in2, out2, in.size);
+
+			cudaError_t cudaError = cudaGetLastError();
+			if (cudaError != cudaSuccess)
+				std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+
+			Tensor out = in;
+			cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
+			cudaFree(in2);
+			cudaFree(out2);
+
+			return out;
+		}
+		default:
+            MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
+            return Tensor();
+	}
 }
 
 Tensor Max(const Tensor& in, const size_t axis)

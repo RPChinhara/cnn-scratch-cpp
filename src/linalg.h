@@ -1,11 +1,7 @@
 ﻿#pragma once
 
-class Tensor;
+#include "device.h"
 
-enum Device
-{
-    CPU,
-    GPU
-};
+class Tensor;
 
 Tensor MatMul(const Tensor& in1, const Tensor& in2, Device device);

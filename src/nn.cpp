@@ -144,12 +144,12 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor& input, const std::vecto
 
     for (size_t i = 0; i < layers.size() - 1; ++i) {
         if (i == 0) {
-            activations.push_back(Relu(MatMul(input, weights[i], Device::CPU) + biases[i]));
+            activations.push_back(Relu(MatMul(input, weights[i], Device::CPU) + biases[i], Device::CPU));
         } else {
             if (i == layers.size() - 2)
                 activations.push_back(Softmax(MatMul(activations[i - 1], weights[i], Device::CPU) + biases[i]));
             else
-                activations.push_back(Relu(MatMul(activations[i - 1], weights[i], Device::CPU) + biases[i]));
+                activations.push_back(Relu(MatMul(activations[i - 1], weights[i], Device::CPU) + biases[i], Device::CPU));
         }
     }
 

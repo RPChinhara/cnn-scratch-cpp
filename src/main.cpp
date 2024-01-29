@@ -6,6 +6,7 @@
 #include "physics.h"
 #include "preprocessing.h"
 #include "q_learning.h"
+#include "activation.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -86,6 +87,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << *ptr2 << std::endl;
     std::cout << ptr1 << std::endl;
     std::cout << ptr2 << std::endl;
+    Tensor ff = Tensor({41, -2, 0, -4, 5, 6}, { 2, 3 });
+    std::cout << Relu(ff, Device::CPU) << std::endl;
 #endif
 
 #if 1
@@ -106,12 +109,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.x_second = MinMaxScaler(val_test.x_second);
 
     size_t inputLayer = 4;
-    size_t hiddenLayer1 = 32;
-    size_t hiddenLayer2 = 32;
+    size_t hiddenLayer1 = 128;
     size_t outputLayer = 3;
     float learningRate = 0.01f;
 
-    NN nn = NN({ inputLayer, hiddenLayer1, hiddenLayer2, outputLayer }, learningRate);
+    NN nn = NN({ inputLayer, hiddenLayer1, outputLayer }, learningRate);
 
     auto startTime = std::chrono::high_resolution_clock::now();
     
@@ -124,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 1
+#if 0
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 

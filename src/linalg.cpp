@@ -9,7 +9,7 @@
 Tensor MatMul(const Tensor& in1, const Tensor& in2, Device device)
 {
     switch (device) {
-        case CPU: {
+        case Device::CPU: {
             Tensor out = Zeros({ in1.shape.front(), in2.shape.back() });
 
             for (size_t i = 0; i < in1.shape.front(); ++i) {
@@ -18,13 +18,14 @@ Tensor MatMul(const Tensor& in1, const Tensor& in2, Device device)
 
                     for (size_t l = 0; l < in1.shape.back(); ++l)
                         sum += in1[i * in1.shape.back() + l] * in2[l * in2.shape.back() + j];
+
                     out[i * in2.shape.back() + j] = sum;
                 }
             }
 
             return out;
         }
-        case GPU: {
+        case Device::GPU: {
             assert(in1.shape.back() == in2.shape.front());
             size_t m = in1.shape.front();
             size_t n = in1.shape.back();
