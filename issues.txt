@@ -70,7 +70,6 @@
 - Why NumPy is fast?
 - fix not being able to change the batch size like to 32 that's why it's stayed in 8
 - I may only need axis 1 pattern for Max()
-- Create ZerosLike
 - ask chatGPT how to implement transpose
 - use in.size instead of out.size in every for loop
 - how can I use flags?
