@@ -1,3 +1,4 @@
+#include "linalg.h"
 #include "array.h"
 #include "kernel.h"
 #include "tensor.h"

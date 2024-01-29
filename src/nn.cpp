@@ -1,20 +1,17 @@
 #include "nn.h"
+#include "activation.h"
 #include "array.h"
+#include "derivative.h"
 #include "kernel.h"
+#include "linalg.h"
+#include "loss.h"
 #include "mathematics.h"
+#include "metric.h"
 #include "random.h"
 
 #include <chrono>
 #include <random>
 #include <string>
-
-Tensor MatMul(const Tensor& in_1, const Tensor& in_2);
-Tensor Relu(const Tensor& in);
-Tensor Softmax(const Tensor& in);
-Tensor CategoricalCrossEntropyDerivative(const Tensor& y_true, const Tensor& y_pred);
-Tensor ReluDerivative(const Tensor& in);
-float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred);
-float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred);
 
 NN::NN(const std::vector<size_t>& layers, const float learning_rate)
 {

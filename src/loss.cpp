@@ -1,3 +1,4 @@
+#include "loss.h"
 #include "array.h"
 #include "mathematics.h"
 #include "tensor.h"
