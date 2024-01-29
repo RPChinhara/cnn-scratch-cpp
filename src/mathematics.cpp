@@ -35,7 +35,7 @@ Tensor Exp(const Tensor& in, Device device)
 		case Device::CPU: {
 			Tensor out = in;
 
-			for (size_t i = 0; i < out.size; ++i)
+			for (size_t i = 0; i < in.size; ++i)
 				out.elem[i] = expf(in.elem[i]);
 
 			return out;
