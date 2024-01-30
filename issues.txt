@@ -50,7 +50,6 @@
 - I dont think i need to allocate memory dynamically in zeros or in other place i use new keyword
 - Consider adding the time of day as a state. Maybe I need to make environment so that it has morning and night like in real life.
 - Order in FlattenState() should be fixed.
-- Should I call Render() before Step() ?
 - Make agent so that he can collect and use items, track its inventory, including available tools, weapons, or consumables as a state.
 - Retrieve real time Japan climate/temperture from internet and add as a state.
 - Learn SIMD, SOA, AOSOA
