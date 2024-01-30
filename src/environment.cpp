@@ -369,7 +369,7 @@ void Environment::CalculateReward(const Action action)
     if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL10 && has_collided_with_water)
         reward += 0.7f;
     if (thirstState == ThirstState::LEVEL10 && has_collided_with_water)
-        reward += -1.0f;
+        reward -= 1.0f;
 
     if (has_collided_with_food)
         reward += 2.5f;
@@ -378,9 +378,9 @@ void Environment::CalculateReward(const Action action)
     if (hungerState == HungerState::SATISFIED && has_collided_with_food)
         reward += 1.0f;
     if (hungerState == HungerState::HUNGRY && hours >= 3)
-        reward += -1.0f;
+        reward -= 1.0f;
     if (hungerState == HungerState::FULL && has_collided_with_food) {
-        reward += -1.0f;
+        reward -= 1.0f;
 
     if (has_collided_with_agent_2)
         reward += 1.5f;
@@ -391,35 +391,35 @@ void Environment::CalculateReward(const Action action)
     if (energyState == EnergyState::LEVEL2 && action == Action::STATIC)
         reward += 1.0f;
     if (energyState == EnergyState::LEVEL1 && action == Action::RUN)
-        reward += -2.0f;
+        reward -= 2.0f;
 
     if (has_collided_with_wall)
-        reward += -1.5f;
+        reward -= 1.5f;
     if (numWallCollision > 1)
-        reward += -2.0f;
+        reward -= 2.0f;
 
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
     //     numMoveForward = 0;
     // }
     if (numTurnLeft == maxConsecutiveAction) {
-        reward += -1.0f;
+        reward -= 1.0f;
         numTurnLeft = 0;
     }
     if (numTurnRight == maxConsecutiveAction) {
-        reward += -1.0f;
+        reward -= 1.0f;
         numTurnRight = 0;
     }
     if (numTurnAround == maxConsecutiveAction) {
-        reward += -1.0f;
+        reward -= 1.0f;
         numTurnAround = 0;
     }
     if (numStatic == maxConsecutiveAction) {
-        reward += -1.0f;
+        reward -= 1.0f;
         numStatic = 0;
     }
     if (numSleep == maxConsecutiveAction) {
-        reward += -1.0f;
+        reward -= 1.0f;
         numSleep = 0;
     }
 }

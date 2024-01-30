@@ -74,7 +74,6 @@
 - The environment should have morning, evening, and night which means I need to add real time maybe in Japan
 - Research all the states and actions both human and animal have.
 - Search definitions of intelligence?
-- use -= instead in CalculateReward()
 
 - blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), social interactions, job satisfaction, clothing choices, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
 
