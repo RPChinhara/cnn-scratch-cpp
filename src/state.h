@@ -65,3 +65,8 @@ enum EmotionState
     ANGRY,
     NEUTRAL
 };
+
+enum BloodPressure
+{
+
+};
