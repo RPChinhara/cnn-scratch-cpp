@@ -73,21 +73,19 @@
 - how can I use flags?
 - rely on BLAS and LAPACK
 - How is graph used in TensorFlow?
+- The environment should have morning, evening, and night which means I need to add real time maybe in Japan
+- Add sleep action
+- Research all the states and actions both human and animal have.
+- Search definitions of intelligence?
 
-- states
-    blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, energy level, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), pain, social interactions, job satisfaction, clothing choices, emotional states, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), emotions(such as stress, boredom, sadness, or happiness), self-esteem level(influences psychological well-being), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
+- blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), social interactions, job satisfaction, clothing choices, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
 
-- actions
-    EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduction(such as mating, parenting, and ensuring the survival of their offspring).
-
-NOTE: Similar to actions, first start with 4 actions which are eat, exercise, sleep, socialize. Can perform these actions at various levels of intensity which are 3 levels (low, medium, high). In this case, it would be 3 levels for each of the 4 actions, resulting in a total of 3^4 = 81 possible action combinations.
-
-TODO: I could go more detail e.g., 
-Food Type: Specify the type of food the agent can choose to eat, such as healthy options (vegetables, fruits, lean proteins) or unhealthy options (fast food, sugary snacks).
+- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduction(such as mating, parenting, and ensuring the survival of their offspring).
+ 
+- Food Type: Specify the type of food the agent can choose to eat, such as healthy options (vegetables, fruits, lean proteins) or unhealthy options (fast food, sugary snacks).
 Portion Size: Define different portion sizes (small, medium, large) for the agent's meals.
 Meal Timing: Determine when the agent can eat (breakfast, lunch, dinner, snacks).
 
-[Insights]
 - Experts say the current models need 'Search system', but what it is?
 - How to let him have curiosity for Science e.g., Mathematics, AI, Physics so that he will try to solve problems within these fields.
 - I need to set the camera focused on him, and spawn objects e.g., food, water, possible friends, and predators etc to let him explore the environment.

@@ -66,7 +66,17 @@ enum EmotionState
     NEUTRAL
 };
 
-enum BloodPressure
+enum BloodPressureState
+{
+
+};
+
+enum ConfidenceState
+{
+
+};
+
+enum HygineState
 {
 
 };
