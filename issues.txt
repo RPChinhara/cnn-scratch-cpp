@@ -55,7 +55,6 @@
 - Retrieve real time Japan climate/temperture from internet and add as a state.
 - Learn SIMD, SOA, AOSOA
 - Learn cache miss
-- If he keeps energy level in 1 and certain time has passed, he will die.
 - Maybe reduce energy level after certain number of time he either walk/run.
 - Make entity class for each entites in RL ? like Food, Water so on, and each includes mem variables size_t flags? Instead of just using RECT
 - How to make tensors lazy ?

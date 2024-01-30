@@ -172,7 +172,7 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
         currentDirection += "west";
 
     std::cout << "Number of iterations:        " << iteration << '\n';
-    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << '\n';
+    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << "/" << numStates << '\n';
     std::cout << currentLeft << '\n';
     std::cout << currentTop << '\n';
     std::cout << "Current Direction            " << currentDirection << '\n';
