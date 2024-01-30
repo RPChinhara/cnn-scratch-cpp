@@ -277,7 +277,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (action == Action::WALK&& numWalk == 20 && energyState != EnergyState::LEVEL1) {
+    if (action == Action::WALK&& numWalk == 200 && energyState != EnergyState::LEVEL1) {
         numWalk = 0;
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         size_t energyStateSizeT = static_cast<size_t>(energyState);
@@ -286,7 +286,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (action == Action::RUN && numRun == 10 && energyState != EnergyState::LEVEL1) {
+    if (action == Action::RUN && numRun == 100 && energyState != EnergyState::LEVEL1) {
         numRun = 0;
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         size_t energyStateSizeT = static_cast<size_t>(energyState);
