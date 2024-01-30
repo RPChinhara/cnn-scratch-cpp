@@ -91,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << Relu(ff, Device::CPU) << std::endl;
 #endif
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -126,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-#if 0
+#if 1
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
@@ -342,6 +342,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         }
                         break;
                     case Action::STATIC:
+                        // std::this_thread::sleep_for(std::chrono::seconds(2));
+                        break;
+                    case Action::SLEEP:
+                        // std::this_thread::sleep_for(std::chrono::seconds(10));
                         break;
                     default:
                         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);

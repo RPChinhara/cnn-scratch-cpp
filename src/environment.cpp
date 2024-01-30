@@ -36,6 +36,9 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
         case Action::STATIC:
             actionStr = "static";
             break;
+        case Action::SLEEP:
+            actionStr = "sleep";
+            break;
         default:
             MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
             break;
@@ -231,6 +234,9 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         case Action::STATIC:
             numStatic += 1;
             break;
+        case Action::SLEEP:
+            numSleep += 1;
+            break;
         default:
             MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
             break;
@@ -388,6 +394,10 @@ void Environment::CalculateReward(const Action action)
     if (numStatic == maxConsecutiveAction) {
         reward += -1.0f;
         numStatic = 0;
+    }
+    if (numSleep == maxConsecutiveAction) {
+        reward += -1.0f;
+        numSleep = 0;
     }
 }
 

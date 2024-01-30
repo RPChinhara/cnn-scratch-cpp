@@ -29,7 +29,7 @@ public:
     size_t numTopStates = (maxTop - minTop) + 1;
 
     size_t numStates = numThirstStates * numHungerStates * numEnergyStates * numLeftStates * numTopStates;
-    size_t numActions = 6;
+    size_t numActions = 7;
     
 private:
     size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left,LONG top);
@@ -46,6 +46,7 @@ private:
     size_t numTurnRight;
     size_t numTurnAround;
     size_t numStatic;
+    size_t numSleep;
 
     size_t currentState;
 

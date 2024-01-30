@@ -7,5 +7,6 @@ enum Action
     TURN_LEFT,
     TURN_RIGHT,
     TURN_AROUND,
-    STATIC
+    STATIC,
+    SLEEP
 };
