@@ -72,7 +72,6 @@
 - rely on BLAS and LAPACK
 - How is graph used in TensorFlow?
 - The environment should have morning, evening, and night which means I need to add real time maybe in Japan
-- Add sleep action
 - Research all the states and actions both human and animal have.
 - Search definitions of intelligence?
 - use -= instead in CalculateReward()
