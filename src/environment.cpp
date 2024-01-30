@@ -196,15 +196,19 @@ size_t Environment::Reset()
     numFoodCollision = 0;
     numFriendCollision = 0;
     numWallCollision = 0;
-    // numMoveForward = 0;
+
+    numWalk = 0;
     numTurnLeft = 0;
     numTurnRight = 0;
     numTurnAround = 0;
+    numRun = 0;
     numStatic = 0;
+
     thirstState = ThirstState::LEVEL5;
     hungerState = HungerState::SATISFIED;
     energyState = EnergyState::LEVEL5;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    
     reward = 0.0f;
     daysLived = 0;
     daysWithoutDrinking = 0;
@@ -218,9 +222,10 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 {
     switch (action) {
         case Action::WALK:
-            // numMoveForward += 1;
+            numWalk += 1;
             break;
         case Action::RUN:
+            numRun += 1;
             break;
         case Action::TURN_LEFT:
             numTurnLeft += 1;
@@ -269,6 +274,24 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (hours >= 1 && energyState != EnergyState::LEVEL1) {
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (action == Action::WALK&& numWalk == 20 && energyState != EnergyState::LEVEL1) {
+        numWalk = 0;
+        energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
+        size_t energyStateSizeT = static_cast<size_t>(energyState);
+        energyStateSizeT -= 1;
+        energyState = static_cast<EnergyState>(energyStateSizeT);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (action == Action::RUN && numRun == 10 && energyState != EnergyState::LEVEL1) {
+        numRun = 0;
+        energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
+        size_t energyStateSizeT = static_cast<size_t>(energyState);
+        energyStateSizeT -= 1;
+        energyState = static_cast<EnergyState>(energyStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 

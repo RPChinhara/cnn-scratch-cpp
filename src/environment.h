@@ -41,7 +41,8 @@ private:
     size_t numFriendCollision;
     size_t numWallCollision;
 
-    size_t numMoveForward;
+    size_t numWalk;
+    size_t numRun;
     size_t numTurnLeft;
     size_t numTurnRight;
     size_t numTurnAround;
