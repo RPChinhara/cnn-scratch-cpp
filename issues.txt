@@ -1,14 +1,9 @@
 - Move less when neutral and full is on (add energy as state)
 - Try achieving open-endedness
 - Change currentState to just state?
-- Ask chathpt how energy should decrease
-- Make headers again?
-- Hunger and thirst states should have at least 10 levels?
 - Add other entities coordinates as states?
-- Add energy as states
 - Get rewards if he gets closer to other entities?
 - Get close to other entities once he’s within certain radius. It seems like people can see objects that are 3 miles away
-- Change reward values from 1s
 - Add other purposes other than eat and drink water as he has time and already neutral. Maybe, put him in modern society now ?, but waht about cat lol ?
 - Both normdist and zeros are wrong so just use normdist?
 - How many states do we have ask chathpt
@@ -70,15 +65,19 @@
 - The environment should have morning, evening, and night which means I need to add real time maybe in Japan
 - Research all the states and actions both human and animal have.
 - Search definitions of intelligence?
-
-- blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), social interactions, job satisfaction, clothing choices, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
-
-- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduction(such as mating, parenting, and ensuring the survival of their offspring).
- 
+- decrease all the states
+- add more levels for hunger states
+- write total reward and num episodes in file so that I can leave the program while it's running and see how things gonna work
+- reference famous games like Minecraft, and observe how the player dies or what is the purpose of games, and just mimic that.
+- reference animals lives
+- How to sync env and real time?
+- Die if he eating unhealthy
+- Create animal like agent first before making the env modern
 - Food Type: Specify the type of food the agent can choose to eat, such as healthy options (vegetables, fruits, lean proteins) or unhealthy options (fast food, sugary snacks).
 Portion Size: Define different portion sizes (small, medium, large) for the agent's meals.
 Meal Timing: Determine when the agent can eat (breakfast, lunch, dinner, snacks).
-
+- blood glucose level, fatigue, hygiene level, hair length, stress level, age, relationship, height and weight, sleepiness, health status(tooth decay, cancer, diabetes, emphysema, asthma), social interactions, job satisfaction, clothing choices, social media activity, weather conditions, temperature(日陰や雨よけ, tide), climate(wind) time of day, location, financial status (income, savings, and debt), education level, pains, feeling of goodness, news, nationality, homeostasis(such as blood sugar levels, electrolyte balance, and body temperature), auditory system, visual system, sense of smell, taste somatosensory system, goals(e.g., first and foremost simply survive, become leader of the group if he was a crocodile).
+- EAT(meat, vegetable), EXERCISE, SLEEP, SOCIALIZE (talk), hydrate, work(earn money), learn, get a haircut, brush teeth, take a bath/shower, grooming, play some sports, get sun, drinking, smoking, healthcare (go to the hospital, dentist...), shop, changing careers, moving to a new location, social media, entertainment (watch movies), transportation (how to commute or travel), clean the house, drive, move stuff, digestion, reproduction(such as mating, parenting, and ensuring the survival of their offspring).
 - Experts say the current models need 'Search system', but what it is?
 - How to let him have curiosity for Science e.g., Mathematics, AI, Physics so that he will try to solve problems within these fields.
 - I need to set the camera focused on him, and spawn objects e.g., food, water, possible friends, and predators etc to let him explore the environment.
@@ -144,7 +143,6 @@ Meal Timing: Determine when the agent can eat (breakfast, lunch, dinner, snacks)
 - Needs body parts e.g., arms, legs.
     - Make scientific devices based on *1.
 - Able to talk through audio.
-
 - Might be in nature or urban city? It'd be fun if I could make simulation that begins with home sapines proceed to year 3000 ~ 5000, and I can steal some technologies from there.
 - Might be newly born baby or animal like a monkey?
 - Check Comparison of reinforcement learning algorithms on https://en.wikipedia.org/wiki/Reinforcement_learning
