@@ -27,6 +27,7 @@ enum Direction
     WEST
 };
 
+// TODO: I think global variables are messed up especially entity.h and client width and height. Learn how to handle.
 inline RECT agent;
 inline RECT agent_previous;
 inline RECT agent_left_eye;

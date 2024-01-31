@@ -128,6 +128,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
+    // TODO: Make agent so that he can collect and use items, track its inventory, including available tools, weapons, or consumables as a state.
+    // TODO: Consider adding the time of day as a state. Maybe I need to make environment so that it has morning and night like in real life.
+    // TODO: He could die of diseases.
+    // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how things gonna work.
+    // TODO: Die if he eating unhealthy.
+    // TODO: Now he eats a lot? How to avoid that?
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 

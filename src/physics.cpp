@@ -76,6 +76,7 @@ void ResolveBoundaryCollision(RECT &rect, const LONG client_width, const LONG cl
 void ResolveRectanglesCollision(RECT &rect1, const RECT &rect2, Entity entity, const LONG client_width,
                                 const LONG client_height)
 {
+    // TODO: It looks like I'm having an issue with collisions, and it's called 'tunneling'.
     if ((rect1.left < rect2.right) && (rect1.right > rect2.left) && (rect1.top < rect2.bottom) &&
         (rect1.bottom > rect2.top))
     {

@@ -280,6 +280,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         break;
     }
 
+    // TODO: Actions could be diveded into various levels e.g., Eat (Low), Eat (Medium), Eat (High), Exercise (Low).
     size_t thirstStateSizeT = static_cast<size_t>(thirstState);
 
     if (has_collided_with_water && thirstState != ThirstState::LEVEL10)
@@ -406,6 +407,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left,
                                  LONG top)
 {
+    // TODO: Order should be fixed. Like the way parameters are passed. Thirst should come first imo.
     if (!(static_cast<size_t>(hungerState) < numHungerStates))
         MessageBoxA(
             nullptr,
