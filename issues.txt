@@ -1,5 +1,4 @@
 - Move less when neutral and full is on (add energy as state)
-- Try achieving open-endedness
 - Change currentState to just state?
 - Add other entities coordinates as states?
 - Get rewards if he gets closer to other entities?
