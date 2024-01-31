@@ -538,11 +538,19 @@ void Environment::CalculateReward(const Action action)
 
 bool Environment::CheckTermination()
 {
-    if (daysLived >= maxDays)
+    if (daysLived >= maxDays) {
         daysLived = 0;
+        return true;
+    }
+
+    if (days == maxDaysWithoutDrinking)
+        return true;
+
+    if (days == maxDaysWithoutEating)
+        return true;
 
     if (days == 60 && energyLevelBelow3)
         return true;
-
-    return daysWithoutEating >= maxDaysWithoutEating || daysLived >= maxDays;
+    
+    return false;
 }

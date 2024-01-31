@@ -62,6 +62,7 @@
 - ask chatGPT how to implement transpose
 - how can I use flags?
 - rely on BLAS and LAPACK
+- Research reasons animals and human die and add these to conditions as CheckTermination()
 - How is graph used in TensorFlow?
 - The environment should have morning, evening, and night which means I need to add real time maybe in Japan
 - Research all the states and actions both human and animal have.
