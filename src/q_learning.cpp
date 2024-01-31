@@ -23,12 +23,12 @@ Action QLearning::ChooseAction(size_t state)
 {
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::uniform_real_distribution<> dis_1(0.0f, 1.0f);
+    std::uniform_real_distribution<> dis1(0.0f, 1.0f);
 
-    if (dis_1(rng) < exploration_rate)
+    if (dis1(rng) < exploration_rate)
     {
-        std::uniform_int_distribution<> dis_2(0, n_actions - 1);
-        return static_cast<Action>(dis_2(rng));
+        std::uniform_int_distribution<> dis2(0, n_actions - 1);
+        return static_cast<Action>(dis2(rng));
     }
     else
     {

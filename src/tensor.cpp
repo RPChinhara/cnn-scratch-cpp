@@ -102,10 +102,10 @@ Tensor &Tensor::operator=(Tensor &&other)
     return *this;
 }
 
-static bool ShapeEqual(const std::vector<size_t> &shape_1, const std::vector<size_t> &shape_2)
+static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size_t> &shape2)
 {
     bool equal = false;
-    if (std::equal(shape_1.begin(), shape_1.end(), shape_2.begin()))
+    if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
         equal = true;
     return equal;
 }
