@@ -10,7 +10,7 @@
 
 class Environment
 {
-public:
+  public:
     Environment(const LONG client_width, const LONG client_height);
     void Render(const size_t iteration, Action action, float exploration_rate, Direction direction);
     size_t Reset();
@@ -30,9 +30,9 @@ public:
 
     size_t numStates = numThirstStates * numHungerStates * numEnergyStates * numLeftStates * numTopStates;
     size_t numActions = 7;
-    
-private:
-    size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left,LONG top);
+
+  private:
+    size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left, LONG top);
     void CalculateReward(const Action action);
     bool CheckTermination();
 

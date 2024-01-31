@@ -2,7 +2,7 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-float CategoricalAccuracy(const Tensor& y_true, const Tensor& y_pred)
+float CategoricalAccuracy(const Tensor &y_true, const Tensor &y_pred)
 {
     Tensor true_idx = Argmax(y_true);
     Tensor pred_idx = Argmax(y_pred);

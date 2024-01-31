@@ -68,15 +68,12 @@ enum EmotionState
 
 enum BloodPressureState
 {
-
 };
 
 enum ConfidenceState
 {
-
 };
 
 enum HygineState
 {
-
 };

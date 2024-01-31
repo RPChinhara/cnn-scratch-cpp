@@ -1,4 +1,5 @@
 #include "action.h"
+#include "activation.h"
 #include "dataset.h"
 #include "entity.h"
 #include "environment.h"
@@ -6,12 +7,13 @@
 #include "physics.h"
 #include "preprocessing.h"
 #include "q_learning.h"
-#include "activation.h"
 
+
+#include <iomanip>
 #include <iostream>
 #include <stdio.h>
 #include <thread>
-#include <iomanip>
+
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
@@ -21,65 +23,66 @@ inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch (uMsg) {
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            return 0;
-        case WM_PAINT: {
-            RECT client_rect;
-            PAINTSTRUCT ps;
+    switch (uMsg)
+    {
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    case WM_PAINT: {
+        RECT client_rect;
+        PAINTSTRUCT ps;
 
-            HDC hdc = BeginPaint(hwnd, &ps);
+        HDC hdc = BeginPaint(hwnd, &ps);
 
-            GetClientRect(hwnd, &client_rect);
-            HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
-            FillRect(hdc, &client_rect, grassBrush);
-            DeleteObject(grassBrush);
+        GetClientRect(hwnd, &client_rect);
+        HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
+        FillRect(hdc, &client_rect, grassBrush);
+        DeleteObject(grassBrush);
 
-            HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-            FillRect(hdc, &bed, whiteBrush);
-            DeleteObject(whiteBrush);
+        HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
+        FillRect(hdc, &bed, whiteBrush);
+        DeleteObject(whiteBrush);
 
-            HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
-            FillRect(hdc, &food, redBrush);
-            DeleteObject(redBrush);
+        HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
+        FillRect(hdc, &food, redBrush);
+        DeleteObject(redBrush);
 
-            HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
-            FillRect(hdc, &water, blueBrush);
-            DeleteObject(blueBrush);
+        HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
+        FillRect(hdc, &water, blueBrush);
+        DeleteObject(blueBrush);
 
-            HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
-            FillRect(hdc, &agent, pinkBrush);
-            FillRect(hdc, &agent_2, pinkBrush);
-            DeleteObject(pinkBrush);
+        HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
+        FillRect(hdc, &agent, pinkBrush);
+        FillRect(hdc, &agent_2, pinkBrush);
+        DeleteObject(pinkBrush);
 
-            HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
-            if (render_agent_left_eye)
-                FillRect(hdc, &agent_left_eye, blackBrush);
-            if (render_agent_right_eye)
-                FillRect(hdc, &agent_right_eye, blackBrush);
-            DeleteObject(blackBrush);
+        HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
+        if (render_agent_left_eye)
+            FillRect(hdc, &agent_left_eye, blackBrush);
+        if (render_agent_right_eye)
+            FillRect(hdc, &agent_right_eye, blackBrush);
+        DeleteObject(blackBrush);
 
-            EndPaint(hwnd, &ps);
+        EndPaint(hwnd, &ps);
 
-            return 0;
-        }
-        default:
-            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+        return 0;
+    }
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     AllocConsole();
-    
-    FILE* file;
+
+    FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
 #if 1
     int a = 10;
-    int *ptr1 = &a;      // ptr1 holds the address of x
-    int **ptr2 = &ptr1;  // ptr2 holds the address of ptr1
+    int *ptr1 = &a;     // ptr1 holds the address of x
+    int **ptr2 = &ptr1; // ptr2 holds the address of ptr1
     std::cout << &a << std::endl;
     std::cout << &ptr1 << std::endl;
     std::cout << &ptr2 << std::endl;
@@ -87,11 +90,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << *ptr2 << std::endl;
     std::cout << ptr1 << std::endl;
     std::cout << ptr2 << std::endl;
-    Tensor ff = Tensor({41, -2, 0, -4, 5, 6}, { 2, 3 });
+    Tensor ff = Tensor({41, -2, 0, -4, 5, 6}, {2, 3});
     std::cout << Relu(ff, Device::CPU) << std::endl;
 #endif
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -135,27 +138,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     wc.hInstance = hInstance;
     wc.lpszClassName = CLASS_NAME;
 
-    if (!RegisterClass(&wc)) {
+    if (!RegisterClass(&wc))
+    {
         MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
     }
 
-    HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        nullptr,
-        nullptr,
-        hInstance,
-        nullptr
-    );
+    HWND hwnd = CreateWindow(CLASS_NAME, WINDOW_NAME, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                             CW_USEDEFAULT, nullptr, nullptr, hInstance, nullptr);
 
-    if (hwnd == nullptr) {
+    if (hwnd == nullptr)
+    {
         MessageBox(nullptr, "Window Creation Failed!", "Error", MB_ICONERROR);
-    } else {
+    }
+    else
+    {
         ShowWindow(hwnd, SW_MAXIMIZE);
         UpdateWindow(hwnd);
     }
@@ -170,14 +166,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        agent           = { borderToAgent, (client_height - borderToAgent) - agent_height, borderToAgent + agent_width, client_height - borderToAgent };
-        agent_left_eye  = { (agent.right - agentToEyeWidth) - agent_eye_width, (client_height - borderToAgent) - agent_height + agentToEyeHeight, agent.right - agentToEyeWidth, (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height };
-        agent_right_eye = { agent.left + agentToEyeWidth, (client_height - borderToAgent) - agent_height + agentToEyeHeight, (agent.left + agentToEyeWidth) + agent_eye_width, (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height };
-        agent_2         = { (client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height, client_width - borderToEntities, client_height - borderToEntities };
-        food            = { borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height };
-        water           = { (client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities, borderToEntities + water_height };
-        bed             = { borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width, client_height - borderToEntities };
-        
+        agent = {borderToAgent, (client_height - borderToAgent) - agent_height, borderToAgent + agent_width,
+                 client_height - borderToAgent};
+        agent_left_eye = {(agent.right - agentToEyeWidth) - agent_eye_width,
+                          (client_height - borderToAgent) - agent_height + agentToEyeHeight,
+                          agent.right - agentToEyeWidth,
+                          (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height};
+        agent_right_eye = {agent.left + agentToEyeWidth,
+                           (client_height - borderToAgent) - agent_height + agentToEyeHeight,
+                           (agent.left + agentToEyeWidth) + agent_eye_width,
+                           (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height};
+        agent_2 = {(client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height,
+                   client_width - borderToEntities, client_height - borderToEntities};
+        food = {borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height};
+        water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
+                 borderToEntities + water_height};
+        bed = {borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width,
+               client_height - borderToEntities};
+
         Orientation orientation = Orientation::FRONT;
         Direction direction = Direction::SOUTH;
 
@@ -186,14 +192,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         size_t num_episodes = 1000;
 
-        for (size_t i = 0; i < num_episodes; ++i) {
+        for (size_t i = 0; i < num_episodes; ++i)
+        {
             lifeStartTime = std::chrono::high_resolution_clock::now();
             auto state = env.Reset();
             bool done = false;
             float total_reward = 0;
             size_t iteration = 0;
 
-            while (!done) {
+            while (!done)
+            {
                 Action action = q_learning.ChooseAction(state);
 
                 auto FrontConfig = [&]() {
@@ -229,127 +237,133 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 agent_previous = agent;
 
-                switch (action) {
-                    case Action::WALK:
-                        switch (orientation) {
-                            case Orientation::FRONT:
-                                agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
-                                agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
-                                agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
-                                break;
-                            case Orientation::LEFT:
-                                agent.left += pixelChangeWalk, agent.right += pixelChangeWalk;
-                                agent_left_eye.left += pixelChangeWalk, agent_left_eye.right += pixelChangeWalk;
-                                agent_right_eye.left += pixelChangeWalk, agent_right_eye.right += pixelChangeWalk;
-                                break;
-                            case Orientation::RIGHT:
-                                agent.left -= pixelChangeWalk, agent.right -= pixelChangeWalk;
-                                agent_left_eye.left -= pixelChangeWalk, agent_left_eye.right -= pixelChangeWalk;
-                                agent_right_eye.left -= pixelChangeWalk, agent_right_eye.right -= pixelChangeWalk;
-                                break;
-                            case Orientation::BACK:
-                                agent.top -= pixelChangeWalk, agent.bottom -= pixelChangeWalk;
-                                agent_left_eye.top -= pixelChangeWalk, agent_left_eye.bottom -= pixelChangeWalk;
-                                agent_right_eye.top -= pixelChangeWalk, agent_right_eye.bottom -= pixelChangeWalk;
-                                break;
-                            default:
-                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                                break;
-                        }
+                switch (action)
+                {
+                case Action::WALK:
+                    switch (orientation)
+                    {
+                    case Orientation::FRONT:
+                        agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
+                        agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
+                        agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
                         break;
-                    case Action::RUN:
-                        switch (orientation) {
-                            case Orientation::FRONT:
-                                agent.top += pixelChangeRun, agent.bottom += pixelChangeRun;
-                                agent_left_eye.top += pixelChangeRun, agent_left_eye.bottom += pixelChangeRun;
-                                agent_right_eye.top += pixelChangeRun, agent_right_eye.bottom += pixelChangeRun;
-                                break;
-                            case Orientation::LEFT:
-                                agent.left += pixelChangeRun, agent.right += pixelChangeRun;
-                                agent_left_eye.left += pixelChangeRun, agent_left_eye.right += pixelChangeRun;
-                                agent_right_eye.left += pixelChangeRun, agent_right_eye.right += pixelChangeRun;
-                                break;
-                            case Orientation::RIGHT:
-                                agent.left -= pixelChangeRun, agent.right -= pixelChangeRun;
-                                agent_left_eye.left -= pixelChangeRun, agent_left_eye.right -= pixelChangeRun;
-                                agent_right_eye.left -= pixelChangeRun, agent_right_eye.right -= pixelChangeRun;
-                                break;
-                            case Orientation::BACK:
-                                agent.top -= pixelChangeRun, agent.bottom -= pixelChangeRun;
-                                agent_left_eye.top -= pixelChangeRun, agent_left_eye.bottom -= pixelChangeRun;
-                                agent_right_eye.top -= pixelChangeRun, agent_right_eye.bottom -= pixelChangeRun;
-                                break;
-                            default:
-                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                                break;
-                        }
+                    case Orientation::LEFT:
+                        agent.left += pixelChangeWalk, agent.right += pixelChangeWalk;
+                        agent_left_eye.left += pixelChangeWalk, agent_left_eye.right += pixelChangeWalk;
+                        agent_right_eye.left += pixelChangeWalk, agent_right_eye.right += pixelChangeWalk;
                         break;
-                    case Action::TURN_LEFT:
-                        switch (orientation) {
-                            case Orientation::FRONT:
-                                LeftConfig();
-                                break;
-                            case Orientation::LEFT:
-                                BackConfig();
-                                break;
-                            case Orientation::RIGHT:
-                                FrontConfig();
-                                break;
-                            case Orientation::BACK:
-                                RightConfig();
-                                break;
-                            default:
-                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                                break;
-                        }
+                    case Orientation::RIGHT:
+                        agent.left -= pixelChangeWalk, agent.right -= pixelChangeWalk;
+                        agent_left_eye.left -= pixelChangeWalk, agent_left_eye.right -= pixelChangeWalk;
+                        agent_right_eye.left -= pixelChangeWalk, agent_right_eye.right -= pixelChangeWalk;
                         break;
-                    case Action::TURN_RIGHT:
-                        switch (orientation) {
-                            case Orientation::FRONT:
-                                RightConfig();
-                                break;
-                            case Orientation::LEFT:
-                                FrontConfig();
-                                break;
-                            case Orientation::RIGHT:
-                                BackConfig();
-                                break;
-                            case Orientation::BACK:
-                                LeftConfig();
-                                break;
-                            default:
-                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                                break;
-                        }
-                        break;
-                    case Action::TURN_AROUND:
-                        switch (orientation) {
-                            case Orientation::FRONT:
-                                BackConfig();
-                                break;
-                            case Orientation::LEFT:
-                                RightConfig();
-                                break;
-                            case Orientation::RIGHT:
-                                LeftConfig();
-                                break;
-                            case Orientation::BACK:
-                                FrontConfig();
-                                break;
-                            default:
-                                MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                                break;
-                        }
-                        break;
-                    case Action::STATIC:
-                        // std::this_thread::sleep_for(std::chrono::seconds(2));
-                        break;
-                    case Action::SLEEP:
-                        // std::this_thread::sleep_for(std::chrono::seconds(10));
+                    case Orientation::BACK:
+                        agent.top -= pixelChangeWalk, agent.bottom -= pixelChangeWalk;
+                        agent_left_eye.top -= pixelChangeWalk, agent_left_eye.bottom -= pixelChangeWalk;
+                        agent_right_eye.top -= pixelChangeWalk, agent_right_eye.bottom -= pixelChangeWalk;
                         break;
                     default:
-                        MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
                         break;
+                    }
+                    break;
+                case Action::RUN:
+                    switch (orientation)
+                    {
+                    case Orientation::FRONT:
+                        agent.top += pixelChangeRun, agent.bottom += pixelChangeRun;
+                        agent_left_eye.top += pixelChangeRun, agent_left_eye.bottom += pixelChangeRun;
+                        agent_right_eye.top += pixelChangeRun, agent_right_eye.bottom += pixelChangeRun;
+                        break;
+                    case Orientation::LEFT:
+                        agent.left += pixelChangeRun, agent.right += pixelChangeRun;
+                        agent_left_eye.left += pixelChangeRun, agent_left_eye.right += pixelChangeRun;
+                        agent_right_eye.left += pixelChangeRun, agent_right_eye.right += pixelChangeRun;
+                        break;
+                    case Orientation::RIGHT:
+                        agent.left -= pixelChangeRun, agent.right -= pixelChangeRun;
+                        agent_left_eye.left -= pixelChangeRun, agent_left_eye.right -= pixelChangeRun;
+                        agent_right_eye.left -= pixelChangeRun, agent_right_eye.right -= pixelChangeRun;
+                        break;
+                    case Orientation::BACK:
+                        agent.top -= pixelChangeRun, agent.bottom -= pixelChangeRun;
+                        agent_left_eye.top -= pixelChangeRun, agent_left_eye.bottom -= pixelChangeRun;
+                        agent_right_eye.top -= pixelChangeRun, agent_right_eye.bottom -= pixelChangeRun;
+                        break;
+                    default:
+                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                        break;
+                    }
+                    break;
+                case Action::TURN_LEFT:
+                    switch (orientation)
+                    {
+                    case Orientation::FRONT:
+                        LeftConfig();
+                        break;
+                    case Orientation::LEFT:
+                        BackConfig();
+                        break;
+                    case Orientation::RIGHT:
+                        FrontConfig();
+                        break;
+                    case Orientation::BACK:
+                        RightConfig();
+                        break;
+                    default:
+                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                        break;
+                    }
+                    break;
+                case Action::TURN_RIGHT:
+                    switch (orientation)
+                    {
+                    case Orientation::FRONT:
+                        RightConfig();
+                        break;
+                    case Orientation::LEFT:
+                        FrontConfig();
+                        break;
+                    case Orientation::RIGHT:
+                        BackConfig();
+                        break;
+                    case Orientation::BACK:
+                        LeftConfig();
+                        break;
+                    default:
+                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                        break;
+                    }
+                    break;
+                case Action::TURN_AROUND:
+                    switch (orientation)
+                    {
+                    case Orientation::FRONT:
+                        BackConfig();
+                        break;
+                    case Orientation::LEFT:
+                        RightConfig();
+                        break;
+                    case Orientation::RIGHT:
+                        LeftConfig();
+                        break;
+                    case Orientation::BACK:
+                        FrontConfig();
+                        break;
+                    default:
+                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
+                        break;
+                    }
+                    break;
+                case Action::STATIC:
+                    // std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                case Action::SLEEP:
+                    // std::this_thread::sleep_for(std::chrono::seconds(10));
+                    break;
+                default:
+                    MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+                    break;
                 }
 
                 has_collided_with_agent_2 = false;
@@ -361,7 +375,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
-                
+
                 if (has_collided_with_food)
                     PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
                 if (has_collided_with_water)
@@ -389,10 +403,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     rl_thread.detach();
 #endif
 
-    while(true) {
+    while (true)
+    {
         MSG msg = {};
 
-        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
 

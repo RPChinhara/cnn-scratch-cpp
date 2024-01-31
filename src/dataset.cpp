@@ -8,7 +8,8 @@ Iris LoadIris()
 {
     std::ifstream file("datasets\\iris.csv");
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         std::cerr << "Failed to open the file." << '\n';
         exit(EXIT_FAILURE);
     }
@@ -18,24 +19,25 @@ Iris LoadIris()
     std::getline(file, line);
 
     size_t idx_features = 0;
-    size_t idx_target   = 0;
-    Tensor features = Zeros({ 150, 4 });
-    Tensor target   = Zeros({ 150, 1 });
+    size_t idx_target = 0;
+    Tensor features = Zeros({150, 4});
+    Tensor target = Zeros({150, 1});
 
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::stringstream ss(line);
         std::string value;
-        
+
         std::getline(ss, value, ',');
 
         std::getline(ss, value, ',');
         features[idx_features] = std::stof(value);
         ++idx_features;
-        
+
         std::getline(ss, value, ',');
         features[idx_features] = std::stof(value);
         ++idx_features;
-        
+
         std::getline(ss, value, ',');
         features[idx_features] = std::stof(value);
         ++idx_features;
@@ -46,23 +48,28 @@ Iris LoadIris()
 
         std::getline(ss, value);
 
-        if (value == "Iris-setosa") {
+        if (value == "Iris-setosa")
+        {
             target[idx_target] = 0.0f;
             ++idx_target;
-        } else if (value == "Iris-versicolor") {
+        }
+        else if (value == "Iris-versicolor")
+        {
             target[idx_target] = 1.0f;
             ++idx_target;
-        } else if (value == "Iris-virginica") {
+        }
+        else if (value == "Iris-virginica")
+        {
             target[idx_target] = 2.0f;
             ++idx_target;
         }
     }
-    
+
     file.close();
 
     Iris iris;
     iris.features = features;
-    iris.target   = target;
+    iris.target = target;
 
     return iris;
 }

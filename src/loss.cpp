@@ -4,7 +4,7 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-float CategoricalCrossEntropy(const Tensor& y_true, const Tensor& y_pred)
+float CategoricalCrossEntropy(const Tensor &y_true, const Tensor &y_pred)
 {
     float sum = 0.0f;
     float epsilon = 1e-15f;

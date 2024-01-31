@@ -12,129 +12,136 @@ inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeEndTime;
 inline std::chrono::hours::rep hours;
 inline std::chrono::hours::rep days;
 
-Environment::Environment(const LONG client_width, const LONG client_height) : client_width(client_width), client_height(client_height) {
+Environment::Environment(const LONG client_width, const LONG client_height)
+    : client_width(client_width), client_height(client_height)
+{
 }
 
 void Environment::Render(const size_t iteration, Action action, float exploration_rate, Direction direction)
 {
-    switch (action) {
-        case Action::WALK:
-            actionStr = "walk";
-            break;
-        case Action::RUN:
-            actionStr = "run";
-            break;
-        case Action::TURN_LEFT:
-            actionStr = "turn left";
-            break;
-        case Action::TURN_RIGHT:
-            actionStr = "turn right";
-            break;
-        case Action::TURN_AROUND:
-            actionStr = "turn around";
-            break;
-        case Action::STATIC:
-            actionStr = "static";
-            break;
-        case Action::SLEEP:
-            actionStr = "sleep";
-            break;
-        default:
-            MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
-            break;
+    switch (action)
+    {
+    case Action::WALK:
+        actionStr = "walk";
+        break;
+    case Action::RUN:
+        actionStr = "run";
+        break;
+    case Action::TURN_LEFT:
+        actionStr = "turn left";
+        break;
+    case Action::TURN_RIGHT:
+        actionStr = "turn right";
+        break;
+    case Action::TURN_AROUND:
+        actionStr = "turn around";
+        break;
+    case Action::STATIC:
+        actionStr = "static";
+        break;
+    case Action::SLEEP:
+        actionStr = "sleep";
+        break;
+    default:
+        MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+        break;
     }
 
-    switch (thirstState) {
-        case ThirstState::LEVEL1:
-            thirstStateStr = "level 1";
-            break;
-        case ThirstState::LEVEL2:
-            thirstStateStr = "level 2";
-            break;
-        case ThirstState::LEVEL3:
-            thirstStateStr = "level 3";
-            break;
-        case ThirstState::LEVEL4:
-            thirstStateStr = "level 4";
-            break;
-        case ThirstState::LEVEL5:
-            thirstStateStr = "level 5";
-            break;
-        case ThirstState::LEVEL6:
-            thirstStateStr = "level 6";
-            break;
-        case ThirstState::LEVEL7:
-            thirstStateStr = "level 7";
-            break;
-        case ThirstState::LEVEL8:
-            thirstStateStr = "level 8";
-            break;
-        case ThirstState::LEVEL9:
-            thirstStateStr = "level 9";
-            break;
-        case ThirstState::LEVEL10:
-            thirstStateStr = "level 10";
-            break;
-        default:
-            MessageBox(nullptr, "Unknown thirst state", "Error", MB_ICONERROR);
-            break;
+    switch (thirstState)
+    {
+    case ThirstState::LEVEL1:
+        thirstStateStr = "level 1";
+        break;
+    case ThirstState::LEVEL2:
+        thirstStateStr = "level 2";
+        break;
+    case ThirstState::LEVEL3:
+        thirstStateStr = "level 3";
+        break;
+    case ThirstState::LEVEL4:
+        thirstStateStr = "level 4";
+        break;
+    case ThirstState::LEVEL5:
+        thirstStateStr = "level 5";
+        break;
+    case ThirstState::LEVEL6:
+        thirstStateStr = "level 6";
+        break;
+    case ThirstState::LEVEL7:
+        thirstStateStr = "level 7";
+        break;
+    case ThirstState::LEVEL8:
+        thirstStateStr = "level 8";
+        break;
+    case ThirstState::LEVEL9:
+        thirstStateStr = "level 9";
+        break;
+    case ThirstState::LEVEL10:
+        thirstStateStr = "level 10";
+        break;
+    default:
+        MessageBox(nullptr, "Unknown thirst state", "Error", MB_ICONERROR);
+        break;
     }
 
-    switch (hungerState) {
-        case HungerState::HUNGRY:
-            hungerStateStr = "hungry";
-            break;
-        case HungerState::SATISFIED:
-            hungerStateStr = "satisfied";
-            break;
-        case HungerState::FULL:
-            hungerStateStr = "full";
-            break;
-        default:
-            MessageBox(nullptr, "Unknown hunger state", "Error", MB_ICONERROR);
-            break;
+    switch (hungerState)
+    {
+    case HungerState::HUNGRY:
+        hungerStateStr = "hungry";
+        break;
+    case HungerState::SATISFIED:
+        hungerStateStr = "satisfied";
+        break;
+    case HungerState::FULL:
+        hungerStateStr = "full";
+        break;
+    default:
+        MessageBox(nullptr, "Unknown hunger state", "Error", MB_ICONERROR);
+        break;
     }
 
-    switch (energyState) {
-        case EnergyState::LEVEL1:
-            energyStateStr = "level 1";
-            break;
-        case EnergyState::LEVEL2:
-            energyStateStr = "level 2";
-            break;
-        case EnergyState::LEVEL3:
-            energyStateStr = "level 3";
-            break;
-        case EnergyState::LEVEL4:
-            energyStateStr = "level 4";
-            break;
-        case EnergyState::LEVEL5:
-            energyStateStr = "level 5";
-            break;
-        case EnergyState::LEVEL6:
-            energyStateStr = "level 6";
-            break;
-        case EnergyState::LEVEL7:
-            energyStateStr = "level 7";
-            break;
-        case EnergyState::LEVEL8:
-            energyStateStr = "level 8";
-            break;
-        case EnergyState::LEVEL9:
-            energyStateStr = "level 9";
-            break;
-        case EnergyState::LEVEL10:
-            energyStateStr = "level 10";
-            break;
-        default:
-            MessageBox(nullptr, "Unknown energy state", "Error", MB_ICONERROR);
-            break;
+    switch (energyState)
+    {
+    case EnergyState::LEVEL1:
+        energyStateStr = "level 1";
+        break;
+    case EnergyState::LEVEL2:
+        energyStateStr = "level 2";
+        break;
+    case EnergyState::LEVEL3:
+        energyStateStr = "level 3";
+        break;
+    case EnergyState::LEVEL4:
+        energyStateStr = "level 4";
+        break;
+    case EnergyState::LEVEL5:
+        energyStateStr = "level 5";
+        break;
+    case EnergyState::LEVEL6:
+        energyStateStr = "level 6";
+        break;
+    case EnergyState::LEVEL7:
+        energyStateStr = "level 7";
+        break;
+    case EnergyState::LEVEL8:
+        energyStateStr = "level 8";
+        break;
+    case EnergyState::LEVEL9:
+        energyStateStr = "level 9";
+        break;
+    case EnergyState::LEVEL10:
+        energyStateStr = "level 10";
+        break;
+    default:
+        MessageBox(nullptr, "Unknown energy state", "Error", MB_ICONERROR);
+        break;
     }
 
     auto lifeEndTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(lifeEndTime - lifeStartTime);
 
-    auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration % std::chrono::seconds(1)).count();
+    auto milliseconds =
+        std::chrono::duration_cast<std::chrono::milliseconds>(duration % std::chrono::seconds(1)).count();
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count() % 60;
     auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count() % 60;
     hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
@@ -154,7 +161,7 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
         currentLeft += "Current Left:                " + std::to_string(agent.left) + " (new)";
     else
         currentLeft += "Current Left:                " + std::to_string(agent.left);
-    
+
     if (newTop)
         currentTop += "Current Top:                 " + std::to_string(agent.top) + " (new)";
     else
@@ -172,7 +179,8 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
         currentDirection += "west";
 
     std::cout << "Number of iterations:        " << iteration << '\n';
-    std::cout << "Current Flatten State:       " << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << "/" << numStates << '\n';
+    std::cout << "Current Flatten State:       "
+              << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << "/" << numStates << '\n';
     std::cout << currentLeft << '\n';
     std::cout << currentTop << '\n';
     std::cout << "Current Direction            " << currentDirection << '\n';
@@ -184,9 +192,12 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
     std::cout << "Number Of Water Collisions:  " << numWaterCollision << '\n';
     std::cout << "Number Of Food Collisions:   " << numFoodCollision << '\n';
     std::cout << "Number Of Friend Collisions: " << numFriendCollision << '\n';
-    std::cout << "Days Lived:                  " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
-    std::cout << "Days Without Drinking:       " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
-    std::cout << "Days Without Eating:         " << days << " days, " << hours << " hours, " << minutes << " minutes, " << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Days Lived:                  " << days << " days, " << hours << " hours, " << minutes << " minutes, "
+              << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Days Without Drinking:       " << days << " days, " << hours << " hours, " << minutes << " minutes, "
+              << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Days Without Eating:         " << days << " days, " << hours << " hours, " << minutes << " minutes, "
+              << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
     std::cout << "Exploration Rate:            " << exploration_rate << "\n\n";
 }
 
@@ -208,7 +219,7 @@ size_t Environment::Reset()
     hungerState = HungerState::SATISFIED;
     energyState = EnergyState::LEVEL5;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
-    
+
     reward = 0.0f;
     daysLived = 0;
     daysWithoutDrinking = 0;
@@ -220,64 +231,76 @@ size_t Environment::Reset()
 
 std::tuple<size_t, float, bool> Environment::Step(Action action)
 {
-    switch (action) {
-        case Action::WALK:
-            numWalk += 1;
-            break;
-        case Action::RUN:
-            numRun += 1;
-            break;
-        case Action::TURN_LEFT:
-            numTurnLeft += 1;
-            break;
-        case Action::TURN_RIGHT:
-            numTurnRight += 1;
-            break;
-        case Action::TURN_AROUND:
-            numTurnAround += 1;
-            break;
-        case Action::STATIC:
-            numStatic += 1;
-            break;
-        case Action::SLEEP:
-            numSleep += 1;
-            break;
-        default:
-            MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
-            break;
+    switch (action)
+    {
+    case Action::WALK:
+        numWalk += 1;
+        break;
+    case Action::RUN:
+        numRun += 1;
+        break;
+    case Action::TURN_LEFT:
+        numTurnLeft += 1;
+        break;
+    case Action::TURN_RIGHT:
+        numTurnRight += 1;
+        break;
+    case Action::TURN_AROUND:
+        numTurnAround += 1;
+        break;
+    case Action::STATIC:
+        numStatic += 1;
+        break;
+    case Action::SLEEP:
+        numSleep += 1;
+        break;
+    default:
+        MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
+        break;
     }
 
     size_t thirstStateSizeT = static_cast<size_t>(thirstState);
 
-    if (has_collided_with_water && thirstState != ThirstState::LEVEL10) {
+    if (has_collided_with_water && thirstState != ThirstState::LEVEL10)
+    {
         thirstStateSizeT = std::min((thirstStateSizeT + 1), numHungerStates - 1);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
-    } else if (hours >= 3 && thirstState != ThirstState::LEVEL1) {
+    }
+    else if (hours >= 3 && thirstState != ThirstState::LEVEL1)
+    {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (has_collided_with_food && hungerState != HungerState::FULL) {
-        hungerState = std::min(static_cast<HungerState>(hungerState + 1), static_cast<HungerState>(numHungerStates - 1));
+    if (has_collided_with_food && hungerState != HungerState::FULL)
+    {
+        hungerState =
+            std::min(static_cast<HungerState>(hungerState + 1), static_cast<HungerState>(numHungerStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
-    } else if (hours >= 3 && hungerState != HungerState::HUNGRY) {
+    }
+    else if (hours >= 3 && hungerState != HungerState::HUNGRY)
+    {
         hungerState = std::max(static_cast<HungerState>(hungerState - 1), static_cast<HungerState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (has_collided_with_food && energyState != EnergyState::LEVEL10) {
-        energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
+    if (has_collided_with_food && energyState != EnergyState::LEVEL10)
+    {
+        energyState =
+            std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (hours >= 1 && energyState != EnergyState::LEVEL1) {
+    if (hours >= 1 && energyState != EnergyState::LEVEL1)
+    {
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (action == Action::WALK&& numWalk == 200 && energyState != EnergyState::LEVEL1) {
+    if (action == Action::WALK && numWalk == 200 && energyState != EnergyState::LEVEL1)
+    {
         numWalk = 0;
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         size_t energyStateSizeT = static_cast<size_t>(energyState);
@@ -286,7 +309,8 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (action == Action::RUN && numRun == 100 && energyState != EnergyState::LEVEL1) {
+    if (action == Action::RUN && numRun == 100 && energyState != EnergyState::LEVEL1)
+    {
         numRun = 0;
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         size_t energyStateSizeT = static_cast<size_t>(energyState);
@@ -301,8 +325,8 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         energyLevelBelow3 = false;
 
     // if (action == Action::STATIC && energyState != EnergyState::LEVEL10) {
-    //     energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
-    //     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    //     energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates -
+    //     1)); currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     // }
 
     CalculateReward(action);
@@ -321,18 +345,35 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     return std::make_tuple(currentState, reward, done);
 }
 
-size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left, LONG top) {
+size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left,
+                                 LONG top)
+{
     if (!(static_cast<size_t>(hungerState) < numHungerStates))
-        MessageBoxA(nullptr, ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(), "Error", MB_ICONERROR);
+        MessageBoxA(
+            nullptr,
+            ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(),
+            "Error", MB_ICONERROR);
     if (!(static_cast<size_t>(thirstState) < numThirstStates))
-        MessageBox(nullptr, ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(), "Error", MB_ICONERROR);
+        MessageBox(
+            nullptr,
+            ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(),
+            "Error", MB_ICONERROR);
     if (!(static_cast<size_t>(energyState) < numEnergyStates))
-        MessageBox(nullptr, ("Invalid energy state. Should be within the range [0, " + std::to_string(numEnergyStates) + ")").c_str(), "Error", MB_ICONERROR);
+        MessageBox(
+            nullptr,
+            ("Invalid energy state. Should be within the range [0, " + std::to_string(numEnergyStates) + ")").c_str(),
+            "Error", MB_ICONERROR);
     if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
-        MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error", MB_ICONERROR);
+        MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error",
+                   MB_ICONERROR);
 
-    // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
-    return ((((energyState) * numHungerStates + hungerState) * numThirstStates + static_cast<size_t>(thirstState)) * numLeftStates + static_cast<size_t>(left)) * numTopStates + static_cast<size_t>(top);
+    // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) *
+    // numTopStates + static_cast<size_t>(top);
+    return ((((energyState)*numHungerStates + hungerState) * numThirstStates + static_cast<size_t>(thirstState)) *
+                numLeftStates +
+            static_cast<size_t>(left)) *
+               numTopStates +
+           static_cast<size_t>(top);
 }
 
 void Environment::CalculateReward(const Action action)
@@ -340,17 +381,23 @@ void Environment::CalculateReward(const Action action)
     reward = 0.0f;
     size_t maxConsecutiveAction = 4;
 
-    if (seenLefts.find(agent.left) != seenLefts.end()) {
+    if (seenLefts.find(agent.left) != seenLefts.end())
+    {
         newLeft = false;
-    } else {
+    }
+    else
+    {
         seenLefts.insert(agent.left);
         newLeft = true;
         reward += 2.2f;
     }
 
-    if (seenTops.find(agent.top) != seenTops.end()) {
+    if (seenTops.find(agent.top) != seenTops.end())
+    {
         newTop = false;
-    } else {
+    }
+    else
+    {
         seenTops.insert(agent.top);
         newTop = true;
         reward += 2.2f;
@@ -379,11 +426,12 @@ void Environment::CalculateReward(const Action action)
         reward += 1.0f;
     if (hungerState == HungerState::HUNGRY && hours >= 3)
         reward -= 1.0f;
-    if (hungerState == HungerState::FULL && has_collided_with_food) {
+    if (hungerState == HungerState::FULL && has_collided_with_food)
+    {
         reward -= 1.0f;
 
-    if (has_collided_with_agent_2)
-        reward += 1.5f;
+        if (has_collided_with_agent_2)
+            reward += 1.5f;
     }
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
@@ -402,23 +450,28 @@ void Environment::CalculateReward(const Action action)
     //     reward += -1;
     //     numMoveForward = 0;
     // }
-    if (numTurnLeft == maxConsecutiveAction) {
+    if (numTurnLeft == maxConsecutiveAction)
+    {
         reward -= 1.0f;
         numTurnLeft = 0;
     }
-    if (numTurnRight == maxConsecutiveAction) {
+    if (numTurnRight == maxConsecutiveAction)
+    {
         reward -= 1.0f;
         numTurnRight = 0;
     }
-    if (numTurnAround == maxConsecutiveAction) {
+    if (numTurnAround == maxConsecutiveAction)
+    {
         reward -= 1.0f;
         numTurnAround = 0;
     }
-    if (numStatic == maxConsecutiveAction) {
+    if (numStatic == maxConsecutiveAction)
+    {
         reward -= 1.0f;
         numStatic = 0;
     }
-    if (numSleep == maxConsecutiveAction) {
+    if (numSleep == maxConsecutiveAction)
+    {
         reward -= 1.0f;
         numSleep = 0;
     }
@@ -431,6 +484,6 @@ bool Environment::CheckTermination()
 
     if (days == 60 && energyLevelBelow3)
         return true;
-    
+
     return daysWithoutEating >= maxDaysWithoutEating || daysLived >= maxDays;
 }
