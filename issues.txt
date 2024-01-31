@@ -1,4 +1,3 @@
-- Move less when neutral and full is on (add energy as state)
 - Add other entities coordinates as states?
 - Get rewards if he gets closer to other entities?
 - Get close to other entities once he’s within certain radius. It seems like people can see objects that are 3 miles away
