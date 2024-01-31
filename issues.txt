@@ -1,8 +1,6 @@
 - Now he eats a lot? How to avoid that?
 - How to let him manipulate my pc not only comman prompt, but like paint app so that he can draw or write something
 - Get close to other entities once he’s within certain radius. It seems like people can see objects that are 3 miles away
-- Both normdist and zeros are wrong so just use normdist?
-- How many states do we have ask chathpt
 - Add predators
 - I need to save parameters such as weights, biases, and Q-table. How do you do in TF?
 - Hunger and thirat have more levels ? Like 0 to 50 at least?
