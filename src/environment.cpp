@@ -439,7 +439,14 @@ void Environment::CalculateReward(const Action action)
 {
     reward = 0.0f;
 
-    // if (agent.left - agent)
+    if (std::labs(agent.left - water.left) < 250 && std::labs(agent.top - water.top) < 250)
+        reward += 1.2f;
+
+    if (std::labs(agent.left - food.left) < 250 && std::labs(agent.top - food.top) < 250)
+        reward += 1.1f;
+
+    if (std::labs(agent.left - agent2.left) < 250 && std::labs(agent.top - agent2.top) < 250)
+        reward += 1.0f;
 
     if (seenLefts.find(agent.left) != seenLefts.end())
     {

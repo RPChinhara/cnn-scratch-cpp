@@ -1,4 +1,5 @@
-- Get rewards if he gets closer to other entities?
+- Now he eats a lot? How to avoid that?
+- How to let him manipulate my pc not only comman prompt, but like paint app so that he can draw or write something
 - Get close to other entities once he’s within certain radius. It seems like people can see objects that are 3 miles away
 - Add other purposes other than eat and drink water as he has time and already neutral. Maybe, put him in modern society now ?, but waht about cat lol ?
 - Both normdist and zeros are wrong so just use normdist?
