@@ -86,14 +86,35 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
 
     switch (hungerState)
     {
-    case HungerState::HUNGRY:
-        hungerStateStr = "hungry";
+    case HungerState::LEVEL1:
+        hungerStateStr = "level 1";
         break;
-    case HungerState::SATISFIED:
-        hungerStateStr = "satisfied";
+    case HungerState::LEVEL2:
+        hungerStateStr = "level 2";
         break;
-    case HungerState::FULL:
-        hungerStateStr = "full";
+    case HungerState::LEVEL3:
+        hungerStateStr = "level 3";
+        break;
+    case HungerState::LEVEL4:
+        hungerStateStr = "level 4";
+        break;
+    case HungerState::LEVEL5:
+        hungerStateStr = "level 5";
+        break;
+    case HungerState::LEVEL6:
+        hungerStateStr = "level 6";
+        break;
+    case HungerState::LEVEL7:
+        hungerStateStr = "level 7";
+        break;
+    case HungerState::LEVEL8:
+        hungerStateStr = "level 8";
+        break;
+    case HungerState::LEVEL9:
+        hungerStateStr = "level 9";
+        break;
+    case HungerState::LEVEL10:
+        hungerStateStr = "level 10";
         break;
     default:
         MessageBox(nullptr, "Unknown hunger state", "Error", MB_ICONERROR);
@@ -216,7 +237,7 @@ size_t Environment::Reset()
     numStatic = 0;
 
     thirstState = ThirstState::LEVEL5;
-    hungerState = HungerState::SATISFIED;
+    hungerState = HungerState::LEVEL3;
     energyState = EnergyState::LEVEL5;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
 
@@ -263,7 +284,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (has_collided_with_water && thirstState != ThirstState::LEVEL10)
     {
-        thirstStateSizeT = std::min((thirstStateSizeT + 1), numHungerStates - 1);
+        thirstStateSizeT = std::min((thirstStateSizeT + 1), numThirstStates - 1);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
@@ -274,15 +295,18 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (has_collided_with_food && hungerState != HungerState::FULL)
+    size_t hungerStateSizeT = static_cast<size_t>(hungerState);
+
+    if (has_collided_with_food && hungerState != HungerState::LEVEL3)
     {
-        hungerState =
-            std::min(static_cast<HungerState>(hungerState + 1), static_cast<HungerState>(numHungerStates - 1));
+        hungerStateSizeT = std::min((hungerStateSizeT + 1), numHungerStates - 1);
+        hungerState = static_cast<HungerState>(hungerStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
-    else if (hours >= 3 && hungerState != HungerState::HUNGRY)
+    else if (hours >= 3 && hungerState != HungerState::LEVEL1)
     {
-        hungerState = std::max(static_cast<HungerState>(hungerState - 1), static_cast<HungerState>(0));
+        hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
+        hungerState = static_cast<HungerState>(hungerStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
@@ -369,7 +393,8 @@ size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstStat
 
     // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) *
     // numTopStates + static_cast<size_t>(top);
-    return ((((energyState)*numHungerStates + hungerState) * numThirstStates + static_cast<size_t>(thirstState)) *
+    return (((energyState * numHungerStates + static_cast<size_t>(hungerState)) * numThirstStates +
+             static_cast<size_t>(thirstState)) *
                 numLeftStates +
             static_cast<size_t>(left)) *
                numTopStates +
@@ -420,13 +445,13 @@ void Environment::CalculateReward(const Action action)
 
     if (has_collided_with_food)
         reward += 2.5f;
-    if (hungerState == HungerState::HUNGRY && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL1 && has_collided_with_food)
         reward += 1.25f;
-    if (hungerState == HungerState::SATISFIED && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL2 && has_collided_with_food)
         reward += 1.0f;
-    if (hungerState == HungerState::HUNGRY && hours >= 3)
+    if (hungerState == HungerState::LEVEL1 && hours >= 3)
         reward -= 1.0f;
-    if (hungerState == HungerState::FULL && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL3 && has_collided_with_food)
     {
         reward -= 1.0f;
 

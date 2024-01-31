@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 1
+#if 0
     int a = 10;
     int *ptr1 = &a;     // ptr1 holds the address of x
     int **ptr2 = &ptr1; // ptr2 holds the address of ptr1
@@ -94,7 +94,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << Relu(ff, Device::CPU) << std::endl;
 #endif
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;

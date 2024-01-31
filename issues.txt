@@ -54,6 +54,7 @@
 - Learn Data locality
 - Actions could be diveded into various levels e.g., Eat (Low), Eat (Medium), Eat (High), Exercise (Low).
 - Log fps
+- size_t is limited. How to solve the issue of eventually there woule be limit for number of memory I could allocate as new states are added. Speacially, if agent could have unlimited coordinates number of left, top would be infinite.
 - Add verbose arg to switch wheather to log metrics or not.
 - Why NumPy is fast?
 - fix not being able to change the batch size like to 32 that's why it's stayed in 8
