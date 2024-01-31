@@ -73,6 +73,10 @@ enum EmotionState
     NEUTRAL
 };
 
+enum SocialConnection
+{
+};
+
 enum BloodPressureState
 {
 };
