@@ -27,7 +27,6 @@
 - An agent should address new goals forever
 - How to fix always choosing first Action in q learning choseAction() issue
 - Turn functions relate in RL into cuda kernel if it's possible
-- Change to friend from agent_2 ?
 - common value for exploration rate ? How should I decay them ?
 - If collisions happen continuouslly, it only considers first one e.g., wall collisions.
 - Refactor ResolveRectanglesCollision()

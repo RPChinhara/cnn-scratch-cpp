@@ -172,7 +172,7 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
         numWaterCollision += 1;
     else if (has_collided_with_food)
         numFoodCollision += 1;
-    else if (has_collided_with_agent_2)
+    else if (has_collided_with_agent2)
         numFriendCollision += 1;
 
     std::string currentLeft;
@@ -438,7 +438,8 @@ size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstStat
 void Environment::CalculateReward(const Action action)
 {
     reward = 0.0f;
-    size_t maxConsecutiveAction = 4;
+
+    // if (agent.left - agent)
 
     if (seenLefts.find(agent.left) != seenLefts.end())
     {
@@ -486,12 +487,7 @@ void Environment::CalculateReward(const Action action)
     if (hungerState == HungerState::LEVEL1 && hours >= 3)
         reward -= 1.0f;
     if (hungerState == HungerState::LEVEL3 && has_collided_with_food)
-    {
         reward -= 1.0f;
-
-        if (has_collided_with_agent_2)
-            reward += 1.5f;
-    }
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
         reward += 2.0f;
@@ -499,6 +495,9 @@ void Environment::CalculateReward(const Action action)
         reward += 1.0f;
     if (energyState == EnergyState::LEVEL1 && action == Action::RUN)
         reward -= 2.0f;
+
+    if (has_collided_with_agent2)
+        reward += 1.5f;
 
     if (has_collided_with_wall)
         reward -= 1.5f;
@@ -509,6 +508,9 @@ void Environment::CalculateReward(const Action action)
     //     reward += -1;
     //     numMoveForward = 0;
     // }
+
+    size_t maxConsecutiveAction = 4;
+
     if (numTurnLeft == maxConsecutiveAction)
     {
         reward -= 1.0f;

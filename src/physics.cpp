@@ -83,7 +83,7 @@ void ResolveRectanglesCollision(RECT &rect1, const RECT &rect2, Entity entity, c
         switch (entity)
         {
         case AGENT2:
-            has_collided_with_agent_2 = true;
+            has_collided_with_agent2 = true;
             break;
         case FOOD:
             has_collided_with_food = true;

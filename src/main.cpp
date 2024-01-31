@@ -8,12 +8,10 @@
 #include "preprocessing.h"
 #include "q_learning.h"
 
-
 #include <iomanip>
 #include <iostream>
 #include <stdio.h>
 #include <thread>
-
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
@@ -53,7 +51,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
         FillRect(hdc, &agent, pinkBrush);
-        FillRect(hdc, &agent_2, pinkBrush);
+        FillRect(hdc, &agent2, pinkBrush);
         DeleteObject(pinkBrush);
 
         HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
@@ -176,8 +174,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                            (client_height - borderToAgent) - agent_height + agentToEyeHeight,
                            (agent.left + agentToEyeWidth) + agent_eye_width,
                            (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height};
-        agent_2 = {(client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height,
-                   client_width - borderToEntities, client_height - borderToEntities};
+        agent2 = {(client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height,
+                  client_width - borderToEntities, client_height - borderToEntities};
         food = {borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height};
         water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
                  borderToEntities + water_height};
@@ -366,12 +364,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     break;
                 }
 
-                has_collided_with_agent_2 = false;
+                has_collided_with_agent2 = false;
                 has_collided_with_food = false;
                 has_collided_with_water = false;
                 has_collided_with_wall = false;
 
-                ResolveRectanglesCollision(agent, agent_2, Entity::AGENT2, client_width, client_height);
+                ResolveRectanglesCollision(agent, agent2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
