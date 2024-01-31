@@ -66,8 +66,6 @@
 - The environment should have morning, evening, and night which means I need to add real time maybe in Japan
 - Research all the states and actions both human and animal have.
 - Search definitions of intelligence?
-- decrease all the states
-- add more levels for hunger states
 - write total reward and num episodes in file so that I can leave the program while it's running and see how things gonna work
 - reference famous games like Minecraft, and observe how the player dies or what is the purpose of games, and just mimic that.
 - reference animals lives

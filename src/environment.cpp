@@ -288,8 +288,26 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
-    else if (hours >= 3 && thirstState != ThirstState::LEVEL1)
+
+    if (hours >= 3 && thirstState != ThirstState::LEVEL1)
     {
+        thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
+        thirstState = static_cast<ThirstState>(thirstStateSizeT);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+        // hours = 0;
+    }
+
+    if (action == Action::WALK && numWalk == 200 && thirstState != ThirstState::LEVEL1)
+    {
+        numWalk = 0;
+        thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
+        thirstState = static_cast<ThirstState>(thirstStateSizeT);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (action == Action::RUN && numRun == 100 && thirstState != ThirstState::LEVEL1)
+    {
+        numRun = 0;
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -302,9 +320,27 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         hungerStateSizeT = std::min((hungerStateSizeT + 1), numHungerStates - 1);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+        // hours = 0;
     }
-    else if (hours >= 3 && hungerState != HungerState::LEVEL1)
+
+    if (hours >= 3 && hungerState != HungerState::LEVEL1)
     {
+        hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
+        hungerState = static_cast<HungerState>(hungerStateSizeT);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (action == Action::WALK && numWalk == 200 && hungerState != HungerState::LEVEL1)
+    {
+        numWalk = 0;
+        hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
+        hungerState = static_cast<HungerState>(hungerStateSizeT);
+        currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
+    }
+
+    if (action == Action::RUN && numRun == 100 && hungerState != HungerState::LEVEL1)
+    {
+        numRun = 0;
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -323,12 +359,12 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
+    size_t energyStateSizeT = static_cast<size_t>(energyState);
+
     if (action == Action::WALK && numWalk == 200 && energyState != EnergyState::LEVEL1)
     {
         numWalk = 0;
-        energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
-        size_t energyStateSizeT = static_cast<size_t>(energyState);
-        energyStateSizeT -= 1;
+        energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
@@ -336,9 +372,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     if (action == Action::RUN && numRun == 100 && energyState != EnergyState::LEVEL1)
     {
         numRun = 0;
-        energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
-        size_t energyStateSizeT = static_cast<size_t>(energyState);
-        energyStateSizeT -= 1;
+        energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
