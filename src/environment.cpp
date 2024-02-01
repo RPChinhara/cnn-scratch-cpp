@@ -17,7 +17,7 @@ Environment::Environment(const LONG client_width, const LONG client_height)
 {
 }
 
-void Environment::Render(const size_t iteration, Action action, float exploration_rate, Direction direction)
+void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate, Direction direction)
 {
     switch (action)
     {
@@ -199,6 +199,7 @@ void Environment::Render(const size_t iteration, Action action, float exploratio
     if (direction == Direction::WEST)
         currentDirection += "west";
 
+    std::cout << "Episode:                     " << episode << '\n';
     std::cout << "Number of iterations:        " << iteration << '\n';
     std::cout << "Current Flatten State:       "
               << FlattenState(hungerState, thirstState, energyState, agent.left, agent.top) << "/" << numStates << '\n';
