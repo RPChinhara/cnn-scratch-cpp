@@ -132,12 +132,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
-    // TODO: Make agent so that he can collect and use items, track its inventory, including available tools, weapons, or consumables as a state.
-    // TODO: Consider adding the time of day as a state. Maybe I need to make environment so that it has morning and night like in real life.
-    // TODO: He could die of diseases.
-    // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how things gonna work.
-    // TODO: Die if he eating unhealthy.
-    // TODO: Now he eats a lot? How to avoid that?
+    // TODO: Make agent so that he can collect and use items, track its inventory, including available tools, weapons,
+    // or consumables as a state.
+    // TODO: Consider adding the time of day as a state. Maybe I need to make environment so that it has morning and
+    // night like in real life.
+    // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how
+    // things gonna work.
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
@@ -190,7 +190,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
                  borderToEntities + water_height};
         predator = {(client_width - borderToEntities) - predator_width, 500, client_width - borderToEntities,
-                 500 + predator_height};
+                    500 + predator_height};
         bed = {borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width,
                client_height - borderToEntities};
 
