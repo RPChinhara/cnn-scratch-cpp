@@ -450,6 +450,9 @@ void Environment::CalculateReward(const Action action)
     if (std::labs(agent.left - agent2.left) < 250 && std::labs(agent.top - agent2.top) < 250)
         reward += 1.0f;
 
+    if (std::labs(agent.left - predator.left) < 250 && std::labs(agent.top - predator.top) < 250)
+        reward -= 2.0f;
+
     if (seenLefts.find(agent.left) != seenLefts.end())
     {
         newLeft = false;
@@ -513,6 +516,9 @@ void Environment::CalculateReward(const Action action)
     if (numWallCollision > 1)
         reward -= 2.0f;
 
+    if (has_collided_with_predator)
+        reward -= 10.0f;
+
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
     //     numMoveForward = 0;
@@ -564,6 +570,11 @@ bool Environment::CheckTermination()
 
     if (days == 60 && energyLevelBelow3)
         return true;
+
+    if (has_collided_with_predator) {
+        MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
+        return true;
+    }
 
     return false;
 }

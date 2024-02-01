@@ -92,6 +92,9 @@ void ResolveRectanglesCollision(RECT &rect1, const RECT &rect2, Entity entity, c
         case WATER:
             has_collided_with_water = true;
             break;
+        case PREDATOR:
+            has_collided_with_predator = true;
+            break;
         default:
             MessageBox(nullptr, "Unknown entity", "Error", MB_ICONERROR);
             break;

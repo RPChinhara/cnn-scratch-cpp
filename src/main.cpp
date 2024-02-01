@@ -61,6 +61,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             FillRect(hdc, &agent_right_eye, blackBrush);
         DeleteObject(blackBrush);
 
+        HBRUSH brownBrush = CreateSolidBrush(RGB(165, 42, 42));
+        FillRect(hdc, &predator, brownBrush);
+        DeleteObject(brownBrush);
+
         EndPaint(hwnd, &ps);
 
         return 0;
@@ -185,6 +189,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         food = {borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height};
         water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
                  borderToEntities + water_height};
+        predator = {(client_width - borderToEntities) - predator_width, 500, client_width - borderToEntities,
+                 500 + predator_height};
         bed = {borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width,
                client_height - borderToEntities};
 
@@ -374,10 +380,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 has_collided_with_food = false;
                 has_collided_with_water = false;
                 has_collided_with_wall = false;
+                has_collided_with_predator = false;
 
                 ResolveRectanglesCollision(agent, agent2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
+                ResolveRectanglesCollision(agent, predator, Entity::PREDATOR, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
 
                 if (has_collided_with_food)
