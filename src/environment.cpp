@@ -466,7 +466,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         hoursLivedWithoutEating = 0;
         daysLivedWithoutEating = 0;
     }
-    
+
     return std::make_tuple(currentState, reward, done);
 }
 
@@ -565,7 +565,7 @@ void Environment::CalculateReward(const Action action)
     if (hungerState == HungerState::LEVEL1 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
     if (hungerState == HungerState::LEVEL3 && has_collided_with_food)
-        reward -= 1.0f;
+        reward -= 2.0f;
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
         reward += 2.0f;
