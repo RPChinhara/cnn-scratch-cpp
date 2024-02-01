@@ -519,18 +519,19 @@ void Environment::CalculateReward(const Action action)
     // }
 
     size_t maxConsecutiveAction = 4;
+    size_t maxConsecutiveActionTurn = 3;
 
-    if (numTurnLeft == maxConsecutiveAction)
+    if (numTurnLeft == maxConsecutiveActionTurn)
     {
         reward -= 1.0f;
         numTurnLeft = 0;
     }
-    if (numTurnRight == maxConsecutiveAction)
+    if (numTurnRight == maxConsecutiveActionTurn)
     {
         reward -= 1.0f;
         numTurnRight = 0;
     }
-    if (numTurnAround == maxConsecutiveAction)
+    if (numTurnAround == maxConsecutiveActionTurn)
     {
         reward -= 1.0f;
         numTurnAround = 0;
