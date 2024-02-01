@@ -451,7 +451,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     CalculateReward(action);
     bool done = CheckTermination();
 
-    if (has_collided_with_food)
+    if (has_collided_with_water)
     {
         secondsLivedWithoutDrinking = 0;
         minutesLivedWithoutDrinking = 0;
@@ -459,14 +459,14 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         daysLivedWithoutDrinking = 0;
     }
 
-    if (has_collided_with_water)
+    if (has_collided_with_food)
     {
         secondsLivedWithoutEating = 0;
         minutesLivedWithoutEating = 0;
         hoursLivedWithoutEating = 0;
         daysLivedWithoutEating = 0;
     }
-
+    
     return std::make_tuple(currentState, reward, done);
 }
 

@@ -132,9 +132,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 1
     // TODO: Make agent so that he can collect and use items, track its inventory, including available tools, weapons,
     // or consumables as a state.
-    // night like in real life.
     // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how
-    // things gonna work.
+    // TODO: things gonna work.
+    // TODO: Add body and env temperture
+    
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
