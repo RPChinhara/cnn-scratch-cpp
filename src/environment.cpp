@@ -639,7 +639,7 @@ bool Environment::CheckTermination()
 
     if (has_collided_with_predator)
     {
-        MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
+        // MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
         return true;
     }
 
