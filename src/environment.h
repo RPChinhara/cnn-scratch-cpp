@@ -62,9 +62,21 @@ class Environment
 
     float reward;
 
+    size_t secondsLived;
+    size_t minutesLived;
+    size_t hoursLived;
     size_t daysLived;
-    size_t daysWithoutEating;
-    size_t daysWithoutDrinking;
+    // TODO: Do I need Lived?
+    size_t secondsLivedWithoutDrinking;
+    size_t minutesLivedWithoutDrinking;
+    size_t hoursLivedWithoutDrinking;
+    size_t daysLivedWithoutDrinking;
+
+    size_t secondsLivedWithoutEating;
+    size_t minutesLivedWithoutEating;
+    size_t hoursLivedWithoutEating;
+    size_t daysLivedWithoutEating;
+  
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;

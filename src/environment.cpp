@@ -7,18 +7,68 @@
 #include <iostream>
 #include <windows.h>
 
-inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
-inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeEndTime;
-inline std::chrono::hours::rep hours;
-inline std::chrono::hours::rep days;
-
 Environment::Environment(const LONG client_width, const LONG client_height)
     : client_width(client_width), client_height(client_height)
 {
 }
 
-void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate, Direction direction)
+void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
+                         Direction direction)
 {
+    // NOTE: It could be 1.5 ~ 2 seconds per iteration. I set to 1 second for now, but I'm not sure.
+    size_t secondsPerIteration = 1;
+    secondsLived += secondsPerIteration;
+    secondsLivedWithoutDrinking += secondsPerIteration;
+    secondsLivedWithoutEating += secondsPerIteration;
+
+    if (secondsLived == 60)
+    {
+        secondsLived = 0;
+        minutesLived += 1;
+    }
+    if (minutesLived == 60)
+    {
+        minutesLived = 0;
+        hoursLived += 1;
+    }
+    if (hoursLived == 24)
+    {
+        hoursLived = 0;
+        daysLived += 1;
+    }
+
+    if (secondsLivedWithoutDrinking == 60)
+    {
+        secondsLivedWithoutDrinking = 0;
+        minutesLivedWithoutDrinking += 1;
+    }
+    if (minutesLivedWithoutDrinking == 60)
+    {
+        minutesLivedWithoutDrinking = 0;
+        hoursLivedWithoutDrinking += 1;
+    }
+    if (hoursLivedWithoutDrinking == 24)
+    {
+        hoursLivedWithoutDrinking = 0;
+        daysLivedWithoutDrinking += 1;
+    }
+
+    if (secondsLivedWithoutEating == 60)
+    {
+        secondsLivedWithoutEating = 0;
+        minutesLivedWithoutEating += 1;
+    }
+    if (minutesLivedWithoutEating == 60)
+    {
+        minutesLivedWithoutEating = 0;
+        hoursLivedWithoutEating += 1;
+    }
+    if (hoursLivedWithoutEating == 24)
+    {
+        hoursLivedWithoutEating = 0;
+        daysLivedWithoutEating += 1;
+    }
+
     switch (action)
     {
     case Action::WALK:
@@ -158,16 +208,6 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
         break;
     }
 
-    auto lifeEndTime = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(lifeEndTime - lifeStartTime);
-
-    auto milliseconds =
-        std::chrono::duration_cast<std::chrono::milliseconds>(duration % std::chrono::seconds(1)).count();
-    auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count() % 60;
-    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count() % 60;
-    hours = std::chrono::duration_cast<std::chrono::hours>(duration).count() % 24;
-    days = std::chrono::duration_cast<std::chrono::hours>(duration).count() / 24;
-
     if (has_collided_with_water)
         numWaterCollision += 1;
     else if (has_collided_with_food)
@@ -214,12 +254,14 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::cout << "Number Of Water Collisions:  " << numWaterCollision << '\n';
     std::cout << "Number Of Food Collisions:   " << numFoodCollision << '\n';
     std::cout << "Number Of Friend Collisions: " << numFriendCollision << '\n';
-    std::cout << "Days Lived:                  " << days << " days, " << hours << " hours, " << minutes << " minutes, "
-              << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
-    std::cout << "Days Without Drinking:       " << days << " days, " << hours << " hours, " << minutes << " minutes, "
-              << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
-    std::cout << "Days Without Eating:         " << days << " days, " << hours << " hours, " << minutes << " minutes, "
-              << seconds << " seconds, and " << milliseconds << " milliseconds" << '\n';
+    std::cout << "Days Lived:                  " << daysLived << " days, " << hoursLived << " hours, " << minutesLived
+              << " minutes, " << secondsLived << " seconds" << '\n';
+    std::cout << "Days Without Drinking:       " << daysLivedWithoutDrinking << " days, " << hoursLivedWithoutDrinking
+              << " hours, " << minutesLivedWithoutDrinking << " minutes, " << secondsLivedWithoutDrinking << " seconds"
+              << '\n';
+    std::cout << "Days Without Eating:         " << daysLivedWithoutEating << " days, " << hoursLivedWithoutEating
+              << " hours, " << minutesLivedWithoutEating << " minutes, " << secondsLivedWithoutEating << " seconds"
+              << '\n';
     std::cout << "Exploration Rate:            " << exploration_rate << "\n\n";
 }
 
@@ -243,9 +285,22 @@ size_t Environment::Reset()
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
 
     reward = 0.0f;
+
+    secondsLived = 0;
+    minutesLived = 0;
+    hoursLived = 0;
     daysLived = 0;
-    daysWithoutDrinking = 0;
-    daysWithoutEating = 0;
+
+    secondsLivedWithoutDrinking = 0;
+    minutesLivedWithoutDrinking = 0;
+    hoursLivedWithoutDrinking = 0;
+    daysLivedWithoutDrinking = 0;
+
+    secondsLivedWithoutEating = 0;
+    minutesLivedWithoutEating = 0;
+    hoursLivedWithoutEating = 0;
+    daysLivedWithoutEating = 0;
+
     energyLevelBelow3 = false;
 
     return currentState;
@@ -291,7 +346,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (hours >= 3 && thirstState != ThirstState::LEVEL1)
+    if (hoursLivedWithoutDrinking >= 3 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
@@ -324,8 +379,10 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
         // hours = 0;
     }
-
-    if (hours >= 3 && hungerState != HungerState::LEVEL1)
+    // TODO: I think this should be hoursLivedWithoutEating % 3 == 0, and this applies to other places as well.
+    // I think above idea is wrong. I think I need to somehow reduce level each time reach multiple of 3 hours or
+    // something.
+    if (hoursLivedWithoutEating >= 3 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
@@ -350,13 +407,15 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (has_collided_with_food && energyState != EnergyState::LEVEL10)
     {
+        // TODO: I'm not changing state of the energy here.
         energyState =
             std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
 
-    if (hours >= 1 && energyState != EnergyState::LEVEL1)
+    if (hoursLivedWithoutEating >= 3 && energyState != EnergyState::LEVEL1)
     {
+        // TODO: I'm not changing state of the energy here.
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
     }
@@ -392,15 +451,21 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     CalculateReward(action);
     bool done = CheckTermination();
 
-    // if (has_collided_with_food)
-    //     daysWithoutEating = 0;
-    // else
-    //     daysWithoutEating += 1;
+    if (has_collided_with_food)
+    {
+        secondsLivedWithoutDrinking = 0;
+        minutesLivedWithoutDrinking = 0;
+        hoursLivedWithoutDrinking = 0;
+        daysLivedWithoutDrinking = 0;
+    }
 
-    // if (has_collided_with_water)
-    //     daysWithoutDrinking = 0;
-    // else
-    //     daysWithoutDrinking += 1;
+    if (has_collided_with_water)
+    {
+        secondsLivedWithoutEating = 0;
+        minutesLivedWithoutEating = 0;
+        hoursLivedWithoutEating = 0;
+        daysLivedWithoutEating = 0;
+    }
 
     return std::make_tuple(currentState, reward, done);
 }
@@ -497,7 +562,7 @@ void Environment::CalculateReward(const Action action)
         reward += 1.25f;
     if (hungerState == HungerState::LEVEL2 && has_collided_with_food)
         reward += 1.0f;
-    if (hungerState == HungerState::LEVEL1 && hours >= 3)
+    if (hungerState == HungerState::LEVEL1 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
     if (hungerState == HungerState::LEVEL3 && has_collided_with_food)
         reward -= 1.0f;
@@ -563,16 +628,17 @@ bool Environment::CheckTermination()
         return true;
     }
 
-    if (days == maxDaysWithoutDrinking)
+    if (daysLivedWithoutDrinking == maxDaysWithoutDrinking)
         return true;
 
-    if (days == maxDaysWithoutEating)
+    if (daysLivedWithoutEating == maxDaysWithoutEating)
         return true;
 
-    if (days == 60 && energyLevelBelow3)
+    if (daysLived == 60 && energyLevelBelow3)
         return true;
 
-    if (has_collided_with_predator) {
+    if (has_collided_with_predator)
+    {
         MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
         return true;
     }

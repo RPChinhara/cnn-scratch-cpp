@@ -17,8 +17,6 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
-inline std::chrono::time_point<std::chrono::high_resolution_clock> lifeStartTime;
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -134,7 +132,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 1
     // TODO: Make agent so that he can collect and use items, track its inventory, including available tools, weapons,
     // or consumables as a state.
-    // TODO: Consider adding the time of day as a state. Maybe I need to make environment so that it has morning and
     // night like in real life.
     // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how
     // things gonna work.
@@ -204,7 +201,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         for (size_t i = 0; i < num_episodes; ++i)
         {
-            lifeStartTime = std::chrono::high_resolution_clock::now();
             auto state = env.Reset();
             bool done = false;
             float total_reward = 0;
