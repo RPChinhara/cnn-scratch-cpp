@@ -372,7 +372,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     size_t hungerStateSizeT = static_cast<size_t>(hungerState);
 
-    if (has_collided_with_food && hungerState != HungerState::LEVEL3)
+    if (has_collided_with_food && hungerState != HungerState::LEVEL10)
     {
         hungerStateSizeT = std::min((hungerStateSizeT + 1), numHungerStates - 1);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
@@ -563,8 +563,10 @@ void Environment::CalculateReward(const Action action)
     if (hungerState == HungerState::LEVEL2 && has_collided_with_food)
         reward += 1.0f;
     if (hungerState == HungerState::LEVEL1 && hoursLivedWithoutEating >= 3)
+        reward -= 1.5f;
+    if (hungerState == HungerState::LEVEL2 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
-    if (hungerState == HungerState::LEVEL3 && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL10 && has_collided_with_food)
         reward -= 2.0f;
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
