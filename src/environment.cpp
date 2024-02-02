@@ -280,7 +280,7 @@ size_t Environment::Reset()
     numStatic = 0;
 
     thirstState = ThirstState::LEVEL5;
-    hungerState = HungerState::LEVEL3;
+    hungerState = HungerState::LEVEL5;
     energyState = EnergyState::LEVEL5;
     currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
 

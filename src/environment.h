@@ -12,7 +12,8 @@ class Environment
 {
   public:
     Environment(const LONG client_width, const LONG client_height);
-    void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate, Direction direction);
+    void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
+                Direction direction);
     size_t Reset();
     std::tuple<size_t, float, bool> Step(Action action);
 
@@ -23,7 +24,7 @@ class Environment
     LONG maxTop = client_height - agent_height;
 
     size_t numThirstStates = 10;
-    size_t numHungerStates = 3;
+    size_t numHungerStates = 10;
     size_t numEnergyStates = 10;
     size_t numLeftStates = (maxLeft - minLeft) + 1;
     size_t numTopStates = (maxTop - minTop) + 1;
@@ -76,7 +77,7 @@ class Environment
     size_t minutesLivedWithoutEating;
     size_t hoursLivedWithoutEating;
     size_t daysLivedWithoutEating;
-  
+
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;
