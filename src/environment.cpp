@@ -20,6 +20,7 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     secondsLived += secondsPerIteration;
     secondsLivedWithoutDrinking += secondsPerIteration;
     secondsLivedWithoutEating += secondsPerIteration;
+    secondsLivedWithoutSocializing += secondsPerIteration;
 
     if (secondsLived == 60)
     {
@@ -67,6 +68,22 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     {
         hoursLivedWithoutEating = 0;
         daysLivedWithoutEating += 1;
+    }
+
+    if (secondsLivedWithoutSocializing == 60)
+    {
+        secondsLivedWithoutSocializing = 0;
+        minutesLivedWithoutSocializing += 1;
+    }
+    if (minutesLivedWithoutSocializing == 60)
+    {
+        minutesLivedWithoutSocializing = 0;
+        hoursLivedWithoutSocializing += 1;
+    }
+    if (hoursLivedWithoutSocializing == 24)
+    {
+        hoursLivedWithoutSocializing = 0;
+        daysLivedWithoutSocializing += 1;
     }
 
     switch (action)
@@ -238,6 +255,9 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::cout << "Days Without Eating:         " << daysLivedWithoutEating << " days, " << hoursLivedWithoutEating
               << " hours, " << minutesLivedWithoutEating << " minutes, " << secondsLivedWithoutEating << " seconds"
               << '\n';
+    std::cout << "Days Without Socializing:    " << daysLivedWithoutSocializing << " days, "
+              << hoursLivedWithoutSocializing << " hours, " << minutesLivedWithoutSocializing << " minutes, "
+              << secondsLivedWithoutSocializing << " seconds" << '\n';
     std::cout << "Exploration Rate:            " << exploration_rate << "\n";
 }
 
@@ -278,6 +298,11 @@ size_t Environment::Reset()
     minutesLivedWithoutEating = 0;
     hoursLivedWithoutEating = 0;
     daysLivedWithoutEating = 0;
+
+    secondsLivedWithoutSocializing = 0;
+    minutesLivedWithoutSocializing = 0;
+    hoursLivedWithoutSocializing = 0;
+    daysLivedWithoutSocializing = 0;
 
     energyLevelBelow3 = false;
 
@@ -412,6 +437,32 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
+    size_t emotionStateSizeT = static_cast<size_t>(emotionState);
+
+    if (has_collided_with_food && emotionState != EmotionState::HAPPY ||
+        has_collided_with_agent2 && emotionState != EmotionState::HAPPY)
+    {
+        emotionStateSizeT = std::min((emotionStateSizeT + 1), numEmotionStates - 1);
+        emotionState = static_cast<EmotionState>(emotionStateSizeT);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+    }
+
+    if (hoursLivedWithoutEating >= 8 && emotionState != EmotionState::ANGRY)
+    {
+        emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
+        emotionState = static_cast<EmotionState>(emotionStateSizeT);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+    }
+
+    if (hoursLivedWithoutSocializing >= 8 && emotionState != EmotionState::ANGRY)
+    {
+        emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
+        emotionState = static_cast<EmotionState>(emotionStateSizeT);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+    }
+
+    // TODO: Increase level of emotion state when he kill the predators, and decrease when opposite result occured.
+
     if (energyState < EnergyState::LEVEL4)
         energyLevelBelow3 = true;
     else if (energyState > EnergyState::LEVEL3)
@@ -445,6 +496,14 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         minutesLivedWithoutEating = 0;
         hoursLivedWithoutEating = 0;
         daysLivedWithoutEating = 0;
+    }
+
+    if (has_collided_with_agent2)
+    {
+        secondsLivedWithoutSocializing = 0;
+        minutesLivedWithoutSocializing = 0;
+        hoursLivedWithoutSocializing = 0;
+        daysLivedWithoutSocializing = 0;
     }
 
     return std::make_tuple(currentState, reward, done);

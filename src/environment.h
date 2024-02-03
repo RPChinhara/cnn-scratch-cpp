@@ -85,6 +85,11 @@ class Environment
     size_t hoursLivedWithoutEating;
     size_t daysLivedWithoutEating;
 
+    size_t secondsLivedWithoutSocializing;
+    size_t minutesLivedWithoutSocializing;
+    size_t hoursLivedWithoutSocializing;
+    size_t daysLivedWithoutSocializing;
+
     size_t maxDays = 50;
     size_t maxDaysWithoutEating = 43;
     size_t maxDaysWithoutDrinking = 3;
