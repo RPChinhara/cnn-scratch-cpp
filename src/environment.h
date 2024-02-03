@@ -30,9 +30,10 @@ class Environment
     size_t numHungerStates = 5;
     size_t numEnergyStates = 5;
     size_t numEmotionStates = 3;
+    size_t numPhysicalHealthStates = 4;
 
-    size_t numStates =
-        numEmotionStates * numEnergyStates * numHungerStates * numThirstStates * numTopStates * numLeftStates;
+    size_t numStates = numPhysicalHealthStates * numEmotionStates * numEnergyStates * numHungerStates *
+                       numThirstStates * numTopStates * numLeftStates;
     size_t numActions = 7;
 
   private:
@@ -60,11 +61,13 @@ class Environment
     HungerState hungerState;
     EnergyState energyState;
     EmotionState emotionState;
+    PhysicalHealthState physicalHealthState;
 
     std::string thirstStateStr;
     std::string hungerStateStr;
     std::string energyStateStr;
     std::string emotionStateStr;
+    std::string physicalHealthStateStr;
 
     std::string actionStr;
 

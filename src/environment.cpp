@@ -199,6 +199,25 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
         break;
     }
 
+    switch (physicalHealthState)
+    {
+    case PhysicalHealthState::CRITICAL:
+        physicalHealthStateStr = "critical";
+        break;
+    case PhysicalHealthState::SICK:
+        physicalHealthStateStr = "sick";
+        break;
+    case PhysicalHealthState::INJURED:
+        physicalHealthStateStr = "injured";
+        break;
+    case PhysicalHealthState::HEALTHY:
+        physicalHealthStateStr = "healthy";
+        break;
+    default:
+        MessageBox(nullptr, "Unknown physical health state", "Error", MB_ICONERROR);
+        break;
+    }
+
     if (has_collided_with_water)
         numWaterCollision += 1;
     else if (has_collided_with_food)
@@ -230,35 +249,36 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     if (direction == Direction::WEST)
         currentDirection += "west";
 
-    std::cout << "Episode:                     " << episode << '\n';
-    std::cout << "Number of iterations:        " << iteration << '\n';
-    std::cout << "Current Flatten State:       "
+    std::cout << "Episode:                       " << episode << '\n';
+    std::cout << "Number of iterations:          " << iteration << '\n';
+    std::cout << "Current Flatten State:         "
               << FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState) << "/"
               << numStates << '\n';
     std::cout << currentLeft << '\n';
     std::cout << currentTop << '\n';
-    std::cout << "Current Direction            " << currentDirection << '\n';
-    std::cout << "Current Thirst State:        " << thirstStateStr << '\n';
-    std::cout << "Current Hunger State:        " << hungerStateStr << '\n';
-    std::cout << "Current Energy State:        " << energyStateStr << '\n';
-    std::cout << "Current Emotion State:       " << emotionStateStr << '\n';
-    std::cout << "Current Action:              " << actionStr << '\n';
-    std::cout << "Reward:                      " << reward << '\n';
-    std::cout << "Number Of Water Collisions:  " << numWaterCollision << '\n';
-    std::cout << "Number Of Food Collisions:   " << numFoodCollision << '\n';
-    std::cout << "Number Of Friend Collisions: " << numFriendCollision << '\n';
-    std::cout << "Days Lived:                  " << daysLived << " days, " << hoursLived << " hours, " << minutesLived
+    std::cout << "Current Direction              " << currentDirection << '\n';
+    std::cout << "Current Thirst State:          " << thirstStateStr << '\n';
+    std::cout << "Current Hunger State:          " << hungerStateStr << '\n';
+    std::cout << "Current Energy State:          " << energyStateStr << '\n';
+    std::cout << "Current Emotion State:         " << emotionStateStr << '\n';
+    std::cout << "Current Physical Health State: " << physicalHealthStateStr << '\n';
+    std::cout << "Current Action:                " << actionStr << '\n';
+    std::cout << "Reward:                        " << reward << '\n';
+    std::cout << "Number Of Water Collisions:    " << numWaterCollision << '\n';
+    std::cout << "Number Of Food Collisions:     " << numFoodCollision << '\n';
+    std::cout << "Number Of Friend Collisions:   " << numFriendCollision << '\n';
+    std::cout << "Days Lived:                    " << daysLived << " days, " << hoursLived << " hours, " << minutesLived
               << " minutes, " << secondsLived << " seconds" << '\n';
-    std::cout << "Days Without Drinking:       " << daysLivedWithoutDrinking << " days, " << hoursLivedWithoutDrinking
+    std::cout << "Days Without Drinking:         " << daysLivedWithoutDrinking << " days, " << hoursLivedWithoutDrinking
               << " hours, " << minutesLivedWithoutDrinking << " minutes, " << secondsLivedWithoutDrinking << " seconds"
               << '\n';
-    std::cout << "Days Without Eating:         " << daysLivedWithoutEating << " days, " << hoursLivedWithoutEating
+    std::cout << "Days Without Eating:           " << daysLivedWithoutEating << " days, " << hoursLivedWithoutEating
               << " hours, " << minutesLivedWithoutEating << " minutes, " << secondsLivedWithoutEating << " seconds"
               << '\n';
-    std::cout << "Days Without Socializing:    " << daysLivedWithoutSocializing << " days, "
+    std::cout << "Days Without Socializing:      " << daysLivedWithoutSocializing << " days, "
               << hoursLivedWithoutSocializing << " hours, " << minutesLivedWithoutSocializing << " minutes, "
               << secondsLivedWithoutSocializing << " seconds" << '\n';
-    std::cout << "Exploration Rate:            " << exploration_rate << "\n";
+    std::cout << "Exploration Rate:              " << exploration_rate << "\n";
 }
 
 size_t Environment::Reset()
@@ -279,6 +299,7 @@ size_t Environment::Reset()
     hungerState = HungerState::LEVEL3;
     energyState = EnergyState::LEVEL3;
     emotionState = EmotionState::NEUTRAL;
+    physicalHealthState = PhysicalHealthState::HEALTHY;
 
     currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
 
@@ -359,6 +380,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         // hoursLivedWithoutDrinking = 0; TODO: Do I have to reset it to 0?
     }
     // TODO: I think I could refactor thirst, hunger, and energy parts as these are doing same thing.
+    // IDEA: I think 200 and 100 is too small, he get exausted too early imo.
     if (action == Action::WALK && numWalk == 200 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
@@ -458,6 +480,15 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+    }
+
+    size_t physicalHealthStateSizeT = static_cast<size_t>(physicalHealthState);
+
+    if (has_collided_with_predator && physicalHealthState != PhysicalHealthState::CRITICAL)
+    {
+        physicalHealthStateSizeT = std::min((physicalHealthStateSizeT + 1), numPhysicalHealthStates - 1);
+        physicalHealthState = static_cast<PhysicalHealthState>(physicalHealthStateSizeT);
         currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
@@ -683,7 +714,7 @@ bool Environment::CheckTermination()
     if (daysLived == 60 && energyLevelBelow3)
         return true;
 
-    if (has_collided_with_predator)
+    if (has_collided_with_predator && physicalHealthState == PhysicalHealthState::CRITICAL)
     {
         // MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
         return true;
