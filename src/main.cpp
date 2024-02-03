@@ -135,6 +135,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how
     // things gonna work.
     // TODO: Add body and env temperture
+    // TODO: Try makefile
 
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";

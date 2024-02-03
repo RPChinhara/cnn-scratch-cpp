@@ -50,6 +50,14 @@ enum HealthState
     CRITICAL
 };
 
+enum EmotionState
+{
+    HAPPY,
+    SAD,
+    ANGRY,
+    NEUTRAL
+};
+
 enum class MentalState
 {
     CALM,
@@ -62,14 +70,6 @@ enum class MentalState
     ANXIOUS,
     OVERWHELMED,
     PANICKED,
-    NEUTRAL
-};
-
-enum EmotionState
-{
-    HAPPY,
-    SAD,
-    ANGRY,
     NEUTRAL
 };
 

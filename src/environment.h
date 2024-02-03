@@ -23,13 +23,14 @@ class Environment
     LONG minTop = 0;
     LONG maxTop = client_height - agent_height;
 
+    size_t numLeftStates = (maxLeft - minLeft) + 1;
+    size_t numTopStates = (maxTop - minTop) + 1;
     size_t numThirstStates = 10;
     size_t numHungerStates = 10;
     size_t numEnergyStates = 10;
-    size_t numLeftStates = (maxLeft - minLeft) + 1;
-    size_t numTopStates = (maxTop - minTop) + 1;
+    size_t numEmotionStates = 4;
 
-    size_t numStates = numThirstStates * numHungerStates * numEnergyStates * numLeftStates * numTopStates;
+    size_t numStates = numEnergyStates * numHungerStates * numThirstStates * numTopStates * numLeftStates;
     size_t numActions = 7;
 
   private:

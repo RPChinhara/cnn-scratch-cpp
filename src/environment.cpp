@@ -351,12 +351,11 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
-        // hours = 0;
+        // hoursLivedWithoutDrinking = 0; TODO: Do I have to reset it to 0?
     }
-
+    // TODO: I think I could refactor thirst, hunger, and energy parts as these are doing same thing.
     if (action == Action::WALK && numWalk == 200 && thirstState != ThirstState::LEVEL1)
     {
-        numWalk = 0;
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -364,7 +363,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (action == Action::RUN && numRun == 100 && thirstState != ThirstState::LEVEL1)
     {
-        numRun = 0;
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -391,7 +389,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (action == Action::WALK && numWalk == 200 && hungerState != HungerState::LEVEL1)
     {
-        numWalk = 0;
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -399,7 +396,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (action == Action::RUN && numRun == 100 && hungerState != HungerState::LEVEL1)
     {
-        numRun = 0;
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -424,7 +420,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (action == Action::WALK && numWalk == 200 && energyState != EnergyState::LEVEL1)
     {
-        numWalk = 0;
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -432,7 +427,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     if (action == Action::RUN && numRun == 100 && energyState != EnergyState::LEVEL1)
     {
-        numRun = 0;
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
         currentState = FlattenState(hungerState, thirstState, energyState, agent.left, agent.top);
@@ -442,6 +436,12 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         energyLevelBelow3 = true;
     else if (energyState > EnergyState::LEVEL3)
         energyLevelBelow3 = false;
+
+    if (numWalk == 200 || numRun == 200)
+    {
+        numWalk = 0;
+        numRun = 0;
+    }
 
     // if (action == Action::STATIC && energyState != EnergyState::LEVEL10) {
     //     energyState = std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates -
@@ -474,24 +474,24 @@ size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstStat
                                  LONG top)
 {
     // TODO: Order should be fixed. Like the way parameters are passed. Thirst should come first imo.
-    if (!(static_cast<size_t>(hungerState) < numHungerStates))
-        MessageBoxA(
-            nullptr,
-            ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(),
-            "Error", MB_ICONERROR);
+    if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
+        MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error",
+                   MB_ICONERROR);
     if (!(static_cast<size_t>(thirstState) < numThirstStates))
         MessageBox(
             nullptr,
             ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(),
+            "Error", MB_ICONERROR);
+    if (!(static_cast<size_t>(hungerState) < numHungerStates))
+        MessageBoxA(
+            nullptr,
+            ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(),
             "Error", MB_ICONERROR);
     if (!(static_cast<size_t>(energyState) < numEnergyStates))
         MessageBox(
             nullptr,
             ("Invalid energy state. Should be within the range [0, " + std::to_string(numEnergyStates) + ")").c_str(),
             "Error", MB_ICONERROR);
-    if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
-        MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error",
-                   MB_ICONERROR);
 
     // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) *
     // numTopStates + static_cast<size_t>(top);
@@ -501,6 +501,7 @@ size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstStat
             static_cast<size_t>(left)) *
                numTopStates +
            static_cast<size_t>(top);
+    // TODO: I think left and top should be switched here.
 }
 
 void Environment::CalculateReward(const Action action)
@@ -541,6 +542,8 @@ void Environment::CalculateReward(const Action action)
         reward += 2.2f;
     }
 
+    // TODO: I think I need to make numWaterCollision, numFoodCollision because otherwise he will drink or eat forever
+    // which lead to death in irl.
     if (has_collided_with_wall)
         ++numWallCollision;
     else
