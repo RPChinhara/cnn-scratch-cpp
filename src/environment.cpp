@@ -229,14 +229,14 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::string currentTop;
 
     if (newLeft)
-        currentLeft += "Current Left:                " + std::to_string(agent.left) + " (new)";
+        currentLeft += "Current Left:                  " + std::to_string(agent.left) + " (new)";
     else
-        currentLeft += "Current Left:                " + std::to_string(agent.left);
+        currentLeft += "Current Left:                  " + std::to_string(agent.left);
 
     if (newTop)
-        currentTop += "Current Top:                 " + std::to_string(agent.top) + " (new)";
+        currentTop += "Current Top:                   " + std::to_string(agent.top) + " (new)";
     else
-        currentTop += "Current Top:                 " + std::to_string(agent.top);
+        currentTop += "Current Top:                   " + std::to_string(agent.top);
 
     std::string currentDirection;
 
