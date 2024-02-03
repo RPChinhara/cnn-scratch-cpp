@@ -37,10 +37,10 @@ enum EmotionState
 
 enum PhysicalHealthState
 {
-    HEALTHY,
-    INJURED,
+    CRITICAL,
     SICK,
-    CRITICAL
+    INJURED,
+    HEALTHY,
 };
 
 enum class MentalHealthState
