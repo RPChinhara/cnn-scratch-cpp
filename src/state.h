@@ -7,11 +7,6 @@ enum class ThirstState
     LEVEL3,
     LEVEL4,
     LEVEL5,
-    LEVEL6,
-    LEVEL7,
-    LEVEL8,
-    LEVEL9,
-    LEVEL10
 };
 
 enum class HungerState
@@ -21,11 +16,6 @@ enum class HungerState
     LEVEL3,
     LEVEL4,
     LEVEL5,
-    LEVEL6,
-    LEVEL7,
-    LEVEL8,
-    LEVEL9,
-    LEVEL10
 };
 
 enum EnergyState
@@ -35,14 +25,17 @@ enum EnergyState
     LEVEL3,
     LEVEL4,
     LEVEL5,
-    LEVEL6,
-    LEVEL7,
-    LEVEL8,
-    LEVEL9,
-    LEVEL10
 };
 
-enum HealthState
+enum EmotionState
+{
+    ANGRY,
+    SAD,
+    NEUTRAL,
+    HAPPY,
+};
+
+enum PhysicalHealthState
 {
     HEALTHY,
     INJURED,
@@ -50,15 +43,7 @@ enum HealthState
     CRITICAL
 };
 
-enum EmotionState
-{
-    HAPPY,
-    SAD,
-    ANGRY,
-    NEUTRAL
-};
-
-enum class MentalState
+enum class MentalHealthState
 {
     CALM,
     RELAXED,
@@ -71,6 +56,14 @@ enum class MentalState
     OVERWHELMED,
     PANICKED,
     NEUTRAL
+};
+// NOTE: if it reached under certain level, in main.ccp goes back to bee and rest, and recover all the
+enum StressState
+{
+};
+
+enum SleepinessState
+{
 };
 
 enum SocialConnection
@@ -89,10 +82,4 @@ enum HygineState
 {
 };
 
-// NOTE:
-// 血糖値、血圧、体重
-// Physical and mental health? Combine them?
-// Emotional state
-// Stress state?
-// Add Sleepiness, and if it reached under certain level, in main.ccp goes back to bee and rest, and recover all the
-// states Do i really need 10 levels for states? 3 is suffice? Ask chatGPT
+// TODO: Maybe add 血糖値、血圧、体重?

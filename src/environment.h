@@ -25,16 +25,19 @@ class Environment
 
     size_t numLeftStates = (maxLeft - minLeft) + 1;
     size_t numTopStates = (maxTop - minTop) + 1;
-    size_t numThirstStates = 10;
-    size_t numHungerStates = 10;
-    size_t numEnergyStates = 10;
-    size_t numEmotionStates = 4;
+    // IDEA: Do states really need to have 10 levels? 3 is suffice? Ask chatGPT
+    size_t numThirstStates = 5;
+    size_t numHungerStates = 5;
+    size_t numEnergyStates = 5;
+    size_t numEmotionStates = 3;
 
-    size_t numStates = numEnergyStates * numHungerStates * numThirstStates * numTopStates * numLeftStates;
+    size_t numStates =
+        numEmotionStates * numEnergyStates * numHungerStates * numThirstStates * numTopStates * numLeftStates;
     size_t numActions = 7;
 
   private:
-    size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState, LONG left, LONG top);
+    size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState,
+                        EmotionState emotionState, LONG left, LONG top);
     void CalculateReward(const Action action);
     bool CheckTermination();
 
@@ -56,10 +59,13 @@ class Environment
     ThirstState thirstState;
     HungerState hungerState;
     EnergyState energyState;
+    EmotionState emotionState;
 
     std::string thirstStateStr;
     std::string hungerStateStr;
     std::string energyStateStr;
+    std::string emotionStateStr;
+
     std::string actionStr;
 
     float reward;
