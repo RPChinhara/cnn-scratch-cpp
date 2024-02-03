@@ -88,3 +88,11 @@ enum ConfidenceState
 enum HygineState
 {
 };
+
+// NOTE:
+// 血糖値、血圧、体重
+// Physical and mental health? Combine them?
+// Emotional state
+// Stress state?
+// Add Sleepiness, and if it reached under certain level, in main.ccp goes back to bee and rest, and recover all the
+// states Do i really need 10 levels for states? 3 is suffice? Ask chatGPT
