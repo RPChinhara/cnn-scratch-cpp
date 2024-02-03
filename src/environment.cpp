@@ -497,11 +497,10 @@ size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstStat
     // numTopStates + static_cast<size_t>(top);
     return (((energyState * numHungerStates + static_cast<size_t>(hungerState)) * numThirstStates +
              static_cast<size_t>(thirstState)) *
-                numLeftStates +
-            static_cast<size_t>(left)) *
-               numTopStates +
-           static_cast<size_t>(top);
-    // TODO: I think left and top should be switched here.
+                numTopStates +
+            static_cast<size_t>(top)) *
+               numLeftStates +
+           static_cast<size_t>(left);
 }
 
 void Environment::CalculateReward(const Action action)
