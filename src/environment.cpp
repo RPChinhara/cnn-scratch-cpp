@@ -327,7 +327,8 @@ size_t Environment::Reset()
 
     energyLevelBelow3 = false;
 
-    // TODO: I have to reset seenLefts and seenTops
+    seenLefts.clear();
+    seenTops.clear();
 
     return currentState;
 }
