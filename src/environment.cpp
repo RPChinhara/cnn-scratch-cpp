@@ -216,7 +216,7 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::cout << "Episode:                     " << episode << '\n';
     std::cout << "Number of iterations:        " << iteration << '\n';
     std::cout << "Current Flatten State:       "
-              << FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top) << "/"
+              << FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState) << "/"
               << numStates << '\n';
     std::cout << currentLeft << '\n';
     std::cout << currentTop << '\n';
@@ -260,7 +260,7 @@ size_t Environment::Reset()
     energyState = EnergyState::LEVEL3;
     emotionState = EmotionState::NEUTRAL;
 
-    currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+    currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
 
     reward = 0.0f;
 
@@ -323,14 +323,14 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         thirstStateSizeT = std::min((thirstStateSizeT + 1), numThirstStates - 1);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (hoursLivedWithoutDrinking >= 3 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
         // hoursLivedWithoutDrinking = 0; TODO: Do I have to reset it to 0?
     }
     // TODO: I think I could refactor thirst, hunger, and energy parts as these are doing same thing.
@@ -338,14 +338,14 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::RUN && numRun == 100 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     size_t hungerStateSizeT = static_cast<size_t>(hungerState);
@@ -354,7 +354,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         hungerStateSizeT = std::min((hungerStateSizeT + 1), numHungerStates - 1);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
         // hours = 0;
     }
     // TODO: I think this should be hoursLivedWithoutEating % 3 == 0, and this applies to other places as well.
@@ -364,21 +364,21 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::WALK && numWalk == 200 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::RUN && numRun == 100 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (has_collided_with_food && energyState != EnergyState::LEVEL5)
@@ -386,14 +386,14 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         // TODO: I'm not changing state of the energy here.
         energyState =
             std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (hoursLivedWithoutEating >= 3 && energyState != EnergyState::LEVEL1)
     {
         // TODO: I'm not changing state of the energy here.
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     size_t energyStateSizeT = static_cast<size_t>(energyState);
@@ -402,14 +402,14 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::RUN && numRun == 100 && energyState != EnergyState::LEVEL1)
     {
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
-        currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (energyState < EnergyState::LEVEL4)
@@ -450,10 +450,9 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     return std::make_tuple(currentState, reward, done);
 }
 
-size_t Environment::FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState,
-                                 EmotionState emotionState, LONG left, LONG top)
+size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState,
+                                 EnergyState energyState, EmotionState emotionState)
 {
-    // TODO: Order should be fixed. Like the way parameters are passed. Thirst should come first imo.
     if (!(minLeft <= left && left < numLeftStates) || !(minTop <= top && top < numTopStates))
         MessageBox(nullptr, "Invalid coordinates. Coordinates should be within the specified ranges", "Error",
                    MB_ICONERROR);

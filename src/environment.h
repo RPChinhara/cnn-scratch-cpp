@@ -25,7 +25,7 @@ class Environment
 
     size_t numLeftStates = (maxLeft - minLeft) + 1;
     size_t numTopStates = (maxTop - minTop) + 1;
-    // IDEA: Do states really need to have 10 levels? 3 is suffice? Ask chatGPT
+
     size_t numThirstStates = 5;
     size_t numHungerStates = 5;
     size_t numEnergyStates = 5;
@@ -36,8 +36,8 @@ class Environment
     size_t numActions = 7;
 
   private:
-    size_t FlattenState(HungerState hungerState, ThirstState thirstState, EnergyState energyState,
-                        EmotionState emotionState, LONG left, LONG top);
+    size_t FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState, EnergyState energyState,
+                        EmotionState emotionState);
     void CalculateReward(const Action action);
     bool CheckTermination();
 
