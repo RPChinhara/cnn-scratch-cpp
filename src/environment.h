@@ -42,6 +42,9 @@ class Environment
     void CalculateReward(const Action action);
     bool CheckTermination();
 
+    bool prevHasCollidedWithWater;
+    bool prevHasCollidedWithFood;
+
     size_t numWaterCollision;
     size_t numFoodCollision;
     size_t numFriendCollision;
