@@ -82,4 +82,5 @@ enum HygineState
 {
 };
 
-// TODO: Maybe add 血糖値、血圧、体重?
+// TODO: Maybe add 血糖値、血圧?
+// TODO I want to add weight, but how?

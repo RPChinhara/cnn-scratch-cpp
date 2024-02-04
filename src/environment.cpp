@@ -283,6 +283,9 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
 
 size_t Environment::Reset()
 {
+    prevHasCollidedWithWater = false;
+    prevHasCollidedWithFood = false;
+
     numWaterCollision = 0;
     numFoodCollision = 0;
     numFriendCollision = 0;
@@ -630,6 +633,8 @@ void Environment::CalculateReward(const Action action)
         reward += 0.7f;
     if (thirstState == ThirstState::LEVEL5 && has_collided_with_water)
         reward -= 1.0f;
+    if (has_collided_with_water && prevHasCollidedWithWater && thirstState == ThirstState::LEVEL5)
+        reward -= 2.0f;
 
     if (has_collided_with_food)
         reward += 2.5f;
@@ -642,6 +647,8 @@ void Environment::CalculateReward(const Action action)
     if (hungerState == HungerState::LEVEL2 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
     if (hungerState == HungerState::LEVEL5 && has_collided_with_food)
+        reward -= 2.0f;
+    if (has_collided_with_food && prevHasCollidedWithFood && hungerState == HungerState::LEVEL5)
         reward -= 2.0f;
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
@@ -695,6 +702,16 @@ void Environment::CalculateReward(const Action action)
         reward -= 1.0f;
         numSleep = 0;
     }
+
+    if (has_collided_with_water)
+        prevHasCollidedWithWater = true;
+    else
+        prevHasCollidedWithWater = false;
+
+    if (has_collided_with_food)
+        prevHasCollidedWithFood = true;
+    else
+        prevHasCollidedWithFood = false;
 }
 
 bool Environment::CheckTermination()

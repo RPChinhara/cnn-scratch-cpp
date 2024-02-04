@@ -51,6 +51,7 @@ inline LONG agentToEyeHeight = 10;
 inline LONG borderToAgent = 13;
 inline LONG borderToEntities = 5;
 
+// IDEA: Maybe make class Entity so that I can avoid these below global variables?
 inline bool has_collided_with_agent2 = false;
 inline bool has_collided_with_food = false;
 inline bool has_collided_with_water = false;
