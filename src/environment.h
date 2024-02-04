@@ -48,6 +48,7 @@ class Environment
     size_t numWaterCollision;
     size_t numFoodCollision;
     size_t numFriendCollision;
+    size_t numFriendCollisionWhileHappy;
     size_t numWallCollision;
 
     size_t numWalk;

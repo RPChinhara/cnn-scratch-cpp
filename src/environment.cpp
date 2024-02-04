@@ -289,6 +289,7 @@ size_t Environment::Reset()
     numWaterCollision = 0;
     numFoodCollision = 0;
     numFriendCollision = 0;
+    numFriendCollisionWhileHappy = 0;
     numWallCollision = 0;
 
     numWalk = 0;
@@ -338,6 +339,9 @@ size_t Environment::Reset()
 
 std::tuple<size_t, float, bool> Environment::Step(Action action)
 {
+    if (has_collided_with_agent2 && emotionState == EmotionState::HAPPY)
+        ++numFriendCollisionWhileHappy;
+
     switch (action)
     {
     case Action::WALK:
@@ -480,6 +484,13 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     }
 
     if (hoursLivedWithoutSocializing >= 8 && emotionState != EmotionState::ANGRY)
+    {
+        emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
+        emotionState = static_cast<EmotionState>(emotionStateSizeT);
+        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+    }
+
+    if (numFriendCollisionWhileHappy >= 3 && emotionState != EmotionState::ANGRY)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
@@ -632,9 +643,9 @@ void Environment::CalculateReward(const Action action)
     if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL5 && has_collided_with_water)
         reward += 0.7f;
     if (thirstState == ThirstState::LEVEL5 && has_collided_with_water)
-        reward -= 1.0f;
+        reward -= 3.0f;
     if (has_collided_with_water && prevHasCollidedWithWater && thirstState == ThirstState::LEVEL5)
-        reward -= 2.0f;
+        reward -= 3.0f;
 
     if (has_collided_with_food)
         reward += 2.5f;
@@ -647,9 +658,9 @@ void Environment::CalculateReward(const Action action)
     if (hungerState == HungerState::LEVEL2 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
     if (hungerState == HungerState::LEVEL5 && has_collided_with_food)
-        reward -= 2.0f;
+        reward -= 3.0f;
     if (has_collided_with_food && prevHasCollidedWithFood && hungerState == HungerState::LEVEL5)
-        reward -= 2.0f;
+        reward -= 3.0f;
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
         reward += 2.0f;
