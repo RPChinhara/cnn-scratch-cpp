@@ -9,7 +9,7 @@ class Agent
     Agent() = default;
 
     RECT position; // TODO: Maybe change to pos?
-    RECT previousPosition = {0, 0, 0, 0};
+    RECT previousPosition;
     RECT leftEyePosition;
     RECT rightEyePosition;
 
