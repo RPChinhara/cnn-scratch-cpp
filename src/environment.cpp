@@ -7,13 +7,23 @@
 #include <iostream>
 #include <windows.h>
 
-Environment::Environment(const LONG client_width, const LONG client_height)
+Environment::Environment(const LONG client_width, const LONG client_height, const Agent &agent)
     : client_width(client_width), client_height(client_height)
 {
+    maxLeft = client_width - agent.width;
+    maxTop = client_height - agent.height;
+
+    numLeftStates = (maxLeft - minLeft) + 1;
+    numTopStates = (maxTop - minTop) + 1;
+    numStates = numPhysicalHealthStates * numEmotionStates * numEnergyStates * numHungerStates * numThirstStates *
+                numTopStates * numLeftStates;
+    // TODO: Ask chatGPT how reduce number of states
+    // NOTE: other methods - https://chat.openai.com/share/25f98e96-2d7b-408c-a8e9-4e544ce98c68
+    // https://chat.openai.com/share/92f68226-e6ce-48bf-a949-9b6bbbeab26d
 }
 
 void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
-                         Direction direction)
+                         Direction direction, const Agent &agent)
 {
     // NOTE: It could be 1.5 ~ 2 seconds per iteration. I set to 1 second for now, but I'm not sure.
     size_t secondsPerIteration = 1;
@@ -218,25 +228,25 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
         break;
     }
 
-    if (has_collided_with_water)
+    if (agent.has_collided_with_water)
         numWaterCollision += 1;
-    else if (has_collided_with_food)
+    else if (agent.has_collided_with_food)
         numFoodCollision += 1;
-    else if (has_collided_with_agent2)
+    else if (agent.has_collided_with_agent2)
         numFriendCollision += 1;
 
     std::string currentLeft;
     std::string currentTop;
 
     if (newLeft)
-        currentLeft += "Current Left:                  " + std::to_string(agent.left) + " (new)";
+        currentLeft += "Current Left:                  " + std::to_string(agent.position.left) + " (new)";
     else
-        currentLeft += "Current Left:                  " + std::to_string(agent.left);
+        currentLeft += "Current Left:                  " + std::to_string(agent.position.left);
 
     if (newTop)
-        currentTop += "Current Top:                   " + std::to_string(agent.top) + " (new)";
+        currentTop += "Current Top:                   " + std::to_string(agent.position.top) + " (new)";
     else
-        currentTop += "Current Top:                   " + std::to_string(agent.top);
+        currentTop += "Current Top:                   " + std::to_string(agent.position.top);
 
     std::string currentDirection;
 
@@ -252,8 +262,9 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::cout << "Episode:                       " << episode << '\n';
     std::cout << "Number of iterations:          " << iteration << '\n';
     std::cout << "Current Flatten State:         "
-              << FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState) << "/"
-              << numStates << '\n';
+              << FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState,
+                              emotionState)
+              << "/" << numStates << '\n';
     std::cout << currentLeft << '\n';
     std::cout << currentTop << '\n';
     std::cout << "Current Direction              " << currentDirection << '\n';
@@ -281,7 +292,7 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::cout << "Exploration Rate:              " << exploration_rate << "\n";
 }
 
-size_t Environment::Reset()
+size_t Environment::Reset(const Agent &agent)
 {
     prevHasCollidedWithWater = false;
     prevHasCollidedWithFood = false;
@@ -305,7 +316,8 @@ size_t Environment::Reset()
     emotionState = EmotionState::NEUTRAL;
     physicalHealthState = PhysicalHealthState::HEALTHY;
 
-    currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+    currentState =
+        FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
 
     reward = 0.0f;
 
@@ -337,9 +349,9 @@ size_t Environment::Reset()
     return currentState;
 }
 
-std::tuple<size_t, float, bool> Environment::Step(Action action)
+std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &agent)
 {
-    if (has_collided_with_agent2 && emotionState == EmotionState::HAPPY)
+    if (agent.has_collided_with_agent2 && emotionState == EmotionState::HAPPY)
         ++numFriendCollisionWhileHappy;
 
     switch (action)
@@ -372,18 +384,21 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
 
     size_t thirstStateSizeT = static_cast<size_t>(thirstState);
 
-    if (has_collided_with_water && thirstState != ThirstState::LEVEL5)
+    if (agent.has_collided_with_water && thirstState != ThirstState::LEVEL5)
     {
+        // TODO: Is this really the best way to decrease/increase the elements of the enum?
         thirstStateSizeT = std::min((thirstStateSizeT + 1), numThirstStates - 1);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (hoursLivedWithoutDrinking >= 3 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
         // hoursLivedWithoutDrinking = 0; TODO: Do I have to reset it to 0?
     }
     // TODO: I think I could refactor thirst, hunger, and energy parts as these are doing same thing.
@@ -392,23 +407,26 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::RUN && numRun == 600 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     size_t hungerStateSizeT = static_cast<size_t>(hungerState);
 
-    if (has_collided_with_food && hungerState != HungerState::LEVEL5)
+    if (agent.has_collided_with_food && hungerState != HungerState::LEVEL5)
     {
         hungerStateSizeT = std::min((hungerStateSizeT + 1), numHungerStates - 1);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
         // hours = 0;
     }
     // TODO: I think this should be hoursLivedWithoutEating % 3 == 0, and this applies to other places as well.
@@ -418,36 +436,41 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::WALK && numWalk == 700 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::RUN && numRun == 600 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
-    if (has_collided_with_food && energyState != EnergyState::LEVEL5)
+    if (agent.has_collided_with_food && energyState != EnergyState::LEVEL5)
     {
         // TODO: I'm not changing state of the energy here.
         energyState =
             std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (hoursLivedWithoutEating >= 3 && energyState != EnergyState::LEVEL1)
     {
         // TODO: I'm not changing state of the energy here.
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     size_t energyStateSizeT = static_cast<size_t>(energyState);
@@ -456,54 +479,61 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     {
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (action == Action::RUN && numRun == 600 && energyState != EnergyState::LEVEL1)
     {
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     size_t emotionStateSizeT = static_cast<size_t>(emotionState);
 
-    if (has_collided_with_food && emotionState != EmotionState::HAPPY ||
-        has_collided_with_agent2 && emotionState != EmotionState::HAPPY)
+    if (agent.has_collided_with_food && emotionState != EmotionState::HAPPY ||
+        agent.has_collided_with_agent2 && emotionState != EmotionState::HAPPY)
     {
         emotionStateSizeT = std::min((emotionStateSizeT + 1), numEmotionStates - 1);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (hoursLivedWithoutEating >= 8 && emotionState != EmotionState::ANGRY)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (hoursLivedWithoutSocializing >= 8 && emotionState != EmotionState::ANGRY)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     if (numFriendCollisionWhileHappy >= 3 && emotionState != EmotionState::ANGRY)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     size_t physicalHealthStateSizeT = static_cast<size_t>(physicalHealthState);
 
-    if (has_collided_with_predator && physicalHealthState != PhysicalHealthState::CRITICAL)
+    if (agent.has_collided_with_predator && physicalHealthState != PhysicalHealthState::CRITICAL)
     {
         physicalHealthStateSizeT = std::min((physicalHealthStateSizeT + 1), numPhysicalHealthStates - 1);
         physicalHealthState = static_cast<PhysicalHealthState>(physicalHealthStateSizeT);
-        currentState = FlattenState(agent.left, agent.top, thirstState, hungerState, energyState, emotionState);
+        currentState =
+            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
     // TODO: Increase level of emotion state when he kill the predators, and decrease when opposite result occured.
@@ -524,10 +554,10 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
     //     1)); currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
     // }
 
-    CalculateReward(action);
-    bool done = CheckTermination();
+    CalculateReward(action, agent);
+    bool done = CheckTermination(agent);
 
-    if (has_collided_with_water)
+    if (agent.has_collided_with_water)
     {
         secondsLivedWithoutDrinking = 0;
         minutesLivedWithoutDrinking = 0;
@@ -535,7 +565,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         daysLivedWithoutDrinking = 0;
     }
 
-    if (has_collided_with_food)
+    if (agent.has_collided_with_food)
     {
         secondsLivedWithoutEating = 0;
         minutesLivedWithoutEating = 0;
@@ -543,7 +573,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action)
         daysLivedWithoutEating = 0;
     }
 
-    if (has_collided_with_agent2)
+    if (agent.has_collided_with_agent2)
     {
         secondsLivedWithoutSocializing = 0;
         minutesLivedWithoutSocializing = 0;
@@ -587,40 +617,41 @@ size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, H
            static_cast<size_t>(left);
 }
 
-void Environment::CalculateReward(const Action action)
+void Environment::CalculateReward(const Action action, const Agent &agent)
 {
     reward = 0.0f;
 
-    if (std::labs(agent.left - water.left) < 250 && std::labs(agent.top - water.top) < 250)
+    // TODO: I don't know, but pass vector of entity in here as there are various enties's postions has been accessed.
+    if (std::labs(agent.position.left - water.left) < 250 && std::labs(agent.position.top - water.top) < 250)
         reward += 1.2f;
 
-    if (std::labs(agent.left - food.left) < 250 && std::labs(agent.top - food.top) < 250)
+    if (std::labs(agent.position.left - food.left) < 250 && std::labs(agent.position.top - food.top) < 250)
         reward += 1.1f;
 
-    if (std::labs(agent.left - agent2.left) < 250 && std::labs(agent.top - agent2.top) < 250)
+    if (std::labs(agent.position.left - agent2.left) < 250 && std::labs(agent.position.top - agent2.top) < 250)
         reward += 1.0f;
 
-    if (std::labs(agent.left - predator.left) < 250 && std::labs(agent.top - predator.top) < 250)
+    if (std::labs(agent.position.left - predator.left) < 250 && std::labs(agent.position.top - predator.top) < 250)
         reward -= 2.0f;
 
-    if (seenLefts.find(agent.left) != seenLefts.end())
+    if (seenLefts.find(agent.position.left) != seenLefts.end())
     {
         newLeft = false;
     }
     else
     {
-        seenLefts.insert(agent.left);
+        seenLefts.insert(agent.position.left);
         newLeft = true;
         reward += 2.2f;
     }
 
-    if (seenTops.find(agent.top) != seenTops.end())
+    if (seenTops.find(agent.position.top) != seenTops.end())
     {
         newTop = false;
     }
     else
     {
-        seenTops.insert(agent.top);
+        seenTops.insert(agent.position.top);
         newTop = true;
         reward += 2.2f;
     }
@@ -630,7 +661,7 @@ void Environment::CalculateReward(const Action action)
 
     // TODO: This is not considering sequentially collided with the wall. It's just incrementing whenever he collided
     // which is not corerct way to do it?
-    if (has_collided_with_wall)
+    if (agent.has_collided_with_wall)
         ++numWallCollision;
     else
         numWallCollision = 0;
@@ -638,28 +669,29 @@ void Environment::CalculateReward(const Action action)
     if (daysLived > maxDays)
         reward += 1.0f;
 
-    if (ThirstState::LEVEL1 < thirstState && thirstState < ThirstState::LEVEL5 && has_collided_with_water)
+    // TODO: Should be thirstState > ThirstState::LEVEL1
+    if (ThirstState::LEVEL1 < thirstState && thirstState < ThirstState::LEVEL5 && agent.has_collided_with_water)
         reward += 1.5f;
-    if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL5 && has_collided_with_water)
+    if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL5 && agent.has_collided_with_water)
         reward += 0.7f;
-    if (thirstState == ThirstState::LEVEL5 && has_collided_with_water)
+    if (thirstState == ThirstState::LEVEL5 && agent.has_collided_with_water)
         reward -= 3.0f;
-    if (has_collided_with_water && prevHasCollidedWithWater && thirstState == ThirstState::LEVEL5)
+    if (agent.has_collided_with_water && prevHasCollidedWithWater && thirstState == ThirstState::LEVEL5)
         reward -= 3.0f;
 
-    if (has_collided_with_food)
+    if (agent.has_collided_with_food)
         reward += 2.5f;
-    if (hungerState == HungerState::LEVEL1 && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL1 && agent.has_collided_with_food)
         reward += 1.25f;
-    if (hungerState == HungerState::LEVEL2 && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL2 && agent.has_collided_with_food)
         reward += 1.0f;
     if (hungerState == HungerState::LEVEL1 && hoursLivedWithoutEating >= 3)
         reward -= 1.5f;
     if (hungerState == HungerState::LEVEL2 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
-    if (hungerState == HungerState::LEVEL5 && has_collided_with_food)
+    if (hungerState == HungerState::LEVEL5 && agent.has_collided_with_food)
         reward -= 3.0f;
-    if (has_collided_with_food && prevHasCollidedWithFood && hungerState == HungerState::LEVEL5)
+    if (agent.has_collided_with_food && prevHasCollidedWithFood && hungerState == HungerState::LEVEL5)
         reward -= 3.0f;
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
@@ -669,15 +701,15 @@ void Environment::CalculateReward(const Action action)
     if (energyState == EnergyState::LEVEL1 && action == Action::RUN)
         reward -= 2.0f;
 
-    if (has_collided_with_agent2)
+    if (agent.has_collided_with_agent2)
         reward += 1.5f;
 
-    if (has_collided_with_wall)
+    if (agent.has_collided_with_wall)
         reward -= 1.5f;
     if (numWallCollision > 1)
         reward -= 2.0f;
 
-    if (has_collided_with_predator)
+    if (agent.has_collided_with_predator)
         reward -= 10.0f;
 
     // if (numMoveForward == maxConsecutiveAction) {
@@ -714,18 +746,18 @@ void Environment::CalculateReward(const Action action)
         numSleep = 0;
     }
 
-    if (has_collided_with_water)
+    if (agent.has_collided_with_water)
         prevHasCollidedWithWater = true;
     else
         prevHasCollidedWithWater = false;
 
-    if (has_collided_with_food)
+    if (agent.has_collided_with_food)
         prevHasCollidedWithFood = true;
     else
         prevHasCollidedWithFood = false;
 }
 
-bool Environment::CheckTermination()
+bool Environment::CheckTermination(const Agent &agent)
 {
     if (daysLived >= maxDays)
     {
@@ -742,7 +774,7 @@ bool Environment::CheckTermination()
     if (daysLived == 60 && energyLevelBelow3)
         return true;
 
-    if (has_collided_with_predator && physicalHealthState == PhysicalHealthState::CRITICAL)
+    if (agent.has_collided_with_predator && physicalHealthState == PhysicalHealthState::CRITICAL)
     {
         // MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
         return true;

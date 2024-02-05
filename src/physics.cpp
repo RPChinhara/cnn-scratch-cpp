@@ -1,261 +1,271 @@
+#include "physics.h"
 #include "entity.h"
 
 #include <algorithm>
 #include <iostream>
 
-void ResolveBoundaryCollision(RECT &rect, const LONG client_width, const LONG client_height)
+void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG client_height)
 {
-    if (rect.left < 0)
+    if (agent.position.left < 0)
     {
         std::cout << 1 << " ResolveBoundaryCollision" << '\n';
-        std::cout << rect.left << '\n';
-        has_collided_with_wall = true;
+        std::cout << agent.position.left << '\n';
+        agent.has_collided_with_wall = true;
 
-        rect.left = 0;
-        rect.right = agent_width;
+        agent.position.left = 0;
+        agent.position.right = agent.width;
 
-        agent_left_eye.left = (rect.right - agentToEyeWidth) - agent_eye_width;
-        agent_left_eye.right = rect.right - agentToEyeWidth;
+        agent.leftEyePosition.left = (agent.position.right - agent.toEyeWidth) - agent.eye_width;
+        agent.leftEyePosition.right = agent.position.right - agent.toEyeWidth;
 
-        agent_right_eye.left = agentToEyeWidth;
-        agent_right_eye.right = agentToEyeWidth + agent_eye_width;
+        agent.rightEyePosition.left = agent.toEyeWidth;
+        agent.rightEyePosition.right = agent.toEyeWidth + agent.eye_width;
     }
 
-    if (rect.top < 0)
+    if (agent.position.top < 0)
     {
         std::cout << 2 << " ResolveBoundaryCollision" << '\n';
-        std::cout << rect.top << '\n';
+        std::cout << agent.position.top << '\n';
 
-        has_collided_with_wall = true;
+        agent.has_collided_with_wall = true;
 
-        rect.top = 0;
-        rect.bottom = agent_height;
+        agent.position.top = 0;
+        agent.position.bottom = agent.height;
 
-        agent_left_eye.top = agentToEyeHeight;
-        agent_left_eye.bottom = agentToEyeHeight + agent_eye_height;
+        agent.leftEyePosition.top = agent.toEyeHeight;
+        agent.leftEyePosition.bottom = agent.toEyeHeight + agent.eye_height;
 
-        agent_right_eye.top = agentToEyeHeight;
-        agent_right_eye.bottom = agentToEyeHeight + agent_eye_height;
+        agent.rightEyePosition.top = agent.toEyeHeight;
+        agent.rightEyePosition.bottom = agent.toEyeHeight + agent.eye_height;
     }
 
-    if (rect.right > client_width)
+    if (agent.position.right > client_width)
     {
         std::cout << 3 << " ResolveBoundaryCollision" << '\n';
-        std::cout << rect.right << '\n';
+        std::cout << agent.position.right << '\n';
 
-        has_collided_with_wall = true;
+        agent.has_collided_with_wall = true;
 
-        rect.left = client_width - agent_width;
-        rect.right = client_width;
+        agent.position.left = client_width - agent.width;
+        agent.position.right = client_width;
 
-        agent_left_eye.left = (rect.right - agentToEyeWidth) - agent_eye_width;
-        agent_left_eye.right = rect.right - agentToEyeWidth;
+        agent.leftEyePosition.left = (agent.position.right - agent.toEyeWidth) - agent.eye_width;
+        agent.leftEyePosition.right = agent.position.right - agent.toEyeWidth;
 
-        agent_right_eye.left = rect.left + agentToEyeWidth;
-        agent_right_eye.right = (rect.left + agentToEyeWidth) + agent_eye_width;
+        agent.rightEyePosition.left = agent.position.left + agent.toEyeWidth;
+        agent.rightEyePosition.right = (agent.position.left + agent.toEyeWidth) + agent.eye_width;
     }
 
-    if (rect.bottom > client_height)
+    if (agent.position.bottom > client_height)
     {
         std::cout << 4 << " ResolveBoundaryCollision" << '\n';
-        std::cout << rect.bottom << '\n';
+        std::cout << agent.position.bottom << '\n';
 
-        has_collided_with_wall = true;
+        agent.has_collided_with_wall = true;
 
-        rect.top = client_height - agent_height;
-        rect.bottom = client_height;
+        agent.position.top = client_height - agent.height;
+        agent.position.bottom = client_height;
 
-        agent_left_eye.top = rect.top + agentToEyeHeight;
-        agent_left_eye.bottom = rect.top + agentToEyeHeight + agent_eye_height;
+        agent.leftEyePosition.top = agent.position.top + agent.toEyeHeight;
+        agent.leftEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
 
-        agent_right_eye.top = rect.top + agentToEyeHeight;
-        agent_right_eye.bottom = rect.top + agentToEyeHeight + agent_eye_height;
+        agent.rightEyePosition.top = agent.position.top + agent.toEyeHeight;
+        agent.rightEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
     }
 }
 
-void ResolveRectanglesCollision(RECT &rect1, const RECT &rect2, Entity entity, const LONG client_width,
+void ResolveRectanglesCollision(Agent &agent, const RECT &rect2, Entity entity,
+                                const LONG client_width, // TODO: Change to entity from rect2?
                                 const LONG client_height)
 {
     // TODO: It looks like I'm having an issue with collisions, and it's called 'tunneling'.
-    if ((rect1.left < rect2.right) && (rect1.right > rect2.left) && (rect1.top < rect2.bottom) &&
-        (rect1.bottom > rect2.top))
+    if ((agent.position.left < rect2.right) && (agent.position.right > rect2.left) &&
+        (agent.position.top < rect2.bottom) && (agent.position.bottom > rect2.top))
     {
 
         switch (entity)
         {
         case AGENT2:
-            has_collided_with_agent2 = true;
+            agent.has_collided_with_agent2 = true;
             break;
         case FOOD:
-            has_collided_with_food = true;
+            agent.has_collided_with_food = true;
             break;
         case WATER:
-            has_collided_with_water = true;
+            agent.has_collided_with_water = true;
             break;
         case PREDATOR:
-            has_collided_with_predator = true;
+            agent.has_collided_with_predator = true;
             break;
         default:
             MessageBox(nullptr, "Unknown entity", "Error", MB_ICONERROR);
             break;
         }
 
-        int horizontalOverlap = std::min(rect1.right, rect2.right) - std::max(rect1.left, rect2.left);
-        int verticalOverlap = std::min(rect1.bottom, rect2.bottom) - std::max(rect1.top, rect2.top);
+        int horizontalOverlap = std::min(agent.position.right, rect2.right) - std::max(agent.position.left, rect2.left);
+        int verticalOverlap = std::min(agent.position.bottom, rect2.bottom) - std::max(agent.position.top, rect2.top);
 
         if (horizontalOverlap < verticalOverlap)
         {
-            if (rect1.left < rect2.left && agent_previous.left < rect2.left)
+            if (agent.position.left < rect2.left && agent.previousPosition.left < rect2.left)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.1 << " from Physics" << '\n';
                 std::cout << horizontalOverlap << '\n';
 
-                rect1.left -= horizontalOverlap;
-                rect1.right -= horizontalOverlap;
+                agent.position.left -= horizontalOverlap;
+                agent.position.right -= horizontalOverlap;
             }
-            else if (rect1.left < rect2.left && agent_previous.left > rect2.left)
+            else if (agent.position.left < rect2.left && agent.previousPosition.left > rect2.left)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.2 << " from Physics" << '\n';
                 std::cout << horizontalOverlap << '\n';
 
-                rect1.left += horizontalOverlap;
-                rect1.right += horizontalOverlap;
+                agent.position.left += horizontalOverlap;
+                agent.position.right += horizontalOverlap;
             }
-            else if (rect1.left > rect2.left && agent_previous.left > rect2.left)
+            else if (agent.position.left > rect2.left && agent.previousPosition.left > rect2.left)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.3 << " from Physics" << '\n';
                 std::cout << horizontalOverlap << '\n';
 
-                rect1.left += horizontalOverlap;
-                rect1.right += horizontalOverlap;
+                agent.position.left += horizontalOverlap;
+                agent.position.right += horizontalOverlap;
             }
-            else if (rect1.left > rect2.left && agent_previous.left < rect2.left)
+            else if (agent.position.left > rect2.left && agent.previousPosition.left < rect2.left)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.4 << " from Physics" << '\n';
                 std::cout << horizontalOverlap << '\n';
 
-                rect1.left -= horizontalOverlap;
-                rect1.right -= horizontalOverlap;
+                agent.position.left -= horizontalOverlap;
+                agent.position.right -= horizontalOverlap;
             }
-            else if (rect1.left == rect2.right || rect1.right == rect2.left)
+            else if (agent.position.left == rect2.right || agent.position.right == rect2.left)
             {
                 std::cout << " do nothing " << '\n';
             }
 
-            if (rect1.left < 0)
+            if (agent.position.left < 0)
             {
                 std::cout << 1 << " from Physics" << '\n';
-                rect1.left = agent_previous.left;
-                rect1.right = agent_previous.right;
+                agent.position.left = agent.previousPosition.left;
+                agent.position.right = agent.previousPosition.right;
 
-                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
-                agent_left_eye.right = rect1.right - agentToEyeWidth;
+                agent.leftEyePosition.left = (agent.position.right - agent.toEyeWidth) - agent.eye_width;
+                agent.leftEyePosition.right = agent.position.right - agent.toEyeWidth;
 
-                agent_right_eye.left = rect1.left + agentToEyeWidth;
-                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+                agent.rightEyePosition.left = agent.position.left + agent.toEyeWidth;
+                agent.rightEyePosition.right = (agent.position.left + agent.toEyeWidth) + agent.eye_width;
             }
-            else if (rect1.right > client_width)
+            else if (agent.position.right > client_width)
             {
                 std::cout << 2 << " from Physics" << '\n';
 
-                rect1.left = agent_previous.left;
-                rect1.right = agent_previous.right;
+                agent.position.left = agent.previousPosition.left;
+                agent.position.right = agent.previousPosition.right;
 
-                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
-                agent_left_eye.right = rect1.right - agentToEyeWidth;
+                agent.leftEyePosition.left = (agent.position.right - agent.toEyeWidth) - agent.eye_width;
+                agent.leftEyePosition.right = agent.position.right - agent.toEyeWidth;
 
-                agent_right_eye.left = rect1.left + agentToEyeWidth;
-                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+                agent.rightEyePosition.left = agent.position.left + agent.toEyeWidth;
+                agent.rightEyePosition.right = (agent.position.left + agent.toEyeWidth) + agent.eye_width;
             }
             else
             {
-                agent_left_eye.left = (rect1.right - agentToEyeWidth) - agent_eye_width;
-                agent_left_eye.right = rect1.right - agentToEyeWidth;
+                agent.leftEyePosition.left = (agent.position.right - agent.toEyeWidth) - agent.eye_width;
+                agent.leftEyePosition.right = agent.position.right - agent.toEyeWidth;
 
-                agent_right_eye.left = rect1.left + agentToEyeWidth;
-                agent_right_eye.right = (rect1.left + agentToEyeWidth) + agent_eye_width;
+                agent.rightEyePosition.left = agent.position.left + agent.toEyeWidth;
+                agent.rightEyePosition.right = (agent.position.left + agent.toEyeWidth) + agent.eye_width;
             }
         }
         else
         {
-            if (rect1.top < rect2.top && agent_previous.top < rect2.top)
+            if (agent.position.top < rect2.top && agent.previousPosition.top < rect2.top)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.5 << " from Physics" << '\n';
                 std::cout << verticalOverlap << '\n';
 
-                rect1.top -= verticalOverlap;
-                rect1.bottom -= verticalOverlap;
+                agent.position.top -= verticalOverlap;
+                agent.position.bottom -= verticalOverlap;
             }
-            else if (rect1.top < rect2.top && agent_previous.top > rect2.top)
+            else if (agent.position.top < rect2.top && agent.previousPosition.top > rect2.top)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.6 << " from Physics" << '\n';
                 std::cout << verticalOverlap << '\n';
 
-                rect1.top += verticalOverlap;
-                rect1.bottom += verticalOverlap;
+                agent.position.top += verticalOverlap;
+                agent.position.bottom += verticalOverlap;
             }
-            else if (rect1.top > rect2.top && agent_previous.top > rect2.top)
+            else if (agent.position.top > rect2.top && agent.previousPosition.top > rect2.top)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.7 << " from Physics" << '\n';
                 std::cout << verticalOverlap << '\n';
 
-                rect1.top += verticalOverlap;
-                rect1.bottom += verticalOverlap;
+                agent.position.top += verticalOverlap;
+                agent.position.bottom += verticalOverlap;
             }
-            else if (rect1.top > rect2.top && agent_previous.top > rect2.top)
+            else if (agent.position.top > rect2.top && agent.previousPosition.top > rect2.top)
             {
-                std::cout << rect1.left << " " << rect1.top << " " << rect1.right << " " << rect1.bottom << '\n';
+                std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
+                          << agent.position.bottom << '\n';
                 std::cout << 0.8 << " from Physics" << '\n';
                 std::cout << verticalOverlap << '\n';
 
-                rect1.top -= verticalOverlap;
-                rect1.bottom -= verticalOverlap;
+                agent.position.top -= verticalOverlap;
+                agent.position.bottom -= verticalOverlap;
             }
-            else if (rect1.top == rect2.bottom || rect1.bottom == rect2.top)
+            else if (agent.position.top == rect2.bottom || agent.position.bottom == rect2.top)
             {
                 std::cout << " do nothing " << '\n';
             }
 
-            if (rect1.top < 0)
+            if (agent.position.top < 0)
             {
                 std::cout << 3 << " from Physics" << '\n';
 
-                rect1.top = agent_previous.top;
-                rect1.bottom = agent_previous.bottom;
+                agent.position.top = agent.previousPosition.top;
+                agent.position.bottom = agent.previousPosition.bottom;
 
-                agent_left_eye.top = rect1.top + agentToEyeHeight;
-                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent.leftEyePosition.top = agent.position.top + agent.toEyeHeight;
+                agent.leftEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
 
-                agent_right_eye.top = rect1.top + agentToEyeHeight;
-                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent.rightEyePosition.top = agent.position.top + agent.toEyeHeight;
+                agent.rightEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
             }
-            else if (rect1.bottom > client_height)
+            else if (agent.position.bottom > client_height)
             {
                 std::cout << 4 << " from Physics" << '\n';
 
-                rect1.top = agent_previous.top;
-                rect1.bottom = agent_previous.bottom;
+                agent.position.top = agent.previousPosition.top;
+                agent.position.bottom = agent.previousPosition.bottom;
 
-                agent_left_eye.top = rect1.top + agentToEyeHeight;
-                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent.leftEyePosition.top = agent.position.top + agent.toEyeHeight;
+                agent.leftEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
 
-                agent_right_eye.top = rect1.top + agentToEyeHeight;
-                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent.rightEyePosition.top = agent.position.top + agent.toEyeHeight;
+                agent.rightEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
             }
             else
             {
-                agent_left_eye.top = rect1.top + agentToEyeHeight;
-                agent_left_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent.leftEyePosition.top = agent.position.top + agent.toEyeHeight;
+                agent.leftEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
 
-                agent_right_eye.top = rect1.top + agentToEyeHeight;
-                agent_right_eye.bottom = rect1.top + agentToEyeHeight + agent_eye_height;
+                agent.rightEyePosition.top = agent.position.top + agent.toEyeHeight;
+                agent.rightEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
             }
         }
     }

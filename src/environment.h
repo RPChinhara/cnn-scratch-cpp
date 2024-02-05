@@ -1,6 +1,7 @@
 #pragma once
 
 #include "action.h"
+#include "agent.h"
 #include "entity.h"
 #include "state.h"
 
@@ -11,20 +12,20 @@
 class Environment
 {
   public:
-    Environment(const LONG client_width, const LONG client_height);
+    Environment(const LONG client_width, const LONG client_height, const Agent &agent);
     void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
-                Direction direction);
-    size_t Reset();
-    std::tuple<size_t, float, bool> Step(Action action);
+                Direction direction, const Agent &agent);
+    size_t Reset(const Agent &agent);
+    std::tuple<size_t, float, bool> Step(Action action, const Agent &agent);
 
     LONG client_width, client_height;
     LONG minLeft = 0;
-    LONG maxLeft = client_width - agent_width;
+    LONG maxLeft;
     LONG minTop = 0;
-    LONG maxTop = client_height - agent_height;
+    LONG maxTop;
 
-    size_t numLeftStates = (maxLeft - minLeft) + 1;
-    size_t numTopStates = (maxTop - minTop) + 1;
+    size_t numLeftStates;
+    size_t numTopStates;
 
     size_t numThirstStates = 5;
     size_t numHungerStates = 5;
@@ -32,16 +33,16 @@ class Environment
     size_t numEmotionStates = 3;
     size_t numPhysicalHealthStates = 4;
 
-    size_t numStates = numPhysicalHealthStates * numEmotionStates * numEnergyStates * numHungerStates *
-                       numThirstStates * numTopStates * numLeftStates;
+    size_t numStates;
     size_t numActions = 7;
 
   private:
     size_t FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState, EnergyState energyState,
                         EmotionState emotionState);
-    void CalculateReward(const Action action);
-    bool CheckTermination();
+    void CalculateReward(const Action action, const Agent &agent);
+    bool CheckTermination(const Agent &agent);
 
+    // TODO: Some of these should be inside class Agent?
     bool prevHasCollidedWithWater;
     bool prevHasCollidedWithFood;
 

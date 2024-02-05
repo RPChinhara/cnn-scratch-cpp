@@ -1,5 +1,6 @@
 #include "action.h"
 #include "activation.h"
+#include "agent.h"
 #include "dataset.h"
 #include "entity.h"
 #include "environment.h"
@@ -8,14 +9,19 @@
 #include "preprocessing.h"
 #include "q_learning.h"
 
+#include <cstdint>
+#include <cuda_fp16.h>
 #include <iomanip>
 #include <iostream>
 #include <stdio.h>
 #include <thread>
+#include <type_traits>
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
+
+static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -47,16 +53,25 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         FillRect(hdc, &water, blueBrush);
         DeleteObject(blueBrush);
 
+        // Retrieve the pointer to your data from the window
+        LONG_PTR userData = GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+        // Assuming your data is a pointer to an int
+        Agent *agent = reinterpret_cast<Agent *>(userData);
+
+        // // Access the variable
+        // int result = *myVariable;
+
         HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
-        FillRect(hdc, &agent, pinkBrush);
+        FillRect(hdc, &agent->position, pinkBrush);
         FillRect(hdc, &agent2, pinkBrush);
         DeleteObject(pinkBrush);
 
         HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
-        if (render_agent_left_eye)
-            FillRect(hdc, &agent_left_eye, blackBrush);
-        if (render_agent_right_eye)
-            FillRect(hdc, &agent_right_eye, blackBrush);
+        if (agent->render_agent_left_eye)
+            FillRect(hdc, &agent->leftEyePosition, blackBrush);
+        if (agent->render_agent_right_eye)
+            FillRect(hdc, &agent->rightEyePosition, blackBrush);
         DeleteObject(blackBrush);
 
         HBRUSH brownBrush = CreateSolidBrush(RGB(165, 42, 42));
@@ -67,6 +82,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         return 0;
     }
+    case WM_UPDATE_DISPLAY:
+        InvalidateRect(hwnd, nullptr, TRUE);
+        return 0;
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
@@ -80,18 +98,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     freopen_s(&file, "CONOUT$", "w", stdout);
 
 #if 0
-    int a = 10;
-    int *ptr1 = &a;     // ptr1 holds the address of x
-    int **ptr2 = &ptr1; // ptr2 holds the address of ptr1
-    std::cout << &a << std::endl;
-    std::cout << &ptr1 << std::endl;
-    std::cout << &ptr2 << std::endl;
-    std::cout << *ptr1 << std::endl;
-    std::cout << *ptr2 << std::endl;
-    std::cout << ptr1 << std::endl;
-    std::cout << ptr2 << std::endl;
-    Tensor ff = Tensor({41, -2, 0, -4, 5, 6}, {2, 3});
-    std::cout << Relu(ff, Device::CPU) << std::endl;
 #endif
 
 #if 0
@@ -116,12 +122,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     size_t outputLayer = 3;
     float learningRate = 0.01f;
 
-    NN nn = NN({ inputLayer, hiddenLayer1, outputLayer }, learningRate);
+    NN nn = NN({inputLayer, hiddenLayer1, outputLayer}, learningRate);
 
     auto startTime = std::chrono::high_resolution_clock::now();
-    
+
     nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
-    
+
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
     std::cout << "Time taken: " << duration.count() << " seconds" << '\n';
@@ -135,6 +141,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Add body and env temperture.
     // TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
     // TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
+    // TODO: I must build from CMake
 
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
@@ -149,8 +156,43 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
     }
 
-    HWND hwnd = CreateWindow(CLASS_NAME, WINDOW_NAME, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-                             CW_USEDEFAULT, nullptr, nullptr, hInstance, nullptr);
+    HWND hwnd = CreateWindow(CLASS_NAME, WINDOW_NAME, WS_OVERLAPPEDWINDOW | WS_MAXIMIZE, CW_USEDEFAULT, CW_USEDEFAULT,
+                             CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, hInstance, nullptr);
+
+    RECT client_rect;
+    GetClientRect(hwnd, &client_rect);
+    LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
+
+    Agent agent;
+
+    agent.position = {borderToAgent, (client_height - borderToAgent) - agent.height, borderToAgent + agent.width,
+                      client_height - borderToAgent};
+
+    agent.leftEyePosition = {(agent.position.right - agent.toEyeWidth) - agent.eye_width,
+                             (client_height - borderToAgent) - agent.height + agent.toEyeHeight,
+                             agent.position.right - agent.toEyeWidth,
+                             (client_height - borderToAgent) - agent.height + agent.toEyeHeight + agent.eye_height};
+
+    agent.rightEyePosition = {agent.position.left + agent.toEyeWidth,
+                              (client_height - borderToAgent) - agent.height + agent.toEyeHeight,
+                              (agent.position.left + agent.toEyeWidth) + agent.eye_width,
+                              (client_height - borderToAgent) - agent.height + agent.toEyeHeight + agent.eye_height};
+
+    agent2 = {(client_width - borderToEntities) - agent.width, (client_height - borderToEntities) - agent.height,
+              client_width - borderToEntities, client_height - borderToEntities};
+
+    food = {borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height};
+
+    water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
+             borderToEntities + water_height};
+
+    predator = {(client_width - borderToEntities) - predator_width, 500, client_width - borderToEntities,
+                500 + predator_height};
+
+    bed = {borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width,
+           client_height - borderToEntities};
+
+    SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&agent));
 
     if (hwnd == nullptr)
     {
@@ -167,42 +209,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //         PlaySound(TEXT("assets\\mixkit-arcade-retro-game-over-213.wav"), NULL, SND_FILENAME);
     // });
 
-    std::thread rl_thread([&hwnd]() {
+    std::thread rl_thread([&hwnd, &agent]() {
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        agent = {borderToAgent, (client_height - borderToAgent) - agent_height, borderToAgent + agent_width,
-                 client_height - borderToAgent};
-        agent_left_eye = {(agent.right - agentToEyeWidth) - agent_eye_width,
-                          (client_height - borderToAgent) - agent_height + agentToEyeHeight,
-                          agent.right - agentToEyeWidth,
-                          (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height};
-        agent_right_eye = {agent.left + agentToEyeWidth,
-                           (client_height - borderToAgent) - agent_height + agentToEyeHeight,
-                           (agent.left + agentToEyeWidth) + agent_eye_width,
-                           (client_height - borderToAgent) - agent_height + agentToEyeHeight + agent_eye_height};
-        agent2 = {(client_width - borderToEntities) - agent_width, (client_height - borderToEntities) - agent_height,
-                  client_width - borderToEntities, client_height - borderToEntities};
-        food = {borderToEntities, borderToEntities, borderToEntities + food_width, borderToEntities + food_height};
-        water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
-                 borderToEntities + water_height};
-        predator = {(client_width - borderToEntities) - predator_width, 500, client_width - borderToEntities,
-                    500 + predator_height};
-        bed = {borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width,
-               client_height - borderToEntities};
-
         Orientation orientation = Orientation::FRONT;
         Direction direction = Direction::SOUTH;
 
-        Environment env = Environment(client_width, client_height);
+        Environment env = Environment(client_width, client_height, agent);
         QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         size_t num_episodes = 1000;
 
         for (size_t i = 0; i < num_episodes; ++i)
         {
-            auto state = env.Reset();
+            auto state = env.Reset(agent);
             bool done = false;
             float total_reward = 0;
             size_t iteration = 0;
@@ -214,35 +236,35 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 auto FrontConfig = [&]() {
                     orientation = Orientation::FRONT;
                     direction = Direction::SOUTH;
-                    render_agent_left_eye = true;
-                    render_agent_right_eye = true;
+                    agent.render_agent_left_eye = true;
+                    agent.render_agent_right_eye = true;
                 };
 
                 auto LeftConfig = [&]() {
                     orientation = Orientation::LEFT;
                     direction = Direction::WEST;
-                    render_agent_left_eye = true;
-                    render_agent_right_eye = false;
+                    agent.render_agent_left_eye = true;
+                    agent.render_agent_right_eye = false;
                 };
 
                 auto RightConfig = [&]() {
                     orientation = Orientation::RIGHT;
                     direction = Direction::EAST;
-                    render_agent_left_eye = false;
-                    render_agent_right_eye = true;
+                    agent.render_agent_left_eye = false;
+                    agent.render_agent_right_eye = true;
                 };
 
                 auto BackConfig = [&]() {
                     orientation = Orientation::BACK;
                     direction = Direction::NORTH;
-                    render_agent_left_eye = false;
-                    render_agent_right_eye = false;
+                    agent.render_agent_left_eye = false;
+                    agent.render_agent_right_eye = false;
                 };
 
                 size_t pixelChangeWalk = 21;
                 size_t pixelChangeRun = 60;
 
-                agent_previous = agent;
+                agent.previousPosition = agent.position;
 
                 switch (action)
                 {
@@ -250,24 +272,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     switch (orientation)
                     {
                     case Orientation::FRONT:
-                        agent.top += pixelChangeWalk, agent.bottom += pixelChangeWalk;
-                        agent_left_eye.top += pixelChangeWalk, agent_left_eye.bottom += pixelChangeWalk;
-                        agent_right_eye.top += pixelChangeWalk, agent_right_eye.bottom += pixelChangeWalk;
+                        agent.position.top += pixelChangeWalk, agent.position.bottom += pixelChangeWalk;
+                        agent.leftEyePosition.top += pixelChangeWalk, agent.leftEyePosition.bottom += pixelChangeWalk;
+                        agent.rightEyePosition.top += pixelChangeWalk, agent.rightEyePosition.bottom += pixelChangeWalk;
                         break;
                     case Orientation::LEFT:
-                        agent.left += pixelChangeWalk, agent.right += pixelChangeWalk;
-                        agent_left_eye.left += pixelChangeWalk, agent_left_eye.right += pixelChangeWalk;
-                        agent_right_eye.left += pixelChangeWalk, agent_right_eye.right += pixelChangeWalk;
+                        agent.position.left += pixelChangeWalk, agent.position.right += pixelChangeWalk;
+                        agent.leftEyePosition.left += pixelChangeWalk, agent.leftEyePosition.right += pixelChangeWalk;
+                        agent.rightEyePosition.left += pixelChangeWalk, agent.rightEyePosition.right += pixelChangeWalk;
                         break;
                     case Orientation::RIGHT:
-                        agent.left -= pixelChangeWalk, agent.right -= pixelChangeWalk;
-                        agent_left_eye.left -= pixelChangeWalk, agent_left_eye.right -= pixelChangeWalk;
-                        agent_right_eye.left -= pixelChangeWalk, agent_right_eye.right -= pixelChangeWalk;
+                        agent.position.left -= pixelChangeWalk, agent.position.right -= pixelChangeWalk;
+                        agent.leftEyePosition.left -= pixelChangeWalk, agent.leftEyePosition.right -= pixelChangeWalk;
+                        agent.rightEyePosition.left -= pixelChangeWalk, agent.rightEyePosition.right -= pixelChangeWalk;
                         break;
                     case Orientation::BACK:
-                        agent.top -= pixelChangeWalk, agent.bottom -= pixelChangeWalk;
-                        agent_left_eye.top -= pixelChangeWalk, agent_left_eye.bottom -= pixelChangeWalk;
-                        agent_right_eye.top -= pixelChangeWalk, agent_right_eye.bottom -= pixelChangeWalk;
+                        agent.position.top -= pixelChangeWalk, agent.position.bottom -= pixelChangeWalk;
+                        agent.leftEyePosition.top -= pixelChangeWalk, agent.leftEyePosition.bottom -= pixelChangeWalk;
+                        agent.rightEyePosition.top -= pixelChangeWalk, agent.rightEyePosition.bottom -= pixelChangeWalk;
                         break;
                     default:
                         MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -278,24 +300,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     switch (orientation)
                     {
                     case Orientation::FRONT:
-                        agent.top += pixelChangeRun, agent.bottom += pixelChangeRun;
-                        agent_left_eye.top += pixelChangeRun, agent_left_eye.bottom += pixelChangeRun;
-                        agent_right_eye.top += pixelChangeRun, agent_right_eye.bottom += pixelChangeRun;
+                        agent.position.top += pixelChangeRun, agent.position.bottom += pixelChangeRun;
+                        agent.leftEyePosition.top += pixelChangeRun, agent.leftEyePosition.bottom += pixelChangeRun;
+                        agent.rightEyePosition.top += pixelChangeRun, agent.rightEyePosition.bottom += pixelChangeRun;
                         break;
                     case Orientation::LEFT:
-                        agent.left += pixelChangeRun, agent.right += pixelChangeRun;
-                        agent_left_eye.left += pixelChangeRun, agent_left_eye.right += pixelChangeRun;
-                        agent_right_eye.left += pixelChangeRun, agent_right_eye.right += pixelChangeRun;
+                        agent.position.left += pixelChangeRun, agent.position.right += pixelChangeRun;
+                        agent.leftEyePosition.left += pixelChangeRun, agent.leftEyePosition.right += pixelChangeRun;
+                        agent.rightEyePosition.left += pixelChangeRun, agent.rightEyePosition.right += pixelChangeRun;
                         break;
                     case Orientation::RIGHT:
-                        agent.left -= pixelChangeRun, agent.right -= pixelChangeRun;
-                        agent_left_eye.left -= pixelChangeRun, agent_left_eye.right -= pixelChangeRun;
-                        agent_right_eye.left -= pixelChangeRun, agent_right_eye.right -= pixelChangeRun;
+                        agent.position.left -= pixelChangeRun, agent.position.right -= pixelChangeRun;
+                        agent.leftEyePosition.left -= pixelChangeRun, agent.leftEyePosition.right -= pixelChangeRun;
+                        agent.rightEyePosition.left -= pixelChangeRun, agent.rightEyePosition.right -= pixelChangeRun;
                         break;
                     case Orientation::BACK:
-                        agent.top -= pixelChangeRun, agent.bottom -= pixelChangeRun;
-                        agent_left_eye.top -= pixelChangeRun, agent_left_eye.bottom -= pixelChangeRun;
-                        agent_right_eye.top -= pixelChangeRun, agent_right_eye.bottom -= pixelChangeRun;
+                        agent.position.top -= pixelChangeRun, agent.position.bottom -= pixelChangeRun;
+                        agent.leftEyePosition.top -= pixelChangeRun, agent.leftEyePosition.bottom -= pixelChangeRun;
+                        agent.rightEyePosition.top -= pixelChangeRun, agent.rightEyePosition.bottom -= pixelChangeRun;
                         break;
                     default:
                         MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -373,11 +395,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     break;
                 }
 
-                has_collided_with_agent2 = false;
-                has_collided_with_food = false;
-                has_collided_with_water = false;
-                has_collided_with_wall = false;
-                has_collided_with_predator = false;
+                agent.has_collided_with_agent2 = false;
+                agent.has_collided_with_food = false;
+                agent.has_collided_with_water = false;
+                agent.has_collided_with_wall = false;
+                agent.has_collided_with_predator = false;
 
                 ResolveRectanglesCollision(agent, agent2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
@@ -385,14 +407,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, predator, Entity::PREDATOR, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
 
-                if (has_collided_with_food)
+                // SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&agent));
+
+                if (agent.has_collided_with_food)
                     PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
-                if (has_collided_with_water)
+                if (agent.has_collided_with_water)
                     PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
-                env.Render(i, iteration, action, q_learning.exploration_rate, direction);
-                auto [next_state, reward, temp_done] = env.Step(action);
+                env.Render(i, iteration, action, q_learning.exploration_rate, direction, agent);
+                auto [next_state, reward, temp_done] = env.Step(action, agent);
                 done = temp_done;
 
                 q_learning.UpdateQtable(state, action, reward, next_state, done);
@@ -400,7 +424,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 total_reward += reward;
                 state = next_state;
 
-                InvalidateRect(hwnd, nullptr, TRUE);
+                // InvalidateRect(hwnd, nullptr, TRUE);
+                PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
