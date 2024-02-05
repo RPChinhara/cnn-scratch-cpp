@@ -13,15 +13,14 @@ class Agent
     RECT leftEyePosition;
     RECT rightEyePosition;
 
-    // TODO: Make it const
-    LONG width = 50;
-    LONG height = 50;
+    const LONG width = 50;
+    const LONG height = 50;
 
-    LONG eye_width = 5;
-    LONG eye_height = 13;
+    const LONG eye_width = 5;
+    const LONG eye_height = 13;
 
-    LONG toEyeWidth = 13;
-    LONG toEyeHeight = 10;
+    const LONG toEyeWidth = 13;
+    const LONG toEyeHeight = 10;
 
     bool has_collided_with_agent2 = false;
     bool has_collided_with_food = false;
