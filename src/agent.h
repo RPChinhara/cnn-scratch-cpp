@@ -1,0 +1,34 @@
+#pragma once
+
+#include <windows.h>
+
+class Agent
+{
+    // TODO: Make this Singleton?
+  public:
+    Agent() = default;
+
+    RECT position; // TODO: Maybe change to pos?
+    RECT previousPosition = {0, 0, 0, 0};
+    RECT leftEyePosition;
+    RECT rightEyePosition;
+
+    // TODO: Make it const
+    LONG width = 50;
+    LONG height = 50;
+
+    LONG eye_width = 5;
+    LONG eye_height = 13;
+
+    LONG toEyeWidth = 13;
+    LONG toEyeHeight = 10;
+
+    bool has_collided_with_agent2 = false;
+    bool has_collided_with_food = false;
+    bool has_collided_with_water = false;
+    bool has_collided_with_wall = false;
+    bool has_collided_with_predator = false;
+
+    bool render_agent_left_eye = true;
+    bool render_agent_right_eye = true;
+};
