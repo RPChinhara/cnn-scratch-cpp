@@ -31,7 +31,7 @@ class Environment
     size_t numHungerStates = 5;
     size_t numEnergyStates = 5;
     size_t numEmotionStates = 3;
-    size_t numPhysicalHealthStates = 4;
+    size_t numPhysicalHealthStates = 1;
 
     size_t numStates;
     size_t numActions = 7;

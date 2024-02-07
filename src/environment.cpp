@@ -192,17 +192,17 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
 
     switch (emotionState)
     {
-    case EmotionState::ANGRY:
-        emotionStateStr = "angry";
+    case EmotionState::LEVEL1:
+        emotionStateStr = "level 1";
         break;
-    case EmotionState::SAD:
-        emotionStateStr = "sad";
+    case EmotionState::LEVEL2:
+        emotionStateStr = "level 2";
         break;
-    case EmotionState::NEUTRAL:
-        emotionStateStr = "neutral";
+    case EmotionState::LEVEL3:
+        emotionStateStr = "level 3";
         break;
-    case EmotionState::HAPPY:
-        emotionStateStr = "happy";
+    case EmotionState::LEVEL4:
+        emotionStateStr = "level 4";
         break;
     default:
         MessageBox(nullptr, "Unknown emotion state", "Error", MB_ICONERROR);
@@ -211,17 +211,17 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
 
     switch (physicalHealthState)
     {
-    case PhysicalHealthState::CRITICAL:
-        physicalHealthStateStr = "critical";
+    case PhysicalHealthState::LEVEL1:
+        physicalHealthStateStr = "level 1";
         break;
-    case PhysicalHealthState::SICK:
-        physicalHealthStateStr = "sick";
+    case PhysicalHealthState::LEVEL2:
+        physicalHealthStateStr = "level 2";
         break;
-    case PhysicalHealthState::INJURED:
-        physicalHealthStateStr = "injured";
+    case PhysicalHealthState::LEVEL3:
+        physicalHealthStateStr = "level 3";
         break;
-    case PhysicalHealthState::HEALTHY:
-        physicalHealthStateStr = "healthy";
+    case PhysicalHealthState::LEVEL4:
+        physicalHealthStateStr = "level 4";
         break;
     default:
         MessageBox(nullptr, "Unknown physical health state", "Error", MB_ICONERROR);
@@ -313,8 +313,8 @@ size_t Environment::Reset(const Agent &agent)
     thirstState = ThirstState::LEVEL3;
     hungerState = HungerState::LEVEL3;
     energyState = EnergyState::LEVEL3;
-    emotionState = EmotionState::NEUTRAL;
-    physicalHealthState = PhysicalHealthState::HEALTHY;
+    emotionState = EmotionState::LEVEL1;
+    physicalHealthState = PhysicalHealthState::LEVEL1;
 
     currentState =
         FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
@@ -351,7 +351,7 @@ size_t Environment::Reset(const Agent &agent)
 
 std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &agent)
 {
-    if (agent.has_collided_with_agent2 && emotionState == EmotionState::HAPPY)
+    if (agent.has_collided_with_agent2 && emotionState == EmotionState::LEVEL4)
         ++numFriendCollisionWhileHappy;
 
     switch (action)
@@ -493,8 +493,8 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
 
     size_t emotionStateSizeT = static_cast<size_t>(emotionState);
 
-    if (agent.has_collided_with_food && emotionState != EmotionState::HAPPY ||
-        agent.has_collided_with_agent2 && emotionState != EmotionState::HAPPY)
+    if (agent.has_collided_with_food && emotionState != EmotionState::LEVEL4 ||
+        agent.has_collided_with_agent2 && emotionState != EmotionState::LEVEL4)
     {
         emotionStateSizeT = std::min((emotionStateSizeT + 1), numEmotionStates - 1);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
@@ -502,7 +502,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
-    if (hoursLivedWithoutEating >= 8 && emotionState != EmotionState::ANGRY)
+    if (hoursLivedWithoutEating >= 8 && emotionState != EmotionState::LEVEL1)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
@@ -510,7 +510,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
-    if (hoursLivedWithoutSocializing >= 8 && emotionState != EmotionState::ANGRY)
+    if (hoursLivedWithoutSocializing >= 8 && emotionState != EmotionState::LEVEL1)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
@@ -518,7 +518,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
-    if (numFriendCollisionWhileHappy >= 3 && emotionState != EmotionState::ANGRY)
+    if (numFriendCollisionWhileHappy >= 3 && emotionState != EmotionState::LEVEL1)
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
@@ -528,7 +528,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
 
     size_t physicalHealthStateSizeT = static_cast<size_t>(physicalHealthState);
 
-    if (agent.has_collided_with_predator && physicalHealthState != PhysicalHealthState::CRITICAL)
+    if (agent.has_collided_with_predator && physicalHealthState != PhysicalHealthState::LEVEL1)
     {
         physicalHealthStateSizeT = std::min((physicalHealthStateSizeT + 1), numPhysicalHealthStates - 1);
         physicalHealthState = static_cast<PhysicalHealthState>(physicalHealthStateSizeT);
@@ -608,7 +608,7 @@ size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, H
 
     // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) *
     // numTopStates + static_cast<size_t>(top);
-    return ((((emotionState * numEnergyStates + energyState) * numHungerStates + static_cast<size_t>(hungerState)) *
+    return ((((static_cast<size_t>(emotionState) * numEnergyStates + energyState) * numHungerStates + static_cast<size_t>(hungerState)) *
                  numThirstStates +
              static_cast<size_t>(thirstState)) *
                 numTopStates +
@@ -774,7 +774,7 @@ bool Environment::CheckTermination(const Agent &agent)
     if (daysLived == 60 && energyLevelBelow3)
         return true;
 
-    if (agent.has_collided_with_predator && physicalHealthState == PhysicalHealthState::CRITICAL)
+    if (agent.has_collided_with_predator && physicalHealthState == PhysicalHealthState::LEVEL1)
     {
         // MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
         return true;

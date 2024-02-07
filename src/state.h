@@ -27,20 +27,20 @@ enum EnergyState
     LEVEL5,
 };
 
-enum EmotionState
+enum class EmotionState
 {
-    ANGRY,
-    SAD,
-    NEUTRAL,
-    HAPPY,
+    LEVEL1,
+    LEVEL2,
+    LEVEL3,
+    LEVEL4,
 };
 
-enum PhysicalHealthState
+enum class PhysicalHealthState
 {
-    CRITICAL,
-    SICK,
-    INJURED,
-    HEALTHY,
+    LEVEL1,
+    LEVEL2,
+    LEVEL3,
+    LEVEL4,
 };
 
 enum class MentalHealthState
