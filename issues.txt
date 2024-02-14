@@ -1,6 +1,7 @@
 - Use deep learning/neural network RL.
 - Make new algorithms/models.
 - Implement CNN.
+- Implement all the famous methods e.g., layers, models in order to make new model.
 - Write total reward and num episodes in file so that I can leave the program while it's running and see how
  things gonna work.
 - Add body and env temperture.
