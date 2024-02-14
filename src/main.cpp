@@ -136,14 +136,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
-    // TODO: Write total reward and num episodes in file so that I can leave the program while it's running and see how
-    // things gonna work.
-    // TODO: Add body and env temperture.
-    // TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
-    // TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
-    // TODO: I must build from CMake
-    // TODO: He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to build a house, and also able to make a fire reference MineCraft to how things are working in this game.
-
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 

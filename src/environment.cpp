@@ -17,9 +17,6 @@ Environment::Environment(const LONG client_width, const LONG client_height, cons
     numTopStates = (maxTop - minTop) + 1;
     numStates = numPhysicalHealthStates * numEmotionStates * numEnergyStates * numHungerStates * numThirstStates *
                 numTopStates * numLeftStates;
-    // TODO: Ask chatGPT how reduce number of states
-    // NOTE: other methods - https://chat.openai.com/share/25f98e96-2d7b-408c-a8e9-4e544ce98c68
-    // https://chat.openai.com/share/92f68226-e6ce-48bf-a949-9b6bbbeab26d
 }
 
 void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
@@ -608,7 +605,8 @@ size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, H
 
     // return (((hungerState) * nujmThirstStates + thirstState) * numLeftStates + static_cast<size_t>(left)) *
     // numTopStates + static_cast<size_t>(top);
-    return ((((static_cast<size_t>(emotionState) * numEnergyStates + energyState) * numHungerStates + static_cast<size_t>(hungerState)) *
+    return ((((static_cast<size_t>(emotionState) * numEnergyStates + energyState) * numHungerStates +
+              static_cast<size_t>(hungerState)) *
                  numThirstStates +
              static_cast<size_t>(thirstState)) *
                 numTopStates +
