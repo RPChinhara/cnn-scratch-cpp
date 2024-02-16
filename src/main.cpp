@@ -151,7 +151,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Reference Terraria and Stardew Valley as well
     // TODO: How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
     // NOTE: Generating or preding future images by self-supervised learning is the way, but not methods used in GANs?
-    // NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm building.
+    // NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm building. However, Geoffrey Hinton
+    // no longer thinks the study will improve or achieve AGI...
 
 #if 1
     const char CLASS_NAME[] = "WorldWindow";
