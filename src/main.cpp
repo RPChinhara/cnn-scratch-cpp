@@ -100,9 +100,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 1
-#endif
-
 #if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
@@ -138,16 +135,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
-    // TODO:  Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
-    // TODO:  No more static water, food, agent2, and predator spawn them in the random spaces.
-    // TODO:  I must build from CMake
-    // TODO:  He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to
+    // HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
+    // HIGH PRIORITY: Implement Transformer.
+    // TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
+    // TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
+    // TODO: I must build from CMake
+    // TODO: He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to
     // build a house, and also able to make a fire reference MineCraft to how things are working in this game.
-    // TODO:  Instead of food place some animal like a sheep, and he can’t eat untill he kills it, and cook that
-    // TODO:  Make inventory
-    // TODO:  Make trees
-    // TODO:  Reference Terraria and Stardew Valley as well
-    // TODO:  How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
+    // TODO: Instead of food place some animal like a sheep, and he can’t eat untill he kills it, and cook that
+    // TODO: Make inventory
+    // TODO: Make trees
+    // TODO: Reference Terraria and Stardew Valley as well
+    // TODO: How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
 
 #if 1
     const char CLASS_NAME[] = "WorldWindow";
@@ -224,7 +223,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         Orientation orientation = Orientation::FRONT;
         Direction direction = Direction::SOUTH;
 
-        // IDEA:  Write total reward and num episodes in file so that I can leave the program while it's running and see how things gonna work.
+        // IDEA:  Write total reward and num episodes in file so that I can leave the program while it's running and see
+        // how things gonna work.
         Environment env = Environment(client_width, client_height, agent);
         QLearning q_learning = QLearning(env.numStates, env.numActions); // TODO:  Use deep learning/neural network RL.
 
