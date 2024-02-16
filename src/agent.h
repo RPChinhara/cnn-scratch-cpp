@@ -5,6 +5,7 @@
 class Agent
 {
     // TODO: Make this Singleton?
+    // TODO: How can I use flags?
   public:
     Agent() = default;
 
