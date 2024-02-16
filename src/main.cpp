@@ -100,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
 #endif
 
 #if 0
@@ -397,6 +397,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 agent.has_collided_with_wall = false;
                 agent.has_collided_with_predator = false;
 
+                // IDEA: I think whenever he collieded with something, he needs to go through CNN process to determine
+                // what he exactly collided with like in real life. For example, he will be presented with some images
+                // or could be some videos. Perhaps in the future, he's gonna learn how to drive, and there I could
+                // definetely utilize CNN.
                 ResolveRectanglesCollision(agent, agent2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
