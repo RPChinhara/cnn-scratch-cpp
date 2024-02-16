@@ -2,9 +2,9 @@
 #include "array.h"
 #include "kernel.h"
 #include "tensor.h"
-#include "windows.h"
 
 #include <cassert>
+#include <windows.h>
 
 Tensor MatMul(const Tensor &in1, const Tensor &in2, Device device)
 {

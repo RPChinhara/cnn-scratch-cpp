@@ -2,10 +2,9 @@
 #include "array.h"
 #include "kernel.h"
 #include "tensor.h"
-#include "windows.h"
-
 
 #include <cassert>
+#include <windows.h>
 
 Tensor Argmax(const Tensor &in)
 {

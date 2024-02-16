@@ -62,6 +62,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             size_t numLayers = layers.size() - 1;
             for (size_t k = numLayers; k > 0; --k)
             {
+                // TODO: Find note for derivative that was deleted, and paste it here.
                 if (k == numLayers)
                     dloss_dlogits.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else

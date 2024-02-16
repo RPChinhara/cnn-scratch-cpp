@@ -4,7 +4,8 @@
 #include "kernel.h"
 #include "mathematics.h"
 #include "tensor.h"
-#include "windows.h"
+
+#include <windows.h>
 
 Tensor Relu(const Tensor &in, Device device)
 {

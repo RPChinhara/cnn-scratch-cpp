@@ -78,6 +78,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         FillRect(hdc, &predator, brownBrush);
         DeleteObject(brownBrush);
 
+        // Draw "Hello, Windows!" text
+        // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
+
         EndPaint(hwnd, &ps);
 
         return 0;

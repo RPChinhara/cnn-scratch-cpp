@@ -1,8 +1,6 @@
 - Use deep learning/neural network RL.
 - Make new algorithms/models.
-- Implement CNN.
-- Implement Transformer.
-- Implement all the famous methods e.g., layers, models in order to make new model.
+- Implement all the famous methods e.g., layers like CNN, Transformer, models in order to make new model.
 - Learn fundamental theory in Biology.
 - Write total reward and num episodes in file so that I can leave the program while it's running and see how
  things gonna work.
@@ -17,6 +15,3 @@
 - Reference Terraria and Stardew Valley as well
 - How game engine is implemented? Can I reference this?
 - Is onRender() or other on..() famous in game engine?
-- 思考モデル
-- 思考の仕組み
-- 動詞すべてのモデル

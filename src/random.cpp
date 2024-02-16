@@ -4,7 +4,6 @@
 #include <cassert>
 #include <random>
 
-
 Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, const float stddev)
 {
     Tensor out = Tensor();
