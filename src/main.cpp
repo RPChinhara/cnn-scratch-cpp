@@ -137,8 +137,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     // HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
     // HIGH PRIORITY: Implement Transformer.
-    // HIGH PRIORITY: Try various type of methods for networks / models e.g., resnet, efficientnet in CNN, PPO, DDPG, in RL,
-    // and maybe some things in Sequential as well, but not sure because of the Transformer. Also, like Generative
+    // HIGH PRIORITY: Try various type of methods for networks / models e.g., resnet, efficientnet in CNN, PPO, DDPG, in
+    // RL, and maybe some things in Sequential as well, but not sure because of the Transformer. Also, like Generative
     // models essentially all the sophisticated methods.
     // TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
     // TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
