@@ -104,7 +104,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -126,7 +126,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     size_t outputLayer = 3;
     float learningRate = 0.01f;
 
-    NN nn = NN({inputLayer, hiddenLayer1, outputLayer}, learningRate); // TODO: Just write the number instead of daclaring it before.
+    NN nn = NN({inputLayer, hiddenLayer1, outputLayer},
+               learningRate); // TODO: Just write the number instead of daclaring it before.
 
     auto startTime = std::chrono::high_resolution_clock::now();
 

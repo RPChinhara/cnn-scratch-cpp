@@ -32,6 +32,7 @@ Tensor Relu(const Tensor &in, Device device)
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+        // TODO: Use MessageBox instead. std::cerr doesn't work in WinMain().
 
         Tensor out = in;
         cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);

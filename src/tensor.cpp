@@ -154,6 +154,7 @@ Tensor Tensor::operator+(const Tensor &other) const
 //         cudaError_t cudaError = cudaGetLastError();
 //         if (cudaError != cudaSuccess)
 //             std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+// TODO: Use MessageBox instead. std::cerr doesn't work in WinMain().
 
 //         out = *this;
 //         cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
@@ -257,6 +258,7 @@ Tensor Tensor::operator/(const Tensor &other) const
         {
             std::cerr << "Shapes don't much." << '\n';
             std::exit(EXIT_FAILURE);
+            // TODO: Use MessageBox instead. std::cerr doesn't work in WinMain().
         }
     }
     return out;

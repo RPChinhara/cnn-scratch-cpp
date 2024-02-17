@@ -3,16 +3,14 @@
 
 #include <fstream>
 #include <sstream>
+#include <windows.h>
 
 Iris LoadIris()
 {
-    std::ifstream file("datasets\\iris.csv");
+    std::ifstream file("datasets\\iris\\iris.csv");
 
     if (!file.is_open())
-    {
-        std::cerr << "Failed to open the file." << '\n';
-        exit(EXIT_FAILURE);
-    }
+        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
 
     std::string line;
 

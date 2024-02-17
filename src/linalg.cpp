@@ -48,6 +48,7 @@ Tensor MatMul(const Tensor &in1, const Tensor &in2, Device device)
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
+        // TODO: Use MessageBox instead. std::cerr doesn't work in WinMain().
 
         Tensor out = Zeros({in1.shape.front(), in2.shape.back()});
         cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
