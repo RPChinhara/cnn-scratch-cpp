@@ -7,7 +7,7 @@
 
 Iris LoadIris()
 {
-    std::ifstream file("datasets\\iris\\iris.csv");
+    std::ifstream file("dataset\\iris\\iris.csv");
 
     if (!file.is_open())
         MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);

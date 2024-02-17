@@ -490,9 +490,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 // SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&agent));
 
                 if (agent.has_collided_with_food)
-                    PlaySound(TEXT("assets\\eating_sound_effect.wav"), NULL, SND_FILENAME);
+                    PlaySound(TEXT("asset\\eating_sound_effect.wav"), NULL, SND_FILENAME);
+                
                 if (agent.has_collided_with_water)
-                    PlaySound(TEXT("assets\\gulp-37759.wav"), NULL, SND_FILENAME);
+                    PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
                 env.Render(i, iteration, action, q_learning.exploration_rate, direction, agent);
