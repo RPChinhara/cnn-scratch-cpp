@@ -1,6 +1,7 @@
 #include "action.h"
 #include "activation.h"
 #include "agent.h"
+#include "cnn.h"
 #include "dataset.h"
 #include "entity.h"
 #include "environment.h"
@@ -35,6 +36,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
 
         HDC hdc = BeginPaint(hwnd, &ps);
+
+        // TODO: Display MNIST images here
+        // Use StretchDIBits to draw the image data onto the window
 
         GetClientRect(hwnd, &client_rect);
         HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
@@ -122,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     size_t outputLayer = 3;
     float learningRate = 0.01f;
 
-    NN nn = NN({inputLayer, hiddenLayer1, outputLayer}, learningRate);
+    NN nn = NN({inputLayer, hiddenLayer1, outputLayer}, learningRate); // TODO: Just write the number instead of daclaring it before.
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -135,15 +139,62 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
 
+#if 1
+    // NOTE: Order of CNN
+    // 1. Input Layer:
+    // The raw input data, usually an image or a sequence.
+
+    // 2. Convolutional Layer (Conv2D):
+    // Apply convolution operation with learnable filters.
+    // Optionally, apply activation function (e.g., ReLU).
+
+    // 3. Pooling Layer (MaxPooling2D):
+    // Downsample the spatial dimensions, reducing computation.
+    // Common pooling methods include max pooling or average pooling.
+
+    // 4. Additional Convolutional and Pooling Layers:
+    // Repeat convolutional and pooling layers to capture hierarchical features.
+
+    // 5. Flatten Layer:
+    // Flatten the output from the previous layers into a 1D vector.
+    // Preparing for the fully connected layers.
+
+    // 6. Fully Connected Layers (Dense):
+    // Connect every neuron to every neuron in the previous layer.
+    // Apply an activation function, often ReLU.
+
+    // 7. Output Layer:
+    // Depending on the task, use an appropriate activation function:
+    // For binary classification, use a sigmoid activation.
+    // For multiclass classification, use softmax activation.
+    // For regression, use linear activation.
+
+    // 8. Loss Calculation:
+    // Compute the difference between predicted and true values using a suitable loss function (e.g., cross-entropy for
+    // classification, mean squared error for regression).
+
+    // 9. Backpropagation:
+    // Compute gradients of the loss with respect to the model parameters.
+    // Update model parameters using an optimization algorithm (e.g., gradient descent).
+
+    // 10. Repeat:
+
+    // Iterate through the dataset multiple times (epochs) to improve the model.
+
+    // TODO: Start with MNIST dataset which is grayscale image (3x3 pixels). Useally, in Python or TensorFlow you'd use
+    // matplotlib to render the true and predicted digits from MNIST, but in my case first I'd just benchmark by
+    // checking raw values in Tensor like I do with Iris datset, but later I could render using StretchDIBits().
+    CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
+#endif
+
     // HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
     // HIGH PRIORITY: Implement Transformer.
     // HIGH PRIORITY: Try various type of methods for networks / models e.g., resnet, efficientnet in CNN, PPO, DDPG, in
-    // HIGH PRIORITY: I have to try video generation project.
     // RL, and maybe some things in Sequential as well, but not sure because of the Transformer. Also, like Generative
     // models essentially all the sophisticated methods.
+    // HIGH PRIORITY: I have to try video generation project.
     // TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
     // TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
-    // META: I must build from CMake
     // TODO: He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to
     // build a house, and also able to make a fire reference MineCraft to how things are working in this game.
     // TODO: Instead of food place some animal like a sheep, and he can’t eat untill he kills it, and cook that
@@ -151,10 +202,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Make trees
     // TODO: Reference Terraria and Stardew Valley as well
     // TODO: How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
-    // NOTE: Generating or preding future images by self-supervised learning is the way, but not methods used in GANs?
-    // NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm building. However, Geoffrey Hinton
-    // no longer thinks the study will improve or achieve AGI. Perhaps, just use AI to study about Neuroscience?
     // IDEA: Instead of predicting next word / token, plan sequences of tasks, and output final unit.
+    // IDEA: World Model: generate probable all the future pixels so that he can predict what might happen in next few
+    // seconds or minutes e.g., a glass contains water is about to fall off the table, what would he expect, and what
+    // kind of action will he take.
+    // IDEA: Maybe, use all the pixels as states? Because in real life I don't know what coordinates (x, y, z) I have at
+    // that moment instead I have the view I'm seeing. I could have used real time images or videos, but since I'm not
+    // using a robot pixels will do it?
+    // NOTE: Generating or preding future images by self-supervised learning is the way, but not methods used in GANs?
+    // NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm
+    // building. However, Geoffrey Hinton no longer thinks the study will improve or achieve AGI. Perhaps, just use AI
+    // to study about Neuroscience?
+    // META: I must build from CMake
 
 #if 1
     const char CLASS_NAME[] = "WorldWindow";

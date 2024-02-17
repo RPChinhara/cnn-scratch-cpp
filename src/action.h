@@ -1,5 +1,6 @@
 #pragma once
 
+// NOTE: Get inspiration list of verbs
 enum Action
 {
     WALK,

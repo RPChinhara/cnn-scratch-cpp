@@ -4,6 +4,7 @@
 
 #include <vector>
 
+// TODO: Change name so that it can adapt to name of parent class?
 class NN
 {
   public:

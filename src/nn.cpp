@@ -90,6 +90,8 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
                 weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
+                
+                // TODO: Implement Adam.
             }
 
             dloss_dlogits.clear(), dloss_dweights.clear(), dloss_dbiases.clear();
