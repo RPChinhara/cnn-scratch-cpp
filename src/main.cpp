@@ -103,33 +103,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor x = iris.features;
     Tensor y = iris.target;
 
-    size_t depth = 3;
-    float testSize1 = 0.2;
-    float testSize2 = 0.5;
-    size_t randomState = 42;
-
-    y = OneHot(y, depth);
-    TrainTest train_temp = TrainTestSplit(x, y, testSize1, randomState);
-    TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, testSize2, randomState);
+    y = OneHot(y, 3);
+    TrainTest train_temp = TrainTestSplit(x, y, 0.2, 42);
+    TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, 0.5, 42);
     train_temp.x_first = MinMaxScaler(train_temp.x_first);
     val_test.x_first = MinMaxScaler(val_test.x_first);
     val_test.x_second = MinMaxScaler(val_test.x_second);
 
-    size_t inputLayer = 4;
-    size_t hiddenLayer1 = 128;
-    size_t outputLayer = 3;
-    float learningRate = 0.01f;
+    NN nn = NN({4, 128, 3}, 0.01f);
 
-    NN nn = NN({inputLayer, hiddenLayer1, outputLayer},
-               learningRate); // TODO: Just write the number instead of daclaring it before.
-
-    auto startTime = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
     nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
 
-    auto endTime = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
-    std::cout << "Time taken: " << duration.count() << " seconds" << '\n';
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+
+    std::cout << "Time taken: " << duration.count() << " seconds\n";
 
     nn.Predict(val_test.x_second, val_test.y_second);
 #endif
