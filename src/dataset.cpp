@@ -71,3 +71,40 @@ Iris LoadIris()
 
     return iris;
 }
+
+std::vector<std::vector<uint8_t>> readMNISTImages(const std::string &filePath)
+{
+    std::ifstream file(filePath, std::ios::binary);
+
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return {};
+    }
+
+    uint32_t magicNumber, numImages, numRows, numCols;
+
+    // Read the header information
+    file.read(reinterpret_cast<char *>(&magicNumber), sizeof(magicNumber));
+    file.read(reinterpret_cast<char *>(&numImages), sizeof(numImages));
+    file.read(reinterpret_cast<char *>(&numRows), sizeof(numRows));
+    file.read(reinterpret_cast<char *>(&numCols), sizeof(numCols));
+
+    // Convert from big-endian to little-endian if needed
+    magicNumber = _byteswap_ulong(magicNumber);
+    numImages = _byteswap_ulong(numImages);
+    numRows = _byteswap_ulong(numRows);
+    numCols = _byteswap_ulong(numCols);
+
+    std::vector<std::vector<uint8_t>> images(numImages, std::vector<uint8_t>(numRows * numCols));
+
+    // Read the image data
+    for (uint32_t i = 0; i < numImages; ++i)
+    {
+        file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
+    }
+
+    file.close();
+
+    return images;
+}

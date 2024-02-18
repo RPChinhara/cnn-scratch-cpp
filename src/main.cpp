@@ -10,13 +10,7 @@
 #include "preprocessing.h"
 #include "q_learning.h"
 
-#include <cstdint>
-#include <cuda_fp16.h>
-#include <iomanip>
-#include <iostream>
-#include <stdio.h>
 #include <thread>
-#include <type_traits>
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
@@ -104,7 +98,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;
@@ -185,6 +179,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Start with MNIST dataset which is grayscale image (3x3 pixels). Useally, in Python or TensorFlow you'd use
     // matplotlib to render the true and predicted digits from MNIST, but in my case first I'd just benchmark by
     // checking raw values in Tensor like I do with Iris datset, but later I could render using StretchDIBits().
+
+    // Replace "path/to" with the actual path to your MNIST dataset files
+    std::string trainImagePath = "dataset\\mnist\\train-images-idx3-ubyte";
+    std::string trainLabelPath = "dataset\\mnist\\train-labels-idx1-ubyte";
+
+    std::vector<std::vector<uint8_t>> trainImages = readMNISTImages(trainImagePath);
+
+    if (!trainImages.empty())
+    {
+        const std::vector<uint8_t> &firstImage = trainImages[0];
+        const uint32_t numRows = 28; // Assuming MNIST images have 28 rows
+        const uint32_t numCols = 28; // Assuming MNIST images have 28 columns
+
+        for (uint32_t i = 0; i < numRows; ++i)
+        {
+            for (uint32_t j = 0; j < numCols; ++j)
+            {
+                std::cout << static_cast<int>(firstImage[i * numCols + j]) << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
 #endif
 
@@ -491,7 +508,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 if (agent.has_collided_with_food)
                     PlaySound(TEXT("asset\\eating_sound_effect.wav"), NULL, SND_FILENAME);
-                
+
                 if (agent.has_collided_with_water)
                     PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
 
@@ -505,6 +522,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 total_reward += reward;
                 state = next_state;
 
+                // TODO: Can't I just call InvalidateRect() here?
                 // InvalidateRect(hwnd, nullptr, TRUE);
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
 
