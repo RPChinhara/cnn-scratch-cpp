@@ -50,7 +50,7 @@ Tensor Exp(const Tensor &in, Device device)
         cudaMalloc((void **)&out2, in.size * sizeof(float));
         cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 
-        int blockSize = 128;
+        constexpr int blockSize = 128;
         int gridSize = (in.size + blockSize - 1) / blockSize;
         Exp<<<gridSize, blockSize>>>(in2, out2, in.size);
 
@@ -90,7 +90,7 @@ Tensor Log(const Tensor &in, Device device)
         cudaMalloc((void **)&out2, in.size * sizeof(float));
         cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
 
-        int blockSize = 128;
+        constexpr int blockSize = 128;
         int gridSize = (in.size + blockSize - 1) / blockSize;
         Log<<<gridSize, blockSize>>>(in2, out2, in.size);
 

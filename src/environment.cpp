@@ -23,6 +23,7 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
                          Direction direction, const Agent &agent)
 {
     // NOTE: It could be 1.5 ~ 2 seconds per iteration. I set to 1 second for now, but I'm not sure.
+    // TODO: Use constexpr
     size_t secondsPerIteration = 1;
     secondsLived += secondsPerIteration;
     secondsLivedWithoutDrinking += secondsPerIteration;

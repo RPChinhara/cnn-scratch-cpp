@@ -98,7 +98,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor x = iris.features;
     Tensor y = iris.target;

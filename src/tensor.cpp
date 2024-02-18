@@ -147,7 +147,7 @@ Tensor Tensor::operator+(const Tensor &other) const
 //         cudaMemcpy(A, elem, this->size * sizeof(float), cudaMemcpyHostToDevice);
 //         cudaMemcpy(B, other.elem, other.size * sizeof(float), cudaMemcpyHostToDevice);
 
-//         int blockSize = 128;
+//         constexpr int blockSize = 128;
 //         int gridSize = (this->size + blockSize - 1) / blockSize;
 //         OperatorPlus<<<gridSize, blockSize>>>(A, B, C, other.shape.back(), this->size);
 
