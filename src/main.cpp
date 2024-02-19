@@ -200,43 +200,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Maybe preprocessing is next?
 #endif
 
-    /* 
-       HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
-       HIGH PRIORITY: Implement Transformer.
-       HIGH PRIORITY: Try various type of methods for networks / models e.g., resnet, efficientnet in CNN, PPO, DDPG, in
-       RL, and maybe some things in Sequential as well, but not sure because of the Transformer. Also, like Generative
-       models essentially all the sophisticated methods.
-       HIGH PRIORITY: I have to try video generation project.
-       TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
-       TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
-       TODO: He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to
-       build a house, and also able to make a fire reference MineCraft to how things are working in this game.
-       TODO: Instead of food place some animal like a sheep, and he can’t eat untill he kills it, and cook that
-       TODO: Make inventory
-       TODO: Make trees
-       TODO: Reference Terraria and Stardew Valley as well
-       TODO: How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
-       TODO: Change Environment to Environment / World model
-       TODO: Place a computer he can use this is equivalent to a project a robot use it in real world.
-       Note: Always compare my project and a project where a robot is in real life (world model) learning / training.
-       Imagine the robot is in a room has red(food), blue(water), and other boxes. There might be a computer he could
-       play with.
-       TODO: How hashseta works?
-       IDEA: Instead of predicting next word / token, plan sequences of tasks, and output final unit.
-       IDEA: World Model: generate probable all the future pixels so that he can predict what might happen in next few
-       seconds or minutes e.g., a glass contains water is about to fall off the table, what would he expect, and what
-       kind of action will he take.
-       IDEA: Maybe, use all the pixels as states? Because in real life I don't know what coordinates (x, y, z) I have at
-       that moment instead I have the view I'm seeing. I could have used real time images or videos, but since I'm not
-       using a robot pixels will do it?
-       NOTE: Generating or preding future images by self-supervised learning is the way, but not methods used in GANs?
-       NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm
-       building. However, Geoffrey Hinton no longer thinks the study will improve or achieve AGI. Perhaps, just use AI
-       to study about Neuroscience?
-       META: I must build from CMake
-       NOTE: What are similar teqniques to using flags
-       NOTE: It could be all the possible images rendered on so that he can predict reason next move or action.
-    */
+    // HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
+    // HIGH PRIORITY: Implement Transformer.
+    // HIGH PRIORITY: Try various type of methods for networks / models e.g., resnet, efficientnet in CNN, PPO, DDPG, in
+    // RL, and maybe some things in Sequential as well, but not sure because of the Transformer. Also, like Generative
+    // models essentially all the sophisticated methods.
+    // HIGH PRIORITY: I have to try video generation project.
+    // TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
+    // TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
+    // TODO: He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to
+    // build a house, and also able to make a fire reference MineCraft to how things are working in this game.
+    // TODO: Instead of food place some animal like a sheep, and he can’t eat untill he kills it, and cook that
+    // TODO: Make inventory
+    // TODO: Make trees
+    // TODO: Reference Terraria and Stardew Valley as well
+    // TODO: How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
+    // TODO: Change Environment to Environment / World model
+    // TODO: Place a computer he can use this is equivalent to a project a robot use it in real world.
+    // Note: Always compare my project and a project where a robot is in real life (world model) learning / training.
+    // Imagine the robot is in a room has red(food), blue(water), and other boxes. There might be a computer he could
+    // play with.
+    // TODO: How hashseta works?
+    // IDEA: Instead of predicting next word / token, plan sequences of tasks, and output final unit.
+    // IDEA: World Model: generate probable all the future pixels so that he can predict what might happen in next few
+    // seconds or minutes e.g., a glass contains water is about to fall off the table, what would he expect, and what
+    // kind of action will he take.
+    // IDEA: Maybe, use all the pixels as states? Because in real life I don't know what coordinates (x, y, z) I have at
+    // that moment instead I have the view I'm seeing. I could have used real time images or videos, but since I'm not
+    // using a robot pixels will do it?
+    // NOTE: Generating or preding future images by self-supervised learning is the way, but not methods used in GANs?
+    // NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm
+    // building. However, Geoffrey Hinton no longer thinks the study will improve or achieve AGI. Perhaps, just use AI
+    // to study about Neuroscience?
+    // META: I must build from CMake
+    // NOTE: What are similar teqniques to using flags
+    // NOTE: It could be all the possible images rendered on so that he can predict reason next move or action.
 
 #if 1
     const char CLASS_NAME[] = "WorldWindow";
