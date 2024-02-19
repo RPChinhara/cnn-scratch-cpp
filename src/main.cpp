@@ -227,11 +227,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm
     // building. However, Geoffrey Hinton no longer thinks the study will improve or achieve AGI. Perhaps, just use AI
     // to study about Neuroscience?
-    // META: I must build from CMake
-    // NOTE: It could be all the possible images rendered on the screen so that he can predict reason next move or action.
-    // Note: Always compare my project and a project where a robot is in real life (world model) learning / training.
-    // Imagine the robot is in a room has red(food), blue(water), and other boxes. There might be a computer he could
-    // play with.
+    // NOTE: It could be all the possible images rendered on the screen so that he can predict reason next move or
+    // action. Note: Always compare my project and a project where a robot is in real life (world model) learning /
+    // training. Imagine the robot is in a room has red(food), blue(water), and other boxes. There might be a computer
+    // he could play with.
 
 #if 1
     const char CLASS_NAME[] = "WorldWindow";
