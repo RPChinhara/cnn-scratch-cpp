@@ -6,11 +6,36 @@ if 1:
     TF_ENABLE_ONEDNN_OPTS=0
 
     # Load MNIST dataset
-    (train_images, _), (_, _) = mnist.load_data()
+    (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 
-    print(train_images.shape)
-    print(train_images)
-    print(train_images[0])
+    # print(train_images.shape)
+    # print(train_images)
+    # print(train_images[0])
+
+    # print(train_labels.shape)
+    # print(train_labels)
+    print(train_images[59999])
+
+    print(train_labels[59997])
+    print(train_labels[59998])
+    print(train_labels[59999])
+
+    print(test_images[9999])
+
+    print(test_labels[9997])
+    print(test_labels[9998])
+    print(test_labels[9999])
+
+
+    # plt.imshow(train_images[0], cmap='gray')
+    # plt.show()
+    # plt.imshow(train_images[1], cmap='gray')
+    # plt.show()
+    # plt.imshow(train_images[2], cmap='gray')
+    # plt.show()
+
+    # plt.imshow(train_labels[0], cmap='gray')
+    # plt.imshow(train_labels[1], cmap='gray')
 
     # Step 1: Input Layer
     # Use the first image in the dataset as an example

@@ -20,4 +20,4 @@ struct MNIST
 };
 
 Iris LoadIris();
-std::vector<std::vector<uint8_t>> readMNISTImages(const std::string &filePath);
+MNIST LoadMNIST();

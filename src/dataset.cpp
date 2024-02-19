@@ -72,15 +72,12 @@ Iris LoadIris()
     return iris;
 }
 
-std::vector<std::vector<uint8_t>> readMNISTImages(const std::string &filePath)
+Tensor ReadMNISTImages(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
-    {
-        std::cerr << "Error opening file: " << filePath << std::endl;
-        return {};
-    }
+        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
 
     uint32_t magicNumber, numImages, numRows, numCols;
 
@@ -104,7 +101,74 @@ std::vector<std::vector<uint8_t>> readMNISTImages(const std::string &filePath)
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
+    // TODO: I don't like this name
+    Tensor images2 = Zeros({numImages, numRows, numCols});
+    size_t idx = 0;
+
+    for (uint32_t i = 0; i < numImages; ++i)
+    {
+        for (uint32_t j = 0; j < numRows; ++j)
+        {
+            for (uint32_t k = 0; k < numCols; ++k)
+            {
+                images2[idx] = static_cast<float>(images[i][j * numCols + k]);
+                ++idx;
+            }
+        }
+    }
+
     file.close();
 
-    return images;
+    return images2;
+}
+
+Tensor ReadMNISTLabels(const std::string &filePath)
+{
+    std::ifstream file(filePath, std::ios::binary);
+
+    if (!file.is_open())
+        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
+
+    // TODO: Do I need this magicNumber?
+    uint32_t magicNumber, numLabels;
+
+    // Read the header information
+    file.read(reinterpret_cast<char *>(&magicNumber), sizeof(magicNumber));
+    file.read(reinterpret_cast<char *>(&numLabels), sizeof(numLabels));
+
+    // Convert from big-endian to little-endian if needed
+    magicNumber = _byteswap_ulong(magicNumber);
+    numLabels = _byteswap_ulong(numLabels);
+
+    std::vector<uint8_t> labels(numLabels);
+
+    // Read the label data
+    file.read(reinterpret_cast<char *>(labels.data()), numLabels);
+
+    // TODO: I don't like this name
+    // TODO: I might need to support 1-dimentional array like (60000,) which is the shape I get when loading MNIST from
+    // TensorFlow, but labels for Iris was 2D so I'm not sure.
+    Tensor labels2 = Zeros({numLabels, 1});
+    size_t idx = 0;
+
+    for (uint32_t i = 0; i < numLabels; ++i)
+    {
+        labels2[idx] = static_cast<float>(labels[i]);
+        ++idx;
+    }
+
+    file.close();
+
+    return labels2;
+}
+
+MNIST LoadMNIST()
+{
+    MNIST mnist;
+    mnist.trainImages = ReadMNISTImages("dataset\\mnist\\train-images-idx3-ubyte");
+    mnist.trainLabels = ReadMNISTLabels("dataset\\mnist\\train-labels-idx1-ubyte");
+    mnist.testImages = ReadMNISTImages("dataset\\mnist\\t10k-images-idx3-ubyte");
+    mnist.testLabels = ReadMNISTLabels("dataset\\mnist\\t10k-labels-idx1-ubyte");
+
+    return mnist;
 }

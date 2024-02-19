@@ -170,29 +170,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // matplotlib to render the true and predicted digits from MNIST, but in my case first I'd just benchmark by
     // checking raw values in Tensor like I do with Iris datset, but later I could render using StretchDIBits().
 
-    // Replace "path/to" with the actual path to your MNIST dataset files
-    std::string trainImagePath = "dataset\\mnist\\train-images-idx3-ubyte";
-    std::string trainLabelPath = "dataset\\mnist\\train-labels-idx1-ubyte";
+    MNIST mnist = LoadMNIST();
 
-    std::vector<std::vector<uint8_t>> trainImages = readMNISTImages(trainImagePath);
-
-    if (!trainImages.empty())
+    // good
+    for (int i = 47039216; i < 47039216 + 784; ++i)
     {
-        const std::vector<uint8_t> &firstImage = trainImages[0];
-        const uint32_t numRows = 28; // Assuming MNIST images have 28 rows
-        const uint32_t numCols = 28; // Assuming MNIST images have 28 columns
-
-        for (uint32_t i = 0; i < numRows; ++i)
-        {
-            for (uint32_t j = 0; j < numCols; ++j)
-            {
-                std::cout << static_cast<int>(firstImage[i * numCols + j]) << " ";
-            }
-            std::cout << std::endl;
-        }
+        std::cout << mnist.trainImages[i] << std::endl;
     }
 
+    // good
+    std::cout << mnist.trainLabels[59997] << std::endl;
+    std::cout << mnist.trainLabels[59998] << std::endl;
+    std::cout << mnist.trainLabels[59999] << std::endl << std::endl;
+
+    // std::cout << mnist.testImages << std::endl;
+
+    for (int i = 7839216; i < 7839216 + 784; ++i)
+    {
+        std::cout << mnist.testImages[i] << std::endl;
+    }
+
+    // good
+    std::cout << mnist.testLabels[9997] << std::endl;
+    std::cout << mnist.testLabels[9998] << std::endl;
+    std::cout << mnist.testLabels[9999] << std::endl;
+
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
+
+    // TODO: Maybe preprocessing is next?
 #endif
 
     // HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
