@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <string>
+#include <windows.h>
 
 Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
 {
@@ -153,8 +154,8 @@ Tensor Tensor::operator+(const Tensor &other) const
 
 //         cudaError_t cudaError = cudaGetLastError();
 //         if (cudaError != cudaSuccess)
-//             std::cerr << "CUDA kernel launch error: " << cudaGetErrorString(cudaError) << std::endl;
-// TODO: Use MessageBox instead. std::cerr doesn't work in WinMain().
+//             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
+//                      "Error", MB_ICONERROR);
 
 //         out = *this;
 //         cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
@@ -256,9 +257,7 @@ Tensor Tensor::operator/(const Tensor &other) const
         }
         else
         {
-            std::cerr << "Shapes don't much." << '\n';
-            std::exit(EXIT_FAILURE);
-            // TODO: Use MessageBox instead. std::cerr doesn't work in WinMain().
+            MessageBox(nullptr, "Shapes don't much", "Error", MB_ICONERROR);
         }
     }
     return out;

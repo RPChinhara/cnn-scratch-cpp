@@ -594,7 +594,7 @@ size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, H
             ("Invalid thirst state. Should be within the range [0, " + std::to_string(numThirstStates) + ")").c_str(),
             "Error", MB_ICONERROR);
     if (!(static_cast<size_t>(hungerState) < numHungerStates))
-        MessageBoxA(
+        MessageBox(
             nullptr,
             ("Invalid hunger state. Should be within the range [0, " + std::to_string(numHungerStates) + ")").c_str(),
             "Error", MB_ICONERROR);
@@ -775,7 +775,7 @@ bool Environment::CheckTermination(const Agent &agent)
 
     if (agent.has_collided_with_predator && physicalHealthState == PhysicalHealthState::LEVEL1)
     {
-        // MessageBoxA(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
+        // MessageBox(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
         return true;
     }
 
