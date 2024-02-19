@@ -9,6 +9,7 @@
 
 Tensor Relu(const Tensor &in, Device device)
 {
+    // IDEA: To 'tensor' and 'newTensor' from 'in' and 'out'? Also 'gpuTensor' and 'gpuNewTesnor' from 'in2' and 'out2'?
     switch (device)
     {
     case Device::CPU: {
