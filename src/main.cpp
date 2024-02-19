@@ -214,7 +214,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // TODO: Make inventory
     // TODO: Make trees
     // TODO: Reference Terraria and Stardew Valley as well
-    // TODO: How game engine is implemented? Can I reference this? Is onRender() or other on..() famous in game engine?
     // TODO: Place a computer he can use this is equivalent to a project a robot use it in real world.
     // IDEA: Instead of predicting next word / token, plan sequences of tasks, and output final unit.
     // IDEA: World Model: generate probable all the future pixels so that he can predict what might happen in next few
