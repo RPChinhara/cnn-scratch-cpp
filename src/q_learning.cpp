@@ -21,7 +21,6 @@ QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, flo
 
 Action QLearning::ChooseAction(size_t state)
 {
-    // TODO: How to fix always choosing first Action in q learning choseAction() issue.
     std::random_device rd;
     std::mt19937 rng(rd());
     std::uniform_real_distribution<> dis1(0.0f, 1.0f);
@@ -64,7 +63,6 @@ void QLearning::UpdateQtable(size_t state, Action action, float reward, size_t n
     size_t idx = state == 0 ? action : (state * q_table.shape.back()) + action;
     q_table[idx] += learning_rate * (reward + discount_factor * next_max_q - q_table[idx]);
 
-    // TODO: What are common value for exploration rate? How should I decay them?
     if (exploration_rate <= exploration_min || done)
         exploration_rate = 1.0f;
 

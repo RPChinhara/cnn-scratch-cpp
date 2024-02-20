@@ -57,7 +57,7 @@ enum class MentalHealthState
     PANICKED,
     NEUTRAL
 };
-// NOTE: if it reached under certain level, in main.ccp goes back to bee and rest, and recover all the
+
 enum StressState
 {
 };
@@ -81,7 +81,3 @@ enum ConfidenceState
 enum HygineState
 {
 };
-
-// TODO: Maybe add 血糖値、血圧?
-// TODO I want to add weight, but how?
-// TODO:  Add body and env temperture.

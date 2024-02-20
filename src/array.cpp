@@ -48,7 +48,6 @@ static size_t GetBatchSize(const std::vector<size_t> &shape)
 
 Tensor Transpose(const Tensor &in)
 {
-    // TODO: Ask chatGPT how to implement better transpose.
     assert(in.shape.size() >= 2);
 
     Tensor out = Zeros({in.shape.back(), in.shape[in.shape.size() - 2]});

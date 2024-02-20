@@ -42,7 +42,6 @@ class Environment
     void CalculateReward(const Action action, const Agent &agent);
     bool CheckTermination(const Agent &agent);
 
-    // TODO: Some of these should be inside class Agent?
     bool prevHasCollidedWithWater;
     bool prevHasCollidedWithFood;
 
@@ -82,7 +81,7 @@ class Environment
     size_t minutesLived;
     size_t hoursLived;
     size_t daysLived;
-    // TODO: Do I need Lived?
+    
     size_t secondsLivedWithoutDrinking;
     size_t minutesLivedWithoutDrinking;
     size_t hoursLivedWithoutDrinking;

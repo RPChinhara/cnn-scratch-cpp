@@ -114,7 +114,6 @@ Tensor Log(const Tensor &in, Device device)
 
 Tensor Max(const Tensor &in, const size_t axis)
 {
-    // DEPRECATED: I may only need axis 1 pattern for Max()
     assert(axis == 0 || axis == 1);
     Tensor out;
 

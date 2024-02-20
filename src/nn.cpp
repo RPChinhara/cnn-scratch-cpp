@@ -51,7 +51,6 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
         x_shuffled = Shuffle(x_train, rd_num);
         y_shuffled = Shuffle(y_train, rd_num);
 
-        // TODO: Fix not being able to change the batch size. For example, to 32 that's why it's stayed in 8.
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size)
         {
             x_batch = Slice(x_shuffled, j, batch_size);
@@ -62,7 +61,6 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             size_t numLayers = layers.size() - 1;
             for (size_t k = numLayers; k > 0; --k)
             {
-                // TODO: Find note for derivative that was deleted, and paste it here.
                 if (k == numLayers)
                     dloss_dlogits.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else
@@ -90,8 +88,6 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
                 weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
-                
-                // TODO: Implement Adam.
             }
 
             dloss_dlogits.clear(), dloss_dweights.clear(), dloss_dbiases.clear();
@@ -104,7 +100,6 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remainingMilliseconds = duration - seconds;
 
-        // TODO: Add verbose arg to switch wheather to log metrics or not.
         buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
                          std::to_string(seconds.count()) + "s " + std::to_string(remainingMilliseconds.count()) +
                          "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, activations.back())) +

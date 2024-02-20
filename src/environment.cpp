@@ -22,9 +22,7 @@ Environment::Environment(const LONG client_width, const LONG client_height, cons
 void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
                          Direction direction, const Agent &agent)
 {
-    // NOTE: It could be 1.5 ~ 2 seconds per iteration. I set to 1 second for now, but I'm not sure.
-    // TODO: Use constexpr
-    size_t secondsPerIteration = 1;
+    constexpr size_t secondsPerIteration = 1;
     secondsLived += secondsPerIteration;
     secondsLivedWithoutDrinking += secondsPerIteration;
     secondsLivedWithoutEating += secondsPerIteration;
@@ -384,7 +382,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
 
     if (agent.has_collided_with_water && thirstState != ThirstState::LEVEL5)
     {
-        // TODO: Is this really the best way to decrease/increase the elements of the enum?
         thirstStateSizeT = std::min((thirstStateSizeT + 1), numThirstStates - 1);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState =
@@ -397,10 +394,9 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
         currentState =
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
-        // hoursLivedWithoutDrinking = 0; TODO: Do I have to reset it to 0?
+        // hoursLivedWithoutDrinking = 0;
     }
-    // TODO: I think I could refactor thirst, hunger, and energy parts as these are doing same thing.
-    // IDEA: I think 200 and 100 is too small, he get exausted too early imo.
+    
     if (action == Action::WALK && numWalk == 700 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
@@ -427,9 +423,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
         // hours = 0;
     }
-    // TODO: I think this should be hoursLivedWithoutEating % 3 == 0, and this applies to other places as well.
-    // I think above idea is wrong. I think I need to somehow reduce level each time reach multiple of 3 hours or
-    // something.
+    
     if (hoursLivedWithoutEating >= 3 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
@@ -456,7 +450,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
 
     if (agent.has_collided_with_food && energyState != EnergyState::LEVEL5)
     {
-        // TODO: I'm not changing state of the energy here.
+        // hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         energyState =
             std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
         currentState =
@@ -465,7 +459,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
 
     if (hoursLivedWithoutEating >= 3 && energyState != EnergyState::LEVEL1)
     {
-        // TODO: I'm not changing state of the energy here.
+        // hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
         currentState =
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
@@ -533,8 +527,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
         currentState =
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
-
-    // TODO: Increase level of emotion state when he kill the predators, and decrease when opposite result occured.
 
     if (energyState < EnergyState::LEVEL4)
         energyLevelBelow3 = true;
@@ -620,7 +612,6 @@ void Environment::CalculateReward(const Action action, const Agent &agent)
 {
     reward = 0.0f;
 
-    // TODO: I don't know, but pass vector of entity in here as there are various enties's postions has been accessed.
     if (std::labs(agent.position.left - water.left) < 250 && std::labs(agent.position.top - water.top) < 250)
         reward += 1.2f;
 
@@ -655,11 +646,6 @@ void Environment::CalculateReward(const Action action, const Agent &agent)
         reward += 2.2f;
     }
 
-    // TODO: I think I need to make numWaterCollision, numFoodCollision because otherwise he will drink or eat forever
-    // which lead to death in irl.
-
-    // TODO: This is not considering sequentially collided with the wall. It's just incrementing whenever he collided
-    // which is not corerct way to do it?
     if (agent.has_collided_with_wall)
         ++numWallCollision;
     else
@@ -668,7 +654,6 @@ void Environment::CalculateReward(const Action action, const Agent &agent)
     if (daysLived > maxDays)
         reward += 1.0f;
 
-    // TODO: Should be thirstState > ThirstState::LEVEL1
     if (ThirstState::LEVEL1 < thirstState && thirstState < ThirstState::LEVEL5 && agent.has_collided_with_water)
         reward += 1.5f;
     if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL5 && agent.has_collided_with_water)

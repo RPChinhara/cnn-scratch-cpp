@@ -4,12 +4,10 @@
 
 class Agent
 {
-    // TODO: Make this Singleton?
-    // TODO: How can I use flags?
   public:
     Agent() = default;
 
-    RECT position; // TODO: Maybe change to pos?
+    RECT position;
     RECT previousPosition;
     RECT leftEyePosition;
     RECT rightEyePosition;

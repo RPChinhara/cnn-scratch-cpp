@@ -7,40 +7,38 @@
 
 #include <windows.h>
 
-Tensor Relu(const Tensor &in, Device device)
+Tensor Relu(const Tensor &tensor, Device device)
 {
-    // IDEA: To 'tensor' and 'newTensor' from 'in' and 'out'? Also 'gpuTensor' and 'gpuNewTesnor' from 'in2' and 'out2'?
+    Tensor newTensor = tensor;
+
     switch (device)
     {
     case Device::CPU: {
-        Tensor out = in;
+        for (size_t i = 0; i < tensor.size; ++i)
+            newTensor.elem[i] = std::max(0.0f, tensor.elem[i]);
 
-        for (size_t i = 0; i < in.size; ++i)
-            out.elem[i] = std::max(0.0f, in.elem[i]);
-
-        return out;
+        return newTensor;
     }
     case Device::GPU: {
-        float *in2, *out2;
-        cudaMalloc((void **)&in2, in.size * sizeof(float));
-        cudaMalloc((void **)&out2, in.size * sizeof(float));
-        cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
+        float *tensorGPU, *newTensorGPU;
+        cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
+        cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
+        cudaMemcpy(tensorGPU, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
 
         constexpr int blockSize = 128;
-        int gridSize = (in.size + blockSize - 1) / blockSize;
-        Relu<<<gridSize, blockSize>>>(in2, out2, in.size);
+        int gridSize = (tensor.size + blockSize - 1) / blockSize;
+        Relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, tensor.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
                        "Error", MB_ICONERROR);
 
-        Tensor out = in;
-        cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(in2);
-        cudaFree(out2);
+        cudaMemcpy(newTensor.elem, newTensorGPU, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaFree(tensorGPU);
+        cudaFree(newTensorGPU);
 
-        return out;
+        return newTensor;
     }
     default:
         MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
@@ -48,8 +46,8 @@ Tensor Relu(const Tensor &in, Device device)
     }
 }
 
-Tensor Softmax(const Tensor &in)
+Tensor Softmax(const Tensor &tensor)
 {
-    Tensor exp_scores = Exp(in - Max(in, 1), Device::CPU);
+    Tensor exp_scores = Exp(tensor - Max(tensor, 1), Device::CPU);
     return exp_scores / Sum(exp_scores, 1);
 }

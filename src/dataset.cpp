@@ -81,13 +81,11 @@ Tensor ReadMNISTImages(const std::string &filePath)
 
     uint32_t magicNumber, numImages, numRows, numCols;
 
-    // Read the header information
     file.read(reinterpret_cast<char *>(&magicNumber), sizeof(magicNumber));
     file.read(reinterpret_cast<char *>(&numImages), sizeof(numImages));
     file.read(reinterpret_cast<char *>(&numRows), sizeof(numRows));
     file.read(reinterpret_cast<char *>(&numCols), sizeof(numCols));
 
-    // Convert from big-endian to little-endian if needed
     magicNumber = _byteswap_ulong(magicNumber);
     numImages = _byteswap_ulong(numImages);
     numRows = _byteswap_ulong(numRows);
@@ -95,13 +93,11 @@ Tensor ReadMNISTImages(const std::string &filePath)
 
     std::vector<std::vector<uint8_t>> images(numImages, std::vector<uint8_t>(numRows * numCols));
 
-    // Read the image data
     for (uint32_t i = 0; i < numImages; ++i)
     {
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
-    // TODO: I don't like this name
     Tensor images2 = Zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
@@ -129,25 +125,18 @@ Tensor ReadMNISTLabels(const std::string &filePath)
     if (!file.is_open())
         MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
 
-    // TODO: Do I need this magicNumber?
     uint32_t magicNumber, numLabels;
 
-    // Read the header information
     file.read(reinterpret_cast<char *>(&magicNumber), sizeof(magicNumber));
     file.read(reinterpret_cast<char *>(&numLabels), sizeof(numLabels));
 
-    // Convert from big-endian to little-endian if needed
     magicNumber = _byteswap_ulong(magicNumber);
     numLabels = _byteswap_ulong(numLabels);
 
     std::vector<uint8_t> labels(numLabels);
 
-    // Read the label data
     file.read(reinterpret_cast<char *>(labels.data()), numLabels);
 
-    // TODO: I don't like this name
-    // TODO: I might need to support 1-dimentional array like (60000,) which is the shape I get when loading MNIST from
-    // TensorFlow, but labels for Iris was 2D so I'm not sure.
     Tensor labels2 = Zeros({numLabels, 1});
     size_t idx = 0;
 

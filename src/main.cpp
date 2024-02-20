@@ -31,8 +31,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         HDC hdc = BeginPaint(hwnd, &ps);
 
-        // TODO: Display MNIST images here
-        // Use StretchDIBits to draw the image data onto the window
+        // StretchDIBits()
 
         GetClientRect(hwnd, &client_rect);
         HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
@@ -51,14 +50,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         FillRect(hdc, &water, blueBrush);
         DeleteObject(blueBrush);
 
-        // Retrieve the pointer to your data from the window
         LONG_PTR userData = GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-        // Assuming your data is a pointer to an int
         Agent *agent = reinterpret_cast<Agent *>(userData);
-
-        // // Access the variable
-        // int result = *myVariable;
 
         HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
         FillRect(hdc, &agent->position, pinkBrush);
@@ -76,7 +70,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         FillRect(hdc, &predator, brownBrush);
         DeleteObject(brownBrush);
 
-        // Draw "Hello, Windows!" text
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 
         EndPaint(hwnd, &ps);
@@ -90,37 +83,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 }
-
-// HIGH PRIORITY: Implement DQN so that I can learn about RL uses nn, and also CNN which is used in this method.
-// HIGH PRIORITY: Implement Transformer.
-// HIGH PRIORITY: Try various type of methods for networks / models e.g., resnet, efficientnet in CNN, PPO, DDPG, in
-// RL, and maybe some things in Sequential as well, but not sure because of the Transformer. Also, like Generative
-// models essentially all the sophisticated methods.
-// HIGH PRIORITY: I have to try video generation project.
-// TODO: Spawn stick in the env, and maybe he can pick up that. Add inventroy box he can open?
-// TODO: No more static water, food, agent2, and predator spawn them in the random spaces.
-// TODO: He can sleep anywhere he want, but he might get eaten by predator so in order to prevent that he has to
-// build a house, and also able to make a fire reference MineCraft to how things are working in this game.
-// TODO: Instead of food place some animal like a sheep, and he can’t eat untill he kills it, and cook that
-// TODO: Make inventory
-// TODO: Make trees
-// TODO: Reference Terraria and Stardew Valley as well
-// TODO: Place a computer he can use this is equivalent to a project a robot use it in real world.
-// IDEA: Instead of predicting next word / token, plan sequences of tasks, and output final unit.
-// IDEA: World Model: generate probable all the future pixels so that he can predict what might happen in next few
-// seconds or minutes e.g., a glass contains water is about to fall off the table, what would he expect, and what
-// kind of action will he take.
-// IDEA: Maybe, use all the pixels as states? Because in real life I don't know what coordinates (x, y, z) I have at
-// that moment instead I have the view I'm seeing. I could have used real time images or videos, but since I'm not
-// using a robot pixels will do it?
-// NOTE: Generating or preding future images by self-supervised learning is the way, but not methods used in GANs?
-// NOTE: Study Neuroscience to get amazing inspirations for the architecture I'm
-// building. However, Geoffrey Hinton no longer thinks the study will improve or achieve AGI. Perhaps, just use AI
-// to study about Neuroscience?
-// NOTE: It could be all the possible images rendered on the screen so that he can predict reason next move or
-// action. Note: Always compare my project and a project where a robot is in real life (world model) learning /
-// training. Imagine the robot is in a room has red(food), blue(water), and other boxes. There might be a computer
-// he could play with.
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -156,60 +118,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
-    // NOTE: Order of CNN
-    // 1. Input Layer:
-    // The raw input data, usually an image or a sequence.
-
-    // 2. Convolutional Layer (Conv2D):
-    // Apply convolution operation with learnable filters.
-    // Optionally, apply activation function (e.g., ReLU).
-
-    // 3. Pooling Layer (MaxPooling2D):
-    // Downsample the spatial dimensions, reducing computation.
-    // Common pooling methods include max pooling or average pooling.
-
-    // 4. Additional Convolutional and Pooling Layers:
-    // Repeat convolutional and pooling layers to capture hierarchical features.
-
-    // 5. Flatten Layer:
-    // Flatten the output from the previous layers into a 1D vector.
-    // Preparing for the fully connected layers.
-
-    // 6. Fully Connected Layers (Dense):
-    // Connect every neuron to every neuron in the previous layer.
-    // Apply an activation function, often ReLU.
-
-    // 7. Output Layer:
-    // Depending on the task, use an appropriate activation function:
-    // For binary classification, use a sigmoid activation.
-    // For multiclass classification, use softmax activation.
-    // For regression, use linear activation.
-
-    // 8. Loss Calculation:
-    // Compute the difference between predicted and true values using a suitable loss function (e.g., cross-entropy for
-    // classification, mean squared error for regression).
-
-    // 9. Backpropagation:
-    // Compute gradients of the loss with respect to the model parameters.
-    // Update model parameters using an optimization algorithm (e.g., gradient descent).
-
-    // 10. Repeat:
-
-    // Iterate through the dataset multiple times (epochs) to improve the model.
-
-    // TODO: Start with MNIST dataset which is grayscale image (3x3 pixels). Useally, in Python or TensorFlow you'd use
-    // matplotlib to render the true and predicted digits from MNIST, but in my case first I'd just benchmark by
-    // checking raw values in Tensor like I do with Iris datset, but later I could render using StretchDIBits().
-
     MNIST mnist = LoadMNIST();
 
-    // good
     for (int i = 47039216; i < 47039216 + 784; ++i)
     {
         std::cout << mnist.trainImages[i] << std::endl;
     }
 
-    // good
     std::cout << mnist.trainLabels[59997] << std::endl;
     std::cout << mnist.trainLabels[59998] << std::endl;
     std::cout << mnist.trainLabels[59999] << std::endl << std::endl;
@@ -221,14 +136,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         std::cout << mnist.testImages[i] << std::endl;
     }
 
-    // good
     std::cout << mnist.testLabels[9997] << std::endl;
     std::cout << mnist.testLabels[9998] << std::endl;
     std::cout << mnist.testLabels[9999] << std::endl;
 
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
-
-    // TODO: Maybe preprocessing is next?
 #endif
 
 #if 1
@@ -306,10 +218,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         Orientation orientation = Orientation::FRONT;
         Direction direction = Direction::SOUTH;
 
-        // IDEA:  Write total reward and num episodes in file so that I can leave the program while it's running and see
-        // how things gonna work.
         Environment env = Environment(client_width, client_height, agent);
-        QLearning q_learning = QLearning(env.numStates, env.numActions); // TODO:  Use deep learning/neural network RL.
+        QLearning q_learning = QLearning(env.numStates, env.numActions);
 
         size_t num_episodes = 1000;
 
@@ -492,10 +402,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 agent.has_collided_with_wall = false;
                 agent.has_collided_with_predator = false;
 
-                // IDEA: I think whenever he collieded with something, he needs to go through CNN process to determine
-                // what he exactly collided with like in real life. For example, he will be presented with some images
-                // or could be some videos. Perhaps in the future, he's gonna learn how to drive, and there I could
-                // definetely utilize CNN.
                 ResolveRectanglesCollision(agent, agent2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
@@ -520,7 +426,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 total_reward += reward;
                 state = next_state;
 
-                // TODO: Can't I just call InvalidateRect() here?
                 // InvalidateRect(hwnd, nullptr, TRUE);
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
 

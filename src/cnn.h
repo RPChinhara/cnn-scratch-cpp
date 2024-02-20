@@ -4,8 +4,6 @@
 
 class Tensor;
 
-// TODO: I could make parent class called NN?
-// NOTE: For one-dimensional data.
 class CNN1D
 {
   public:
@@ -16,7 +14,6 @@ class CNN1D
     std::vector<Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &kernel, const size_t stride);
 };
 
-// NOTE: For two-dimensional data, such as images (most common).
 class CNN2D
 {
   public:
@@ -31,7 +28,6 @@ class CNN2D
     float learning_rate;
 };
 
-// NOTE: For three-dimensional data, like video or volumetric data.
 class CNN3D
 {
   public:
