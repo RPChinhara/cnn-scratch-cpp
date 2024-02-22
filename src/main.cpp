@@ -175,6 +175,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     Agent agent;
 
+    constexpr LONG borderToAgent = 13;
+    constexpr LONG borderToEntities = 5;
+
     agent.position = {borderToAgent, (client_height - borderToAgent) - agent.height, borderToAgent + agent.width,
                       client_height - borderToAgent};
 
