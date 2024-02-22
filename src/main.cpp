@@ -120,6 +120,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 1
     MNIST mnist = LoadMNIST();
 
+    mnist.trainImages / 255.0f;
+
     for (int i = 47039216; i < 47039216 + 784; ++i)
     {
         std::cout << mnist.trainImages[i] << std::endl;
