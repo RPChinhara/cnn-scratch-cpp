@@ -51,22 +51,22 @@ Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, co
     return out;
 }
 
-Tensor Shuffle(const Tensor &in, const size_t random_state)
+Tensor Shuffle(const Tensor &tensor, const size_t random_state)
 {
-    Tensor out = in;
+    Tensor newTensor = tensor;
     std::mt19937 rng(random_state);
 
-    for (size_t i = in.shape.front() - 1; i > 0; --i)
+    for (size_t i = tensor.shape.front() - 1; i > 0; --i)
     {
         std::uniform_int_distribution<> dist(0, i);
         int j = dist(rng);
 
-        for (size_t k = 0; k < in.shape.back(); ++k)
+        for (size_t k = 0; k < tensor.shape.back(); ++k)
         {
-            float temp = out[(in.shape.back() - 1) * i + i + k];
-            out[(in.shape.back() - 1) * i + i + k] = out[(in.shape.back() - 1) * j + j + k];
-            out[(in.shape.back() - 1) * j + j + k] = temp;
+            float temp = newTensor[(tensor.shape.back() - 1) * i + i + k];
+            newTensor[(tensor.shape.back() - 1) * i + i + k] = newTensor[(tensor.shape.back() - 1) * j + j + k];
+            newTensor[(tensor.shape.back() - 1) * j + j + k] = temp;
         }
     }
-    return out;
+    return newTensor;
 }
