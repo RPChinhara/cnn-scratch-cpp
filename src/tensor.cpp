@@ -50,55 +50,55 @@ Tensor::~Tensor()
         delete[] elem;
 }
 
-Tensor::Tensor(const Tensor &other)
+Tensor::Tensor(const Tensor &tensor)
 {
-    elem = new float[other.size];
-    std::copy(other.elem, other.elem + other.size, elem);
-    num_ch_dim = other.num_ch_dim;
-    size = other.size;
-    shape = other.shape;
+    elem = new float[tensor.size];
+    std::copy(tensor.elem, tensor.elem + tensor.size, elem);
+    num_ch_dim = tensor.num_ch_dim;
+    size = tensor.size;
+    shape = tensor.shape;
 }
 
-Tensor::Tensor(Tensor &&other)
+Tensor::Tensor(Tensor &&tensor)
 {
-    elem = other.elem;
-    num_ch_dim = other.num_ch_dim;
-    size = other.size;
-    shape = other.shape;
+    elem = tensor.elem;
+    num_ch_dim = tensor.num_ch_dim;
+    size = tensor.size;
+    shape = tensor.shape;
 
-    other.elem = nullptr;
-    other.num_ch_dim = 0;
-    other.size = 0;
+    tensor.elem = nullptr;
+    tensor.num_ch_dim = 0;
+    tensor.size = 0;
 }
 
-Tensor &Tensor::operator=(const Tensor &other)
+Tensor &Tensor::operator=(const Tensor &tensor)
 {
-    if (this != &other)
+    if (this != &tensor)
     {
         delete[] elem;
-        elem = new float[other.size];
-        std::copy(other.elem, other.elem + other.size, elem);
-        num_ch_dim = other.num_ch_dim;
-        size = other.size;
-        shape = other.shape;
+        elem = new float[tensor.size];
+        std::copy(tensor.elem, tensor.elem + tensor.size, elem);
+        num_ch_dim = tensor.num_ch_dim;
+        size = tensor.size;
+        shape = tensor.shape;
     }
     return *this;
 }
 
-Tensor &Tensor::operator=(Tensor &&other)
+Tensor &Tensor::operator=(Tensor &&tensor)
 {
-    if (this != &other)
+    if (this != &tensor)
     {
         delete[] elem;
 
-        elem = other.elem;
-        num_ch_dim = other.num_ch_dim;
-        size = other.size;
-        shape = other.shape;
+        elem = tensor.elem;
+        num_ch_dim = tensor.num_ch_dim;
+        size = tensor.size;
+        shape = tensor.shape;
 
-        other.elem = nullptr;
-        other.num_ch_dim = 0;
-        other.size = 0;
+        tensor.elem = nullptr;
+        tensor.num_ch_dim = 0;
+        tensor.size = 0;
     }
     return *this;
 }
@@ -111,46 +111,46 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-Tensor Tensor::operator+(const Tensor &other) const
+Tensor Tensor::operator+(const Tensor &tensor) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, other.shape))
+    if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] + other[i];
+            out[i] = elem[i] + tensor[i];
     }
     else
     {
-        assert(shape.back() == other.shape.back());
+        assert(shape.back() == tensor.shape.back());
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] + other[i % other.shape.back()];
+            out[i] = elem[i] + tensor[i % tensor.shape.back()];
     }
     return out;
 }
 
-// Tensor Tensor::operator+(const Tensor& other) const
+// Tensor Tensor::operator+(const Tensor& tensor) const
 // {
 //     Tensor out;
-//     if (ShapeEqual(shape, other.shape)) {
+//     if (ShapeEqual(shape, tensor.shape)) {
 //         out = *this;
 //         std::cout << "1" << std::endl;
 //         for (size_t i = 0; i < out.size; ++i)
-//             out[i] = elem[i] + other[i];
+//             out[i] = elem[i] + tensor[i];
 //     } else {
 //         // std::cout << "2" << std::endl;
 
-//         assert(shape.back() == other.shape.back());
+//         assert(shape.back() == tensor.shape.back());
 
 //         float *A, *B, *C;
 //         cudaMalloc((void**)&A, this->size * sizeof(float));
 //         cudaMalloc((void**)&B, this->size * sizeof(float));
 //         cudaMalloc((void**)&C, this->size * sizeof(float));
 //         cudaMemcpy(A, elem, this->size * sizeof(float), cudaMemcpyHostToDevice);
-//         cudaMemcpy(B, other.elem, other.size * sizeof(float), cudaMemcpyHostToDevice);
+//         cudaMemcpy(B, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
 
 //         constexpr int blockSize = 128;
 //         int gridSize = (this->size + blockSize - 1) / blockSize;
-//         OperatorPlus<<<gridSize, blockSize>>>(A, B, C, other.shape.back(), this->size);
+//         OperatorPlus<<<gridSize, blockSize>>>(A, B, C, tensor.shape.back(), this->size);
 
 //         cudaError_t cudaError = cudaGetLastError();
 //         if (cudaError != cudaSuccess)
@@ -168,33 +168,33 @@ Tensor Tensor::operator+(const Tensor &other) const
 //     return out;
 // }
 
-Tensor Tensor::operator-(const Tensor &other) const
+Tensor Tensor::operator-(const Tensor &tensor) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, other.shape))
+    if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] - other[i];
+            out[i] = elem[i] - tensor[i];
     }
-    else if (shape.back() == other.shape.back())
+    else if (shape.back() == tensor.shape.back())
     {
         size_t idx = 0;
         for (size_t i = 0; i < out.size; ++i)
         {
-            if (idx == other.shape.back())
+            if (idx == tensor.shape.back())
                 idx = 0;
-            out[i] = elem[i] - other[idx];
+            out[i] = elem[i] - tensor[idx];
             ++idx;
         }
     }
-    else if (shape.front() == other.shape.front())
+    else if (shape.front() == tensor.shape.front())
     {
         size_t idx = 0;
         for (size_t i = 0; i < shape.front(); ++i)
         {
             for (size_t j = 0; j < shape.back(); ++j)
             {
-                out[idx] = elem[idx] - other[i];
+                out[idx] = elem[idx] - tensor[i];
                 ++idx;
             }
         }
@@ -202,57 +202,57 @@ Tensor Tensor::operator-(const Tensor &other) const
     return out;
 }
 
-Tensor Tensor::operator*(const Tensor &other) const
+Tensor Tensor::operator*(const Tensor &tensor) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, other.shape))
+    if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] * other[i];
+            out[i] = elem[i] * tensor[i];
     }
     else
     {
-        assert(shape.back() == other.shape.back());
+        assert(shape.back() == tensor.shape.back());
         size_t idx = 0;
         for (size_t i = 0; i < out.size; ++i)
         {
-            if (idx == other.shape.back())
+            if (idx == tensor.shape.back())
                 idx = 0;
-            out[i] = elem[i] * other[idx];
+            out[i] = elem[i] * tensor[idx];
             ++idx;
         }
     }
     return out;
 }
 
-Tensor Tensor::operator/(const Tensor &other) const
+Tensor Tensor::operator/(const Tensor &tensor) const
 {
     Tensor out = *this;
-    if (ShapeEqual(shape, other.shape))
+    if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] / other[i];
+            out[i] = elem[i] / tensor[i];
     }
     else
     {
         size_t idx = 0;
-        if (shape.back() == other.shape.back())
+        if (shape.back() == tensor.shape.back())
         {
             for (size_t i = 0; i < out.size; ++i)
             {
-                if (idx == other.shape.back())
+                if (idx == tensor.shape.back())
                     idx = 0;
-                out[i] = elem[i] / other[idx];
+                out[i] = elem[i] / tensor[idx];
                 ++idx;
             }
         }
-        else if (shape.front() == other.shape.front())
+        else if (shape.front() == tensor.shape.front())
         {
             for (size_t i = 0; i < out.size; ++i)
             {
                 if (i == shape.back())
                     ++idx;
-                out[i] = elem[i] / other[idx];
+                out[i] = elem[i] / tensor[idx];
             }
         }
         else
@@ -263,18 +263,18 @@ Tensor Tensor::operator/(const Tensor &other) const
     return out;
 }
 
-Tensor Tensor::operator+=(const Tensor &other) const
+Tensor Tensor::operator+=(const Tensor &tensor) const
 {
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] + other[i];
+        elem[i] = elem[i] + tensor[i];
     return *this;
 }
 
-Tensor Tensor::operator-=(const Tensor &other) const
+Tensor Tensor::operator-=(const Tensor &tensor) const
 {
-    assert(ShapeEqual(shape, other.shape));
+    assert(ShapeEqual(shape, tensor.shape));
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] - other[i];
+        elem[i] = elem[i] - tensor[i];
     return *this;
 }
 
