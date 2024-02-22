@@ -121,26 +121,35 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MNIST mnist = LoadMNIST();
 
     mnist.trainImages / 255.0f;
+    mnist.testImages / 255.0f;
 
-    for (int i = 47039216; i < 47039216 + 784; ++i)
-    {
-        std::cout << mnist.trainImages[i] << std::endl;
-    }
+    Tensor aa = Tensor{{2, 2, 2, 2, 2, 2}, {2, 3}};
 
-    std::cout << mnist.trainLabels[59997] << std::endl;
-    std::cout << mnist.trainLabels[59998] << std::endl;
-    std::cout << mnist.trainLabels[59999] << std::endl << std::endl;
+    // std::cout << aa * 100.0f << std::endl;
+    // std::cout << 100.0f * aa << std::endl;
 
-    // std::cout << mnist.testImages << std::endl;
+    // mnist.trainLabels = to_categorical(train_labels)
+    // mnist.testLabels = to_categorical(test_labels)
 
-    for (int i = 7839216; i < 7839216 + 784; ++i)
-    {
-        std::cout << mnist.testImages[i] << std::endl;
-    }
+    // for (int i = 47039216; i < 47039216 + 784; ++i)
+    // {
+    //     std::cout << mnist.trainImages[i] << std::endl;
+    // }
 
-    std::cout << mnist.testLabels[9997] << std::endl;
-    std::cout << mnist.testLabels[9998] << std::endl;
-    std::cout << mnist.testLabels[9999] << std::endl;
+    // std::cout << mnist.trainLabels[59997] << std::endl;
+    // std::cout << mnist.trainLabels[59998] << std::endl;
+    // std::cout << mnist.trainLabels[59999] << std::endl << std::endl;
+
+    // // std::cout << mnist.testImages << std::endl;
+
+    // for (int i = 7839216; i < 7839216 + 784; ++i)
+    // {
+    //     std::cout << mnist.testImages[i] << std::endl;
+    // }
+
+    // std::cout << mnist.testLabels[9997] << std::endl;
+    // std::cout << mnist.testLabels[9998] << std::endl;
+    // std::cout << mnist.testLabels[9999] << std::endl;
 
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
 #endif

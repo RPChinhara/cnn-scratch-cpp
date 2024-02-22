@@ -283,20 +283,25 @@ float &Tensor::operator[](const size_t idx) const
     return elem[idx];
 }
 
-Tensor operator-(const float sca, const Tensor &other)
+Tensor operator-(const float sca, const Tensor &tensor)
 {
-    Tensor out = other;
-    for (size_t i = 0; i < out.size; ++i)
-        out[i] = sca - other[i];
-    return out;
+    Tensor newTensor = tensor;
+    for (size_t i = 0; i < tensor.size; ++i)
+        newTensor[i] = sca - tensor[i];
+    return newTensor;
 }
 
-Tensor operator*(const float sca, const Tensor &other)
+Tensor operator*(const float sca, const Tensor &tensor)
 {
-    Tensor out = other;
-    for (size_t i = 0; i < out.size; ++i)
-        out[i] = sca * other[i];
-    return out;
+    Tensor newTensor = tensor;
+    for (size_t i = 0; i < tensor.size; ++i)
+        newTensor[i] = sca * tensor[i];
+    return newTensor;
+}
+
+Tensor operator/(const Tensor &other, const float sca)
+{
+    return Tensor();
 }
 
 static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)
