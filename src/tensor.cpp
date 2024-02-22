@@ -113,29 +113,29 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
 
 Tensor Tensor::operator+(const Tensor &tensor) const
 {
-    Tensor out = *this;
+    Tensor newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
-        for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] + tensor[i];
+        for (size_t i = 0; i < newTensor.size; ++i)
+            newTensor[i] = elem[i] + tensor[i];
     }
     else
     {
         assert(shape.back() == tensor.shape.back());
-        for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] + tensor[i % tensor.shape.back()];
+        for (size_t i = 0; i < newTensor.size; ++i)
+            newTensor[i] = elem[i] + tensor[i % tensor.shape.back()];
     }
-    return out;
+    return newTensor;
 }
 
 // Tensor Tensor::operator+(const Tensor& tensor) const
 // {
-//     Tensor out;
+//     Tensor newTensor;
 //     if (ShapeEqual(shape, tensor.shape)) {
-//         out = *this;
+//         newTensor = *this;
 //         std::cout << "1" << std::endl;
-//         for (size_t i = 0; i < out.size; ++i)
-//             out[i] = elem[i] + tensor[i];
+//         for (size_t i = 0; i < newTensor.size; ++i)
+//             newTensor[i] = elem[i] + tensor[i];
 //     } else {
 //         // std::cout << "2" << std::endl;
 
@@ -157,33 +157,33 @@ Tensor Tensor::operator+(const Tensor &tensor) const
 //             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
 //                      "Error", MB_ICONERROR);
 
-//         out = *this;
-//         cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
+//         newTensor = *this;
+//         cudaMemcpy(newTensor.elem, C, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
 //         cudaFree(A);
 //         cudaFree(B);
 //         cudaFree(C);
 
 //     }
 
-//     return out;
+//     return newTensor;
 // }
 
 Tensor Tensor::operator-(const Tensor &tensor) const
 {
-    Tensor out = *this;
+    Tensor newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
-        for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] - tensor[i];
+        for (size_t i = 0; i < newTensor.size; ++i)
+            newTensor[i] = elem[i] - tensor[i];
     }
     else if (shape.back() == tensor.shape.back())
     {
         size_t idx = 0;
-        for (size_t i = 0; i < out.size; ++i)
+        for (size_t i = 0; i < newTensor.size; ++i)
         {
             if (idx == tensor.shape.back())
                 idx = 0;
-            out[i] = elem[i] - tensor[idx];
+            newTensor[i] = elem[i] - tensor[idx];
             ++idx;
         }
     }
@@ -194,65 +194,65 @@ Tensor Tensor::operator-(const Tensor &tensor) const
         {
             for (size_t j = 0; j < shape.back(); ++j)
             {
-                out[idx] = elem[idx] - tensor[i];
+                newTensor[idx] = elem[idx] - tensor[i];
                 ++idx;
             }
         }
     }
-    return out;
+    return newTensor;
 }
 
 Tensor Tensor::operator*(const Tensor &tensor) const
 {
-    Tensor out = *this;
+    Tensor newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
-        for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] * tensor[i];
+        for (size_t i = 0; i < newTensor.size; ++i)
+            newTensor[i] = elem[i] * tensor[i];
     }
     else
     {
         assert(shape.back() == tensor.shape.back());
         size_t idx = 0;
-        for (size_t i = 0; i < out.size; ++i)
+        for (size_t i = 0; i < newTensor.size; ++i)
         {
             if (idx == tensor.shape.back())
                 idx = 0;
-            out[i] = elem[i] * tensor[idx];
+            newTensor[i] = elem[i] * tensor[idx];
             ++idx;
         }
     }
-    return out;
+    return newTensor;
 }
 
 Tensor Tensor::operator/(const Tensor &tensor) const
 {
-    Tensor out = *this;
+    Tensor newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
-        for (size_t i = 0; i < out.size; ++i)
-            out[i] = elem[i] / tensor[i];
+        for (size_t i = 0; i < newTensor.size; ++i)
+            newTensor[i] = elem[i] / tensor[i];
     }
     else
     {
         size_t idx = 0;
         if (shape.back() == tensor.shape.back())
         {
-            for (size_t i = 0; i < out.size; ++i)
+            for (size_t i = 0; i < newTensor.size; ++i)
             {
                 if (idx == tensor.shape.back())
                     idx = 0;
-                out[i] = elem[i] / tensor[idx];
+                newTensor[i] = elem[i] / tensor[idx];
                 ++idx;
             }
         }
         else if (shape.front() == tensor.shape.front())
         {
-            for (size_t i = 0; i < out.size; ++i)
+            for (size_t i = 0; i < newTensor.size; ++i)
             {
                 if (i == shape.back())
                     ++idx;
-                out[i] = elem[i] / tensor[idx];
+                newTensor[i] = elem[i] / tensor[idx];
             }
         }
         else
@@ -260,7 +260,7 @@ Tensor Tensor::operator/(const Tensor &tensor) const
             MessageBox(nullptr, "Shapes don't much", "Error", MB_ICONERROR);
         }
     }
-    return out;
+    return newTensor;
 }
 
 Tensor Tensor::operator+=(const Tensor &tensor) const
