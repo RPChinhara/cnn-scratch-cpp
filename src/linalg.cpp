@@ -6,40 +6,41 @@
 #include <cassert>
 #include <windows.h>
 
-Tensor MatMul(const Tensor &in1, const Tensor &in2, Device device)
+Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
 {
+    Tensor newTensor = Zeros({tensor1.shape.front(), tensor2.shape.back()});
+
     switch (device)
     {
     case Device::CPU: {
-        Tensor out = Zeros({in1.shape.front(), in2.shape.back()});
 
-        for (size_t i = 0; i < in1.shape.front(); ++i)
+        for (size_t i = 0; i < tensor1.shape.front(); ++i)
         {
-            for (size_t j = 0; j < in2.shape.back(); ++j)
+            for (size_t j = 0; j < tensor2.shape.back(); ++j)
             {
                 float sum = 0.0;
 
-                for (size_t l = 0; l < in1.shape.back(); ++l)
-                    sum += in1[i * in1.shape.back() + l] * in2[l * in2.shape.back() + j];
+                for (size_t l = 0; l < tensor1.shape.back(); ++l)
+                    sum += tensor1[i * tensor1.shape.back() + l] * tensor2[l * tensor2.shape.back() + j];
 
-                out[i * in2.shape.back() + j] = sum;
+                newTensor[i * tensor2.shape.back() + j] = sum;
             }
         }
 
-        return out;
+        return newTensor;
     }
     case Device::GPU: {
-        assert(in1.shape.back() == in2.shape.front());
-        size_t m = in1.shape.front();
-        size_t n = in1.shape.back();
-        size_t k = in2.shape.back();
+        assert(tensor1.shape.back() == tensor2.shape.front());
+        size_t m = tensor1.shape.front();
+        size_t n = tensor1.shape.back();
+        size_t k = tensor2.shape.back();
 
         float *A, *B, *C;
         cudaMalloc(&A, m * n * sizeof(float));
         cudaMalloc(&B, n * k * sizeof(float));
         cudaMalloc(&C, m * k * sizeof(float));
-        cudaMemcpy(A, in1.elem, in1.size * sizeof(float), cudaMemcpyHostToDevice);
-        cudaMemcpy(B, in2.elem, in2.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(A, tensor1.elem, tensor1.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(B, tensor2.elem, tensor2.size * sizeof(float), cudaMemcpyHostToDevice);
 
         dim3 block_dim(16, 16);
         dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
@@ -50,13 +51,12 @@ Tensor MatMul(const Tensor &in1, const Tensor &in2, Device device)
             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
                        "Error", MB_ICONERROR);
 
-        Tensor out = Zeros({in1.shape.front(), in2.shape.back()});
-        cudaMemcpy(out.elem, C, out.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(newTensor.elem, C, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(A);
         cudaFree(B);
         cudaFree(C);
 
-        return out;
+        return newTensor;
     }
     default:
         MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
