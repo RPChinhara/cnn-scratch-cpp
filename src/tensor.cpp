@@ -325,48 +325,48 @@ static std::vector<size_t> GetNumElemEachBatch(const std::vector<size_t> &shape)
     return num_elem_each_batch;
 }
 
-std::ostream &operator<<(std::ostream &os, const Tensor &in)
+std::ostream &operator<<(std::ostream &os, const Tensor &tensor)
 {
     size_t idx = 0;
-    if (in.shape.size() == 0)
+    if (tensor.shape.size() == 0)
     {
-        os << "Tensor(" << std::to_string(in[0]) << ", shape=())";
+        os << "Tensor(" << std::to_string(tensor[0]) << ", shape=())";
         return os;
     }
     else
     {
-        if (in.num_ch_dim == 1)
+        if (tensor.num_ch_dim == 1)
         {
             os << "Tensor(";
-            for (size_t i = 0; i < in.shape.size(); ++i)
+            for (size_t i = 0; i < tensor.shape.size(); ++i)
                 os << "[";
         }
         else
         {
             os << "Tensor(\n";
-            for (size_t i = 0; i < in.shape.size(); ++i)
+            for (size_t i = 0; i < tensor.shape.size(); ++i)
                 os << "[";
         }
 
-        if (in.num_ch_dim == 1)
+        if (tensor.num_ch_dim == 1)
         {
-            for (size_t i = 0; i < in.size; ++i)
-                if (i == in.size - 1)
-                    os << std::to_string(in[i]);
+            for (size_t i = 0; i < tensor.size; ++i)
+                if (i == tensor.size - 1)
+                    os << std::to_string(tensor[i]);
                 else
-                    os << std::to_string(in[i]) << " ";
+                    os << std::to_string(tensor[i]) << " ";
         }
         else
         {
-            std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(in.shape);
-            size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(in.shape);
+            std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(tensor.shape);
+            size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(tensor.shape);
 
-            for (size_t i = 0; i < in.size; ++i)
+            for (size_t i = 0; i < tensor.size; ++i)
             {
                 bool num_elem_each_batch_done = false;
                 size_t num_square_brackets = 0;
 
-                if (in.shape.size() > 2)
+                if (tensor.shape.size() > 2)
                 {
                     for (int j = num_elem_each_batch.size() - 1; j >= 0; --j)
                     {
@@ -379,11 +379,11 @@ std::ostream &operator<<(std::ostream &os, const Tensor &in)
                     }
                 }
 
-                if (i % in.shape.back() == 0 && i != 0 && !(i % num_elem_most_inner_mat == 0))
+                if (i % tensor.shape.back() == 0 && i != 0 && !(i % num_elem_most_inner_mat == 0))
                 {
                     os << "]\n";
 
-                    for (size_t i = 0; i < in.shape.size() - 1; ++i)
+                    for (size_t i = 0; i < tensor.shape.size() - 1; ++i)
                         os << " ";
 
                     os << "[";
@@ -410,7 +410,7 @@ std::ostream &operator<<(std::ostream &os, const Tensor &in)
                     {
                         for (size_t i = 0; i < num_square_brackets; ++i)
                             os << "\n";
-                        for (size_t i = 0; i < in.shape.size() - num_square_brackets - 1; ++i)
+                        for (size_t i = 0; i < tensor.shape.size() - num_square_brackets - 1; ++i)
                             os << " ";
                         for (size_t i = 0; i < num_square_brackets + 1; ++i)
                             os << "[";
@@ -418,31 +418,31 @@ std::ostream &operator<<(std::ostream &os, const Tensor &in)
                     else
                     {
                         os << "\n";
-                        for (size_t i = 0; i < in.shape.size() - 2; ++i)
+                        for (size_t i = 0; i < tensor.shape.size() - 2; ++i)
                             os << " ";
                         os << "[[";
                     }
                 }
 
-                if (i == in.size - 1)
+                if (i == tensor.size - 1)
                 {
-                    os << std::to_string(in[i]);
+                    os << std::to_string(tensor[i]);
                     continue;
                 }
 
-                if (idx == in.shape.back())
+                if (idx == tensor.shape.back())
                     idx = 0;
 
-                if (in.shape.back() == 1)
+                if (tensor.shape.back() == 1)
                 {
-                    os << std::to_string(in[i]);
+                    os << std::to_string(tensor[i]);
                 }
                 else
                 {
-                    if (idx % (in.shape.back() - 1) == 0 && idx != 0)
-                        os << std::to_string(in[i]);
+                    if (idx % (tensor.shape.back() - 1) == 0 && idx != 0)
+                        os << std::to_string(tensor[i]);
                     else
-                        os << std::to_string(in[i]) << " ";
+                        os << std::to_string(tensor[i]) << " ";
                 }
                 ++idx;
 
@@ -450,19 +450,19 @@ std::ostream &operator<<(std::ostream &os, const Tensor &in)
             }
         }
 
-        for (size_t i = 0; i < in.shape.size(); ++i)
+        for (size_t i = 0; i < tensor.shape.size(); ++i)
             os << "]";
     }
 
     os << ", shape=(";
-    for (size_t i = 0; i < in.shape.size(); ++i)
+    for (size_t i = 0; i < tensor.shape.size(); ++i)
     {
-        if (i != in.shape.size() - 1)
-            os << in.shape[i] << ", ";
-        else if (in.shape.size() == 1)
-            os << in.shape[i] << ",";
+        if (i != tensor.shape.size() - 1)
+            os << tensor.shape[i] << ", ";
+        else if (tensor.shape.size() == 1)
+            os << tensor.shape[i] << ",";
         else
-            os << in.shape[i];
+            os << tensor.shape[i];
     }
     os << "))";
 
