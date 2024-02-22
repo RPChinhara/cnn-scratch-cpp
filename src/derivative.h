@@ -2,5 +2,5 @@
 
 class Tensor;
 
-Tensor CategoricalCrossEntropyDerivative(const Tensor &y_true, const Tensor &y_pred);
-Tensor ReluDerivative(const Tensor &in);
+Tensor CategoricalCrossEntropyDerivative(const Tensor &yTrue, const Tensor &yPred);
+Tensor ReluDerivative(const Tensor &tensor);

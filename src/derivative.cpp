@@ -1,24 +1,24 @@
 #include "derivative.h"
 #include "tensor.h"
 
-Tensor CategoricalCrossEntropyDerivative(const Tensor &y_true, const Tensor &y_pred)
+Tensor CategoricalCrossEntropyDerivative(const Tensor &yTrue, const Tensor &yPred)
 {
-    return (y_pred - y_true);
+    return (yPred - yTrue);
 }
 
-Tensor ReluDerivative(const Tensor &in)
+Tensor ReluDerivative(const Tensor &tensor)
 {
-    Tensor out = in;
+    Tensor newTensor = tensor;
 
-    for (size_t i = 0; i < in.size; ++i)
+    for (size_t i = 0; i < tensor.size; ++i)
     {
-        if (in[i] < 0.0f)
-            out[i] = 0.0f;
-        else if (in[i] > 0.0f)
-            out[i] = 1.0f;
-        else if (in[i] == 0.0f)
-            out[i] = 0.0f;
+        if (tensor[i] > 0.0f)
+            newTensor[i] = 1.0f;
+        else if (tensor[i] == 0.0f)
+            newTensor[i] = 0.0f;
+        else
+            newTensor[i] = 0.0f;
     }
 
-    return out;
+    return newTensor;
 }
