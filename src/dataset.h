@@ -2,9 +2,6 @@
 
 #include "tensor.h"
 
-#include <string>
-#include <vector>
-
 struct Iris
 {
     Tensor features;
