@@ -12,6 +12,46 @@ enum Entity
     PREDATOR
 };
 
+// class Agent2
+// {
+//     RECT position;
+
+//     const LONG width = 50;
+//     const LONG height = 50;
+// };
+
+// class Bed
+// {
+//     RECT position;
+
+//     const LONG width = 66;
+//     const LONG height = 60;
+// };
+
+// class Food
+// {
+//     RECT position;
+
+//     const LONG width = 50;
+//     const LONG height = 50;
+// };
+
+// class Water
+// {
+//     RECT position;
+
+//     const LONG width = 50;
+//     const LONG height = 50;
+// };
+
+// class Predator
+// {
+//     RECT position;
+
+//     const LONG width = 60;
+//     const LONG height = 60;
+// };
+
 inline RECT agent2;
 inline RECT bed;
 inline RECT food;
