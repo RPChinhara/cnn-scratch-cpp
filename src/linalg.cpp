@@ -31,20 +31,23 @@ Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
     }
     case Device::GPU: {
         assert(tensor1.shape.back() == tensor2.shape.front());
-        size_t m = tensor1.shape.front();
-        size_t n = tensor1.shape.back();
-        size_t k = tensor2.shape.back();
+
+        size_t numRowsTensor1 = tensor1.shape.front();
+        size_t numColsTensor1 = tensor1.shape.back();
+        size_t numRowsTensor2 = tensor2.shape.back();
 
         float *tensorGPU1, *tensorGPU2, *newTensorGPU;
-        cudaMalloc(&tensorGPU1, m * n * sizeof(float));
-        cudaMalloc(&tensorGPU2, n * k * sizeof(float));
-        cudaMalloc(&newTensorGPU, m * k * sizeof(float));
+        cudaMalloc(&tensorGPU1, numRowsTensor1 * numColsTensor1 * sizeof(float));
+        cudaMalloc(&tensorGPU2, numColsTensor1 * numRowsTensor2 * sizeof(float));
+        cudaMalloc(&newTensorGPU, numRowsTensor1 * numRowsTensor2 * sizeof(float));
         cudaMemcpy(tensorGPU1, tensor1.elem, tensor1.size * sizeof(float), cudaMemcpyHostToDevice);
         cudaMemcpy(tensorGPU2, tensor2.elem, tensor2.size * sizeof(float), cudaMemcpyHostToDevice);
 
         dim3 block_dim(16, 16);
-        dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
-        MatMul<<<grid_dim, block_dim>>>(tensorGPU1, tensorGPU2, newTensorGPU, m, n, k);
+        dim3 grid_dim((numRowsTensor1 + block_dim.x - 1) / block_dim.x,
+                      (numRowsTensor2 + block_dim.y - 1) / block_dim.y);
+        MatMul<<<grid_dim, block_dim>>>(tensorGPU1, tensorGPU2, newTensorGPU, numRowsTensor1, numColsTensor1,
+                                        numRowsTensor2);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
