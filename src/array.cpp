@@ -4,20 +4,20 @@
 #include <cassert>
 #include <numeric>
 
-Tensor ClipByValue(const Tensor &in, float clip_val_min, float clip_val_max)
+Tensor ClipByValue(const Tensor &tensor, float clip_val_min, float clip_val_max)
 {
     assert(clip_val_min <= clip_val_max);
-    Tensor out = in;
+    Tensor newTensor = tensor;
 
-    for (size_t i = 0; i < in.size; ++i)
+    for (size_t i = 0; i < tensor.size; ++i)
     {
-        if (in[i] < clip_val_min)
-            out[i] = clip_val_min;
-        else if (in[i] > clip_val_max)
-            out[i] = clip_val_max;
+        if (tensor[i] < clip_val_min)
+            newTensor[i] = clip_val_min;
+        else if (tensor[i] > clip_val_max)
+            newTensor[i] = clip_val_max;
     }
 
-    return out;
+    return newTensor;
 }
 
 Tensor Slice(const Tensor &in, const size_t begin, const size_t size)
