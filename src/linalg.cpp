@@ -35,26 +35,26 @@ Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
         size_t n = tensor1.shape.back();
         size_t k = tensor2.shape.back();
 
-        float *A, *B, *C;
-        cudaMalloc(&A, m * n * sizeof(float));
-        cudaMalloc(&B, n * k * sizeof(float));
-        cudaMalloc(&C, m * k * sizeof(float));
-        cudaMemcpy(A, tensor1.elem, tensor1.size * sizeof(float), cudaMemcpyHostToDevice);
-        cudaMemcpy(B, tensor2.elem, tensor2.size * sizeof(float), cudaMemcpyHostToDevice);
+        float *tensorGPU1, *tensorGPU2, *newTensorGPU;
+        cudaMalloc(&tensorGPU1, m * n * sizeof(float));
+        cudaMalloc(&tensorGPU2, n * k * sizeof(float));
+        cudaMalloc(&newTensorGPU, m * k * sizeof(float));
+        cudaMemcpy(tensorGPU1, tensor1.elem, tensor1.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(tensorGPU2, tensor2.elem, tensor2.size * sizeof(float), cudaMemcpyHostToDevice);
 
         dim3 block_dim(16, 16);
         dim3 grid_dim((m + block_dim.x - 1) / block_dim.x, (k + block_dim.y - 1) / block_dim.y);
-        MatMul<<<grid_dim, block_dim>>>(A, B, C, m, n, k);
+        MatMul<<<grid_dim, block_dim>>>(tensorGPU1, tensorGPU2, newTensorGPU, m, n, k);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
                        "Error", MB_ICONERROR);
 
-        cudaMemcpy(newTensor.elem, C, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(A);
-        cudaFree(B);
-        cudaFree(C);
+        cudaMemcpy(newTensor.elem, newTensorGPU, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaFree(tensorGPU1);
+        cudaFree(tensorGPU2);
+        cudaFree(newTensorGPU);
 
         return newTensor;
     }
