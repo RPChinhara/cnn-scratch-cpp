@@ -17,6 +17,7 @@ enum Entity
 
 //     const LONG width = 50;
 //     const LONG height = 50;
+//     Entity entity = Entity::AGENT2
 // };
 
 // class Bed
@@ -25,6 +26,7 @@ enum Entity
 
 //     const LONG width = 66;
 //     const LONG height = 60;
+//     Entity entity = Entity::Bed
 // };
 
 // class Food
@@ -33,6 +35,7 @@ enum Entity
 
 //     const LONG width = 50;
 //     const LONG height = 50;
+//     Entity entity = Entity::Food
 // };
 
 // class Water
@@ -41,6 +44,7 @@ enum Entity
 
 //     const LONG width = 50;
 //     const LONG height = 50;
+//     Entity entity = Entity::Water
 // };
 
 // class Predator
@@ -49,6 +53,7 @@ enum Entity
 
 //     const LONG width = 60;
 //     const LONG height = 60;
+//     Entity entity = Entity::Predator
 // };
 
 inline RECT agent2;
