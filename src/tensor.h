@@ -22,7 +22,7 @@ class Tensor
     float &operator[](const size_t idx) const;
     friend Tensor operator-(const float sca, const Tensor &tensor);
     friend Tensor operator*(const float sca, const Tensor &tensor);
-    friend Tensor operator/(const Tensor &tensor, const float sca);
+    friend void operator/(const Tensor &tensor, const float sca);
     friend std::ostream &operator<<(std::ostream &os, const Tensor &tensor);
 
     size_t size;

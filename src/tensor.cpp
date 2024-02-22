@@ -299,9 +299,10 @@ Tensor operator*(const float sca, const Tensor &tensor)
     return newTensor;
 }
 
-Tensor operator/(const Tensor &other, const float sca)
+void operator/(const Tensor &tensor, const float sca)
 {
-    return Tensor();
+    for (size_t i = 0; i < tensor.size; ++i)
+        tensor[i] = tensor[i] / sca;
 }
 
 static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)

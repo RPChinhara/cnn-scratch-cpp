@@ -123,10 +123,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     mnist.trainImages / 255.0f;
     mnist.testImages / 255.0f;
 
-    Tensor aa = Tensor{{2, 2, 2, 2, 2, 2}, {2, 3}};
-
-    // std::cout << aa * 100.0f << std::endl;
-    // std::cout << 100.0f * aa << std::endl;
+    std::cout << mnist.trainImages << std::endl;
+    std::cout << mnist.testImages << std::endl;
 
     // mnist.trainLabels = to_categorical(train_labels)
     // mnist.testLabels = to_categorical(test_labels)
