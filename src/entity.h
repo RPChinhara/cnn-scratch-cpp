@@ -4,7 +4,6 @@
 
 enum Entity
 {
-    AGENT,
     AGENT2,
     BED,
     FOOD,
