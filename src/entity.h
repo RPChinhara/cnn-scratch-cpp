@@ -12,22 +12,6 @@ enum Entity
     PREDATOR
 };
 
-enum Orientation
-{
-    FRONT,
-    LEFT,
-    RIGHT,
-    BACK
-};
-
-enum Direction
-{
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST
-};
-
 inline RECT agent2;
 inline RECT bed;
 inline RECT food;

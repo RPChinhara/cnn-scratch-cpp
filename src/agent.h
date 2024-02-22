@@ -2,11 +2,29 @@
 
 #include <windows.h>
 
+enum Direction
+{
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+};
+
+enum Orientation
+{
+    FRONT,
+    LEFT,
+    RIGHT,
+    BACK
+};
+
 class Agent
 {
   public:
     Agent() = default;
 
+    Direction direction = Direction::SOUTH;
+    Orientation orientation = Orientation::FRONT;
     RECT position;
     RECT previousPosition;
     RECT leftEyePosition;

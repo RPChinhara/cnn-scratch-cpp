@@ -226,9 +226,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        Orientation orientation = Orientation::FRONT;
-        Direction direction = Direction::SOUTH;
-
         Environment env = Environment(client_width, client_height, agent);
         QLearning q_learning = QLearning(env.numStates, env.numActions);
 
@@ -246,29 +243,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 Action action = q_learning.ChooseAction(state);
 
                 auto FrontConfig = [&]() {
-                    orientation = Orientation::FRONT;
-                    direction = Direction::SOUTH;
+                    agent.orientation = Orientation::FRONT;
+                    agent.direction = Direction::SOUTH;
                     agent.render_agent_left_eye = true;
                     agent.render_agent_right_eye = true;
                 };
 
                 auto LeftConfig = [&]() {
-                    orientation = Orientation::LEFT;
-                    direction = Direction::WEST;
+                    agent.orientation = Orientation::LEFT;
+                    agent.direction = Direction::EAST;
                     agent.render_agent_left_eye = true;
                     agent.render_agent_right_eye = false;
                 };
 
                 auto RightConfig = [&]() {
-                    orientation = Orientation::RIGHT;
-                    direction = Direction::EAST;
+                    agent.orientation = Orientation::RIGHT;
+                    agent.direction = Direction::WEST;
                     agent.render_agent_left_eye = false;
                     agent.render_agent_right_eye = true;
                 };
 
                 auto BackConfig = [&]() {
-                    orientation = Orientation::BACK;
-                    direction = Direction::NORTH;
+                    agent.orientation = Orientation::BACK;
+                    agent.direction = Direction::NORTH;
                     agent.render_agent_left_eye = false;
                     agent.render_agent_right_eye = false;
                 };
@@ -281,7 +278,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 switch (action)
                 {
                 case Action::WALK:
-                    switch (orientation)
+                    switch (agent.orientation)
                     {
                     case Orientation::FRONT:
                         agent.position.top += pixelChangeWalk, agent.position.bottom += pixelChangeWalk;
@@ -309,7 +306,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::RUN:
-                    switch (orientation)
+                    switch (agent.orientation)
                     {
                     case Orientation::FRONT:
                         agent.position.top += pixelChangeRun, agent.position.bottom += pixelChangeRun;
@@ -337,7 +334,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::TURN_LEFT:
-                    switch (orientation)
+                    switch (agent.orientation)
                     {
                     case Orientation::FRONT:
                         LeftConfig();
@@ -357,7 +354,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::TURN_RIGHT:
-                    switch (orientation)
+                    switch (agent.orientation)
                     {
                     case Orientation::FRONT:
                         RightConfig();
@@ -377,7 +374,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::TURN_AROUND:
-                    switch (orientation)
+                    switch (agent.orientation)
                     {
                     case Orientation::FRONT:
                         BackConfig();
@@ -428,7 +425,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
-                env.Render(i, iteration, action, q_learning.exploration_rate, direction, agent);
+                env.Render(i, iteration, action, q_learning.exploration_rate, agent.direction, agent);
                 auto [next_state, reward, temp_done] = env.Step(action, agent);
                 done = temp_done;
 
