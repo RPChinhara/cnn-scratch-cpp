@@ -10,30 +10,30 @@ Tensor MinMaxScaler(Tensor &dataset)
     return (dataset - min_vals) / (max_vals - min_vals);
 }
 
-Tensor OneHot(const Tensor &in, const size_t depth)
+Tensor OneHot(const Tensor &tensor, const size_t depth)
 {
-    Tensor out = Zeros({in.size, depth});
+    Tensor newTensor = Zeros({tensor.size, depth});
 
     std::vector<float> indices;
 
-    for (size_t i = 0; i < in.size; ++i)
+    for (size_t i = 0; i < tensor.size; ++i)
     {
         if (i == 0)
-            indices.push_back(in[i]);
+            indices.push_back(tensor[i]);
         else
-            indices.push_back(in[i] + (i * depth));
+            indices.push_back(tensor[i] + (i * depth));
     }
 
-    for (size_t i = 0; i < out.size; ++i)
+    for (size_t i = 0; i < newTensor.size; ++i)
     {
         for (auto j : indices)
         {
             if (i == j)
-                out[i] = 1.0f;
+                newTensor[i] = 1.0f;
         }
     }
 
-    return out;
+    return newTensor;
 }
 
 TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float test_size, const size_t random_state)
