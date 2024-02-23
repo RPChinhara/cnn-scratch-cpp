@@ -129,7 +129,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // mnist.trainLabels = to_categorical(train_labels)
     // mnist.testLabels = to_categorical(test_labels)
 
-
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
 #endif
 
@@ -395,8 +394,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
                 ResolveRectanglesCollision(agent, predator, Entity::PREDATOR, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
-
-                // SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(&agent));
 
                 if (agent.has_collided_with_food)
                     PlaySound(TEXT("asset\\eating_sound_effect.wav"), NULL, SND_FILENAME);
