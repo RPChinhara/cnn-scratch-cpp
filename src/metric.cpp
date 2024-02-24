@@ -2,15 +2,15 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-float CategoricalAccuracy(const Tensor &y_true, const Tensor &y_pred)
+float CategoricalAccuracy(const Tensor &yTrue, const Tensor &yPred)
 {
-    Tensor true_idx = Argmax(y_true);
-    Tensor pred_idx = Argmax(y_pred);
+    Tensor trueIdx = Argmax(yTrue);
+    Tensor predIdx = Argmax(yPred);
     float equal = 0.0f;
 
-    for (size_t i = 0; i < true_idx.size; ++i)
-        if (true_idx[i] == pred_idx[i])
+    for (size_t i = 0; i < trueIdx.size; ++i)
+        if (trueIdx[i] == predIdx[i])
             ++equal;
 
-    return equal / true_idx.size;
+    return equal / trueIdx.size;
 }
