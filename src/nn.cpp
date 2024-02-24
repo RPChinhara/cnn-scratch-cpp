@@ -2,7 +2,6 @@
 #include "activation.h"
 #include "array.h"
 #include "derivative.h"
-#include "kernel.h"
 #include "linalg.h"
 #include "loss.h"
 #include "mathematics.h"
