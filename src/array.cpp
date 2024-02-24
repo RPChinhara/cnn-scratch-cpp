@@ -4,17 +4,17 @@
 #include <cassert>
 #include <numeric>
 
-Tensor ClipByValue(const Tensor &tensor, float clip_val_min, float clip_val_max)
+Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax)
 {
-    assert(clip_val_min <= clip_val_max);
+    assert(clipValMin <= clipValMax);
     Tensor newTensor = tensor;
 
     for (size_t i = 0; i < tensor.size; ++i)
     {
-        if (tensor[i] < clip_val_min)
-            newTensor[i] = clip_val_min;
-        else if (tensor[i] > clip_val_max)
-            newTensor[i] = clip_val_max;
+        if (tensor[i] < clipValMin)
+            newTensor[i] = clipValMin;
+        else if (tensor[i] > clipValMax)
+            newTensor[i] = clipValMax;
     }
 
     return newTensor;
@@ -92,7 +92,8 @@ Tensor Zeros(const std::vector<size_t> &shape)
     newTensor.shape = shape;
 
     if (newTensor.shape.size() > 0)
-        newTensor.size = std::accumulate(newTensor.shape.begin(), newTensor.shape.end(), 1ULL, std::multiplies<size_t>());
+        newTensor.size =
+            std::accumulate(newTensor.shape.begin(), newTensor.shape.end(), 1ULL, std::multiplies<size_t>());
     else
         newTensor.size = 1;
 
