@@ -20,19 +20,19 @@ Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax)
     return newTensor;
 }
 
-Tensor Slice(const Tensor &in, const size_t begin, const size_t size)
+Tensor Slice(const Tensor &tensor, const size_t begin, const size_t size)
 {
-    assert(begin < in.shape[0] && begin + size <= in.shape[0]);
-    Tensor out = Zeros({size, in.shape.back()});
+    assert(begin < tensor.shape[0] && begin + size <= tensor.shape[0]);
+    Tensor newTensor = Zeros({size, tensor.shape.back()});
     size_t idx = 0;
 
-    for (size_t i = begin * in.shape.back(); i < (begin * in.shape.back()) + (size * in.shape.back()); ++i)
+    for (size_t i = begin * tensor.shape.back(); i < (begin * tensor.shape.back()) + (size * tensor.shape.back()); ++i)
     {
-        out[idx] = in[i];
+        newTensor[idx] = tensor[i];
         ++idx;
     }
 
-    return out;
+    return newTensor;
 }
 
 static size_t GetBatchSize(const std::vector<size_t> &shape)
