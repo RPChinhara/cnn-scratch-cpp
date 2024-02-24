@@ -46,11 +46,11 @@ static size_t GetBatchSize(const std::vector<size_t> &shape)
     return batch_size;
 }
 
-Tensor Transpose(const Tensor &in)
+Tensor Transpose(const Tensor &tensor)
 {
-    assert(in.shape.size() >= 2);
+    assert(tensor.shape.size() >= 2);
 
-    Tensor out = Zeros({in.shape.back(), in.shape[in.shape.size() - 2]});
+    Tensor out = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
 
     out.num_ch_dim = 1;
 
@@ -59,10 +59,10 @@ Tensor Transpose(const Tensor &in)
 
     std::vector<size_t> idx_rows;
 
-    for (size_t i = 0; i < in.num_ch_dim; ++i)
-        idx_rows.push_back(i * in.shape.back());
+    for (size_t i = 0; i < tensor.num_ch_dim; ++i)
+        idx_rows.push_back(i * tensor.shape.back());
 
-    size_t batch_size = GetBatchSize(in.shape);
+    size_t batch_size = GetBatchSize(tensor.shape);
 
     size_t idx = 0;
 
@@ -72,7 +72,7 @@ Tensor Transpose(const Tensor &in)
         {
             for (size_t k = 0; k < out.shape.back(); ++k)
             {
-                out[idx] = in[idx_rows[k + (i * out.shape.back())]];
+                out[idx] = tensor[idx_rows[k + (i * out.shape.back())]];
                 idx_rows[k + (i * out.shape.back())] += 1;
                 ++idx;
             }
