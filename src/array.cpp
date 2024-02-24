@@ -84,32 +84,32 @@ Tensor Transpose(const Tensor &in)
 
 Tensor Zeros(const std::vector<size_t> &shape)
 {
-    Tensor out = Tensor();
+    Tensor newTensor = Tensor();
 
     for (const size_t &i : shape)
         assert(i != 0);
 
-    out.shape = shape;
+    newTensor.shape = shape;
 
-    if (out.shape.size() > 0)
-        out.size = std::accumulate(out.shape.begin(), out.shape.end(), 1ULL, std::multiplies<size_t>());
+    if (newTensor.shape.size() > 0)
+        newTensor.size = std::accumulate(newTensor.shape.begin(), newTensor.shape.end(), 1ULL, std::multiplies<size_t>());
     else
-        out.size = 1;
+        newTensor.size = 1;
 
-    out.elem = new float[out.size];
-    std::fill(out.elem, out.elem + out.size, 0.0f);
+    newTensor.elem = new float[newTensor.size];
+    std::fill(newTensor.elem, newTensor.elem + newTensor.size, 0.0f);
 
-    if (out.shape.size() > 0)
+    if (newTensor.shape.size() > 0)
     {
-        out.num_ch_dim = 1;
+        newTensor.num_ch_dim = 1;
 
         for (const size_t &i : shape)
-            out.num_ch_dim *= i;
+            newTensor.num_ch_dim *= i;
     }
     else
     {
-        out.num_ch_dim = 0;
+        newTensor.num_ch_dim = 0;
     }
 
-    return out;
+    return newTensor;
 }
