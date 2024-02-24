@@ -2,4 +2,4 @@
 
 class Tensor;
 
-float CategoricalCrossEntropy(const Tensor &y_true, const Tensor &y_pred);
+float CategoricalCrossEntropy(const Tensor &yTrue, const Tensor &yPred);
