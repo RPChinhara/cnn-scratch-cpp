@@ -50,12 +50,12 @@ Tensor Transpose(const Tensor &tensor)
 {
     assert(tensor.shape.size() >= 2);
 
-    Tensor out = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
+    Tensor newTensor = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
 
-    out.num_ch_dim = 1;
+    newTensor.num_ch_dim = 1;
 
-    for (size_t i = 0; i < out.shape.size() - 1; ++i)
-        out.num_ch_dim *= out.shape[i];
+    for (size_t i = 0; i < newTensor.shape.size() - 1; ++i)
+        newTensor.num_ch_dim *= newTensor.shape[i];
 
     std::vector<size_t> idx_rows;
 
@@ -68,18 +68,18 @@ Tensor Transpose(const Tensor &tensor)
 
     for (size_t i = 0; i < batch_size; ++i)
     {
-        for (size_t j = 0; j < out.shape[out.shape.size() - 2]; ++j)
+        for (size_t j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
         {
-            for (size_t k = 0; k < out.shape.back(); ++k)
+            for (size_t k = 0; k < newTensor.shape.back(); ++k)
             {
-                out[idx] = tensor[idx_rows[k + (i * out.shape.back())]];
-                idx_rows[k + (i * out.shape.back())] += 1;
+                newTensor[idx] = tensor[idx_rows[k + (i * newTensor.shape.back())]];
+                idx_rows[k + (i * newTensor.shape.back())] += 1;
                 ++idx;
             }
         }
     }
 
-    return out;
+    return newTensor;
 }
 
 Tensor Zeros(const std::vector<size_t> &shape)
