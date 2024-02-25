@@ -86,23 +86,23 @@ Tensor Log(const Tensor &tensor, Device device)
         return newTensor;
     }
     case Device::GPU: {
-        float *in2, *out2;
-        cudaMalloc((void **)&in2, tensor.size * sizeof(float));
-        cudaMalloc((void **)&out2, tensor.size * sizeof(float));
-        cudaMemcpy(in2, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
+        float *tensorGPU, *newTensorGPU;
+        cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
+        cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
+        cudaMemcpy(tensorGPU, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
 
         constexpr int blockSize = 128;
         int gridSize = (tensor.size + blockSize - 1) / blockSize;
-        Log<<<gridSize, blockSize>>>(in2, out2, tensor.size);
+        Log<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, tensor.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
                        "Error", MB_ICONERROR);
 
-        cudaMemcpy(newTensor.elem, out2, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(in2);
-        cudaFree(out2);
+        cudaMemcpy(newTensor.elem, newTensorGPU, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaFree(tensorGPU);
+        cudaFree(newTensorGPU);
 
         return newTensor;
     }
