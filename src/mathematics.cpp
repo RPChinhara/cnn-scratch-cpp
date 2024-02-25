@@ -112,51 +112,51 @@ Tensor Log(const Tensor &tensor, Device device)
     }
 }
 
-Tensor Max(const Tensor &in, const size_t axis)
+Tensor Max(const Tensor &tensor, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    Tensor out;
+    Tensor newTensor;
 
     if (axis == 0)
     {
-        out = Zeros({1, in.shape.back()});
+        newTensor = Zeros({1, tensor.shape.back()});
 
-        for (size_t i = 0; i < in.shape.back(); ++i)
+        for (size_t i = 0; i < tensor.shape.back(); ++i)
         {
             size_t idx = i;
             float max = std::numeric_limits<float>::lowest();
 
-            for (size_t j = 0; j < in.shape.front(); ++j)
+            for (size_t j = 0; j < tensor.shape.front(); ++j)
             {
-                if (in[idx] > max)
-                    max = in[idx];
-                idx += in.shape.back();
+                if (tensor[idx] > max)
+                    max = tensor[idx];
+                idx += tensor.shape.back();
             }
 
-            out[i] = max;
+            newTensor[i] = max;
         }
     }
     else if (axis == 1)
     {
-        out = Zeros({in.shape.front(), 1});
+        newTensor = Zeros({tensor.shape.front(), 1});
         size_t idx = 0;
 
-        for (size_t i = 0; i < in.shape.front(); ++i)
+        for (size_t i = 0; i < tensor.shape.front(); ++i)
         {
             float max = std::numeric_limits<float>::lowest();
 
-            for (size_t j = 0; j < in.shape.back(); ++j)
+            for (size_t j = 0; j < tensor.shape.back(); ++j)
             {
-                if (in[idx] > max)
-                    max = in[idx];
+                if (tensor[idx] > max)
+                    max = tensor[idx];
                 ++idx;
             }
 
-            out[i] = max;
+            newTensor[i] = max;
         }
     }
 
-    return out;
+    return newTensor;
 }
 
 Tensor Min(const Tensor &in)
