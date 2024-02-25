@@ -159,25 +159,26 @@ Tensor Max(const Tensor &tensor, const size_t axis)
     return newTensor;
 }
 
-Tensor Min(const Tensor &in)
+Tensor Min(const Tensor &tensor)
 {
-    Tensor out = Zeros({1, in.shape.back()});
+    Tensor newTensor = Zeros({1, tensor.shape.back()});
 
-    for (size_t i = 0; i < in.shape.back(); ++i)
+    for (size_t i = 0; i < tensor.shape.back(); ++i)
     {
         size_t idx = i;
         float min = std::numeric_limits<float>::max();
 
-        for (size_t j = 0; j < in.shape.front(); ++j)
+        for (size_t j = 0; j < tensor.shape.front(); ++j)
         {
-            if (in[idx] < min)
-                min = in[idx];
-            idx += in.shape.back();
+            if (tensor[idx] < min)
+                min = tensor[idx];
+            idx += tensor.shape.back();
         }
-        out[i] = min;
+
+        newTensor[i] = min;
     }
 
-    return out;
+    return newTensor;
 }
 
 Tensor Sum(const Tensor &in, const size_t axis)
