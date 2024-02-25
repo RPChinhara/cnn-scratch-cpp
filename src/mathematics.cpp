@@ -181,61 +181,61 @@ Tensor Min(const Tensor &tensor)
     return newTensor;
 }
 
-Tensor Sum(const Tensor &in, const size_t axis)
+Tensor Sum(const Tensor &tensor, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    Tensor out;
+    Tensor newTensor;
 
-    if (in.shape.size() == 1 || in.shape.front() == 1)
+    if (tensor.shape.size() == 1 || tensor.shape.front() == 1)
     {
         if (axis == 0)
         {
-            out = in;
+            newTensor = tensor;
         }
         else if (axis == 1)
         {
-            out = Zeros({1, 1});
+            newTensor = Zeros({1, 1});
             float sum = 0.0f;
 
-            for (size_t i = 0; i < in.size; ++i)
+            for (size_t i = 0; i < tensor.size; ++i)
             {
-                sum += in[i];
+                sum += tensor[i];
             }
-            out[0] = sum;
+            newTensor[0] = sum;
         }
     }
     else
     {
         if (axis == 0)
         {
-            out = Zeros({1, in.shape.back()});
+            newTensor = Zeros({1, tensor.shape.back()});
 
-            for (size_t i = 0; i < in.shape.back(); ++i)
+            for (size_t i = 0; i < tensor.shape.back(); ++i)
             {
                 size_t idx = i;
 
-                for (size_t j = 0; j < in.shape.front(); ++j)
+                for (size_t j = 0; j < tensor.shape.front(); ++j)
                 {
-                    out[i] += in[idx];
-                    idx += in.shape.back();
+                    newTensor[i] += tensor[idx];
+                    idx += tensor.shape.back();
                 }
             }
         }
         else if (axis == 1)
         {
-            out = Zeros({in.shape.front(), 1});
+            newTensor = Zeros({tensor.shape.front(), 1});
             size_t idx = 0;
 
-            for (size_t i = 0; i < in.shape.front(); ++i)
+            for (size_t i = 0; i < tensor.shape.front(); ++i)
             {
-                for (size_t j = 0; j < in.shape.back(); ++j)
+                for (size_t j = 0; j < tensor.shape.back(); ++j)
                 {
-                    out[i] += in[idx];
+                    newTensor[i] += tensor[idx];
                     ++idx;
                 }
             }
         }
     }
 
-    return out;
+    return newTensor;
 }
