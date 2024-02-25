@@ -33,39 +33,39 @@ Tensor Argmax(const Tensor &tensor)
     return newTensor;
 }
 
-Tensor Exp(const Tensor &in, Device device)
+Tensor Exp(const Tensor &tensor, Device device)
 {
+    Tensor newTensor = tensor;
+
     switch (device)
     {
     case Device::CPU: {
-        Tensor out = in;
 
-        for (size_t i = 0; i < in.size; ++i)
-            out.elem[i] = expf(in.elem[i]);
+        for (size_t i = 0; i < tensor.size; ++i)
+            newTensor.elem[i] = expf(tensor.elem[i]);
 
-        return out;
+        return newTensor;
     }
     case Device::GPU: {
         float *in2, *out2;
-        cudaMalloc((void **)&in2, in.size * sizeof(float));
-        cudaMalloc((void **)&out2, in.size * sizeof(float));
-        cudaMemcpy(in2, in.elem, in.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMalloc((void **)&in2, tensor.size * sizeof(float));
+        cudaMalloc((void **)&out2, tensor.size * sizeof(float));
+        cudaMemcpy(in2, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
 
         constexpr int blockSize = 128;
-        int gridSize = (in.size + blockSize - 1) / blockSize;
-        Exp<<<gridSize, blockSize>>>(in2, out2, in.size);
+        int gridSize = (tensor.size + blockSize - 1) / blockSize;
+        Exp<<<gridSize, blockSize>>>(in2, out2, tensor.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
                        "Error", MB_ICONERROR);
 
-        Tensor out = in;
-        cudaMemcpy(out.elem, out2, in.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(newTensor.elem, out2, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(in2);
         cudaFree(out2);
 
-        return out;
+        return newTensor;
     }
     default:
         MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
