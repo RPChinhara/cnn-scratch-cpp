@@ -6,30 +6,31 @@
 #include <cassert>
 #include <windows.h>
 
-Tensor Argmax(const Tensor &in)
+Tensor Argmax(const Tensor &tensor)
 {
-    Tensor out = Zeros({in.shape.front()});
+    Tensor newTensor = Zeros({tensor.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
     size_t max_idx = 0;
 
-    for (size_t i = 0; i < in.shape.front(); ++i)
+    for (size_t i = 0; i < tensor.shape.front(); ++i)
     {
-        for (size_t j = 0; j < in.shape.back(); ++j)
+        for (size_t j = 0; j < tensor.shape.back(); ++j)
         {
-            if (in[idx] > max)
+            if (tensor[idx] > max)
             {
-                max = in[idx];
+                max = tensor[idx];
                 max_idx = j;
             }
             ++idx;
         }
-        out[i] = max_idx;
+
+        newTensor[i] = max_idx;
         max = std::numeric_limits<float>::lowest();
     }
 
-    return out;
+    return newTensor;
 }
 
 Tensor Exp(const Tensor &in, Device device)
