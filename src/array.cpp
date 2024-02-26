@@ -22,7 +22,6 @@ Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax)
 
 Tensor Slice(const Tensor &tensor, const size_t begin, const size_t size)
 {
-    assert(begin < tensor.shape[0] && begin + size <= tensor.shape[0]);
     Tensor newTensor = Zeros({size, tensor.shape.back()});
     size_t idx = 0;
 

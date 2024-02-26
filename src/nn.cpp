@@ -8,6 +8,7 @@
 #include "metric.h"
 #include "random.h"
 
+#include <cassert>
 #include <chrono>
 #include <random>
 #include <string>
@@ -52,8 +53,18 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size)
         {
-            x_batch = Slice(x_shuffled, j, batch_size);
-            y_batch = Slice(y_shuffled, j, batch_size);
+            assert(x_train.shape.front() >= batch_size && batch_size > 0);
+
+            if (j + batch_size >= x_train.shape.front())
+            {
+                x_batch = Slice(x_shuffled, j, x_train.shape.front() - j);
+                y_batch = Slice(y_shuffled, j, x_train.shape.front() - j);
+            }
+            else
+            {
+                x_batch = Slice(x_shuffled, j, batch_size);
+                y_batch = Slice(y_shuffled, j, batch_size);
+            }
 
             activations = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
 
