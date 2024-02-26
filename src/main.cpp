@@ -97,24 +97,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Tensor targets = iris.targets;
 
     targets = OneHot(targets, 3);
+
     TrainTest train_temp = TrainTestSplit(features, targets, 0.2, 42);
-    TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, 0.5, 42);
-    train_temp.x_first = MinMaxScaler(train_temp.x_first);
-    val_test.x_first = MinMaxScaler(val_test.x_first);
-    val_test.x_second = MinMaxScaler(val_test.x_second);
+    TrainTest val_test = TrainTestSplit(train_temp.featuresSecond, train_temp.targetsSecond, 0.5, 42);
+
+    train_temp.featuresFirst = MinMaxScaler(train_temp.featuresFirst);
+    val_test.featuresFirst = MinMaxScaler(val_test.featuresFirst);
+    val_test.featuresSecond = MinMaxScaler(val_test.featuresSecond);
 
     NN nn = NN({4, 128, 3}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    nn.Train(train_temp.x_first, train_temp.y_first, val_test.x_first, val_test.y_first);
+    nn.Train(train_temp.featuresFirst, train_temp.targetsFirst, val_test.featuresFirst, val_test.targetsFirst);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    nn.Predict(val_test.x_second, val_test.y_second);
+    nn.Predict(val_test.featuresSecond, val_test.targetsSecond);
 #endif
 
 #if 1

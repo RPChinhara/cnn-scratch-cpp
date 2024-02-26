@@ -4,10 +4,10 @@
 
 struct TrainTest
 {
-    Tensor x_first;  // featuresFirst
-    Tensor x_second; // featuresSecond
-    Tensor y_first;  // targetsFirst
-    Tensor y_second; // targetsSecond
+    Tensor featuresFirst;
+    Tensor featuresSecond;
+    Tensor targetsFirst;
+    Tensor targetsSecond;
 };
 
 Tensor MinMaxScaler(Tensor &dataset);

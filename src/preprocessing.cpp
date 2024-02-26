@@ -42,30 +42,30 @@ TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float test_size
     Tensor y_new = Shuffle(y, random_state);
 
     TrainTest train_test;
-    train_test.x_first = Zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    train_test.x_second = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-    train_test.y_first = Zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
-    train_test.y_second = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
+    train_test.featuresFirst = Zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
+    train_test.featuresSecond = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
+    train_test.targetsFirst = Zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
+    train_test.targetsSecond = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
 
-    for (size_t i = 0; i < train_test.x_first.size; ++i)
-        train_test.x_first[i] = x_new[i];
+    for (size_t i = 0; i < train_test.featuresFirst.size; ++i)
+        train_test.featuresFirst[i] = x_new[i];
 
     size_t idx = 0;
 
-    for (size_t i = train_test.x_first.size; i < x.size; ++i)
+    for (size_t i = train_test.featuresFirst.size; i < x.size; ++i)
     {
-        train_test.x_second[idx] = x_new[i];
+        train_test.featuresSecond[idx] = x_new[i];
         ++idx;
     }
 
-    for (size_t i = 0; i < train_test.y_first.size; ++i)
-        train_test.y_first[i] = y_new[i];
+    for (size_t i = 0; i < train_test.targetsFirst.size; ++i)
+        train_test.targetsFirst[i] = y_new[i];
 
     idx = 0;
 
-    for (size_t i = train_test.y_first.size; i < y.size; ++i)
+    for (size_t i = train_test.targetsFirst.size; i < y.size; ++i)
     {
-        train_test.y_second[idx] = y_new[i];
+        train_test.targetsSecond[idx] = y_new[i];
         ++idx;
     }
 
