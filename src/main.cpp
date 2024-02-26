@@ -94,7 +94,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 1
     Iris iris = LoadIris();
     Tensor features = iris.features;
-    Tensor targets = iris.target;
+    Tensor targets = iris.targets;
 
     targets = OneHot(targets, 3);
     TrainTest train_temp = TrainTestSplit(features, targets, 0.2, 42);

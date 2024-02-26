@@ -19,7 +19,7 @@ Iris LoadIris()
     size_t idx_features = 0;
     size_t idx_target = 0;
     Tensor features = Zeros({150, 4});
-    Tensor target = Zeros({150, 1});
+    Tensor targets = Zeros({150, 1});
 
     while (std::getline(file, line))
     {
@@ -48,17 +48,17 @@ Iris LoadIris()
 
         if (value == "Iris-setosa")
         {
-            target[idx_target] = 0.0f;
+            targets[idx_target] = 0.0f;
             ++idx_target;
         }
         else if (value == "Iris-versicolor")
         {
-            target[idx_target] = 1.0f;
+            targets[idx_target] = 1.0f;
             ++idx_target;
         }
         else if (value == "Iris-virginica")
         {
-            target[idx_target] = 2.0f;
+            targets[idx_target] = 2.0f;
             ++idx_target;
         }
     }
@@ -67,7 +67,7 @@ Iris LoadIris()
 
     Iris iris;
     iris.features = features;
-    iris.target = target;
+    iris.targets = targets;
 
     return iris;
 }
