@@ -93,11 +93,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 #if 1
     Iris iris = LoadIris();
-    Tensor x = iris.features;
-    Tensor y = iris.target;
+    Tensor features = iris.features;
+    Tensor targets = iris.target;
 
-    y = OneHot(y, 3);
-    TrainTest train_temp = TrainTestSplit(x, y, 0.2, 42);
+    targets = OneHot(targets, 3);
+    TrainTest train_temp = TrainTestSplit(features, targets, 0.2, 42);
     TrainTest val_test = TrainTestSplit(train_temp.x_second, train_temp.y_second, 0.5, 42);
     train_temp.x_first = MinMaxScaler(train_temp.x_first);
     val_test.x_first = MinMaxScaler(val_test.x_first);

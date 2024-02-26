@@ -5,7 +5,7 @@
 struct Iris
 {
     Tensor features;
-    Tensor target;
+    Tensor target; // targets
 };
 
 struct MNIST
