@@ -127,6 +127,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     mnist.testLabels = OneHot(mnist.testLabels, 10);
 
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
+    cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
 #if 1

@@ -8,11 +8,11 @@ CNN2D::CNN2D(const std::vector<size_t> &filters, float const learning_rate)
     this->learning_rate = learning_rate;
 }
 
-void CNN2D::Train()
+void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal)
 {
 }
 
-void CNN2D::Predict()
+void CNN2D::Predict(const Tensor &xTest, const Tensor &yTest)
 {
 }
 
