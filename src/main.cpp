@@ -123,11 +123,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     mnist.trainImages / 255.0f;
     mnist.testImages / 255.0f;
 
-    // std::cout << mnist.trainImages << std::endl;
-    // std::cout << mnist.testImages << std::endl;
-
-    // mnist.trainLabels = to_categorical(train_labels)
-    // mnist.testLabels = to_categorical(test_labels)
+    mnist.trainLabels = OneHot(mnist.trainLabels, 10);
+    mnist.testLabels = OneHot(mnist.testLabels, 10);
 
     CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
 #endif
