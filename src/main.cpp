@@ -99,24 +99,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     targets = OneHot(targets, 3);
 
     TrainTest train_temp = TrainTestSplit(features, targets, 0.2, 42);
-    TrainTest val_test = TrainTestSplit(train_temp.featuresSecond, train_temp.targetsSecond, 0.5, 42);
+    TrainTest val_test = TrainTestSplit(train_temp.testFeatures, train_temp.testTargets, 0.5, 42);
 
-    train_temp.featuresFirst = MinMaxScaler(train_temp.featuresFirst);
-    val_test.featuresFirst = MinMaxScaler(val_test.featuresFirst);
-    val_test.featuresSecond = MinMaxScaler(val_test.featuresSecond);
+    train_temp.trainFeatures = MinMaxScaler(train_temp.trainFeatures);
+    val_test.trainFeatures = MinMaxScaler(val_test.trainFeatures);
+    val_test.testFeatures = MinMaxScaler(val_test.testFeatures);
 
     NN nn = NN({4, 128, 3}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    nn.Train(train_temp.featuresFirst, train_temp.targetsFirst, val_test.featuresFirst, val_test.targetsFirst);
+    nn.Train(train_temp.trainFeatures, train_temp.trainTargets, val_test.trainFeatures, val_test.trainTargets);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    nn.Predict(val_test.featuresSecond, val_test.targetsSecond);
+    nn.Predict(val_test.testFeatures, val_test.testTargets);
 #endif
 
 #if 1

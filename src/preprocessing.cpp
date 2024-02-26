@@ -42,24 +42,24 @@ TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float test_size
     Tensor y_new = Shuffle(y, random_state);
 
     TrainTest train_test;
-    train_test.featuresFirst =
+    train_test.trainFeatures =
         Zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    train_test.targetsFirst =
+    train_test.trainTargets =
         Zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
-    train_test.featuresSecond = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-    train_test.targetsSecond = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
+    train_test.testFeatures = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
+    train_test.testTargets = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
 
-    for (size_t i = 0; i < train_test.featuresFirst.size; ++i)
-        train_test.featuresFirst[i] = x_new[i];
+    for (size_t i = 0; i < train_test.trainFeatures.size; ++i)
+        train_test.trainFeatures[i] = x_new[i];
 
-    for (size_t i = 0; i < train_test.targetsFirst.size; ++i)
-        train_test.targetsFirst[i] = y_new[i];
+    for (size_t i = 0; i < train_test.trainTargets.size; ++i)
+        train_test.trainTargets[i] = y_new[i];
 
-    for (size_t i = train_test.featuresFirst.size; i < x.size; ++i)
-        train_test.featuresSecond[i - train_test.featuresFirst.size] = x_new[i];
+    for (size_t i = train_test.trainFeatures.size; i < x.size; ++i)
+        train_test.testFeatures[i - train_test.trainFeatures.size] = x_new[i];
 
-    for (size_t i = train_test.targetsFirst.size; i < y.size; ++i)
-        train_test.targetsSecond[i - train_test.targetsFirst.size] = y_new[i];
+    for (size_t i = train_test.trainTargets.size; i < y.size; ++i)
+        train_test.testTargets[i - train_test.trainTargets.size] = y_new[i];
 
     return train_test;
 }
