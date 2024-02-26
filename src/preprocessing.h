@@ -5,8 +5,8 @@
 struct TrainTest
 {
     Tensor featuresFirst;
-    Tensor featuresSecond;
     Tensor targetsFirst;
+    Tensor featuresSecond;
     Tensor targetsSecond;
 };
 
