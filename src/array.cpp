@@ -23,13 +23,9 @@ Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax)
 Tensor Slice(const Tensor &tensor, const size_t begin, const size_t size)
 {
     Tensor newTensor = Zeros({size, tensor.shape.back()});
-    size_t idx = 0;
 
     for (size_t i = begin * tensor.shape.back(); i < (begin * tensor.shape.back()) + (size * tensor.shape.back()); ++i)
-    {
-        newTensor[idx] = tensor[i];
-        ++idx;
-    }
+        newTensor[i - (begin * tensor.shape.back())] = tensor[i];
 
     return newTensor;
 }
