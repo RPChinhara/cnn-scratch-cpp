@@ -120,29 +120,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.testFeatures, val_test.testTargets);
 #endif
 
-    Tensor sdfd = Tensor({1}, {3, 3, 3});
-    Tensor sdfd2 = Tensor({3}, {2, 3, 4});
-    Tensor sdfd3 = Tensor({1, 2, 3, 4, 5, 6}, {2, 3});
-    Tensor sdfd4 = Tensor({5}, {2, 3});
-
-    std::cout << sdfd << std::endl;
-    std::cout << sdfd.shape[0] << std::endl;
-    std::cout << sdfd.shape[1] << std::endl;
-    std::cout << sdfd.shape[2] << std::endl;
-    std::cout << sdfd.shape.back() << std::endl;
-
-    std::cout << sdfd << std::endl;
-    // std::cout << sdfd.size << std::endl;
-    std::cout << sdfd.size << std::endl;
-
-    std::cout << sdfd2 << std::endl;
-    // std::cout << sdfd2.size << std::endl;
-    std::cout << sdfd2.size << std::endl;
-
-    std::cout << Transpose(sdfd2) << std::endl;
-    std::cout << sdfd3 << std::endl;
-    std::cout << Transpose(sdfd3) << std::endl;
-    std::cout << Transpose(sdfd4) << std::endl;
 #if 1
     MNIST mnist = LoadMNIST();
 
@@ -156,7 +133,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
-#if 1
+#if 0
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
