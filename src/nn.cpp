@@ -13,10 +13,10 @@
 #include <random>
 #include <string>
 
-NN::NN(const std::vector<size_t> &layers, const float learning_rate)
+NN::NN(const std::vector<size_t> &layers, const float learningRate)
 {
     this->layers = layers;
-    this->learning_rate = learning_rate;
+    this->learningRate = learningRate;
 }
 
 void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val)
@@ -41,29 +41,29 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
         startTime = std::chrono::high_resolution_clock::now();
 
         if (i > 10 && i < 20)
-            learning_rate = 0.009f;
+            learningRate = 0.009f;
         else if (i > 20 && i < 30)
-            learning_rate = 0.005f;
+            learningRate = 0.005f;
         else
-            learning_rate = 0.001f;
+            learningRate = 0.001f;
 
         rd_num = rd();
         x_shuffled = Shuffle(x_train, rd_num);
         y_shuffled = Shuffle(y_train, rd_num);
 
-        for (size_t j = 0; j < x_train.shape.front(); j += batch_size)
+        for (size_t j = 0; j < x_train.shape.front(); j += batchSize)
         {
-            assert(x_train.shape.front() >= batch_size && batch_size > 0);
+            assert(x_train.shape.front() >= batchSize && batchSize > 0);
 
-            if (j + batch_size >= x_train.shape.front())
+            if (j + batchSize >= x_train.shape.front())
             {
                 x_batch = Slice(x_shuffled, j, x_train.shape.front() - j);
                 y_batch = Slice(y_shuffled, j, x_train.shape.front() - j);
             }
             else
             {
-                x_batch = Slice(x_shuffled, j, batch_size);
-                y_batch = Slice(y_shuffled, j, batch_size);
+                x_batch = Slice(x_shuffled, j, batchSize);
+                y_batch = Slice(y_shuffled, j, batchSize);
             }
 
             activations = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
@@ -87,14 +87,14 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 dloss_dbiases.push_back(Sum(dloss_dlogits[(numLayers)-k], 0));
 
                 dloss_dweights[(numLayers)-k] =
-                    ClipByValue(dloss_dweights[(numLayers)-k], -gradient_clip_threshold, gradient_clip_threshold);
+                    ClipByValue(dloss_dweights[(numLayers)-k], -gradientClipThreshold, gradientClipThreshold);
                 dloss_dbiases[(numLayers)-k] =
-                    ClipByValue(dloss_dbiases[(numLayers)-k], -gradient_clip_threshold, gradient_clip_threshold);
+                    ClipByValue(dloss_dbiases[(numLayers)-k], -gradientClipThreshold, gradientClipThreshold);
 
                 weights_biases_momentum.first[k - 1] =
-                    momentum * weights_biases_momentum.first[k - 1] - learning_rate * dloss_dweights[(numLayers)-k];
+                    momentum * weights_biases_momentum.first[k - 1] - learningRate * dloss_dweights[(numLayers)-k];
                 weights_biases_momentum.second[k - 1] =
-                    momentum * weights_biases_momentum.second[k - 1] - learning_rate * dloss_dbiases[(numLayers)-k];
+                    momentum * weights_biases_momentum.second[k - 1] - learningRate * dloss_dbiases[(numLayers)-k];
 
                 weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];

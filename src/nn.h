@@ -19,10 +19,10 @@ class NN
     std::vector<size_t> layers;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
-    size_t batch_size = 10;
+    size_t batchSize = 10;
     size_t epochs = 200;
-    float learning_rate;
-    float gradient_clip_threshold = 8.0f;
+    float learningRate;
+    float gradientClipThreshold = 8.0f;
     float momentum = 0.1f;
     size_t patience = 4;
 };
