@@ -33,15 +33,6 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
         this->elem = new float[size];
         memcpy(this->elem, elem.data(), size * sizeof(float));
     }
-
-    if (this->shape.size() > 0)
-    {
-        num_ch_dim = 1;
-        for (const size_t &i : shape)
-            num_ch_dim *= i;
-    }
-    else
-        num_ch_dim = 0;
 }
 
 Tensor::~Tensor()
@@ -54,7 +45,6 @@ Tensor::Tensor(const Tensor &tensor)
 {
     elem = new float[tensor.size];
     std::copy(tensor.elem, tensor.elem + tensor.size, elem);
-    num_ch_dim = tensor.num_ch_dim;
     size = tensor.size;
     shape = tensor.shape;
 }
@@ -62,12 +52,10 @@ Tensor::Tensor(const Tensor &tensor)
 Tensor::Tensor(Tensor &&tensor)
 {
     elem = tensor.elem;
-    num_ch_dim = tensor.num_ch_dim;
     size = tensor.size;
     shape = tensor.shape;
 
     tensor.elem = nullptr;
-    tensor.num_ch_dim = 0;
     tensor.size = 0;
 }
 
@@ -78,7 +66,6 @@ Tensor &Tensor::operator=(const Tensor &tensor)
         delete[] elem;
         elem = new float[tensor.size];
         std::copy(tensor.elem, tensor.elem + tensor.size, elem);
-        num_ch_dim = tensor.num_ch_dim;
         size = tensor.size;
         shape = tensor.shape;
     }
@@ -92,12 +79,10 @@ Tensor &Tensor::operator=(Tensor &&tensor)
         delete[] elem;
 
         elem = tensor.elem;
-        num_ch_dim = tensor.num_ch_dim;
         size = tensor.size;
         shape = tensor.shape;
 
         tensor.elem = nullptr;
-        tensor.num_ch_dim = 0;
         tensor.size = 0;
     }
     return *this;
@@ -335,7 +320,7 @@ std::ostream &operator<<(std::ostream &os, const Tensor &tensor)
     }
     else
     {
-        if (tensor.num_ch_dim == 1)
+        if (tensor.size == 1)
         {
             os << "Tensor(";
             for (size_t i = 0; i < tensor.shape.size(); ++i)
@@ -348,7 +333,7 @@ std::ostream &operator<<(std::ostream &os, const Tensor &tensor)
                 os << "[";
         }
 
-        if (tensor.num_ch_dim == 1)
+        if (tensor.size == 1)
         {
             for (size_t i = 0; i < tensor.size; ++i)
                 if (i == tensor.size - 1)

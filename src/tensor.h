@@ -28,5 +28,4 @@ class Tensor
     size_t size;
     std::vector<size_t> shape;
     float *elem = nullptr;
-    size_t num_ch_dim;
 };

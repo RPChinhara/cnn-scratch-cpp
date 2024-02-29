@@ -36,18 +36,6 @@ Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, co
     for (size_t i = 0; i < newTensor.size; ++i)
         newTensor[i] = dist(rng);
 
-    if (newTensor.shape.size() > 0)
-    {
-        newTensor.num_ch_dim = 1;
-
-        for (const size_t &i : shape)
-            newTensor.num_ch_dim *= i;
-    }
-    else
-    {
-        newTensor.num_ch_dim = 0;
-    }
-
     return newTensor;
 }
 

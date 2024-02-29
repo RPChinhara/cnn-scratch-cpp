@@ -47,14 +47,9 @@ Tensor Transpose(const Tensor &tensor)
 
     Tensor newTensor = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
 
-    newTensor.num_ch_dim = 1;
-
-    for (size_t i = 0; i < newTensor.shape.size() - 1; ++i)
-        newTensor.num_ch_dim *= newTensor.shape[i];
-
     std::vector<size_t> idx_rows;
 
-    for (size_t i = 0; i < tensor.num_ch_dim; ++i)
+    for (size_t i = 0; i < tensor.size; ++i)
         idx_rows.push_back(i * tensor.shape.back());
 
     size_t batch_size = GetBatchSize(tensor.shape);
@@ -94,18 +89,6 @@ Tensor Zeros(const std::vector<size_t> &shape)
 
     newTensor.elem = new float[newTensor.size];
     std::fill(newTensor.elem, newTensor.elem + newTensor.size, 0.0f);
-
-    if (newTensor.shape.size() > 0)
-    {
-        newTensor.num_ch_dim = 1;
-
-        for (const size_t &i : shape)
-            newTensor.num_ch_dim *= i;
-    }
-    else
-    {
-        newTensor.num_ch_dim = 0;
-    }
 
     return newTensor;
 }
