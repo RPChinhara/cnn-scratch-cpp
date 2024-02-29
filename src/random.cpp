@@ -2,6 +2,7 @@
 #include "tensor.h"
 
 #include <cassert>
+#include <numeric>
 #include <random>
 
 Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, const float stddev)
@@ -14,18 +15,10 @@ Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, co
     newTensor.shape = shape;
 
     if (newTensor.shape.size() > 0)
-    {
-        size_t num_elem = 1;
-
-        for (const size_t &i : shape)
-            num_elem *= i;
-
-        newTensor.size = num_elem;
-    }
+        newTensor.size =
+            std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
-    {
         newTensor.size = 1;
-    }
 
     newTensor.elem = new float[newTensor.size];
 

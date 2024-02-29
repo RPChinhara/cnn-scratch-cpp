@@ -1,6 +1,7 @@
 #include "tensor.h"
 
 #include <cassert>
+#include <numeric>
 #include <string>
 #include <windows.h>
 
@@ -13,12 +14,7 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
     this->shape = std::move(shape);
 
     if (this->shape.size() > 0)
-    {
-        size_t num_elem = 1;
-        for (const size_t &i : shape)
-            num_elem *= i;
-        size = num_elem;
-    }
+        size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
         size = 1;
 

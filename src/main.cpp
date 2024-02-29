@@ -10,6 +10,7 @@
 #include "physics.h"
 #include "preprocessing.h"
 #include "q_learning.h"
+#include "random.h"
 
 #include <thread>
 
@@ -92,6 +93,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
+    Tensor fdf = Tensor({1, 2, 3, 4, 5, 6}, {2, 3});
+    Tensor fdf2 = Zeros({2, 3});
+    Tensor fdf3 = NormalDistribution({2, 3});
+
+    std::cout << fdf << std::endl;
+    std::cout << fdf2 << std::endl;
+    std::cout << fdf3 << std::endl;
 #if 1
     Iris iris = LoadIris();
     Tensor features = iris.features;
