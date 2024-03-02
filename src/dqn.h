@@ -3,3 +3,7 @@
 class DQN
 {
 };
+
+class DDQN
+{
+};
