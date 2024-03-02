@@ -13,9 +13,11 @@ void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal
 {
     Tensor kernel = Zeros({3, 3});
 
-    // # Get image and kernel dimensions
-    // img_height, img_width = batch_images.shape[1:3]
-    // kernel_height, kernel_width = kernel.shape
+    size_t kernelHeight = kernel.shape.front();
+    size_t kernelWidth = kernel.shape.back();
+
+    size_t inputHeight = xTrain.shape[1];
+    size_t inputWidth = xTrain.shape[2];
 }
 
 void CNN2D::Predict(const Tensor &xTest, const Tensor &yTest)
