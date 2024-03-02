@@ -3,3 +3,7 @@
 class Transformer
 {
 };
+
+class BERT
+{
+};
