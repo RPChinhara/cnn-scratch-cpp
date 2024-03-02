@@ -37,3 +37,7 @@ class CNN3D
   private:
     std::vector<Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &kernel, const size_t stride);
 };
+
+class ResNet
+{
+};
