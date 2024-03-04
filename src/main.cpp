@@ -2,7 +2,6 @@
 #include "activation.h"
 #include "agent.h"
 #include "array.h"
-#include "cnn.h"
 #include "dataset.h"
 #include "entity.h"
 #include "environment.h"
@@ -119,19 +118,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
     nn.Predict(val_test.testFeatures, val_test.testTargets);
-#endif
-
-#if 1
-    MNIST mnist = LoadMNIST();
-
-    mnist.trainImages / 255.0f;
-    mnist.testImages / 255.0f;
-
-    mnist.trainLabels = OneHot(mnist.trainLabels, 10);
-    mnist.testLabels = OneHot(mnist.testLabels, 10);
-
-    CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
-    cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
 #if 0

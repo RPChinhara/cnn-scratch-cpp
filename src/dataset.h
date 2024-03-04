@@ -8,13 +8,4 @@ struct Iris
     Tensor targets;
 };
 
-struct MNIST
-{
-    Tensor trainImages;
-    Tensor trainLabels;
-    Tensor testImages;
-    Tensor testLabels;
-};
-
 Iris LoadIris();
-MNIST LoadMNIST();
