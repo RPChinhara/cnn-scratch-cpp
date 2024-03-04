@@ -20,7 +20,6 @@ set SRC=..\src\activation.cpp ^
         ..\src\q_learning.cpp ^
         ..\src\random.cpp ^
         ..\src\tensor.cpp ^
-        ..\src\transformer.cpp
 
 if not exist bin mkdir bin
 
