@@ -5,10 +5,9 @@
 #include "dataset.h"
 #include "entity.h"
 #include "environment.h"
-#include "nn.h"
+#include "model.h"
 #include "physics.h"
 #include "preprocessing.h"
-#include "q_learning.h"
 #include "random.h"
 
 #include <thread>
@@ -120,7 +119,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.testFeatures, val_test.testTargets);
 #endif
 
-#if 0
+#if 1
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
