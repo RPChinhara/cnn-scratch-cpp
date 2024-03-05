@@ -99,18 +99,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.trainFeatures = MinMaxScaler(val_test.trainFeatures);
     val_test.testFeatures = MinMaxScaler(val_test.testFeatures);
 
-    NN nn = NN({4, 128, 3}, 0.01f);
+    FeedforwardNeuralNetwork feedforwardNeuralNetwork = FeedforwardNeuralNetwork({4, 128, 3}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    nn.Train(train_temp.trainFeatures, train_temp.trainTargets, val_test.trainFeatures, val_test.trainTargets);
+    feedforwardNeuralNetwork.Train(train_temp.trainFeatures, train_temp.trainTargets, val_test.trainFeatures,
+                                   val_test.trainTargets);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    nn.Predict(val_test.testFeatures, val_test.testTargets);
+    feedforwardNeuralNetwork.Predict(val_test.testFeatures, val_test.testTargets);
 #endif
 
 #if 1

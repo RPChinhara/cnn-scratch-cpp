@@ -13,10 +13,10 @@ class DDQN
 {
 };
 
-class NN
+class FeedforwardNeuralNetwork
 {
   public:
-    NN(const std::vector<size_t> &layers, float const learningRate);
+    FeedforwardNeuralNetwork(const std::vector<size_t> &layers, float const learningRate);
     void Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal);
     void Predict(const Tensor &xTest, const Tensor &yTest);
 
@@ -54,4 +54,8 @@ class QLearning
     float discount_factor;
     float exploration_decay;
     float exploration_min;
+};
+
+class Transformer
+{
 };
