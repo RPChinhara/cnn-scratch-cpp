@@ -43,7 +43,6 @@ class Agent
     bool has_collided_with_food = false;
     bool has_collided_with_water = false;
     bool has_collided_with_wall = false;
-    bool has_collided_with_predator = false;
 
     bool render_agent_left_eye = true;
     bool render_agent_right_eye = true;

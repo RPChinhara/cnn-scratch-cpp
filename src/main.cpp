@@ -66,10 +66,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             FillRect(hdc, &agent->rightEyePosition, blackBrush);
         DeleteObject(blackBrush);
 
-        HBRUSH brownBrush = CreateSolidBrush(RGB(165, 42, 42));
-        FillRect(hdc, &predator, brownBrush);
-        DeleteObject(brownBrush);
-
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 
         EndPaint(hwnd, &ps);
@@ -91,7 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor features = iris.features;
     Tensor targets = iris.targets;
@@ -163,9 +159,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     water = {(client_width - borderToEntities) - water_width, borderToEntities, client_width - borderToEntities,
              borderToEntities + water_height};
-
-    predator = {(client_width - borderToEntities) - predator_width, 500, client_width - borderToEntities,
-                500 + predator_height};
 
     bed = {borderToEntities, (client_height - borderToEntities) - bed_height, borderToEntities + bed_width,
            client_height - borderToEntities};
@@ -374,12 +367,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 agent.has_collided_with_food = false;
                 agent.has_collided_with_water = false;
                 agent.has_collided_with_wall = false;
-                agent.has_collided_with_predator = false;
 
                 ResolveRectanglesCollision(agent, agent2, Entity::AGENT2, client_width, client_height);
                 ResolveRectanglesCollision(agent, food, Entity::FOOD, client_width, client_height);
                 ResolveRectanglesCollision(agent, water, Entity::WATER, client_width, client_height);
-                ResolveRectanglesCollision(agent, predator, Entity::PREDATOR, client_width, client_height);
                 ResolveBoundaryCollision(agent, client_width, client_height);
 
                 if (agent.has_collided_with_food)

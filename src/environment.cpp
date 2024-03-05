@@ -518,16 +518,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
     }
 
-    size_t physicalHealthStateSizeT = static_cast<size_t>(physicalHealthState);
-
-    if (agent.has_collided_with_predator && physicalHealthState != PhysicalHealthState::LEVEL1)
-    {
-        physicalHealthStateSizeT = std::min((physicalHealthStateSizeT + 1), numPhysicalHealthStates - 1);
-        physicalHealthState = static_cast<PhysicalHealthState>(physicalHealthStateSizeT);
-        currentState =
-            FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
-    }
-
     if (energyState < EnergyState::LEVEL4)
         energyLevelBelow3 = true;
     else if (energyState > EnergyState::LEVEL3)
@@ -621,9 +611,6 @@ void Environment::CalculateReward(const Action action, const Agent &agent)
     if (std::labs(agent.position.left - agent2.left) < 250 && std::labs(agent.position.top - agent2.top) < 250)
         reward += 1.0f;
 
-    if (std::labs(agent.position.left - predator.left) < 250 && std::labs(agent.position.top - predator.top) < 250)
-        reward -= 2.0f;
-
     if (seenLefts.find(agent.position.left) != seenLefts.end())
     {
         newLeft = false;
@@ -693,9 +680,6 @@ void Environment::CalculateReward(const Action action, const Agent &agent)
     if (numWallCollision > 1)
         reward -= 2.0f;
 
-    if (agent.has_collided_with_predator)
-        reward -= 10.0f;
-
     // if (numMoveForward == maxConsecutiveAction) {
     //     reward += -1;
     //     numMoveForward = 0;
@@ -757,12 +741,6 @@ bool Environment::CheckTermination(const Agent &agent)
 
     if (daysLived == 60 && energyLevelBelow3)
         return true;
-
-    if (agent.has_collided_with_predator && physicalHealthState == PhysicalHealthState::LEVEL1)
-    {
-        // MessageBox(NULL, "The agent has been eaten by the predator", "Information", MB_OK | MB_ICONINFORMATION);
-        return true;
-    }
 
     return false;
 }

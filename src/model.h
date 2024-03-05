@@ -47,3 +47,11 @@ class QLearning
     float exploration_decay;
     float exploration_min;
 };
+
+class DQN
+{
+};
+
+class DDQN
+{
+};

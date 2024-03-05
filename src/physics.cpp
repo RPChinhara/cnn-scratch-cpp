@@ -92,9 +92,6 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
         case WATER:
             agent.has_collided_with_water = true;
             break;
-        case PREDATOR:
-            agent.has_collided_with_predator = true;
-            break;
         default:
             MessageBox(nullptr, "Unknown entity", "Error", MB_ICONERROR);
             break;
