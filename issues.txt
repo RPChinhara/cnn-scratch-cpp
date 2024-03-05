@@ -1,0 +1,1 @@
+-Don't try to implement all the methods/algorithms to understand it. Instead just read details and use it e.g., COT, RLHF.
