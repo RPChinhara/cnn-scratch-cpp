@@ -5,6 +5,14 @@
 
 #include <vector>
 
+class DQN
+{
+};
+
+class DDQN
+{
+};
+
 class NN
 {
   public:
@@ -46,12 +54,4 @@ class QLearning
     float discount_factor;
     float exploration_decay;
     float exploration_min;
-};
-
-class DQN
-{
-};
-
-class DDQN
-{
 };
