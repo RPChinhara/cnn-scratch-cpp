@@ -31,8 +31,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         HDC hdc = BeginPaint(hwnd, &ps);
 
-        // StretchDIBits()
-
         GetClientRect(hwnd, &client_rect);
         HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
         FillRect(hdc, &client_rect, grassBrush);
