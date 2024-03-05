@@ -34,35 +34,3 @@ enum class EmotionState
     LEVEL3,
     LEVEL4,
 };
-
-enum class PhysicalHealthState
-{
-    LEVEL1,
-    LEVEL2,
-    LEVEL3,
-    LEVEL4,
-};
-
-// enum class MentalState
-// {
-// };
-
-// enum SocialState
-// {
-// };
-
-// enum StressState
-// {
-// };
-
-// enum BloodPressureState
-// {
-// };
-
-// enum ConfidenceState
-// {
-// };
-
-// enum HygineState
-// {
-// };

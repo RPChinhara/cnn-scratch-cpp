@@ -15,8 +15,7 @@ Environment::Environment(const LONG client_width, const LONG client_height, cons
 
     numLeftStates = (maxLeft - minLeft) + 1;
     numTopStates = (maxTop - minTop) + 1;
-    numStates = numPhysicalHealthStates * numEmotionStates * numEnergyStates * numHungerStates * numThirstStates *
-                numTopStates * numLeftStates;
+    numStates = numEmotionStates * numEnergyStates * numHungerStates * numThirstStates * numTopStates * numLeftStates;
 }
 
 void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
@@ -205,25 +204,6 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
         break;
     }
 
-    switch (physicalHealthState)
-    {
-    case PhysicalHealthState::LEVEL1:
-        physicalHealthStateStr = "level 1";
-        break;
-    case PhysicalHealthState::LEVEL2:
-        physicalHealthStateStr = "level 2";
-        break;
-    case PhysicalHealthState::LEVEL3:
-        physicalHealthStateStr = "level 3";
-        break;
-    case PhysicalHealthState::LEVEL4:
-        physicalHealthStateStr = "level 4";
-        break;
-    default:
-        MessageBox(nullptr, "Unknown physical health state", "Error", MB_ICONERROR);
-        break;
-    }
-
     if (agent.has_collided_with_water)
         numWaterCollision += 1;
     else if (agent.has_collided_with_food)
@@ -268,7 +248,6 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     std::cout << "Current Hunger State:          " << hungerStateStr << '\n';
     std::cout << "Current Energy State:          " << energyStateStr << '\n';
     std::cout << "Current Emotion State:         " << emotionStateStr << '\n';
-    std::cout << "Current Physical Health State: " << physicalHealthStateStr << '\n';
     std::cout << "Current Action:                " << actionStr << '\n';
     std::cout << "Reward:                        " << reward << '\n';
     std::cout << "Number Of Water Collisions:    " << numWaterCollision << '\n';
@@ -309,8 +288,7 @@ size_t Environment::Reset(const Agent &agent)
     thirstState = ThirstState::LEVEL3;
     hungerState = HungerState::LEVEL3;
     energyState = EnergyState::LEVEL3;
-    emotionState = EmotionState::LEVEL1;
-    physicalHealthState = PhysicalHealthState::LEVEL1;
+    emotionState = EmotionState::LEVEL3;
 
     currentState =
         FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
