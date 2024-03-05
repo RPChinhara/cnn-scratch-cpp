@@ -8,8 +8,7 @@ enum Action
     TURN_RIGHT,
     TURN_AROUND,
     STATIC,
-    SLEEP,
     // JUMP
     // JUMP_WALK,
-    // JUMP_RUN,
+    // JUMP_RUN
 };

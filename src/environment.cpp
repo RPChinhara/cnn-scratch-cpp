@@ -112,9 +112,6 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     case Action::STATIC:
         actionStr = "static";
         break;
-    case Action::SLEEP:
-        actionStr = "sleep";
-        break;
     default:
         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
         break;
@@ -369,9 +366,6 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
         break;
     case Action::STATIC:
         numStatic += 1;
-        break;
-    case Action::SLEEP:
-        numSleep += 1;
         break;
     default:
         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
@@ -707,11 +701,6 @@ void Environment::CalculateReward(const Action action, const Agent &agent)
     {
         reward -= 1.0f;
         numStatic = 0;
-    }
-    if (numSleep == maxConsecutiveAction)
-    {
-        reward -= 1.0f;
-        numSleep = 0;
     }
 
     if (agent.has_collided_with_water)

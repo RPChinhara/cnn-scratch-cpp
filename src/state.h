@@ -55,10 +55,6 @@ enum class PhysicalHealthState
 // {
 // };
 
-// enum SleepinessState
-// {
-// };
-
 // enum BloodPressureState
 // {
 // };
