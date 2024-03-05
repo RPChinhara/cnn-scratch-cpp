@@ -43,41 +43,30 @@ enum class PhysicalHealthState
     LEVEL4,
 };
 
-enum class MentalHealthState
-{
-    CALM,
-    RELAXED,
-    CONTENT,
-    FOCUSED,
-    ALERT,
-    ENGAGED,
-    STRESSED,
-    ANXIOUS,
-    OVERWHELMED,
-    PANICKED,
-    NEUTRAL
-};
+// enum class MentalState
+// {
+// };
 
-enum StressState
-{
-};
+// enum SocialState
+// {
+// };
 
-enum SleepinessState
-{
-};
+// enum StressState
+// {
+// };
 
-enum SocialConnection
-{
-};
+// enum SleepinessState
+// {
+// };
 
-enum BloodPressureState
-{
-};
+// enum BloodPressureState
+// {
+// };
 
-enum ConfidenceState
-{
-};
+// enum ConfidenceState
+// {
+// };
 
-enum HygineState
-{
-};
+// enum HygineState
+// {
+// };
