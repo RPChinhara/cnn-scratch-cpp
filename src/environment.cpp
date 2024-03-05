@@ -112,6 +112,9 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     case Action::STATIC:
         actionStr = "static";
         break;
+    case Action::TALK:
+        actionStr = "talk";
+        break;
     default:
         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
         break;
@@ -367,6 +370,8 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
     case Action::STATIC:
         numStatic += 1;
         break;
+    case Action::TALK:
+        break;
     default:
         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
         break;
@@ -390,7 +395,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
         // hoursLivedWithoutDrinking = 0;
     }
-    
+
     if (action == Action::WALK && numWalk == 700 && thirstState != ThirstState::LEVEL1)
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
@@ -417,7 +422,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
             FlattenState(agent.position.left, agent.position.top, thirstState, hungerState, energyState, emotionState);
         // hours = 0;
     }
-    
+
     if (hoursLivedWithoutEating >= 3 && hungerState != HungerState::LEVEL1)
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);

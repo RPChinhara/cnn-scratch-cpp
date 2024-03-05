@@ -34,7 +34,7 @@ class Environment
     size_t numPhysicalHealthStates = 1;
 
     size_t numStates;
-    size_t numActions = 6;
+    size_t numActions = 7;
 
   private:
     size_t FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState, EnergyState energyState,

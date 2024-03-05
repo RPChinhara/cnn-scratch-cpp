@@ -355,6 +355,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 case Action::STATIC:
                     // std::this_thread::sleep_for(std::chrono::seconds(2));
                     break;
+                case Action::TALK:
+                    // std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
                 default:
                     MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
                     break;

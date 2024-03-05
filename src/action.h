@@ -8,6 +8,7 @@ enum Action
     TURN_RIGHT,
     TURN_AROUND,
     STATIC,
+    TALK
     // JUMP
     // JUMP_WALK,
     // JUMP_RUN
