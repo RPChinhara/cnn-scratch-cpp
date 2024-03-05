@@ -94,11 +94,17 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
 
     switch (action)
     {
-    case Action::WALK:
-        actionStr = "walk";
-        break;
     case Action::RUN:
         actionStr = "run";
+        break;
+    case Action::STATIC:
+        actionStr = "static";
+        break;
+    case Action::TALK:
+        actionStr = "talk";
+        break;
+    case Action::TURN_AROUND:
+        actionStr = "turn around";
         break;
     case Action::TURN_LEFT:
         actionStr = "turn left";
@@ -106,14 +112,8 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
     case Action::TURN_RIGHT:
         actionStr = "turn right";
         break;
-    case Action::TURN_AROUND:
-        actionStr = "turn around";
-        break;
-    case Action::STATIC:
-        actionStr = "static";
-        break;
-    case Action::TALK:
-        actionStr = "talk";
+    case Action::WALK:
+        actionStr = "walk";
         break;
     default:
         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
@@ -352,11 +352,16 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
 
     switch (action)
     {
-    case Action::WALK:
-        numWalk += 1;
-        break;
     case Action::RUN:
         numRun += 1;
+        break;
+    case Action::STATIC:
+        numStatic += 1;
+        break;
+    case Action::TALK:
+        break;
+    case Action::TURN_AROUND:
+        numTurnAround += 1;
         break;
     case Action::TURN_LEFT:
         numTurnLeft += 1;
@@ -364,13 +369,8 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
     case Action::TURN_RIGHT:
         numTurnRight += 1;
         break;
-    case Action::TURN_AROUND:
-        numTurnAround += 1;
-        break;
-    case Action::STATIC:
-        numStatic += 1;
-        break;
-    case Action::TALK:
+    case Action::WALK:
+        numWalk += 1;
         break;
     default:
         MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);

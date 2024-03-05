@@ -2,13 +2,13 @@
 
 enum Action
 {
-    WALK,
     RUN,
+    STATIC,
+    TALK,
+    TURN_AROUND,
     TURN_LEFT,
     TURN_RIGHT,
-    TURN_AROUND,
-    STATIC,
-    TALK
+    WALK
     // JUMP
     // JUMP_WALK,
     // JUMP_RUN
