@@ -186,7 +186,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
         Environment environment = Environment(client_width, client_height, agent);
-        QLearning q_learning = QLearning(environment.numStates, environment.numActions);
+        QLearning qLearning = QLearning(environment.numStates, environment.numActions);
 
         size_t num_episodes = 1000;
 
@@ -199,7 +199,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             while (!done)
             {
-                Action action = q_learning.ChooseAction(state);
+                Action action = qLearning.ChooseAction(state);
 
                 auto FrontConfig = [&]() {
                     agent.orientation = Orientation::FRONT;
@@ -380,11 +380,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
-                environment.Render(i, iteration, action, q_learning.exploration_rate, agent.direction, agent);
+                environment.Render(i, iteration, action, qLearning.exploration_rate, agent.direction, agent);
                 auto [next_state, reward, temp_done] = environment.Step(action, agent);
                 done = temp_done;
 
-                q_learning.UpdateQtable(state, action, reward, next_state, done);
+                qLearning.UpdateQtable(state, action, reward, next_state, done);
 
                 total_reward += reward;
                 state = next_state;
