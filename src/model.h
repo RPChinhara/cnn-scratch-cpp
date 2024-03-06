@@ -92,4 +92,8 @@ class QLearning
 
 class Transformer
 {
+  public:
+    Transformer();
+    void Train();
+    void Predict();
 };

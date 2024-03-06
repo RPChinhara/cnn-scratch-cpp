@@ -305,3 +305,15 @@ void QLearning::UpdateQtable(size_t state, Action action, float reward, size_t n
     if (exploration_rate > exploration_min)
         exploration_rate *= exploration_decay;
 }
+
+Transformer::Transformer()
+{
+}
+
+void Transformer::Train()
+{
+}
+
+void Transformer::Predict()
+{
+}
