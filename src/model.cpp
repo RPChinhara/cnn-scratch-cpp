@@ -38,13 +38,13 @@ void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal
 
     size_t idx = 0;
 
-    for (size_t i = 0; i < outputHeight; ++i)
-    {
-        for (size_t j = 0; i < outputWidth; ++j)
-        {
-            // ouput[idx] =
-        }
-    }
+    // for (size_t i = 0; i < outputHeight; ++i)
+    // {
+    //     for (size_t j = 0; i < outputWidth; ++j)
+    //     {
+    //         // ouput[idx] =
+    //     }
+    // }
 
     std::cout << output << std::endl;
 }
