@@ -36,7 +36,7 @@ void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal
 
     Tensor output = Zeros({outputHeight, outputWidth});
 
-    size_t idx = 0;
+    // size_t idx = 0;
 
     // for (size_t i = 0; i < outputHeight; ++i)
     // {

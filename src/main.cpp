@@ -106,7 +106,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor features = iris.features;
     Tensor targets = iris.targets;
