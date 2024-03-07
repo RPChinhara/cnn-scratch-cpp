@@ -5,6 +5,11 @@
 #include <sstream>
 #include <windows.h>
 
+IMDb LoadIMDb()
+{
+    return IMDb();
+}
+
 Iris LoadIris()
 {
     std::ifstream file("dataset\\iris.csv");
