@@ -39,18 +39,18 @@ class CNN3D
     std::vector<Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &kernel, const size_t stride);
 };
 
-class DQN
-{
-};
-
 class DDQN
 {
 };
 
-class FeedforwardNeuralNetwork
+class DQN
+{
+};
+
+class NN
 {
   public:
-    FeedforwardNeuralNetwork(const std::vector<size_t> &layers, float const learningRate);
+    NN(const std::vector<size_t> &layers, float const learningRate);
     void Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal);
     void Predict(const Tensor &xTest, const Tensor &yTest);
 

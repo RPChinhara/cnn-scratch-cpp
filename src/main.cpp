@@ -106,7 +106,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor features = iris.features;
     Tensor targets = iris.targets;
@@ -120,19 +120,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     val_test.trainFeatures = MinMaxScaler(val_test.trainFeatures);
     val_test.testFeatures = MinMaxScaler(val_test.testFeatures);
 
-    FeedforwardNeuralNetwork feedforwardNeuralNetwork = FeedforwardNeuralNetwork({4, 128, 3}, 0.01f);
+    NN nn = NN({4, 128, 3}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    feedforwardNeuralNetwork.Train(train_temp.trainFeatures, train_temp.trainTargets, val_test.trainFeatures,
-                                   val_test.trainTargets);
+    nn.Train(train_temp.trainFeatures, train_temp.trainTargets, val_test.trainFeatures, val_test.trainTargets);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    feedforwardNeuralNetwork.Predict(val_test.testFeatures, val_test.testTargets);
+    nn.Predict(val_test.testFeatures, val_test.testTargets);
 #endif
 
 #if 1

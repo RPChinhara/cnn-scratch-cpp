@@ -61,14 +61,13 @@ std::vector<Tensor> CNN2D::ForwardPropagation(const Tensor &input, const std::ve
     return weights;
 }
 
-FeedforwardNeuralNetwork::FeedforwardNeuralNetwork(const std::vector<size_t> &layers, const float learningRate)
+NN::NN(const std::vector<size_t> &layers, const float learningRate)
 {
     this->layers = layers;
     this->learningRate = learningRate;
 }
 
-void FeedforwardNeuralNetwork::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val,
-                                     const Tensor &y_val)
+void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
     size_t rd_num;
@@ -191,7 +190,7 @@ void FeedforwardNeuralNetwork::Train(const Tensor &x_train, const Tensor &y_trai
     }
 }
 
-void FeedforwardNeuralNetwork::Predict(const Tensor &x_test, const Tensor &y_test)
+void NN::Predict(const Tensor &x_test, const Tensor &y_test)
 {
     std::vector<Tensor> activations = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
 
@@ -203,7 +202,7 @@ void FeedforwardNeuralNetwork::Predict(const Tensor &x_test, const Tensor &y_tes
     std::cout << activations.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<Tensor>, std::vector<Tensor>> FeedforwardNeuralNetwork::InitParameters()
+std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
 {
     std::vector<Tensor> weights;
     std::vector<Tensor> biases;
@@ -217,9 +216,8 @@ std::pair<std::vector<Tensor>, std::vector<Tensor>> FeedforwardNeuralNetwork::In
     return std::make_pair(weights, biases);
 }
 
-std::vector<Tensor> FeedforwardNeuralNetwork::ForwardPropagation(const Tensor &input,
-                                                                 const std::vector<Tensor> &weights,
-                                                                 const std::vector<Tensor> &biases)
+std::vector<Tensor> NN::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weights,
+                                           const std::vector<Tensor> &biases)
 {
     std::vector<Tensor> activations;
 
