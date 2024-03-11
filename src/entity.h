@@ -191,3 +191,13 @@ class Water : public Entity
         return *this;
     }
 };
+
+struct WinData
+{
+    WinData() = default;
+    Agent agent;
+    Agent2 agent2;
+    Bed bed;
+    Food food;
+    Water water;
+};

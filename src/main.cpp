@@ -18,16 +18,6 @@
 
 static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
-struct WinData
-{
-    WinData() = default;
-    Agent agent;
-    Agent2 agent2;
-    Bed bed;
-    Food food;
-    Water water;
-};
-
 // struct WinData;
 // WinData *winData = nullptr;
 
@@ -416,8 +406,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 ++iteration;
                 environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
-                auto [next_state, reward, temp_done] =
-                    environment.Step(action, winData->agent, winData->agent2, winData->food, winData->water);
+                auto [next_state, reward, temp_done] = environment.Step(action, *winData);
                 done = temp_done;
 
                 qLearning.UpdateQtable(state, action, reward, next_state, done);
