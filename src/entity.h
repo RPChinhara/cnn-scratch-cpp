@@ -192,9 +192,9 @@ class Water : public Entity
     }
 };
 
-struct WinData
+struct Entities
 {
-    WinData() = default;
+    Entities() = default;
     Agent agent;
     Agent2 agent2;
     Bed bed;

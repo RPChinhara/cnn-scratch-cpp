@@ -15,7 +15,7 @@ class Environment
     void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
                 const Agent &agent);
     size_t Reset(const Agent &agent);
-    std::tuple<size_t, float, bool> Step(Action action, const WinData &winData);
+    std::tuple<size_t, float, bool> Step(Action action, const Entities &entities);
 
     LONG client_width, client_height;
     LONG minLeft = 0;
@@ -37,7 +37,7 @@ class Environment
   private:
     size_t FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState, EnergyState energyState,
                         EmotionState emotionState);
-    void CalculateReward(const Action action, const WinData& winData);
+    void CalculateReward(const Action action, const Entities &entities);
     bool CheckTermination(const Agent &agent);
 
     bool prevHasCollidedWithWater;

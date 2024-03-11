@@ -18,8 +18,7 @@
 
 static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
-// struct WinData;
-// WinData *winData = nullptr;
+// Entities *entities = nullptr;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -32,7 +31,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         RECT client_rect;
         PAINTSTRUCT ps;
 
-        WinData *winData = reinterpret_cast<WinData *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+        Entities *entities = reinterpret_cast<Entities *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
         HDC hdc = BeginPaint(hwnd, &ps);
 
@@ -42,27 +41,27 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         DeleteObject(grassBrush);
 
         HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-        FillRect(hdc, &winData->bed.position, whiteBrush);
+        FillRect(hdc, &entities->bed.position, whiteBrush);
         DeleteObject(whiteBrush);
 
         HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
-        FillRect(hdc, &winData->food.position, redBrush);
+        FillRect(hdc, &entities->food.position, redBrush);
         DeleteObject(redBrush);
 
         HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
-        FillRect(hdc, &winData->water.position, blueBrush);
+        FillRect(hdc, &entities->water.position, blueBrush);
         DeleteObject(blueBrush);
 
         HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
-        FillRect(hdc, &winData->agent.position, pinkBrush);
-        FillRect(hdc, &winData->agent2.position, pinkBrush);
+        FillRect(hdc, &entities->agent.position, pinkBrush);
+        FillRect(hdc, &entities->agent2.position, pinkBrush);
         DeleteObject(pinkBrush);
 
         HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
-        if (winData->agent.render_agent_left_eye)
-            FillRect(hdc, &winData->agent.leftEyePosition, blackBrush);
-        if (winData->agent.render_agent_right_eye)
-            FillRect(hdc, &winData->agent.rightEyePosition, blackBrush);
+        if (entities->agent.render_agent_left_eye)
+            FillRect(hdc, &entities->agent.leftEyePosition, blackBrush);
+        if (entities->agent.render_agent_right_eye)
+            FillRect(hdc, &entities->agent.rightEyePosition, blackBrush);
         DeleteObject(blackBrush);
 
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
@@ -161,14 +160,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     constexpr LONG borderToAgent = 13;
     constexpr LONG borderToEntities = 5;
 
-    WinData *winData = new WinData;
-    winData->agent = Agent(client_width, client_height, borderToAgent);
-    winData->agent2 = Agent2(client_width, client_height, borderToEntities);
-    winData->bed = Bed(client_height, borderToEntities);
-    winData->food = Food(borderToEntities);
-    winData->water = Water(client_width, client_height, borderToEntities);
+    Entities *entities = new Entities;
+    entities->agent = Agent(client_width, client_height, borderToAgent);
+    entities->agent2 = Agent2(client_width, client_height, borderToEntities);
+    entities->bed = Bed(client_height, borderToEntities);
+    entities->food = Food(borderToEntities);
+    entities->water = Water(client_width, client_height, borderToEntities);
 
-    SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(winData));
+    SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(entities));
 
     if (hwnd == nullptr)
     {
@@ -185,19 +184,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //         PlaySound(TEXT("assets\\mixkit-arcade-retro-game-over-213.wav"), NULL, SND_FILENAME);
     // });
 
-    std::thread rl_thread([&hwnd, winData]() {
+    std::thread rl_thread([&hwnd, entities]() {
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
         LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-        Environment environment = Environment(client_width, client_height, winData->agent);
+        Environment environment = Environment(client_width, client_height, entities->agent);
         QLearning qLearning = QLearning(environment.numStates, environment.numActions);
 
         size_t num_episodes = 1000;
 
         for (size_t i = 0; i < num_episodes; ++i)
         {
-            auto state = environment.Reset(winData->agent);
+            auto state = environment.Reset(entities->agent);
             bool done = false;
             float total_reward = 0;
             size_t iteration = 0;
@@ -207,70 +206,74 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 Action action = qLearning.ChooseAction(state);
 
                 auto FrontConfig = [&]() {
-                    winData->agent.orientation = Orientation::FRONT;
-                    winData->agent.direction = Direction::SOUTH;
-                    winData->agent.render_agent_left_eye = true;
-                    winData->agent.render_agent_right_eye = true;
+                    entities->agent.orientation = Orientation::FRONT;
+                    entities->agent.direction = Direction::SOUTH;
+                    entities->agent.render_agent_left_eye = true;
+                    entities->agent.render_agent_right_eye = true;
                 };
 
                 auto LeftConfig = [&]() {
-                    winData->agent.orientation = Orientation::LEFT;
-                    winData->agent.direction = Direction::EAST;
-                    winData->agent.render_agent_left_eye = true;
-                    winData->agent.render_agent_right_eye = false;
+                    entities->agent.orientation = Orientation::LEFT;
+                    entities->agent.direction = Direction::EAST;
+                    entities->agent.render_agent_left_eye = true;
+                    entities->agent.render_agent_right_eye = false;
                 };
 
                 auto RightConfig = [&]() {
-                    winData->agent.orientation = Orientation::RIGHT;
-                    winData->agent.direction = Direction::WEST;
-                    winData->agent.render_agent_left_eye = false;
-                    winData->agent.render_agent_right_eye = true;
+                    entities->agent.orientation = Orientation::RIGHT;
+                    entities->agent.direction = Direction::WEST;
+                    entities->agent.render_agent_left_eye = false;
+                    entities->agent.render_agent_right_eye = true;
                 };
 
                 auto BackConfig = [&]() {
-                    winData->agent.orientation = Orientation::BACK;
-                    winData->agent.direction = Direction::NORTH;
-                    winData->agent.render_agent_left_eye = false;
-                    winData->agent.render_agent_right_eye = false;
+                    entities->agent.orientation = Orientation::BACK;
+                    entities->agent.direction = Direction::NORTH;
+                    entities->agent.render_agent_left_eye = false;
+                    entities->agent.render_agent_right_eye = false;
                 };
 
                 size_t pixelChangeWalk = 21;
                 size_t pixelChangeRun = 60;
 
-                winData->agent.previousPosition = winData->agent.position;
+                entities->agent.previousPosition = entities->agent.position;
 
                 switch (action)
                 {
                 case Action::RUN:
-                    switch (winData->agent.orientation)
+                    switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
-                        winData->agent.position.top += pixelChangeRun, winData->agent.position.bottom += pixelChangeRun;
-                        winData->agent.leftEyePosition.top += pixelChangeRun,
-                            winData->agent.leftEyePosition.bottom += pixelChangeRun;
-                        winData->agent.rightEyePosition.top += pixelChangeRun,
-                            winData->agent.rightEyePosition.bottom += pixelChangeRun;
+                        entities->agent.position.top += pixelChangeRun,
+                            entities->agent.position.bottom += pixelChangeRun;
+                        entities->agent.leftEyePosition.top += pixelChangeRun,
+                            entities->agent.leftEyePosition.bottom += pixelChangeRun;
+                        entities->agent.rightEyePosition.top += pixelChangeRun,
+                            entities->agent.rightEyePosition.bottom += pixelChangeRun;
                         break;
                     case Orientation::LEFT:
-                        winData->agent.position.left += pixelChangeRun, winData->agent.position.right += pixelChangeRun;
-                        winData->agent.leftEyePosition.left += pixelChangeRun,
-                            winData->agent.leftEyePosition.right += pixelChangeRun;
-                        winData->agent.rightEyePosition.left += pixelChangeRun,
-                            winData->agent.rightEyePosition.right += pixelChangeRun;
+                        entities->agent.position.left += pixelChangeRun,
+                            entities->agent.position.right += pixelChangeRun;
+                        entities->agent.leftEyePosition.left += pixelChangeRun,
+                            entities->agent.leftEyePosition.right += pixelChangeRun;
+                        entities->agent.rightEyePosition.left += pixelChangeRun,
+                            entities->agent.rightEyePosition.right += pixelChangeRun;
                         break;
                     case Orientation::RIGHT:
-                        winData->agent.position.left -= pixelChangeRun, winData->agent.position.right -= pixelChangeRun;
-                        winData->agent.leftEyePosition.left -= pixelChangeRun,
-                            winData->agent.leftEyePosition.right -= pixelChangeRun;
-                        winData->agent.rightEyePosition.left -= pixelChangeRun,
-                            winData->agent.rightEyePosition.right -= pixelChangeRun;
+                        entities->agent.position.left -= pixelChangeRun,
+                            entities->agent.position.right -= pixelChangeRun;
+                        entities->agent.leftEyePosition.left -= pixelChangeRun,
+                            entities->agent.leftEyePosition.right -= pixelChangeRun;
+                        entities->agent.rightEyePosition.left -= pixelChangeRun,
+                            entities->agent.rightEyePosition.right -= pixelChangeRun;
                         break;
                     case Orientation::BACK:
-                        winData->agent.position.top -= pixelChangeRun, winData->agent.position.bottom -= pixelChangeRun;
-                        winData->agent.leftEyePosition.top -= pixelChangeRun,
-                            winData->agent.leftEyePosition.bottom -= pixelChangeRun;
-                        winData->agent.rightEyePosition.top -= pixelChangeRun,
-                            winData->agent.rightEyePosition.bottom -= pixelChangeRun;
+                        entities->agent.position.top -= pixelChangeRun,
+                            entities->agent.position.bottom -= pixelChangeRun;
+                        entities->agent.leftEyePosition.top -= pixelChangeRun,
+                            entities->agent.leftEyePosition.bottom -= pixelChangeRun;
+                        entities->agent.rightEyePosition.top -= pixelChangeRun,
+                            entities->agent.rightEyePosition.bottom -= pixelChangeRun;
                         break;
                     default:
                         MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -284,7 +287,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     // std::this_thread::sleep_for(std::chrono::seconds(2));
                     break;
                 case Action::TURN_AROUND:
-                    switch (winData->agent.orientation)
+                    switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
                         BackConfig();
@@ -304,7 +307,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::TURN_LEFT:
-                    switch (winData->agent.orientation)
+                    switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
                         LeftConfig();
@@ -324,7 +327,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::TURN_RIGHT:
-                    switch (winData->agent.orientation)
+                    switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
                         RightConfig();
@@ -344,39 +347,39 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     }
                     break;
                 case Action::WALK:
-                    switch (winData->agent.orientation)
+                    switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
-                        winData->agent.position.top += pixelChangeWalk,
-                            winData->agent.position.bottom += pixelChangeWalk;
-                        winData->agent.leftEyePosition.top += pixelChangeWalk,
-                            winData->agent.leftEyePosition.bottom += pixelChangeWalk;
-                        winData->agent.rightEyePosition.top += pixelChangeWalk,
-                            winData->agent.rightEyePosition.bottom += pixelChangeWalk;
+                        entities->agent.position.top += pixelChangeWalk,
+                            entities->agent.position.bottom += pixelChangeWalk;
+                        entities->agent.leftEyePosition.top += pixelChangeWalk,
+                            entities->agent.leftEyePosition.bottom += pixelChangeWalk;
+                        entities->agent.rightEyePosition.top += pixelChangeWalk,
+                            entities->agent.rightEyePosition.bottom += pixelChangeWalk;
                         break;
                     case Orientation::LEFT:
-                        winData->agent.position.left += pixelChangeWalk,
-                            winData->agent.position.right += pixelChangeWalk;
-                        winData->agent.leftEyePosition.left += pixelChangeWalk,
-                            winData->agent.leftEyePosition.right += pixelChangeWalk;
-                        winData->agent.rightEyePosition.left += pixelChangeWalk,
-                            winData->agent.rightEyePosition.right += pixelChangeWalk;
+                        entities->agent.position.left += pixelChangeWalk,
+                            entities->agent.position.right += pixelChangeWalk;
+                        entities->agent.leftEyePosition.left += pixelChangeWalk,
+                            entities->agent.leftEyePosition.right += pixelChangeWalk;
+                        entities->agent.rightEyePosition.left += pixelChangeWalk,
+                            entities->agent.rightEyePosition.right += pixelChangeWalk;
                         break;
                     case Orientation::RIGHT:
-                        winData->agent.position.left -= pixelChangeWalk,
-                            winData->agent.position.right -= pixelChangeWalk;
-                        winData->agent.leftEyePosition.left -= pixelChangeWalk,
-                            winData->agent.leftEyePosition.right -= pixelChangeWalk;
-                        winData->agent.rightEyePosition.left -= pixelChangeWalk,
-                            winData->agent.rightEyePosition.right -= pixelChangeWalk;
+                        entities->agent.position.left -= pixelChangeWalk,
+                            entities->agent.position.right -= pixelChangeWalk;
+                        entities->agent.leftEyePosition.left -= pixelChangeWalk,
+                            entities->agent.leftEyePosition.right -= pixelChangeWalk;
+                        entities->agent.rightEyePosition.left -= pixelChangeWalk,
+                            entities->agent.rightEyePosition.right -= pixelChangeWalk;
                         break;
                     case Orientation::BACK:
-                        winData->agent.position.top -= pixelChangeWalk,
-                            winData->agent.position.bottom -= pixelChangeWalk;
-                        winData->agent.leftEyePosition.top -= pixelChangeWalk,
-                            winData->agent.leftEyePosition.bottom -= pixelChangeWalk;
-                        winData->agent.rightEyePosition.top -= pixelChangeWalk,
-                            winData->agent.rightEyePosition.bottom -= pixelChangeWalk;
+                        entities->agent.position.top -= pixelChangeWalk,
+                            entities->agent.position.bottom -= pixelChangeWalk;
+                        entities->agent.leftEyePosition.top -= pixelChangeWalk,
+                            entities->agent.leftEyePosition.bottom -= pixelChangeWalk;
+                        entities->agent.rightEyePosition.top -= pixelChangeWalk,
+                            entities->agent.rightEyePosition.bottom -= pixelChangeWalk;
                         break;
                     default:
                         MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -388,25 +391,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     break;
                 }
 
-                winData->agent.has_collided_with_agent2 = false;
-                winData->agent.has_collided_with_food = false;
-                winData->agent.has_collided_with_water = false;
-                winData->agent.has_collided_with_wall = false;
+                entities->agent.has_collided_with_agent2 = false;
+                entities->agent.has_collided_with_food = false;
+                entities->agent.has_collided_with_water = false;
+                entities->agent.has_collided_with_wall = false;
 
-                ResolveRectanglesCollision(winData->agent, winData->agent2, client_width, client_height);
-                ResolveRectanglesCollision(winData->agent, winData->food, client_width, client_height);
-                ResolveRectanglesCollision(winData->agent, winData->water, client_width, client_height);
-                ResolveBoundaryCollision(winData->agent, client_width, client_height);
+                ResolveRectanglesCollision(entities->agent, entities->agent2, client_width, client_height);
+                ResolveRectanglesCollision(entities->agent, entities->food, client_width, client_height);
+                ResolveRectanglesCollision(entities->agent, entities->water, client_width, client_height);
+                ResolveBoundaryCollision(entities->agent, client_width, client_height);
 
-                if (winData->agent.has_collided_with_food)
+                if (entities->agent.has_collided_with_food)
                     PlaySound(TEXT("asset\\eating_sound_effect.wav"), NULL, SND_FILENAME);
 
-                if (winData->agent.has_collided_with_water)
+                if (entities->agent.has_collided_with_water)
                     PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
-                environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
-                auto [next_state, reward, temp_done] = environment.Step(action, *winData);
+                environment.Render(i, iteration, action, qLearning.exploration_rate, entities->agent);
+                auto [next_state, reward, temp_done] = environment.Step(action, *entities);
                 done = temp_done;
 
                 qLearning.UpdateQtable(state, action, reward, next_state, done);
@@ -443,7 +446,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     FreeConsole();
     fclose(file);
-    delete winData;
+    delete entities;
 
     return 0;
 }
