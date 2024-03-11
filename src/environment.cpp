@@ -19,7 +19,7 @@ Environment::Environment(const LONG client_width, const LONG client_height, cons
 }
 
 void Environment::Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
-                         Direction direction, const Agent &agent)
+                         const Agent &agent)
 {
     constexpr size_t secondsPerIteration = 1;
     secondsLived += secondsPerIteration;
@@ -226,13 +226,13 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
 
     std::string currentDirection;
 
-    if (direction == Direction::NORTH)
+    if (agent.direction == Direction::NORTH)
         currentDirection += "north";
-    if (direction == Direction::SOUTH)
+    if (agent.direction == Direction::SOUTH)
         currentDirection += "south";
-    if (direction == Direction::EAST)
+    if (agent.direction == Direction::EAST)
         currentDirection += "east";
-    if (direction == Direction::WEST)
+    if (agent.direction == Direction::WEST)
         currentDirection += "west";
 
     std::cout << "Episode:                       " << episode << '\n';

@@ -415,8 +415,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
 
                 ++iteration;
-                environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent.direction,
-                                   winData->agent);
+                environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
                 auto [next_state, reward, temp_done] =
                     environment.Step(action, winData->agent, winData->agent2, winData->food, winData->water);
                 done = temp_done;

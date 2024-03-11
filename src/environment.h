@@ -13,7 +13,7 @@ class Environment
   public:
     Environment(const LONG client_width, const LONG client_height, const Agent &agent);
     void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
-                Direction direction, const Agent &agent);
+                const Agent &agent);
     size_t Reset(const Agent &agent);
     std::tuple<size_t, float, bool> Step(Action action, const Agent &agent, const Agent2 &agent2, const Food &food,
                                          const Water &water);
