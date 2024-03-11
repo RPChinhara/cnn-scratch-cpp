@@ -323,7 +323,8 @@ size_t Environment::Reset(const Agent &agent)
     return currentState;
 }
 
-std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &agent)
+std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &agent, const Agent2 &agent2,
+                                                  const Food &food, const Water &water)
 {
     if (agent.has_collided_with_agent2 && emotionState == EmotionState::LEVEL4)
         ++numFriendCollisionWhileHappy;
@@ -511,7 +512,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Agent &ag
     //     1)); currentState = FlattenState(hungerState, thirstState, energyState, emotionState, agent.left, agent.top);
     // }
 
-    CalculateReward(action, agent);
+    CalculateReward(action, agent, agent2, food, water);
     bool done = CheckTermination(agent);
 
     if (agent.has_collided_with_water)
@@ -575,17 +576,21 @@ size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, H
            static_cast<size_t>(left);
 }
 
-void Environment::CalculateReward(const Action action, const Agent &agent)
+void Environment::CalculateReward(const Action action, const Agent &agent, const Agent2 &agent2, const Food &food,
+                                  const Water &water)
 {
     reward = 0.0f;
 
-    if (std::labs(agent.position.left - water.left) < 250 && std::labs(agent.position.top - water.top) < 250)
+    if (std::labs(agent.position.left - water.position.left) < 250 &&
+        std::labs(agent.position.top - water.position.top) < 250)
         reward += 1.2f;
 
-    if (std::labs(agent.position.left - food.left) < 250 && std::labs(agent.position.top - food.top) < 250)
+    if (std::labs(agent.position.left - food.position.left) < 250 &&
+        std::labs(agent.position.top - food.position.top) < 250)
         reward += 1.1f;
 
-    if (std::labs(agent.position.left - agent2.left) < 250 && std::labs(agent.position.top - agent2.top) < 250)
+    if (std::labs(agent.position.left - agent2.position.left) < 250 &&
+        std::labs(agent.position.top - agent2.position.top) < 250)
         reward += 1.0f;
 
     if (seenLefts.find(agent.position.left) != seenLefts.end())

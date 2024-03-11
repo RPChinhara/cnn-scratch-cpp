@@ -74,22 +74,22 @@ void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG 
     }
 }
 
-void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityType, const LONG client_width,
+void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG client_width,
                                 const LONG client_height)
 {
-    if ((agent.position.left < entity.right) && (agent.position.right > entity.left) &&
-        (agent.position.top < entity.bottom) && (agent.position.bottom > entity.top))
+    if ((agent.position.left < entity.position.right) && (agent.position.right > entity.position.left) &&
+        (agent.position.top < entity.position.bottom) && (agent.position.bottom > entity.position.top))
     {
 
-        switch (entityType)
+        switch (entity.type)
         {
-        case AGENT2:
+        case Entity::AGENT2:
             agent.has_collided_with_agent2 = true;
             break;
-        case FOOD:
+        case Entity::FOOD:
             agent.has_collided_with_food = true;
             break;
-        case WATER:
+        case Entity::WATER:
             agent.has_collided_with_water = true;
             break;
         default:
@@ -97,12 +97,14 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
             break;
         }
 
-        int horizontalOverlap = std::min(agent.position.right, entity.right) - std::max(agent.position.left, entity.left);
-        int verticalOverlap = std::min(agent.position.bottom, entity.bottom) - std::max(agent.position.top, entity.top);
+        int horizontalOverlap =
+            std::min(agent.position.right, entity.position.right) - std::max(agent.position.left, entity.position.left);
+        int verticalOverlap =
+            std::min(agent.position.bottom, entity.position.bottom) - std::max(agent.position.top, entity.position.top);
 
         if (horizontalOverlap < verticalOverlap)
         {
-            if (agent.position.left < entity.left && agent.previousPosition.left < entity.left)
+            if (agent.position.left < entity.position.left && agent.previousPosition.left < entity.position.left)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -112,7 +114,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.left -= horizontalOverlap;
                 agent.position.right -= horizontalOverlap;
             }
-            else if (agent.position.left < entity.left && agent.previousPosition.left > entity.left)
+            else if (agent.position.left < entity.position.left && agent.previousPosition.left > entity.position.left)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -122,7 +124,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.left += horizontalOverlap;
                 agent.position.right += horizontalOverlap;
             }
-            else if (agent.position.left > entity.left && agent.previousPosition.left > entity.left)
+            else if (agent.position.left > entity.position.left && agent.previousPosition.left > entity.position.left)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -132,7 +134,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.left += horizontalOverlap;
                 agent.position.right += horizontalOverlap;
             }
-            else if (agent.position.left > entity.left && agent.previousPosition.left < entity.left)
+            else if (agent.position.left > entity.position.left && agent.previousPosition.left < entity.position.left)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -142,7 +144,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.left -= horizontalOverlap;
                 agent.position.right -= horizontalOverlap;
             }
-            else if (agent.position.left == entity.right || agent.position.right == entity.left)
+            else if (agent.position.left == entity.position.right || agent.position.right == entity.position.left)
             {
                 std::cout << " do nothing " << '\n';
             }
@@ -183,7 +185,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
         }
         else
         {
-            if (agent.position.top < entity.top && agent.previousPosition.top < entity.top)
+            if (agent.position.top < entity.position.top && agent.previousPosition.top < entity.position.top)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -193,7 +195,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.top -= verticalOverlap;
                 agent.position.bottom -= verticalOverlap;
             }
-            else if (agent.position.top < entity.top && agent.previousPosition.top > entity.top)
+            else if (agent.position.top < entity.position.top && agent.previousPosition.top > entity.position.top)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -203,7 +205,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.top += verticalOverlap;
                 agent.position.bottom += verticalOverlap;
             }
-            else if (agent.position.top > entity.top && agent.previousPosition.top > entity.top)
+            else if (agent.position.top > entity.position.top && agent.previousPosition.top > entity.position.top)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -213,7 +215,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.top += verticalOverlap;
                 agent.position.bottom += verticalOverlap;
             }
-            else if (agent.position.top > entity.top && agent.previousPosition.top > entity.top)
+            else if (agent.position.top > entity.position.top && agent.previousPosition.top > entity.position.top)
             {
                 std::cout << agent.position.left << " " << agent.position.top << " " << agent.position.right << " "
                           << agent.position.bottom << '\n';
@@ -223,7 +225,7 @@ void ResolveRectanglesCollision(Agent &agent, const RECT &entity, Entity entityT
                 agent.position.top -= verticalOverlap;
                 agent.position.bottom -= verticalOverlap;
             }
-            else if (agent.position.top == entity.bottom || agent.position.bottom == entity.top)
+            else if (agent.position.top == entity.position.bottom || agent.position.bottom == entity.position.top)
             {
                 std::cout << " do nothing " << '\n';
             }

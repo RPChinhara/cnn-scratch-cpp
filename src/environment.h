@@ -1,7 +1,6 @@
 #pragma once
 
 #include "action.h"
-#include "agent.h"
 #include "entity.h"
 #include "state.h"
 
@@ -16,7 +15,8 @@ class Environment
     void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
                 Direction direction, const Agent &agent);
     size_t Reset(const Agent &agent);
-    std::tuple<size_t, float, bool> Step(Action action, const Agent &agent);
+    std::tuple<size_t, float, bool> Step(Action action, const Agent &agent, const Agent2 &agent2, const Food &food,
+                                         const Water &water);
 
     LONG client_width, client_height;
     LONG minLeft = 0;
@@ -38,7 +38,8 @@ class Environment
   private:
     size_t FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState, EnergyState energyState,
                         EmotionState emotionState);
-    void CalculateReward(const Action action, const Agent &agent);
+    void CalculateReward(const Action action, const Agent &agent, const Agent2 &agent2, const Food &food,
+                         const Water &water);
     bool CheckTermination(const Agent &agent);
 
     bool prevHasCollidedWithWater;
@@ -77,7 +78,7 @@ class Environment
     size_t minutesLived;
     size_t hoursLived;
     size_t daysLived;
-    
+
     size_t secondsLivedWithoutDrinking;
     size_t minutesLivedWithoutDrinking;
     size_t hoursLivedWithoutDrinking;

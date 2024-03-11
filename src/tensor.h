@@ -9,7 +9,7 @@ class Tensor
     Tensor() = default;
     Tensor(const std::vector<float> elem, const std::vector<size_t> shape);
     ~Tensor();
-    Tensor(const Tensor &tensor);
+    Tensor(const Tensor &tensor); // Tensor(const Tensor &other);
     Tensor(Tensor &&tensor);
     Tensor &operator=(const Tensor &tensor);
     Tensor &operator=(Tensor &&tensor);
