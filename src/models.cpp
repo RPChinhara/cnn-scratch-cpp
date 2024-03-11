@@ -1,11 +1,11 @@
-#include "model.h"
-#include "activation.h"
-#include "array.h"
-#include "derivative.h"
+#include "models.h"
+#include "activations.h"
+#include "arrays.h"
+#include "derivatives.h"
 #include "linalg.h"
-#include "loss.h"
+#include "losses.h"
 #include "mathematics.h"
-#include "metric.h"
+#include "metrics.h"
 #include "random.h"
 
 #include <cassert>

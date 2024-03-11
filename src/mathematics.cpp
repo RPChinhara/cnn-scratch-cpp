@@ -1,6 +1,6 @@
 #include "mathematics.h"
-#include "array.h"
-#include "kernel.h"
+#include "arrays.h"
+#include "kernels.h"
 #include "tensor.h"
 
 #include <cassert>

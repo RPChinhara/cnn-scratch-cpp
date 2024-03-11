@@ -1,8 +1,8 @@
 #pragma once
 
 #include "action.h"
-#include "entity.h"
-#include "state.h"
+#include "entities.h"
+#include "states.h"
 
 #include <set>
 #include <string>

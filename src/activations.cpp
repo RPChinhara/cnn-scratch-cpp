@@ -1,7 +1,7 @@
-#include "activation.h"
-#include "array.h"
+#include "activations.h"
+#include "arrays.h"
 #include "device.h"
-#include "kernel.h"
+#include "kernels.h"
 #include "mathematics.h"
 #include "tensor.h"
 

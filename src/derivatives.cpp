@@ -1,4 +1,4 @@
-#include "derivative.h"
+#include "derivatives.h"
 #include "tensor.h"
 
 Tensor CategoricalCrossEntropyDerivative(const Tensor &yTrue, const Tensor &yPred)

@@ -1,5 +1,5 @@
 #include "physics.h"
-#include "entity.h"
+#include "entities.h"
 
 #include <algorithm>
 #include <iostream>
@@ -74,8 +74,7 @@ void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG 
     }
 }
 
-void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG client_width,
-                                const LONG client_height)
+void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG client_width, const LONG client_height)
 {
     if ((agent.position.left < entity.position.right) && (agent.position.right > entity.position.left) &&
         (agent.position.top < entity.position.bottom) && (agent.position.bottom > entity.position.top))

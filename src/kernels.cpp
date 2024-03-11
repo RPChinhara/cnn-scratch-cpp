@@ -1,4 +1,4 @@
-#include "kernel.h"
+#include "kernels.h"
 
 __global__ void Exp(float *tensor, float *newTensor, size_t n)
 {

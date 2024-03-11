@@ -1,5 +1,5 @@
-#include "dataset.h"
-#include "array.h"
+#include "datasets.h"
+#include "arrays.h"
 
 #include <fstream>
 #include <sstream>

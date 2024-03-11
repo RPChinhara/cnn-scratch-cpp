@@ -1,5 +1,5 @@
-#include "loss.h"
-#include "array.h"
+#include "losses.h"
+#include "arrays.h"
 #include "device.h"
 #include "mathematics.h"
 #include "tensor.h"

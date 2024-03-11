@@ -1,4 +1,4 @@
-#include "array.h"
+#include "arrays.h"
 #include "tensor.h"
 
 #include <cassert>
@@ -82,8 +82,7 @@ Tensor Zeros(const std::vector<size_t> &shape)
     newTensor.shape = shape;
 
     if (newTensor.shape.size() > 0)
-        newTensor.size =
-            std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
+        newTensor.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
         newTensor.size = 1;
 
