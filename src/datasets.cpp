@@ -12,7 +12,7 @@ IMDb LoadIMDb()
 
 Iris LoadIris()
 {
-    std::ifstream file("dataset\\iris.csv");
+    std::ifstream file("datasets\\iris.csv");
 
     if (!file.is_open())
         MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
@@ -159,10 +159,10 @@ Tensor ReadMNISTLabels(const std::string &filePath)
 MNIST LoadMNIST()
 {
     MNIST mnist;
-    mnist.trainImages = ReadMNISTImages("dataset\\mnist\\train-images-idx3-ubyte");
-    mnist.trainLabels = ReadMNISTLabels("dataset\\mnist\\train-labels-idx1-ubyte");
-    mnist.testImages = ReadMNISTImages("dataset\\mnist\\t10k-images-idx3-ubyte");
-    mnist.testLabels = ReadMNISTLabels("dataset\\mnist\\t10k-labels-idx1-ubyte");
+    mnist.trainImages = ReadMNISTImages("datasets\\mnist\\train-images-idx3-ubyte");
+    mnist.trainLabels = ReadMNISTLabels("datasets\\mnist\\train-labels-idx1-ubyte");
+    mnist.testImages = ReadMNISTImages("datasets\\mnist\\t10k-images-idx3-ubyte");
+    mnist.testLabels = ReadMNISTLabels("datasets\\mnist\\t10k-labels-idx1-ubyte");
 
     return mnist;
 }
