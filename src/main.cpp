@@ -157,11 +157,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     GetClientRect(hwnd, &client_rect);
     LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
 
-    constexpr LONG borderToAgent = 13;
     constexpr LONG borderToEntities = 5;
 
     Entities *entities = new Entities;
-    entities->agent = Agent(client_width, client_height, borderToAgent);
+    entities->agent = Agent(client_width, client_height);
     entities->agent2 = Agent2(client_width, client_height, borderToEntities);
     entities->bed = Bed(client_height, borderToEntities);
     entities->food = Food(borderToEntities);

@@ -22,18 +22,22 @@ class Agent
 {
   public:
     Agent() = default;
-    Agent(LONG clientWidth, LONG clientHeight, LONG borderToAgent)
+    Agent(LONG clientWidth, LONG clientHeight)
     {
-        position = {borderToAgent, (clientHeight - borderToAgent) - height, borderToAgent + width,
-                    clientHeight - borderToAgent};
+        LONG halfWidth = width / 2;
+        LONG halfHeight = height / 2;
+        LONG halfClientWidth = clientWidth / 2;
+        LONG halfClientHeight = clientHeight / 2;
 
-        leftEyePosition = {(position.right - toEyeWidth) - eye_width,
-                           (clientHeight - borderToAgent) - height + toEyeHeight, position.right - toEyeWidth,
-                           (clientHeight - borderToAgent) - height + toEyeHeight + eye_height};
+        position = {halfClientWidth - halfWidth, halfClientHeight - halfHeight, halfClientWidth - halfWidth + width,
+                    halfClientHeight - halfHeight + height};
 
-        rightEyePosition = {position.left + toEyeWidth, (clientHeight - borderToAgent) - height + toEyeHeight,
+        leftEyePosition = {(position.right - toEyeWidth) - eye_width, halfClientHeight - halfHeight + toEyeHeight,
+                           position.right - toEyeWidth, halfClientHeight - halfHeight + toEyeHeight + eye_height};
+
+        rightEyePosition = {position.left + toEyeWidth, halfClientHeight - halfHeight + toEyeHeight,
                             (position.left + toEyeWidth) + eye_width,
-                            (clientHeight - borderToAgent) - height + toEyeHeight + eye_height};
+                            halfClientHeight - halfHeight + toEyeHeight + eye_height};
     }
     Agent &operator=(const Agent &other)
     {
