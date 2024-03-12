@@ -28,13 +28,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         return 0;
     case WM_PAINT: {
-        RECT client_rect;
-        PAINTSTRUCT ps;
-
         Entities *entities = reinterpret_cast<Entities *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
+        PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
 
+        RECT client_rect;
         GetClientRect(hwnd, &client_rect);
         HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
         FillRect(hdc, &client_rect, grassBrush);
@@ -459,7 +458,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 // InvalidateRect(hwnd, nullptr, TRUE);
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << "\n\n";
