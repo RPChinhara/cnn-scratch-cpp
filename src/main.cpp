@@ -9,9 +9,11 @@
 #include "preprocessing.h"
 #include "random.h"
 
+#include <gdiplus.h>
 #include <memory>
 #include <thread>
 
+#pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
@@ -20,65 +22,14 @@ static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
 
 // Entities *entities = nullptr;
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    switch (uMsg)
-    {
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
-    case WM_PAINT: {
-        Entities *entities = reinterpret_cast<Entities *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-
-        RECT client_rect;
-        GetClientRect(hwnd, &client_rect);
-        HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
-        FillRect(hdc, &client_rect, grassBrush);
-        DeleteObject(grassBrush);
-
-        HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-        FillRect(hdc, &entities->bed.position, whiteBrush);
-        DeleteObject(whiteBrush);
-
-        HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
-        FillRect(hdc, &entities->food.position, redBrush);
-        DeleteObject(redBrush);
-
-        HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
-        FillRect(hdc, &entities->water.position, blueBrush);
-        DeleteObject(blueBrush);
-
-        HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
-        FillRect(hdc, &entities->agent.position, pinkBrush);
-        FillRect(hdc, &entities->agent2.position, pinkBrush);
-        DeleteObject(pinkBrush);
-
-        HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
-        if (entities->agent.render_agent_left_eye)
-            FillRect(hdc, &entities->agent.leftEyePosition, blackBrush);
-        if (entities->agent.render_agent_right_eye)
-            FillRect(hdc, &entities->agent.rightEyePosition, blackBrush);
-        DeleteObject(blackBrush);
-
-        // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
-
-        EndPaint(hwnd, &ps);
-
-        return 0;
-    }
-    case WM_UPDATE_DISPLAY:
-        InvalidateRect(hwnd, nullptr, TRUE);
-        return 0;
-    default:
-        return DefWindowProc(hwnd, uMsg, wParam, lParam);
-    }
-}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    ULONG_PTR gdiplusToken;
+    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
+
     AllocConsole();
 
     FILE *file;
@@ -482,9 +433,67 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     }
 
-    FreeConsole();
-    fclose(file);
     delete entities;
+    fclose(file);
+    FreeConsole();
+    Gdiplus::GdiplusShutdown(gdiplusToken);
 
     return 0;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    case WM_PAINT: {
+        Entities *entities = reinterpret_cast<Entities *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+
+        RECT client_rect;
+        GetClientRect(hwnd, &client_rect);
+        HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
+        FillRect(hdc, &client_rect, grassBrush);
+        DeleteObject(grassBrush);
+
+        HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
+        FillRect(hdc, &entities->bed.position, whiteBrush);
+        DeleteObject(whiteBrush);
+
+        HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
+        FillRect(hdc, &entities->food.position, redBrush);
+        DeleteObject(redBrush);
+
+        HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
+        FillRect(hdc, &entities->water.position, blueBrush);
+        DeleteObject(blueBrush);
+
+        HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
+        FillRect(hdc, &entities->agent.position, pinkBrush);
+        FillRect(hdc, &entities->agent2.position, pinkBrush);
+        DeleteObject(pinkBrush);
+
+        HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
+        if (entities->agent.render_agent_left_eye)
+            FillRect(hdc, &entities->agent.leftEyePosition, blackBrush);
+        if (entities->agent.render_agent_right_eye)
+            FillRect(hdc, &entities->agent.rightEyePosition, blackBrush);
+        DeleteObject(blackBrush);
+
+        // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
+
+        EndPaint(hwnd, &ps);
+
+        return 0;
+    }
+    case WM_UPDATE_DISPLAY:
+        InvalidateRect(hwnd, nullptr, TRUE);
+        return 0;
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
 }
