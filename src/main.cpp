@@ -484,6 +484,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             FillRect(hdc, &entities->agent.rightEyePosition, blackBrush);
         DeleteObject(blackBrush);
 
+        Gdiplus::Graphics gf(hdc);
+        Gdiplus::Bitmap bmp(L"assets\\13031.jpg");
+        gf.DrawImage(&bmp, 500, 500);
+
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 
         EndPaint(hwnd, &ps);
