@@ -243,36 +243,56 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
-                        entities->agent.position.top += pixelChangeRun,
-                            entities->agent.position.bottom += pixelChangeRun;
-                        entities->agent.leftEyePosition.top += pixelChangeRun,
-                            entities->agent.leftEyePosition.bottom += pixelChangeRun;
-                        entities->agent.rightEyePosition.top += pixelChangeRun,
-                            entities->agent.rightEyePosition.bottom += pixelChangeRun;
+                        entities->agent2.position.top -= pixelChangeRun;
+                        entities->agent2.position.bottom -= pixelChangeRun;
+
+                        entities->bed.position.top -= pixelChangeRun;
+                        entities->bed.position.bottom -= pixelChangeRun;
+
+                        entities->food.position.top -= pixelChangeRun;
+                        entities->food.position.bottom -= pixelChangeRun;
+
+                        entities->water.position.top -= pixelChangeRun;
+                        entities->water.position.bottom -= pixelChangeRun;
                         break;
                     case Orientation::LEFT:
-                        entities->agent.position.left += pixelChangeRun,
-                            entities->agent.position.right += pixelChangeRun;
-                        entities->agent.leftEyePosition.left += pixelChangeRun,
-                            entities->agent.leftEyePosition.right += pixelChangeRun;
-                        entities->agent.rightEyePosition.left += pixelChangeRun,
-                            entities->agent.rightEyePosition.right += pixelChangeRun;
+                        entities->agent2.position.left -= pixelChangeRun;
+                        entities->agent2.position.right -= pixelChangeRun;
+
+                        entities->bed.position.left -= pixelChangeRun;
+                        entities->bed.position.right -= pixelChangeRun;
+
+                        entities->food.position.left -= pixelChangeRun;
+                        entities->food.position.right -= pixelChangeRun;
+
+                        entities->water.position.left -= pixelChangeRun;
+                        entities->water.position.right -= pixelChangeRun;
                         break;
                     case Orientation::RIGHT:
-                        entities->agent.position.left -= pixelChangeRun,
-                            entities->agent.position.right -= pixelChangeRun;
-                        entities->agent.leftEyePosition.left -= pixelChangeRun,
-                            entities->agent.leftEyePosition.right -= pixelChangeRun;
-                        entities->agent.rightEyePosition.left -= pixelChangeRun,
-                            entities->agent.rightEyePosition.right -= pixelChangeRun;
+                        entities->agent2.position.left += pixelChangeRun;
+                        entities->agent2.position.right += pixelChangeRun;
+
+                        entities->bed.position.left += pixelChangeRun;
+                        entities->bed.position.right += pixelChangeRun;
+
+                        entities->food.position.left += pixelChangeRun;
+                        entities->food.position.right += pixelChangeRun;
+
+                        entities->water.position.left += pixelChangeRun;
+                        entities->water.position.right += pixelChangeRun;
                         break;
                     case Orientation::BACK:
-                        entities->agent.position.top -= pixelChangeRun,
-                            entities->agent.position.bottom -= pixelChangeRun;
-                        entities->agent.leftEyePosition.top -= pixelChangeRun,
-                            entities->agent.leftEyePosition.bottom -= pixelChangeRun;
-                        entities->agent.rightEyePosition.top -= pixelChangeRun,
-                            entities->agent.rightEyePosition.bottom -= pixelChangeRun;
+                        entities->agent2.position.top += pixelChangeRun;
+                        entities->agent2.position.bottom += pixelChangeRun;
+
+                        entities->bed.position.top += pixelChangeRun;
+                        entities->bed.position.bottom += pixelChangeRun;
+
+                        entities->food.position.top += pixelChangeRun;
+                        entities->food.position.bottom += pixelChangeRun;
+
+                        entities->water.position.top += pixelChangeRun;
+                        entities->water.position.bottom += pixelChangeRun;
                         break;
                     default:
                         MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -349,36 +369,56 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
-                        entities->agent.position.top += pixelChangeWalk,
-                            entities->agent.position.bottom += pixelChangeWalk;
-                        entities->agent.leftEyePosition.top += pixelChangeWalk,
-                            entities->agent.leftEyePosition.bottom += pixelChangeWalk;
-                        entities->agent.rightEyePosition.top += pixelChangeWalk,
-                            entities->agent.rightEyePosition.bottom += pixelChangeWalk;
+                        entities->agent2.position.top -= pixelChangeWalk;
+                        entities->agent2.position.bottom -= pixelChangeWalk;
+
+                        entities->bed.position.top -= pixelChangeWalk;
+                        entities->bed.position.bottom -= pixelChangeWalk;
+
+                        entities->food.position.top -= pixelChangeWalk;
+                        entities->food.position.bottom -= pixelChangeWalk;
+
+                        entities->water.position.top -= pixelChangeWalk;
+                        entities->water.position.bottom -= pixelChangeWalk;
                         break;
                     case Orientation::LEFT:
-                        entities->agent.position.left += pixelChangeWalk,
-                            entities->agent.position.right += pixelChangeWalk;
-                        entities->agent.leftEyePosition.left += pixelChangeWalk,
-                            entities->agent.leftEyePosition.right += pixelChangeWalk;
-                        entities->agent.rightEyePosition.left += pixelChangeWalk,
-                            entities->agent.rightEyePosition.right += pixelChangeWalk;
+                        entities->agent2.position.left -= pixelChangeWalk;
+                        entities->agent2.position.right -= pixelChangeWalk;
+
+                        entities->bed.position.left -= pixelChangeWalk;
+                        entities->bed.position.right -= pixelChangeWalk;
+
+                        entities->food.position.left -= pixelChangeWalk;
+                        entities->food.position.right -= pixelChangeWalk;
+
+                        entities->water.position.left -= pixelChangeWalk;
+                        entities->water.position.right -= pixelChangeWalk;
                         break;
                     case Orientation::RIGHT:
-                        entities->agent.position.left -= pixelChangeWalk,
-                            entities->agent.position.right -= pixelChangeWalk;
-                        entities->agent.leftEyePosition.left -= pixelChangeWalk,
-                            entities->agent.leftEyePosition.right -= pixelChangeWalk;
-                        entities->agent.rightEyePosition.left -= pixelChangeWalk,
-                            entities->agent.rightEyePosition.right -= pixelChangeWalk;
+                        entities->agent2.position.left += pixelChangeWalk;
+                        entities->agent2.position.right += pixelChangeWalk;
+
+                        entities->bed.position.left += pixelChangeWalk;
+                        entities->bed.position.right += pixelChangeWalk;
+
+                        entities->food.position.left += pixelChangeWalk;
+                        entities->food.position.right += pixelChangeWalk;
+
+                        entities->water.position.left += pixelChangeWalk;
+                        entities->water.position.right += pixelChangeWalk;
                         break;
                     case Orientation::BACK:
-                        entities->agent.position.top -= pixelChangeWalk,
-                            entities->agent.position.bottom -= pixelChangeWalk;
-                        entities->agent.leftEyePosition.top -= pixelChangeWalk,
-                            entities->agent.leftEyePosition.bottom -= pixelChangeWalk;
-                        entities->agent.rightEyePosition.top -= pixelChangeWalk,
-                            entities->agent.rightEyePosition.bottom -= pixelChangeWalk;
+                        entities->agent2.position.top += pixelChangeWalk;
+                        entities->agent2.position.bottom += pixelChangeWalk;
+
+                        entities->bed.position.top += pixelChangeWalk;
+                        entities->bed.position.bottom += pixelChangeWalk;
+
+                        entities->food.position.top += pixelChangeWalk;
+                        entities->food.position.bottom += pixelChangeWalk;
+
+                        entities->water.position.top += pixelChangeWalk;
+                        entities->water.position.bottom += pixelChangeWalk;
                         break;
                     default:
                         MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
@@ -419,7 +459,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 // InvalidateRect(hwnd, nullptr, TRUE);
                 PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
 
             std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << "\n\n";
