@@ -1,0 +1,19 @@
+#pragma once
+
+#include <vector>
+
+class Tensor;
+
+class CNN2D
+{
+  public:
+    CNN2D(const std::vector<size_t> &filters, float const learning_rate);
+    void Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal);
+    void Predict(const Tensor &xTest, const Tensor &yTest);
+
+  private:
+    std::vector<Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &kernel, const size_t stride);
+
+    std::vector<size_t> filters;
+    float learning_rate;
+};

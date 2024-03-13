@@ -4,7 +4,10 @@
 #include "datasets.h"
 #include "entities.h"
 #include "environment.h"
-#include "models.h"
+#include "models\cnn2d.h"
+#include "models\nn.h"
+#include "models\q_learning.h"
+#include "models\transformer.h"
 #include "physics.h"
 #include "preprocessing.h"
 #include "random.h"
@@ -31,7 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
     MNIST mnist = LoadMNIST();
 
     for (size_t i = 0; i < 784; ++i)
