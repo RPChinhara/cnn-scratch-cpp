@@ -15,7 +15,7 @@ set SRC=..\src\activations.cpp ^
         ..\src\metrics.cpp ^
         ..\src\models\cnn2d.cpp ^
         ..\src\models\nn.cpp ^
-        ..\src\models\q_learning.cpp ^
+        ..\src\models\qlearning.cpp ^
         ..\src\models\transformer.cpp ^
         ..\src\physics.cpp ^
         ..\src\preprocessing.cpp ^

@@ -6,7 +6,7 @@
 #include "environment.h"
 #include "models\cnn2d.h"
 #include "models\nn.h"
-#include "models\q_learning.h"
+#include "models\qlearning.h"
 #include "models\transformer.h"
 #include "physics.h"
 #include "preprocessing.h"
@@ -34,7 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 1
+#if 0
     MNIST mnist = LoadMNIST();
 
     for (size_t i = 0; i < 784; ++i)
@@ -55,7 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
-#if 1
+#if 0
     Iris iris = LoadIris();
     Tensor features = iris.features;
     Tensor targets = iris.targets;
