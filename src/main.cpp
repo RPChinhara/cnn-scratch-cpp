@@ -485,7 +485,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         DeleteObject(blackBrush);
 
         Gdiplus::Graphics gf(hdc);
-        Gdiplus::Bitmap bmp(L"assets\\13031.jpg");
+        Gdiplus::Bitmap bmp(L"assets\\textures\\13031.jpg");
         gf.DrawImage(&bmp, 500, 500);
 
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
