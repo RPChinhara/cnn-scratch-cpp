@@ -113,6 +113,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     entities->agent = Agent(client_width, client_height);
     entities->agent2 = Agent2(client_width, client_height, borderToEntities);
     entities->bed = Bed(client_height, borderToEntities);
+    entities->building = Building(200, 200);
     entities->food = Food(borderToEntities);
     entities->water = Water(client_width, client_height, borderToEntities);
 
@@ -199,6 +200,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->bed.position.top -= pixelChangeRun;
                         entities->bed.position.bottom -= pixelChangeRun;
 
+                        entities->building.y -= pixelChangeRun;
+
                         entities->food.position.top -= pixelChangeRun;
                         entities->food.position.bottom -= pixelChangeRun;
 
@@ -211,6 +214,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         entities->bed.position.left -= pixelChangeRun;
                         entities->bed.position.right -= pixelChangeRun;
+
+                        entities->building.x -= pixelChangeRun;
 
                         entities->food.position.left -= pixelChangeRun;
                         entities->food.position.right -= pixelChangeRun;
@@ -225,6 +230,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->bed.position.left += pixelChangeRun;
                         entities->bed.position.right += pixelChangeRun;
 
+                        entities->building.x += pixelChangeRun;
+
                         entities->food.position.left += pixelChangeRun;
                         entities->food.position.right += pixelChangeRun;
 
@@ -237,6 +244,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         entities->bed.position.top += pixelChangeRun;
                         entities->bed.position.bottom += pixelChangeRun;
+
+                        entities->building.y += pixelChangeRun;
 
                         entities->food.position.top += pixelChangeRun;
                         entities->food.position.bottom += pixelChangeRun;
@@ -325,6 +334,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->bed.position.top -= pixelChangeWalk;
                         entities->bed.position.bottom -= pixelChangeWalk;
 
+                        entities->building.y -= pixelChangeRun;
+
                         entities->food.position.top -= pixelChangeWalk;
                         entities->food.position.bottom -= pixelChangeWalk;
 
@@ -338,6 +349,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->bed.position.left -= pixelChangeWalk;
                         entities->bed.position.right -= pixelChangeWalk;
 
+                        entities->building.x -= pixelChangeRun;
+
                         entities->food.position.left -= pixelChangeWalk;
                         entities->food.position.right -= pixelChangeWalk;
 
@@ -347,6 +360,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     case Orientation::RIGHT:
                         entities->agent2.position.left += pixelChangeWalk;
                         entities->agent2.position.right += pixelChangeWalk;
+
+                        entities->building.x += pixelChangeRun;
 
                         entities->bed.position.left += pixelChangeWalk;
                         entities->bed.position.right += pixelChangeWalk;
@@ -363,6 +378,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         entities->bed.position.top += pixelChangeWalk;
                         entities->bed.position.bottom += pixelChangeWalk;
+
+                        entities->building.y += pixelChangeRun;
 
                         entities->food.position.top += pixelChangeWalk;
                         entities->food.position.bottom += pixelChangeWalk;
@@ -486,7 +503,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         Gdiplus::Graphics gf(hdc);
         Gdiplus::Bitmap bmp(L"assets\\textures\\13031.jpg");
-        gf.DrawImage(&bmp, 500, 500);
+        gf.DrawImage(&bmp, entities->building.x, entities->building.y);
 
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 

@@ -196,12 +196,27 @@ class Water : public Entity
     }
 };
 
+class Building
+{
+  public:
+    int x;
+    int y;
+
+    Building() = default;
+    Building(int x, int y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+};
+
 struct Entities
 {
     Entities() = default;
     Agent agent;
     Agent2 agent2;
     Bed bed;
+    Building building;
     Food food;
     Water water;
 };
