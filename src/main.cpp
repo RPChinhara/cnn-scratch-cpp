@@ -18,10 +18,6 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
 
-static constexpr UINT WM_UPDATE_DISPLAY = WM_USER + 1;
-
-// Entities *entities = nullptr;
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -407,6 +403,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ResolveRectanglesCollision(entities->agent, entities->water, client_width, client_height);
                 ResolveBoundaryCollision(entities->agent, client_width, client_height);
 
+                InvalidateRect(hwnd, nullptr, TRUE);
+
                 if (entities->agent.has_collided_with_food)
                     PlaySound(TEXT("asset\\eating_sound_effect.wav"), NULL, SND_FILENAME);
 
@@ -422,9 +420,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 total_reward += reward;
                 state = next_state;
-
-                // InvalidateRect(hwnd, nullptr, TRUE);
-                PostMessage(hwnd, WM_UPDATE_DISPLAY, 0, 0);
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
@@ -511,9 +506,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         return 0;
     }
-    case WM_UPDATE_DISPLAY:
-        InvalidateRect(hwnd, nullptr, TRUE);
-        return 0;
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
