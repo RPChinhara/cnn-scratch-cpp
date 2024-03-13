@@ -2,11 +2,7 @@
 
 set NVCC=nvcc
 set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++20 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Z7 -Xcompiler /O2
-set SRC=..\src\models\cnn2d.cpp ^
-        ..\src\models\nn.cpp ^
-        ..\src\models\q_learning.cpp ^
-        ..\src\models\transformer.cpp ^
-        ..\src\activations.cpp ^
+set SRC=..\src\activations.cpp ^
         ..\src\arrays.cpp ^
         ..\src\datasets.cpp ^
         ..\src\derivatives.cpp ^
@@ -17,10 +13,14 @@ set SRC=..\src\models\cnn2d.cpp ^
         ..\src\main.cpp ^
         ..\src\mathematics.cpp ^
         ..\src\metrics.cpp ^
+        ..\src\models\cnn2d.cpp ^
+        ..\src\models\nn.cpp ^
+        ..\src\models\q_learning.cpp ^
+        ..\src\models\transformer.cpp ^
         ..\src\physics.cpp ^
         ..\src\preprocessing.cpp ^
         ..\src\random.cpp ^
-        ..\src\tensor.cpp ^
+        ..\src\tensor.cpp
 
 if not exist bin mkdir bin
 

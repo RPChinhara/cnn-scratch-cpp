@@ -108,6 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     constexpr LONG borderToEntities = 5;
 
+    // WindowData *windowData = new WindowData;
     Entities *entities = new Entities;
     entities->agent = Agent(client_width, client_height);
     entities->agent2 = Agent2(client_width, client_height, borderToEntities);
