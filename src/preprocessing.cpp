@@ -36,18 +36,18 @@ Tensor OneHot(const Tensor &tensor, const size_t depth)
     return newTensor;
 }
 
-TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float test_size, const size_t random_state)
+TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float testSize, const size_t randomState)
 {
-    Tensor x_new = Shuffle(x, random_state);
-    Tensor y_new = Shuffle(y, random_state);
+    Tensor x_new = Shuffle(x, randomState);
+    Tensor y_new = Shuffle(y, randomState);
 
     TrainTest train_test;
     train_test.trainFeatures =
-        Zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
+        Zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - testSize))), x.shape.back()});
     train_test.trainTargets =
-        Zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
-    train_test.testFeatures = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-    train_test.testTargets = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
+        Zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - testSize))), y.shape.back()});
+    train_test.testFeatures = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * testSize)), x.shape.back()});
+    train_test.testTargets = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * testSize)), y.shape.back()});
 
     for (size_t i = 0; i < train_test.trainFeatures.size; ++i)
         train_test.trainFeatures[i] = x_new[i];
