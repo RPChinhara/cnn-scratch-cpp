@@ -129,11 +129,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         UpdateWindow(hwnd);
     }
 
-    // std::thread sound_thread([]() {
-    //     while (true)
-    //         PlaySound(TEXT("assets\\mixkit-arcade-retro-game-over-213.wav"), NULL, SND_FILENAME);
-    // });
-
     std::thread rl_thread([&hwnd, winData]() {
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
@@ -409,15 +404,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 InvalidateRect(hwnd, nullptr, TRUE);
 
-                if (winData->agent.has_collided_with_food)
-                    PlaySound(TEXT("asset\\eating_sound_effect.wav"), NULL, SND_FILENAME);
-
-                if (winData->agent.has_collided_with_water)
-                    PlaySound(TEXT("asset\\gulp-37759.wav"), NULL, SND_FILENAME);
-
                 ++iteration;
+
                 environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
+                
                 auto [next_state, reward, temp_done] = environment.Step(action, winData);
+
                 done = temp_done;
 
                 qLearning.UpdateQtable(state, action, reward, next_state, done);
