@@ -10,30 +10,6 @@
 
 class Environment
 {
-  public:
-    Environment(const LONG client_width, const LONG client_height, const Agent &agent);
-    void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
-                const Agent &agent);
-    size_t Reset(const Agent &agent);
-    std::tuple<size_t, float, bool> Step(Action action, const WinData *winData);
-
-    LONG client_width, client_height;
-    LONG minLeft = 0;
-    LONG maxLeft;
-    LONG minTop = 0;
-    LONG maxTop;
-
-    size_t numLeftStates;
-    size_t numTopStates;
-
-    size_t numThirstStates = 5;
-    size_t numHungerStates = 5;
-    size_t numEnergyStates = 5;
-    size_t numEmotionStates = 3;
-
-    size_t numStates;
-    size_t numActions = 7;
-
   private:
     size_t FlattenState(LONG left, LONG top, ThirstState thirstState, HungerState hungerState, EnergyState energyState,
                         EmotionState emotionState);
@@ -102,4 +78,28 @@ class Environment
     std::set<LONG> seenTops;
     bool newLeft;
     bool newTop;
+
+  public:
+    Environment(const LONG client_width, const LONG client_height, const Agent &agent);
+    void Render(const size_t episode, const size_t iteration, Action action, float exploration_rate,
+                const Agent &agent);
+    size_t Reset(const Agent &agent);
+    std::tuple<size_t, float, bool> Step(Action action, const WinData *winData);
+
+    LONG client_width, client_height;
+    LONG minLeft = 0;
+    LONG maxLeft;
+    LONG minTop = 0;
+    LONG maxTop;
+
+    size_t numLeftStates;
+    size_t numTopStates;
+
+    size_t numThirstStates = 5;
+    size_t numHungerStates = 5;
+    size_t numEnergyStates = 5;
+    size_t numEmotionStates = 3;
+
+    size_t numStates;
+    size_t numActions = 7;
 };

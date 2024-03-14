@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 
-void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG client_height)
+void ResolveBoundaryCollision(Agent &agent, const LONG clientWidth, const LONG clientHeight)
 {
     if (agent.position.left < 0)
     {
@@ -40,15 +40,15 @@ void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG 
         agent.rightEyePosition.bottom = agent.toEyeHeight + agent.eye_height;
     }
 
-    if (agent.position.right > client_width)
+    if (agent.position.right > clientWidth)
     {
         std::cout << 3 << " ResolveBoundaryCollision" << '\n';
         std::cout << agent.position.right << '\n';
 
         agent.has_collided_with_wall = true;
 
-        agent.position.left = client_width - agent.width;
-        agent.position.right = client_width;
+        agent.position.left = clientWidth - agent.width;
+        agent.position.right = clientWidth;
 
         agent.leftEyePosition.left = (agent.position.right - agent.toEyeWidth) - agent.eye_width;
         agent.leftEyePosition.right = agent.position.right - agent.toEyeWidth;
@@ -57,15 +57,15 @@ void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG 
         agent.rightEyePosition.right = (agent.position.left + agent.toEyeWidth) + agent.eye_width;
     }
 
-    if (agent.position.bottom > client_height)
+    if (agent.position.bottom > clientHeight)
     {
         std::cout << 4 << " ResolveBoundaryCollision" << '\n';
         std::cout << agent.position.bottom << '\n';
 
         agent.has_collided_with_wall = true;
 
-        agent.position.top = client_height - agent.height;
-        agent.position.bottom = client_height;
+        agent.position.top = clientHeight - agent.height;
+        agent.position.bottom = clientHeight;
 
         agent.leftEyePosition.top = agent.position.top + agent.toEyeHeight;
         agent.leftEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
@@ -75,7 +75,7 @@ void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG 
     }
 }
 
-void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG client_width, const LONG client_height)
+void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG clientWidth, const LONG clientHeight)
 {
     if ((agent.position.left < entity.position.right) && (agent.position.right > entity.position.left) &&
         (agent.position.top < entity.position.bottom) && (agent.position.bottom > entity.position.top))
@@ -161,7 +161,7 @@ void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG c
                 agent.rightEyePosition.left = agent.position.left + agent.toEyeWidth;
                 agent.rightEyePosition.right = (agent.position.left + agent.toEyeWidth) + agent.eye_width;
             }
-            else if (agent.position.right > client_width)
+            else if (agent.position.right > clientWidth)
             {
                 std::cout << 2 << " from Physics" << '\n';
 
@@ -243,7 +243,7 @@ void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG c
                 agent.rightEyePosition.top = agent.position.top + agent.toEyeHeight;
                 agent.rightEyePosition.bottom = agent.position.top + agent.toEyeHeight + agent.eye_height;
             }
-            else if (agent.position.bottom > client_height)
+            else if (agent.position.bottom > clientHeight)
             {
                 std::cout << 4 << " from Physics" << '\n';
 
