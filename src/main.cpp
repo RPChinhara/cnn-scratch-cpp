@@ -115,6 +115,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     winData->building = Building(200, 200);
     winData->food = Food(borderToEntities);
     winData->mod = Mod(client_width, client_height, borderToEntities);
+    winData->street = Street(client_width, client_height);
     winData->water = Water(client_width, client_height, borderToEntities);
 
     SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(winData));
@@ -200,6 +201,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         winData->food.position.top -= pixelChangeRun;
                         winData->food.position.bottom -= pixelChangeRun;
 
+                        winData->street.position.top -= pixelChangeRun;
+                        winData->street.position.bottom -= pixelChangeRun;
+
                         winData->water.position.top -= pixelChangeRun;
                         winData->water.position.bottom -= pixelChangeRun;
                         break;
@@ -214,6 +218,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         winData->food.position.left -= pixelChangeRun;
                         winData->food.position.right -= pixelChangeRun;
+
+                        winData->street.position.left -= pixelChangeRun;
+                        winData->street.position.right -= pixelChangeRun;
 
                         winData->water.position.left -= pixelChangeRun;
                         winData->water.position.right -= pixelChangeRun;
@@ -230,6 +237,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         winData->food.position.left += pixelChangeRun;
                         winData->food.position.right += pixelChangeRun;
 
+                        winData->street.position.left += pixelChangeRun;
+                        winData->street.position.right += pixelChangeRun;
+
                         winData->water.position.left += pixelChangeRun;
                         winData->water.position.right += pixelChangeRun;
                         break;
@@ -244,6 +254,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         winData->food.position.top += pixelChangeRun;
                         winData->food.position.bottom += pixelChangeRun;
+
+                        winData->street.position.top += pixelChangeRun;
+                        winData->street.position.bottom += pixelChangeRun;
 
                         winData->water.position.top += pixelChangeRun;
                         winData->water.position.bottom += pixelChangeRun;
@@ -334,6 +347,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         winData->food.position.top -= pixelChangeWalk;
                         winData->food.position.bottom -= pixelChangeWalk;
 
+                        winData->street.position.top -= pixelChangeWalk;
+                        winData->street.position.bottom -= pixelChangeWalk;
+
                         winData->water.position.top -= pixelChangeWalk;
                         winData->water.position.bottom -= pixelChangeWalk;
                         break;
@@ -348,6 +364,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         winData->food.position.left -= pixelChangeWalk;
                         winData->food.position.right -= pixelChangeWalk;
+
+                        winData->street.position.left -= pixelChangeWalk;
+                        winData->street.position.right -= pixelChangeWalk;
 
                         winData->water.position.left -= pixelChangeWalk;
                         winData->water.position.right -= pixelChangeWalk;
@@ -364,6 +383,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         winData->food.position.left += pixelChangeWalk;
                         winData->food.position.right += pixelChangeWalk;
 
+                        winData->street.position.left += pixelChangeWalk;
+                        winData->street.position.right += pixelChangeWalk;
+
                         winData->water.position.left += pixelChangeWalk;
                         winData->water.position.right += pixelChangeWalk;
                         break;
@@ -378,6 +400,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                         winData->food.position.top += pixelChangeWalk;
                         winData->food.position.bottom += pixelChangeWalk;
+
+                        winData->street.position.top += pixelChangeWalk;
+                        winData->street.position.bottom += pixelChangeWalk;
 
                         winData->water.position.top += pixelChangeWalk;
                         winData->water.position.bottom += pixelChangeWalk;
@@ -407,7 +432,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ++iteration;
 
                 environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
-                
+
                 auto [next_state, reward, temp_done] = environment.Step(action, winData);
 
                 done = temp_done;
@@ -467,6 +492,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
         FillRect(hdc, &client_rect, grassBrush);
         DeleteObject(grassBrush);
+
+        HBRUSH greyBrush = CreateSolidBrush(RGB(128, 128, 128));
+        FillRect(hdc, &winData->street.position, greyBrush);
+        DeleteObject(greyBrush);
 
         HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
         FillRect(hdc, &winData->bed.position, whiteBrush);
