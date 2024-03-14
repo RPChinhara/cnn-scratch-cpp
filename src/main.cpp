@@ -111,10 +111,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // WindowData *windowData = new WindowData;
     Entities *entities = new Entities;
     entities->agent = Agent(client_width, client_height);
-    entities->agent2 = Agent2(client_width, client_height, borderToEntities);
     entities->bed = Bed(client_height, borderToEntities);
     entities->building = Building(200, 200);
     entities->food = Food(borderToEntities);
+    entities->mod = Mod(client_width, client_height, borderToEntities);
     entities->water = Water(client_width, client_height, borderToEntities);
 
     SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(entities));
@@ -194,8 +194,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
-                        entities->agent2.position.top -= pixelChangeRun;
-                        entities->agent2.position.bottom -= pixelChangeRun;
+                        entities->mod.position.top -= pixelChangeRun;
+                        entities->mod.position.bottom -= pixelChangeRun;
 
                         entities->bed.position.top -= pixelChangeRun;
                         entities->bed.position.bottom -= pixelChangeRun;
@@ -209,8 +209,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->water.position.bottom -= pixelChangeRun;
                         break;
                     case Orientation::LEFT:
-                        entities->agent2.position.left -= pixelChangeRun;
-                        entities->agent2.position.right -= pixelChangeRun;
+                        entities->mod.position.left -= pixelChangeRun;
+                        entities->mod.position.right -= pixelChangeRun;
 
                         entities->bed.position.left -= pixelChangeRun;
                         entities->bed.position.right -= pixelChangeRun;
@@ -224,8 +224,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->water.position.right -= pixelChangeRun;
                         break;
                     case Orientation::RIGHT:
-                        entities->agent2.position.left += pixelChangeRun;
-                        entities->agent2.position.right += pixelChangeRun;
+                        entities->mod.position.left += pixelChangeRun;
+                        entities->mod.position.right += pixelChangeRun;
 
                         entities->bed.position.left += pixelChangeRun;
                         entities->bed.position.right += pixelChangeRun;
@@ -239,8 +239,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->water.position.right += pixelChangeRun;
                         break;
                     case Orientation::BACK:
-                        entities->agent2.position.top += pixelChangeRun;
-                        entities->agent2.position.bottom += pixelChangeRun;
+                        entities->mod.position.top += pixelChangeRun;
+                        entities->mod.position.bottom += pixelChangeRun;
 
                         entities->bed.position.top += pixelChangeRun;
                         entities->bed.position.bottom += pixelChangeRun;
@@ -328,8 +328,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     switch (entities->agent.orientation)
                     {
                     case Orientation::FRONT:
-                        entities->agent2.position.top -= pixelChangeWalk;
-                        entities->agent2.position.bottom -= pixelChangeWalk;
+                        entities->mod.position.top -= pixelChangeWalk;
+                        entities->mod.position.bottom -= pixelChangeWalk;
 
                         entities->bed.position.top -= pixelChangeWalk;
                         entities->bed.position.bottom -= pixelChangeWalk;
@@ -343,8 +343,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->water.position.bottom -= pixelChangeWalk;
                         break;
                     case Orientation::LEFT:
-                        entities->agent2.position.left -= pixelChangeWalk;
-                        entities->agent2.position.right -= pixelChangeWalk;
+                        entities->mod.position.left -= pixelChangeWalk;
+                        entities->mod.position.right -= pixelChangeWalk;
 
                         entities->bed.position.left -= pixelChangeWalk;
                         entities->bed.position.right -= pixelChangeWalk;
@@ -358,8 +358,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->water.position.right -= pixelChangeWalk;
                         break;
                     case Orientation::RIGHT:
-                        entities->agent2.position.left += pixelChangeWalk;
-                        entities->agent2.position.right += pixelChangeWalk;
+                        entities->mod.position.left += pixelChangeWalk;
+                        entities->mod.position.right += pixelChangeWalk;
 
                         entities->building.x += pixelChangeRun;
 
@@ -373,8 +373,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                         entities->water.position.right += pixelChangeWalk;
                         break;
                     case Orientation::BACK:
-                        entities->agent2.position.top += pixelChangeWalk;
-                        entities->agent2.position.bottom += pixelChangeWalk;
+                        entities->mod.position.top += pixelChangeWalk;
+                        entities->mod.position.bottom += pixelChangeWalk;
 
                         entities->bed.position.top += pixelChangeWalk;
                         entities->bed.position.bottom += pixelChangeWalk;
@@ -397,12 +397,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     break;
                 }
 
-                entities->agent.has_collided_with_agent2 = false;
+                entities->agent.has_collided_with_mod = false;
                 entities->agent.has_collided_with_food = false;
                 entities->agent.has_collided_with_water = false;
                 entities->agent.has_collided_with_wall = false;
 
-                ResolveRectanglesCollision(entities->agent, entities->agent2, client_width, client_height);
+                ResolveRectanglesCollision(entities->agent, entities->mod, client_width, client_height);
                 ResolveRectanglesCollision(entities->agent, entities->food, client_width, client_height);
                 ResolveRectanglesCollision(entities->agent, entities->water, client_width, client_height);
                 ResolveBoundaryCollision(entities->agent, client_width, client_height);
@@ -490,7 +490,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
         FillRect(hdc, &entities->agent.position, pinkBrush);
-        FillRect(hdc, &entities->agent2.position, pinkBrush);
+        FillRect(hdc, &entities->mod.position, pinkBrush);
         DeleteObject(pinkBrush);
 
         HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));

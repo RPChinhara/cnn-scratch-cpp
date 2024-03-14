@@ -82,8 +82,8 @@ void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG c
 
         switch (entity.type)
         {
-        case Entity::AGENT2:
-            agent.has_collided_with_agent2 = true;
+        case Entity::MOD:
+            agent.has_collided_with_mod = true;
             break;
         case Entity::FOOD:
             agent.has_collided_with_food = true;

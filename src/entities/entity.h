@@ -7,9 +7,9 @@ class Entity
   public:
     enum Type
     {
-        AGENT2,
         BED,
         FOOD,
+        MOD,
         WATER,
     };
 

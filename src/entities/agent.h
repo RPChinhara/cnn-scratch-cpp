@@ -50,10 +50,10 @@ class Agent
             leftEyePosition = other.leftEyePosition;
             rightEyePosition = other.rightEyePosition;
 
-            has_collided_with_agent2 = other.has_collided_with_agent2;
             has_collided_with_food = other.has_collided_with_food;
-            has_collided_with_water = other.has_collided_with_water;
+            has_collided_with_mod = other.has_collided_with_mod;
             has_collided_with_wall = other.has_collided_with_wall;
+            has_collided_with_water = other.has_collided_with_water;
 
             render_agent_left_eye = other.render_agent_left_eye;
             render_agent_right_eye = other.render_agent_right_eye;
@@ -77,10 +77,10 @@ class Agent
     const LONG toEyeWidth = 13;
     const LONG toEyeHeight = 10;
 
-    bool has_collided_with_agent2 = false;
     bool has_collided_with_food = false;
-    bool has_collided_with_water = false;
+    bool has_collided_with_mod = false;
     bool has_collided_with_wall = false;
+    bool has_collided_with_water = false;
 
     bool render_agent_left_eye = true;
     bool render_agent_right_eye = true;

@@ -208,7 +208,7 @@ void Environment::Render(const size_t episode, const size_t iteration, Action ac
         numWaterCollision += 1;
     else if (agent.has_collided_with_food)
         numFoodCollision += 1;
-    else if (agent.has_collided_with_agent2)
+    else if (agent.has_collided_with_mod)
         numFriendCollision += 1;
 
     std::string currentLeft;
@@ -325,7 +325,7 @@ size_t Environment::Reset(const Agent &agent)
 
 std::tuple<size_t, float, bool> Environment::Step(Action action, const Entities &entities)
 {
-    if (entities.agent.has_collided_with_agent2 && emotionState == EmotionState::LEVEL4)
+    if (entities.agent.has_collided_with_mod && emotionState == EmotionState::LEVEL4)
         ++numFriendCollisionWhileHappy;
 
     switch (action)
@@ -463,7 +463,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Entities 
     size_t emotionStateSizeT = static_cast<size_t>(emotionState);
 
     if (entities.agent.has_collided_with_food && emotionState != EmotionState::LEVEL4 ||
-        entities.agent.has_collided_with_agent2 && emotionState != EmotionState::LEVEL4)
+        entities.agent.has_collided_with_mod && emotionState != EmotionState::LEVEL4)
     {
         emotionStateSizeT = std::min((emotionStateSizeT + 1), numEmotionStates - 1);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
@@ -530,7 +530,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const Entities 
         daysLivedWithoutEating = 0;
     }
 
-    if (entities.agent.has_collided_with_agent2)
+    if (entities.agent.has_collided_with_mod)
     {
         secondsLivedWithoutSocializing = 0;
         minutesLivedWithoutSocializing = 0;
@@ -587,8 +587,8 @@ void Environment::CalculateReward(const Action action, const Entities &entities)
         std::labs(entities.agent.position.top - entities.food.position.top) < 250)
         reward += 1.1f;
 
-    if (std::labs(entities.agent.position.left - entities.agent2.position.left) < 250 &&
-        std::labs(entities.agent.position.top - entities.agent2.position.top) < 250)
+    if (std::labs(entities.agent.position.left - entities.mod.position.left) < 250 &&
+        std::labs(entities.agent.position.top - entities.mod.position.top) < 250)
         reward += 1.0f;
 
     if (seenLefts.find(entities.agent.position.left) != seenLefts.end())
@@ -654,7 +654,7 @@ void Environment::CalculateReward(const Action action, const Entities &entities)
     if (energyState == EnergyState::LEVEL1 && action == Action::RUN)
         reward -= 2.0f;
 
-    if (entities.agent.has_collided_with_agent2)
+    if (entities.agent.has_collided_with_mod)
         reward += 1.5f;
 
     if (entities.agent.has_collided_with_wall)
