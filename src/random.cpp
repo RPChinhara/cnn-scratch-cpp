@@ -5,7 +5,7 @@
 #include <numeric>
 #include <random>
 
-Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, const float stddev)
+Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, const float stdDev)
 {
     Tensor newTensor = Tensor();
 
@@ -24,7 +24,7 @@ Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, co
 
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::normal_distribution<float> dist(mean, stddev);
+    std::normal_distribution<float> dist(mean, stdDev);
 
     for (size_t i = 0; i < newTensor.size; ++i)
         newTensor[i] = dist(rng);
@@ -32,10 +32,10 @@ Tensor NormalDistribution(const std::vector<size_t> &shape, const float mean, co
     return newTensor;
 }
 
-Tensor Shuffle(const Tensor &tensor, const size_t random_state)
+Tensor Shuffle(const Tensor &tensor, const size_t randomState)
 {
     Tensor newTensor = tensor;
-    std::mt19937 rng(random_state);
+    std::mt19937 rng(randomState);
 
     for (size_t i = tensor.shape.front() - 1; i > 0; --i)
     {
