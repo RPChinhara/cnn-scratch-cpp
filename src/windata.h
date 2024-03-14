@@ -8,9 +8,9 @@
 #include "entities\mod.h"
 #include "entities\water.h"
 
-struct Entities
+struct WinData
 {
-    Entities() = default;
+    WinData() = default;
     Agent agent;
     Mod mod;
     Bed bed;

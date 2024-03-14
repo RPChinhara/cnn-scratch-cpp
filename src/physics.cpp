@@ -1,5 +1,6 @@
 #include "physics.h"
-#include "entities.h"
+#include "entities\agent.h"
+#include "entities\entity.h"
 
 #include <algorithm>
 #include <iostream>

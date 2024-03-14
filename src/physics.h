@@ -1,6 +1,9 @@
 #pragma once
 
-#include "entities.h"
+#include <windows.h>
 
-void ResolveBoundaryCollision(Agent &agent, const LONG client_width, const LONG client_height);
-void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG client_width, const LONG client_height);
+class Agent;
+class Entity;
+
+void ResolveBoundaryCollision(Agent &agent, const LONG clientWidth, const LONG clientHeight);
+void ResolveRectanglesCollision(Agent &agent, const Entity &entity, const LONG clientWidth, const LONG clientHeight);
