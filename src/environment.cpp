@@ -323,9 +323,9 @@ size_t Environment::Reset(const Agent &agent)
     return currentState;
 }
 
-std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &winData)
+std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData *winData)
 {
-    if (winData.agent.has_collided_with_mod && emotionState == EmotionState::LEVEL4)
+    if (winData->agent.has_collided_with_mod && emotionState == EmotionState::LEVEL4)
         ++numFriendCollisionWhileHappy;
 
     switch (action)
@@ -357,11 +357,11 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
 
     size_t thirstStateSizeT = static_cast<size_t>(thirstState);
 
-    if (winData.agent.has_collided_with_water && thirstState != ThirstState::LEVEL5)
+    if (winData->agent.has_collided_with_water && thirstState != ThirstState::LEVEL5)
     {
         thirstStateSizeT = std::min((thirstStateSizeT + 1), numThirstStates - 1);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -369,7 +369,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
         // hoursLivedWithoutDrinking = 0;
     }
@@ -378,7 +378,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -386,17 +386,17 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         thirstStateSizeT = std::max(thirstStateSizeT - 1, 0ULL);
         thirstState = static_cast<ThirstState>(thirstStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
     size_t hungerStateSizeT = static_cast<size_t>(hungerState);
 
-    if (winData.agent.has_collided_with_food && hungerState != HungerState::LEVEL5)
+    if (winData->agent.has_collided_with_food && hungerState != HungerState::LEVEL5)
     {
         hungerStateSizeT = std::min((hungerStateSizeT + 1), numHungerStates - 1);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
         // hours = 0;
     }
@@ -405,7 +405,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -413,7 +413,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -421,16 +421,16 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         hungerState = static_cast<HungerState>(hungerStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
-    if (winData.agent.has_collided_with_food && energyState != EnergyState::LEVEL5)
+    if (winData->agent.has_collided_with_food && energyState != EnergyState::LEVEL5)
     {
         // hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         energyState =
             std::min(static_cast<EnergyState>(energyState + 1), static_cast<EnergyState>(numEnergyStates - 1));
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -438,7 +438,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         // hungerStateSizeT = std::max(hungerStateSizeT - 1, 0ULL);
         energyState = std::max(static_cast<EnergyState>(energyState - 1), static_cast<EnergyState>(0));
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -448,7 +448,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -456,18 +456,18 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         energyStateSizeT = std::max(energyStateSizeT - 1, 0ULL);
         energyState = static_cast<EnergyState>(energyStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
     size_t emotionStateSizeT = static_cast<size_t>(emotionState);
 
-    if (winData.agent.has_collided_with_food && emotionState != EmotionState::LEVEL4 ||
-        winData.agent.has_collided_with_mod && emotionState != EmotionState::LEVEL4)
+    if (winData->agent.has_collided_with_food && emotionState != EmotionState::LEVEL4 ||
+        winData->agent.has_collided_with_mod && emotionState != EmotionState::LEVEL4)
     {
         emotionStateSizeT = std::min((emotionStateSizeT + 1), numEmotionStates - 1);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -475,7 +475,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -483,7 +483,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -491,7 +491,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     {
         emotionStateSizeT = std::max(emotionStateSizeT - 1, 0ULL);
         emotionState = static_cast<EmotionState>(emotionStateSizeT);
-        currentState = FlattenState(winData.agent.position.left, winData.agent.position.top, thirstState, hungerState,
+        currentState = FlattenState(winData->agent.position.left, winData->agent.position.top, thirstState, hungerState,
                                     energyState, emotionState);
     }
 
@@ -512,9 +512,9 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
     // }
 
     CalculateReward(action, winData);
-    bool done = CheckTermination(winData.agent);
+    bool done = CheckTermination(winData->agent);
 
-    if (winData.agent.has_collided_with_water)
+    if (winData->agent.has_collided_with_water)
     {
         secondsLivedWithoutDrinking = 0;
         minutesLivedWithoutDrinking = 0;
@@ -522,7 +522,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
         daysLivedWithoutDrinking = 0;
     }
 
-    if (winData.agent.has_collided_with_food)
+    if (winData->agent.has_collided_with_food)
     {
         secondsLivedWithoutEating = 0;
         minutesLivedWithoutEating = 0;
@@ -530,7 +530,7 @@ std::tuple<size_t, float, bool> Environment::Step(Action action, const WinData &
         daysLivedWithoutEating = 0;
     }
 
-    if (winData.agent.has_collided_with_mod)
+    if (winData->agent.has_collided_with_mod)
     {
         secondsLivedWithoutSocializing = 0;
         minutesLivedWithoutSocializing = 0;
@@ -575,45 +575,45 @@ size_t Environment::FlattenState(LONG left, LONG top, ThirstState thirstState, H
            static_cast<size_t>(left);
 }
 
-void Environment::CalculateReward(const Action action, const WinData &winData)
+void Environment::CalculateReward(const Action action, const WinData *winData)
 {
     reward = 0.0f;
 
-    if (std::labs(winData.agent.position.left - winData.water.position.left) < 250 &&
-        std::labs(winData.agent.position.top - winData.water.position.top) < 250)
+    if (std::labs(winData->agent.position.left - winData->water.position.left) < 250 &&
+        std::labs(winData->agent.position.top - winData->water.position.top) < 250)
         reward += 1.2f;
 
-    if (std::labs(winData.agent.position.left - winData.food.position.left) < 250 &&
-        std::labs(winData.agent.position.top - winData.food.position.top) < 250)
+    if (std::labs(winData->agent.position.left - winData->food.position.left) < 250 &&
+        std::labs(winData->agent.position.top - winData->food.position.top) < 250)
         reward += 1.1f;
 
-    if (std::labs(winData.agent.position.left - winData.mod.position.left) < 250 &&
-        std::labs(winData.agent.position.top - winData.mod.position.top) < 250)
+    if (std::labs(winData->agent.position.left - winData->mod.position.left) < 250 &&
+        std::labs(winData->agent.position.top - winData->mod.position.top) < 250)
         reward += 1.0f;
 
-    if (seenLefts.find(winData.agent.position.left) != seenLefts.end())
+    if (seenLefts.find(winData->agent.position.left) != seenLefts.end())
     {
         newLeft = false;
     }
     else
     {
-        seenLefts.insert(winData.agent.position.left);
+        seenLefts.insert(winData->agent.position.left);
         newLeft = true;
         reward += 2.2f;
     }
 
-    if (seenTops.find(winData.agent.position.top) != seenTops.end())
+    if (seenTops.find(winData->agent.position.top) != seenTops.end())
     {
         newTop = false;
     }
     else
     {
-        seenTops.insert(winData.agent.position.top);
+        seenTops.insert(winData->agent.position.top);
         newTop = true;
         reward += 2.2f;
     }
 
-    if (winData.agent.has_collided_with_wall)
+    if (winData->agent.has_collided_with_wall)
         ++numWallCollision;
     else
         numWallCollision = 0;
@@ -621,28 +621,30 @@ void Environment::CalculateReward(const Action action, const WinData &winData)
     if (daysLived > maxDays)
         reward += 1.0f;
 
-    if (ThirstState::LEVEL1 < thirstState && thirstState < ThirstState::LEVEL5 && winData.agent.has_collided_with_water)
+    if (ThirstState::LEVEL1 < thirstState && thirstState < ThirstState::LEVEL5 &&
+        winData->agent.has_collided_with_water)
         reward += 1.5f;
-    if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL5 && winData.agent.has_collided_with_water)
+    if (ThirstState::LEVEL5 < thirstState && thirstState < ThirstState::LEVEL5 &&
+        winData->agent.has_collided_with_water)
         reward += 0.7f;
-    if (thirstState == ThirstState::LEVEL5 && winData.agent.has_collided_with_water)
+    if (thirstState == ThirstState::LEVEL5 && winData->agent.has_collided_with_water)
         reward -= 3.0f;
-    if (winData.agent.has_collided_with_water && prevHasCollidedWithWater && thirstState == ThirstState::LEVEL5)
+    if (winData->agent.has_collided_with_water && prevHasCollidedWithWater && thirstState == ThirstState::LEVEL5)
         reward -= 3.0f;
 
-    if (winData.agent.has_collided_with_food)
+    if (winData->agent.has_collided_with_food)
         reward += 2.5f;
-    if (hungerState == HungerState::LEVEL1 && winData.agent.has_collided_with_food)
+    if (hungerState == HungerState::LEVEL1 && winData->agent.has_collided_with_food)
         reward += 1.25f;
-    if (hungerState == HungerState::LEVEL2 && winData.agent.has_collided_with_food)
+    if (hungerState == HungerState::LEVEL2 && winData->agent.has_collided_with_food)
         reward += 1.0f;
     if (hungerState == HungerState::LEVEL1 && hoursLivedWithoutEating >= 3)
         reward -= 1.5f;
     if (hungerState == HungerState::LEVEL2 && hoursLivedWithoutEating >= 3)
         reward -= 1.0f;
-    if (hungerState == HungerState::LEVEL5 && winData.agent.has_collided_with_food)
+    if (hungerState == HungerState::LEVEL5 && winData->agent.has_collided_with_food)
         reward -= 3.0f;
-    if (winData.agent.has_collided_with_food && prevHasCollidedWithFood && hungerState == HungerState::LEVEL5)
+    if (winData->agent.has_collided_with_food && prevHasCollidedWithFood && hungerState == HungerState::LEVEL5)
         reward -= 3.0f;
 
     if (energyState == EnergyState::LEVEL1 && action == Action::STATIC)
@@ -652,10 +654,10 @@ void Environment::CalculateReward(const Action action, const WinData &winData)
     if (energyState == EnergyState::LEVEL1 && action == Action::RUN)
         reward -= 2.0f;
 
-    if (winData.agent.has_collided_with_mod)
+    if (winData->agent.has_collided_with_mod)
         reward += 1.5f;
 
-    if (winData.agent.has_collided_with_wall)
+    if (winData->agent.has_collided_with_wall)
         reward -= 1.5f;
     if (numWallCollision > 1)
         reward -= 2.0f;
@@ -689,12 +691,12 @@ void Environment::CalculateReward(const Action action, const WinData &winData)
         numStatic = 0;
     }
 
-    if (winData.agent.has_collided_with_water)
+    if (winData->agent.has_collided_with_water)
         prevHasCollidedWithWater = true;
     else
         prevHasCollidedWithWater = false;
 
-    if (winData.agent.has_collided_with_food)
+    if (winData->agent.has_collided_with_food)
         prevHasCollidedWithFood = true;
     else
         prevHasCollidedWithFood = false;

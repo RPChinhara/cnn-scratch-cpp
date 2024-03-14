@@ -417,7 +417,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
                 ++iteration;
                 environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
-                auto [next_state, reward, temp_done] = environment.Step(action, *winData);
+                auto [next_state, reward, temp_done] = environment.Step(action, winData);
                 done = temp_done;
 
                 qLearning.UpdateQtable(state, action, reward, next_state, done);
