@@ -48,6 +48,6 @@ Tensor Relu(const Tensor &tensor, Device device)
 
 Tensor Softmax(const Tensor &tensor)
 {
-    Tensor exp_scores = Exp(tensor - Max(tensor, 1), Device::CPU);
-    return exp_scores / Sum(exp_scores, 1);
+    Tensor expScores = Exp(tensor - Max(tensor, 1), Device::CPU);
+    return expScores / Sum(expScores, 1);
 }
