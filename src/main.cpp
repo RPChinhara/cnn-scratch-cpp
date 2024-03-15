@@ -34,7 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
     MNIST mnist = LoadMNIST();
 
     for (size_t i = 0; i < 784; ++i)

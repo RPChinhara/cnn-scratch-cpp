@@ -37,49 +37,49 @@ Tensor::~Tensor()
         delete[] elem;
 }
 
-Tensor::Tensor(const Tensor &tensor)
+Tensor::Tensor(const Tensor &other)
 {
-    elem = new float[tensor.size];
-    std::copy(tensor.elem, tensor.elem + tensor.size, elem);
-    size = tensor.size;
-    shape = tensor.shape;
+    elem = new float[other.size];
+    std::copy(other.elem, other.elem + other.size, elem);
+    size = other.size;
+    shape = other.shape;
 }
 
-Tensor::Tensor(Tensor &&tensor)
+Tensor::Tensor(Tensor &&other)
 {
-    elem = tensor.elem;
-    size = tensor.size;
-    shape = tensor.shape;
+    elem = other.elem;
+    size = other.size;
+    shape = other.shape;
 
-    tensor.elem = nullptr;
-    tensor.size = 0;
+    other.elem = nullptr;
+    other.size = 0;
 }
 
-Tensor &Tensor::operator=(const Tensor &tensor)
+Tensor &Tensor::operator=(const Tensor &other)
 {
-    if (this != &tensor)
+    if (this != &other)
     {
         delete[] elem;
-        elem = new float[tensor.size];
-        std::copy(tensor.elem, tensor.elem + tensor.size, elem);
-        size = tensor.size;
-        shape = tensor.shape;
+        elem = new float[other.size];
+        std::copy(other.elem, other.elem + other.size, elem);
+        size = other.size;
+        shape = other.shape;
     }
     return *this;
 }
 
-Tensor &Tensor::operator=(Tensor &&tensor)
+Tensor &Tensor::operator=(Tensor &&other)
 {
-    if (this != &tensor)
+    if (this != &other)
     {
         delete[] elem;
 
-        elem = tensor.elem;
-        size = tensor.size;
-        shape = tensor.shape;
+        elem = other.elem;
+        size = other.size;
+        shape = other.shape;
 
-        tensor.elem = nullptr;
-        tensor.size = 0;
+        other.elem = nullptr;
+        other.size = 0;
     }
     return *this;
 }
@@ -244,18 +244,18 @@ Tensor Tensor::operator/(const Tensor &tensor) const
     return newTensor;
 }
 
-Tensor Tensor::operator+=(const Tensor &tensor) const
+Tensor Tensor::operator+=(const Tensor &other) const
 {
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] + tensor[i];
+        elem[i] = elem[i] + other[i];
     return *this;
 }
 
-Tensor Tensor::operator-=(const Tensor &tensor) const
+Tensor Tensor::operator-=(const Tensor &other) const
 {
-    assert(ShapeEqual(shape, tensor.shape));
+    assert(ShapeEqual(shape, other.shape));
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] - tensor[i];
+        elem[i] = elem[i] - other[i];
     return *this;
 }
 
