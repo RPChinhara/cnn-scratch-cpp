@@ -451,9 +451,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     rl_thread.detach();
 #endif
 
+    MSG msg = {};
     while (true)
     {
-        MSG msg = {};
 
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
@@ -470,7 +470,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FreeConsole();
     Gdiplus::GdiplusShutdown(gdiplusToken);
 
-    return 0;
+    return static_cast<int>(msg.wParam);
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -479,7 +479,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
     case WM_DESTROY:
         PostQuitMessage(0);
-        return 0;
+        break;
     case WM_PAINT: {
         WinData *winData = reinterpret_cast<WinData *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
@@ -527,10 +527,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 
         EndPaint(hwnd, &ps);
-
-        return 0;
+        break;
     }
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
+    return 0;
 }
