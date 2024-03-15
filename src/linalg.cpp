@@ -43,11 +43,10 @@ Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
         cudaMemcpy(tensorGPU1, tensor1.elem, tensor1.size * sizeof(float), cudaMemcpyHostToDevice);
         cudaMemcpy(tensorGPU2, tensor2.elem, tensor2.size * sizeof(float), cudaMemcpyHostToDevice);
 
-        dim3 block_dim(16, 16);
-        dim3 grid_dim((numRowsTensor1 + block_dim.x - 1) / block_dim.x,
-                      (numRowsTensor2 + block_dim.y - 1) / block_dim.y);
-        MatMul<<<grid_dim, block_dim>>>(tensorGPU1, tensorGPU2, newTensorGPU, numRowsTensor1, numColsTensor1,
-                                        numRowsTensor2);
+        dim3 blockDim(16, 16);
+        dim3 gridDim((numRowsTensor1 + blockDim.x - 1) / blockDim.x, (numRowsTensor2 + blockDim.y - 1) / blockDim.y);
+        MatMul<<<gridDim, blockDim>>>(tensorGPU1, tensorGPU2, newTensorGPU, numRowsTensor1, numColsTensor1,
+                                      numRowsTensor2);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)

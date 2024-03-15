@@ -33,12 +33,12 @@ Tensor Slice(const Tensor &tensor, const size_t begin, const size_t size)
 static size_t GetBatchSize(const std::vector<size_t> &shape)
 {
     assert(shape.size() > 1);
-    size_t batch_size = 1;
+    size_t batchSize = 1;
 
     for (size_t i = 0; i < shape.size() - 2; ++i)
-        batch_size *= shape[i];
+        batchSize *= shape[i];
 
-    return batch_size;
+    return batchSize;
 }
 
 Tensor Transpose(const Tensor &tensor)
@@ -52,11 +52,11 @@ Tensor Transpose(const Tensor &tensor)
     for (size_t i = 0; i < tensor.size; ++i)
         idx_rows.push_back(i * tensor.shape.back());
 
-    size_t batch_size = GetBatchSize(tensor.shape);
+    size_t batchSize = GetBatchSize(tensor.shape);
 
     size_t idx = 0;
 
-    for (size_t i = 0; i < batch_size; ++i)
+    for (size_t i = 0; i < batchSize; ++i)
     {
         for (size_t j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
         {

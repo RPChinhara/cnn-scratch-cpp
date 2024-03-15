@@ -21,8 +21,8 @@ Iris LoadIris()
 
     std::getline(file, line);
 
-    size_t idx_features = 0;
-    size_t idx_target = 0;
+    size_t idxFeatures = 0;
+    size_t idxTarget = 0;
     Tensor features = Zeros({150, 4});
     Tensor targets = Zeros({150, 1});
 
@@ -34,37 +34,37 @@ Iris LoadIris()
         std::getline(ss, value, ',');
 
         std::getline(ss, value, ',');
-        features[idx_features] = std::stof(value);
-        ++idx_features;
+        features[idxFeatures] = std::stof(value);
+        ++idxFeatures;
 
         std::getline(ss, value, ',');
-        features[idx_features] = std::stof(value);
-        ++idx_features;
+        features[idxFeatures] = std::stof(value);
+        ++idxFeatures;
 
         std::getline(ss, value, ',');
-        features[idx_features] = std::stof(value);
-        ++idx_features;
+        features[idxFeatures] = std::stof(value);
+        ++idxFeatures;
 
         std::getline(ss, value, ',');
-        features[idx_features] = std::stof(value);
-        ++idx_features;
+        features[idxFeatures] = std::stof(value);
+        ++idxFeatures;
 
         std::getline(ss, value);
 
         if (value == "Iris-setosa")
         {
-            targets[idx_target] = 0.0f;
-            ++idx_target;
+            targets[idxTarget] = 0.0f;
+            ++idxTarget;
         }
         else if (value == "Iris-versicolor")
         {
-            targets[idx_target] = 1.0f;
-            ++idx_target;
+            targets[idxTarget] = 1.0f;
+            ++idxTarget;
         }
         else if (value == "Iris-virginica")
         {
-            targets[idx_target] = 2.0f;
-            ++idx_target;
+            targets[idxTarget] = 2.0f;
+            ++idxTarget;
         }
     }
 
