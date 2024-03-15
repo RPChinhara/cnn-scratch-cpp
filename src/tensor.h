@@ -6,6 +6,10 @@
 class Tensor
 {
   public:
+    size_t size;
+    std::vector<size_t> shape;
+    float *elem = nullptr;
+
     Tensor() = default;
     Tensor(const std::vector<float> elem, const std::vector<size_t> shape);
     ~Tensor();
@@ -24,8 +28,4 @@ class Tensor
     friend Tensor operator*(const float sca, const Tensor &tensor);
     friend void operator/(const Tensor &tensor, const float sca);
     friend std::ostream &operator<<(std::ostream &os, const Tensor &tensor);
-
-    size_t size;
-    std::vector<size_t> shape;
-    float *elem = nullptr;
 };
