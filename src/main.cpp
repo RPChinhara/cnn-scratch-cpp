@@ -12,11 +12,9 @@
 #include "random.h"
 #include "windata.h"
 
-#include <gdiplus.h>
 #include <memory>
 #include <thread>
 
-#pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "winmm.lib")
@@ -25,10 +23,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, nullptr);
-
     AllocConsole();
 
     FILE *file;
@@ -468,7 +462,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     delete winData;
     fclose(file);
     FreeConsole();
-    Gdiplus::GdiplusShutdown(gdiplusToken);
 
     return static_cast<int>(msg.wParam);
 }
@@ -519,10 +512,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (winData->agent.render_agent_right_eye)
             FillRect(hdc, &winData->agent.rightEyePosition, blackBrush);
         DeleteObject(blackBrush);
-
-        Gdiplus::Graphics gf(hdc);
-        Gdiplus::Bitmap bmp(L"assets\\textures\\13031.jpg");
-        gf.DrawImage(&bmp, winData->building.x, winData->building.y);
 
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 
