@@ -78,10 +78,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
+    std::cout << "transformer" << std::endl;
+
     Transformer transformer = Transformer();
 #endif
 
-#if 1
+#if 0
     const char CLASS_NAME[] = "WorldWindow";
     const char WINDOW_NAME[] = "Dora";
 
@@ -459,7 +461,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     }
 
+#if 0
     delete winData;
+#endif
+
     fclose(file);
     FreeConsole();
 

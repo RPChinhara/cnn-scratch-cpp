@@ -34,7 +34,7 @@ void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal
     //     }
     // }
 
-    std::cout << output << std::endl;
+    // std::cout << output << std::endl;
 }
 
 void CNN2D::Predict(const Tensor &xTest, const Tensor &yTest)
