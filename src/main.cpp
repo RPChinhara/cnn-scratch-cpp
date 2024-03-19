@@ -1,19 +1,16 @@
-#include "action.h"
 #include "activations.h"
 #include "arrays.h"
 #include "datasets.h"
-#include "environment.h"
 #include "models\cnn2d.h"
 #include "models\nn.h"
 #include "models\qlearning.h"
 #include "models\transformer.h"
-#include "physics.h"
 #include "preprocessing.h"
 #include "random.h"
-#include "windata.h"
 
 #include <memory>
 #include <thread>
+#include <windows.h>
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
@@ -83,8 +80,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     Transformer transformer = Transformer();
 #endif
 
-#if 0
-    const char CLASS_NAME[] = "WorldWindow";
+    const char CLASS_NAME[] = "Window";
     const char WINDOW_NAME[] = "Dora";
 
     WNDCLASS wc = {};
@@ -95,25 +91,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!RegisterClass(&wc))
         MessageBox(nullptr, "Window Registration Failed!", "Error", MB_ICONERROR);
 
-    HWND hwnd = CreateWindow(CLASS_NAME, WINDOW_NAME, WS_OVERLAPPEDWINDOW | WS_MAXIMIZE, CW_USEDEFAULT, CW_USEDEFAULT,
-                             CW_USEDEFAULT, CW_USEDEFAULT, nullptr, nullptr, hInstance, nullptr);
-
-    RECT client_rect;
-    GetClientRect(hwnd, &client_rect);
-    LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
-
-    constexpr LONG borderToEntities = 5;
-
-    WinData *winData = new WinData;
-    winData->agent = Agent(client_width, client_height);
-    winData->bed = Bed(client_height, borderToEntities);
-    winData->building = Building(200, 200);
-    winData->food = Food(borderToEntities);
-    winData->mod = Mod(client_width, client_height, borderToEntities);
-    winData->street = Street(client_width, client_height);
-    winData->water = Water(client_width, client_height, borderToEntities);
-
-    SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(winData));
+    HWND hwnd =
+        CreateWindow(CLASS_NAME, WINDOW_NAME, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, // 1280x720
+                     nullptr, nullptr, hInstance, nullptr);
 
     if (hwnd == nullptr)
     {
@@ -121,331 +101,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     else
     {
-        ShowWindow(hwnd, SW_MAXIMIZE);
+        ShowWindow(hwnd, nCmdShow);
         UpdateWindow(hwnd);
     }
-
-    std::thread rl_thread([&hwnd, winData]() {
-        RECT client_rect;
-        GetClientRect(hwnd, &client_rect);
-        LONG client_width = client_rect.right - client_rect.left, client_height = client_rect.bottom - client_rect.top;
-
-        Environment environment = Environment(client_width, client_height, winData->agent);
-        QLearning qLearning = QLearning(environment.numStates, environment.numActions);
-
-        size_t num_episodes = 1000;
-
-        for (size_t i = 0; i < num_episodes; ++i)
-        {
-            auto state = environment.Reset(winData->agent);
-            bool done = false;
-            float total_reward = 0;
-            size_t iteration = 0;
-
-            while (!done)
-            {
-                Action action = qLearning.ChooseAction(state);
-
-                auto FrontConfig = [&]() {
-                    winData->agent.orientation = Orientation::FRONT;
-                    winData->agent.direction = Direction::SOUTH;
-                    winData->agent.render_agent_left_eye = true;
-                    winData->agent.render_agent_right_eye = true;
-                };
-
-                auto LeftConfig = [&]() {
-                    winData->agent.orientation = Orientation::LEFT;
-                    winData->agent.direction = Direction::EAST;
-                    winData->agent.render_agent_left_eye = true;
-                    winData->agent.render_agent_right_eye = false;
-                };
-
-                auto RightConfig = [&]() {
-                    winData->agent.orientation = Orientation::RIGHT;
-                    winData->agent.direction = Direction::WEST;
-                    winData->agent.render_agent_left_eye = false;
-                    winData->agent.render_agent_right_eye = true;
-                };
-
-                auto BackConfig = [&]() {
-                    winData->agent.orientation = Orientation::BACK;
-                    winData->agent.direction = Direction::NORTH;
-                    winData->agent.render_agent_left_eye = false;
-                    winData->agent.render_agent_right_eye = false;
-                };
-
-                size_t pixelChangeWalk = 21;
-                size_t pixelChangeRun = 60;
-
-                winData->agent.previousPosition = winData->agent.position;
-
-                switch (action)
-                {
-                case Action::RUN:
-                    switch (winData->agent.orientation)
-                    {
-                    case Orientation::FRONT:
-                        winData->mod.position.top -= pixelChangeRun;
-                        winData->mod.position.bottom -= pixelChangeRun;
-
-                        winData->bed.position.top -= pixelChangeRun;
-                        winData->bed.position.bottom -= pixelChangeRun;
-
-                        winData->building.y -= pixelChangeRun;
-
-                        winData->food.position.top -= pixelChangeRun;
-                        winData->food.position.bottom -= pixelChangeRun;
-
-                        winData->street.position.top -= pixelChangeRun;
-                        winData->street.position.bottom -= pixelChangeRun;
-
-                        winData->water.position.top -= pixelChangeRun;
-                        winData->water.position.bottom -= pixelChangeRun;
-                        break;
-                    case Orientation::LEFT:
-                        winData->mod.position.left -= pixelChangeRun;
-                        winData->mod.position.right -= pixelChangeRun;
-
-                        winData->bed.position.left -= pixelChangeRun;
-                        winData->bed.position.right -= pixelChangeRun;
-
-                        winData->building.x -= pixelChangeRun;
-
-                        winData->food.position.left -= pixelChangeRun;
-                        winData->food.position.right -= pixelChangeRun;
-
-                        winData->street.position.left -= pixelChangeRun;
-                        winData->street.position.right -= pixelChangeRun;
-
-                        winData->water.position.left -= pixelChangeRun;
-                        winData->water.position.right -= pixelChangeRun;
-                        break;
-                    case Orientation::RIGHT:
-                        winData->mod.position.left += pixelChangeRun;
-                        winData->mod.position.right += pixelChangeRun;
-
-                        winData->bed.position.left += pixelChangeRun;
-                        winData->bed.position.right += pixelChangeRun;
-
-                        winData->building.x += pixelChangeRun;
-
-                        winData->food.position.left += pixelChangeRun;
-                        winData->food.position.right += pixelChangeRun;
-
-                        winData->street.position.left += pixelChangeRun;
-                        winData->street.position.right += pixelChangeRun;
-
-                        winData->water.position.left += pixelChangeRun;
-                        winData->water.position.right += pixelChangeRun;
-                        break;
-                    case Orientation::BACK:
-                        winData->mod.position.top += pixelChangeRun;
-                        winData->mod.position.bottom += pixelChangeRun;
-
-                        winData->bed.position.top += pixelChangeRun;
-                        winData->bed.position.bottom += pixelChangeRun;
-
-                        winData->building.y += pixelChangeRun;
-
-                        winData->food.position.top += pixelChangeRun;
-                        winData->food.position.bottom += pixelChangeRun;
-
-                        winData->street.position.top += pixelChangeRun;
-                        winData->street.position.bottom += pixelChangeRun;
-
-                        winData->water.position.top += pixelChangeRun;
-                        winData->water.position.bottom += pixelChangeRun;
-                        break;
-                    default:
-                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                        break;
-                    }
-                    break;
-                case Action::STATIC:
-                    // std::this_thread::sleep_for(std::chrono::seconds(2));
-                    break;
-                case Action::TALK:
-                    // std::this_thread::sleep_for(std::chrono::seconds(2));
-                    break;
-                case Action::TURN_AROUND:
-                    switch (winData->agent.orientation)
-                    {
-                    case Orientation::FRONT:
-                        BackConfig();
-                        break;
-                    case Orientation::LEFT:
-                        RightConfig();
-                        break;
-                    case Orientation::RIGHT:
-                        LeftConfig();
-                        break;
-                    case Orientation::BACK:
-                        FrontConfig();
-                        break;
-                    default:
-                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                        break;
-                    }
-                    break;
-                case Action::TURN_LEFT:
-                    switch (winData->agent.orientation)
-                    {
-                    case Orientation::FRONT:
-                        LeftConfig();
-                        break;
-                    case Orientation::LEFT:
-                        BackConfig();
-                        break;
-                    case Orientation::RIGHT:
-                        FrontConfig();
-                        break;
-                    case Orientation::BACK:
-                        RightConfig();
-                        break;
-                    default:
-                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                        break;
-                    }
-                    break;
-                case Action::TURN_RIGHT:
-                    switch (winData->agent.orientation)
-                    {
-                    case Orientation::FRONT:
-                        RightConfig();
-                        break;
-                    case Orientation::LEFT:
-                        FrontConfig();
-                        break;
-                    case Orientation::RIGHT:
-                        BackConfig();
-                        break;
-                    case Orientation::BACK:
-                        LeftConfig();
-                        break;
-                    default:
-                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                        break;
-                    }
-                    break;
-                case Action::WALK:
-                    switch (winData->agent.orientation)
-                    {
-                    case Orientation::FRONT:
-                        winData->mod.position.top -= pixelChangeWalk;
-                        winData->mod.position.bottom -= pixelChangeWalk;
-
-                        winData->bed.position.top -= pixelChangeWalk;
-                        winData->bed.position.bottom -= pixelChangeWalk;
-
-                        winData->building.y -= pixelChangeRun;
-
-                        winData->food.position.top -= pixelChangeWalk;
-                        winData->food.position.bottom -= pixelChangeWalk;
-
-                        winData->street.position.top -= pixelChangeWalk;
-                        winData->street.position.bottom -= pixelChangeWalk;
-
-                        winData->water.position.top -= pixelChangeWalk;
-                        winData->water.position.bottom -= pixelChangeWalk;
-                        break;
-                    case Orientation::LEFT:
-                        winData->mod.position.left -= pixelChangeWalk;
-                        winData->mod.position.right -= pixelChangeWalk;
-
-                        winData->bed.position.left -= pixelChangeWalk;
-                        winData->bed.position.right -= pixelChangeWalk;
-
-                        winData->building.x -= pixelChangeRun;
-
-                        winData->food.position.left -= pixelChangeWalk;
-                        winData->food.position.right -= pixelChangeWalk;
-
-                        winData->street.position.left -= pixelChangeWalk;
-                        winData->street.position.right -= pixelChangeWalk;
-
-                        winData->water.position.left -= pixelChangeWalk;
-                        winData->water.position.right -= pixelChangeWalk;
-                        break;
-                    case Orientation::RIGHT:
-                        winData->mod.position.left += pixelChangeWalk;
-                        winData->mod.position.right += pixelChangeWalk;
-
-                        winData->building.x += pixelChangeRun;
-
-                        winData->bed.position.left += pixelChangeWalk;
-                        winData->bed.position.right += pixelChangeWalk;
-
-                        winData->food.position.left += pixelChangeWalk;
-                        winData->food.position.right += pixelChangeWalk;
-
-                        winData->street.position.left += pixelChangeWalk;
-                        winData->street.position.right += pixelChangeWalk;
-
-                        winData->water.position.left += pixelChangeWalk;
-                        winData->water.position.right += pixelChangeWalk;
-                        break;
-                    case Orientation::BACK:
-                        winData->mod.position.top += pixelChangeWalk;
-                        winData->mod.position.bottom += pixelChangeWalk;
-
-                        winData->bed.position.top += pixelChangeWalk;
-                        winData->bed.position.bottom += pixelChangeWalk;
-
-                        winData->building.y += pixelChangeRun;
-
-                        winData->food.position.top += pixelChangeWalk;
-                        winData->food.position.bottom += pixelChangeWalk;
-
-                        winData->street.position.top += pixelChangeWalk;
-                        winData->street.position.bottom += pixelChangeWalk;
-
-                        winData->water.position.top += pixelChangeWalk;
-                        winData->water.position.bottom += pixelChangeWalk;
-                        break;
-                    default:
-                        MessageBox(nullptr, "Unknown orientation", "Error", MB_ICONERROR);
-                        break;
-                    }
-                    break;
-                default:
-                    MessageBox(nullptr, "Unknown action", "Error", MB_ICONERROR);
-                    break;
-                }
-
-                winData->agent.has_collided_with_mod = false;
-                winData->agent.has_collided_with_food = false;
-                winData->agent.has_collided_with_water = false;
-                winData->agent.has_collided_with_wall = false;
-
-                ResolveRectanglesCollision(winData->agent, winData->mod, client_width, client_height);
-                ResolveRectanglesCollision(winData->agent, winData->food, client_width, client_height);
-                ResolveRectanglesCollision(winData->agent, winData->water, client_width, client_height);
-                ResolveBoundaryCollision(winData->agent, client_width, client_height);
-
-                InvalidateRect(hwnd, nullptr, TRUE);
-
-                ++iteration;
-
-                environment.Render(i, iteration, action, qLearning.exploration_rate, winData->agent);
-
-                auto [next_state, reward, temp_done] = environment.Step(action, winData);
-
-                done = temp_done;
-
-                qLearning.UpdateQtable(state, action, reward, next_state, done);
-
-                total_reward += reward;
-                state = next_state;
-
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            }
-
-            std::cout << "Episode " << i + 1 << ": Total Reward = " << total_reward << "\n\n";
-        }
-    });
-
-    rl_thread.detach();
-#endif
 
     MSG msg = {};
     while (true)
@@ -461,10 +119,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     }
 
-#if 0
-    delete winData;
-#endif
-
     fclose(file);
     FreeConsole();
 
@@ -479,44 +133,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
     case WM_PAINT: {
-        WinData *winData = reinterpret_cast<WinData *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hwnd, &ps);
 
         RECT client_rect;
         GetClientRect(hwnd, &client_rect);
-        HBRUSH grassBrush = CreateSolidBrush(RGB(110, 168, 88));
-        FillRect(hdc, &client_rect, grassBrush);
-        DeleteObject(grassBrush);
-
-        HBRUSH greyBrush = CreateSolidBrush(RGB(128, 128, 128));
-        FillRect(hdc, &winData->street.position, greyBrush);
-        DeleteObject(greyBrush);
-
         HBRUSH whiteBrush = CreateSolidBrush(RGB(255, 255, 255));
-        FillRect(hdc, &winData->bed.position, whiteBrush);
+        FillRect(hdc, &client_rect, whiteBrush);
         DeleteObject(whiteBrush);
-
-        HBRUSH redBrush = CreateSolidBrush(RGB(255, 0, 0));
-        FillRect(hdc, &winData->food.position, redBrush);
-        DeleteObject(redBrush);
-
-        HBRUSH blueBrush = CreateSolidBrush(RGB(0, 0, 255));
-        FillRect(hdc, &winData->water.position, blueBrush);
-        DeleteObject(blueBrush);
-
-        HBRUSH pinkBrush = CreateSolidBrush(RGB(209, 163, 164));
-        FillRect(hdc, &winData->agent.position, pinkBrush);
-        FillRect(hdc, &winData->mod.position, pinkBrush);
-        DeleteObject(pinkBrush);
-
-        HBRUSH blackBrush = CreateSolidBrush(RGB(0, 0, 0));
-        if (winData->agent.render_agent_left_eye)
-            FillRect(hdc, &winData->agent.leftEyePosition, blackBrush);
-        if (winData->agent.render_agent_right_eye)
-            FillRect(hdc, &winData->agent.rightEyePosition, blackBrush);
-        DeleteObject(blackBrush);
 
         // TextOut(hdc, 10, 10, "Hello, Windows!", 15);
 

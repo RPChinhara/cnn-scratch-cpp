@@ -6,7 +6,6 @@ set SRC=..\src\activations.cpp ^
         ..\src\arrays.cpp ^
         ..\src\datasets.cpp ^
         ..\src\derivatives.cpp ^
-        ..\src\environment.cpp ^
         ..\src\kernels.cpp ^
         ..\src\linalg.cpp ^
         ..\src\losses.cpp ^
@@ -17,7 +16,6 @@ set SRC=..\src\activations.cpp ^
         ..\src\models\nn.cpp ^
         ..\src\models\qlearning.cpp ^
         ..\src\models\transformer.cpp ^
-        ..\src\physics.cpp ^
         ..\src\preprocessing.cpp ^
         ..\src\random.cpp ^
         ..\src\tensor.cpp

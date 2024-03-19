@@ -1,7 +1,17 @@
 #pragma once
 
-#include "action.h"
 #include "tensor.h"
+
+enum Action
+{
+    RUN,
+    STATIC,
+    TALK,
+    TURN_AROUND,
+    TURN_LEFT,
+    TURN_RIGHT,
+    WALK
+};
 
 class QLearning
 {
