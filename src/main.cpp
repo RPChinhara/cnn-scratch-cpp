@@ -75,12 +75,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
-    std::cout << "transformer" << std::endl;
+    IMDb IMDb = LoadIMDb();
 
     Transformer transformer = Transformer();
 #endif
 
-    const char CLASS_NAME[] = "Window";
+    const char CLASS_NAME[] = "WindowClass";
     const char WINDOW_NAME[] = "Dora";
 
     WNDCLASS wc = {};

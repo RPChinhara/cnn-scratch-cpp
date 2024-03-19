@@ -7,6 +7,11 @@
 
 IMDb LoadIMDb()
 {
+    std::ifstream file("datasets\\IMDB Dataset.csv");
+
+    if (!file.is_open())
+        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
+
     return IMDb();
 }
 
