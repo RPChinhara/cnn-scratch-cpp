@@ -2,7 +2,7 @@
 
 #include "tensor.h"
 
-struct IMDb
+struct IMDB
 {
     Tensor features;
     Tensor targets;
@@ -22,6 +22,6 @@ struct MNIST
     Tensor testLabels;
 };
 
-IMDb LoadIMDb();
+IMDB LoadIMDB();
 Iris LoadIris();
 MNIST LoadMNIST();

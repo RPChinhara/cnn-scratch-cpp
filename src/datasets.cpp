@@ -3,16 +3,64 @@
 
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <vector>
 #include <windows.h>
 
-IMDb LoadIMDb()
+// std::string ExtractSentence(const std::string &line)
+// {
+//     size_t startPos = 0;
+//     size_t endPosPositive = line.find(",positive");
+//     size_t endPosNegative = line.find(",negative");
+
+//     size_t endPos = endPosPositive != std::string::npos ? endPosPositive : endPosNegative;
+
+//     std::string sentence = line.substr(startPos, endPos - startPos);
+
+//     return sentence;
+// }
+
+IMDB LoadIMDB()
 {
     std::ifstream file("datasets\\IMDB Dataset.csv");
 
     if (!file.is_open())
         MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
 
-    return IMDb();
+    std::vector<std::string> reviews;
+    std::vector<float> sentiments;
+
+    std::string line;
+    std::getline(file, line);
+
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+        std::string value;
+
+        size_t startPos = 0;
+        size_t endPosPositive = line.find(",positive");
+        size_t endPosNegative = line.find(",negative");
+
+        size_t endPos;
+        if (endPosPositive != std::string::npos)
+        {
+            endPos = endPosPositive;
+            sentiments.push_back(1.0f);
+        }
+        else if (endPosNegative != std::string::npos)
+        {
+            endPos = endPosNegative;
+            sentiments.push_back(0.0f);
+        }
+
+        std::string sentence = line.substr(startPos, endPos - startPos);
+
+        reviews.push_back(sentence);
+        std::cout << "--------------------------: " << sentence << std::endl;
+    }
+
+    return IMDB();
 }
 
 Iris LoadIris()
@@ -22,14 +70,13 @@ Iris LoadIris()
     if (!file.is_open())
         MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
 
-    std::string line;
-
-    std::getline(file, line);
-
     size_t idxFeatures = 0;
     size_t idxTarget = 0;
     Tensor features = Zeros({150, 4});
     Tensor targets = Zeros({150, 1});
+
+    std::string line;
+    std::getline(file, line);
 
     while (std::getline(file, line))
     {
