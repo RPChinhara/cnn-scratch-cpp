@@ -3,7 +3,6 @@
 #include "datasets.h"
 #include "models\cnn2d.h"
 #include "models\nn.h"
-#include "models\qlearning.h"
 #include "models\transformer.h"
 #include "preprocessing.h"
 #include "random.h"
@@ -14,7 +13,6 @@
 
 #pragma comment(lib, "gdi32.lib")
 #pragma comment(lib, "user32.lib")
-#pragma comment(lib, "winmm.lib")
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
