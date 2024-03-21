@@ -2,18 +2,6 @@
 
 #include "tensor.h"
 
-struct IMDB
-{
-    Tensor features;
-    Tensor targets;
-};
-
-struct Iris
-{
-    Tensor features;
-    Tensor targets;
-};
-
 struct MNIST
 {
     Tensor trainImages;
@@ -22,6 +10,4 @@ struct MNIST
     Tensor testLabels;
 };
 
-IMDB LoadIMDB();
-Iris LoadIris();
 MNIST LoadMNIST();

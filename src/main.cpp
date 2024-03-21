@@ -1,6 +1,8 @@
 #include "activations.h"
 #include "arrays.h"
-#include "datasets.h"
+#include "datasets\imdb.h"
+#include "datasets\iris.h"
+#include "datasets\mnist.h"
 #include "models\cnn2d.h"
 #include "models\nn.h"
 #include "models\transformer.h"
@@ -23,7 +25,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
+#if 1
     MNIST mnist = LoadMNIST();
 
     for (size_t i = 0; i < 784; ++i)
@@ -44,7 +46,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 #endif
 
-#if 0
+#if 1
     Iris iris = LoadIris();
     Tensor features = iris.features;
     Tensor targets = iris.targets;
