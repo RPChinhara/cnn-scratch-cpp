@@ -2,6 +2,7 @@
 #include "arrays.h"
 
 #include <fstream>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -19,6 +20,13 @@
 
 //     return sentence;
 // }
+
+std::string RemoveLink(const std::string &input)
+{
+    std::regex linkPattern(R"((https?:\/\/|www\.)\S+)");
+    std::string output = std::regex_replace(input, linkPattern, "");
+    return output;
+}
 
 IMDB LoadIMDB()
 {
@@ -56,8 +64,10 @@ IMDB LoadIMDB()
         }
 
         std::string sentence = line.substr(startPos, endPos - startPos);
+        std::string sentenceNoLink = RemoveLink(sentence);
 
-        reviews.push_back(sentence);
+        reviews.push_back(sentenceNoLink);
+        std::cout << "Sentence: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
         ++idx;
