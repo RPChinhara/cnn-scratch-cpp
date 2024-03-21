@@ -14,6 +14,12 @@ std::string RemoveLink(const std::string &input)
     return output;
 }
 
+std::string RemovePunct(std::string text)
+{
+    std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
+    return std::regex_replace(text, pattern, " ");
+}
+
 IMDB LoadIMDB()
 {
     std::ifstream file("datasets\\IMDB Dataset.csv");
@@ -51,8 +57,9 @@ IMDB LoadIMDB()
 
         std::string sentence = line.substr(startPos, endPos - startPos);
         std::string sentenceNoLink = RemoveLink(sentence);
+        std::string sentenceNoPunc = RemovePunct(sentenceNoLink);
 
-        reviews.push_back(sentenceNoLink);
+        reviews.push_back(sentenceNoPunc);
         std::cout << "Sentence: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
