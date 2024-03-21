@@ -7,14 +7,13 @@
 #include <vector>
 #include <windows.h>
 
-std::string RemoveLink(const std::string &input)
+std::string RemoveLink(const std::string &text)
 {
-    std::regex linkPattern(R"((https?:\/\/|www\.)\S+)");
-    std::string output = std::regex_replace(input, linkPattern, "");
-    return output;
+    std::regex pattern(R"((https?:\/\/|www\.)\S+)");
+    return std::regex_replace(text, pattern, "");
 }
 
-std::string RemovePunct(std::string text)
+std::string RemovePunct(const std::string &text)
 {
     std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
     return std::regex_replace(text, pattern, " ");
@@ -55,12 +54,12 @@ IMDB LoadIMDB()
             sentiments.push_back(0.0f);
         }
 
-        std::string sentence = line.substr(startPos, endPos - startPos);
-        std::string sentenceNoLink = RemoveLink(sentence);
-        std::string sentenceNoPunc = RemovePunct(sentenceNoLink);
+        std::string text = line.substr(startPos, endPos - startPos);
+        std::string textNoLink = RemoveLink(text);
+        std::string textNoPunc = RemovePunct(textNoLink);
 
-        reviews.push_back(sentenceNoPunc);
-        std::cout << "Sentence: " << idx + 1 << std::endl;
+        reviews.push_back(textNoPunc);
+        std::cout << "Text: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
         ++idx;
