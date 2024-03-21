@@ -33,6 +33,7 @@ IMDB LoadIMDB()
     std::string line;
     std::getline(file, line);
 
+    size_t idx = 0;
     while (std::getline(file, line))
     {
         std::stringstream ss(line);
@@ -57,7 +58,9 @@ IMDB LoadIMDB()
         std::string sentence = line.substr(startPos, endPos - startPos);
 
         reviews.push_back(sentence);
-        std::cout << "--------------------------: " << sentence << std::endl;
+        std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
+        std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
+        ++idx;
     }
 
     return IMDB();
