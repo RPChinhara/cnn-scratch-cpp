@@ -2,8 +2,6 @@
 #include "arrays.h"
 
 #include <fstream>
-#include <regex>
-#include <sstream>
 #include <string>
 #include <vector>
 #include <windows.h>
