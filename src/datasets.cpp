@@ -8,19 +8,6 @@
 #include <vector>
 #include <windows.h>
 
-// std::string ExtractSentence(const std::string &line)
-// {
-//     size_t startPos = 0;
-//     size_t endPosPositive = line.find(",positive");
-//     size_t endPosNegative = line.find(",negative");
-
-//     size_t endPos = endPosPositive != std::string::npos ? endPosPositive : endPosNegative;
-
-//     std::string sentence = line.substr(startPos, endPos - startPos);
-
-//     return sentence;
-// }
-
 std::string RemoveLink(const std::string &input)
 {
     std::regex linkPattern(R"((https?:\/\/|www\.)\S+)");
