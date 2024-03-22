@@ -31,6 +31,12 @@ std::string RemoveNumber(const std::string &text)
     return std::regex_replace(text, pattern, "");
 }
 
+std::string RemoveWhiteSpace(const std::string &text)
+{
+    std::regex pattern("\\s+");
+    return std::regex_replace(text, pattern, " ");
+}
+
 IMDB LoadIMDB()
 {
     std::ifstream file("datasets\\IMDB Dataset.csv");
@@ -71,8 +77,9 @@ IMDB LoadIMDB()
         std::string textNoHTML = RemoveHTML(textNoLink);
         std::string textNoPunc = RemovePunct(textNoHTML);
         std::string textNoNumber = RemoveNumber(textNoPunc);
+        std::string textNoWhiteSpace = RemoveWhiteSpace(textNoNumber);
 
-        reviews.push_back(textNoNumber);
+        reviews.push_back(textNoWhiteSpace);
         std::cout << "Text: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
