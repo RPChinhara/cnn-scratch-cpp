@@ -22,7 +22,7 @@ std::string RemovePunct(const std::string &text)
 std::string RemoveHTML(const std::string &text)
 {
     std::regex pattern("<[^>]*>");
-    return std::regex_replace(text, pattern, "");
+    return std::regex_replace(text, pattern, " ");
 }
 
 std::string RemoveNumber(const std::string &text)
