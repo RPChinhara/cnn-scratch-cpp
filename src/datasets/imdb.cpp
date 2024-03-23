@@ -25,6 +25,14 @@ std::string RemoveHTML(const std::string &text)
     return std::regex_replace(text, pattern, " ");
 }
 
+std::string AddSpaceBetweenPunct(const std::string &text)
+{
+    std::regex pattern("([.,!?-])");
+    std::string s = std::regex_replace(text, pattern, " $1 ");
+    s = std::regex_replace(s, std::regex("\\s{2,}"), " ");
+    return s;
+}
+
 std::string RemoveNumber(const std::string &text)
 {
     std::regex pattern("\\d+");
@@ -81,7 +89,8 @@ IMDB LoadIMDB()
         std::string text = line.substr(startPos, endPos - startPos);
         std::string textNoLink = RemoveLink(text);
         std::string textNoHTML = RemoveHTML(textNoLink);
-        std::string textNoPunc = RemovePunct(textNoHTML);
+        std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);
+        std::string textNoPunc = RemovePunct(textSpaceBetweenPunc);
         std::string textNoNumber = RemoveNumber(textNoPunc);
         std::string textNoASCII = RemoveNonASCII(textNoNumber);
         std::string textNoWhiteSpace = RemoveWhiteSpace(textNoASCII);
