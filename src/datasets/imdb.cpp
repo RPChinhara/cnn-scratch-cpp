@@ -51,6 +51,12 @@ std::string RemoveWhiteSpace(const std::string &text)
     return std::regex_replace(text, pattern, " ");
 }
 
+std::string RemoveEmoji(const std::string &text)
+{
+    std::regex pattern("[\xE2\x98\x80-\xE2\x9B\xBF]");
+    return std::regex_replace(text, pattern, "");
+}
+
 std::string SpellCorrection(const std::string &text)
 {
     std::regex pattern("(.)\\1+");
@@ -100,7 +106,8 @@ IMDB LoadIMDB()
         std::string textNoNumber = RemoveNumber(textNoPunc);
         std::string textNoASCII = RemoveNonASCII(textNoNumber);
         std::string textNoWhiteSpace = RemoveWhiteSpace(textNoASCII);
-        std::string textSpellCorrected = SpellCorrection(textNoWhiteSpace);
+        std::string textNoEmoji = RemoveEmoji(textNoWhiteSpace);
+        std::string textSpellCorrected = SpellCorrection(textNoEmoji);
 
         reviews.push_back(textSpellCorrected);
         std::cout << "Text: " << idx + 1 << std::endl;
