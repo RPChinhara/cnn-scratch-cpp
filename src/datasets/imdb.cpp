@@ -13,12 +13,6 @@ std::string RemoveLink(const std::string &text)
     return std::regex_replace(text, pattern, "");
 }
 
-std::string RemovePunct(const std::string &text)
-{
-    std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
-    return std::regex_replace(text, pattern, " ");
-}
-
 std::string RemoveHTML(const std::string &text)
 {
     std::regex pattern("<[^>]*>");
@@ -33,21 +27,27 @@ std::string AddSpaceBetweenPunct(const std::string &text)
     return s;
 }
 
+std::string RemovePunct(const std::string &text)
+{
+    std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
+    return std::regex_replace(text, pattern, " ");
+}
+
 std::string RemoveNumber(const std::string &text)
 {
     std::regex pattern("\\d+");
     return std::regex_replace(text, pattern, "");
 }
 
-std::string RemoveWhiteSpace(const std::string &text)
-{
-    std::regex pattern("\\s+");
-    return std::regex_replace(text, pattern, " ");
-}
-
 std::string RemoveNonASCII(const std::string &text)
 {
     std::regex pattern("[^\\x00-\\x7f]");
+    return std::regex_replace(text, pattern, " ");
+}
+
+std::string RemoveWhiteSpace(const std::string &text)
+{
+    std::regex pattern("\\s+");
     return std::regex_replace(text, pattern, " ");
 }
 
