@@ -51,6 +51,12 @@ std::string RemoveNonASCII(const std::string &text)
     return std::regex_replace(text, pattern, " ");
 }
 
+std::string SpellCorrection(const std::string &text)
+{
+    std::regex pattern("(.)\\1+");
+    return std::regex_replace(text, pattern, "$1$1");
+}
+
 IMDB LoadIMDB()
 {
     std::ifstream file("datasets\\IMDB Dataset.csv");
@@ -94,8 +100,9 @@ IMDB LoadIMDB()
         std::string textNoNumber = RemoveNumber(textNoPunc);
         std::string textNoASCII = RemoveNonASCII(textNoNumber);
         std::string textNoWhiteSpace = RemoveWhiteSpace(textNoASCII);
+        std::string textSpellCorrected = SpellCorrection(textNoWhiteSpace);
 
-        reviews.push_back(textNoWhiteSpace);
+        reviews.push_back(textSpellCorrected);
         std::cout << "Text: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
