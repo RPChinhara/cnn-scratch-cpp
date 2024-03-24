@@ -12,5 +12,5 @@ struct TrainTest
 
 Tensor MinMaxScaler(Tensor &dataset);
 Tensor OneHot(const Tensor &tensor, const size_t depth);
-void Tokenizer();
+std::vector<std::string> Tokenizer(const std::string &text);
 TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float testSize, const size_t randomState);

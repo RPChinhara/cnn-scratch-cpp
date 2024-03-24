@@ -3,6 +3,8 @@
 #include "mathematics.h"
 #include "random.h"
 
+#include <sstream>
+
 Tensor MinMaxScaler(Tensor &dataset)
 {
     auto min_vals = Min(dataset);
@@ -36,8 +38,18 @@ Tensor OneHot(const Tensor &tensor, const size_t depth)
     return newTensor;
 }
 
-void Tokenizer()
+std::vector<std::string> Tokenizer(const std::string &text)
 {
+    std::vector<std::string> tokens;
+    std::stringstream ss(text);
+    std::string token;
+
+    while (ss >> token)
+    {
+        tokens.push_back(token);
+    }
+
+    return tokens;
 }
 
 TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float testSize, const size_t randomState)

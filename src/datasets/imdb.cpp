@@ -1,4 +1,5 @@
 #include "imdb.h"
+#include "preprocessing.h"
 
 #include <fstream>
 #include <regex>
@@ -109,9 +110,14 @@ IMDB LoadIMDB()
         std::string textNoEmoji = RemoveEmoji(textNoWhiteSpace);
         std::string textSpellCorrected = SpellCorrection(textNoEmoji);
 
-        reviews.push_back(textSpellCorrected);
+        auto textTokenized = Tokenizer(textSpellCorrected);
+
         std::cout << "Text: " << idx + 1 << std::endl;
-        std::cout << "++++++++++++++++++++++++++: " << reviews[idx] << std::endl;
+        std::cout << "++++++++++++++++++++++++++: " << std::endl;
+        for (int i = 0; i < textTokenized.size(); ++i)
+        {
+            std::cout << textTokenized[i] << std::endl;
+        }
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
         ++idx;
     }
