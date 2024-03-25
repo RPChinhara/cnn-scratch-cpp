@@ -2,6 +2,9 @@
 
 #include "tensor.h"
 
+#include <string>
+#include <vector>
+
 struct TrainTest
 {
     Tensor trainFeatures;
