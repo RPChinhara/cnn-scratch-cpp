@@ -110,13 +110,14 @@ IMDB LoadIMDB()
         std::string textNoEmoji = RemoveEmoji(textNoWhiteSpace);
         std::string textSpellCorrected = SpellCorrection(textNoEmoji);
 
-        auto textTokenized = Tokenizer(textSpellCorrected);
+        auto tokens = Tokenizer(textSpellCorrected);
+        auto tokensNoStopWords = RemoveStopWords(tokens);
 
         std::cout << "Text: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << std::endl;
-        for (int i = 0; i < textTokenized.size(); ++i)
+        for (int i = 0; i < tokensNoStopWords.size(); ++i)
         {
-            std::cout << textTokenized[i] << std::endl;
+            std::cout << tokensNoStopWords[i] << std::endl;
         }
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
         ++idx;

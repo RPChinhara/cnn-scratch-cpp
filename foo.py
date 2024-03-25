@@ -78,21 +78,26 @@ def rm_stopwords(text):
 first_text = data['review'][0]
 print(first_text)
 print()
+
 first_text = clean_pipeline(first_text)
 print(first_text)
 print()
-a = word_tokenize(first_text)
-print(a[0])
-print(a[1])
-print()
-firstrm_stopwords(data['review'][0])
-print(first_text)
-print()
 
-a = "The cat is playing, and her friends."
-print(a)
-print(word_tokenize(a))
-print(rm_stopwords(a))
+first_text = word_tokenize(first_text)
+# for word in first_text:
+#     print(word)
+# print()
+
+print(first_text)
+
+filtered_text = [word for word in first_text if word.lower() not in stopwords]
+filtered_text2 = [i for i in first_text if i not in stopwords]
+
+print(filtered_text)
+print()
+print(filtered_text2)
+print()
+print(stopwords)
 
 # import tensorflow as tf
 # from tensorflow.keras.datasets import imdb
