@@ -3,7 +3,16 @@
 #include "mathematics.h"
 #include "random.h"
 
+#include <regex>
 #include <sstream>
+
+std::string AddSpaceBetweenPunct(const std::string &text)
+{
+    std::regex pattern("([.,!?-])");
+    std::string s = std::regex_replace(text, pattern, " $1 ");
+    s = std::regex_replace(s, std::regex("\\s{2,}"), " ");
+    return s;
+}
 
 std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens)
 {
@@ -69,6 +78,42 @@ Tensor OneHot(const Tensor &tensor, const size_t depth)
     return newTensor;
 }
 
+std::string RemoveEmoji(const std::string &text)
+{
+    std::regex pattern("[\xE2\x98\x80-\xE2\x9B\xBF]");
+    return std::regex_replace(text, pattern, "");
+}
+
+std::string RemoveHTML(const std::string &text)
+{
+    std::regex pattern("<[^>]*>");
+    return std::regex_replace(text, pattern, " ");
+}
+
+std::string RemoveLink(const std::string &text)
+{
+    std::regex pattern(R"((https?:\/\/|www\.)\S+)");
+    return std::regex_replace(text, pattern, "");
+}
+
+std::string RemoveNonASCII(const std::string &text)
+{
+    std::regex pattern("[^\\x00-\\x7f]");
+    return std::regex_replace(text, pattern, " ");
+}
+
+std::string RemoveNumber(const std::string &text)
+{
+    std::regex pattern("\\d+");
+    return std::regex_replace(text, pattern, "");
+}
+
+std::string RemovePunct(const std::string &text)
+{
+    std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
+    return std::regex_replace(text, pattern, " ");
+}
+
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
 {
     std::vector<std::string> stopWords = {
@@ -93,7 +138,7 @@ std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
         "myself", "once",   "any",     "before",    "shan",      "isn",      "more",    "nor",        "now",
         "me",     "hadn't", "such",    "not",       "was",       "very",     "it's",    "didn"};
 
-        // this, yours, themselves, ourselves, ours, hers, She's 
+    // this, yours, themselves, ourselves, ours, hers, She's
 
     std::vector<std::string> tokensNoStopWords;
 
@@ -115,6 +160,18 @@ std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
     }
 
     return tokensNoStopWords;
+}
+
+std::string RemoveWhiteSpace(const std::string &text)
+{
+    std::regex pattern("\\s+");
+    return std::regex_replace(text, pattern, " ");
+}
+
+std::string SpellCorrection(const std::string &text)
+{
+    std::regex pattern("(.)\\1+");
+    return std::regex_replace(text, pattern, "$1$1");
 }
 
 std::vector<std::string> Tokenizer(const std::string &text)

@@ -2,67 +2,10 @@
 #include "preprocessing.h"
 
 #include <fstream>
-#include <regex>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <windows.h>
-
-std::string RemoveLink(const std::string &text)
-{
-    std::regex pattern(R"((https?:\/\/|www\.)\S+)");
-    return std::regex_replace(text, pattern, "");
-}
-
-std::string RemoveHTML(const std::string &text)
-{
-    std::regex pattern("<[^>]*>");
-    return std::regex_replace(text, pattern, " ");
-}
-
-std::string AddSpaceBetweenPunct(const std::string &text)
-{
-    std::regex pattern("([.,!?-])");
-    std::string s = std::regex_replace(text, pattern, " $1 ");
-    s = std::regex_replace(s, std::regex("\\s{2,}"), " ");
-    return s;
-}
-
-std::string RemovePunct(const std::string &text)
-{
-    std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
-    return std::regex_replace(text, pattern, " ");
-}
-
-std::string RemoveNumber(const std::string &text)
-{
-    std::regex pattern("\\d+");
-    return std::regex_replace(text, pattern, "");
-}
-
-std::string RemoveNonASCII(const std::string &text)
-{
-    std::regex pattern("[^\\x00-\\x7f]");
-    return std::regex_replace(text, pattern, " ");
-}
-
-std::string RemoveWhiteSpace(const std::string &text)
-{
-    std::regex pattern("\\s+");
-    return std::regex_replace(text, pattern, " ");
-}
-
-std::string RemoveEmoji(const std::string &text)
-{
-    std::regex pattern("[\xE2\x98\x80-\xE2\x9B\xBF]");
-    return std::regex_replace(text, pattern, "");
-}
-
-std::string SpellCorrection(const std::string &text)
-{
-    std::regex pattern("(.)\\1+");
-    return std::regex_replace(text, pattern, "$1$1");
-}
 
 IMDB LoadIMDB()
 {

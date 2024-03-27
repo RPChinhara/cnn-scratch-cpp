@@ -7,6 +7,7 @@ set SRC=..\src\activations.cpp ^
         ..\src\datasets\imdb.cpp ^
         ..\src\datasets\iris.cpp ^
         ..\src\datasets\mnist.cpp ^
+        ..\src\datasets\tripadvisor.cpp ^
         ..\src\derivatives.cpp ^
         ..\src\kernels.cpp ^
         ..\src\linalg.cpp ^
