@@ -188,6 +188,16 @@ std::vector<std::string> Tokenizer(const std::string &text)
     return tokens;
 }
 
+std::string ToLower(const std::string &text)
+{
+    std::string result;
+    for (char c : text)
+    {
+        result += std::tolower(c);
+    }
+    return result;
+}
+
 TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float testSize, const size_t randomState)
 {
     Tensor x_new = Shuffle(x, randomState);

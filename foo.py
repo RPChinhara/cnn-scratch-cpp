@@ -105,4 +105,17 @@ def label2name(x):
         return "Positive"
 
 # Read Data
-      
+df = pd.read_csv("datasets\\tripadvisor_hotel_reviews.csv")
+print(df["Review"][0], '\n')
+print(df["Rating"][0], '\n')
+
+# encode label and mapping label name
+df["label"] = df["Rating"].apply(lambda x: label_encode(x))
+df["label_name"] = df["label"].apply(lambda x: label2name(x))
+
+# clean text, lowercase and remove punk
+df["Review"] = df["Review"].apply(lambda x: remove_punct(clean(remove_emoji(x).lower())[0][0]))
+
+print(df["Review"][0], '\n')
+print(df["label"][0], '\n')
+print(df["label_name"][0], '\n')

@@ -41,4 +41,6 @@ std::string SpellCorrection(const std::string &text);
 
 std::vector<std::string> Tokenizer(const std::string &text);
 
+std::string ToLower(const std::string &text);
+
 TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float testSize, const size_t randomState);
