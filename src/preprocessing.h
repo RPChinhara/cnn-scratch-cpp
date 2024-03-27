@@ -13,6 +13,7 @@ struct TrainTest
     Tensor testTargets;
 };
 
+std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens);
 Tensor MinMaxScaler(Tensor &dataset);
 Tensor OneHot(const Tensor &tensor, const size_t depth);
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens);

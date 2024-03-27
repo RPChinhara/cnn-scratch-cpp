@@ -13,15 +13,10 @@ stopwords = set(stopwords.words('english'))
 
 data = pd.read_csv('datasets\\IMDB Dataset.csv')
 
-# text cleaning
-
 def rm_link(text):
     return re.sub(r'https?://\S+|www\.\S+', '', text)
 
-# handle case like "shut up okay?Im only 10 years old"
-# become "shut up okay Im only 10 years old"
 def rm_punct2(text):
-    # return re.sub(r'[\!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\:\;\<\=\>\?\@\[\\\]\^\_\`\{\|\}\~]', ' ', text)
     return re.sub(r'[\"\#\$\%\&\'\(\)\*\+\/\:\;\<\=\>\@\[\\\]\^\_\`\{\|\}\~]', ' ', text)
 
 def rm_html(text):
@@ -29,8 +24,8 @@ def rm_html(text):
 
 def space_bt_punct(text):
     pattern = r'([.,!?-])'
-    s = re.sub(pattern, r' \1 ', text)     # add whitespaces between punctuation
-    s = re.sub(r'\s{2,}', ' ', s)        # remove double whitespaces    
+    s = re.sub(pattern, r' \1 ', text)
+    s = re.sub(r'\s{2,}', ' ', s)
     return s
 
 def rm_number(text):
@@ -45,10 +40,10 @@ def rm_nonascii(text):
 def rm_emoji(text):
     emojis = re.compile(
         '['
-        u'\U0001F600-\U0001F64F'  # emoticons
-        u'\U0001F300-\U0001F5FF'  # symbols & pictographs
-        u'\U0001F680-\U0001F6FF'  # transport & map symbols
-        u'\U0001F1E0-\U0001F1FF'  # flags (iOS)
+        u'\U0001F600-\U0001F64F'
+        u'\U0001F300-\U0001F5FF'
+        u'\U0001F680-\U0001F6FF'
+        u'\U0001F1E0-\U0001F1FF'
         u'\U00002702-\U000027B0'
         u'\U000024C2-\U0001F251'
         ']+',
@@ -74,6 +69,11 @@ def clean_pipeline(text):
 def rm_stopwords(text):
     return [i for i in text if i not in stopwords]
 
+def lemmatize(text):
+    lemmatizer = WordNetLemmatizer()    
+    lemmas = [lemmatizer.lemmatize(t) for t in text]
+    # make sure lemmas does not contains sotpwords
+    return rm_stopwords(lemmas)
 
 first_text = data['review'][0]
 print(first_text)
@@ -84,37 +84,16 @@ print(first_text)
 print()
 
 first_text = word_tokenize(first_text)
-# for word in first_text:
-#     print(word)
-# print()
-
 print(first_text)
-
-filtered_text = [word for word in first_text if word.lower() not in stopwords]
-filtered_text2 = [i for i in first_text if i not in stopwords]
-
-print(filtered_text)
 print()
-print(filtered_text2)
+
+filtered_text = [i for i in first_text if i not in stopwords]
+print(filtered_text)
 print()
 print(stopwords)
 
-# import tensorflow as tf
-# from tensorflow.keras.datasets import imdb
-# from tensorflow.keras.preprocessing.sequence import pad_sequences
+a = lemmatize(filtered_text)
+print(a)
 
-# # Load the IMDb dataset
-# max_features = 10000  # Number of words to consider as features
-# maxlen = 200  # Cut texts after this number of words
-# (train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=max_features)
-
-# print(train_data)
-
-# # Pad sequences to make them uniform length
-# train_data = pad_sequences(train_data, maxlen=maxlen)
-# test_data = pad_sequences(test_data, maxlen=maxlen)
-
-# # Display dataset shapes
-# print("Training data shape:", train_data.shape)
-# print("Testing data shape:", test_data.shape)
-# print(train_data)
+abc = ["dogs", "cats", "pants", "she's", "She's", "girls", "female", "girl", "running", "talked", "plays", "plays", "this", "This", "yours", "Yours", "runs", "Ours", "ours"]
+print(lemmatize(abc))
