@@ -33,6 +33,8 @@ std::string RemoveNumber(const std::string &text);
 
 std::string RemovePunct(const std::string &text);
 
+std::string RemovePunct2(const std::string &text);
+
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens);
 
 std::string RemoveWhiteSpace(const std::string &text);
