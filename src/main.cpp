@@ -3,6 +3,7 @@
 #include "datasets\imdb.h"
 #include "datasets\iris.h"
 #include "datasets\mnist.h"
+#include "datasets\tripadvisor.h"
 #include "models\cnn2d.h"
 #include "models\nn.h"
 #include "models\transformer.h"
@@ -75,7 +76,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
-    IMDB IMDb = LoadIMDB();
+    Tripadvisor tripadvisor = LoadTripadvisor();
+
+    Transformer transformer = Transformer();
+#endif
+
+#if 0
+    IMDB imdb = LoadIMDB();
 
     Transformer transformer = Transformer();
 #endif
