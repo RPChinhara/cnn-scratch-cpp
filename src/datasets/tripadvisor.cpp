@@ -72,23 +72,7 @@ Tripadvisor LoadTripadvisor()
             std::cout << tokens[i] << std::endl;
         }
         std::cout << "--------------------------: " << ratings[idx] << std::endl << std::endl;
-
         ++idx;
-        // std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);
-        // std::string textNoNumber = RemoveNumber(textNoPunc);
-        // std::string textSpellCorrected = SpellCorrection(textNoEmoji);
-
-        // auto tokens = Tokenizer(textSpellCorrected);
-        // auto tokensNoStopWords = RemoveStopWords(tokens);
-
-        // std::cout << "Text: " << idx + 1 << std::endl;
-        // std::cout << "++++++++++++++++++++++++++: " << std::endl;
-        // for (int i = 0; i < tokensNoStopWords.size(); ++i)
-        // {
-        //     std::cout << tokensNoStopWords[i] << std::endl;
-        // }
-        // std::cout << "--------------------------: " << ratings[idx] << std::endl << std::endl;
-        // ++idx;
     }
 
     return Tripadvisor();

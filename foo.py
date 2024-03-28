@@ -146,10 +146,8 @@ print(df["label_name"][0], '\n')
 # show_wordcloud(df["Review"].values)
 
 df["tokenized_review"] = df.Review.apply(lambda x: tokenize(x))
+df['tokenized_review'] = df['tokenized_review'].apply(lambda x: remove_punct(x))
 
 print(df["tokenized_review"][0], '\n')
 print(df["tokenized_review"][1], '\n')
 print(df["tokenized_review"][2], '\n')
-
-text = "Hello, world! This is a 123 sample text."
-print(tokenize(text))
