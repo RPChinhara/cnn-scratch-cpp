@@ -150,3 +150,6 @@ df["tokenized_review"] = df.Review.apply(lambda x: tokenize(x))
 print(df["tokenized_review"][0], '\n')
 print(df["tokenized_review"][1], '\n')
 print(df["tokenized_review"][2], '\n')
+
+text = "Hello, world! This is a 123 sample text."
+print(tokenize(text))

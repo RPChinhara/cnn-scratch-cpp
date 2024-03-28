@@ -65,12 +65,17 @@ Tripadvisor LoadTripadvisor()
         std::string textLower = ToLower(textNoEmoji);
         std::string textNoPunc = RemovePunct2(textLower);
         std::string textNoWhiteSpace = RemoveWhiteSpace(textNoPunc);
-        std::cout << textNoWhiteSpace << std::endl << std::endl;
-        std::cout << ratings[idx] << std::endl << std::endl;
+        auto tokens = Tokenizer(textNoWhiteSpace);
+
+        for (int i = 0; i < tokens.size(); ++i)
+        {
+            std::cout << tokens[i] << std::endl;
+        }
+        std::cout << "--------------------------: " << ratings[idx] << std::endl << std::endl;
+
         ++idx;
         // std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);
         // std::string textNoNumber = RemoveNumber(textNoPunc);
-        // std::string textNoWhiteSpace = RemoveWhiteSpace(textNoASCII);
         // std::string textSpellCorrected = SpellCorrection(textNoEmoji);
 
         // auto tokens = Tokenizer(textSpellCorrected);
