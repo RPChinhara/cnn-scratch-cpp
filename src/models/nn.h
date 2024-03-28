@@ -8,11 +8,14 @@ class NN
 {
   public:
     NN(const std::vector<size_t> &layers, float const learningRate);
+
     void Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal);
+
     void Predict(const Tensor &xTest, const Tensor &yTest);
 
   private:
     std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
+    
     std::vector<Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weights,
                                            const std::vector<Tensor> &biases);
 
