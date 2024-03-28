@@ -104,9 +104,30 @@ def label2name(x):
     if x == 2:
         return "Positive"
 
+def show_wordcloud(data, title = None):
+    wordcloud = WordCloud(
+        background_color='black',
+        max_words=200,
+        max_font_size=40, 
+        scale=1,
+        random_state=1
+).generate(" ".join(data))
+
+
+    fig = plt.figure(1, figsize=(15, 15))
+    plt.axis('off')
+    if title: 
+        fig.suptitle(title, fontsize=20)
+        fig.subplots_adjust(top=2.3)
+
+    plt.imshow(wordcloud)
+    plt.show()
+
+
 # Read Data
 df = pd.read_csv("datasets\\tripadvisor_hotel_reviews.csv")
 print(df["Review"][0], '\n')
+print(df["Review"][1], '\n')
 print(df["Rating"][0], '\n')
 
 # encode label and mapping label name
@@ -117,5 +138,9 @@ df["label_name"] = df["label"].apply(lambda x: label2name(x))
 df["Review"] = df["Review"].apply(lambda x: remove_punct(clean(remove_emoji(x).lower())[0][0]))
 
 print(df["Review"][0], '\n')
+print(df["Review"][1], '\n')
+print(df["Review"][2], '\n')
 print(df["label"][0], '\n')
 print(df["label_name"][0], '\n')
+
+show_wordcloud(df["Review"].values)

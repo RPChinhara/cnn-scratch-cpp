@@ -15,7 +15,7 @@ Tripadvisor LoadTripadvisor()
         MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
 
     std::vector<std::string> reviews;
-    std::vector<float> ratings;
+    std::vector<std::string> ratings;
 
     std::string line;
     std::getline(file, line);
@@ -37,27 +37,27 @@ Tripadvisor LoadTripadvisor()
         if (endPos1 != std::string::npos)
         {
             endPos = endPos1;
-            ratings.push_back(1.0f);
+            ratings.push_back("Negative");
         }
         else if (endPos2 != std::string::npos)
         {
             endPos = endPos2;
-            ratings.push_back(2.0f);
+            ratings.push_back("Negative");
         }
         else if (endPos3 != std::string::npos)
         {
             endPos = endPos3;
-            ratings.push_back(3.0f);
+            ratings.push_back("Neutral");
         }
         else if (endPos4 != std::string::npos)
         {
             endPos = endPos4;
-            ratings.push_back(4.0f);
+            ratings.push_back("Positive");
         }
         else if (endPos5 != std::string::npos)
         {
             endPos = endPos5;
-            ratings.push_back(5.0f);
+            ratings.push_back("Positive");
         }
 
         std::string text = line.substr(startPos, endPos - startPos);
@@ -66,6 +66,8 @@ Tripadvisor LoadTripadvisor()
         // clean
         std::string textNoPunc = RemovePunct2(textLower);
         std::cout << textNoPunc << std::endl << std::endl;
+        std::cout << ratings[idx] << std::endl << std::endl;
+        ++idx;
         // std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);
         // std::string textNoNumber = RemoveNumber(textNoPunc);
         // std::string textNoWhiteSpace = RemoveWhiteSpace(textNoASCII);
