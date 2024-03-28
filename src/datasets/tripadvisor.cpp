@@ -63,9 +63,9 @@ Tripadvisor LoadTripadvisor()
         std::string text = line.substr(startPos, endPos - startPos);
         std::string textNoEmoji = RemoveEmoji(text);
         std::string textLower = ToLower(textNoEmoji);
-        // clean
         std::string textNoPunc = RemovePunct2(textLower);
-        std::cout << textNoPunc << std::endl << std::endl;
+        std::string textNoWhiteSpace = RemoveWhiteSpace(textNoPunc);
+        std::cout << textNoWhiteSpace << std::endl << std::endl;
         std::cout << ratings[idx] << std::endl << std::endl;
         ++idx;
         // std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);

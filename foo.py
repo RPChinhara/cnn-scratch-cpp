@@ -143,4 +143,10 @@ print(df["Review"][2], '\n')
 print(df["label"][0], '\n')
 print(df["label_name"][0], '\n')
 
-show_wordcloud(df["Review"].values)
+# show_wordcloud(df["Review"].values)
+
+df["tokenized_review"] = df.Review.apply(lambda x: tokenize(x))
+
+print(df["tokenized_review"][0], '\n')
+print(df["tokenized_review"][1], '\n')
+print(df["tokenized_review"][2], '\n')
