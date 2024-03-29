@@ -87,6 +87,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     EngSpa engSpa = LoadEngSpa();
 
+    for (int i = 0; i < engSpa.targetRaw.size(); ++i)
+    {
+        std::cout << engSpa.targetRaw[i] << std::endl;
+        std::cout << engSpa.contextRaw[i] << std::endl;
+    }
+
     Transformer transformer = Transformer();
 #endif
 

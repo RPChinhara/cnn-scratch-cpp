@@ -30,14 +30,20 @@ EngSpa LoadEngSpa()
             line.erase(pos);
         }
 
-        std::cout << line << std::endl;
-  
+        pos = line.find_first_of(".!?");
+
+        std::string extractedTargetRaw = line.substr(0, pos + 1);
+        targetRaw.push_back(extractedTargetRaw);
+
+        std::string remainingContextRaw = line.substr(pos + 1);
+        contextRaw.push_back(remainingContextRaw);
     }
 
     file.close();
 
     EngSpa engSpa;
-
     engSpa.targetRaw = targetRaw;
     engSpa.contextRaw = contextRaw;
+
+    return engSpa;
 }
