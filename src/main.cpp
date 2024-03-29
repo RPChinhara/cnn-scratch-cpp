@@ -1,6 +1,6 @@
 #include "activations.h"
 #include "arrays.h"
-#include "datasets\engspa.h"
+#include "datasets\englishspanish.h"
 #include "datasets\imdb.h"
 #include "datasets\iris.h"
 #include "datasets\mnist.h"
@@ -85,13 +85,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #if 1
     SetConsoleOutputCP(CP_UTF8);
 
-    EngSpa engSpa = LoadEngSpa();
+    EnglishSpanish englishSpanish = LoadEnglishSpanish();
 
-    for (int i = 0; i < engSpa.targetRaw.size(); ++i)
-    {
-        std::cout << engSpa.targetRaw[i] << std::endl;
-        std::cout << engSpa.contextRaw[i] << std::endl;
-    }
+    for (int i = 0; i < englishSpanish.targetRaw.size(); ++i)
+        std::cout << englishSpanish.targetRaw[i] << " " << englishSpanish.contextRaw[i] << std::endl;
 
     Transformer transformer = Transformer();
 #endif
