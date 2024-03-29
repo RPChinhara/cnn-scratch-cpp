@@ -1,5 +1,6 @@
 #include "activations.h"
 #include "arrays.h"
+#include "datasets\engSpa.h"
 #include "datasets\imdb.h"
 #include "datasets\iris.h"
 #include "datasets\mnist.h"
@@ -75,8 +76,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     nn.Predict(val_test.testFeatures, val_test.testTargets);
 #endif
 
-#if 1
+#if 0
     Tripadvisor tripadvisor = LoadTripadvisor();
+
+    Transformer transformer = Transformer();
+#endif
+
+#if 1
+    EngSpa engSpa = LoadEngSpa();
 
     Transformer transformer = Transformer();
 #endif
