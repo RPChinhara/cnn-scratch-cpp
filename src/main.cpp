@@ -1,18 +1,7 @@
-#include "activations.h"
-#include "arrays.h"
 #include "datasets\englishspanish.h"
-#include "datasets\imdb.h"
-#include "datasets\iris.h"
-#include "datasets\mnist.h"
-#include "datasets\tripadvisor.h"
-#include "models\cnn2d.h"
-#include "models\nn.h"
 #include "models\transformer.h"
-#include "preprocessing.h"
-#include "random.h"
 
-#include <memory>
-#include <thread>
+#include <iostream>
 #include <windows.h>
 
 #pragma comment(lib, "gdi32.lib")
@@ -27,62 +16,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     FILE *file;
     freopen_s(&file, "CONOUT$", "w", stdout);
 
-#if 0
-    MNIST mnist = LoadMNIST();
-
-    for (size_t i = 0; i < 784; ++i)
-    {
-
-        if (i % 28 == 0)
-            std::cout << std::endl;
-        std::cout << mnist.trainImages[i] << "   ";
-    }
-
-    mnist.trainImages / 255.0f;
-    mnist.testImages / 255.0f;
-
-    mnist.trainLabels = OneHot(mnist.trainLabels, 10);
-    mnist.testLabels = OneHot(mnist.testLabels, 10);
-
-    CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
-    cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
-#endif
-
-#if 0
-    Iris iris = LoadIris();
-    Tensor features = iris.features;
-    Tensor targets = iris.targets;
-
-    targets = OneHot(targets, 3);
-
-    TrainTest train_temp = TrainTestSplit(features, targets, 0.2, 42);
-    TrainTest val_test = TrainTestSplit(train_temp.testFeatures, train_temp.testTargets, 0.5, 42);
-
-    train_temp.trainFeatures = MinMaxScaler(train_temp.trainFeatures);
-    val_test.trainFeatures = MinMaxScaler(val_test.trainFeatures);
-    val_test.testFeatures = MinMaxScaler(val_test.testFeatures);
-
-    NN nn = NN({4, 128, 3}, 0.01f);
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    nn.Train(train_temp.trainFeatures, train_temp.trainTargets, val_test.trainFeatures, val_test.trainTargets);
-
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-
-    std::cout << "Time taken: " << duration.count() << " seconds\n";
-
-    nn.Predict(val_test.testFeatures, val_test.testTargets);
-#endif
-
-#if 0
-    Tripadvisor tripadvisor = LoadTripadvisor();
-
-    Transformer transformer = Transformer();
-#endif
-
-#if 1
     SetConsoleOutputCP(CP_UTF8);
 
     EnglishSpanish englishSpanish = LoadEnglishSpanish();
@@ -91,13 +24,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         std::cout << englishSpanish.targetRaw[i] << " " << englishSpanish.contextRaw[i] << std::endl;
 
     Transformer transformer = Transformer();
-#endif
-
-#if 0
-    IMDB imdb = LoadIMDB();
-
-    Transformer transformer = Transformer();
-#endif
 
     const char CLASS_NAME[] = "WindowClass";
     const char WINDOW_NAME[] = "Dora";
