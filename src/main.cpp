@@ -83,6 +83,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 #if 1
+    SetConsoleOutputCP(CP_UTF8);
+
     EngSpa engSpa = LoadEngSpa();
 
     Transformer transformer = Transformer();
