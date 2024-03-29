@@ -1,6 +1,6 @@
 #include "activations.h"
 #include "arrays.h"
-#include "datasets\engSpa.h"
+#include "datasets\engspa.h"
 #include "datasets\imdb.h"
 #include "datasets\iris.h"
 #include "datasets\mnist.h"
