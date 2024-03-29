@@ -1,15 +1,8 @@
 #include "models\nn.h"
-#include "activations.h"
-#include "arrays.h"
-#include "datasets\englishspanish.h"
-#include "datasets\imdb.h"
 #include "datasets\iris.h"
-#include "datasets\mnist.h"
-#include "datasets\tripadvisor.h"
-#include "models\cnn2d.h"
-#include "models\transformer.h"
 #include "preprocessing.h"
-#include "random.h"
+
+#include <chrorno>
 
 int main()
 {
