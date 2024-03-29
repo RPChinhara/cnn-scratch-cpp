@@ -10,10 +10,7 @@ EnglishSpanish LoadEnglishSpanish()
 {
     std::ifstream file("datasets\\english-spanish.txt");
     if (!file)
-    {
-        std::cout << "Failed to open the file." << std::endl;
-        // return 1;
-    }
+        std::cerr << "Failed to open the file." << std::endl;
 
     std::vector<std::string> targetRaw;
     std::vector<std::string> contextRaw;
