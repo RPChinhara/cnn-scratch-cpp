@@ -8,7 +8,6 @@
 
 EnglishSpanish LoadEnglishSpanish()
 {
-
     std::ifstream file("datasets\\english-spanish.txt");
     if (!file)
     {
