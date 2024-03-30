@@ -32,7 +32,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     Tensor y_batch;
     std::vector<Tensor> activations;
     std::vector<Tensor> activations_val;
-    std::vector<Tensor> dloss_dlogits, dloss_dweights, dloss_dbiases;
+    std::vector<Tensor> dloss_dhiddens, dloss_dweights, dloss_dbiases;
 
     weights_biases = InitParameters();
     weights_biases_momentum = InitParameters();
@@ -73,19 +73,19 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             for (size_t k = numLayers; k > 0; --k)
             {
                 if (k == numLayers)
-                    dloss_dlogits.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
+                    dloss_dhiddens.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else
-                    dloss_dlogits.push_back(MatMul(dloss_dlogits[(layers.size() - 2) - k],
+                    dloss_dhiddens.push_back(MatMul(dloss_dhiddens[(layers.size() - 2) - k],
                                                    Transpose(weights_biases.first[k]), Device::CPU) *
                                             ReluDerivative(activations[k - 1]));
 
                 if (k == 1)
-                    dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dlogits[(numLayers)-k], Device::CPU));
+                    dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dhiddens[(numLayers)-k], Device::CPU));
                 else
                     dloss_dweights.push_back(
-                        MatMul(Transpose(activations[k - 2]), dloss_dlogits[(numLayers)-k], Device::CPU));
+                        MatMul(Transpose(activations[k - 2]), dloss_dhiddens[(numLayers)-k], Device::CPU));
 
-                dloss_dbiases.push_back(Sum(dloss_dlogits[(numLayers)-k], 0));
+                dloss_dbiases.push_back(Sum(dloss_dhiddens[(numLayers)-k], 0));
 
                 dloss_dweights[(numLayers)-k] =
                     ClipByValue(dloss_dweights[(numLayers)-k], -gradientClipThreshold, gradientClipThreshold);
@@ -101,7 +101,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
             }
 
-            dloss_dlogits.clear(), dloss_dweights.clear(), dloss_dbiases.clear();
+            dloss_dhiddens.clear(), dloss_dweights.clear(), dloss_dbiases.clear();
         }
 
         activations_val = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
