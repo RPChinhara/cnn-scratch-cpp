@@ -84,22 +84,22 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                                             ReluDerivative(hiddensYpred.first[k - 1]));
 
                 if (k == 1)
-                    dlossDweights.push_back(MatMul(Transpose(x_batch), dlossDhiddens[(numLayers)-k], Device::CPU));
+                    dlossDweights.push_back(MatMul(Transpose(x_batch), dlossDhiddens[numLayers - k], Device::CPU));
                 else
                     dlossDweights.push_back(
-                        MatMul(Transpose(hiddensYpred.first[k - 2]), dlossDhiddens[(numLayers)-k], Device::CPU));
+                        MatMul(Transpose(hiddensYpred.first[k - 2]), dlossDhiddens[numLayers - k], Device::CPU));
 
-                dlossDbiases.push_back(Sum(dlossDhiddens[(numLayers)-k], 0));
+                dlossDbiases.push_back(Sum(dlossDhiddens[numLayers - k], 0));
 
-                dlossDweights[(numLayers)-k] =
-                    ClipByValue(dlossDweights[(numLayers)-k], -gradientClipThreshold, gradientClipThreshold);
-                dlossDbiases[(numLayers)-k] =
-                    ClipByValue(dlossDbiases[(numLayers)-k], -gradientClipThreshold, gradientClipThreshold);
+                dlossDweights[numLayers - k] =
+                    ClipByValue(dlossDweights[numLayers - k], -gradientClipThreshold, gradientClipThreshold);
+                dlossDbiases[numLayers - k] =
+                    ClipByValue(dlossDbiases[numLayers - k], -gradientClipThreshold, gradientClipThreshold);
 
                 weights_biases_momentum.first[k - 1] =
-                    momentum * weights_biases_momentum.first[k - 1] - learningRate * dlossDweights[(numLayers)-k];
+                    momentum * weights_biases_momentum.first[k - 1] - learningRate * dlossDweights[numLayers - k];
                 weights_biases_momentum.second[k - 1] =
-                    momentum * weights_biases_momentum.second[k - 1] - learningRate * dlossDbiases[(numLayers)-k];
+                    momentum * weights_biases_momentum.second[k - 1] - learningRate * dlossDbiases[numLayers - k];
 
                 weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
