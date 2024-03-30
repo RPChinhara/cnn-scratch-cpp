@@ -32,7 +32,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     Tensor y_batch;
     std::vector<Tensor> activations;
     std::vector<Tensor> activations_val;
-    std::vector<Tensor> dloss_dhiddens, dloss_dweights, dloss_dbiases;
+    std::vector<Tensor> dlossDy, dloss_dhiddens, dloss_dweights, dloss_dbiases;
 
     weights_biases = InitParameters();
     weights_biases_momentum = InitParameters();
@@ -76,8 +76,8 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                     dloss_dhiddens.push_back(CategoricalCrossEntropyDerivative(y_batch, activations.back()));
                 else
                     dloss_dhiddens.push_back(MatMul(dloss_dhiddens[(layers.size() - 2) - k],
-                                                   Transpose(weights_biases.first[k]), Device::CPU) *
-                                            ReluDerivative(activations[k - 1]));
+                                                    Transpose(weights_biases.first[k]), Device::CPU) *
+                                             ReluDerivative(activations[k - 1]));
 
                 if (k == 1)
                     dloss_dweights.push_back(MatMul(Transpose(x_batch), dloss_dhiddens[(numLayers)-k], Device::CPU));
