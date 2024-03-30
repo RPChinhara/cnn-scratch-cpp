@@ -5,8 +5,6 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-#include <windows.h>
-
 Tensor Relu(const Tensor &tensor, Device device)
 {
     Tensor newTensor = tensor;
@@ -31,8 +29,7 @@ Tensor Relu(const Tensor &tensor, Device device)
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
-            MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
-                       "Error", MB_ICONERROR);
+            std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
         cudaMemcpy(newTensor.elem, newTensorGPU, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
@@ -41,7 +38,7 @@ Tensor Relu(const Tensor &tensor, Device device)
         return newTensor;
     }
     default:
-        MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
+        std::cout << "Unknown device." << std::endl;
         return Tensor();
     }
 }

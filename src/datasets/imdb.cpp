@@ -5,14 +5,13 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <windows.h>
 
 IMDB LoadIMDB()
 {
     std::ifstream file("datasets\\IMDB Dataset.csv");
 
     if (!file.is_open())
-        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
+        std::cerr << "Failed to open the file." << std::endl;
 
     std::vector<std::string> reviews;
     std::vector<float> sentiments;

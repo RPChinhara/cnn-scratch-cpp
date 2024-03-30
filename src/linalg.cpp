@@ -4,7 +4,6 @@
 #include "tensor.h"
 
 #include <cassert>
-#include <windows.h>
 
 Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
 {
@@ -50,8 +49,7 @@ Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
-            MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
-                       "Error", MB_ICONERROR);
+            std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
         cudaMemcpy(newTensor.elem, newTensorGPU, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU1);
@@ -61,7 +59,7 @@ Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device)
         return newTensor;
     }
     default:
-        MessageBox(nullptr, "Unknown device", "Error", MB_ICONERROR);
+        std::cout << "Unknown device." << std::endl;
         return Tensor();
     }
 }

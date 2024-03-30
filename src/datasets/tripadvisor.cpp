@@ -5,14 +5,13 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <windows.h>
 
 Tripadvisor LoadTripadvisor()
 {
     std::ifstream file("datasets\\tripadvisor_hotel_reviews.csv");
 
     if (!file.is_open())
-        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
+        std::cerr << "Failed to open the file." << std::endl;
 
     std::vector<std::string> reviews;
     std::vector<std::string> ratings;

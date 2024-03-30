@@ -4,14 +4,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <windows.h>
 
 Tensor ReadMNISTImages(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
-        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
+        std::cerr << "Failed to open the file." << std::endl;
 
     uint32_t magicNumber, numImages, numRows, numCols;
 
@@ -57,7 +56,7 @@ Tensor ReadMNISTLabels(const std::string &filePath)
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
-        MessageBox(nullptr, "Failed to open the file", "Error", MB_ICONERROR);
+        std::cerr << "Failed to open the file." << std::endl;
 
     uint32_t magicNumber, numLabels;
 

@@ -3,7 +3,6 @@
 #include <cassert>
 #include <numeric>
 #include <string>
-#include <windows.h>
 
 Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
 {
@@ -135,8 +134,8 @@ Tensor Tensor::operator+(const Tensor &tensor) const
 
 //         cudaError_t cudaError = cudaGetLastError();
 //         if (cudaError != cudaSuccess)
-//             MessageBox(nullptr, ("CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError))).c_str(),
-//                      "Error", MB_ICONERROR);
+//           td::cerr << "CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError)) <<
+//                       std::endl;
 
 //         newTensor = *this;
 //         cudaMemcpy(newTensor.elem, C, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
@@ -238,7 +237,7 @@ Tensor Tensor::operator/(const Tensor &tensor) const
         }
         else
         {
-            MessageBox(nullptr, "Shapes don't much", "Error", MB_ICONERROR);
+            std::cerr << "Shapes don't much." << std::endl;
         }
     }
     return newTensor;
