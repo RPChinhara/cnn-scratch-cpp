@@ -23,6 +23,7 @@ class NN
     size_t numForwardBackProps;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
+    std::vector<Tensor> a;
     size_t batchSize = 10;
     size_t epochs = 200;
     float learningRate;

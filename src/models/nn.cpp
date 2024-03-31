@@ -31,7 +31,6 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     Tensor y_shuffled;
     Tensor x_batch;
     Tensor y_batch;
-    std::vector<Tensor> a;
     std::vector<Tensor> a_val;
     std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
@@ -144,7 +143,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
 void NN::Predict(const Tensor &x_test, const Tensor &y_test)
 {
-    std::vector<Tensor> a = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
+    a = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
 
     std::cout << '\n';
     std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, a.back()))
