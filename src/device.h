@@ -1,6 +1,6 @@
 #pragma once
 
-enum Device
+enum Dev
 {
     CPU,
     GPU

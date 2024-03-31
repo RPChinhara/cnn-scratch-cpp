@@ -10,7 +10,7 @@ float CategoricalCrossEntropy(const Tensor &yTrue, const Tensor &yPred)
     constexpr float epsilon = 1e-15f;
     size_t numSamples = yTrue.shape.front();
     Tensor yPredClipped = ClipByValue(yPred, epsilon, 1.0f - epsilon);
-    Tensor log = Log(yPredClipped, Device::CPU);
+    Tensor log = Log(yPredClipped, Dev::CPU);
 
     for (size_t i = 0; i < yTrue.size; ++i)
         sum += yTrue[i] * log[i];

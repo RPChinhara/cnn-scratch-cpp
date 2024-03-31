@@ -4,4 +4,4 @@
 
 class Tensor;
 
-Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Device device);
+Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Dev device);

@@ -32,20 +32,20 @@ Tensor Argmax(const Tensor &tensor)
     return newTensor;
 }
 
-Tensor Exp(const Tensor &tensor, Device device)
+Tensor Exp(const Tensor &tensor, Dev device)
 {
     Tensor newTensor = tensor;
 
     switch (device)
     {
-    case Device::CPU: {
+    case Dev::CPU: {
 
         for (size_t i = 0; i < tensor.size; ++i)
             newTensor.elem[i] = expf(tensor.elem[i]);
 
         return newTensor;
     }
-    case Device::GPU: {
+    case Dev::GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
@@ -71,19 +71,19 @@ Tensor Exp(const Tensor &tensor, Device device)
     }
 }
 
-Tensor Log(const Tensor &tensor, Device device)
+Tensor Log(const Tensor &tensor, Dev device)
 {
     Tensor newTensor = tensor;
 
     switch (device)
     {
-    case Device::CPU: {
+    case Dev::CPU: {
         for (size_t i = 0; i < tensor.size; ++i)
             newTensor.elem[i] = logf(tensor.elem[i]);
 
         return newTensor;
     }
-    case Device::GPU: {
+    case Dev::GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));

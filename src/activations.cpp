@@ -5,19 +5,19 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-Tensor Relu(const Tensor &tensor, Device device)
+Tensor Relu(const Tensor &tensor, Dev device)
 {
     Tensor newTensor = tensor;
 
     switch (device)
     {
-    case Device::CPU: {
+    case Dev::CPU: {
         for (size_t i = 0; i < tensor.size; ++i)
             newTensor.elem[i] = std::max(0.0f, tensor.elem[i]);
 
         return newTensor;
     }
-    case Device::GPU: {
+    case Dev::GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
@@ -45,6 +45,6 @@ Tensor Relu(const Tensor &tensor, Device device)
 
 Tensor Softmax(const Tensor &tensor)
 {
-    Tensor expScores = Exp(tensor - Max(tensor, 1), Device::CPU);
+    Tensor expScores = Exp(tensor - Max(tensor, 1), Dev::CPU);
     return expScores / Sum(expScores, 1);
 }

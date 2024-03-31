@@ -76,13 +76,13 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                     dl_dz.push_back(dcce_da_da_dz(y_batch, a.back()));
                 else
                     dl_dz.push_back(
-                        MatMul(dl_dz[(layers.size() - 2) - k], Transpose(weights_biases.first[k]), Device::CPU) *
+                        MatMul(dl_dz[(layers.size() - 2) - k], Transpose(weights_biases.first[k]), Dev::CPU) *
                         drelu_dz(a[k - 1]));
 
                 if (k == 1)
-                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Device::CPU));
+                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Dev::CPU));
                 else
-                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[numForwardBackProps - k], Device::CPU));
+                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[numForwardBackProps - k], Dev::CPU));
 
                 dl_db.push_back(Sum(dl_dz[numForwardBackProps - k], 0));
 
@@ -177,14 +177,14 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor &input, const std::vecto
     {
         if (i == 0)
         {
-            a.push_back(Relu(MatMul(input, weight[i], Device::CPU) + bias[i], Device::CPU));
+            a.push_back(Relu(MatMul(input, weight[i], Dev::CPU) + bias[i], Dev::CPU));
         }
         else
         {
             if (i == layers.size() - 2)
-                a.push_back(Softmax(MatMul(a[i - 1], weight[i], Device::CPU) + bias[i]));
+                a.push_back(Softmax(MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i]));
             else
-                a.push_back(Relu(MatMul(a[i - 1], weight[i], Device::CPU) + bias[i], Device::CPU));
+                a.push_back(Relu(MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i], Dev::CPU));
         }
     }
 
