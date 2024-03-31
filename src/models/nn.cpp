@@ -14,11 +14,11 @@
 #include <chrono>
 #include <random>
 
-NN::NN(const std::vector<size_t> &layers, const float learningRate)
+NN::NN(const std::vector<size_t> &layers, const float lr)
 {
     this->layers = layers;
     this->numForwardBackProps = layers.size() - 1;
-    this->learningRate = learningRate;
+    this->lr = lr;
 }
 
 void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val)
@@ -42,11 +42,11 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
         startTime = std::chrono::high_resolution_clock::now();
 
         if (i > 10 && i < 20)
-            learningRate = 0.009f;
+            lr = 0.009f;
         else if (i > 20 && i < 30)
-            learningRate = 0.005f;
+            lr = 0.005f;
         else
-            learningRate = 0.001f;
+            lr = 0.001f;
 
         rd_num = rd();
         x_shuffled = Shuffle(x_train, rd_num);
@@ -91,9 +91,9 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                     ClipByValue(dl_db[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
 
                 weights_biases_momentum.first[k - 1] =
-                    momentum * weights_biases_momentum.first[k - 1] - learningRate * dl_dw[numForwardBackProps - k];
+                    momentum * weights_biases_momentum.first[k - 1] - lr * dl_dw[numForwardBackProps - k];
                 weights_biases_momentum.second[k - 1] =
-                    momentum * weights_biases_momentum.second[k - 1] - learningRate * dl_db[numForwardBackProps - k];
+                    momentum * weights_biases_momentum.second[k - 1] - lr * dl_db[numForwardBackProps - k];
 
                 weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];

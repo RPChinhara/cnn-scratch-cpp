@@ -7,7 +7,7 @@ class Tensor;
 class NN
 {
   public:
-    NN(const std::vector<size_t> &layers, float const learningRate);
+    NN(const std::vector<size_t> &layers, float const lr);
 
     void Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal);
 
@@ -26,7 +26,7 @@ class NN
     std::vector<Tensor> a;
     size_t batchSize = 10;
     size_t epochs = 200;
-    float learningRate;
+    float lr;
     float gradientClipThreshold = 8.0f;
     float momentum = 0.1f;
     size_t patience = 4;
