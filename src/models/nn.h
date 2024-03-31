@@ -9,9 +9,9 @@ class NN
   public:
     NN(const std::vector<size_t> &layers, float const lr);
 
-    void Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal);
+    void Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val);
 
-    void Predict(const Tensor &xTest, const Tensor &yTest);
+    void Predict(const Tensor &x_test, const Tensor &y_test);
 
   private:
     std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
