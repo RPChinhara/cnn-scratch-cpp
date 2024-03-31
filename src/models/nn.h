@@ -17,8 +17,8 @@ class NN
 
     std::vector<size_t> layers;
     size_t numForwardBackProps;
-    std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
-    std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b;
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b_momentum;
     std::vector<Tensor> a;
     size_t batchSize = 10;
     size_t epochs = 200;

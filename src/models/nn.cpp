@@ -34,8 +34,8 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     std::vector<Tensor> a_val;
     std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-    weights_biases = init_parameters();
-    weights_biases_momentum = init_parameters();
+    w_b = init_parameters();
+    w_b_momentum = init_parameters();
 
     for (size_t i = 1; i <= epochs; ++i)
     {
@@ -67,16 +67,15 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 y_batch = Slice(y_shuffled, j, batchSize);
             }
 
-            a = forward_prop(x_batch, weights_biases.first, weights_biases.second);
+            a = forward_prop(x_batch, w_b.first, w_b.second);
 
             for (size_t k = numForwardBackProps; k > 0; --k)
             {
                 if (k == numForwardBackProps)
                     dl_dz.push_back(dcce_da_da_dz(y_batch, a.back()));
                 else
-                    dl_dz.push_back(
-                        MatMul(dl_dz[(layers.size() - 2) - k], Transpose(weights_biases.first[k]), Dev::CPU) *
-                        drelu_dz(a[k - 1]));
+                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
+                                    drelu_dz(a[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Dev::CPU));
@@ -90,19 +89,18 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 dl_db[numForwardBackProps - k] =
                     ClipByValue(dl_db[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
 
-                weights_biases_momentum.first[k - 1] =
-                    momentum * weights_biases_momentum.first[k - 1] - lr * dl_dw[numForwardBackProps - k];
-                weights_biases_momentum.second[k - 1] =
-                    momentum * weights_biases_momentum.second[k - 1] - lr * dl_db[numForwardBackProps - k];
+                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[numForwardBackProps - k];
+                w_b_momentum.second[k - 1] =
+                    momentum * w_b_momentum.second[k - 1] - lr * dl_db[numForwardBackProps - k];
 
-                weights_biases.first[k - 1] += weights_biases_momentum.first[k - 1];
-                weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
+                w_b.first[k - 1] += w_b_momentum.first[k - 1];
+                w_b.second[k - 1] += w_b_momentum.second[k - 1];
             }
 
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        a_val = forward_prop(x_val, weights_biases.first, weights_biases.second);
+        a_val = forward_prop(x_val, w_b.first, w_b.second);
 
         auto endTime = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
@@ -143,7 +141,7 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
 void NN::predict(const Tensor &x_test, const Tensor &y_test)
 {
-    a = forward_prop(x_test, weights_biases.first, weights_biases.second);
+    a = forward_prop(x_test, w_b.first, w_b.second);
 
     std::cout << '\n';
     std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, a.back()))
@@ -155,16 +153,16 @@ void NN::predict(const Tensor &x_test, const Tensor &y_test)
 
 std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_parameters()
 {
-    std::vector<Tensor> weight;
-    std::vector<Tensor> bias;
+    std::vector<Tensor> w;
+    std::vector<Tensor> b;
 
     for (size_t i = 0; i < layers.size() - 1; ++i)
     {
-        weight.push_back(NormalDistribution({layers[i], layers[i + 1]}, 0.0f, 0.2f));
-        bias.push_back(Zeros({1, layers[i + 1]}));
+        w.push_back(NormalDistribution({layers[i], layers[i + 1]}, 0.0f, 0.2f));
+        b.push_back(Zeros({1, layers[i + 1]}));
     }
 
-    return std::make_pair(weight, bias);
+    return std::make_pair(w, b);
 }
 
 std::vector<Tensor> NN::forward_prop(const Tensor &x, const std::vector<Tensor> &w, const std::vector<Tensor> &b)
