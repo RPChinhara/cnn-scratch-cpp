@@ -176,14 +176,21 @@ std::vector<Tensor> NN::ForwardPropagation(const Tensor &input, const std::vecto
     {
         if (i == 0)
         {
-            a.push_back(Relu(MatMul(input, weight[i], Dev::CPU) + bias[i], Dev::CPU));
+            Tensor z = MatMul(input, weight[i], Dev::CPU) + bias[i];
+            a.push_back(Relu(z, Dev::CPU));
         }
         else
         {
             if (i == layers.size() - 2)
-                a.push_back(Softmax(MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i]));
+            {
+                Tensor z = MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i];
+                a.push_back(Softmax(z));
+            }
             else
-                a.push_back(Relu(MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i], Dev::CPU));
+            {
+                Tensor z = MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i];
+                a.push_back(Relu(z, Dev::CPU));
+            }
         }
     }
 
