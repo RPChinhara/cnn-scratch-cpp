@@ -162,20 +162,20 @@ void NN::Predict(const Tensor &x_test, const Tensor &y_test)
 
 std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
 {
-    std::vector<Tensor> weights;
-    std::vector<Tensor> biases;
+    std::vector<Tensor> weight;
+    std::vector<Tensor> bias;
 
     for (size_t i = 0; i < layers.size() - 1; ++i)
     {
-        weights.push_back(NormalDistribution({layers[i], layers[i + 1]}, 0.0f, 0.2f));
-        biases.push_back(Zeros({1, layers[i + 1]}));
+        weight.push_back(NormalDistribution({layers[i], layers[i + 1]}, 0.0f, 0.2f));
+        bias.push_back(Zeros({1, layers[i + 1]}));
     }
 
-    return std::make_pair(weights, biases);
+    return std::make_pair(weight, bias);
 }
 
-std::pair<std::vector<Tensor>, Tensor> NN::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weights,
-                                                              const std::vector<Tensor> &biases)
+std::pair<std::vector<Tensor>, Tensor> NN::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weight,
+                                                              const std::vector<Tensor> &bias)
 {
     std::vector<Tensor> hiddens;
     Tensor yPred;
@@ -184,14 +184,14 @@ std::pair<std::vector<Tensor>, Tensor> NN::ForwardPropagation(const Tensor &inpu
     {
         if (i == 0)
         {
-            hiddens.push_back(Relu(MatMul(input, weights[i], Device::CPU) + biases[i], Device::CPU));
+            hiddens.push_back(Relu(MatMul(input, weight[i], Device::CPU) + bias[i], Device::CPU));
         }
         else
         {
             if (i == layers.size() - 2)
-                yPred = Softmax(MatMul(hiddens[i - 1], weights[i], Device::CPU) + biases[i]);
+                yPred = Softmax(MatMul(hiddens[i - 1], weight[i], Device::CPU) + bias[i]);
             else
-                hiddens.push_back(Relu(MatMul(hiddens[i - 1], weights[i], Device::CPU) + biases[i], Device::CPU));
+                hiddens.push_back(Relu(MatMul(hiddens[i - 1], weight[i], Device::CPU) + bias[i], Device::CPU));
         }
     }
 

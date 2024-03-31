@@ -16,8 +16,8 @@ class NN
   private:
     std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
 
-    std::pair<std::vector<Tensor>, Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weights,
-                                                              const std::vector<Tensor> &biases);
+    std::pair<std::vector<Tensor>, Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weight,
+                                                              const std::vector<Tensor> &bias);
 
     std::vector<size_t> layers;
     size_t numForwardBackProps;
