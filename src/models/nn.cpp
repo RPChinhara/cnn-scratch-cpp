@@ -21,7 +21,7 @@ NN::NN(const std::vector<size_t> &layers, const float lr)
     this->lr = lr;
 }
 
-void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val)
+void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
     size_t rd_num;
@@ -34,8 +34,8 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     std::vector<Tensor> a_val;
     std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-    weights_biases = InitParameters();
-    weights_biases_momentum = InitParameters();
+    weights_biases = init_parameters();
+    weights_biases_momentum = init_parameters();
 
     for (size_t i = 1; i <= epochs; ++i)
     {
@@ -67,7 +67,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 y_batch = Slice(y_shuffled, j, batchSize);
             }
 
-            a = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
+            a = forward_prop(x_batch, weights_biases.first, weights_biases.second);
 
             for (size_t k = numForwardBackProps; k > 0; --k)
             {
@@ -102,7 +102,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        a_val = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
+        a_val = forward_prop(x_val, weights_biases.first, weights_biases.second);
 
         auto endTime = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
@@ -141,9 +141,9 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     }
 }
 
-void NN::Predict(const Tensor &x_test, const Tensor &y_test)
+void NN::predict(const Tensor &x_test, const Tensor &y_test)
 {
-    a = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
+    a = forward_prop(x_test, weights_biases.first, weights_biases.second);
 
     std::cout << '\n';
     std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, a.back()))
@@ -153,7 +153,7 @@ void NN::Predict(const Tensor &x_test, const Tensor &y_test)
     std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
+std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_parameters()
 {
     std::vector<Tensor> weight;
     std::vector<Tensor> bias;
@@ -167,8 +167,8 @@ std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
     return std::make_pair(weight, bias);
 }
 
-std::vector<Tensor> NN::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weight,
-                                           const std::vector<Tensor> &bias)
+std::vector<Tensor> NN::forward_prop(const Tensor &input, const std::vector<Tensor> &weight,
+                                     const std::vector<Tensor> &bias)
 {
     std::vector<Tensor> a;
 

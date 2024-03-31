@@ -8,15 +8,12 @@ class NN
 {
   public:
     NN(const std::vector<size_t> &layers, float const lr);
-
-    void Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val);
-
-    void Predict(const Tensor &x_test, const Tensor &y_test);
+    void train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val);
+    void predict(const Tensor &x_test, const Tensor &y_test);
 
   private:
-    std::pair<std::vector<Tensor>, std::vector<Tensor>> InitParameters();
-
-    std::vector<Tensor> ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weight,
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> init_parameters();
+    std::vector<Tensor> forward_prop(const Tensor &input, const std::vector<Tensor> &weight,
                                            const std::vector<Tensor> &bias);
 
     std::vector<size_t> layers;
