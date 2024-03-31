@@ -77,11 +77,11 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             for (size_t k = numForwardBackProps; k > 0; --k)
             {
                 if (k == numForwardBackProps)
-                    dlossDhiddens.push_back(CategoricalCrossEntropyDerivative(y_batch, hiddensYpred.second));
+                    dlossDhiddens.push_back(dcce_da_da_dz(y_batch, hiddensYpred.second));
                 else
                     dlossDhiddens.push_back(MatMul(dlossDhiddens[(layers.size() - 2) - k],
                                                    Transpose(weights_biases.first[k]), Device::CPU) *
-                                            ReluDerivative(hiddensYpred.first[k - 1]));
+                                            drelu_dz(hiddensYpred.first[k - 1]));
 
                 if (k == 1)
                     dlossDweights.push_back(
@@ -92,10 +92,10 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
                 dlossDbiases.push_back(Sum(dlossDhiddens[numForwardBackProps - k], 0));
 
-                dlossDweights[numForwardBackProps - k] = ClipByValue(
-                    dlossDweights[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
-                dlossDbiases[numForwardBackProps - k] = ClipByValue(
-                    dlossDbiases[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
+                dlossDweights[numForwardBackProps - k] =
+                    ClipByValue(dlossDweights[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
+                dlossDbiases[numForwardBackProps - k] =
+                    ClipByValue(dlossDbiases[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
 
                 weights_biases_momentum.first[k - 1] = momentum * weights_biases_momentum.first[k - 1] -
                                                        learningRate * dlossDweights[numForwardBackProps - k];

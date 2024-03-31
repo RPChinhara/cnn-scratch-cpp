@@ -2,5 +2,5 @@
 
 class Tensor;
 
-Tensor CategoricalCrossEntropyDerivative(const Tensor &yTrue, const Tensor &yPred);
-Tensor ReluDerivative(const Tensor &tensor);
+Tensor dcce_da_da_dz(const Tensor &yTrue, const Tensor &yPred);
+Tensor drelu_dz(const Tensor &tensor);

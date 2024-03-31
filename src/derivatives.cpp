@@ -1,12 +1,12 @@
 #include "derivatives.h"
 #include "tensor.h"
 
-Tensor CategoricalCrossEntropyDerivative(const Tensor &yTrue, const Tensor &yPred)
+Tensor dcce_da_da_dz(const Tensor &yTrue, const Tensor &yPred)
 {
     return (yPred - yTrue);
 }
 
-Tensor ReluDerivative(const Tensor &tensor)
+Tensor drelu_dz(const Tensor &tensor)
 {
     Tensor newTensor = tensor;
 
