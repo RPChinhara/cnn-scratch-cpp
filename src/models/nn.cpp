@@ -31,8 +31,8 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     Tensor y_shuffled;
     Tensor x_batch;
     Tensor y_batch;
-    std::pair<std::vector<Tensor>, Tensor> hiddensYpred;
-    std::pair<std::vector<Tensor>, Tensor> hiddensYpredVal;
+    std::vector<Tensor> a;
+    std::vector<Tensor> a_val;
     std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
     weights_biases = InitParameters();
@@ -68,26 +68,21 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 y_batch = Slice(y_shuffled, j, batchSize);
             }
 
-            hiddensYpred = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
-
-            // hidden1 = Relu(MatMul(inputs, weight1) + bias1)
-            // yPred = Softmax(MatMul(hidden1, weight2) + bias2)
-            // loss = Loss(yTrain, yPred)
+            a = ForwardPropagation(x_batch, weights_biases.first, weights_biases.second);
 
             for (size_t k = numForwardBackProps; k > 0; --k)
             {
                 if (k == numForwardBackProps)
-                    dl_dz.push_back(dcce_da_da_dz(y_batch, hiddensYpred.second));
+                    dl_dz.push_back(dcce_da_da_dz(y_batch, a.back()));
                 else
                     dl_dz.push_back(
                         MatMul(dl_dz[(layers.size() - 2) - k], Transpose(weights_biases.first[k]), Device::CPU) *
-                        drelu_dz(hiddensYpred.first[k - 1]));
+                        drelu_dz(a[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Device::CPU));
                 else
-                    dl_dw.push_back(
-                        MatMul(Transpose(hiddensYpred.first[k - 2]), dl_dz[numForwardBackProps - k], Device::CPU));
+                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[numForwardBackProps - k], Device::CPU));
 
                 dl_db.push_back(Sum(dl_dz[numForwardBackProps - k], 0));
 
@@ -108,7 +103,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        hiddensYpredVal = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
+        a_val = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
 
         auto endTime = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
@@ -117,10 +112,10 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
         buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
                          std::to_string(seconds.count()) + "s " + std::to_string(remainingMilliseconds.count()) +
-                         "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, hiddensYpred.second)) +
-                         " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, hiddensYpred.second)));
-        buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, hiddensYpredVal.second)) +
-                         " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, hiddensYpredVal.second));
+                         "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, a.back())) +
+                         " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, a.back())));
+        buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, a_val.back())) +
+                         " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, a_val.back()));
 
         if (i % 10 == 0)
         {
@@ -149,15 +144,14 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
 void NN::Predict(const Tensor &x_test, const Tensor &y_test)
 {
-    std::pair<std::vector<Tensor>, Tensor> hiddensYpred =
-        ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
+    std::vector<Tensor> a = ForwardPropagation(x_test, weights_biases.first, weights_biases.second);
 
     std::cout << '\n';
-    std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, hiddensYpred.second))
-              << " - test accuracy: " << std::to_string(CategoricalAccuracy(y_test, hiddensYpred.second));
+    std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, a.back()))
+              << " - test accuracy: " << std::to_string(CategoricalAccuracy(y_test, a.back()));
     std::cout << "\n\n";
 
-    std::cout << hiddensYpred.second << "\n\n" << y_test << '\n';
+    std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
 std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
@@ -174,26 +168,25 @@ std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::InitParameters()
     return std::make_pair(weight, bias);
 }
 
-std::pair<std::vector<Tensor>, Tensor> NN::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weight,
-                                                              const std::vector<Tensor> &bias)
+std::vector<Tensor> NN::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &weight,
+                                           const std::vector<Tensor> &bias)
 {
-    std::vector<Tensor> hiddens;
-    Tensor yPred;
+    std::vector<Tensor> a;
 
     for (size_t i = 0; i < layers.size() - 1; ++i)
     {
         if (i == 0)
         {
-            hiddens.push_back(Relu(MatMul(input, weight[i], Device::CPU) + bias[i], Device::CPU));
+            a.push_back(Relu(MatMul(input, weight[i], Device::CPU) + bias[i], Device::CPU));
         }
         else
         {
             if (i == layers.size() - 2)
-                yPred = Softmax(MatMul(hiddens[i - 1], weight[i], Device::CPU) + bias[i]);
+                a.push_back(Softmax(MatMul(a[i - 1], weight[i], Device::CPU) + bias[i]));
             else
-                hiddens.push_back(Relu(MatMul(hiddens[i - 1], weight[i], Device::CPU) + bias[i], Device::CPU));
+                a.push_back(Relu(MatMul(a[i - 1], weight[i], Device::CPU) + bias[i], Device::CPU));
         }
     }
 
-    return std::make_pair(hiddens, yPred);
+    return a;
 }
