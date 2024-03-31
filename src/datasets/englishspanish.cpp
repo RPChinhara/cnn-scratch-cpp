@@ -8,7 +8,7 @@
 
 EnglishSpanish LoadEnglishSpanish()
 {
-    std::ifstream file("datasets\\english-spanish.txt");
+    std::ifstream file("datasets\\spa.txt");
     if (!file)
         std::cerr << "Failed to open the file." << std::endl;
 
