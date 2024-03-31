@@ -33,7 +33,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     Tensor y_batch;
     std::pair<std::vector<Tensor>, Tensor> hiddensYpred;
     std::pair<std::vector<Tensor>, Tensor> hiddensYpredVal;
-    std::vector<Tensor> dl_dz, dlossDweights, dlossDbiases;
+    std::vector<Tensor> dl_dz, dl_dw, dlossDbiases;
 
     weights_biases = InitParameters();
     weights_biases_momentum = InitParameters();
@@ -84,20 +84,20 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                         drelu_dz(hiddensYpred.first[k - 1]));
 
                 if (k == 1)
-                    dlossDweights.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Device::CPU));
+                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Device::CPU));
                 else
-                    dlossDweights.push_back(
+                    dl_dw.push_back(
                         MatMul(Transpose(hiddensYpred.first[k - 2]), dl_dz[numForwardBackProps - k], Device::CPU));
 
                 dlossDbiases.push_back(Sum(dl_dz[numForwardBackProps - k], 0));
 
-                dlossDweights[numForwardBackProps - k] =
-                    ClipByValue(dlossDweights[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
+                dl_dw[numForwardBackProps - k] =
+                    ClipByValue(dl_dw[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
                 dlossDbiases[numForwardBackProps - k] =
                     ClipByValue(dlossDbiases[numForwardBackProps - k], -gradientClipThreshold, gradientClipThreshold);
 
                 weights_biases_momentum.first[k - 1] = momentum * weights_biases_momentum.first[k - 1] -
-                                                       learningRate * dlossDweights[numForwardBackProps - k];
+                                                       learningRate * dl_dw[numForwardBackProps - k];
                 weights_biases_momentum.second[k - 1] = momentum * weights_biases_momentum.second[k - 1] -
                                                         learningRate * dlossDbiases[numForwardBackProps - k];
 
@@ -105,7 +105,7 @@ void NN::Train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 weights_biases.second[k - 1] += weights_biases_momentum.second[k - 1];
             }
 
-            dl_dz.clear(), dlossDweights.clear(), dlossDbiases.clear();
+            dl_dz.clear(), dl_dw.clear(), dlossDbiases.clear();
         }
 
         hiddensYpredVal = ForwardPropagation(x_val, weights_biases.first, weights_biases.second);
