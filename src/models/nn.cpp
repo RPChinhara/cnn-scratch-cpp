@@ -167,8 +167,7 @@ std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_parameters()
     return std::make_pair(weight, bias);
 }
 
-std::vector<Tensor> NN::forward_prop(const Tensor &input, const std::vector<Tensor> &weight,
-                                     const std::vector<Tensor> &bias)
+std::vector<Tensor> NN::forward_prop(const Tensor &x, const std::vector<Tensor> &w, const std::vector<Tensor> &b)
 {
     std::vector<Tensor> a;
 
@@ -176,19 +175,19 @@ std::vector<Tensor> NN::forward_prop(const Tensor &input, const std::vector<Tens
     {
         if (i == 0)
         {
-            Tensor z = MatMul(input, weight[i], Dev::CPU) + bias[i];
+            Tensor z = MatMul(x, w[i], Dev::CPU) + b[i];
             a.push_back(Relu(z, Dev::CPU));
         }
         else
         {
             if (i == layers.size() - 2)
             {
-                Tensor z = MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i];
+                Tensor z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
                 a.push_back(Softmax(z));
             }
             else
             {
-                Tensor z = MatMul(a[i - 1], weight[i], Dev::CPU) + bias[i];
+                Tensor z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
                 a.push_back(Relu(z, Dev::CPU));
             }
         }
