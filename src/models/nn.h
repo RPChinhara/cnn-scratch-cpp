@@ -20,6 +20,7 @@ class NN
                                                               const std::vector<Tensor> &biases);
 
     std::vector<size_t> layers;
+    size_t numForwardBackProps;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> weights_biases_momentum;
     size_t batchSize = 10;
