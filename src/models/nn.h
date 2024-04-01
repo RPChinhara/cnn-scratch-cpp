@@ -16,7 +16,6 @@ class NN
     std::vector<Tensor> forward_prop(const Tensor &x, const std::vector<Tensor> &w, const std::vector<Tensor> &b);
 
     std::vector<size_t> layers;
-    size_t numForwardBackProps;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b_momentum;
     std::vector<Tensor> a;

@@ -17,7 +17,6 @@
 NN::NN(const std::vector<size_t> &layers, const float lr)
 {
     this->layers = layers;
-    this->numForwardBackProps = layers.size() - 1;
     this->lr = lr;
 }
 
@@ -69,29 +68,29 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
             a = forward_prop(x_batch, w_b.first, w_b.second);
 
-            for (size_t k = numForwardBackProps; k > 0; --k)
+            for (size_t k = layers.size() - 1; k > 0; --k)
             {
-                if (k == numForwardBackProps)
+                if (k == layers.size() - 1)
                     dl_dz.push_back(dcce_dsoftmax_dsoftmax_dz(y_batch, a.back()));
                 else
                     dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
                                     drelu_dz(a[k - 1]));
 
                 if (k == 1)
-                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[numForwardBackProps - k], Dev::CPU));
+                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(layers.size() - 1) - k], Dev::CPU));
                 else
-                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[numForwardBackProps - k], Dev::CPU));
+                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[(layers.size() - 1) - k], Dev::CPU));
 
-                dl_db.push_back(Sum(dl_dz[numForwardBackProps - k], 0));
+                dl_db.push_back(Sum(dl_dz[(layers.size() - 1) - k], 0));
 
-                dl_dw[numForwardBackProps - k] =
-                    ClipByValue(dl_dw[numForwardBackProps - k], -gradient_clip_threshold, gradient_clip_threshold);
-                dl_db[numForwardBackProps - k] =
-                    ClipByValue(dl_db[numForwardBackProps - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_dw[(layers.size() - 1) - k] =
+                    ClipByValue(dl_dw[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_db[(layers.size() - 1) - k] =
+                    ClipByValue(dl_db[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
 
-                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[numForwardBackProps - k];
+                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[(layers.size() - 1) - k];
                 w_b_momentum.second[k - 1] =
-                    momentum * w_b_momentum.second[k - 1] - lr * dl_db[numForwardBackProps - k];
+                    momentum * w_b_momentum.second[k - 1] - lr * dl_db[(layers.size() - 1) - k];
 
                 w_b.first[k - 1] += w_b_momentum.first[k - 1];
                 w_b.second[k - 1] += w_b_momentum.second[k - 1];
