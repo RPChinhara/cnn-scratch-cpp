@@ -22,7 +22,7 @@ set SRC=..\src\acts.cpp ^
         ..\src\models\transformer.cpp ^
         ..\src\preproc.cpp ^
         ..\src\rand.cpp ^
-        ..\src\tensor.cpp
+        ..\src\ten.cpp
 
 if not exist bin mkdir bin
 

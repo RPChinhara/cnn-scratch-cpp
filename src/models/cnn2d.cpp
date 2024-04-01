@@ -1,6 +1,6 @@
 #include "cnn2d.h"
 #include "arrs.h"
-#include "tensor.h"
+#include "ten.h"
 
 CNN2D::CNN2D(const std::vector<size_t> &filters, float const learning_rate)
 {

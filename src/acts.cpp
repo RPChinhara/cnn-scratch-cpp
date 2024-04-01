@@ -2,7 +2,7 @@
 #include "arrs.h"
 #include "kernels.h"
 #include "mathematics.h"
-#include "tensor.h"
+#include "ten.h"
 
 Tensor Relu(const Tensor &tensor, Dev dev)
 {

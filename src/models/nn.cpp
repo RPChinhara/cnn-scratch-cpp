@@ -8,7 +8,7 @@
 #include "mathematics.h"
 #include "metrics.h"
 #include "rand.h"
-#include "tensor.h"
+#include "ten.h"
 
 #include <cassert>
 #include <chrono>

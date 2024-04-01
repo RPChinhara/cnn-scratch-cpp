@@ -1,6 +1,6 @@
 #include "qlearning.h"
 #include "arrs.h"
-#include "tensor.h"
+#include "ten.h"
 
 #include <random>
 

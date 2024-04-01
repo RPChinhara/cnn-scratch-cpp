@@ -1,7 +1,7 @@
 #include "mathematics.h"
 #include "arrs.h"
 #include "kernels.h"
-#include "tensor.h"
+#include "ten.h"
 
 #include <cassert>
 

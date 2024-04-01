@@ -1,5 +1,5 @@
 #include "diffs.h"
-#include "tensor.h"
+#include "ten.h"
 
 Tensor dl_da_da_dz(const Tensor &y_target, const Tensor &y_pred, Act act)
 {

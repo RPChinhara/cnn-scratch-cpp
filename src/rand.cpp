@@ -1,5 +1,5 @@
 #include "rand.h"
-#include "tensor.h"
+#include "ten.h"
 
 #include <cassert>
 #include <numeric>

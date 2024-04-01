@@ -1,6 +1,6 @@
 #include "metrics.h"
 #include "mathematics.h"
-#include "tensor.h"
+#include "ten.h"
 
 float CategoricalAccuracy(const Tensor &y_target, const Tensor &y_pred)
 {
