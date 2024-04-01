@@ -2,6 +2,6 @@
 
 class Tensor;
 
-Tensor dcce_da_da_dz(const Tensor &y_true, const Tensor &y_pred);
-Tensor dmse_da_da_dz(const Tensor &y_true, const Tensor &y_pred);
+Tensor dcce_da_da_dz(const Tensor &y_target, const Tensor &y_pred);
+Tensor dmse_da_da_dz(const Tensor &y_target, const Tensor &y_pred);
 Tensor drelu_dz(const Tensor &tensor);
