@@ -1,5 +1,5 @@
 #include "preprocessing.h"
-#include "arrays.h"
+#include "arrs.h"
 #include "mathematics.h"
 #include "rand.h"
 

@@ -1,5 +1,5 @@
 #include "mnist.h"
-#include "arrays.h"
+#include "arrs.h"
 
 #include <fstream>
 #include <string>

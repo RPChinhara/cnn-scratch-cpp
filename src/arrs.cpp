@@ -1,4 +1,4 @@
-#include "arrays.h"
+#include "arrs.h"
 #include "tensor.h"
 
 #include <cassert>

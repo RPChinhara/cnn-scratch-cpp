@@ -1,5 +1,5 @@
 #include "mathematics.h"
-#include "arrays.h"
+#include "arrs.h"
 #include "kernels.h"
 #include "tensor.h"
 

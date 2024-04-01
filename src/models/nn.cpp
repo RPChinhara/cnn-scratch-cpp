@@ -1,6 +1,6 @@
 #include "nn.h"
 #include "acts.h"
-#include "arrays.h"
+#include "arrs.h"
 #include "derivatives.h"
 #include "dev.h"
 #include "linalg.h"
