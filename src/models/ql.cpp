@@ -1,4 +1,4 @@
-#include "qlearning.h"
+#include "ql.h"
 #include "arrs.h"
 #include "ten.h"
 
