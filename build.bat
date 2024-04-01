@@ -19,7 +19,7 @@ set SRC=..\src\acts.cpp ^
         ..\src\models\cnn2d.cpp ^
         ..\src\models\nn.cpp ^
         ..\src\models\ql.cpp ^
-        ..\src\models\transformer.cpp ^
+        ..\src\models\trans.cpp ^
         ..\src\preproc.cpp ^
         ..\src\rand.cpp ^
         ..\src\ten.cpp

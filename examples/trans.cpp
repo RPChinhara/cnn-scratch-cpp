@@ -1,4 +1,4 @@
-#include "models\transformer.h"
+#include "models\trans.h"
 #include "datasets\imdb.h"
 #include "preproc.h"
 

@@ -1,4 +1,4 @@
-#include "transformer.h"
+#include "trans.h"
 
 Transformer::Transformer()
 {
