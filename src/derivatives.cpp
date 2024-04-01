@@ -6,7 +6,7 @@ Tensor dcce_dsoftmax_dsoftmax_dz(const Tensor &y_target, const Tensor &y_pred)
     return (y_pred - y_target);
 }
 
-Tensor dmse_da_da_dz(const Tensor &y_target, const Tensor &y_pred)
+Tensor dmse_dsigmoid_dsigmoid_dz(const Tensor &y_target, const Tensor &y_pred)
 {
     return (y_pred - y_target) * y_pred * (1 - y_pred);
 }
