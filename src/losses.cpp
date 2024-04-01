@@ -1,6 +1,6 @@
 #include "losses.h"
 #include "arrays.h"
-#include "device.h"
+#include "dev.h"
 #include "mathematics.h"
 #include "tensor.h"
 

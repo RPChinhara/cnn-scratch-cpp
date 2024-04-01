@@ -2,7 +2,7 @@
 #include "acts.h"
 #include "arrays.h"
 #include "derivatives.h"
-#include "device.h"
+#include "dev.h"
 #include "linalg.h"
 #include "losses.h"
 #include "mathematics.h"

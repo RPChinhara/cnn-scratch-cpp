@@ -1,6 +1,6 @@
 #pragma once
 
-#include "device.h"
+#include "dev.h"
 
 enum Act
 {
