@@ -4,11 +4,11 @@
 #include "mathematics.h"
 #include "tensor.h"
 
-Tensor Relu(const Tensor &tensor, Dev device)
+Tensor Relu(const Tensor &tensor, Dev dev)
 {
     Tensor newTensor = tensor;
 
-    switch (device)
+    switch (dev)
     {
     case Dev::CPU: {
         for (size_t i = 0; i < tensor.size; ++i)
@@ -37,7 +37,7 @@ Tensor Relu(const Tensor &tensor, Dev device)
         return newTensor;
     }
     default:
-        std::cout << "Unknown device." << std::endl;
+        std::cout << "Unknown dev." << std::endl;
         return Tensor();
     }
 }

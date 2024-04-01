@@ -11,5 +11,5 @@ enum Act
 
 class Tensor;
 
-Tensor Relu(const Tensor &tensor, Dev device);
+Tensor Relu(const Tensor &tensor, Dev dev);
 Tensor Softmax(const Tensor &tensor);
