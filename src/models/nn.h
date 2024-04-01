@@ -20,7 +20,7 @@ class NN
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b_momentum;
     std::vector<Tensor> a;
-    size_t batchSize = 10;
+    size_t batch_size = 10;
     size_t epochs = 200;
     float lr;
     float gradientClipThreshold = 8.0f;
