@@ -1,4 +1,4 @@
-#include "englishspanish.h"
+#include "engspa.h"
 
 #include <fstream>
 #include <iostream>
@@ -6,7 +6,7 @@
 #include <sstream>
 #include <stdio.h>
 
-EnglishSpanish LoadEnglishSpanish()
+EngSpa LoadEngSpa()
 {
     std::ifstream file("datasets\\spa.txt");
     if (!file)
@@ -38,9 +38,9 @@ EnglishSpanish LoadEnglishSpanish()
 
     file.close();
 
-    EnglishSpanish englishSpanish;
-    englishSpanish.targetRaw = targetRaw;
-    englishSpanish.contextRaw = contextRaw;
+    EngSpa eng_spa;
+    eng_spa.targetRaw = targetRaw;
+    eng_spa.contextRaw = contextRaw;
 
-    return englishSpanish;
+    return eng_spa;
 }

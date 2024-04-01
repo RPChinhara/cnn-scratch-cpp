@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-struct EnglishSpanish
+struct EngSpa
 {
     std::vector<std::string> targetRaw;
     std::vector<std::string> contextRaw;
 };
 
-EnglishSpanish LoadEnglishSpanish();
+EngSpa LoadEngSpa();
