@@ -7,7 +7,7 @@
 #include "losses.h"
 #include "mathematics.h"
 #include "metrics.h"
-#include "random.h"
+#include "rand.h"
 #include "tensor.h"
 
 #include <cassert>

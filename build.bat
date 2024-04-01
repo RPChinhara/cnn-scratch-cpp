@@ -21,7 +21,7 @@ set SRC=..\src\acts.cpp ^
         ..\src\models\qlearning.cpp ^
         ..\src\models\transformer.cpp ^
         ..\src\preprocessing.cpp ^
-        ..\src\random.cpp ^
+        ..\src\rand.cpp ^
         ..\src\tensor.cpp
 
 if not exist bin mkdir bin

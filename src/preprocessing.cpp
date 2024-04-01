@@ -1,7 +1,7 @@
 #include "preprocessing.h"
 #include "arrays.h"
 #include "mathematics.h"
-#include "random.h"
+#include "rand.h"
 
 #include <regex>
 #include <sstream>
