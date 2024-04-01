@@ -6,6 +6,11 @@ Tensor dcce_da_da_dz(const Tensor &yTrue, const Tensor &yPred)
     return (yPred - yTrue);
 }
 
+Tensor dmse_da_da_dz(const Tensor &y_true, const Tensor &y_pred)
+{
+    return (y_pred - y_true) * y_pred * (1 - y_pred);
+}
+
 Tensor drelu_dz(const Tensor &tensor)
 {
     Tensor newTensor = tensor;
