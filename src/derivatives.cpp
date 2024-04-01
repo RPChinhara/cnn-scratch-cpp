@@ -1,29 +1,46 @@
 #include "derivatives.h"
 #include "tensor.h"
 
-Tensor dcce_dsoftmax_dsoftmax_dz(const Tensor &y_target, const Tensor &y_pred)
+Tensor dl_da_da_dz(const Tensor &y_target, const Tensor &y_pred, Act act)
 {
-    return (y_pred - y_target);
+    switch (act)
+    {
+    case SIGMOID: {
+        return (y_pred - y_target) * y_pred * (1 - y_pred);
+        break;
+    }
+    case SOFTMAX: {
+        return (y_pred - y_target);
+        break;
+    }
+    default:
+        std::cout << "Unknown activation." << std::endl;
+        return Tensor();
+    }
 }
 
-Tensor dmse_dsigmoid_dsigmoid_dz(const Tensor &y_target, const Tensor &y_pred)
-{
-    return (y_pred - y_target) * y_pred * (1 - y_pred);
-}
-
-Tensor drelu_dz(const Tensor &tensor)
+Tensor da_dz(const Tensor &tensor, Act act)
 {
     Tensor newTensor = tensor;
 
-    for (size_t i = 0; i < tensor.size; ++i)
+    switch (act)
     {
-        if (tensor[i] > 0.0f)
-            newTensor[i] = 1.0f;
-        else if (tensor[i] == 0.0f)
-            newTensor[i] = 0.0f;
-        else
-            newTensor[i] = 0.0f;
-    }
+    case RELU: {
+        for (size_t i = 0; i < tensor.size; ++i)
+        {
+            if (tensor[i] > 0.0f)
+                newTensor[i] = 1.0f;
+            else if (tensor[i] == 0.0f)
+                newTensor[i] = 0.0f;
+            else
+                newTensor[i] = 0.0f;
+        }
 
-    return newTensor;
+        return newTensor;
+        break;
+    }
+    default:
+        std::cout << "Unknown activation." << std::endl;
+        return Tensor();
+    }
 }

@@ -71,10 +71,10 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             for (size_t k = layers.size() - 1; k > 0; --k)
             {
                 if (k == layers.size() - 1)
-                    dl_dz.push_back(dcce_dsoftmax_dsoftmax_dz(y_batch, a.back()));
+                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), SOFTMAX));
                 else
                     dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
-                                    drelu_dz(a[k - 1]));
+                                    da_dz(a[k - 1], RELU));
 
                 if (k == 1)
                     dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(layers.size() - 1) - k], Dev::CPU));
