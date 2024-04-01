@@ -20,7 +20,7 @@ set SRC=..\src\acts.cpp ^
         ..\src\models\nn.cpp ^
         ..\src\models\qlearning.cpp ^
         ..\src\models\transformer.cpp ^
-        ..\src\preprocessing.cpp ^
+        ..\src\preproc.cpp ^
         ..\src\rand.cpp ^
         ..\src\tensor.cpp
 

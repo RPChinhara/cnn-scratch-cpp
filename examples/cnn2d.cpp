@@ -1,6 +1,6 @@
 #include "models\cnn2d.h"
 #include "datasets\mnist.h"
-#include "preprocessing.h"
+#include "preproc.h"
 
 int main()
 {
