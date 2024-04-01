@@ -1,6 +1,6 @@
 #pragma once
 
-#include "activations.h"
+#include "acts.h"
 
 class Tensor;
 

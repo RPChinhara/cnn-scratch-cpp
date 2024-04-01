@@ -1,4 +1,4 @@
-#include "activations.h"
+#include "acts.h"
 #include "arrays.h"
 #include "device.h"
 #include "kernels.h"

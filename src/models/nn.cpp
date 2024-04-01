@@ -1,5 +1,5 @@
 #include "nn.h"
-#include "activations.h"
+#include "acts.h"
 #include "arrays.h"
 #include "derivatives.h"
 #include "device.h"
