@@ -1,4 +1,4 @@
-#include "derivatives.h"
+#include "diffs.h"
 #include "tensor.h"
 
 Tensor dl_da_da_dz(const Tensor &y_target, const Tensor &y_pred, Act act)
