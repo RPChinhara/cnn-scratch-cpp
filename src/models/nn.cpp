@@ -72,7 +72,7 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
             for (size_t k = numForwardBackProps; k > 0; --k)
             {
                 if (k == numForwardBackProps)
-                    dl_dz.push_back(dcce_da_da_dz(y_batch, a.back()));
+                    dl_dz.push_back(dcce_dsoftmax_dsoftmax_dz(y_batch, a.back()));
                 else
                     dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
                                     drelu_dz(a[k - 1]));
