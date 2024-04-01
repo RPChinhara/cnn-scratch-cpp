@@ -14,7 +14,7 @@ set SRC=..\src\acts.cpp ^
         ..\src\linalg.cpp ^
         ..\src\losses.cpp ^
         ..\src\main.cpp ^
-        ..\src\mathematics.cpp ^
+        ..\src\math.cpp ^
         ..\src\metrics.cpp ^
         ..\src\models\cnn2d.cpp ^
         ..\src\models\nn.cpp ^

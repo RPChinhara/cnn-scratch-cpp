@@ -1,7 +1,7 @@
 #include "losses.h"
 #include "arrs.h"
 #include "dev.h"
-#include "mathematics.h"
+#include "math.hpp"
 #include "ten.h"
 
 float CategoricalCrossEntropy(const Tensor &y_target, const Tensor &y_pred)

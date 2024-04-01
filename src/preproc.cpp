@@ -1,6 +1,6 @@
 #include "preproc.h"
 #include "arrs.h"
-#include "mathematics.h"
+#include "math.hpp"
 #include "rand.h"
 
 #include <regex>

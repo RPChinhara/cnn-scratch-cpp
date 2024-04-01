@@ -1,7 +1,7 @@
 #include "acts.h"
 #include "arrs.h"
 #include "kernels.h"
-#include "mathematics.h"
+#include "math.hpp"
 #include "ten.h"
 
 Tensor Relu(const Tensor &tensor, Dev dev)
