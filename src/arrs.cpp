@@ -4,10 +4,10 @@
 #include <cassert>
 #include <numeric>
 
-Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax)
+Ten ClipByValue(const Ten &tensor, float clipValMin, float clipValMax)
 {
     assert(clipValMin <= clipValMax);
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
 
     for (size_t i = 0; i < tensor.size; ++i)
     {
@@ -20,9 +20,9 @@ Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax)
     return newTensor;
 }
 
-Tensor Slice(const Tensor &tensor, const size_t begin, const size_t size)
+Ten Slice(const Ten &tensor, const size_t begin, const size_t size)
 {
-    Tensor newTensor = Zeros({size, tensor.shape.back()});
+    Ten newTensor = Zeros({size, tensor.shape.back()});
 
     for (size_t i = begin * tensor.shape.back(); i < (begin * tensor.shape.back()) + (size * tensor.shape.back()); ++i)
         newTensor[i - (begin * tensor.shape.back())] = tensor[i];
@@ -41,11 +41,11 @@ static size_t GetBatchSize(const std::vector<size_t> &shape)
     return batchSize;
 }
 
-Tensor Transpose(const Tensor &tensor)
+Ten Transpose(const Ten &tensor)
 {
     assert(tensor.shape.size() >= 2);
 
-    Tensor newTensor = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
+    Ten newTensor = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
 
@@ -72,9 +72,9 @@ Tensor Transpose(const Tensor &tensor)
     return newTensor;
 }
 
-Tensor Zeros(const std::vector<size_t> &shape)
+Ten Zeros(const std::vector<size_t> &shape)
 {
-    Tensor newTensor = Tensor();
+    Ten newTensor = Ten();
 
     for (const size_t &i : shape)
         assert(i != 0);

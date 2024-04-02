@@ -7,8 +7,8 @@
 int main()
 {
     Iris iris = LoadIris();
-    Tensor features = iris.features;
-    Tensor targets = iris.targets;
+    Ten features = iris.features;
+    Ten targets = iris.targets;
 
     targets = OneHot(targets, 3);
 

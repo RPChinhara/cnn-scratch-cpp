@@ -4,10 +4,10 @@
 
 struct MNIST
 {
-    Tensor trainImages;
-    Tensor trainLabels;
-    Tensor testImages;
-    Tensor testLabels;
+    Ten trainImages;
+    Ten trainLabels;
+    Ten testImages;
+    Ten testLabels;
 };
 
 MNIST LoadMNIST();

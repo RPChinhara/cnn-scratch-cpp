@@ -1,7 +1,7 @@
 #include "diffs.h"
 #include "ten.h"
 
-Tensor dl_da_da_dz(const Tensor &y_target, const Tensor &y_pred, Act act)
+Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act)
 {
     switch (act)
     {
@@ -15,13 +15,13 @@ Tensor dl_da_da_dz(const Tensor &y_target, const Tensor &y_pred, Act act)
     }
     default:
         std::cout << "Unknown activation." << std::endl;
-        return Tensor();
+        return Ten();
     }
 }
 
-Tensor da_dz(const Tensor &tensor, Act act)
+Ten da_dz(const Ten &tensor, Act act)
 {
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
 
     switch (act)
     {
@@ -41,6 +41,6 @@ Tensor da_dz(const Tensor &tensor, Act act)
     }
     default:
         std::cout << "Unknown activation." << std::endl;
-        return Tensor();
+        return Ten();
     }
 }

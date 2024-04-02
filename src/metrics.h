@@ -1,5 +1,5 @@
 #pragma once
 
-class Tensor;
+class Ten;
 
-float CategoricalAccuracy(const Tensor &y_target, const Tensor &y_pred);
+float CategoricalAccuracy(const Ten &y_target, const Ten &y_pred);

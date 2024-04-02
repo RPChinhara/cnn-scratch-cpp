@@ -30,7 +30,7 @@ Action QLearning::ChooseAction(size_t state)
     }
     else
     {
-        Tensor sliced_q_table = Slice(q_table, state, 1);
+        Ten sliced_q_table = Slice(q_table, state, 1);
         size_t max_idx = 0;
         float max = std::numeric_limits<float>::lowest();
 
@@ -51,7 +51,7 @@ void QLearning::UpdateQtable(size_t state, Action action, float reward, size_t n
 {
     std::cout << Slice(q_table, state, 1) << "\n\n";
 
-    Tensor sliced_q_table = Slice(q_table, next_state, 1);
+    Ten sliced_q_table = Slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
 
     for (size_t i = 0; i < sliced_q_table.size; ++i)

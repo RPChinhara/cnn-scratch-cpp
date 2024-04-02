@@ -4,9 +4,9 @@
 #include "math.hpp"
 #include "ten.h"
 
-Tensor Relu(const Tensor &tensor, Dev dev)
+Ten Relu(const Ten &tensor, Dev dev)
 {
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
 
     switch (dev)
     {
@@ -38,12 +38,12 @@ Tensor Relu(const Tensor &tensor, Dev dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return Tensor();
+        return Ten();
     }
 }
 
-Tensor Softmax(const Tensor &tensor)
+Ten Softmax(const Ten &tensor)
 {
-    Tensor expScores = Exp(tensor - Max(tensor, 1), Dev::CPU);
+    Ten expScores = Exp(tensor - Max(tensor, 1), Dev::CPU);
     return expScores / Sum(expScores, 1);
 }

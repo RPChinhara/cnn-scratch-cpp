@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-Tensor ReadMNISTImages(const std::string &filePath)
+Ten ReadMNISTImages(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -31,7 +31,7 @@ Tensor ReadMNISTImages(const std::string &filePath)
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
-    Tensor images2 = Zeros({numImages, numRows, numCols});
+    Ten images2 = Zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
     for (uint32_t i = 0; i < numImages; ++i)
@@ -51,7 +51,7 @@ Tensor ReadMNISTImages(const std::string &filePath)
     return images2;
 }
 
-Tensor ReadMNISTLabels(const std::string &filePath)
+Ten ReadMNISTLabels(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -70,7 +70,7 @@ Tensor ReadMNISTLabels(const std::string &filePath)
 
     file.read(reinterpret_cast<char *>(labels.data()), numLabels);
 
-    Tensor labels2 = Zeros({numLabels, 1});
+    Ten labels2 = Zeros({numLabels, 1});
     size_t idx = 0;
 
     for (uint32_t i = 0; i < numLabels; ++i)

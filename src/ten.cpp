@@ -4,7 +4,7 @@
 #include <numeric>
 #include <string>
 
-Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
+Ten::Ten(const std::vector<float> elem, const std::vector<size_t> shape)
 {
     assert(elem.size() != 0);
 
@@ -30,13 +30,13 @@ Tensor::Tensor(const std::vector<float> elem, const std::vector<size_t> shape)
     }
 }
 
-Tensor::~Tensor()
+Ten::~Ten()
 {
     if (elem != nullptr)
         delete[] elem;
 }
 
-Tensor::Tensor(const Tensor &other)
+Ten::Ten(const Ten &other)
 {
     elem = new float[other.size];
     std::copy(other.elem, other.elem + other.size, elem);
@@ -44,7 +44,7 @@ Tensor::Tensor(const Tensor &other)
     shape = other.shape;
 }
 
-Tensor::Tensor(Tensor &&other)
+Ten::Ten(Ten &&other)
 {
     elem = other.elem;
     size = other.size;
@@ -54,7 +54,7 @@ Tensor::Tensor(Tensor &&other)
     other.size = 0;
 }
 
-Tensor &Tensor::operator=(const Tensor &other)
+Ten &Ten::operator=(const Ten &other)
 {
     if (this != &other)
     {
@@ -67,7 +67,7 @@ Tensor &Tensor::operator=(const Tensor &other)
     return *this;
 }
 
-Tensor &Tensor::operator=(Tensor &&other)
+Ten &Ten::operator=(Ten &&other)
 {
     if (this != &other)
     {
@@ -91,9 +91,9 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-Tensor Tensor::operator+(const Tensor &tensor) const
+Ten Ten::operator+(const Ten &tensor) const
 {
-    Tensor newTensor = *this;
+    Ten newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
@@ -108,9 +108,9 @@ Tensor Tensor::operator+(const Tensor &tensor) const
     return newTensor;
 }
 
-// Tensor Tensor::operator+(const Tensor& tensor) const
+// Ten Ten::operator+(const Ten& tensor) const
 // {
-//     Tensor newTensor;
+//     Ten newTensor;
 //     if (ShapeEqual(shape, tensor.shape)) {
 //         newTensor = *this;
 //         std::cout << "1" << std::endl;
@@ -148,9 +148,9 @@ Tensor Tensor::operator+(const Tensor &tensor) const
 //     return newTensor;
 // }
 
-Tensor Tensor::operator-(const Tensor &tensor) const
+Ten Ten::operator-(const Ten &tensor) const
 {
-    Tensor newTensor = *this;
+    Ten newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
@@ -182,9 +182,9 @@ Tensor Tensor::operator-(const Tensor &tensor) const
     return newTensor;
 }
 
-Tensor Tensor::operator*(const Tensor &tensor) const
+Ten Ten::operator*(const Ten &tensor) const
 {
-    Tensor newTensor = *this;
+    Ten newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
@@ -205,9 +205,9 @@ Tensor Tensor::operator*(const Tensor &tensor) const
     return newTensor;
 }
 
-Tensor Tensor::operator/(const Tensor &tensor) const
+Ten Ten::operator/(const Ten &tensor) const
 {
-    Tensor newTensor = *this;
+    Ten newTensor = *this;
     if (ShapeEqual(shape, tensor.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
@@ -243,14 +243,14 @@ Tensor Tensor::operator/(const Tensor &tensor) const
     return newTensor;
 }
 
-Tensor Tensor::operator+=(const Tensor &other) const
+Ten Ten::operator+=(const Ten &other) const
 {
     for (size_t i = 0; i < size; ++i)
         elem[i] = elem[i] + other[i];
     return *this;
 }
 
-Tensor Tensor::operator-=(const Tensor &other) const
+Ten Ten::operator-=(const Ten &other) const
 {
     assert(ShapeEqual(shape, other.shape));
     for (size_t i = 0; i < size; ++i)
@@ -258,28 +258,28 @@ Tensor Tensor::operator-=(const Tensor &other) const
     return *this;
 }
 
-float &Tensor::operator[](const size_t idx) const
+float &Ten::operator[](const size_t idx) const
 {
     return elem[idx];
 }
 
-Tensor operator-(const float sca, const Tensor &tensor)
+Ten operator-(const float sca, const Ten &tensor)
 {
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
     for (size_t i = 0; i < tensor.size; ++i)
         newTensor[i] = sca - tensor[i];
     return newTensor;
 }
 
-Tensor operator*(const float sca, const Tensor &tensor)
+Ten operator*(const float sca, const Ten &tensor)
 {
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
     for (size_t i = 0; i < tensor.size; ++i)
         newTensor[i] = sca * tensor[i];
     return newTensor;
 }
 
-void operator/(const Tensor &tensor, const float sca)
+void operator/(const Ten &tensor, const float sca)
 {
     for (size_t i = 0; i < tensor.size; ++i)
         tensor[i] = tensor[i] / sca;
@@ -305,7 +305,7 @@ static std::vector<size_t> GetNumElemEachBatch(const std::vector<size_t> &shape)
     return num_elem_each_batch;
 }
 
-std::ostream &operator<<(std::ostream &os, const Tensor &tensor)
+std::ostream &operator<<(std::ostream &os, const Ten &tensor)
 {
     size_t idx = 0;
     if (tensor.shape.size() == 0)

@@ -2,10 +2,10 @@
 #include "math.hpp"
 #include "ten.h"
 
-float CategoricalAccuracy(const Tensor &y_target, const Tensor &y_pred)
+float CategoricalAccuracy(const Ten &y_target, const Ten &y_pred)
 {
-    Tensor target_idx = Argmax(y_target);
-    Tensor pred_idx = Argmax(y_pred);
+    Ten target_idx = Argmax(y_target);
+    Ten pred_idx = Argmax(y_pred);
     float equal = 0.0f;
 
     for (size_t i = 0; i < target_idx.size; ++i)

@@ -4,8 +4,8 @@
 
 struct Tripadvisor
 {
-    Tensor features;
-    Tensor targets;
+    Ten features;
+    Ten targets;
 };
 
 Tripadvisor LoadTripadvisor();

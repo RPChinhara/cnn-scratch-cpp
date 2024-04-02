@@ -4,8 +4,8 @@
 
 struct Iris
 {
-    Tensor features;
-    Tensor targets;
+    Ten features;
+    Ten targets;
 };
 
 Iris LoadIris();

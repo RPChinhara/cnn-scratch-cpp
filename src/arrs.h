@@ -2,10 +2,10 @@
 
 #include <vector>
 
-class Tensor;
+class Ten;
 
-Tensor ClipByValue(const Tensor &tensor, float clipValMin, float clipValMax);
-Tensor Slice(const Tensor &tensor, const size_t begin, const size_t size);
-Tensor Transpose(const Tensor &tensor);
-Tensor Zeros(const std::vector<size_t> &shape);
-Tensor ZerosLike(const std::vector<size_t> &shape);
+Ten ClipByValue(const Ten &tensor, float clipValMin, float clipValMax);
+Ten Slice(const Ten &tensor, const size_t begin, const size_t size);
+Ten Transpose(const Ten &tensor);
+Ten Zeros(const std::vector<size_t> &shape);
+Ten ZerosLike(const std::vector<size_t> &shape);

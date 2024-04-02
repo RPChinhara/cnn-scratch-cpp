@@ -2,11 +2,11 @@
 
 #include "dev.h"
 
-class Tensor;
+class Ten;
 
-Tensor Argmax(const Tensor &tensor);
-Tensor Exp(const Tensor &tensor, Dev device);
-Tensor Log(const Tensor &tensor, Dev device);
-Tensor Max(const Tensor &tensor, const size_t axis);
-Tensor Min(const Tensor &tensor);
-Tensor Sum(const Tensor &tensor, const size_t axis);
+Ten Argmax(const Ten &tensor);
+Ten Exp(const Ten &tensor, Dev device);
+Ten Log(const Ten &tensor, Dev device);
+Ten Max(const Ten &tensor, const size_t axis);
+Ten Min(const Ten &tensor);
+Ten Sum(const Ten &tensor, const size_t axis);

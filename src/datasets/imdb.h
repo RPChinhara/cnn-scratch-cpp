@@ -4,8 +4,8 @@
 
 struct IMDB
 {
-    Tensor features;
-    Tensor targets;
+    Ten features;
+    Ten targets;
 };
 
 IMDB LoadIMDB();

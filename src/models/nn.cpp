@@ -20,18 +20,18 @@ NN::NN(const std::vector<size_t> &lyrs, const float lr)
     this->lr = lr;
 }
 
-void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val)
+void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
     size_t rd_num;
     std::random_device rd;
     std::vector<std::string> buffer;
-    Tensor x_shuffled;
-    Tensor y_shuffled;
-    Tensor x_batch;
-    Tensor y_batch;
-    std::vector<Tensor> a_val;
-    std::vector<Tensor> dl_dz, dl_dw, dl_db;
+    Ten x_shuffled;
+    Ten y_shuffled;
+    Ten x_batch;
+    Ten y_batch;
+    std::vector<Ten> a_val;
+    std::vector<Ten> dl_dz, dl_dw, dl_db;
 
     w_b = init_params();
     w_b_mom = init_params();
@@ -137,7 +137,7 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     }
 }
 
-void NN::predict(const Tensor &x_test, const Tensor &y_test)
+void NN::predict(const Ten &x_test, const Ten &y_test)
 {
     a = forward_prop(x_test, w_b.first, w_b.second);
 
@@ -149,10 +149,10 @@ void NN::predict(const Tensor &x_test, const Tensor &y_test)
     std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_params()
+std::pair<std::vector<Ten>, std::vector<Ten>> NN::init_params()
 {
-    std::vector<Tensor> w;
-    std::vector<Tensor> b;
+    std::vector<Ten> w;
+    std::vector<Ten> b;
 
     for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
@@ -163,27 +163,27 @@ std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<Tensor> NN::forward_prop(const Tensor &x, const std::vector<Tensor> &w, const std::vector<Tensor> &b)
+std::vector<Ten> NN::forward_prop(const Ten &x, const std::vector<Ten> &w, const std::vector<Ten> &b)
 {
-    std::vector<Tensor> a;
+    std::vector<Ten> a;
 
     for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
         if (i == 0)
         {
-            Tensor z = MatMul(x, w[i], Dev::CPU) + b[i];
+            Ten z = MatMul(x, w[i], Dev::CPU) + b[i];
             a.push_back(Relu(z, Dev::CPU));
         }
         else
         {
             if (i == lyrs.size() - 2)
             {
-                Tensor z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
+                Ten z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
                 a.push_back(Softmax(z));
             }
             else
             {
-                Tensor z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
+                Ten z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
                 a.push_back(Relu(z, Dev::CPU));
             }
         }

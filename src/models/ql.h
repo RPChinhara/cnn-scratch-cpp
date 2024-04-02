@@ -24,7 +24,7 @@ class QLearning
     float exploration_rate;
 
   private:
-    Tensor q_table;
+    Ten q_table;
     size_t n_states;
     size_t n_actions;
     float learning_rate;

@@ -2,7 +2,7 @@
 
 #include "acts.h"
 
-class Tensor;
+class Ten;
 
-Tensor dl_da_da_dz(const Tensor &y_target, const Tensor &y_pred, Act act);
-Tensor da_dz(const Tensor &tensor, Act act);
+Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act);
+Ten da_dz(const Ten &tensor, Act act);

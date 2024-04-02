@@ -2,6 +2,6 @@
 
 #include "dev.h"
 
-class Tensor;
+class Ten;
 
-Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Dev device);
+Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev device);

@@ -8,10 +8,10 @@ CNN2D::CNN2D(const std::vector<size_t> &filters, float const learning_rate)
     this->learning_rate = learning_rate;
 }
 
-void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal, const Tensor &yVal)
+void CNN2D::Train(const Ten &xTrain, const Ten &yTrain, const Ten &xVal, const Ten &yVal)
 {
-    // Tensor kernel = Zeros({3, 3});
-    Tensor kernel = Tensor({1, -1, 1, 0, 1, 0, -1, 0, 1}, {3, 3});
+    // Ten kernel = Zeros({3, 3});
+    Ten kernel = Ten({1, -1, 1, 0, 1, 0, -1, 0, 1}, {3, 3});
 
     size_t kernelHeight = kernel.shape.front();
     size_t kernelWidth = kernel.shape.back();
@@ -22,7 +22,7 @@ void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal
     size_t outputHeight = inputHeight - kernelHeight + 1;
     size_t outputWidth = inputWidth - kernelWidth + 1;
 
-    Tensor output = Zeros({outputHeight, outputWidth});
+    Ten output = Zeros({outputHeight, outputWidth});
 
     // size_t idx = 0;
 
@@ -37,14 +37,13 @@ void CNN2D::Train(const Tensor &xTrain, const Tensor &yTrain, const Tensor &xVal
     // std::cout << output << std::endl;
 }
 
-void CNN2D::Predict(const Tensor &xTest, const Tensor &yTest)
+void CNN2D::Predict(const Ten &xTest, const Ten &yTest)
 {
 }
 
-std::vector<Tensor> CNN2D::ForwardPropagation(const Tensor &input, const std::vector<Tensor> &kernel,
-                                              const size_t stride)
+std::vector<Ten> CNN2D::ForwardPropagation(const Ten &input, const std::vector<Ten> &kernel, const size_t stride)
 {
-    std::vector<Tensor> weights;
+    std::vector<Ten> weights;
 
     return weights;
 }

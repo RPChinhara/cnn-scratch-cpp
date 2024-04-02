@@ -5,9 +5,9 @@
 
 #include <cassert>
 
-Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Dev device)
+Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev device)
 {
-    Tensor newTensor = Zeros({tensor1.shape.front(), tensor2.shape.back()});
+    Ten newTensor = Zeros({tensor1.shape.front(), tensor2.shape.back()});
 
     switch (device)
     {
@@ -60,6 +60,6 @@ Tensor MatMul(const Tensor &tensor1, const Tensor &tensor2, Dev device)
     }
     default:
         std::cout << "Unknown device." << std::endl;
-        return Tensor();
+        return Ten();
     }
 }

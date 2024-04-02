@@ -9,7 +9,7 @@ enum Act
     SOFTMAX
 };
 
-class Tensor;
+class Ten;
 
-Tensor Relu(const Tensor &tensor, Dev dev);
-Tensor Softmax(const Tensor &tensor);
+Ten Relu(const Ten &tensor, Dev dev);
+Ten Softmax(const Ten &tensor);

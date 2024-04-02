@@ -45,16 +45,16 @@ std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens)
     return originalForms;
 }
 
-Tensor MinMaxScaler(Tensor &dataset)
+Ten MinMaxScaler(Ten &dataset)
 {
     auto min_vals = Min(dataset);
     auto max_vals = Max(dataset, 0);
     return (dataset - min_vals) / (max_vals - min_vals);
 }
 
-Tensor OneHot(const Tensor &tensor, const size_t depth)
+Ten OneHot(const Ten &tensor, const size_t depth)
 {
-    Tensor newTensor = Zeros({tensor.size, depth});
+    Ten newTensor = Zeros({tensor.size, depth});
 
     std::vector<float> indices;
 
@@ -206,10 +206,10 @@ std::string ToLower(const std::string &text)
     return result;
 }
 
-TrainTest TrainTestSplit(const Tensor &x, const Tensor &y, const float testSize, const size_t randomState)
+TrainTest TrainTestSplit(const Ten &x, const Ten &y, const float testSize, const size_t randomState)
 {
-    Tensor x_new = Shuffle(x, randomState);
-    Tensor y_new = Shuffle(y, randomState);
+    Ten x_new = Shuffle(x, randomState);
+    Ten y_new = Shuffle(y, randomState);
 
     TrainTest train_test;
     train_test.trainFeatures =

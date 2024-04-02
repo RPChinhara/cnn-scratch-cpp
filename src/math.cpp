@@ -5,9 +5,9 @@
 
 #include <cassert>
 
-Tensor Argmax(const Tensor &tensor)
+Ten Argmax(const Ten &tensor)
 {
-    Tensor newTensor = Zeros({tensor.shape.front()});
+    Ten newTensor = Zeros({tensor.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
@@ -32,9 +32,9 @@ Tensor Argmax(const Tensor &tensor)
     return newTensor;
 }
 
-Tensor Exp(const Tensor &tensor, Dev device)
+Ten Exp(const Ten &tensor, Dev device)
 {
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
 
     switch (device)
     {
@@ -67,13 +67,13 @@ Tensor Exp(const Tensor &tensor, Dev device)
     }
     default:
         std::cout << "Unknown device." << std::endl;
-        return Tensor();
+        return Ten();
     }
 }
 
-Tensor Log(const Tensor &tensor, Dev device)
+Ten Log(const Ten &tensor, Dev device)
 {
-    Tensor newTensor = tensor;
+    Ten newTensor = tensor;
 
     switch (device)
     {
@@ -105,14 +105,14 @@ Tensor Log(const Tensor &tensor, Dev device)
     }
     default:
         std::cout << "Unknown device." << std::endl;
-        return Tensor();
+        return Ten();
     }
 }
 
-Tensor Max(const Tensor &tensor, const size_t axis)
+Ten Max(const Ten &tensor, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    Tensor newTensor;
+    Ten newTensor;
 
     if (axis == 0)
     {
@@ -156,9 +156,9 @@ Tensor Max(const Tensor &tensor, const size_t axis)
     return newTensor;
 }
 
-Tensor Min(const Tensor &tensor)
+Ten Min(const Ten &tensor)
 {
-    Tensor newTensor = Zeros({1, tensor.shape.back()});
+    Ten newTensor = Zeros({1, tensor.shape.back()});
 
     for (size_t i = 0; i < tensor.shape.back(); ++i)
     {
@@ -178,10 +178,10 @@ Tensor Min(const Tensor &tensor)
     return newTensor;
 }
 
-Tensor Sum(const Tensor &tensor, const size_t axis)
+Ten Sum(const Ten &tensor, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    Tensor newTensor;
+    Ten newTensor;
 
     if (tensor.shape.size() == 1 || tensor.shape.front() == 1)
     {
