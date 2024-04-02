@@ -9,7 +9,7 @@ class NN
   public:
     NN(const std::vector<size_t> &lyrs, float const lr);
     void train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val);
-    void predict(const Ten &x_test, const Ten &y_test);
+    void pred(const Ten &x_test, const Ten &y_test);
 
   private:
     std::pair<std::vector<Ten>, std::vector<Ten>> init_params();

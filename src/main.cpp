@@ -50,7 +50,7 @@ int main()
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    nn.predict(val_test.testFeatures, val_test.testTargets);
+    nn.pred(val_test.testFeatures, val_test.testTargets);
 
     return 0;
 }

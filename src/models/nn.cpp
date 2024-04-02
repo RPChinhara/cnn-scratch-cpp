@@ -137,7 +137,7 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
     }
 }
 
-void NN::predict(const Ten &x_test, const Ten &y_test)
+void NN::pred(const Ten &x_test, const Ten &y_test)
 {
     a = forward_prop(x_test, w_b.first, w_b.second);
 
