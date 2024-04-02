@@ -89,8 +89,7 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                     ClipByValue(dl_db[(lyrs.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
 
                 w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
-                w_b_momentum.second[k - 1] =
-                    momentum * w_b_momentum.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
+                w_b_momentum.second[k - 1] = momentum * w_b_momentum.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
 
                 w_b.first[k - 1] += w_b_momentum.first[k - 1];
                 w_b.second[k - 1] += w_b_momentum.second[k - 1];
