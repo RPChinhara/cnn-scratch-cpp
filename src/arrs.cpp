@@ -4,28 +4,28 @@
 #include <cassert>
 #include <numeric>
 
-Ten ClipByValue(const Ten &tensor, float clipValMin, float clipValMax)
+Ten ClipByValue(const Ten &ten, float clipValMin, float clipValMax)
 {
     assert(clipValMin <= clipValMax);
-    Ten newTensor = tensor;
+    Ten newTensor = ten;
 
-    for (size_t i = 0; i < tensor.size; ++i)
+    for (size_t i = 0; i < ten.size; ++i)
     {
-        if (tensor[i] < clipValMin)
+        if (ten[i] < clipValMin)
             newTensor[i] = clipValMin;
-        else if (tensor[i] > clipValMax)
+        else if (ten[i] > clipValMax)
             newTensor[i] = clipValMax;
     }
 
     return newTensor;
 }
 
-Ten Slice(const Ten &tensor, const size_t begin, const size_t size)
+Ten Slice(const Ten &ten, const size_t begin, const size_t size)
 {
-    Ten newTensor = Zeros({size, tensor.shape.back()});
+    Ten newTensor = Zeros({size, ten.shape.back()});
 
-    for (size_t i = begin * tensor.shape.back(); i < (begin * tensor.shape.back()) + (size * tensor.shape.back()); ++i)
-        newTensor[i - (begin * tensor.shape.back())] = tensor[i];
+    for (size_t i = begin * ten.shape.back(); i < (begin * ten.shape.back()) + (size * ten.shape.back()); ++i)
+        newTensor[i - (begin * ten.shape.back())] = ten[i];
 
     return newTensor;
 }
@@ -41,18 +41,18 @@ static size_t GetBatchSize(const std::vector<size_t> &shape)
     return batchSize;
 }
 
-Ten Transpose(const Ten &tensor)
+Ten Transpose(const Ten &ten)
 {
-    assert(tensor.shape.size() >= 2);
+    assert(ten.shape.size() >= 2);
 
-    Ten newTensor = Zeros({tensor.shape.back(), tensor.shape[tensor.shape.size() - 2]});
+    Ten newTensor = Zeros({ten.shape.back(), ten.shape[ten.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
 
-    for (size_t i = 0; i < tensor.size; ++i)
-        idx_rows.push_back(i * tensor.shape.back());
+    for (size_t i = 0; i < ten.size; ++i)
+        idx_rows.push_back(i * ten.shape.back());
 
-    size_t batchSize = GetBatchSize(tensor.shape);
+    size_t batchSize = GetBatchSize(ten.shape);
 
     size_t idx = 0;
 
@@ -62,7 +62,7 @@ Ten Transpose(const Ten &tensor)
         {
             for (size_t k = 0; k < newTensor.shape.back(); ++k)
             {
-                newTensor[idx] = tensor[idx_rows[k + (i * newTensor.shape.back())]];
+                newTensor[idx] = ten[idx_rows[k + (i * newTensor.shape.back())]];
                 idx_rows[k + (i * newTensor.shape.back())] += 1;
                 ++idx;
             }

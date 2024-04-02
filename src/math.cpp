@@ -5,21 +5,21 @@
 
 #include <cassert>
 
-Ten Argmax(const Ten &tensor)
+Ten Argmax(const Ten &ten)
 {
-    Ten newTensor = Zeros({tensor.shape.front()});
+    Ten newTensor = Zeros({ten.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
     size_t max_idx = 0;
 
-    for (size_t i = 0; i < tensor.shape.front(); ++i)
+    for (size_t i = 0; i < ten.shape.front(); ++i)
     {
-        for (size_t j = 0; j < tensor.shape.back(); ++j)
+        for (size_t j = 0; j < ten.shape.back(); ++j)
         {
-            if (tensor[idx] > max)
+            if (ten[idx] > max)
             {
-                max = tensor[idx];
+                max = ten[idx];
                 max_idx = j;
             }
             ++idx;
@@ -32,34 +32,34 @@ Ten Argmax(const Ten &tensor)
     return newTensor;
 }
 
-Ten Exp(const Ten &tensor, Dev device)
+Ten Exp(const Ten &ten, Dev device)
 {
-    Ten newTensor = tensor;
+    Ten newTensor = ten;
 
     switch (device)
     {
     case Dev::CPU: {
 
-        for (size_t i = 0; i < tensor.size; ++i)
-            newTensor.elem[i] = expf(tensor.elem[i]);
+        for (size_t i = 0; i < ten.size; ++i)
+            newTensor.elem[i] = expf(ten.elem[i]);
 
         return newTensor;
     }
     case Dev::GPU: {
         float *tensorGPU, *newTensorGPU;
-        cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
-        cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
-        cudaMemcpy(tensorGPU, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMalloc((void **)&tensorGPU, ten.size * sizeof(float));
+        cudaMalloc((void **)&newTensorGPU, ten.size * sizeof(float));
+        cudaMemcpy(tensorGPU, ten.elem, ten.size * sizeof(float), cudaMemcpyHostToDevice);
 
         constexpr int blockSize = 128;
-        int gridSize = (tensor.size + blockSize - 1) / blockSize;
-        Exp<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, tensor.size);
+        int gridSize = (ten.size + blockSize - 1) / blockSize;
+        Exp<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, ten.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(newTensor.elem, newTensorGPU, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
         cudaFree(newTensorGPU);
 
@@ -71,33 +71,33 @@ Ten Exp(const Ten &tensor, Dev device)
     }
 }
 
-Ten Log(const Ten &tensor, Dev device)
+Ten Log(const Ten &ten, Dev device)
 {
-    Ten newTensor = tensor;
+    Ten newTensor = ten;
 
     switch (device)
     {
     case Dev::CPU: {
-        for (size_t i = 0; i < tensor.size; ++i)
-            newTensor.elem[i] = logf(tensor.elem[i]);
+        for (size_t i = 0; i < ten.size; ++i)
+            newTensor.elem[i] = logf(ten.elem[i]);
 
         return newTensor;
     }
     case Dev::GPU: {
         float *tensorGPU, *newTensorGPU;
-        cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
-        cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
-        cudaMemcpy(tensorGPU, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMalloc((void **)&tensorGPU, ten.size * sizeof(float));
+        cudaMalloc((void **)&newTensorGPU, ten.size * sizeof(float));
+        cudaMemcpy(tensorGPU, ten.elem, ten.size * sizeof(float), cudaMemcpyHostToDevice);
 
         constexpr int blockSize = 128;
-        int gridSize = (tensor.size + blockSize - 1) / blockSize;
-        Log<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, tensor.size);
+        int gridSize = (ten.size + blockSize - 1) / blockSize;
+        Log<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, ten.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(newTensor.elem, newTensorGPU, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
         cudaFree(newTensorGPU);
 
@@ -109,25 +109,25 @@ Ten Log(const Ten &tensor, Dev device)
     }
 }
 
-Ten Max(const Ten &tensor, const size_t axis)
+Ten Max(const Ten &ten, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
     Ten newTensor;
 
     if (axis == 0)
     {
-        newTensor = Zeros({1, tensor.shape.back()});
+        newTensor = Zeros({1, ten.shape.back()});
 
-        for (size_t i = 0; i < tensor.shape.back(); ++i)
+        for (size_t i = 0; i < ten.shape.back(); ++i)
         {
             size_t idx = i;
             float max = std::numeric_limits<float>::lowest();
 
-            for (size_t j = 0; j < tensor.shape.front(); ++j)
+            for (size_t j = 0; j < ten.shape.front(); ++j)
             {
-                if (tensor[idx] > max)
-                    max = tensor[idx];
-                idx += tensor.shape.back();
+                if (ten[idx] > max)
+                    max = ten[idx];
+                idx += ten.shape.back();
             }
 
             newTensor[i] = max;
@@ -135,17 +135,17 @@ Ten Max(const Ten &tensor, const size_t axis)
     }
     else if (axis == 1)
     {
-        newTensor = Zeros({tensor.shape.front(), 1});
+        newTensor = Zeros({ten.shape.front(), 1});
         size_t idx = 0;
 
-        for (size_t i = 0; i < tensor.shape.front(); ++i)
+        for (size_t i = 0; i < ten.shape.front(); ++i)
         {
             float max = std::numeric_limits<float>::lowest();
 
-            for (size_t j = 0; j < tensor.shape.back(); ++j)
+            for (size_t j = 0; j < ten.shape.back(); ++j)
             {
-                if (tensor[idx] > max)
-                    max = tensor[idx];
+                if (ten[idx] > max)
+                    max = ten[idx];
                 ++idx;
             }
 
@@ -156,20 +156,20 @@ Ten Max(const Ten &tensor, const size_t axis)
     return newTensor;
 }
 
-Ten Min(const Ten &tensor)
+Ten Min(const Ten &ten)
 {
-    Ten newTensor = Zeros({1, tensor.shape.back()});
+    Ten newTensor = Zeros({1, ten.shape.back()});
 
-    for (size_t i = 0; i < tensor.shape.back(); ++i)
+    for (size_t i = 0; i < ten.shape.back(); ++i)
     {
         size_t idx = i;
         float min = std::numeric_limits<float>::max();
 
-        for (size_t j = 0; j < tensor.shape.front(); ++j)
+        for (size_t j = 0; j < ten.shape.front(); ++j)
         {
-            if (tensor[idx] < min)
-                min = tensor[idx];
-            idx += tensor.shape.back();
+            if (ten[idx] < min)
+                min = ten[idx];
+            idx += ten.shape.back();
         }
 
         newTensor[i] = min;
@@ -178,25 +178,25 @@ Ten Min(const Ten &tensor)
     return newTensor;
 }
 
-Ten Sum(const Ten &tensor, const size_t axis)
+Ten Sum(const Ten &ten, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
     Ten newTensor;
 
-    if (tensor.shape.size() == 1 || tensor.shape.front() == 1)
+    if (ten.shape.size() == 1 || ten.shape.front() == 1)
     {
         if (axis == 0)
         {
-            newTensor = tensor;
+            newTensor = ten;
         }
         else if (axis == 1)
         {
             newTensor = Zeros({1, 1});
             float sum = 0.0f;
 
-            for (size_t i = 0; i < tensor.size; ++i)
+            for (size_t i = 0; i < ten.size; ++i)
             {
-                sum += tensor[i];
+                sum += ten[i];
             }
             newTensor[0] = sum;
         }
@@ -205,29 +205,29 @@ Ten Sum(const Ten &tensor, const size_t axis)
     {
         if (axis == 0)
         {
-            newTensor = Zeros({1, tensor.shape.back()});
+            newTensor = Zeros({1, ten.shape.back()});
 
-            for (size_t i = 0; i < tensor.shape.back(); ++i)
+            for (size_t i = 0; i < ten.shape.back(); ++i)
             {
                 size_t idx = i;
 
-                for (size_t j = 0; j < tensor.shape.front(); ++j)
+                for (size_t j = 0; j < ten.shape.front(); ++j)
                 {
-                    newTensor[i] += tensor[idx];
-                    idx += tensor.shape.back();
+                    newTensor[i] += ten[idx];
+                    idx += ten.shape.back();
                 }
             }
         }
         else if (axis == 1)
         {
-            newTensor = Zeros({tensor.shape.front(), 1});
+            newTensor = Zeros({ten.shape.front(), 1});
             size_t idx = 0;
 
-            for (size_t i = 0; i < tensor.shape.front(); ++i)
+            for (size_t i = 0; i < ten.shape.front(); ++i)
             {
-                for (size_t j = 0; j < tensor.shape.back(); ++j)
+                for (size_t j = 0; j < ten.shape.back(); ++j)
                 {
-                    newTensor[i] += tensor[idx];
+                    newTensor[i] += ten[idx];
                     ++idx;
                 }
             }

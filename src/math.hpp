@@ -4,9 +4,9 @@
 
 class Ten;
 
-Ten Argmax(const Ten &tensor);
-Ten Exp(const Ten &tensor, Dev device);
-Ten Log(const Ten &tensor, Dev device);
-Ten Max(const Ten &tensor, const size_t axis);
-Ten Min(const Ten &tensor);
-Ten Sum(const Ten &tensor, const size_t axis);
+Ten Argmax(const Ten &ten);
+Ten Exp(const Ten &ten, Dev device);
+Ten Log(const Ten &ten, Dev device);
+Ten Max(const Ten &ten, const size_t axis);
+Ten Min(const Ten &ten);
+Ten Sum(const Ten &ten, const size_t axis);

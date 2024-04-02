@@ -4,8 +4,8 @@
 
 class Ten;
 
-Ten ClipByValue(const Ten &tensor, float clipValMin, float clipValMax);
-Ten Slice(const Ten &tensor, const size_t begin, const size_t size);
-Ten Transpose(const Ten &tensor);
+Ten ClipByValue(const Ten &ten, float clipValMin, float clipValMax);
+Ten Slice(const Ten &ten, const size_t begin, const size_t size);
+Ten Transpose(const Ten &ten);
 Ten Zeros(const std::vector<size_t> &shape);
 Ten ZerosLike(const std::vector<size_t> &shape);

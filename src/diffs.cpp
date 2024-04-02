@@ -19,18 +19,18 @@ Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act)
     }
 }
 
-Ten da_dz(const Ten &tensor, Act act)
+Ten da_dz(const Ten &ten, Act act)
 {
-    Ten newTensor = tensor;
+    Ten newTensor = ten;
 
     switch (act)
     {
     case RELU: {
-        for (size_t i = 0; i < tensor.size; ++i)
+        for (size_t i = 0; i < ten.size; ++i)
         {
-            if (tensor[i] > 0.0f)
+            if (ten[i] > 0.0f)
                 newTensor[i] = 1.0f;
-            else if (tensor[i] == 0.0f)
+            else if (ten[i] == 0.0f)
                 newTensor[i] = 0.0f;
             else
                 newTensor[i] = 0.0f;

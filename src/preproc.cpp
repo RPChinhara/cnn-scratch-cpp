@@ -52,18 +52,18 @@ Ten MinMaxScaler(Ten &dataset)
     return (dataset - min_vals) / (max_vals - min_vals);
 }
 
-Ten OneHot(const Ten &tensor, const size_t depth)
+Ten OneHot(const Ten &ten, const size_t depth)
 {
-    Ten newTensor = Zeros({tensor.size, depth});
+    Ten newTensor = Zeros({ten.size, depth});
 
     std::vector<float> indices;
 
-    for (size_t i = 0; i < tensor.size; ++i)
+    for (size_t i = 0; i < ten.size; ++i)
     {
         if (i == 0)
-            indices.push_back(tensor[i]);
+            indices.push_back(ten[i]);
         else
-            indices.push_back(tensor[i] + (i * depth));
+            indices.push_back(ten[i] + (i * depth));
     }
 
     for (size_t i = 0; i < newTensor.size; ++i)

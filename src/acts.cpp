@@ -4,33 +4,33 @@
 #include "math.hpp"
 #include "ten.h"
 
-Ten Relu(const Ten &tensor, Dev dev)
+Ten Relu(const Ten &ten, Dev dev)
 {
-    Ten newTensor = tensor;
+    Ten newTensor = ten;
 
     switch (dev)
     {
     case Dev::CPU: {
-        for (size_t i = 0; i < tensor.size; ++i)
-            newTensor.elem[i] = std::max(0.0f, tensor.elem[i]);
+        for (size_t i = 0; i < ten.size; ++i)
+            newTensor.elem[i] = std::max(0.0f, ten.elem[i]);
 
         return newTensor;
     }
     case Dev::GPU: {
         float *tensorGPU, *newTensorGPU;
-        cudaMalloc((void **)&tensorGPU, tensor.size * sizeof(float));
-        cudaMalloc((void **)&newTensorGPU, tensor.size * sizeof(float));
-        cudaMemcpy(tensorGPU, tensor.elem, tensor.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMalloc((void **)&tensorGPU, ten.size * sizeof(float));
+        cudaMalloc((void **)&newTensorGPU, ten.size * sizeof(float));
+        cudaMemcpy(tensorGPU, ten.elem, ten.size * sizeof(float), cudaMemcpyHostToDevice);
 
         constexpr int blockSize = 128;
-        int gridSize = (tensor.size + blockSize - 1) / blockSize;
-        Relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, tensor.size);
+        int gridSize = (ten.size + blockSize - 1) / blockSize;
+        Relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, ten.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(newTensor.elem, newTensorGPU, tensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
         cudaFree(newTensorGPU);
 
@@ -42,8 +42,8 @@ Ten Relu(const Ten &tensor, Dev dev)
     }
 }
 
-Ten Softmax(const Ten &tensor)
+Ten Softmax(const Ten &ten)
 {
-    Ten expScores = Exp(tensor - Max(tensor, 1), Dev::CPU);
+    Ten expScores = Exp(ten - Max(ten, 1), Dev::CPU);
     return expScores / Sum(expScores, 1);
 }
