@@ -34,7 +34,7 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
     w_b = init_parameters();
-    w_b_momentum = init_parameters();
+    w_b_mom = init_parameters();
 
     for (size_t i = 1; i <= epochs; ++i)
     {
@@ -88,11 +88,11 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
                 dl_db[(lyrs.size() - 1) - k] =
                     ClipByValue(dl_db[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
 
-                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
-                w_b_momentum.second[k - 1] = momentum * w_b_momentum.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
+                w_b_mom.first[k - 1] = mom * w_b_mom.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
+                w_b_mom.second[k - 1] = mom * w_b_mom.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
 
-                w_b.first[k - 1] += w_b_momentum.first[k - 1];
-                w_b.second[k - 1] += w_b_momentum.second[k - 1];
+                w_b.first[k - 1] += w_b_mom.first[k - 1];
+                w_b.second[k - 1] += w_b_mom.second[k - 1];
             }
 
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();

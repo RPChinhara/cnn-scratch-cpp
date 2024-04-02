@@ -17,12 +17,12 @@ class NN
 
     std::vector<size_t> lyrs;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b;
-    std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b_momentum;
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b_mom;
     std::vector<Tensor> a;
     size_t batch_size = 10;
     size_t epochs = 200;
     float lr;
     float grad_clip_threshold = 8.0f;
-    float momentum = 0.1f;
+    float mom = 0.1f;
     size_t patience = 4;
 };
