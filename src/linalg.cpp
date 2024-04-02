@@ -5,11 +5,11 @@
 
 #include <cassert>
 
-Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev device)
+Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev dev)
 {
     Ten newTensor = Zeros({tensor1.shape.front(), tensor2.shape.back()});
 
-    switch (device)
+    switch (dev)
     {
     case Dev::CPU: {
 
@@ -59,7 +59,7 @@ Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev device)
         return newTensor;
     }
     default:
-        std::cout << "Unknown device." << std::endl;
+        std::cout << "Unknown dev." << std::endl;
         return Ten();
     }
 }

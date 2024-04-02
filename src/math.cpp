@@ -32,11 +32,11 @@ Ten Argmax(const Ten &ten)
     return newTensor;
 }
 
-Ten Exp(const Ten &ten, Dev device)
+Ten Exp(const Ten &ten, Dev dev)
 {
     Ten newTensor = ten;
 
-    switch (device)
+    switch (dev)
     {
     case Dev::CPU: {
 
@@ -66,16 +66,16 @@ Ten Exp(const Ten &ten, Dev device)
         return newTensor;
     }
     default:
-        std::cout << "Unknown device." << std::endl;
+        std::cout << "Unknown dev." << std::endl;
         return Ten();
     }
 }
 
-Ten Log(const Ten &ten, Dev device)
+Ten Log(const Ten &ten, Dev dev)
 {
     Ten newTensor = ten;
 
-    switch (device)
+    switch (dev)
     {
     case Dev::CPU: {
         for (size_t i = 0; i < ten.size; ++i)
@@ -104,7 +104,7 @@ Ten Log(const Ten &ten, Dev device)
         return newTensor;
     }
     default:
-        std::cout << "Unknown device." << std::endl;
+        std::cout << "Unknown dev." << std::endl;
         return Ten();
     }
 }

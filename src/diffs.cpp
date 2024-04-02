@@ -22,7 +22,7 @@ Ten da_dz(const Ten &ten, Act act)
         break;
     }
     default:
-        std::cout << "Unknown activation." << std::endl;
+        std::cout << "Unknown act." << std::endl;
         return Ten();
     }
 }
@@ -40,7 +40,7 @@ Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act)
         break;
     }
     default:
-        std::cout << "Unknown activation." << std::endl;
+        std::cout << "Unknown act." << std::endl;
         return Ten();
     }
 }
