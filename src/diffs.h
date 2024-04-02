@@ -4,5 +4,5 @@
 
 class Ten;
 
-Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act);
 Ten da_dz(const Ten &ten, Act act);
+Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act);
