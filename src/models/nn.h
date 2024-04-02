@@ -7,7 +7,7 @@ class Tensor;
 class NN
 {
   public:
-    NN(const std::vector<size_t> &layers, float const lr);
+    NN(const std::vector<size_t> &lyrs, float const lr);
     void train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val, const Tensor &y_val);
     void predict(const Tensor &x_test, const Tensor &y_test);
 
@@ -15,7 +15,7 @@ class NN
     std::pair<std::vector<Tensor>, std::vector<Tensor>> init_parameters();
     std::vector<Tensor> forward_prop(const Tensor &x, const std::vector<Tensor> &w, const std::vector<Tensor> &b);
 
-    std::vector<size_t> layers;
+    std::vector<size_t> lyrs;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b;
     std::pair<std::vector<Tensor>, std::vector<Tensor>> w_b_momentum;
     std::vector<Tensor> a;

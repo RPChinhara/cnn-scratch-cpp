@@ -14,9 +14,9 @@
 #include <chrono>
 #include <random>
 
-NN::NN(const std::vector<size_t> &layers, const float lr)
+NN::NN(const std::vector<size_t> &lyrs, const float lr)
 {
-    this->layers = layers;
+    this->lyrs = lyrs;
     this->lr = lr;
 }
 
@@ -68,29 +68,29 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
 
             a = forward_prop(x_batch, w_b.first, w_b.second);
 
-            for (size_t k = layers.size() - 1; k > 0; --k)
+            for (size_t k = lyrs.size() - 1; k > 0; --k)
             {
-                if (k == layers.size() - 1)
+                if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), SOFTMAX));
                 else
-                    dl_dz.push_back(MatMul(dl_dz[(layers.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
+                    dl_dz.push_back(MatMul(dl_dz[(lyrs.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
                                     da_dz(a[k - 1], RELU));
 
                 if (k == 1)
-                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(layers.size() - 1) - k], Dev::CPU));
+                    dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
                 else
-                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[(layers.size() - 1) - k], Dev::CPU));
+                    dl_dw.push_back(MatMul(Transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
 
-                dl_db.push_back(Sum(dl_dz[(layers.size() - 1) - k], 0));
+                dl_db.push_back(Sum(dl_dz[(lyrs.size() - 1) - k], 0));
 
-                dl_dw[(layers.size() - 1) - k] =
-                    ClipByValue(dl_dw[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
-                dl_db[(layers.size() - 1) - k] =
-                    ClipByValue(dl_db[(layers.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_dw[(lyrs.size() - 1) - k] =
+                    ClipByValue(dl_dw[(lyrs.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
+                dl_db[(lyrs.size() - 1) - k] =
+                    ClipByValue(dl_db[(lyrs.size() - 1) - k], -gradient_clip_threshold, gradient_clip_threshold);
 
-                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[(layers.size() - 1) - k];
+                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
                 w_b_momentum.second[k - 1] =
-                    momentum * w_b_momentum.second[k - 1] - lr * dl_db[(layers.size() - 1) - k];
+                    momentum * w_b_momentum.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
 
                 w_b.first[k - 1] += w_b_momentum.first[k - 1];
                 w_b.second[k - 1] += w_b_momentum.second[k - 1];
@@ -155,10 +155,10 @@ std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_parameters()
     std::vector<Tensor> w;
     std::vector<Tensor> b;
 
-    for (size_t i = 0; i < layers.size() - 1; ++i)
+    for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
-        w.push_back(NormalDistribution({layers[i], layers[i + 1]}, 0.0f, 0.2f));
-        b.push_back(Zeros({1, layers[i + 1]}));
+        w.push_back(NormalDistribution({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
+        b.push_back(Zeros({1, lyrs[i + 1]}));
     }
 
     return std::make_pair(w, b);
@@ -168,7 +168,7 @@ std::vector<Tensor> NN::forward_prop(const Tensor &x, const std::vector<Tensor> 
 {
     std::vector<Tensor> a;
 
-    for (size_t i = 0; i < layers.size() - 1; ++i)
+    for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
         if (i == 0)
         {
@@ -177,7 +177,7 @@ std::vector<Tensor> NN::forward_prop(const Tensor &x, const std::vector<Tensor> 
         }
         else
         {
-            if (i == layers.size() - 2)
+            if (i == lyrs.size() - 2)
             {
                 Tensor z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
                 a.push_back(Softmax(z));
