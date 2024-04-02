@@ -22,7 +22,7 @@ class NN
     size_t batch_size = 10;
     size_t epochs = 200;
     float lr;
-    float gradient_clip_threshold = 8.0f;
+    float grad_clip_threshold = 8.0f;
     float momentum = 0.1f;
     size_t patience = 4;
 };
