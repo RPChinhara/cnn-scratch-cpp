@@ -33,8 +33,8 @@ void NN::train(const Tensor &x_train, const Tensor &y_train, const Tensor &x_val
     std::vector<Tensor> a_val;
     std::vector<Tensor> dl_dz, dl_dw, dl_db;
 
-    w_b = init_parameters();
-    w_b_mom = init_parameters();
+    w_b = init_params();
+    w_b_mom = init_params();
 
     for (size_t i = 1; i <= epochs; ++i)
     {
@@ -149,7 +149,7 @@ void NN::predict(const Tensor &x_test, const Tensor &y_test)
     std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_parameters()
+std::pair<std::vector<Tensor>, std::vector<Tensor>> NN::init_params()
 {
     std::vector<Tensor> w;
     std::vector<Tensor> b;

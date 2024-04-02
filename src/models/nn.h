@@ -12,7 +12,7 @@ class NN
     void predict(const Tensor &x_test, const Tensor &y_test);
 
   private:
-    std::pair<std::vector<Tensor>, std::vector<Tensor>> init_parameters();
+    std::pair<std::vector<Tensor>, std::vector<Tensor>> init_params();
     std::vector<Tensor> forward_prop(const Tensor &x, const std::vector<Tensor> &w, const std::vector<Tensor> &b);
 
     std::vector<size_t> lyrs;
