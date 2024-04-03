@@ -1,6 +1,6 @@
 #include "math.hpp"
 #include "arrs.h"
-#include "kernels.h"
+#include "knls.h"
 #include "ten.h"
 
 #include <cassert>

@@ -10,7 +10,7 @@ set SRC=..\src\acts.cpp ^
         ..\src\datasets\mnist.cpp ^
         ..\src\datasets\tripadvisor.cpp ^
         ..\src\diffs.cpp ^
-        ..\src\kernels.cpp ^
+        ..\src\knls.cpp ^
         ..\src\linalg.cpp ^
         ..\src\losses.cpp ^
         ..\src\main.cpp ^
