@@ -2,7 +2,7 @@
 
 set NVCC=nvcc
 set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++20 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Z7 -Xcompiler /O2
-set SRC=..\src\acts.cpp ^
+set SRC=..\src\act.cpp ^
         ..\src\arrs.cpp ^
         ..\src\datasets\engspa.cpp ^
         ..\src\datasets\imdb.cpp ^
