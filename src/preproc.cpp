@@ -208,8 +208,8 @@ std::string ToLower(const std::string &text)
 
 TrainTest TrainTestSplit(const Ten &x, const Ten &y, const float testSize, const size_t randomState)
 {
-    Ten x_new = Shuffle(x, randomState);
-    Ten y_new = Shuffle(y, randomState);
+    Ten x_new = shuffle(x, randomState);
+    Ten y_new = shuffle(y, randomState);
 
     TrainTest train_test;
     train_test.trainFeatures =

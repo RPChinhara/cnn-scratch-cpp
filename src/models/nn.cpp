@@ -47,8 +47,8 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
             lr = 0.001f;
 
         rd_num = rd();
-        x_shuffled = Shuffle(x_train, rd_num);
-        y_shuffled = Shuffle(y_train, rd_num);
+        x_shuffled = shuffle(x_train, rd_num);
+        y_shuffled = shuffle(y_train, rd_num);
 
         for (size_t j = 0; j < x_train.shape.front(); j += batch_size)
         {

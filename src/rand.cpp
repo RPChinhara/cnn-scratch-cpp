@@ -31,7 +31,7 @@ Ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
     return newTensor;
 }
 
-Ten Shuffle(const Ten &ten, const size_t randomState)
+Ten shuffle(const Ten &ten, const size_t randomState)
 {
     Ten newTensor = ten;
     std::mt19937 rng(randomState);
