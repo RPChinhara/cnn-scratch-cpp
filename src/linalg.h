@@ -4,4 +4,4 @@
 
 class Ten;
 
-Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev dev);
+Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev);
