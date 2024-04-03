@@ -21,7 +21,7 @@ NN::NN(const std::vector<size_t> &lyrs, const float lr)
 
 void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val)
 {
-    std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     size_t rd_num;
     std::random_device rd;
     std::vector<std::string> buffer;
@@ -37,7 +37,7 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
 
     for (size_t i = 1; i <= epochs; ++i)
     {
-        startTime = std::chrono::high_resolution_clock::now();
+        start_time = std::chrono::high_resolution_clock::now();
 
         if (i > 10 && i < 20)
             lr = 0.009f;
@@ -99,13 +99,13 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
 
         a_val = forward_prop(x_val, w_b.first, w_b.second);
 
-        auto endTime = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-        auto remainingMilliseconds = duration - seconds;
+        auto remaining_ms = duration - seconds;
 
         buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
-                         std::to_string(seconds.count()) + "s " + std::to_string(remainingMilliseconds.count()) +
+                         std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
                          "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, a.back())) +
                          " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, a.back())));
         buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, a_val.back())) +
