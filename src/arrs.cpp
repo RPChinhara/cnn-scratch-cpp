@@ -4,7 +4,7 @@
 #include <cassert>
 #include <numeric>
 
-Ten ClipByValue(const Ten &ten, float clipValMin, float clipValMax)
+Ten clip_by_value(const Ten &ten, float clipValMin, float clipValMax)
 {
     assert(clipValMin <= clipValMax);
     Ten newTensor = ten;

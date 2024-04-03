@@ -83,9 +83,9 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
                 dl_db.push_back(Sum(dl_dz[(lyrs.size() - 1) - k], 0));
 
                 dl_dw[(lyrs.size() - 1) - k] =
-                    ClipByValue(dl_dw[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
+                    clip_by_value(dl_dw[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
                 dl_db[(lyrs.size() - 1) - k] =
-                    ClipByValue(dl_db[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
+                    clip_by_value(dl_db[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
 
                 w_b_mom.first[k - 1] = mom * w_b_mom.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
                 w_b_mom.second[k - 1] = mom * w_b_mom.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
@@ -105,11 +105,11 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
         auto remaining_ms = duration - seconds;
 
         buff.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
-                         std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
-                         "ms/step - loss: " + std::to_string(categorical_cross_entropy(y_batch, a.back())) +
-                         " - accuracy: " + std::to_string(categorical_accuracy(y_batch, a.back())));
+                       std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
+                       "ms/step - loss: " + std::to_string(categorical_cross_entropy(y_batch, a.back())) +
+                       " - accuracy: " + std::to_string(categorical_accuracy(y_batch, a.back())));
         buff.back() += " - val_loss: " + std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
-                         " - val_accuracy: " + std::to_string(categorical_accuracy(y_val, a_val.back()));
+                       " - val_accuracy: " + std::to_string(categorical_accuracy(y_val, a_val.back()));
 
         if (i % 10 == 0)
         {
