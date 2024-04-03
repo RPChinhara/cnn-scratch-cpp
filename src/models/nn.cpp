@@ -155,7 +155,7 @@ std::pair<std::vector<Ten>, std::vector<Ten>> NN::init_params()
 
     for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
-        w.push_back(NormalDistribution({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
+        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
         b.push_back(Zeros({1, lyrs[i + 1]}));
     }
 

@@ -5,7 +5,7 @@
 #include <numeric>
 #include <random>
 
-Ten NormalDistribution(const std::vector<size_t> &shape, const float mean, const float stdDev)
+Ten normal_dist(const std::vector<size_t> &shape, const float mean, const float stdDev)
 {
     Ten newTensor = Ten();
 
