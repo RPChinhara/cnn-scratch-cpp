@@ -49,7 +49,7 @@ Ten MatMul(const Ten &tensor1, const Ten &tensor2, Dev dev)
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
-            std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
+            std::cerr << "CUDA kernel launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
         cudaMemcpy(newTensor.elem, newTensorGPU, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU1);

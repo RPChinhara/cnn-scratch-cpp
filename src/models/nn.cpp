@@ -1,5 +1,4 @@
 #include "nn.h"
-#include "acts.h"
 #include "arrs.h"
 #include "dev.h"
 #include "diffs.h"
@@ -71,10 +70,10 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
             for (size_t k = lyrs.size() - 1; k > 0; --k)
             {
                 if (k == lyrs.size() - 1)
-                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), SOFTMAX));
+                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), acts.back()));
                 else
                     dl_dz.push_back(MatMul(dl_dz[(lyrs.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
-                                    da_dz(a[k - 1], RELU));
+                                    da_dz(a[k - 1], acts[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(MatMul(Transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
@@ -172,20 +171,12 @@ std::vector<Ten> NN::forward_prop(const Ten &x, const std::vector<Ten> &w, const
         if (i == 0)
         {
             Ten z = MatMul(x, w[i], Dev::CPU) + b[i];
-            a.push_back(Relu(z, Dev::CPU));
+            a.push_back(act(z, acts[i], Dev::CPU));
         }
         else
         {
-            if (i == lyrs.size() - 2)
-            {
-                Ten z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
-                a.push_back(Softmax(z));
-            }
-            else
-            {
-                Ten z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
-                a.push_back(Relu(z, Dev::CPU));
-            }
+            Ten z = MatMul(a[i - 1], w[i], Dev::CPU) + b[i];
+            a.push_back(act(z, acts[i], Dev::CPU));
         }
     }
 

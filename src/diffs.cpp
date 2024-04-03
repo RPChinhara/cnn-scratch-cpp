@@ -19,7 +19,6 @@ Ten da_dz(const Ten &ten, Act act)
         }
 
         return newTensor;
-        break;
     }
     default:
         std::cout << "Unknown act." << std::endl;
@@ -33,11 +32,9 @@ Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act)
     {
     case SIGMOID: {
         return (y_pred - y_target) * y_pred * (1 - y_pred);
-        break;
     }
     case SOFTMAX: {
         return (y_pred - y_target);
-        break;
     }
     default:
         std::cout << "Unknown act." << std::endl;

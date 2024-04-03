@@ -1,5 +1,7 @@
 #pragma once
 
+#include "acts.h"
+
 #include <vector>
 
 class Ten;
@@ -16,6 +18,7 @@ class NN
     std::vector<Ten> forward_prop(const Ten &x, const std::vector<Ten> &w, const std::vector<Ten> &b);
 
     std::vector<size_t> lyrs;
+    std::vector<Act> acts = {RELU, SOFTMAX};
     std::pair<std::vector<Ten>, std::vector<Ten>> w_b;
     std::pair<std::vector<Ten>, std::vector<Ten>> w_b_mom;
     std::vector<Ten> a;

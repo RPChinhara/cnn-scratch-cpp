@@ -57,7 +57,7 @@ Ten Exp(const Ten &ten, Dev dev)
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
-            std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
+            std::cerr << "CUDA kernel launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
         cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
@@ -95,7 +95,7 @@ Ten Log(const Ten &ten, Dev dev)
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
-            std::cerr << "CUDA kernel launch error." + std::string(cudaGetErrorString(cudaError)) << std::endl;
+            std::cerr << "CUDA kernel launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
         cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
