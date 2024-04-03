@@ -31,7 +31,7 @@ Ten act(const Ten &ten, Act act, Dev dev)
 
             cudaError_t cudaError = cudaGetLastError();
             if (cudaError != cudaSuccess)
-                std::cerr << "CUDA kernel launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
+                std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
             cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
             cudaFree(tensorGPU);
