@@ -24,7 +24,7 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     size_t rd_num;
     std::random_device rd;
-    std::vector<std::string> buffer;
+    std::vector<std::string> buff;
     Ten x_shuffled;
     Ten y_shuffled;
     Ten x_batch;
@@ -104,18 +104,18 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
+        buff.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
                          std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
                          "ms/step - loss: " + std::to_string(categorical_cross_entropy(y_batch, a.back())) +
                          " - accuracy: " + std::to_string(categorical_accuracy(y_batch, a.back())));
-        buffer.back() += " - val_loss: " + std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
+        buff.back() += " - val_loss: " + std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
                          " - val_accuracy: " + std::to_string(categorical_accuracy(y_val, a_val.back()));
 
         if (i % 10 == 0)
         {
-            for (const auto &message : buffer)
+            for (const auto &message : buff)
                 std::cout << message << '\n';
-            buffer.clear();
+            buff.clear();
         }
 
         // static size_t epochs_without_improvement = 0;
