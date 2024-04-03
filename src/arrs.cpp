@@ -20,7 +20,7 @@ Ten ClipByValue(const Ten &ten, float clipValMin, float clipValMax)
     return newTensor;
 }
 
-Ten Slice(const Ten &ten, const size_t begin, const size_t size)
+Ten slice(const Ten &ten, const size_t begin, const size_t size)
 {
     Ten newTensor = Zeros({size, ten.shape.back()});
 

@@ -56,13 +56,13 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
 
             if (j + batch_size >= x_train.shape.front())
             {
-                x_batch = Slice(x_shuffled, j, x_train.shape.front() - j);
-                y_batch = Slice(y_shuffled, j, x_train.shape.front() - j);
+                x_batch = slice(x_shuffled, j, x_train.shape.front() - j);
+                y_batch = slice(y_shuffled, j, x_train.shape.front() - j);
             }
             else
             {
-                x_batch = Slice(x_shuffled, j, batch_size);
-                y_batch = Slice(y_shuffled, j, batch_size);
+                x_batch = slice(x_shuffled, j, batch_size);
+                y_batch = slice(y_shuffled, j, batch_size);
             }
 
             a = forward_prop(x_batch, w_b.first, w_b.second);
