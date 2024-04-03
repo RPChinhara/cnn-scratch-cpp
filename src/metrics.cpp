@@ -2,7 +2,7 @@
 #include "math.hpp"
 #include "ten.h"
 
-float CategoricalAccuracy(const Ten &y_target, const Ten &y_pred)
+float categorical_accuracy(const Ten &y_target, const Ten &y_pred)
 {
     Ten target_idx = Argmax(y_target);
     Ten pred_idx = Argmax(y_pred);

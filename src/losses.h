@@ -2,4 +2,4 @@
 
 class Ten;
 
-float CategoricalCrossEntropy(const Ten &y_target, const Ten &y_pred);
+float categorical_cross_entropy(const Ten &y_target, const Ten &y_pred);

@@ -106,10 +106,10 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
 
         buffer.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
                          std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
-                         "ms/step - loss: " + std::to_string(CategoricalCrossEntropy(y_batch, a.back())) +
-                         " - accuracy: " + std::to_string(CategoricalAccuracy(y_batch, a.back())));
-        buffer.back() += " - val_loss: " + std::to_string(CategoricalCrossEntropy(y_val, a_val.back())) +
-                         " - val_accuracy: " + std::to_string(CategoricalAccuracy(y_val, a_val.back()));
+                         "ms/step - loss: " + std::to_string(categorical_cross_entropy(y_batch, a.back())) +
+                         " - accuracy: " + std::to_string(categorical_accuracy(y_batch, a.back())));
+        buffer.back() += " - val_loss: " + std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
+                         " - val_accuracy: " + std::to_string(categorical_accuracy(y_val, a_val.back()));
 
         if (i % 10 == 0)
         {
@@ -141,8 +141,8 @@ void NN::pred(const Ten &x_test, const Ten &y_test)
     a = forward_prop(x_test, w_b.first, w_b.second);
 
     std::cout << '\n';
-    std::cout << "test loss: " << std::to_string(CategoricalCrossEntropy(y_test, a.back()))
-              << " - test accuracy: " << std::to_string(CategoricalAccuracy(y_test, a.back()));
+    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
+              << " - test accuracy: " << std::to_string(categorical_accuracy(y_test, a.back()));
     std::cout << "\n\n";
 
     std::cout << a.back() << "\n\n" << y_test << '\n';

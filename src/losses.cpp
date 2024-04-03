@@ -4,7 +4,7 @@
 #include "math.hpp"
 #include "ten.h"
 
-float CategoricalCrossEntropy(const Ten &y_target, const Ten &y_pred)
+float categorical_cross_entropy(const Ten &y_target, const Ten &y_pred)
 {
     float sum = 0.0f;
     constexpr float epsilon = 1e-15f;
