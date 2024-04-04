@@ -30,7 +30,7 @@ int main()
     Ten features = iris.features;
     Ten targets = iris.targets;
 
-    targets = OneHot(targets, 3);
+    targets = one_hot(targets, 3);
 
     TrainTest train_temp = TrainTestSplit(features, targets, 0.2, 42);
     TrainTest val_test = TrainTestSplit(train_temp.testFeatures, train_temp.testTargets, 0.5, 42);

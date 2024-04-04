@@ -52,7 +52,7 @@ Ten MinMaxScaler(Ten &dataset)
     return (dataset - min_vals) / (max_vals - min_vals);
 }
 
-Ten OneHot(const Ten &ten, const size_t depth)
+Ten one_hot(const Ten &ten, const size_t depth)
 {
     Ten newTensor = zeros({ten.size, depth});
 
