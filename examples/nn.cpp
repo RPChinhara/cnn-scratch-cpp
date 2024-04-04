@@ -19,7 +19,7 @@ int main()
     val_test.trainFeatures = MinMaxScaler(val_test.trainFeatures);
     val_test.testFeatures = MinMaxScaler(val_test.testFeatures);
 
-    NN nn = NN({4, 128, 3}, 0.01f);
+    nn nn = nn({4, 128, 3}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 

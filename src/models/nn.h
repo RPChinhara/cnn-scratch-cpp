@@ -6,10 +6,10 @@
 
 class Ten;
 
-class NN
+class nn
 {
   public:
-    NN(const std::vector<size_t> &lyrs, float const lr);
+    nn(const std::vector<size_t> &lyrs, float const lr);
     void train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val);
     void pred(const Ten &x_test, const Ten &y_test);
 

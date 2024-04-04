@@ -13,13 +13,13 @@
 #include <chrono>
 #include <random>
 
-NN::NN(const std::vector<size_t> &lyrs, const float lr)
+nn::nn(const std::vector<size_t> &lyrs, const float lr)
 {
     this->lyrs = lyrs;
     this->lr = lr;
 }
 
-void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val)
+void nn::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     size_t rd_num;
@@ -136,7 +136,7 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
     }
 }
 
-void NN::pred(const Ten &x_test, const Ten &y_test)
+void nn::pred(const Ten &x_test, const Ten &y_test)
 {
     a = forward_prop(x_test, w_b.first, w_b.second);
 
@@ -148,7 +148,7 @@ void NN::pred(const Ten &x_test, const Ten &y_test)
     std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<Ten>, std::vector<Ten>> NN::init_params()
+std::pair<std::vector<Ten>, std::vector<Ten>> nn::init_params()
 {
     std::vector<Ten> w;
     std::vector<Ten> b;
@@ -162,7 +162,7 @@ std::pair<std::vector<Ten>, std::vector<Ten>> NN::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<Ten> NN::forward_prop(const Ten &x, const std::vector<Ten> &w, const std::vector<Ten> &b)
+std::vector<Ten> nn::forward_prop(const Ten &x, const std::vector<Ten> &w, const std::vector<Ten> &b)
 {
     std::vector<Ten> a;
 
