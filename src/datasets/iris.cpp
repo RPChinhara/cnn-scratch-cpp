@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-Iris load_iris()
+iris load_iris()
 {
     std::ifstream file("datasets\\iris.csv");
 
@@ -63,9 +63,9 @@ Iris load_iris()
 
     file.close();
 
-    Iris iris;
-    iris.features = features;
-    iris.targets = targets;
+    iris data;
+    data.features = features;
+    data.targets = targets;
 
-    return iris;
+    return data;
 }

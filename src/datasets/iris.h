@@ -2,10 +2,10 @@
 
 #include "ten.h"
 
-struct Iris
+struct iris
 {
     Ten features;
     Ten targets;
 };
 
-Iris load_iris();
+iris load_iris();

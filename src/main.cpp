@@ -26,9 +26,9 @@
 
 int main()
 {
-    Iris iris = load_iris();
-    Ten features = iris.features;
-    Ten targets = iris.targets;
+    iris data = load_iris();
+    Ten features = data.features;
+    Ten targets = data.targets;
 
     targets = one_hot(targets, 3);
 
