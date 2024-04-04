@@ -45,4 +45,4 @@ std::vector<std::string> Tokenizer(const std::string &text);
 
 std::string ToLower(const std::string &text);
 
-TrainTest TrainTestSplit(const Ten &x, const Ten &y, const float testSize, const size_t randomState);
+TrainTest train_test_split(const Ten &x, const Ten &y, const float testSize, const size_t randomState);
