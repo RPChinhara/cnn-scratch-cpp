@@ -7,7 +7,7 @@
 
 Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev)
 {
-    Ten newTensor = Zeros({tensor1.shape.front(), tensor2.shape.back()});
+    Ten newTensor = zeros({tensor1.shape.front(), tensor2.shape.back()});
 
     switch (dev)
     {
@@ -79,7 +79,7 @@ Ten transpose(const Ten &ten)
 {
     assert(ten.shape.size() >= 2);
 
-    Ten newTensor = Zeros({ten.shape.back(), ten.shape[ten.shape.size() - 2]});
+    Ten newTensor = zeros({ten.shape.back(), ten.shape[ten.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
 

@@ -7,7 +7,7 @@
 
 Ten Argmax(const Ten &ten)
 {
-    Ten newTensor = Zeros({ten.shape.front()});
+    Ten newTensor = zeros({ten.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
@@ -116,7 +116,7 @@ Ten Max(const Ten &ten, const size_t axis)
 
     if (axis == 0)
     {
-        newTensor = Zeros({1, ten.shape.back()});
+        newTensor = zeros({1, ten.shape.back()});
 
         for (size_t i = 0; i < ten.shape.back(); ++i)
         {
@@ -135,7 +135,7 @@ Ten Max(const Ten &ten, const size_t axis)
     }
     else if (axis == 1)
     {
-        newTensor = Zeros({ten.shape.front(), 1});
+        newTensor = zeros({ten.shape.front(), 1});
         size_t idx = 0;
 
         for (size_t i = 0; i < ten.shape.front(); ++i)
@@ -158,7 +158,7 @@ Ten Max(const Ten &ten, const size_t axis)
 
 Ten Min(const Ten &ten)
 {
-    Ten newTensor = Zeros({1, ten.shape.back()});
+    Ten newTensor = zeros({1, ten.shape.back()});
 
     for (size_t i = 0; i < ten.shape.back(); ++i)
     {
@@ -191,7 +191,7 @@ Ten Sum(const Ten &ten, const size_t axis)
         }
         else if (axis == 1)
         {
-            newTensor = Zeros({1, 1});
+            newTensor = zeros({1, 1});
             float sum = 0.0f;
 
             for (size_t i = 0; i < ten.size; ++i)
@@ -205,7 +205,7 @@ Ten Sum(const Ten &ten, const size_t axis)
     {
         if (axis == 0)
         {
-            newTensor = Zeros({1, ten.shape.back()});
+            newTensor = zeros({1, ten.shape.back()});
 
             for (size_t i = 0; i < ten.shape.back(); ++i)
             {
@@ -220,7 +220,7 @@ Ten Sum(const Ten &ten, const size_t axis)
         }
         else if (axis == 1)
         {
-            newTensor = Zeros({ten.shape.front(), 1});
+            newTensor = zeros({ten.shape.front(), 1});
             size_t idx = 0;
 
             for (size_t i = 0; i < ten.shape.front(); ++i)

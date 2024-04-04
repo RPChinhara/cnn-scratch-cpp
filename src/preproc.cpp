@@ -54,7 +54,7 @@ Ten MinMaxScaler(Ten &dataset)
 
 Ten OneHot(const Ten &ten, const size_t depth)
 {
-    Ten newTensor = Zeros({ten.size, depth});
+    Ten newTensor = zeros({ten.size, depth});
 
     std::vector<float> indices;
 
@@ -213,11 +213,11 @@ TrainTest TrainTestSplit(const Ten &x, const Ten &y, const float testSize, const
 
     TrainTest train_test;
     train_test.trainFeatures =
-        Zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - testSize))), x.shape.back()});
+        zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - testSize))), x.shape.back()});
     train_test.trainTargets =
-        Zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - testSize))), y.shape.back()});
-    train_test.testFeatures = Zeros({static_cast<size_t>(std::ceilf(x.shape.front() * testSize)), x.shape.back()});
-    train_test.testTargets = Zeros({static_cast<size_t>(std::ceilf(y.shape.front() * testSize)), y.shape.back()});
+        zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - testSize))), y.shape.back()});
+    train_test.testFeatures = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * testSize)), x.shape.back()});
+    train_test.testTargets = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * testSize)), y.shape.back()});
 
     for (size_t i = 0; i < train_test.trainFeatures.size; ++i)
         train_test.trainFeatures[i] = x_new[i];

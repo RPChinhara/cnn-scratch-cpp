@@ -10,7 +10,7 @@ CNN2D::CNN2D(const std::vector<size_t> &filters, float const learning_rate)
 
 void CNN2D::Train(const Ten &xTrain, const Ten &yTrain, const Ten &xVal, const Ten &yVal)
 {
-    // Ten kernel = Zeros({3, 3});
+    // Ten kernel = zeros({3, 3});
     Ten kernel = Ten({1, -1, 1, 0, 1, 0, -1, 0, 1}, {3, 3});
 
     size_t kernelHeight = kernel.shape.front();
@@ -22,7 +22,7 @@ void CNN2D::Train(const Ten &xTrain, const Ten &yTrain, const Ten &xVal, const T
     size_t outputHeight = inputHeight - kernelHeight + 1;
     size_t outputWidth = inputWidth - kernelWidth + 1;
 
-    Ten output = Zeros({outputHeight, outputWidth});
+    Ten output = zeros({outputHeight, outputWidth});
 
     // size_t idx = 0;
 

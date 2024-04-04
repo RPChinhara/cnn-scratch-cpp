@@ -22,7 +22,7 @@ Ten clip_by_value(const Ten &ten, float clipValMin, float clipValMax)
 
 Ten slice(const Ten &ten, const size_t begin, const size_t size)
 {
-    Ten newTensor = Zeros({size, ten.shape.back()});
+    Ten newTensor = zeros({size, ten.shape.back()});
 
     for (size_t i = begin * ten.shape.back(); i < (begin * ten.shape.back()) + (size * ten.shape.back()); ++i)
         newTensor[i - (begin * ten.shape.back())] = ten[i];
@@ -30,7 +30,7 @@ Ten slice(const Ten &ten, const size_t begin, const size_t size)
     return newTensor;
 }
 
-Ten Zeros(const std::vector<size_t> &shape)
+Ten zeros(const std::vector<size_t> &shape)
 {
     Ten newTensor = Ten();
 

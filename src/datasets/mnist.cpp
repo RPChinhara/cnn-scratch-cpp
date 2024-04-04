@@ -31,7 +31,7 @@ Ten ReadMNISTImages(const std::string &filePath)
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
-    Ten images2 = Zeros({numImages, numRows, numCols});
+    Ten images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
     for (uint32_t i = 0; i < numImages; ++i)
@@ -70,7 +70,7 @@ Ten ReadMNISTLabels(const std::string &filePath)
 
     file.read(reinterpret_cast<char *>(labels.data()), numLabels);
 
-    Ten labels2 = Zeros({numLabels, 1});
+    Ten labels2 = zeros({numLabels, 1});
     size_t idx = 0;
 
     for (uint32_t i = 0; i < numLabels; ++i)

@@ -14,7 +14,7 @@ QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, flo
     this->exploration_rate = exploration_rate;
     this->exploration_decay = exploration_decay;
     this->exploration_min = exploration_min;
-    q_table = Zeros({n_states, n_actions});
+    q_table = zeros({n_states, n_actions});
 }
 
 Action QLearning::ChooseAction(size_t state)

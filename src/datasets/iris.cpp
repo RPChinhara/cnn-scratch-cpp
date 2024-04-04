@@ -13,8 +13,8 @@ Iris LoadIris()
 
     size_t idxFeatures = 0;
     size_t idxTarget = 0;
-    Ten features = Zeros({150, 4});
-    Ten targets = Zeros({150, 1});
+    Ten features = zeros({150, 4});
+    Ten targets = zeros({150, 1});
 
     std::string line;
     std::getline(file, line);
