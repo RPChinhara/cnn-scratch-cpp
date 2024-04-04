@@ -17,7 +17,7 @@ std::string AddSpaceBetweenPunct(const std::string &text);
 
 std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens);
 
-Ten MinMaxScaler(Ten &dataset);
+Ten min_max_scaler(Ten &dataset);
 
 Ten one_hot(const Ten &ten, const size_t depth);
 

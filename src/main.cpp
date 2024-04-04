@@ -35,9 +35,9 @@ int main()
     TrainTest train_temp = train_test_split(features, targets, 0.2, 42);
     TrainTest val_test = train_test_split(train_temp.testFeatures, train_temp.testTargets, 0.5, 42);
 
-    train_temp.trainFeatures = MinMaxScaler(train_temp.trainFeatures);
-    val_test.trainFeatures = MinMaxScaler(val_test.trainFeatures);
-    val_test.testFeatures = MinMaxScaler(val_test.testFeatures);
+    train_temp.trainFeatures = min_max_scaler(train_temp.trainFeatures);
+    val_test.trainFeatures = min_max_scaler(val_test.trainFeatures);
+    val_test.testFeatures = min_max_scaler(val_test.testFeatures);
 
     NN nn = NN({4, 128, 3}, 0.01f);
 

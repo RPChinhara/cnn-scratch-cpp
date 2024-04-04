@@ -45,7 +45,7 @@ std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens)
     return originalForms;
 }
 
-Ten MinMaxScaler(Ten &dataset)
+Ten min_max_scaler(Ten &dataset)
 {
     auto min_vals = Min(dataset);
     auto max_vals = Max(dataset, 0);
