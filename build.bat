@@ -8,7 +8,7 @@ set SRC=..\src\act.cpp ^
         ..\src\datasets\imdb.cpp ^
         ..\src\datasets\iris.cpp ^
         ..\src\datasets\mnist.cpp ^
-        ..\src\datasets\tripadvisor.cpp ^
+        ..\src\datasets\ta.cpp ^
         ..\src\diffs.cpp ^
         ..\src\knls.cpp ^
         ..\src\linalg.cpp ^
