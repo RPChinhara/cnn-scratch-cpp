@@ -4,7 +4,7 @@
 
 #include <random>
 
-QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, float discount_factor,
+QL::QL(size_t n_states, size_t n_actions, float learning_rate, float discount_factor,
                      float exploration_rate, float exploration_decay, float exploration_min)
 {
     this->n_states = n_states;
@@ -17,7 +17,7 @@ QLearning::QLearning(size_t n_states, size_t n_actions, float learning_rate, flo
     q_table = zeros({n_states, n_actions});
 }
 
-Action QLearning::ChooseAction(size_t state)
+Action QL::ChooseAction(size_t state)
 {
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -47,7 +47,7 @@ Action QLearning::ChooseAction(size_t state)
     }
 }
 
-void QLearning::UpdateQtable(size_t state, Action action, float reward, size_t next_state, bool done)
+void QL::UpdateQtable(size_t state, Action action, float reward, size_t next_state, bool done)
 {
     std::cout << slice(q_table, state, 1) << "\n\n";
 
