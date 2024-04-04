@@ -8,10 +8,10 @@
 // {
 //     SetConsoleOutputCP(CP_UTF8);
 
-//     EnglishSpanish englishSpanish = LoadEnglishSpanish();
+//     EnEs en_es = load_en_es();
 
-//     for (int i = 0; i < englishSpanish.targetRaw.size(); ++i)
-//         std::cout << englishSpanish.targetRaw[i] << " " << englishSpanish.contextRaw[i] << std::endl;
+//     for (int i = 0; i < en_es.targetRaw.size(); ++i)
+//         std::cout << en_es.targetRaw[i] << " " << en_es.contextRaw[i] << std::endl;
 
 //     Transformer transformer = Transformer();
 
