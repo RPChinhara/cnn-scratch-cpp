@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-Iris LoadIris()
+Iris load_iris()
 {
     std::ifstream file("datasets\\iris.csv");
 

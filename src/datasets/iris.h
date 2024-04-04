@@ -8,4 +8,4 @@ struct Iris
     Ten targets;
 };
 
-Iris LoadIris();
+Iris load_iris();

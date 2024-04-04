@@ -26,7 +26,7 @@
 
 int main()
 {
-    Iris iris = LoadIris();
+    Iris iris = load_iris();
     Ten features = iris.features;
     Ten targets = iris.targets;
 
