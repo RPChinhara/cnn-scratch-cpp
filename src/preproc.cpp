@@ -212,24 +212,24 @@ TrainTest train_test_split(const Ten &x, const Ten &y, const float testSize, con
     Ten y_new = shuffle(y, randomState);
 
     TrainTest train_test;
-    train_test.trainFeatures =
+    train_test.train_features =
         zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - testSize))), x.shape.back()});
-    train_test.trainTargets =
+    train_test.train_targets =
         zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - testSize))), y.shape.back()});
-    train_test.testFeatures = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * testSize)), x.shape.back()});
-    train_test.testTargets = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * testSize)), y.shape.back()});
+    train_test.test_features = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * testSize)), x.shape.back()});
+    train_test.test_targets = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * testSize)), y.shape.back()});
 
-    for (size_t i = 0; i < train_test.trainFeatures.size; ++i)
-        train_test.trainFeatures[i] = x_new[i];
+    for (size_t i = 0; i < train_test.train_features.size; ++i)
+        train_test.train_features[i] = x_new[i];
 
-    for (size_t i = 0; i < train_test.trainTargets.size; ++i)
-        train_test.trainTargets[i] = y_new[i];
+    for (size_t i = 0; i < train_test.train_targets.size; ++i)
+        train_test.train_targets[i] = y_new[i];
 
-    for (size_t i = train_test.trainFeatures.size; i < x.size; ++i)
-        train_test.testFeatures[i - train_test.trainFeatures.size] = x_new[i];
+    for (size_t i = train_test.train_features.size; i < x.size; ++i)
+        train_test.test_features[i - train_test.train_features.size] = x_new[i];
 
-    for (size_t i = train_test.trainTargets.size; i < y.size; ++i)
-        train_test.testTargets[i - train_test.trainTargets.size] = y_new[i];
+    for (size_t i = train_test.train_targets.size; i < y.size; ++i)
+        train_test.test_targets[i - train_test.train_targets.size] = y_new[i];
 
     return train_test;
 }
