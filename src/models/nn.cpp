@@ -72,13 +72,13 @@ void NN::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), acts.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], Transpose(w_b.first[k]), Dev::CPU) *
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), Dev::CPU) *
                                     da_dz(a[k - 1], acts[k - 1]));
 
                 if (k == 1)
-                    dl_dw.push_back(matmul(Transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
+                    dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
                 else
-                    dl_dw.push_back(matmul(Transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
+                    dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], Dev::CPU));
 
                 dl_db.push_back(Sum(dl_dz[(lyrs.size() - 1) - k], 0));
 

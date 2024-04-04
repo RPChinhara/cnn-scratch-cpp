@@ -30,48 +30,6 @@ Ten slice(const Ten &ten, const size_t begin, const size_t size)
     return newTensor;
 }
 
-static size_t GetBatchSize(const std::vector<size_t> &shape)
-{
-    assert(shape.size() > 1);
-    size_t batchSize = 1;
-
-    for (size_t i = 0; i < shape.size() - 2; ++i)
-        batchSize *= shape[i];
-
-    return batchSize;
-}
-
-Ten Transpose(const Ten &ten)
-{
-    assert(ten.shape.size() >= 2);
-
-    Ten newTensor = Zeros({ten.shape.back(), ten.shape[ten.shape.size() - 2]});
-
-    std::vector<size_t> idx_rows;
-
-    for (size_t i = 0; i < ten.size; ++i)
-        idx_rows.push_back(i * ten.shape.back());
-
-    size_t batchSize = GetBatchSize(ten.shape);
-
-    size_t idx = 0;
-
-    for (size_t i = 0; i < batchSize; ++i)
-    {
-        for (size_t j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
-        {
-            for (size_t k = 0; k < newTensor.shape.back(); ++k)
-            {
-                newTensor[idx] = ten[idx_rows[k + (i * newTensor.shape.back())]];
-                idx_rows[k + (i * newTensor.shape.back())] += 1;
-                ++idx;
-            }
-        }
-    }
-
-    return newTensor;
-}
-
 Ten Zeros(const std::vector<size_t> &shape)
 {
     Ten newTensor = Ten();

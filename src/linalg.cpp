@@ -63,3 +63,45 @@ Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev)
         return Ten();
     }
 }
+
+static size_t get_batch_size(const std::vector<size_t> &shape)
+{
+    assert(shape.size() > 1);
+    size_t batchSize = 1;
+
+    for (size_t i = 0; i < shape.size() - 2; ++i)
+        batchSize *= shape[i];
+
+    return batchSize;
+}
+
+Ten transpose(const Ten &ten)
+{
+    assert(ten.shape.size() >= 2);
+
+    Ten newTensor = Zeros({ten.shape.back(), ten.shape[ten.shape.size() - 2]});
+
+    std::vector<size_t> idx_rows;
+
+    for (size_t i = 0; i < ten.size; ++i)
+        idx_rows.push_back(i * ten.shape.back());
+
+    size_t batchSize = get_batch_size(ten.shape);
+
+    size_t idx = 0;
+
+    for (size_t i = 0; i < batchSize; ++i)
+    {
+        for (size_t j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
+        {
+            for (size_t k = 0; k < newTensor.shape.back(); ++k)
+            {
+                newTensor[idx] = ten[idx_rows[k + (i * newTensor.shape.back())]];
+                idx_rows[k + (i * newTensor.shape.back())] += 1;
+                ++idx;
+            }
+        }
+    }
+
+    return newTensor;
+}
