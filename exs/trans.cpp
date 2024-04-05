@@ -1,5 +1,5 @@
 #include "mdls\trans.h"
-#include "datasets\imdb.h"
+#include "datas\imdb.h"
 #include "preproc.h"
 
 int main()

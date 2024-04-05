@@ -1,5 +1,5 @@
 #include "mdls\nn.h"
-#include "datasets\iris.h"
+#include "datas\iris.h"
 #include "preproc.h"
 
 #include <chrono>
