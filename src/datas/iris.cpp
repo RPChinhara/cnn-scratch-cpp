@@ -6,7 +6,7 @@
 
 iris load_iris()
 {
-    std::ifstream file("datasets\\iris.csv");
+    std::ifstream file("datas\\iris.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;

@@ -8,7 +8,7 @@
 
 Tripadvisor LoadTripadvisor()
 {
-    std::ifstream file("datasets\\tripadvisor_hotel_reviews.csv");
+    std::ifstream file("datas\\tripadvisor_hotel_reviews.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;

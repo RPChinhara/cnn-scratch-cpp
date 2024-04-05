@@ -1,4 +1,4 @@
-#include "datasets\enes.h"
+#include "datas\enes.h"
 #include "mdls\trans.h"
 
 #include <iostream>

@@ -4,11 +4,11 @@ set NVCC=nvcc
 set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++20 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Z7 -Xcompiler /O2
 set SRC=..\src\act.cpp ^
         ..\src\arrs.cpp ^
-        ..\src\datasets\enes.cpp ^
-        ..\src\datasets\imdb.cpp ^
-        ..\src\datasets\iris.cpp ^
-        ..\src\datasets\mnist.cpp ^
-        ..\src\datasets\ta.cpp ^
+        ..\src\datas\enes.cpp ^
+        ..\src\datas\imdb.cpp ^
+        ..\src\datas\iris.cpp ^
+        ..\src\datas\mnist.cpp ^
+        ..\src\datas\ta.cpp ^
         ..\src\diffs.cpp ^
         ..\src\knls.cpp ^
         ..\src\linalg.cpp ^
