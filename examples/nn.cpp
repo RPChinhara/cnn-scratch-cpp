@@ -1,4 +1,4 @@
-#include "models\nn.h"
+#include "mdls\nn.h"
 #include "datasets\iris.h"
 #include "preproc.h"
 

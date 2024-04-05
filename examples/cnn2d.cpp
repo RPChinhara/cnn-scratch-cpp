@@ -1,4 +1,4 @@
-#include "models\cnn2d.h"
+#include "mdls\cnn2d.h"
 #include "datasets\mnist.h"
 #include "preproc.h"
 

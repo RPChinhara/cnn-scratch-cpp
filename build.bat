@@ -16,10 +16,10 @@ set SRC=..\src\act.cpp ^
         ..\src\main.cpp ^
         ..\src\math.cpp ^
         ..\src\metrics.cpp ^
-        ..\src\models\cnn2d.cpp ^
-        ..\src\models\nn.cpp ^
-        ..\src\models\ql.cpp ^
-        ..\src\models\trans.cpp ^
+        ..\src\mdls\cnn2d.cpp ^
+        ..\src\mdls\nn.cpp ^
+        ..\src\mdls\ql.cpp ^
+        ..\src\mdls\trans.cpp ^
         ..\src\preproc.cpp ^
         ..\src\rand.cpp ^
         ..\src\ten.cpp
