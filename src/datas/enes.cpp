@@ -8,7 +8,7 @@
 
 EnEs load_en_es()
 {
-    std::ifstream file("datas\\spa.txt");
+    std::ifstream file("datas/spa.txt");
     if (!file)
         std::cerr << "Failed to open the file." << std::endl;
 

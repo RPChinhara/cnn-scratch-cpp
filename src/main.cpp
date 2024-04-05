@@ -1,5 +1,5 @@
-#include "datas\enes.h"
-#include "mdls\trans.h"
+#include "datas/enes.h"
+#include "mdls/trans.h"
 
 #include <iostream>
 #include <windows.h>

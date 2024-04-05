@@ -1,5 +1,5 @@
-#include "mdls\cnn2d.h"
-#include "datas\mnist.h"
+#include "mdls/cnn2d.h"
+#include "datas/mnist.h"
 #include "preproc.h"
 
 int main()

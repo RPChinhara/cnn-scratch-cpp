@@ -8,7 +8,7 @@
 
 IMDB LoadIMDB()
 {
-    std::ifstream file("datas\\IMDB Dataset.csv");
+    std::ifstream file("datas/IMDB Dataset.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;

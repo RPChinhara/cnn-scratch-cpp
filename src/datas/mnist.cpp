@@ -87,10 +87,10 @@ Ten ReadMNISTLabels(const std::string &filePath)
 MNIST LoadMNIST()
 {
     MNIST mnist;
-    mnist.trainImages = ReadMNISTImages("datas\\mnist\\train-images-idx3-ubyte");
-    mnist.trainLabels = ReadMNISTLabels("datas\\mnist\\train-labels-idx1-ubyte");
-    mnist.testImages = ReadMNISTImages("datas\\mnist\\t10k-images-idx3-ubyte");
-    mnist.testLabels = ReadMNISTLabels("datas\\mnist\\t10k-labels-idx1-ubyte");
+    mnist.trainImages = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
+    mnist.trainLabels = ReadMNISTLabels("datas/mnist/train-labels-idx1-ubyte");
+    mnist.testImages = ReadMNISTImages("datas/mnist/t10k-images-idx3-ubyte");
+    mnist.testLabels = ReadMNISTLabels("datas/mnist/t10k-labels-idx1-ubyte");
 
     return mnist;
 }
