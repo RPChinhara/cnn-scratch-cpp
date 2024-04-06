@@ -13,10 +13,10 @@
 #include <chrono>
 #include <random>
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<Act> &acts, const float lr)
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<Act> &act_type, const float lr)
 {
     this->lyrs = lyrs;
-    this->acts = acts;
+    this->act_type = act_type;
     this->lr = lr;
 }
 
@@ -71,10 +71,10 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             for (size_t k = lyrs.size() - 1; k > 0; --k)
             {
                 if (k == lyrs.size() - 1)
-                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), acts.back()));
+                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), act_type.back()));
                 else
                     dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), DEV_CPU) *
-                                    da_dz(a[k - 1], acts[k - 1]));
+                                    da_dz(a[k - 1], act_type[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], DEV_CPU));
@@ -172,12 +172,12 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
         if (i == 0)
         {
             ten z = matmul(x, w[i], DEV_CPU) + b[i];
-            a.push_back(act(z, acts[i], DEV_CPU));
+            a.push_back(act(z, act_type[i], DEV_CPU));
         }
         else
         {
             ten z = matmul(a[i - 1], w[i], DEV_CPU) + b[i];
-            a.push_back(act(z, acts[i], DEV_CPU));
+            a.push_back(act(z, act_type[i], DEV_CPU));
         }
     }
 

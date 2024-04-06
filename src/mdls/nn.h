@@ -9,7 +9,7 @@ class ten;
 class nn
 {
   public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<Act> &acts, float const lr);
+    nn(const std::vector<size_t> &lyrs, const std::vector<Act> &act_type, float const lr);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
     void pred(const ten &x_test, const ten &y_test);
 
@@ -18,7 +18,7 @@ class nn
     std::vector<ten> forward_prop(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
 
     std::vector<size_t> lyrs;
-    std::vector<Act> acts;
+    std::vector<Act> act_type;
     std::pair<std::vector<ten>, std::vector<ten>> w_b;
     std::pair<std::vector<ten>, std::vector<ten>> w_b_mom;
     std::vector<ten> a;
