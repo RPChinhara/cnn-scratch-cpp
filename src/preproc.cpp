@@ -206,28 +206,28 @@ std::string ToLower(const std::string &text)
     return result;
 }
 
-train_test train_test_split(const ten &x, const ten &y, const float testSize, const size_t randomState)
+train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rand_state)
 {
-    ten x_new = shuffle(x, randomState);
-    ten y_new = shuffle(y, randomState);
+    ten x_shuffled = shuffle(x, rand_state);
+    ten y_shuffled = shuffle(y, rand_state);
 
     train_test data;
-    data.train_features = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - testSize))), x.shape.back()});
-    data.train_targets = zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - testSize))), y.shape.back()});
-    data.test_features = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * testSize)), x.shape.back()});
-    data.test_targets = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * testSize)), y.shape.back()});
+    data.train_features = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
+    data.train_targets = zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
+    data.test_features = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
+    data.test_targets = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
 
     for (size_t i = 0; i < data.train_features.size; ++i)
-        data.train_features[i] = x_new[i];
+        data.train_features[i] = x_shuffled[i];
 
     for (size_t i = 0; i < data.train_targets.size; ++i)
-        data.train_targets[i] = y_new[i];
+        data.train_targets[i] = y_shuffled[i];
 
     for (size_t i = data.train_features.size; i < x.size; ++i)
-        data.test_features[i - data.train_features.size] = x_new[i];
+        data.test_features[i - data.train_features.size] = x_shuffled[i];
 
     for (size_t i = data.train_targets.size; i < y.size; ++i)
-        data.test_targets[i - data.train_targets.size] = y_new[i];
+        data.test_targets[i - data.train_targets.size] = y_shuffled[i];
 
     return data;
 }
