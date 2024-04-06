@@ -212,22 +212,22 @@ train_test train_test_split(const ten &x, const ten &y, const float test_size, c
     ten y_shuffled = shuffle(y, rand_state);
 
     train_test data;
-    data.train_features = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    data.train_targets = zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
-    data.test_features = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-    data.test_targets = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
+    data.x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
+    data.y_train = zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
+    data.x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
+    data.y_test = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
 
-    for (size_t i = 0; i < data.train_features.size; ++i)
-        data.train_features[i] = x_shuffled[i];
+    for (size_t i = 0; i < data.x_train.size; ++i)
+        data.x_train[i] = x_shuffled[i];
 
-    for (size_t i = 0; i < data.train_targets.size; ++i)
-        data.train_targets[i] = y_shuffled[i];
+    for (size_t i = 0; i < data.y_train.size; ++i)
+        data.y_train[i] = y_shuffled[i];
 
-    for (size_t i = data.train_features.size; i < x.size; ++i)
-        data.test_features[i - data.train_features.size] = x_shuffled[i];
+    for (size_t i = data.x_train.size; i < x.size; ++i)
+        data.x_test[i - data.x_train.size] = x_shuffled[i];
 
-    for (size_t i = data.train_targets.size; i < y.size; ++i)
-        data.test_targets[i - data.train_targets.size] = y_shuffled[i];
+    for (size_t i = data.y_train.size; i < y.size; ++i)
+        data.y_test[i - data.y_train.size] = y_shuffled[i];
 
     return data;
 }

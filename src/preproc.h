@@ -7,10 +7,10 @@
 
 struct train_test
 {
-    ten train_features;
-    ten train_targets;
-    ten test_features;
-    ten test_targets;
+    ten x_train;
+    ten y_train;
+    ten x_test;
+    ten y_test;
 };
 
 std::string AddSpaceBetweenPunct(const std::string &text);
