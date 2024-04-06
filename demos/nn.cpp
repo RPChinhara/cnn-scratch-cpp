@@ -7,19 +7,19 @@
 int main()
 {
     iris data = load_iris();
-    ten features = data.features;
-    ten targets = data.targets;
+    ten x = data.x;
+    ten y = data.y;
 
-    targets = one_hot(targets, 3);
+    y = one_hot(y, 3);
 
-    TrainTest train_temp = train_test_split(features, targets, 0.2, 42);
-    TrainTest val_test = train_test_split(train_temp.test_features, train_temp.test_targets, 0.5, 42);
+    train_test train_temp = train_test_split(x, y, 0.2, 42);
+    train_test val_test = train_test_split(train_temp.test_features, train_temp.test_targets, 0.5, 42);
 
     train_temp.train_features = min_max_scaler(train_temp.train_features);
     val_test.train_features = min_max_scaler(val_test.train_features);
     val_test.test_features = min_max_scaler(val_test.test_features);
 
-    nn classifier = nn({4, 128, 3}, 0.01f);
+    nn classifier = nn({4, 128, 3}, {RELU, SOFTMAX}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
