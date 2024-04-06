@@ -5,13 +5,13 @@
 
 #include <cassert>
 
-ten matmul(const ten &tensor1, const ten &tensor2, Dev dev)
+ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
 {
     ten newTensor = zeros({tensor1.shape.front(), tensor2.shape.back()});
 
     switch (dev)
     {
-    case Dev::CPU: {
+    case DEV_CPU: {
 
         for (size_t i = 0; i < tensor1.shape.front(); ++i)
         {
@@ -28,7 +28,7 @@ ten matmul(const ten &tensor1, const ten &tensor2, Dev dev)
 
         return newTensor;
     }
-    case Dev::GPU: {
+    case DEV_GPU: {
         assert(tensor1.shape.back() == tensor2.shape.front());
 
         size_t numRowsTensor1 = tensor1.shape.front();

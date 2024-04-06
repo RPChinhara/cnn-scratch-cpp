@@ -1,7 +1,7 @@
 #pragma once
 
-enum Dev
+enum dev_type
 {
-    CPU,
-    GPU
+    DEV_CPU,
+    DEV_GPU
 };

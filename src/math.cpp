@@ -32,20 +32,20 @@ ten Argmax(const ten &t)
     return newTensor;
 }
 
-ten Exp(const ten &t, Dev dev)
+ten Exp(const ten &t, dev_type dev)
 {
     ten newTensor = t;
 
     switch (dev)
     {
-    case Dev::CPU: {
+    case DEV_CPU: {
 
         for (size_t i = 0; i < t.size; ++i)
             newTensor.elem[i] = expf(t.elem[i]);
 
         return newTensor;
     }
-    case Dev::GPU: {
+    case DEV_GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));
@@ -71,19 +71,19 @@ ten Exp(const ten &t, Dev dev)
     }
 }
 
-ten Log(const ten &t, Dev dev)
+ten Log(const ten &t, dev_type dev)
 {
     ten newTensor = t;
 
     switch (dev)
     {
-    case Dev::CPU: {
+    case DEV_CPU: {
         for (size_t i = 0; i < t.size; ++i)
             newTensor.elem[i] = logf(t.elem[i]);
 
         return newTensor;
     }
-    case Dev::GPU: {
+    case DEV_GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));

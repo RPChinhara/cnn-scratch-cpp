@@ -3,7 +3,7 @@
 #include "math.hpp"
 #include "ten.h"
 
-ten act(const ten &t, Act act, Dev dev)
+ten act(const ten &t, Act act, dev_type dev)
 {
 
     switch (act)
@@ -13,13 +13,13 @@ ten act(const ten &t, Act act, Dev dev)
 
         switch (dev)
         {
-        case Dev::CPU: {
+        case DEV_CPU: {
             for (size_t i = 0; i < t.size; ++i)
                 newTensor.elem[i] = std::max(0.0f, t.elem[i]);
 
             return newTensor;
         }
-        case Dev::GPU: {
+        case DEV_GPU: {
             float *tensorGPU, *newTensorGPU;
             cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
             cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));
@@ -45,7 +45,7 @@ ten act(const ten &t, Act act, Dev dev)
         }
     }
     case SOFTMAX: {
-        ten expScores = Exp(t - Max(t, 1), Dev::CPU);
+        ten expScores = Exp(t - Max(t, 1), DEV_CPU);
         return expScores / Sum(expScores, 1);
     }
     default:
