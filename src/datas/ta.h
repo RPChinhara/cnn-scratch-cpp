@@ -4,8 +4,8 @@
 
 struct Tripadvisor
 {
-    Ten features;
-    Ten targets;
+    ten features;
+    ten targets;
 };
 
 Tripadvisor LoadTripadvisor();

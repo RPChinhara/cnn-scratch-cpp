@@ -2,7 +2,7 @@
 
 #include "dev.h"
 
-class Ten;
+class ten;
 
-Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev);
-Ten transpose(const Ten &t);
+ten matmul(const ten &tensor1, const ten &tensor2, Dev dev);
+ten transpose(const ten &t);

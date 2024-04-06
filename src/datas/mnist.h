@@ -4,10 +4,10 @@
 
 struct MNIST
 {
-    Ten trainImages;
-    Ten trainLabels;
-    Ten testImages;
-    Ten testLabels;
+    ten trainImages;
+    ten trainLabels;
+    ten testImages;
+    ten testLabels;
 };
 
 MNIST LoadMNIST();

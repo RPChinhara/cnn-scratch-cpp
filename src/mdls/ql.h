@@ -24,7 +24,7 @@ class QL
     float exploration_rate;
 
   private:
-    Ten q_table;
+    ten q_table;
     size_t n_states;
     size_t n_actions;
     float learning_rate;

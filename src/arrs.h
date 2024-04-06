@@ -2,8 +2,8 @@
 
 #include <vector>
 
-class Ten;
+class ten;
 
-Ten clip_by_value(const Ten &t, float clipValMin, float clipValMax);
-Ten slice(const Ten &t, const size_t begin, const size_t size);
-Ten zeros(const std::vector<size_t> &shape);
+ten clip_by_value(const ten &t, float clipValMin, float clipValMax);
+ten slice(const ten &t, const size_t begin, const size_t size);
+ten zeros(const std::vector<size_t> &shape);

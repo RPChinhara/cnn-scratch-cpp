@@ -2,7 +2,7 @@
 
 #include "act.h"
 
-class Ten;
+class ten;
 
-Ten da_dz(const Ten &t, Act act);
-Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act);
+ten da_dz(const ten &t, Act act);
+ten dl_da_da_dz(const ten &y_target, const ten &y_pred, Act act);

@@ -4,8 +4,8 @@
 
 struct IMDB
 {
-    Ten features;
-    Ten targets;
+    ten features;
+    ten targets;
 };
 
 IMDB LoadIMDB();

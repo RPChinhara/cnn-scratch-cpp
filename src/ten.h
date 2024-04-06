@@ -3,29 +3,29 @@
 #include <iostream>
 #include <vector>
 
-class Ten
+class ten
 {
   public:
     size_t size;
     std::vector<size_t> shape;
     float *elem = nullptr;
 
-    Ten() = default;
-    Ten(const std::vector<float> elem, const std::vector<size_t> shape);
-    ~Ten();
-    Ten(const Ten &other);
-    Ten(Ten &&other);
-    Ten &operator=(const Ten &other);
-    Ten &operator=(Ten &&other);
-    Ten operator+(const Ten &t) const;
-    Ten operator-(const Ten &t) const;
-    Ten operator*(const Ten &t) const;
-    Ten operator/(const Ten &t) const;
-    Ten operator+=(const Ten &other) const;
-    Ten operator-=(const Ten &other) const;
+    ten() = default;
+    ten(const std::vector<float> elem, const std::vector<size_t> shape);
+    ~ten();
+    ten(const ten &other);
+    ten(ten &&other);
+    ten &operator=(const ten &other);
+    ten &operator=(ten &&other);
+    ten operator+(const ten &t) const;
+    ten operator-(const ten &t) const;
+    ten operator*(const ten &t) const;
+    ten operator/(const ten &t) const;
+    ten operator+=(const ten &other) const;
+    ten operator-=(const ten &other) const;
     float &operator[](const size_t idx) const;
-    friend Ten operator-(const float sca, const Ten &t);
-    friend Ten operator*(const float sca, const Ten &t);
-    friend void operator/(const Ten &t, const float sca);
-    friend std::ostream &operator<<(std::ostream &os, const Ten &t);
+    friend ten operator-(const float sca, const ten &t);
+    friend ten operator*(const float sca, const ten &t);
+    friend void operator/(const ten &t, const float sca);
+    friend std::ostream &operator<<(std::ostream &os, const ten &t);
 };

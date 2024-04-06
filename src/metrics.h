@@ -1,5 +1,5 @@
 #pragma once
 
-class Ten;
+class ten;
 
-float categorical_accuracy(const Ten &y_target, const Ten &y_pred);
+float categorical_accuracy(const ten &y_target, const ten &y_pred);

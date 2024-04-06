@@ -5,9 +5,9 @@
 
 #include <cassert>
 
-Ten Argmax(const Ten &t)
+ten Argmax(const ten &t)
 {
-    Ten newTensor = zeros({t.shape.front()});
+    ten newTensor = zeros({t.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
@@ -32,9 +32,9 @@ Ten Argmax(const Ten &t)
     return newTensor;
 }
 
-Ten Exp(const Ten &t, Dev dev)
+ten Exp(const ten &t, Dev dev)
 {
-    Ten newTensor = t;
+    ten newTensor = t;
 
     switch (dev)
     {
@@ -67,13 +67,13 @@ Ten Exp(const Ten &t, Dev dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return Ten();
+        return ten();
     }
 }
 
-Ten Log(const Ten &t, Dev dev)
+ten Log(const ten &t, Dev dev)
 {
-    Ten newTensor = t;
+    ten newTensor = t;
 
     switch (dev)
     {
@@ -105,14 +105,14 @@ Ten Log(const Ten &t, Dev dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return Ten();
+        return ten();
     }
 }
 
-Ten Max(const Ten &t, const size_t axis)
+ten Max(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    Ten newTensor;
+    ten newTensor;
 
     if (axis == 0)
     {
@@ -156,9 +156,9 @@ Ten Max(const Ten &t, const size_t axis)
     return newTensor;
 }
 
-Ten Min(const Ten &t)
+ten Min(const ten &t)
 {
-    Ten newTensor = zeros({1, t.shape.back()});
+    ten newTensor = zeros({1, t.shape.back()});
 
     for (size_t i = 0; i < t.shape.back(); ++i)
     {
@@ -178,10 +178,10 @@ Ten Min(const Ten &t)
     return newTensor;
 }
 
-Ten Sum(const Ten &t, const size_t axis)
+ten Sum(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    Ten newTensor;
+    ten newTensor;
 
     if (t.shape.size() == 1 || t.shape.front() == 1)
     {

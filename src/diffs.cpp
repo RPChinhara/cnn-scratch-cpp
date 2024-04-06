@@ -1,9 +1,9 @@
 #include "diffs.h"
 #include "ten.h"
 
-Ten da_dz(const Ten &t, Act act)
+ten da_dz(const ten &t, Act act)
 {
-    Ten newTensor = t;
+    ten newTensor = t;
 
     switch (act)
     {
@@ -22,11 +22,11 @@ Ten da_dz(const Ten &t, Act act)
     }
     default:
         std::cout << "Unknown act." << std::endl;
-        return Ten();
+        return ten();
     }
 }
 
-Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act)
+ten dl_da_da_dz(const ten &y_target, const ten &y_pred, Act act)
 {
     switch (act)
     {
@@ -38,6 +38,6 @@ Ten dl_da_da_dz(const Ten &y_target, const Ten &y_pred, Act act)
     }
     default:
         std::cout << "Unknown act." << std::endl;
-        return Ten();
+        return ten();
     }
 }

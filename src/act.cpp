@@ -3,13 +3,13 @@
 #include "math.hpp"
 #include "ten.h"
 
-Ten act(const Ten &t, Act act, Dev dev)
+ten act(const ten &t, Act act, Dev dev)
 {
 
     switch (act)
     {
     case RELU: {
-        Ten newTensor = t;
+        ten newTensor = t;
 
         switch (dev)
         {
@@ -41,15 +41,15 @@ Ten act(const Ten &t, Act act, Dev dev)
         }
         default:
             std::cout << "Unknown dev." << std::endl;
-            return Ten();
+            return ten();
         }
     }
     case SOFTMAX: {
-        Ten expScores = Exp(t - Max(t, 1), Dev::CPU);
+        ten expScores = Exp(t - Max(t, 1), Dev::CPU);
         return expScores / Sum(expScores, 1);
     }
     default:
         std::cout << "Unknown act." << std::endl;
-        return Ten();
+        return ten();
     }
 }

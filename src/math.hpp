@@ -2,11 +2,11 @@
 
 #include "dev.h"
 
-class Ten;
+class ten;
 
-Ten Argmax(const Ten &t);
-Ten Exp(const Ten &t, Dev dev);
-Ten Log(const Ten &t, Dev dev);
-Ten Max(const Ten &t, const size_t axis);
-Ten Min(const Ten &t);
-Ten Sum(const Ten &t, const size_t axis);
+ten Argmax(const ten &t);
+ten Exp(const ten &t, Dev dev);
+ten Log(const ten &t, Dev dev);
+ten Max(const ten &t, const size_t axis);
+ten Min(const ten &t);
+ten Sum(const ten &t, const size_t axis);

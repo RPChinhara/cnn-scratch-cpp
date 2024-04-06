@@ -19,18 +19,18 @@ nn::nn(const std::vector<size_t> &lyrs, const float lr)
     this->lr = lr;
 }
 
-void nn::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val)
+void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
     size_t rd_num;
     std::random_device rd;
     std::vector<std::string> buff;
-    Ten x_shuffled;
-    Ten y_shuffled;
-    Ten x_batch;
-    Ten y_batch;
-    std::vector<Ten> a_val;
-    std::vector<Ten> dl_dz, dl_dw, dl_db;
+    ten x_shuffled;
+    ten y_shuffled;
+    ten x_batch;
+    ten y_batch;
+    std::vector<ten> a_val;
+    std::vector<ten> dl_dz, dl_dw, dl_db;
 
     w_b = init_params();
     w_b_mom = init_params();
@@ -136,7 +136,7 @@ void nn::train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const T
     }
 }
 
-void nn::pred(const Ten &x_test, const Ten &y_test)
+void nn::pred(const ten &x_test, const ten &y_test)
 {
     a = forward_prop(x_test, w_b.first, w_b.second);
 
@@ -148,10 +148,10 @@ void nn::pred(const Ten &x_test, const Ten &y_test)
     std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<Ten>, std::vector<Ten>> nn::init_params()
+std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
 {
-    std::vector<Ten> w;
-    std::vector<Ten> b;
+    std::vector<ten> w;
+    std::vector<ten> b;
 
     for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
@@ -162,20 +162,20 @@ std::pair<std::vector<Ten>, std::vector<Ten>> nn::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<Ten> nn::forward_prop(const Ten &x, const std::vector<Ten> &w, const std::vector<Ten> &b)
+std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
 {
-    std::vector<Ten> a;
+    std::vector<ten> a;
 
     for (size_t i = 0; i < lyrs.size() - 1; ++i)
     {
         if (i == 0)
         {
-            Ten z = matmul(x, w[i], Dev::CPU) + b[i];
+            ten z = matmul(x, w[i], Dev::CPU) + b[i];
             a.push_back(act(z, acts[i], Dev::CPU));
         }
         else
         {
-            Ten z = matmul(a[i - 1], w[i], Dev::CPU) + b[i];
+            ten z = matmul(a[i - 1], w[i], Dev::CPU) + b[i];
             a.push_back(act(z, acts[i], Dev::CPU));
         }
     }

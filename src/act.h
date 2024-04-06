@@ -9,6 +9,6 @@ enum Act
     SOFTMAX
 };
 
-class Ten;
+class ten;
 
-Ten act(const Ten &t, Act act, Dev dev);
+ten act(const ten &t, Act act, Dev dev);

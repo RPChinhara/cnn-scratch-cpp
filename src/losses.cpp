@@ -4,13 +4,13 @@
 #include "math.hpp"
 #include "ten.h"
 
-float categorical_cross_entropy(const Ten &y_target, const Ten &y_pred)
+float categorical_cross_entropy(const ten &y_target, const ten &y_pred)
 {
     float sum = 0.0f;
     constexpr float epsilon = 1e-15f;
     size_t num_samples = y_target.shape.front();
-    Ten y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
-    Ten log = Log(y_pred_clipped, Dev::CPU);
+    ten y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
+    ten log = Log(y_pred_clipped, Dev::CPU);
 
     for (size_t i = 0; i < y_target.size; ++i)
         sum += y_target[i] * log[i];

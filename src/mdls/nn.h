@@ -4,24 +4,24 @@
 
 #include <vector>
 
-class Ten;
+class ten;
 
 class nn
 {
   public:
     nn(const std::vector<size_t> &lyrs, float const lr);
-    void train(const Ten &x_train, const Ten &y_train, const Ten &x_val, const Ten &y_val);
-    void pred(const Ten &x_test, const Ten &y_test);
+    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
+    void pred(const ten &x_test, const ten &y_test);
 
   private:
-    std::pair<std::vector<Ten>, std::vector<Ten>> init_params();
-    std::vector<Ten> forward_prop(const Ten &x, const std::vector<Ten> &w, const std::vector<Ten> &b);
+    std::pair<std::vector<ten>, std::vector<ten>> init_params();
+    std::vector<ten> forward_prop(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
 
     std::vector<size_t> lyrs;
     std::vector<Act> acts = {RELU, SOFTMAX};
-    std::pair<std::vector<Ten>, std::vector<Ten>> w_b;
-    std::pair<std::vector<Ten>, std::vector<Ten>> w_b_mom;
-    std::vector<Ten> a;
+    std::pair<std::vector<ten>, std::vector<ten>> w_b;
+    std::pair<std::vector<ten>, std::vector<ten>> w_b_mom;
+    std::vector<ten> a;
     size_t batch_size = 10;
     size_t epochs = 200;
     float lr;

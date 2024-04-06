@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-Ten ReadMNISTImages(const std::string &filePath)
+ten ReadMNISTImages(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -31,7 +31,7 @@ Ten ReadMNISTImages(const std::string &filePath)
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
-    Ten images2 = zeros({numImages, numRows, numCols});
+    ten images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
     for (uint32_t i = 0; i < numImages; ++i)
@@ -51,7 +51,7 @@ Ten ReadMNISTImages(const std::string &filePath)
     return images2;
 }
 
-Ten ReadMNISTLabels(const std::string &filePath)
+ten ReadMNISTLabels(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -70,7 +70,7 @@ Ten ReadMNISTLabels(const std::string &filePath)
 
     file.read(reinterpret_cast<char *>(labels.data()), numLabels);
 
-    Ten labels2 = zeros({numLabels, 1});
+    ten labels2 = zeros({numLabels, 1});
     size_t idx = 0;
 
     for (uint32_t i = 0; i < numLabels; ++i)

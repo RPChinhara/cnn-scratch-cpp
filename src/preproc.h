@@ -7,19 +7,19 @@
 
 struct TrainTest
 {
-    Ten train_features;
-    Ten train_targets;
-    Ten test_features;
-    Ten test_targets;
+    ten train_features;
+    ten train_targets;
+    ten test_features;
+    ten test_targets;
 };
 
 std::string AddSpaceBetweenPunct(const std::string &text);
 
 std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens);
 
-Ten min_max_scaler(Ten &dataset);
+ten min_max_scaler(ten &dataset);
 
-Ten one_hot(const Ten &t, const size_t depth);
+ten one_hot(const ten &t, const size_t depth);
 
 std::string RemoveEmoji(const std::string &text);
 
@@ -45,4 +45,4 @@ std::vector<std::string> Tokenizer(const std::string &text);
 
 std::string ToLower(const std::string &text);
 
-TrainTest train_test_split(const Ten &x, const Ten &y, const float testSize, const size_t randomState);
+TrainTest train_test_split(const ten &x, const ten &y, const float testSize, const size_t randomState);

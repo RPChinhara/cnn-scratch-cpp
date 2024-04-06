@@ -2,7 +2,7 @@
 
 #include <vector>
 
-class Ten;
+class ten;
 
-Ten normal_dist(const std::vector<size_t> &shape, const float mean = 0.0f, const float stdDev = 0.05f);
-Ten shuffle(const Ten &t, const size_t randomState);
+ten normal_dist(const std::vector<size_t> &shape, const float mean = 0.0f, const float stdDev = 0.05f);
+ten shuffle(const ten &t, const size_t randomState);

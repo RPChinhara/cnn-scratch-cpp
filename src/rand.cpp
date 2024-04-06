@@ -5,9 +5,9 @@
 #include <numeric>
 #include <random>
 
-Ten normal_dist(const std::vector<size_t> &shape, const float mean, const float stdDev)
+ten normal_dist(const std::vector<size_t> &shape, const float mean, const float stdDev)
 {
-    Ten newTensor = Ten();
+    ten newTensor = ten();
 
     for (const size_t &i : shape)
         assert(i != 0);
@@ -31,9 +31,9 @@ Ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
     return newTensor;
 }
 
-Ten shuffle(const Ten &t, const size_t randomState)
+ten shuffle(const ten &t, const size_t randomState)
 {
-    Ten newTensor = t;
+    ten newTensor = t;
     std::mt19937 rng(randomState);
 
     for (size_t i = t.shape.front() - 1; i > 0; --i)

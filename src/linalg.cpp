@@ -5,9 +5,9 @@
 
 #include <cassert>
 
-Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev)
+ten matmul(const ten &tensor1, const ten &tensor2, Dev dev)
 {
-    Ten newTensor = zeros({tensor1.shape.front(), tensor2.shape.back()});
+    ten newTensor = zeros({tensor1.shape.front(), tensor2.shape.back()});
 
     switch (dev)
     {
@@ -60,7 +60,7 @@ Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return Ten();
+        return ten();
     }
 }
 
@@ -75,11 +75,11 @@ static size_t get_batch_size(const std::vector<size_t> &shape)
     return batchSize;
 }
 
-Ten transpose(const Ten &t)
+ten transpose(const ten &t)
 {
     assert(t.shape.size() >= 2);
 
-    Ten newTensor = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
+    ten newTensor = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
 

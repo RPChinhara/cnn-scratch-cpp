@@ -1,5 +1,5 @@
 #pragma once
 
-class Ten;
+class ten;
 
-float categorical_cross_entropy(const Ten &y_target, const Ten &y_pred);
+float categorical_cross_entropy(const ten &y_target, const ten &y_pred);

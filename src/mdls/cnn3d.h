@@ -7,5 +7,5 @@ class CNN3D
     void Predict();
 
   private:
-    std::vector<Ten> ForwardPropagation(const Ten &input, const std::vector<Ten> &kernel, const size_t stride);
+    std::vector<ten> ForwardPropagation(const ten &input, const std::vector<ten> &kernel, const size_t stride);
 };

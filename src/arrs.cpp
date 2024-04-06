@@ -4,10 +4,10 @@
 #include <cassert>
 #include <numeric>
 
-Ten clip_by_value(const Ten &t, float clipValMin, float clipValMax)
+ten clip_by_value(const ten &t, float clipValMin, float clipValMax)
 {
     assert(clipValMin <= clipValMax);
-    Ten newTensor = t;
+    ten newTensor = t;
 
     for (size_t i = 0; i < t.size; ++i)
     {
@@ -20,9 +20,9 @@ Ten clip_by_value(const Ten &t, float clipValMin, float clipValMax)
     return newTensor;
 }
 
-Ten slice(const Ten &t, const size_t begin, const size_t size)
+ten slice(const ten &t, const size_t begin, const size_t size)
 {
-    Ten newTensor = zeros({size, t.shape.back()});
+    ten newTensor = zeros({size, t.shape.back()});
 
     for (size_t i = begin * t.shape.back(); i < (begin * t.shape.back()) + (size * t.shape.back()); ++i)
         newTensor[i - (begin * t.shape.back())] = t[i];
@@ -30,9 +30,9 @@ Ten slice(const Ten &t, const size_t begin, const size_t size)
     return newTensor;
 }
 
-Ten zeros(const std::vector<size_t> &shape)
+ten zeros(const std::vector<size_t> &shape)
 {
-    Ten newTensor = Ten();
+    ten newTensor = ten();
 
     for (const size_t &i : shape)
         assert(i != 0);
