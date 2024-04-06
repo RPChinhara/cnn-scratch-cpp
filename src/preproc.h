@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-struct TrainTest
+struct train_test
 {
     ten train_features;
     ten train_targets;
@@ -45,4 +45,4 @@ std::vector<std::string> Tokenizer(const std::string &text);
 
 std::string ToLower(const std::string &text);
 
-TrainTest train_test_split(const ten &x, const ten &y, const float testSize, const size_t randomState);
+train_test train_test_split(const ten &x, const ten &y, const float testSize, const size_t randomState);

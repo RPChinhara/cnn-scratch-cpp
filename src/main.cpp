@@ -30,8 +30,8 @@ int main()
 
     targets = one_hot(targets, 3);
 
-    TrainTest train_temp = train_test_split(features, targets, 0.2, 42);
-    TrainTest val_test = train_test_split(train_temp.test_features, train_temp.test_targets, 0.5, 42);
+    train_test train_temp = train_test_split(features, targets, 0.2, 42);
+    train_test val_test = train_test_split(train_temp.test_features, train_temp.test_targets, 0.5, 42);
 
     train_temp.train_features = min_max_scaler(train_temp.train_features);
     val_test.train_features = min_max_scaler(val_test.train_features);
