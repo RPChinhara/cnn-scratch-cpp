@@ -11,10 +11,10 @@ iris load_iris()
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
 
-    size_t idxFeatures = 0;
-    size_t idxTarget = 0;
-    ten features = zeros({150, 4});
-    ten targets = zeros({150, 1});
+    size_t idx_x = 0;
+    size_t idx_y = 0;
+    ten x = zeros({150, 4});
+    ten y = zeros({150, 1});
 
     std::string line;
     std::getline(file, line);
@@ -27,45 +27,45 @@ iris load_iris()
         std::getline(ss, value, ',');
 
         std::getline(ss, value, ',');
-        features[idxFeatures] = std::stof(value);
-        ++idxFeatures;
+        x[idx_x] = std::stof(value);
+        ++idx_x;
 
         std::getline(ss, value, ',');
-        features[idxFeatures] = std::stof(value);
-        ++idxFeatures;
+        x[idx_x] = std::stof(value);
+        ++idx_x;
 
         std::getline(ss, value, ',');
-        features[idxFeatures] = std::stof(value);
-        ++idxFeatures;
+        x[idx_x] = std::stof(value);
+        ++idx_x;
 
         std::getline(ss, value, ',');
-        features[idxFeatures] = std::stof(value);
-        ++idxFeatures;
+        x[idx_x] = std::stof(value);
+        ++idx_x;
 
         std::getline(ss, value);
 
         if (value == "Iris-setosa")
         {
-            targets[idxTarget] = 0.0f;
-            ++idxTarget;
+            y[idx_y] = 0.0f;
+            ++idx_y;
         }
         else if (value == "Iris-versicolor")
         {
-            targets[idxTarget] = 1.0f;
-            ++idxTarget;
+            y[idx_y] = 1.0f;
+            ++idx_y;
         }
         else if (value == "Iris-virginica")
         {
-            targets[idxTarget] = 2.0f;
-            ++idxTarget;
+            y[idx_y] = 2.0f;
+            ++idx_y;
         }
     }
 
     file.close();
 
     iris data;
-    data.features = features;
-    data.targets = targets;
+    data.x = x;
+    data.y = y;
 
     return data;
 }

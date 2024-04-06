@@ -25,12 +25,12 @@
 int main()
 {
     iris data = load_iris();
-    ten features = data.features;
-    ten targets = data.targets;
+    ten x = data.x;
+    ten y = data.y;
 
-    targets = one_hot(targets, 3);
+    y = one_hot(y, 3);
 
-    train_test train_temp = train_test_split(features, targets, 0.2, 42);
+    train_test train_temp = train_test_split(x, y, 0.2, 42);
     train_test val_test = train_test_split(train_temp.test_features, train_temp.test_targets, 0.5, 42);
 
     train_temp.train_features = min_max_scaler(train_temp.train_features);

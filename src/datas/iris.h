@@ -4,8 +4,8 @@
 
 struct iris
 {
-    ten features;
-    ten targets;
+    ten x;
+    ten y;
 };
 
 iris load_iris();
