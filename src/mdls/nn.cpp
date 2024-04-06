@@ -13,9 +13,10 @@
 #include <chrono>
 #include <random>
 
-nn::nn(const std::vector<size_t> &lyrs, const float lr)
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<Act> &acts, const float lr)
 {
     this->lyrs = lyrs;
+    this->acts = acts;
     this->lr = lr;
 }
 
