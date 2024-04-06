@@ -26,15 +26,15 @@ ten da_dz(const ten &t, act_enum act)
     }
 }
 
-ten dl_da_da_dz(const ten &y_target, const ten &y_pred, act_enum act)
+ten dl_da_da_dz(const ten &y_true, const ten &y_pred, act_enum act)
 {
     switch (act)
     {
     case ACT_SIGMOID: {
-        return (y_pred - y_target) * y_pred * (1 - y_pred);
+        return (y_pred - y_true) * y_pred * (1 - y_pred);
     }
     case ACT_SOFTMAX: {
-        return (y_pred - y_target);
+        return (y_pred - y_true);
     }
     default:
         std::cout << "Unknown act." << std::endl;

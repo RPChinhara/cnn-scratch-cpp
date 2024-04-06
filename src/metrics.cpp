@@ -2,15 +2,15 @@
 #include "math.hpp"
 #include "ten.h"
 
-float categorical_accuracy(const ten &y_target, const ten &y_pred)
+float categorical_accuracy(const ten &y_true, const ten &y_pred)
 {
-    ten target_idx = Argmax(y_target);
+    ten idx_true = Argmax(y_true);
     ten pred_idx = Argmax(y_pred);
     float equal = 0.0f;
 
-    for (size_t i = 0; i < target_idx.size; ++i)
-        if (target_idx[i] == pred_idx[i])
+    for (size_t i = 0; i < idx_true.size; ++i)
+        if (idx_true[i] == pred_idx[i])
             ++equal;
 
-    return equal / target_idx.size;
+    return equal / idx_true.size;
 }
