@@ -19,7 +19,7 @@ int main()
     val_test.train_features = min_max_scaler(val_test.train_features);
     val_test.test_features = min_max_scaler(val_test.test_features);
 
-    nn classifier = nn({4, 128, 3}, {RELU, SOFTMAX}, 0.01f);
+    nn classifier = nn({4, 128, 3}, {ACT_RELU, ACT_SOFTMAX}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 

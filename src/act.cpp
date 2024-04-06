@@ -3,12 +3,12 @@
 #include "math.hpp"
 #include "ten.h"
 
-ten act(const ten &t, Act act, dev_type dev)
+ten act(const ten &t, act_enum act, dev_type dev)
 {
 
     switch (act)
     {
-    case RELU: {
+    case ACT_RELU: {
         ten newTensor = t;
 
         switch (dev)
@@ -44,7 +44,7 @@ ten act(const ten &t, Act act, dev_type dev)
             return ten();
         }
     }
-    case SOFTMAX: {
+    case ACT_SOFTMAX: {
         ten expScores = Exp(t - Max(t, 1), DEV_CPU);
         return expScores / Sum(expScores, 1);
     }

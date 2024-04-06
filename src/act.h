@@ -2,13 +2,13 @@
 
 #include "dev.h"
 
-enum Act
+enum act_enum
 {
-    RELU,
-    SIGMOID,
-    SOFTMAX
+    ACT_RELU,
+    ACT_SIGMOID,
+    ACT_SOFTMAX
 };
 
 class ten;
 
-ten act(const ten &t, Act act, dev_type dev);
+ten act(const ten &t, act_enum act, dev_type dev);
