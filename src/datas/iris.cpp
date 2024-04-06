@@ -13,6 +13,7 @@ iris load_iris()
 
     size_t idx_x = 0;
     size_t idx_y = 0;
+    
     ten x = zeros({150, 4});
     ten y = zeros({150, 1});
 
