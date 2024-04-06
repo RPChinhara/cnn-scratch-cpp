@@ -4,9 +4,9 @@
 
 class Ten;
 
-Ten Argmax(const Ten &ten);
-Ten Exp(const Ten &ten, Dev dev);
-Ten Log(const Ten &ten, Dev dev);
-Ten Max(const Ten &ten, const size_t axis);
-Ten Min(const Ten &ten);
-Ten Sum(const Ten &ten, const size_t axis);
+Ten Argmax(const Ten &t);
+Ten Exp(const Ten &t, Dev dev);
+Ten Log(const Ten &t, Dev dev);
+Ten Max(const Ten &t, const size_t axis);
+Ten Min(const Ten &t);
+Ten Sum(const Ten &t, const size_t axis);

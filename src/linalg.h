@@ -5,4 +5,4 @@
 class Ten;
 
 Ten matmul(const Ten &tensor1, const Ten &tensor2, Dev dev);
-Ten transpose(const Ten &ten);
+Ten transpose(const Ten &t);

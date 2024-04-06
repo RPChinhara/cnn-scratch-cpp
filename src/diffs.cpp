@@ -1,18 +1,18 @@
 #include "diffs.h"
 #include "ten.h"
 
-Ten da_dz(const Ten &ten, Act act)
+Ten da_dz(const Ten &t, Act act)
 {
-    Ten newTensor = ten;
+    Ten newTensor = t;
 
     switch (act)
     {
     case RELU: {
-        for (size_t i = 0; i < ten.size; ++i)
+        for (size_t i = 0; i < t.size; ++i)
         {
-            if (ten[i] > 0.0f)
+            if (t[i] > 0.0f)
                 newTensor[i] = 1.0f;
-            else if (ten[i] == 0.0f)
+            else if (t[i] == 0.0f)
                 newTensor[i] = 0.0f;
             else
                 newTensor[i] = 0.0f;

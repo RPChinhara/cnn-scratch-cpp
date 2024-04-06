@@ -91,46 +91,46 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-Ten Ten::operator+(const Ten &ten) const
+Ten Ten::operator+(const Ten &t) const
 {
     Ten newTensor = *this;
-    if (ShapeEqual(shape, ten.shape))
+    if (ShapeEqual(shape, t.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] + ten[i];
+            newTensor[i] = elem[i] + t[i];
     }
     else
     {
-        assert(shape.back() == ten.shape.back());
+        assert(shape.back() == t.shape.back());
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] + ten[i % ten.shape.back()];
+            newTensor[i] = elem[i] + t[i % t.shape.back()];
     }
     return newTensor;
 }
 
-// Ten Ten::operator+(const Ten& ten) const
+// Ten Ten::operator+(const Ten& t) const
 // {
 //     Ten newTensor;
-//     if (ShapeEqual(shape, ten.shape)) {
+//     if (ShapeEqual(shape, t.shape)) {
 //         newTensor = *this;
 //         std::cout << "1" << std::endl;
 //         for (size_t i = 0; i < newTensor.size; ++i)
-//             newTensor[i] = elem[i] + ten[i];
+//             newTensor[i] = elem[i] + t[i];
 //     } else {
 //         // std::cout << "2" << std::endl;
 
-//         assert(shape.back() == ten.shape.back());
+//         assert(shape.back() == t.shape.back());
 
 //         float *A, *B, *C;
 //         cudaMalloc((void**)&A, this->size * sizeof(float));
 //         cudaMalloc((void**)&B, this->size * sizeof(float));
 //         cudaMalloc((void**)&C, this->size * sizeof(float));
 //         cudaMemcpy(A, elem, this->size * sizeof(float), cudaMemcpyHostToDevice);
-//         cudaMemcpy(B, ten.elem, ten.size * sizeof(float), cudaMemcpyHostToDevice);
+//         cudaMemcpy(B, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
 //         constexpr int blockSize = 128;
 //         int gridSize = (this->size + blockSize - 1) / blockSize;
-//         OperatorPlus<<<gridSize, blockSize>>>(A, B, C, ten.shape.back(), this->size);
+//         OperatorPlus<<<gridSize, blockSize>>>(A, B, C, t.shape.back(), this->size);
 
 //         cudaError_t cudaError = cudaGetLastError();
 //         if (cudaError != cudaSuccess)
@@ -148,33 +148,33 @@ Ten Ten::operator+(const Ten &ten) const
 //     return newTensor;
 // }
 
-Ten Ten::operator-(const Ten &ten) const
+Ten Ten::operator-(const Ten &t) const
 {
     Ten newTensor = *this;
-    if (ShapeEqual(shape, ten.shape))
+    if (ShapeEqual(shape, t.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] - ten[i];
+            newTensor[i] = elem[i] - t[i];
     }
-    else if (shape.back() == ten.shape.back())
+    else if (shape.back() == t.shape.back())
     {
         size_t idx = 0;
         for (size_t i = 0; i < newTensor.size; ++i)
         {
-            if (idx == ten.shape.back())
+            if (idx == t.shape.back())
                 idx = 0;
-            newTensor[i] = elem[i] - ten[idx];
+            newTensor[i] = elem[i] - t[idx];
             ++idx;
         }
     }
-    else if (shape.front() == ten.shape.front())
+    else if (shape.front() == t.shape.front())
     {
         size_t idx = 0;
         for (size_t i = 0; i < shape.front(); ++i)
         {
             for (size_t j = 0; j < shape.back(); ++j)
             {
-                newTensor[idx] = elem[idx] - ten[i];
+                newTensor[idx] = elem[idx] - t[i];
                 ++idx;
             }
         }
@@ -182,57 +182,57 @@ Ten Ten::operator-(const Ten &ten) const
     return newTensor;
 }
 
-Ten Ten::operator*(const Ten &ten) const
+Ten Ten::operator*(const Ten &t) const
 {
     Ten newTensor = *this;
-    if (ShapeEqual(shape, ten.shape))
+    if (ShapeEqual(shape, t.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] * ten[i];
+            newTensor[i] = elem[i] * t[i];
     }
     else
     {
-        assert(shape.back() == ten.shape.back());
+        assert(shape.back() == t.shape.back());
         size_t idx = 0;
         for (size_t i = 0; i < newTensor.size; ++i)
         {
-            if (idx == ten.shape.back())
+            if (idx == t.shape.back())
                 idx = 0;
-            newTensor[i] = elem[i] * ten[idx];
+            newTensor[i] = elem[i] * t[idx];
             ++idx;
         }
     }
     return newTensor;
 }
 
-Ten Ten::operator/(const Ten &ten) const
+Ten Ten::operator/(const Ten &t) const
 {
     Ten newTensor = *this;
-    if (ShapeEqual(shape, ten.shape))
+    if (ShapeEqual(shape, t.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] / ten[i];
+            newTensor[i] = elem[i] / t[i];
     }
     else
     {
         size_t idx = 0;
-        if (shape.back() == ten.shape.back())
+        if (shape.back() == t.shape.back())
         {
             for (size_t i = 0; i < newTensor.size; ++i)
             {
-                if (idx == ten.shape.back())
+                if (idx == t.shape.back())
                     idx = 0;
-                newTensor[i] = elem[i] / ten[idx];
+                newTensor[i] = elem[i] / t[idx];
                 ++idx;
             }
         }
-        else if (shape.front() == ten.shape.front())
+        else if (shape.front() == t.shape.front())
         {
             for (size_t i = 0; i < newTensor.size; ++i)
             {
                 if (i == shape.back())
                     ++idx;
-                newTensor[i] = elem[i] / ten[idx];
+                newTensor[i] = elem[i] / t[idx];
             }
         }
         else
@@ -263,26 +263,26 @@ float &Ten::operator[](const size_t idx) const
     return elem[idx];
 }
 
-Ten operator-(const float sca, const Ten &ten)
+Ten operator-(const float sca, const Ten &t)
 {
-    Ten newTensor = ten;
-    for (size_t i = 0; i < ten.size; ++i)
-        newTensor[i] = sca - ten[i];
+    Ten newTensor = t;
+    for (size_t i = 0; i < t.size; ++i)
+        newTensor[i] = sca - t[i];
     return newTensor;
 }
 
-Ten operator*(const float sca, const Ten &ten)
+Ten operator*(const float sca, const Ten &t)
 {
-    Ten newTensor = ten;
-    for (size_t i = 0; i < ten.size; ++i)
-        newTensor[i] = sca * ten[i];
+    Ten newTensor = t;
+    for (size_t i = 0; i < t.size; ++i)
+        newTensor[i] = sca * t[i];
     return newTensor;
 }
 
-void operator/(const Ten &ten, const float sca)
+void operator/(const Ten &t, const float sca)
 {
-    for (size_t i = 0; i < ten.size; ++i)
-        ten[i] = ten[i] / sca;
+    for (size_t i = 0; i < t.size; ++i)
+        t[i] = t[i] / sca;
 }
 
 static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)
@@ -305,48 +305,48 @@ static std::vector<size_t> GetNumElemEachBatch(const std::vector<size_t> &shape)
     return num_elem_each_batch;
 }
 
-std::ostream &operator<<(std::ostream &os, const Ten &ten)
+std::ostream &operator<<(std::ostream &os, const Ten &t)
 {
     size_t idx = 0;
-    if (ten.shape.size() == 0)
+    if (t.shape.size() == 0)
     {
-        os << "Tensor(" << std::to_string(ten[0]) << ", shape=())";
+        os << "Tensor(" << std::to_string(t[0]) << ", shape=())";
         return os;
     }
     else
     {
-        if (ten.size == 1)
+        if (t.size == 1)
         {
             os << "Tensor(";
-            for (size_t i = 0; i < ten.shape.size(); ++i)
+            for (size_t i = 0; i < t.shape.size(); ++i)
                 os << "[";
         }
         else
         {
             os << "Tensor(\n";
-            for (size_t i = 0; i < ten.shape.size(); ++i)
+            for (size_t i = 0; i < t.shape.size(); ++i)
                 os << "[";
         }
 
-        if (ten.size == 1)
+        if (t.size == 1)
         {
-            for (size_t i = 0; i < ten.size; ++i)
-                if (i == ten.size - 1)
-                    os << std::to_string(ten[i]);
+            for (size_t i = 0; i < t.size; ++i)
+                if (i == t.size - 1)
+                    os << std::to_string(t[i]);
                 else
-                    os << std::to_string(ten[i]) << " ";
+                    os << std::to_string(t[i]) << " ";
         }
         else
         {
-            std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(ten.shape);
-            size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(ten.shape);
+            std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(t.shape);
+            size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(t.shape);
 
-            for (size_t i = 0; i < ten.size; ++i)
+            for (size_t i = 0; i < t.size; ++i)
             {
                 bool num_elem_each_batch_done = false;
                 size_t num_square_brackets = 0;
 
-                if (ten.shape.size() > 2)
+                if (t.shape.size() > 2)
                 {
                     for (int j = num_elem_each_batch.size() - 1; j >= 0; --j)
                     {
@@ -359,11 +359,11 @@ std::ostream &operator<<(std::ostream &os, const Ten &ten)
                     }
                 }
 
-                if (i % ten.shape.back() == 0 && i != 0 && !(i % num_elem_most_inner_mat == 0))
+                if (i % t.shape.back() == 0 && i != 0 && !(i % num_elem_most_inner_mat == 0))
                 {
                     os << "]\n";
 
-                    for (size_t i = 0; i < ten.shape.size() - 1; ++i)
+                    for (size_t i = 0; i < t.shape.size() - 1; ++i)
                         os << " ";
 
                     os << "[";
@@ -390,7 +390,7 @@ std::ostream &operator<<(std::ostream &os, const Ten &ten)
                     {
                         for (size_t i = 0; i < num_square_brackets; ++i)
                             os << "\n";
-                        for (size_t i = 0; i < ten.shape.size() - num_square_brackets - 1; ++i)
+                        for (size_t i = 0; i < t.shape.size() - num_square_brackets - 1; ++i)
                             os << " ";
                         for (size_t i = 0; i < num_square_brackets + 1; ++i)
                             os << "[";
@@ -398,31 +398,31 @@ std::ostream &operator<<(std::ostream &os, const Ten &ten)
                     else
                     {
                         os << "\n";
-                        for (size_t i = 0; i < ten.shape.size() - 2; ++i)
+                        for (size_t i = 0; i < t.shape.size() - 2; ++i)
                             os << " ";
                         os << "[[";
                     }
                 }
 
-                if (i == ten.size - 1)
+                if (i == t.size - 1)
                 {
-                    os << std::to_string(ten[i]);
+                    os << std::to_string(t[i]);
                     continue;
                 }
 
-                if (idx == ten.shape.back())
+                if (idx == t.shape.back())
                     idx = 0;
 
-                if (ten.shape.back() == 1)
+                if (t.shape.back() == 1)
                 {
-                    os << std::to_string(ten[i]);
+                    os << std::to_string(t[i]);
                 }
                 else
                 {
-                    if (idx % (ten.shape.back() - 1) == 0 && idx != 0)
-                        os << std::to_string(ten[i]);
+                    if (idx % (t.shape.back() - 1) == 0 && idx != 0)
+                        os << std::to_string(t[i]);
                     else
-                        os << std::to_string(ten[i]) << " ";
+                        os << std::to_string(t[i]) << " ";
                 }
                 ++idx;
 
@@ -430,19 +430,19 @@ std::ostream &operator<<(std::ostream &os, const Ten &ten)
             }
         }
 
-        for (size_t i = 0; i < ten.shape.size(); ++i)
+        for (size_t i = 0; i < t.shape.size(); ++i)
             os << "]";
     }
 
     os << ", shape=(";
-    for (size_t i = 0; i < ten.shape.size(); ++i)
+    for (size_t i = 0; i < t.shape.size(); ++i)
     {
-        if (i != ten.shape.size() - 1)
-            os << ten.shape[i] << ", ";
-        else if (ten.shape.size() == 1)
-            os << ten.shape[i] << ",";
+        if (i != t.shape.size() - 1)
+            os << t.shape[i] << ", ";
+        else if (t.shape.size() == 1)
+            os << t.shape[i] << ",";
         else
-            os << ten.shape[i];
+            os << t.shape[i];
     }
     os << "))";
 

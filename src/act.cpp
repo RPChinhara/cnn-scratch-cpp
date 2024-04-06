@@ -3,37 +3,37 @@
 #include "math.hpp"
 #include "ten.h"
 
-Ten act(const Ten &ten, Act act, Dev dev)
+Ten act(const Ten &t, Act act, Dev dev)
 {
 
     switch (act)
     {
     case RELU: {
-        Ten newTensor = ten;
+        Ten newTensor = t;
 
         switch (dev)
         {
         case Dev::CPU: {
-            for (size_t i = 0; i < ten.size; ++i)
-                newTensor.elem[i] = std::max(0.0f, ten.elem[i]);
+            for (size_t i = 0; i < t.size; ++i)
+                newTensor.elem[i] = std::max(0.0f, t.elem[i]);
 
             return newTensor;
         }
         case Dev::GPU: {
             float *tensorGPU, *newTensorGPU;
-            cudaMalloc((void **)&tensorGPU, ten.size * sizeof(float));
-            cudaMalloc((void **)&newTensorGPU, ten.size * sizeof(float));
-            cudaMemcpy(tensorGPU, ten.elem, ten.size * sizeof(float), cudaMemcpyHostToDevice);
+            cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
+            cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));
+            cudaMemcpy(tensorGPU, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
             constexpr int blockSize = 128;
-            int gridSize = (ten.size + blockSize - 1) / blockSize;
-            Relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, ten.size);
+            int gridSize = (t.size + blockSize - 1) / blockSize;
+            Relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, t.size);
 
             cudaError_t cudaError = cudaGetLastError();
             if (cudaError != cudaSuccess)
                 std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-            cudaMemcpy(newTensor.elem, newTensorGPU, ten.size * sizeof(float), cudaMemcpyDeviceToHost);
+            cudaMemcpy(newTensor.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
             cudaFree(tensorGPU);
             cudaFree(newTensorGPU);
 
@@ -45,7 +45,7 @@ Ten act(const Ten &ten, Act act, Dev dev)
         }
     }
     case SOFTMAX: {
-        Ten expScores = Exp(ten - Max(ten, 1), Dev::CPU);
+        Ten expScores = Exp(t - Max(t, 1), Dev::CPU);
         return expScores / Sum(expScores, 1);
     }
     default:

@@ -31,21 +31,21 @@ Ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
     return newTensor;
 }
 
-Ten shuffle(const Ten &ten, const size_t randomState)
+Ten shuffle(const Ten &t, const size_t randomState)
 {
-    Ten newTensor = ten;
+    Ten newTensor = t;
     std::mt19937 rng(randomState);
 
-    for (size_t i = ten.shape.front() - 1; i > 0; --i)
+    for (size_t i = t.shape.front() - 1; i > 0; --i)
     {
         std::uniform_int_distribution<> dist(0, i);
         int j = dist(rng);
 
-        for (size_t k = 0; k < ten.shape.back(); ++k)
+        for (size_t k = 0; k < t.shape.back(); ++k)
         {
-            float temp = newTensor[(ten.shape.back() - 1) * i + i + k];
-            newTensor[(ten.shape.back() - 1) * i + i + k] = newTensor[(ten.shape.back() - 1) * j + j + k];
-            newTensor[(ten.shape.back() - 1) * j + j + k] = temp;
+            float temp = newTensor[(t.shape.back() - 1) * i + i + k];
+            newTensor[(t.shape.back() - 1) * i + i + k] = newTensor[(t.shape.back() - 1) * j + j + k];
+            newTensor[(t.shape.back() - 1) * j + j + k] = temp;
         }
     }
     return newTensor;

@@ -4,28 +4,28 @@
 #include <cassert>
 #include <numeric>
 
-Ten clip_by_value(const Ten &ten, float clipValMin, float clipValMax)
+Ten clip_by_value(const Ten &t, float clipValMin, float clipValMax)
 {
     assert(clipValMin <= clipValMax);
-    Ten newTensor = ten;
+    Ten newTensor = t;
 
-    for (size_t i = 0; i < ten.size; ++i)
+    for (size_t i = 0; i < t.size; ++i)
     {
-        if (ten[i] < clipValMin)
+        if (t[i] < clipValMin)
             newTensor[i] = clipValMin;
-        else if (ten[i] > clipValMax)
+        else if (t[i] > clipValMax)
             newTensor[i] = clipValMax;
     }
 
     return newTensor;
 }
 
-Ten slice(const Ten &ten, const size_t begin, const size_t size)
+Ten slice(const Ten &t, const size_t begin, const size_t size)
 {
-    Ten newTensor = zeros({size, ten.shape.back()});
+    Ten newTensor = zeros({size, t.shape.back()});
 
-    for (size_t i = begin * ten.shape.back(); i < (begin * ten.shape.back()) + (size * ten.shape.back()); ++i)
-        newTensor[i - (begin * ten.shape.back())] = ten[i];
+    for (size_t i = begin * t.shape.back(); i < (begin * t.shape.back()) + (size * t.shape.back()); ++i)
+        newTensor[i - (begin * t.shape.back())] = t[i];
 
     return newTensor;
 }

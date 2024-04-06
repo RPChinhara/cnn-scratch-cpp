@@ -19,7 +19,7 @@ std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens);
 
 Ten min_max_scaler(Ten &dataset);
 
-Ten one_hot(const Ten &ten, const size_t depth);
+Ten one_hot(const Ten &t, const size_t depth);
 
 std::string RemoveEmoji(const std::string &text);
 

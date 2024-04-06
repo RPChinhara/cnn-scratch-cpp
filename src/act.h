@@ -11,4 +11,4 @@ enum Act
 
 class Ten;
 
-Ten act(const Ten &ten, Act act, Dev dev);
+Ten act(const Ten &t, Act act, Dev dev);

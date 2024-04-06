@@ -1,19 +1,19 @@
 #include "knls.h"
 
-__global__ void Exp(float *ten, float *newTensor, size_t n)
+__global__ void Exp(float *t, float *newTensor, size_t n)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (id < n)
-        newTensor[id] = expf(ten[id]);
+        newTensor[id] = expf(t[id]);
 }
 
-__global__ void Log(float *ten, float *newTensor, size_t n)
+__global__ void Log(float *t, float *newTensor, size_t n)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (id < n)
-        newTensor[id] = logf(ten[id]);
+        newTensor[id] = logf(t[id]);
 }
 
 __global__ void MatMul(float *tensor1, float *tensor2, float *newTensor, size_t numRowsTensor1, size_t numColsTensor1,
@@ -40,10 +40,10 @@ __global__ void MatMul(float *tensor1, float *tensor2, float *newTensor, size_t 
 // 	    newTensor[id] = in1[id] + in2[id];
 // }
 
-__global__ void Relu(float *ten, float *newTensor, size_t n)
+__global__ void Relu(float *t, float *newTensor, size_t n)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (id < n)
-        newTensor[id] = fmaxf(0.0f, ten[id]);
+        newTensor[id] = fmaxf(0.0f, t[id]);
 }
