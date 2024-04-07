@@ -57,16 +57,5 @@ int main()
 
     classifier.pred(v_te.x_test, v_te.y_test);
 
-    auto aa = ten({1, 2, 3, 4, 5, 6, 4, 4, 4}, {3, 3});
-    auto a2 = ten({1, 2, 3}, {3, 1});
-
-    auto b2 = ten({1, 2, 3, 4, 5, 6, 9, 10, 9}, {3, 3});
-    auto b = ten({1, 2, 3}, {3, 1});
-    a2 += b;
-    std::cout << a2 << std::endl;
-
-    a2 -= b;
-    std::cout << a2 << std::endl;
-
     return 0;
 }

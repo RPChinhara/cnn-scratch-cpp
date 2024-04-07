@@ -22,7 +22,6 @@ class ten
     ten operator*(const ten &other) const;
     ten operator/(const ten &other) const;
     ten operator+=(const ten &other) const;
-    ten operator-=(const ten &other) const;
     float &operator[](const size_t idx) const;
     friend ten operator-(const float sca, const ten &t);
     friend ten operator*(const float sca, const ten &t);

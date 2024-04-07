@@ -224,16 +224,9 @@ ten ten::operator/(const ten &other) const
 
 ten ten::operator+=(const ten &other) const
 {
+    // assert(ShapeEqual(shape, other.shape));
     for (size_t i = 0; i < size; ++i)
         elem[i] += other[i];
-    return *this;
-}
-
-ten ten::operator-=(const ten &other) const
-{
-    assert(ShapeEqual(shape, other.shape));
-    for (size_t i = 0; i < size; ++i)
-        elem[i] -= other[i];
     return *this;
 }
 
