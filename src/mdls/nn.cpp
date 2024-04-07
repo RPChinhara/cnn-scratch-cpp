@@ -121,18 +121,24 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
         // static size_t epochs_without_improvement = 0;
         // static float best_val_loss = std::numeric_limits<float>::max();
-        // float loss = CategoricalCrossEntropy(y_val, hiddensOutputs.back());
+        // float loss = categorical_cross_entropy(y_val, a_val.back());
 
-        // if (loss < best_val_loss) {
+        // if (loss < best_val_loss)
+        // {
         //     best_val_loss = loss;
         //     epochs_without_improvement = 0;
-        // } else {
+        // }
+        // else
+        // {
         //     epochs_without_improvement += 1;
         // }
 
-        // if (epochs_without_improvement >= patience) {
-        //     std::cout << '\n' << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " <<
-        //     patience << " epochs." << '\n'; break;
+        // if (epochs_without_improvement >= patience)
+        // {
+        //     std::cout << '\n'
+        //               << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience
+        //               << " epochs." << '\n';
+        //     break;
         // }
     }
 }

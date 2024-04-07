@@ -44,7 +44,7 @@ int main()
     v_te.x_train = min_max_scaler(v_te.x_train);
     v_te.x_test = min_max_scaler(v_te.x_test);
 
-    nn classifier = nn({4, 64, 16, 8, 3}, {ACT_RELU, ACT_RELU, ACT_RELU, ACT_SOFTMAX}, 0.01f);
+    nn classifier = nn({4, 64, 32, 3}, {ACT_RELU, ACT_RELU, ACT_SOFTMAX}, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
