@@ -230,7 +230,7 @@ ten ten::operator/(const ten &t) const
         {
             for (size_t i = 0; i < newTensor.size; ++i)
             {
-                if (i == shape.back())
+                if (i % shape.back() == 0 && i != 0)
                     ++idx;
                 newTensor[i] = elem[i] / t[idx];
             }
@@ -283,6 +283,7 @@ void operator/(const ten &t, const float sca)
 {
     for (size_t i = 0; i < t.size; ++i)
         t[i] = t[i] / sca;
+    std::cout << "fjdkfjkdjf" << std::endl;
 }
 
 static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)

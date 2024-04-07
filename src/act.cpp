@@ -46,6 +46,13 @@ ten act(const ten &t, act_enum act, dev_type dev)
     }
     case ACT_SOFTMAX: {
         ten expScores = Exp(t - Max(t, 1), DEV_CPU);
+        // std::cout << "expScores" << std::endl;
+        // std::cout << expScores << std::endl;
+        // std::cout << "Sum(expScores, 1)" << std::endl;
+        // std::cout << Sum(expScores, 1) << std::endl;
+        // std::cout << "expScores / Sum(expScores, 1)" << std::endl;
+        // std::cout << expScores / Sum(expScores, 1) << std::endl;
+
         return expScores / Sum(expScores, 1);
     }
     default:
