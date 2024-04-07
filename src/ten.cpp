@@ -180,20 +180,6 @@ ten ten::operator*(const ten &other) const
         for (size_t i = 0; i < newTensor.size; ++i)
             newTensor[i] = elem[i] * other[i];
     }
-    else
-    {
-        assert(shape.back() == other.shape.back());
-        size_t idx = 0;
-        for (size_t i = 0; i < newTensor.size; ++i)
-        {
-            if (idx == other.shape.back())
-                idx = 0;
-            newTensor[i] = elem[i] * other[idx];
-            ++idx;
-            std::cout << 1 << std::endl;
-            exit(2);
-        }
-    }
     return newTensor;
 }
 
