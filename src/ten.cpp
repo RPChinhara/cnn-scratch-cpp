@@ -201,8 +201,6 @@ ten ten::operator/(const ten &other) const
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i];
-        std::cout << 0 << std::endl;
-        exit(3);
     }
     else
     {
@@ -210,9 +208,6 @@ ten ten::operator/(const ten &other) const
         {
             for (size_t i = 0; i < size; ++i)
                 newTensor[i] = elem[i] / other[i % other.shape.back()];
-
-            std::cout << 1 << std::endl;
-            // exit(3);
         }
         else if (shape.front() == other.shape.front()) // it's working
         {
@@ -221,8 +216,6 @@ ten ten::operator/(const ten &other) const
                 size_t idx = i / shape.back();
                 newTensor[i] = elem[i] / other[idx];
             }
-            std::cout << 2 << std::endl;
-            // exit(3);
         }
         else
         {
