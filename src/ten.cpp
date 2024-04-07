@@ -164,16 +164,13 @@ ten ten::operator-(const ten &t) const
     else if (shape.front() == t.shape.front())
     {
         size_t idx = 0;
-        for (size_t i = 0; i < shape.front(); ++i)
+        for (size_t i = 0; i < newTensor.size; ++i)
         {
-            for (size_t j = 0; j < shape.back(); ++j)
-            {
-                newTensor[idx] = elem[idx] - t[i];
+            if (i % shape.back() == 0 && i != 0)
                 ++idx;
-            }
+            newTensor[i] = elem[i] - t[idx];
         }
-        // std::cout << 2 << std::endl;
-        // exit(3);
+        std::cout << 2 << std::endl;
     }
     return newTensor;
 }
