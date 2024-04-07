@@ -26,6 +26,5 @@ class ten
     float &operator[](const size_t idx) const;
     friend ten operator-(const float sca, const ten &t);
     friend ten operator*(const float sca, const ten &t);
-    friend void operator/(const ten &t, const float sca);
     friend std::ostream &operator<<(std::ostream &os, const ten &t);
 };

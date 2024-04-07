@@ -261,13 +261,6 @@ ten operator*(const float sca, const ten &t)
     return newTensor;
 }
 
-void operator/(const ten &t, const float sca)
-{
-    for (size_t i = 0; i < t.size; ++i)
-        t[i] = t[i] / sca;
-    std::cout << "fjdkfjkdjf" << std::endl;
-}
-
 static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)
 {
     size_t last_shape = shape[shape.size() - 1];
