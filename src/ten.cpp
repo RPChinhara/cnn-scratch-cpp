@@ -91,19 +91,19 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-ten ten::operator+(const ten &t) const // it's working
+ten ten::operator+(const ten &other) const // it's working
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, t.shape))
+    if (ShapeEqual(shape, other.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] + t[i];
+            newTensor[i] = elem[i] + other[i];
     }
     else
     {
-        assert(shape.back() == t.shape.back());
+        assert(shape.back() == other.shape.back());
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] + t[i % t.shape.back()];
+            newTensor[i] = elem[i] + other[i % other.shape.back()];
     }
     return newTensor;
 }
@@ -148,47 +148,47 @@ ten ten::operator+(const ten &t) const // it's working
 //     return newTensor;
 // }
 
-ten ten::operator-(const ten &t) const
+ten ten::operator-(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, t.shape)) // it's working
+    if (ShapeEqual(shape, other.shape)) // it's working
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] - t[i];
+            newTensor[i] = elem[i] - other[i];
     }
-    else if (shape.back() == t.shape.back()) // it's working
+    else if (shape.back() == other.shape.back()) // it's working
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] - t[i % t.shape.back()];
+            newTensor[i] = elem[i] - other[i % other.shape.back()];
     }
-    else if (shape.front() == t.shape.front()) // it's working
+    else if (shape.front() == other.shape.front()) // it's working
     {
         for (size_t i = 0; i < newTensor.size; ++i)
         {
             size_t idx = i / shape.back();
-            newTensor[i] = elem[i] - t[idx];
+            newTensor[i] = elem[i] - other[idx];
         }
     }
     return newTensor;
 }
 
-ten ten::operator*(const ten &t) const
+ten ten::operator*(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, t.shape)) // it's working
+    if (ShapeEqual(shape, other.shape)) // it's working
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] * t[i];
+            newTensor[i] = elem[i] * other[i];
     }
     else
     {
-        assert(shape.back() == t.shape.back());
+        assert(shape.back() == other.shape.back());
         size_t idx = 0;
         for (size_t i = 0; i < newTensor.size; ++i)
         {
-            if (idx == t.shape.back())
+            if (idx == other.shape.back())
                 idx = 0;
-            newTensor[i] = elem[i] * t[idx];
+            newTensor[i] = elem[i] * other[idx];
             ++idx;
             std::cout << 1 << std::endl;
             exit(2);
@@ -197,34 +197,34 @@ ten ten::operator*(const ten &t) const
     return newTensor;
 }
 
-ten ten::operator/(const ten &t) const
+ten ten::operator/(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, t.shape))
+    if (ShapeEqual(shape, other.shape))
     {
         for (size_t i = 0; i < newTensor.size; ++i)
-            newTensor[i] = elem[i] / t[i];
+            newTensor[i] = elem[i] / other[i];
     }
     else
     {
         size_t idx = 0;
-        if (shape.back() == t.shape.back())
+        if (shape.back() == other.shape.back())
         {
             for (size_t i = 0; i < newTensor.size; ++i)
             {
-                if (idx == t.shape.back())
+                if (idx == other.shape.back())
                     idx = 0;
-                newTensor[i] = elem[i] / t[idx];
+                newTensor[i] = elem[i] / other[idx];
                 ++idx;
             }
         }
-        else if (shape.front() == t.shape.front())
+        else if (shape.front() == other.shape.front())
         {
             for (size_t i = 0; i < newTensor.size; ++i)
             {
                 if (i % shape.back() == 0 && i != 0)
                     ++idx;
-                newTensor[i] = elem[i] / t[idx];
+                newTensor[i] = elem[i] / other[idx];
             }
         }
         else

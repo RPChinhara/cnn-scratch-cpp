@@ -17,10 +17,10 @@ class ten
     ten(ten &&other);
     ten &operator=(const ten &other);
     ten &operator=(ten &&other);
-    ten operator+(const ten &t) const;
-    ten operator-(const ten &t) const;
-    ten operator*(const ten &t) const;
-    ten operator/(const ten &t) const;
+    ten operator+(const ten &other) const;
+    ten operator-(const ten &other) const;
+    ten operator*(const ten &other) const;
+    ten operator/(const ten &other) const;
     ten operator+=(const ten &other) const;
     ten operator-=(const ten &other) const;
     float &operator[](const size_t idx) const;
