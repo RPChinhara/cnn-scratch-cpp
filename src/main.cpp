@@ -62,8 +62,11 @@ int main()
 
     auto b2 = ten({1, 2, 3, 4, 5, 6, 9, 10, 9}, {3, 3});
     auto b = ten({1, 2, 3}, {3, 1});
+    a2 += b;
+    std::cout << a2 << std::endl;
 
-    std::cout << b2 / b << std::endl;
+    a2 -= b;
+    std::cout << a2 << std::endl;
 
     return 0;
 }

@@ -225,7 +225,7 @@ ten ten::operator/(const ten &other) const
 ten ten::operator+=(const ten &other) const
 {
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] + other[i];
+        elem[i] += other[i];
     return *this;
 }
 
@@ -233,7 +233,7 @@ ten ten::operator-=(const ten &other) const
 {
     assert(ShapeEqual(shape, other.shape));
     for (size_t i = 0; i < size; ++i)
-        elem[i] = elem[i] - other[i];
+        elem[i] -= other[i];
     return *this;
 }
 
@@ -255,7 +255,6 @@ ten operator*(const float sca, const ten &t)
     ten newTensor = t;
     for (size_t i = 0; i < t.size; ++i)
         newTensor[i] = sca * t[i];
-    // exit(3);
     return newTensor;
 }
 
