@@ -91,7 +91,7 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-ten ten::operator+(const ten &other) const // it's working
+ten ten::operator+(const ten &other) const
 {
     ten newTensor = *this;
     if (ShapeEqual(shape, other.shape))
@@ -154,17 +154,17 @@ ten ten::operator+(const ten &other) const // it's working
 ten ten::operator-(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, other.shape)) // it's working
+    if (ShapeEqual(shape, other.shape))
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] - other[i];
     }
-    else if (shape.back() == other.shape.back()) // it's working
+    else if (shape.back() == other.shape.back())
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] - other[i % other.shape.back()];
     }
-    else if (shape.front() == other.shape.front()) // it's working
+    else if (shape.front() == other.shape.front())
     {
         for (size_t i = 0; i < size; ++i)
         {
@@ -182,7 +182,7 @@ ten ten::operator-(const ten &other) const
 ten ten::operator*(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, other.shape)) // it's working
+    if (ShapeEqual(shape, other.shape))
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] * other[i];
@@ -197,17 +197,17 @@ ten ten::operator*(const ten &other) const
 ten ten::operator/(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, other.shape)) // it's working
+    if (ShapeEqual(shape, other.shape))
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i];
     }
-    else if (shape.back() == other.shape.back()) // it's working
+    else if (shape.back() == other.shape.back())
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i % other.shape.back()];
     }
-    else if (shape.front() == other.shape.front()) // it's working
+    else if (shape.front() == other.shape.front())
     {
         for (size_t i = 0; i < size; ++i)
         {
