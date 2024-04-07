@@ -202,25 +202,22 @@ ten ten::operator/(const ten &other) const
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i];
     }
+    else if (shape.back() == other.shape.back()) // it's working
+    {
+        for (size_t i = 0; i < size; ++i)
+            newTensor[i] = elem[i] / other[i % other.shape.back()];
+    }
+    else if (shape.front() == other.shape.front()) // it's working
+    {
+        for (size_t i = 0; i < size; ++i)
+        {
+            size_t idx = i / shape.back();
+            newTensor[i] = elem[i] / other[idx];
+        }
+    }
     else
     {
-        if (shape.back() == other.shape.back()) // it's working
-        {
-            for (size_t i = 0; i < size; ++i)
-                newTensor[i] = elem[i] / other[i % other.shape.back()];
-        }
-        else if (shape.front() == other.shape.front()) // it's working
-        {
-            for (size_t i = 0; i < size; ++i)
-            {
-                size_t idx = i / shape.back();
-                newTensor[i] = elem[i] / other[idx];
-            }
-        }
-        else
-        {
-            std::cerr << "Shapes don't match." << std::endl;
-        }
+        std::cerr << "Shapes don't match." << std::endl;
     }
     return newTensor;
 }
@@ -258,6 +255,7 @@ ten operator*(const float sca, const ten &t)
     ten newTensor = t;
     for (size_t i = 0; i < t.size; ++i)
         newTensor[i] = sca * t[i];
+    // exit(3);
     return newTensor;
 }
 
