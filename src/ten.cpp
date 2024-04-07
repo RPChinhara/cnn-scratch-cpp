@@ -197,23 +197,23 @@ ten ten::operator*(const ten &other) const
 ten ten::operator/(const ten &other) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, other.shape))
+    if (ShapeEqual(shape, other.shape)) // it's working
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i];
+        std::cout << 0 << std::endl;
+        exit(3);
     }
     else
     {
         size_t idx = 0;
-        if (shape.back() == other.shape.back())
+        if (shape.back() == other.shape.back()) // it's working
         {
             for (size_t i = 0; i < size; ++i)
-            {
-                if (idx == other.shape.back())
-                    idx = 0;
-                newTensor[i] = elem[i] / other[idx];
-                ++idx;
-            }
+                newTensor[i] = elem[i] / other[i % other.shape.back()];
+
+            std::cout << 1 << std::endl;
+            // exit(3);
         }
         else if (shape.front() == other.shape.front())
         {
@@ -223,6 +223,8 @@ ten ten::operator/(const ten &other) const
                     ++idx;
                 newTensor[i] = elem[i] / other[idx];
             }
+            std::cout << 2 << std::endl;
+            // exit(3);
         }
         else
         {
