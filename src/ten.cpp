@@ -175,7 +175,7 @@ ten ten::operator-(const ten &t) const
 ten ten::operator*(const ten &t) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, t.shape))
+    if (ShapeEqual(shape, t.shape)) // it's working
     {
         for (size_t i = 0; i < newTensor.size; ++i)
             newTensor[i] = elem[i] * t[i];
@@ -190,6 +190,8 @@ ten ten::operator*(const ten &t) const
                 idx = 0;
             newTensor[i] = elem[i] * t[idx];
             ++idx;
+            std::cout << 1 << std::endl;
+            exit(2);
         }
     }
     return newTensor;
