@@ -99,11 +99,14 @@ ten ten::operator+(const ten &other) const // it's working
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] + other[i];
     }
-    else
+    else if (shape.back() == other.shape.back())
     {
-        assert(shape.back() == other.shape.back());
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] + other[i % other.shape.back()];
+    }
+    else
+    {
+        std::cerr << "Shapes don't match." << std::endl;
     }
     return newTensor;
 }
@@ -169,6 +172,10 @@ ten ten::operator-(const ten &other) const
             newTensor[i] = elem[i] - other[idx];
         }
     }
+    else
+    {
+        std::cerr << "Shapes don't match." << std::endl;
+    }
     return newTensor;
 }
 
@@ -179,6 +186,10 @@ ten ten::operator*(const ten &other) const
     {
         for (size_t i = 0; i < size; ++i)
             newTensor[i] = elem[i] * other[i];
+    }
+    else
+    {
+        std::cerr << "Shapes don't match." << std::endl;
     }
     return newTensor;
 }
@@ -215,7 +226,7 @@ ten ten::operator/(const ten &other) const
         }
         else
         {
-            std::cerr << "Shapes don't much." << std::endl;
+            std::cerr << "Shapes don't match." << std::endl;
         }
     }
     return newTensor;

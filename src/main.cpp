@@ -60,10 +60,10 @@ int main()
     auto aa = ten({1, 2, 3, 4, 5, 6, 4, 4, 4}, {3, 3});
     auto a2 = ten({1, 2, 3}, {3, 1});
 
-    auto b = ten({4, 5, 6}, {1, 3});
+    auto b = ten({4, 5, 6, 3}, {1, 4});
     auto b2 = ten({1, 2, 3, 4, 5, 6}, {2, 3});
 
-    // std::cout << b * b2 << std::endl;
+    std::cout << b / b2 << std::endl;
 
     // Tensor(
     // [[0.000000 1.000000 2.000000]
