@@ -91,7 +91,7 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-ten ten::operator+(const ten &t) const
+ten ten::operator+(const ten &t) const // it's working
 {
     ten newTensor = *this;
     if (ShapeEqual(shape, t.shape))
@@ -151,21 +151,15 @@ ten ten::operator+(const ten &t) const
 ten ten::operator-(const ten &t) const
 {
     ten newTensor = *this;
-    if (ShapeEqual(shape, t.shape))
+    if (ShapeEqual(shape, t.shape)) // it's working
     {
         for (size_t i = 0; i < newTensor.size; ++i)
             newTensor[i] = elem[i] - t[i];
     }
-    else if (shape.back() == t.shape.back())
+    else if (shape.back() == t.shape.back()) // it's working
     {
-        size_t idx = 0;
         for (size_t i = 0; i < newTensor.size; ++i)
-        {
-            if (idx == t.shape.back())
-                idx = 0;
-            newTensor[i] = elem[i] - t[idx];
-            ++idx;
-        }
+            newTensor[i] = elem[i] - t[i % t.shape.back()];
     }
     else if (shape.front() == t.shape.front())
     {
@@ -178,6 +172,8 @@ ten ten::operator-(const ten &t) const
                 ++idx;
             }
         }
+        // std::cout << 2 << std::endl;
+        // exit(3);
     }
     return newTensor;
 }
