@@ -178,7 +178,7 @@ ten Min(const ten &t)
     return newTensor;
 }
 
-ten Sum(const ten &t, const size_t axis)
+ten sum(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
     ten newTensor;

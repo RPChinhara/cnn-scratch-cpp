@@ -81,7 +81,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
                 else
                     dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], DEV_CPU));
 
-                dl_db.push_back(Sum(dl_dz[(lyrs.size() - 1) - k], 0));
+                dl_db.push_back(sum(dl_dz[(lyrs.size() - 1) - k], 0));
 
                 dl_dw[(lyrs.size() - 1) - k] =
                     clip_by_value(dl_dw[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
@@ -136,7 +136,8 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         // if (epochs_without_improvement >= patience)
         // {
         //     std::cout << '\n'
-        //               << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " << patience
+        //               << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " <<
+        //               patience
         //               << " epochs." << '\n';
         //     break;
         // }
