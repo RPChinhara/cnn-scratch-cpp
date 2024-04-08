@@ -203,6 +203,12 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return output;
 }
 
+std::string strip(const std::string &text)
+{
+    std::regex pattern("(^\\s+)|(\\s+$)");
+    return std::regex_replace(text, pattern, "");
+}
+
 std::string to_lower(const std::string &text)
 {
     std::string result;
