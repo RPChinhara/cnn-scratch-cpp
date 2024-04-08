@@ -14,35 +14,19 @@ struct train_test
 };
 
 std::string AddSpaceBetweenPunct(const std::string &text);
-
 std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens);
-
 ten min_max_scaler(ten &dataset);
-
 ten one_hot(const ten &t, const size_t depth);
-
 std::string RemoveEmoji(const std::string &text);
-
 std::string RemoveHTML(const std::string &text);
-
 std::string RemoveLink(const std::string &text);
-
 std::string RemoveNonASCII(const std::string &text);
-
 std::string RemoveNumber(const std::string &text);
-
 std::string RemovePunct(const std::string &text);
-
 std::string RemovePunct2(const std::string &text);
-
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens);
-
 std::string RemoveWhiteSpace(const std::string &text);
-
 std::string SpellCorrection(const std::string &text);
-
 std::vector<std::string> Tokenizer(const std::string &text);
-
-std::string ToLower(const std::string &text);
-
+std::string to_lower(const std::string &text);
 train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rand_state);

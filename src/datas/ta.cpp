@@ -61,7 +61,7 @@ Tripadvisor LoadTripadvisor()
 
         std::string text = line.substr(startPos, endPos - startPos);
         std::string textNoEmoji = RemoveEmoji(text);
-        std::string textLower = ToLower(textNoEmoji);
+        std::string textLower = to_lower(textNoEmoji);
         std::string textNoPunc = RemovePunct2(textLower);
         std::string textNoWhiteSpace = RemoveWhiteSpace(textNoPunc);
         auto tokens = Tokenizer(textNoWhiteSpace);

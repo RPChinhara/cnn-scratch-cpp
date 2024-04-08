@@ -196,7 +196,7 @@ std::vector<std::string> Tokenizer(const std::string &text)
     return tokens;
 }
 
-std::string ToLower(const std::string &text)
+std::string to_lower(const std::string &text)
 {
     std::string result;
     for (char c : text)
