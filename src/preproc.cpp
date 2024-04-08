@@ -196,6 +196,13 @@ std::vector<std::string> Tokenizer(const std::string &text)
     return tokens;
 }
 
+std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &replace_with)
+{
+    std::regex re(pattern);
+    std::string output = std::regex_replace(in, re, replace_with);
+    return output;
+}
+
 std::string to_lower(const std::string &text)
 {
     std::string result;
