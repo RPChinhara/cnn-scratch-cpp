@@ -6,14 +6,14 @@
 #include <sstream>
 #include <stdio.h>
 
-EnEs load_en_es()
+en_es load_en_es()
 {
     std::wifstream file("datas/spa.txt");
     if (!file)
         std::wcerr << L"Failed to open the file." << std::endl;
 
-    std::vector<std::wstring> targetRaw;
-    std::vector<std::wstring> contextRaw;
+    std::vector<std::wstring> x;
+    std::vector<std::wstring> y;
 
     std::wstring line;
     while (std::getline(file, line))
@@ -27,20 +27,20 @@ EnEs load_en_es()
 
         pos = line.find_first_of(L".!?");
 
-        std::wstring extractedTargetRaw = line.substr(0, pos + 1);
-        targetRaw.push_back(extractedTargetRaw);
+        std::wstring extracted_y = line.substr(0, pos + 1);
+        y.push_back(extracted_y);
 
-        std::wstring extractedContextRaw = line.substr(pos + 1);
+        std::wstring extracted_x = line.substr(pos + 1);
         std::wregex regex(L"\\s*(.*)");
-        std::wstring extractedContextRawNoPrecedingSpaces = std::regex_replace(extractedContextRaw, regex, L"$1");
-        contextRaw.push_back(extractedContextRawNoPrecedingSpaces);
+        std::wstring extracted_x_no_preceding_spaces = std::regex_replace(extracted_x, regex, L"$1");
+        x.push_back(extracted_x_no_preceding_spaces);
     }
 
     file.close();
 
-    EnEs eng_spa;
-    eng_spa.targetRaw = targetRaw;
-    eng_spa.contextRaw = contextRaw;
+    en_es data;
+    data.x = x;
+    data.y = y;
 
-    return eng_spa;
+    return data;
 }

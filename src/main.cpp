@@ -14,10 +14,10 @@ int main()
     std::locale::global(std::locale("es_ES.UTF-8"));
     // _setmode(_fileno(stdout), _O_U16TEXT);
 
-    EnEs en_es = load_en_es();
+    en_es data = load_en_es();
 
-    std::wstring en_es_target;
-    std::wstring en_es_context;
+    std::wstring en_es_x;
+    std::wstring en_es_y;
 
     for (int i = 0; i < 20; ++i)
     {
@@ -27,10 +27,10 @@ int main()
         //     en_es_target = regex_replace(en_es_target, "[^ a-z.?!,¿]", "");
         //     en_es_context = regex_replace(en_es_context, "[^ a-z.?!,¿]", "");
 
-        en_es_target = regex_replace_wstring(en_es.targetRaw[i], L"([.?!¡,¿])", L" $1 ");
-        en_es_context = regex_replace_wstring(en_es.contextRaw[i], L"([.?!¡,¿])", L" $1 ");
+        en_es_x = regex_replace_wstring(data.x[i], L"([.?!¡,¿])", L" $1 ");
+        en_es_y = regex_replace_wstring(data.y[i], L"([.?!¡,¿])", L" $1 ");
 
-        std::wcout << en_es_target << " " << en_es_context << std::endl;
+        std::wcout << en_es_y << " " << en_es_x << std::endl;
         //     en_es_target = strip(en_es_target);
         //     en_es_context = strip(en_es_context);
 

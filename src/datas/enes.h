@@ -3,10 +3,10 @@
 #include <string>
 #include <vector>
 
-struct EnEs
+struct en_es
 {
-    std::vector<std::wstring> targetRaw;
-    std::vector<std::wstring> contextRaw;
+    std::vector<std::wstring> x;
+    std::vector<std::wstring> y;
 };
 
-EnEs load_en_es();
+en_es load_en_es();
