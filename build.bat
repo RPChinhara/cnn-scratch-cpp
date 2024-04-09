@@ -1,8 +1,8 @@
 @echo off
 
 set NVCC=nvcc
-set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++20 --threads 0 --use_fast_math -x cu -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Z7 -Xcompiler /O2
-set SRC=..\src\act.cpp ^
+set FLAGS=-I ..\src -o dora -arch sm_75 --optimize 3 -std c++20 --threads 0 --use_fast_math -Xcompiler /GL -Xcompiler /Gm- -Xcompiler /MP -Xcompiler /Z7 -Xcompiler /O2 -Xcompiler /utf-8
+set SRC=..\src\act.cu ^
         ..\src\arrs.cpp ^
         ..\src\datas\enes.cpp ^
         ..\src\datas\imdb.cpp ^
@@ -10,11 +10,11 @@ set SRC=..\src\act.cpp ^
         ..\src\datas\mnist.cpp ^
         ..\src\datas\ta.cpp ^
         ..\src\diffs.cpp ^
-        ..\src\knls.cpp ^
-        ..\src\linalg.cpp ^
+        ..\src\knls.cu ^
+        ..\src\linalg.cu ^
         ..\src\losses.cpp ^
         ..\src\main.cpp ^
-        ..\src\math.cpp ^
+        ..\src\math.cu ^
         ..\src\mdls\cnn2d.cpp ^
         ..\src\mdls\nn.cpp ^
         ..\src\mdls\ql.cpp ^

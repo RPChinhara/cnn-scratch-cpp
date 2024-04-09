@@ -203,6 +203,13 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return output;
 }
 
+std::wstring regex_replace_wstring(const std::wstring &input, const std::wstring &pattern,
+                                   const std::wstring &replace_with)
+{
+    std::wregex regex(pattern);
+    return std::regex_replace(input, regex, replace_with);
+}
+
 std::string strip(const std::string &text)
 {
     std::regex pattern("(^\\s+)|(\\s+$)");
