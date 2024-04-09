@@ -16,11 +16,11 @@ int main()
         x = to_lower_w(data.x[i]);
         y = to_lower_w(data.y[i]);
 
-        // en_es_target = regex_replace(en_es_target, "[^ a-z.?!,¿]", "");
-        // en_es_context = regex_replace(en_es_context, "[^ a-z.?!,¿]", "");
+        x = regex_replace_wstring(x, L"([^ a-z.?!,¿])", L"");
+        y = regex_replace_wstring(y, L"([^ a-z.?!,¿])", L"");
 
-        x = regex_replace_wstring(x, L"([.?!¡,¿])", L" $1 ");
-        y = regex_replace_wstring(y, L"([.?!¡,¿])", L" $1 ");
+        x = regex_replace_wstring(x, L"([.?!,¿])", L" $1 ");
+        y = regex_replace_wstring(y, L"([.?!,¿])", L" $1 ");
 
         std::wcout << y << " " << x << std::endl;
 
