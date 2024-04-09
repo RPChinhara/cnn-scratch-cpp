@@ -3,6 +3,7 @@
 #include "math.hpp"
 #include "rand.h"
 
+#include <cwctype>
 #include <regex>
 #include <sstream>
 
@@ -222,6 +223,16 @@ std::string to_lower(const std::string &text)
     for (char c : text)
     {
         result += std::tolower(c);
+    }
+    return result;
+}
+
+std::wstring to_lower_w(const std::wstring &text)
+{
+    std::wstring result;
+    for (wchar_t c : text)
+    {
+        result += std::towlower(c);
     }
     return result;
 }
