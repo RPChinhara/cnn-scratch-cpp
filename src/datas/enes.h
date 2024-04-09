@@ -5,8 +5,8 @@
 
 struct EnEs
 {
-    std::vector<std::string> targetRaw;
-    std::vector<std::string> contextRaw;
+    std::vector<std::wstring> targetRaw;
+    std::vector<std::wstring> contextRaw;
 };
 
 EnEs load_en_es();

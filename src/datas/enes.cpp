@@ -8,31 +8,31 @@
 
 EnEs load_en_es()
 {
-    std::ifstream file("datas/spa.txt");
+    std::wifstream file("datas/spa.txt");
     if (!file)
-        std::cerr << "Failed to open the file." << std::endl;
+        std::wcerr << L"Failed to open the file." << std::endl;
 
-    std::vector<std::string> targetRaw;
-    std::vector<std::string> contextRaw;
+    std::vector<std::wstring> targetRaw;
+    std::vector<std::wstring> contextRaw;
 
-    std::string line;
+    std::wstring line;
     while (std::getline(file, line))
     {
-        size_t pos = line.find("CC-BY");
+        size_t pos = line.find(L"CC-BY");
 
-        if (pos != std::string::npos)
+        if (pos != std::wstring::npos)
         {
             line.erase(pos);
         }
 
-        pos = line.find_first_of(".!?");
+        pos = line.find_first_of(L".!?");
 
-        std::string extractedTargetRaw = line.substr(0, pos + 1);
+        std::wstring extractedTargetRaw = line.substr(0, pos + 1);
         targetRaw.push_back(extractedTargetRaw);
 
-        std::string extractedContextRaw = line.substr(pos + 1);
-        std::regex regex("\\s*(.*)");
-        std::string extractedContextRawNoPrecedingSpaces = std::regex_replace(extractedContextRaw, regex, "$1");
+        std::wstring extractedContextRaw = line.substr(pos + 1);
+        std::wregex regex(L"\\s*(.*)");
+        std::wstring extractedContextRawNoPrecedingSpaces = std::regex_replace(extractedContextRaw, regex, L"$1");
         contextRaw.push_back(extractedContextRawNoPrecedingSpaces);
     }
 
