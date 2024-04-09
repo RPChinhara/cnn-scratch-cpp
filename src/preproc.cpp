@@ -244,3 +244,19 @@ train_test train_test_split(const ten &x, const ten &y, const float test_size, c
 
     return data;
 }
+
+std::string join(const std::vector<std::string> &strings, const std::string &separator)
+{
+    if (strings.empty())
+    {
+        return "";
+    }
+
+    std::string result = strings[0];
+    for (size_t i = 1; i < strings.size(); ++i)
+    {
+        result += separator + strings[i];
+    }
+
+    return result;
+}
