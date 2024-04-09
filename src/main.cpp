@@ -1,11 +1,7 @@
 #include "datas/enes.h"
 #include "preproc.h"
 
-#include <fcntl.h>
-#include <io.h>
 #include <iostream>
-#include <locale>
-#include <regex>
 #include <windows.h>
 
 int main()
