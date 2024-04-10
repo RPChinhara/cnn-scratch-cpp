@@ -16,8 +16,10 @@ int main()
         x = to_lower_w(data.x[i]);
         y = to_lower_w(data.y[i]);
 
-        x = regex_replace_wstring(x, L"(¡)", L"");
-        y = regex_replace_wstring(y, L"(¡)", L"");
+        x = regex_replace_wstring(x, L"(á)", L"a");
+
+        x = regex_replace_wstring(x, L"([^ a-z.?!,¿])", L"");
+        y = regex_replace_wstring(y, L"([^ a-z.?!,¿])", L"");
 
         x = regex_replace_wstring(x, L"([.?!,¿])", L" $1 ");
         y = regex_replace_wstring(y, L"([.?!,¿])", L" $1 ");
