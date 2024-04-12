@@ -8,7 +8,6 @@ set SRC=..\src\act.cu ^
         ..\src\datas\imdb.cpp ^
         ..\src\datas\iris.cpp ^
         ..\src\datas\mnist.cpp ^
-        ..\src\datas\ta.cpp ^
         ..\src\diffs.cpp ^
         ..\src\knls.cu ^
         ..\src\linalg.cu ^
