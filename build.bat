@@ -18,7 +18,7 @@ set SRC=..\src\act.cu ^
         ..\src\mdls\nn.cpp ^
         ..\src\mdls\ql.cpp ^
         ..\src\mdls\trans.cpp ^
-        ..\src\metrics.cpp ^
+        ..\src\mets.cpp ^
         ..\src\preproc.cpp ^
         ..\src\rand.cpp ^
         ..\src\ten.cpp

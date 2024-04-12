@@ -5,7 +5,7 @@
 #include "linalg.h"
 #include "losses.h"
 #include "math.hpp"
-#include "metrics.h"
+#include "mets.h"
 #include "rand.h"
 #include "ten.h"
 
