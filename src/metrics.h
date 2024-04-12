@@ -2,4 +2,4 @@
 
 class ten;
 
-float categorical_accuracy(const ten &y_true, const ten &y_pred);
+float categorical_acc(const ten &y_true, const ten &y_pred);
