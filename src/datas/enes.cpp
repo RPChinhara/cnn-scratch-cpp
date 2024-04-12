@@ -12,8 +12,8 @@ en_es load_en_es()
     // std::locale("es_ES.UTF-8");
     // _setmode(_fileno(stdout), _O_U16TEXT);
 
-    // std::locale::global(std::locale("es_ES.UTF-8"));
-    std::setlocale(LC_ALL, "es_ES.utf8");
+    std::locale::global(std::locale("es_ES.UTF-8"));
+    // std::setlocale(LC_ALL, "es_ES.utf8");
 
     std::wifstream file("datas/spa.txt");
     if (!file)
@@ -32,7 +32,7 @@ en_es load_en_es()
             line.erase(pos);
         }
 
-        pos = line.find_first_of(L".!?");
+        pos = line.find_first_of(L".?!¿¡");
 
         std::wstring extracted_y = line.substr(0, pos + 1);
         y.push_back(extracted_y);

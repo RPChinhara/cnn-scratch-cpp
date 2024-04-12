@@ -13,10 +13,20 @@ int main()
 
     for (int i = 0; i < 20; ++i)
     {
-        x = to_lower_w(data.x[i]);
-        y = to_lower_w(data.y[i]);
+        x = regex_replace_wstring(data.x[i], L"(á)", L"a");
+        x = regex_replace_wstring(data.x[i], L"(é)", L"e");
+        x = regex_replace_wstring(data.x[i], L"(í)", L"i");
+        x = regex_replace_wstring(data.x[i], L"(ó)", L"o");
+        x = regex_replace_wstring(data.x[i], L"(ú)", L"u");
 
-        x = regex_replace_wstring(x, L"(á)", L"a");
+        x = regex_replace_wstring(x, L"(Á)", L"A");
+        x = regex_replace_wstring(x, L"(É)", L"E");
+        x = regex_replace_wstring(x, L"(Í)", L"I");
+        x = regex_replace_wstring(x, L"(Ó)", L"O");
+        x = regex_replace_wstring(x, L"(Ú)", L"U");
+
+        x = to_lower_w(x);
+        y = to_lower_w(data.y[i]);
 
         x = regex_replace_wstring(x, L"([^ a-z.?!,¿])", L"");
         y = regex_replace_wstring(y, L"([^ a-z.?!,¿])", L"");
