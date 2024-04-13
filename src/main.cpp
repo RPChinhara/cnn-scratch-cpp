@@ -1,4 +1,5 @@
 #include "datas/enes.h"
+#include "datas/imdb.h"
 #include "preproc.h"
 
 #include <iostream>
@@ -42,6 +43,8 @@ int main()
 
         std::wcout << y << " " << x << std::endl;
     }
+
+    IMDB imdb = LoadIMDB();
 
     return 0;
 }

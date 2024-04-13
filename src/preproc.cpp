@@ -60,12 +60,6 @@ std::string RemoveHTML(const std::string &text)
     return std::regex_replace(text, pattern, " ");
 }
 
-std::string RemoveLink(const std::string &text)
-{
-    std::regex pattern(R"((https?:\/\/|www\.)\S+)");
-    return std::regex_replace(text, pattern, "");
-}
-
 std::string RemoveNonASCII(const std::string &text)
 {
     std::regex pattern("[^\\x00-\\x7f]");

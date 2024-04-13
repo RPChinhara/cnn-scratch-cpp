@@ -42,7 +42,7 @@ IMDB LoadIMDB()
         }
 
         std::string text = line.substr(startPos, endPos - startPos);
-        std::string textNoLink = RemoveLink(text);
+        std::string textNoLink = regex_replace(text, R"((https?:\/\/|www\.)\S+)", "");
         std::string textNoHTML = RemoveHTML(textNoLink);
         std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);
         std::string textNoPunc = RemovePunct(textSpaceBetweenPunc);
