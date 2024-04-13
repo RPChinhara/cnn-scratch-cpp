@@ -157,8 +157,7 @@ std::vector<std::string> Tokenizer(const std::string &text)
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite)
 {
     std::regex re(pattern);
-    std::string output = std::regex_replace(in, re, rewrite);
-    return output;
+    return std::regex_replace(in, re, rewrite);
 }
 
 std::wstring wregex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
