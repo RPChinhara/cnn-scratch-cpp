@@ -204,7 +204,7 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return output;
 }
 
-std::wstring regex_replace_wstring(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
+std::wstring wregex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
 {
     std::wregex regex(pattern);
     return std::regex_replace(in, regex, rewrite);

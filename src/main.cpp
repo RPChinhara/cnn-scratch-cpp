@@ -13,26 +13,26 @@ int main()
 
     for (int i = 0; i < 20; ++i)
     {
-        x = regex_replace_wstring(data.x[i], L"(á)", L"a");
-        x = regex_replace_wstring(x, L"(é)", L"e");
-        x = regex_replace_wstring(x, L"(í)", L"i");
-        x = regex_replace_wstring(x, L"(ó)", L"o");
-        x = regex_replace_wstring(x, L"(ú)", L"u");
+        x = wregex_replace(data.x[i], L"(á)", L"a");
+        x = wregex_replace(x, L"(é)", L"e");
+        x = wregex_replace(x, L"(í)", L"i");
+        x = wregex_replace(x, L"(ó)", L"o");
+        x = wregex_replace(x, L"(ú)", L"u");
 
-        x = regex_replace_wstring(x, L"(Á)", L"A");
-        x = regex_replace_wstring(x, L"(É)", L"E");
-        x = regex_replace_wstring(x, L"(Í)", L"I");
-        x = regex_replace_wstring(x, L"(Ó)", L"O");
-        x = regex_replace_wstring(x, L"(Ú)", L"U");
+        x = wregex_replace(x, L"(Á)", L"A");
+        x = wregex_replace(x, L"(É)", L"E");
+        x = wregex_replace(x, L"(Í)", L"I");
+        x = wregex_replace(x, L"(Ó)", L"O");
+        x = wregex_replace(x, L"(Ú)", L"U");
 
         x = to_lower_w(x);
         y = to_lower_w(data.y[i]);
 
-        x = regex_replace_wstring(x, L"([^ a-z.?!,¿])", L"");
-        y = regex_replace_wstring(y, L"([^ a-z.?!,¿])", L"");
+        x = wregex_replace(x, L"([^ a-z.?!,¿])", L"");
+        y = wregex_replace(y, L"([^ a-z.?!,¿])", L"");
 
-        x = regex_replace_wstring(x, L"([.?!,¿])", L" $1 ");
-        y = regex_replace_wstring(y, L"([.?!,¿])", L" $1 ");
+        x = wregex_replace(x, L"([.?!,¿])", L" $1 ");
+        y = wregex_replace(y, L"([.?!,¿])", L" $1 ");
 
         x = strip(x);
         y = strip(y);
