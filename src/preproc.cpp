@@ -210,7 +210,7 @@ std::wstring wregex_replace(const std::wstring &in, const std::wstring &pattern,
     return std::regex_replace(in, regex, rewrite);
 }
 
-std::wstring strip(const std::wstring &text)
+std::wstring wstrip(const std::wstring &text)
 {
     std::wregex pattern(L"(^\\s+)|(\\s+$)");
     return std::regex_replace(text, pattern, L"");

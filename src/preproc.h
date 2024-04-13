@@ -29,7 +29,7 @@ std::string RemoveWhiteSpace(const std::string &text);
 std::string SpellCorrection(const std::string &text);
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);
 std::wstring wregex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite);
-std::wstring strip(const std::wstring &text);
+std::wstring wstrip(const std::wstring &text);
 std::vector<std::string> Tokenizer(const std::string &text);
 std::string to_lower(const std::string &text);
 std::wstring wlower(const std::wstring &text);

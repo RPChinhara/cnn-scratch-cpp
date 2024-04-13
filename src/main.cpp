@@ -34,8 +34,8 @@ int main()
         x = wregex_replace(x, L"([.?!,¿])", L" $1 ");
         y = wregex_replace(y, L"([.?!,¿])", L" $1 ");
 
-        x = strip(x);
-        y = strip(y);
+        x = wstrip(x);
+        y = wstrip(y);
 
         x = wjoin({L"[START]", x, L"[END]"}, L" ");
         y = wjoin({L"[START]", y, L"[END]"}, L" ");
