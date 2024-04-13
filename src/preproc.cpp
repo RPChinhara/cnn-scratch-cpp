@@ -211,10 +211,10 @@ std::wstring regex_replace_wstring(const std::wstring &input, const std::wstring
     return std::regex_replace(input, regex, replace_with);
 }
 
-std::string strip(const std::string &text)
+std::wstring strip(const std::wstring &text)
 {
-    std::regex pattern("(^\\s+)|(\\s+$)");
-    return std::regex_replace(text, pattern, "");
+    std::wregex pattern(L"(^\\s+)|(\\s+$)");
+    return std::regex_replace(text, pattern, L"");
 }
 
 std::string to_lower(const std::string &text)
@@ -263,14 +263,14 @@ train_test train_test_split(const ten &x, const ten &y, const float test_size, c
     return data;
 }
 
-std::string join(const std::vector<std::string> &strings, const std::string &separator)
+std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator)
 {
     if (strings.empty())
     {
-        return "";
+        return L"";
     }
 
-    std::string result = strings[0];
+    std::wstring result = strings[0];
     for (size_t i = 1; i < strings.size(); ++i)
     {
         result += separator + strings[i];

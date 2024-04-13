@@ -14,10 +14,10 @@ int main()
     for (int i = 0; i < 20; ++i)
     {
         x = regex_replace_wstring(data.x[i], L"(á)", L"a");
-        x = regex_replace_wstring(data.x[i], L"(é)", L"e");
-        x = regex_replace_wstring(data.x[i], L"(í)", L"i");
-        x = regex_replace_wstring(data.x[i], L"(ó)", L"o");
-        x = regex_replace_wstring(data.x[i], L"(ú)", L"u");
+        x = regex_replace_wstring(x, L"(é)", L"e");
+        x = regex_replace_wstring(x, L"(í)", L"i");
+        x = regex_replace_wstring(x, L"(ó)", L"o");
+        x = regex_replace_wstring(x, L"(ú)", L"u");
 
         x = regex_replace_wstring(x, L"(Á)", L"A");
         x = regex_replace_wstring(x, L"(É)", L"E");
@@ -34,17 +34,13 @@ int main()
         x = regex_replace_wstring(x, L"([.?!,¿])", L" $1 ");
         y = regex_replace_wstring(y, L"([.?!,¿])", L" $1 ");
 
+        x = strip(x);
+        y = strip(y);
+
+        x = join({L"[START]", x, L"[END]"}, L" ");
+        y = join({L"[START]", y, L"[END]"}, L" ");
+
         std::wcout << y << " " << x << std::endl;
-
-        //     en_es_target = strip(en_es_target);
-        //     en_es_context = strip(en_es_context);
-
-        //     std::vector<std::string> words_target = {"[START]", en_es_target, "[END]"};
-        //     std::vector<std::string> words_context = {"[START]", en_es_context, "[END]"};
-        //     std::string separator = " ";
-
-        //     // en_es_target = join(words_target, separator);
-        //     // en_es_context = join(words_context, separator);
     }
 
     return 0;
