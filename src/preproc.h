@@ -14,7 +14,6 @@ struct train_test
 };
 
 std::string AddSpaceBetweenPunct(const std::string &text);
-std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens);
 ten min_max_scaler(ten &dataset);
 ten one_hot(const ten &t, const size_t depth);
 std::string RemoveEmoji(const std::string &text);

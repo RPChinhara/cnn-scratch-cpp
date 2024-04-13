@@ -15,37 +15,6 @@ std::string AddSpaceBetweenPunct(const std::string &text)
     return s;
 }
 
-std::vector<std::string> Lemmatizer(const std::vector<std::string> &tokens)
-{
-    // Define common suffixes to remove
-    const std::string suffixes[] = {"s"}; // Add more as needed
-
-    std::vector<std::string> originalForms;
-
-    // Process each word in the vector
-    for (const std::string &token : tokens)
-    {
-        std::string originalForm = token;
-
-        // Iterate through each suffix and check if the word ends with it
-        for (const std::string &suffix : suffixes)
-        {
-            if (originalForm.size() >= suffix.size() &&
-                originalForm.substr(originalForm.size() - suffix.size()) == suffix &&
-                originalForm.size() > suffix.size())
-            {
-                // If the word ends with the current suffix (and it's not the whole word itself), remove it
-                originalForm = originalForm.substr(0, originalForm.size() - suffix.size());
-                break; // Move to the next word
-            }
-        }
-
-        originalForms.push_back(originalForm);
-    }
-
-    return originalForms;
-}
-
 ten min_max_scaler(ten &dataset)
 {
     auto min_vals = Min(dataset);
