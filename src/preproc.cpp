@@ -216,16 +216,6 @@ std::wstring wstrip(const std::wstring &text)
     return std::regex_replace(text, pattern, L"");
 }
 
-std::string to_lower(const std::string &text)
-{
-    std::string result;
-    for (char c : text)
-    {
-        result += std::tolower(c);
-    }
-    return result;
-}
-
 std::wstring wlower(const std::wstring &text)
 {
     std::wstring result;

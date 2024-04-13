@@ -31,7 +31,6 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
 std::wstring wregex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite);
 std::wstring wstrip(const std::wstring &text);
 std::vector<std::string> Tokenizer(const std::string &text);
-std::string to_lower(const std::string &text);
 std::wstring wlower(const std::wstring &text);
 train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rand_state);
 std::wstring wjoin(const std::vector<std::wstring> &strings, const std::wstring &separator);
