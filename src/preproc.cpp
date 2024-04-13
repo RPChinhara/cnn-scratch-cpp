@@ -197,18 +197,17 @@ std::vector<std::string> Tokenizer(const std::string &text)
     return tokens;
 }
 
-std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &replace_with)
+std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite)
 {
     std::regex re(pattern);
-    std::string output = std::regex_replace(in, re, replace_with);
+    std::string output = std::regex_replace(in, re, rewrite);
     return output;
 }
 
-std::wstring regex_replace_wstring(const std::wstring &input, const std::wstring &pattern,
-                                   const std::wstring &replace_with)
+std::wstring regex_replace_wstring(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
 {
     std::wregex regex(pattern);
-    return std::regex_replace(input, regex, replace_with);
+    return std::regex_replace(in, regex, rewrite);
 }
 
 std::wstring strip(const std::wstring &text)

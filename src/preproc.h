@@ -27,9 +27,8 @@ std::string RemovePunct2(const std::string &text);
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens);
 std::string RemoveWhiteSpace(const std::string &text);
 std::string SpellCorrection(const std::string &text);
-std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &replace_with);
-std::wstring regex_replace_wstring(const std::wstring &input, const std::wstring &pattern,
-                                   const std::wstring &replace_with);
+std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);
+std::wstring regex_replace_wstring(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite);
 std::wstring strip(const std::wstring &text);
 std::vector<std::string> Tokenizer(const std::string &text);
 std::string to_lower(const std::string &text);
