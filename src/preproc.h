@@ -13,7 +13,6 @@ struct train_test
     ten y_test;
 };
 
-std::string AddSpaceBetweenPunct(const std::string &text);
 ten min_max_scaler(ten &dataset);
 ten one_hot(const ten &t, const size_t depth);
 std::string RemoveEmoji(const std::string &text);

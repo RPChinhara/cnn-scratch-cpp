@@ -43,9 +43,10 @@ IMDB LoadIMDB()
 
         std::string text = line.substr(startPos, endPos - startPos);
         std::string textNoLink = regex_replace(text, R"((https?:\/\/|www\.)\S+)", "");
-        std::string textNoHTML = regex_replace(text, "<[^>]*>", " ");
-        std::string textSpaceBetweenPunc = AddSpaceBetweenPunct(textNoHTML);
-        std::string textNoPunc = RemovePunct(textSpaceBetweenPunc);
+        std::string textNoHTML = regex_replace(textNoLink, "<[^>]*>", " ");
+        std::string textSpacesBetweenPunc = regex_replace(textNoHTML, "([.,!?-])", " $1 ");
+        std::string text_no_consecutive_spaces = regex_replace(textSpacesBetweenPunc, "\\s{2,}", " ");
+        std::string textNoPunc = RemovePunct(text_no_consecutive_spaces);
         std::string textNoNumber = RemoveNumber(textNoPunc);
         std::string textNoASCII = RemoveNonASCII(textNoNumber);
         std::string textNoWhiteSpace = RemoveWhiteSpace(textNoASCII);

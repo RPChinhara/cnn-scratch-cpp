@@ -7,14 +7,6 @@
 #include <regex>
 #include <sstream>
 
-std::string AddSpaceBetweenPunct(const std::string &text)
-{
-    std::regex pattern("([.,!?-])");
-    std::string s = std::regex_replace(text, pattern, " $1 ");
-    s = std::regex_replace(s, std::regex("\\s{2,}"), " ");
-    return s;
-}
-
 ten min_max_scaler(ten &dataset)
 {
     auto min_vals = Min(dataset);
