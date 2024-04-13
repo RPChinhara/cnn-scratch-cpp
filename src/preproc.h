@@ -17,7 +17,6 @@ std::string AddSpaceBetweenPunct(const std::string &text);
 ten min_max_scaler(ten &dataset);
 ten one_hot(const ten &t, const size_t depth);
 std::string RemoveEmoji(const std::string &text);
-std::string RemoveHTML(const std::string &text);
 std::string RemoveNonASCII(const std::string &text);
 std::string RemoveNumber(const std::string &text);
 std::string RemovePunct(const std::string &text);
