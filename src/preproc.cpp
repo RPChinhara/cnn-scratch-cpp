@@ -226,7 +226,7 @@ std::string to_lower(const std::string &text)
     return result;
 }
 
-std::wstring to_lower_w(const std::wstring &text)
+std::wstring wlower(const std::wstring &text)
 {
     std::wstring result;
     for (wchar_t c : text)
@@ -262,7 +262,7 @@ train_test train_test_split(const ten &x, const ten &y, const float test_size, c
     return data;
 }
 
-std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator)
+std::wstring wjoin(const std::vector<std::wstring> &strings, const std::wstring &separator)
 {
     if (strings.empty())
     {

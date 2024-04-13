@@ -25,8 +25,8 @@ int main()
         x = wregex_replace(x, L"(Ó)", L"O");
         x = wregex_replace(x, L"(Ú)", L"U");
 
-        x = to_lower_w(x);
-        y = to_lower_w(data.y[i]);
+        x = wlower(x);
+        y = wlower(data.y[i]);
 
         x = wregex_replace(x, L"([^ a-z.?!,¿])", L"");
         y = wregex_replace(y, L"([^ a-z.?!,¿])", L"");
@@ -37,8 +37,8 @@ int main()
         x = strip(x);
         y = strip(y);
 
-        x = join({L"[START]", x, L"[END]"}, L" ");
-        y = join({L"[START]", y, L"[END]"}, L" ");
+        x = wjoin({L"[START]", x, L"[END]"}, L" ");
+        y = wjoin({L"[START]", y, L"[END]"}, L" ");
 
         std::wcout << y << " " << x << std::endl;
     }
