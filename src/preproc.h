@@ -15,7 +15,6 @@ struct train_test
 
 ten min_max_scaler(ten &dataset);
 ten one_hot(const ten &t, const size_t depth);
-std::string RemoveEmoji(const std::string &text);
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens);
 std::string SpellCorrection(const std::string &text);
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);

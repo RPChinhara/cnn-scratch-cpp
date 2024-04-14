@@ -40,12 +40,6 @@ ten one_hot(const ten &t, const size_t depth)
     return newTensor;
 }
 
-std::string RemoveEmoji(const std::string &text)
-{
-    std::regex pattern("[\xE2\x98\x80-\xE2\x9B\xBF]");
-    return std::regex_replace(text, pattern, "");
-}
-
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
 {
     std::vector<std::string> stopWords = {
