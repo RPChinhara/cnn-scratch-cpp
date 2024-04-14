@@ -94,12 +94,6 @@ std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
     return tokensNoStopWords;
 }
 
-std::string RemoveWhiteSpace(const std::string &text)
-{
-    std::regex pattern("\\s+");
-    return std::regex_replace(text, pattern, " ");
-}
-
 std::string SpellCorrection(const std::string &text)
 {
     std::regex pattern("(.)\\1+");

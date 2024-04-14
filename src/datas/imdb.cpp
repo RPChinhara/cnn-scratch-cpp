@@ -49,7 +49,7 @@ imdb load_imdb()
         std::string text_no_punc = regex_replace(text_no_consecutive_sp, "[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]", " ");
         std::string text_no_num = regex_replace(text_no_punc, "\\d+", "");
         std::string text_no_ascii = regex_replace(text_no_num, "[^\\x00-\\x7f]", " ");
-        std::string text_no_white_sp = RemoveWhiteSpace(text_no_ascii);
+        std::string text_no_white_sp = regex_replace(text_no_ascii, "\\s+", " ");
         std::string text_no_emoji = RemoveEmoji(text_no_white_sp);
         std::string text_spell_corrected = SpellCorrection(text_no_emoji);
 
