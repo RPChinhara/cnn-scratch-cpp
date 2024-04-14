@@ -2,7 +2,7 @@
 
 #include "ten.h"
 
-struct MNIST
+struct mnist
 {
     ten trainImages;
     ten trainLabels;
@@ -10,4 +10,4 @@ struct MNIST
     ten testLabels;
 };
 
-MNIST LoadMNIST();
+mnist load_mnist();

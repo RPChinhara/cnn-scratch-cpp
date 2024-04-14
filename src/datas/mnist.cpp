@@ -84,13 +84,13 @@ ten ReadMNISTLabels(const std::string &filePath)
     return labels2;
 }
 
-MNIST LoadMNIST()
+mnist load_mnist()
 {
-    MNIST mnist;
-    mnist.trainImages = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
-    mnist.trainLabels = ReadMNISTLabels("datas/mnist/train-labels-idx1-ubyte");
-    mnist.testImages = ReadMNISTImages("datas/mnist/t10k-images-idx3-ubyte");
-    mnist.testLabels = ReadMNISTLabels("datas/mnist/t10k-labels-idx1-ubyte");
+    mnist data;
+    data.trainImages = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
+    data.trainLabels = ReadMNISTLabels("datas/mnist/train-labels-idx1-ubyte");
+    data.testImages = ReadMNISTImages("datas/mnist/t10k-images-idx3-ubyte");
+    data.testLabels = ReadMNISTLabels("datas/mnist/t10k-labels-idx1-ubyte");
 
-    return mnist;
+    return data;
 }
