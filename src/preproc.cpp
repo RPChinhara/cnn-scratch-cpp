@@ -88,12 +88,6 @@ std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
     return tokensNoStopWords;
 }
 
-std::string SpellCorrection(const std::string &text)
-{
-    std::regex pattern("(.)\\1+");
-    return std::regex_replace(text, pattern, "$1$1");
-}
-
 std::vector<std::string> Tokenizer(const std::string &text)
 {
     std::vector<std::string> tokens;
