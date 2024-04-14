@@ -58,14 +58,6 @@ std::string RemoveNumber(const std::string &text)
     return std::regex_replace(text, pattern, "");
 }
 
-std::string RemovePunct2(const std::string &text)
-{
-    std::regex regex("[^\\w\\s]");
-    std::string result = std::regex_replace(text, regex, " ");
-
-    return result;
-}
-
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
 {
     std::vector<std::string> stopWords = {
