@@ -2,10 +2,10 @@
 
 #include "ten.h"
 
-struct IMDB
+struct imdb
 {
-    ten features;
-    ten targets;
+    ten x;
+    ten y;
 };
 
-IMDB LoadIMDB();
+imdb load_imdb();

@@ -44,7 +44,7 @@ int main()
         std::wcout << y << " " << x << std::endl;
     }
 
-    IMDB imdb = LoadIMDB();
+    imdb imdb = load_imdb();
 
     return 0;
 }

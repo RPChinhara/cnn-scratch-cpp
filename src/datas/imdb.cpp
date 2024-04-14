@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-IMDB LoadIMDB()
+IMDB load_imdb()
 {
     std::ifstream file("datas/IMDB Dataset.csv");
 
@@ -66,5 +66,5 @@ IMDB LoadIMDB()
         ++idx;
     }
 
-    return IMDB();
+    return imdb();
 }
