@@ -40,7 +40,7 @@ __global__ void MatMul(float *tensor1, float *tensor2, float *newTensor, size_t 
 // 	    newTensor[id] = in1[id] + in2[id];
 // }
 
-__global__ void Relu(float *t, float *newTensor, size_t n)
+__global__ void relu(float *t, float *newTensor, size_t n)
 {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 

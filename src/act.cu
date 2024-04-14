@@ -27,7 +27,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
 
             constexpr int blockSize = 128;
             int gridSize = (t.size + blockSize - 1) / blockSize;
-            Relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, t.size);
+            relu<<<gridSize, blockSize>>>(tensorGPU, newTensorGPU, t.size);
 
             cudaError_t cudaError = cudaGetLastError();
             if (cudaError != cudaSuccess)
