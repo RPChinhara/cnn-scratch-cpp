@@ -38,14 +38,14 @@ ten Exp(const ten &t, dev_type dev)
 
     switch (dev)
     {
-    case DEV_CPU: {
+    case CPU: {
 
         for (size_t i = 0; i < t.size; ++i)
             newTensor.elem[i] = expf(t.elem[i]);
 
         return newTensor;
     }
-    case DEV_GPU: {
+    case GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));
@@ -77,13 +77,13 @@ ten Log(const ten &t, dev_type dev)
 
     switch (dev)
     {
-    case DEV_CPU: {
+    case CPU: {
         for (size_t i = 0; i < t.size; ++i)
             newTensor.elem[i] = logf(t.elem[i]);
 
         return newTensor;
     }
-    case DEV_GPU: {
+    case GPU: {
         float *tensorGPU, *newTensorGPU;
         cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
         cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));

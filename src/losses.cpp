@@ -10,7 +10,7 @@ float categorical_cross_entropy(const ten &y_true, const ten &y_pred)
     constexpr float epsilon = 1e-15f;
     size_t num_samples = y_true.shape.front();
     ten y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
-    ten log = Log(y_pred_clipped, DEV_CPU);
+    ten log = Log(y_pred_clipped, CPU);
 
     for (size_t i = 0; i < y_true.size; ++i)
         sum += y_true[i] * log[i];

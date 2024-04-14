@@ -11,7 +11,7 @@ ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
 
     switch (dev)
     {
-    case DEV_CPU: {
+    case CPU: {
 
         for (size_t i = 0; i < tensor1.shape.front(); ++i)
         {
@@ -28,7 +28,7 @@ ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
 
         return newTensor;
     }
-    case DEV_GPU: {
+    case GPU: {
         assert(tensor1.shape.back() == tensor2.shape.front());
 
         size_t numRowsTensor1 = tensor1.shape.front();

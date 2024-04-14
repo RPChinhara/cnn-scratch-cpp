@@ -13,13 +13,13 @@ ten act(const ten &t, act_enum act, dev_type dev)
 
         switch (dev)
         {
-        case DEV_CPU: {
+        case CPU: {
             for (size_t i = 0; i < t.size; ++i)
                 newTensor.elem[i] = std::max(0.0f, t.elem[i]);
 
             return newTensor;
         }
-        case DEV_GPU: {
+        case GPU: {
             float *tensorGPU, *newTensorGPU;
             cudaMalloc((void **)&tensorGPU, t.size * sizeof(float));
             cudaMalloc((void **)&newTensorGPU, t.size * sizeof(float));
@@ -45,7 +45,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
         }
     }
     case SOFTMAX: {
-        ten expScores = Exp(t - Max(t, 1), DEV_CPU);
+        ten expScores = Exp(t - Max(t, 1), CPU);
         return expScores / sum(expScores, 1);
     }
     default:

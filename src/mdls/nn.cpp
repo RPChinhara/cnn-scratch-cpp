@@ -73,13 +73,13 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), act_types.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), DEV_CPU) *
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), CPU) *
                                     da_dz(a[k - 1], act_types[k - 1]));
 
                 if (k == 1)
-                    dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], DEV_CPU));
+                    dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], CPU));
                 else
-                    dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], DEV_CPU));
+                    dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], CPU));
 
                 dl_db.push_back(sum(dl_dz[(lyrs.size() - 1) - k], 0));
 
@@ -178,13 +178,13 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
     {
         if (i == 0)
         {
-            ten z = matmul(x, w[i], DEV_CPU) + b[i];
-            a.push_back(act(z, act_types[i], DEV_CPU));
+            ten z = matmul(x, w[i], CPU) + b[i];
+            a.push_back(act(z, act_types[i], CPU));
         }
         else
         {
-            ten z = matmul(a[i - 1], w[i], DEV_CPU) + b[i];
-            a.push_back(act(z, act_types[i], DEV_CPU));
+            ten z = matmul(a[i - 1], w[i], CPU) + b[i];
+            a.push_back(act(z, act_types[i], CPU));
         }
     }
 
