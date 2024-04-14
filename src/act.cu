@@ -8,7 +8,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
 
     switch (act)
     {
-    case ACT_RELU: {
+    case RELU: {
         ten newTensor = t;
 
         switch (dev)
@@ -44,7 +44,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
             return ten();
         }
     }
-    case ACT_SOFTMAX: {
+    case SOFTMAX: {
         ten expScores = Exp(t - Max(t, 1), DEV_CPU);
         return expScores / sum(expScores, 1);
     }

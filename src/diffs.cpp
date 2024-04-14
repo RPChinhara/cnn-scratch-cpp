@@ -7,7 +7,7 @@ ten da_dz(const ten &t, act_enum act)
 
     switch (act)
     {
-    case ACT_RELU: {
+    case RELU: {
         for (size_t i = 0; i < t.size; ++i)
         {
             if (t[i] > 0.0f)
@@ -30,10 +30,10 @@ ten dl_da_da_dz(const ten &y_true, const ten &y_pred, act_enum act)
 {
     switch (act)
     {
-    case ACT_SIGMOID: {
+    case SIGMOID: {
         return (y_pred - y_true) * y_pred * (1 - y_pred);
     }
-    case ACT_SOFTMAX: {
+    case SOFTMAX: {
         return (y_pred - y_true);
     }
     default:

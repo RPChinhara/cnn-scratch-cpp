@@ -4,9 +4,9 @@
 
 enum act_enum
 {
-    ACT_RELU,
-    ACT_SIGMOID,
-    ACT_SOFTMAX
+    RELU,
+    SIGMOID,
+    SOFTMAX
 };
 
 class ten;
