@@ -53,7 +53,7 @@ imdb load_imdb()
         std::string text_no_emoji = regex_replace(text_no_white_sp, "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
         std::string text_spell_corrected = regex_replace(text_no_emoji, "(.)\\1+", "$1$1");
 
-        auto tokens = Tokenizer(text_spell_corrected);
+        auto tokens = tokenizer(text_spell_corrected);
         auto tokens_no_stop_words = RemoveStopWords(tokens);
 
         std::cout << "Text: " << idx + 1 << std::endl;
