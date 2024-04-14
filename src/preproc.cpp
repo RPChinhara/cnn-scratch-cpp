@@ -52,12 +52,6 @@ std::string RemoveNonASCII(const std::string &text)
     return std::regex_replace(text, pattern, " ");
 }
 
-std::string RemoveNumber(const std::string &text)
-{
-    std::regex pattern("\\d+");
-    return std::regex_replace(text, pattern, "");
-}
-
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
 {
     std::vector<std::string> stopWords = {
