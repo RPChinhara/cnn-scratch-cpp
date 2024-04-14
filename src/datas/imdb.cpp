@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-IMDB load_imdb()
+imdb load_imdb()
 {
     std::ifstream file("datas/IMDB Dataset.csv");
 
@@ -46,7 +46,7 @@ IMDB load_imdb()
         std::string text_no_html = regex_replace(text_no_link, "<[^>]*>", " ");
         std::string text_sp_around_punc = regex_replace(text_no_html, "([.,!?-])", " $1 ");
         std::string text_no_consecutive_sp = regex_replace(text_sp_around_punc, "\\s{2,}", " ");
-        std::string text_no_punc = RemovePunct(text_no_consecutive_sp);
+        std::string text_no_punc = regex_replace(text_no_consecutive_sp, "[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]", " ");
         std::string text_no_num = RemoveNumber(text_no_punc);
         std::string text_no_ascii = RemoveNonASCII(text_no_num);
         std::string text_no_white_sp = RemoveWhiteSpace(text_no_ascii);

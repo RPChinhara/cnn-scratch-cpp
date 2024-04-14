@@ -58,12 +58,6 @@ std::string RemoveNumber(const std::string &text)
     return std::regex_replace(text, pattern, "");
 }
 
-std::string RemovePunct(const std::string &text)
-{
-    std::regex pattern("[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]");
-    return std::regex_replace(text, pattern, " ");
-}
-
 std::string RemovePunct2(const std::string &text)
 {
     std::regex regex("[^\\w\\s]");
