@@ -6,6 +6,7 @@
 #include <cwctype>
 #include <regex>
 #include <sstream>
+#include <unordered_map>
 
 ten min_max_scaler(ten &dataset)
 {
@@ -44,6 +45,53 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
 {
     std::regex re(pattern);
     return std::regex_replace(in, re, rewrite);
+}
+
+std::vector<float> text_vectorization(const std::vector<std::wstring> &texts)
+{
+    std::vector<float> a;
+    std::vector<std::wstring> vocab;
+    std::unordered_map<std::wstring, int> vocab_map;
+
+    for (auto text : texts)
+    {
+        auto tokens = wtokenizer(text);
+
+        for (auto token : tokens)
+        {
+            std::wcout << token << std::endl;
+
+            if (vocab_map.find(token) != vocab_map.end())
+            {
+                vocab_map[token] += 1;
+                std::cout << "Key exists" << std::endl;
+            }
+            else
+            {
+                vocab_map.insert(std::pair<std::wstring, int>(token, 1));
+
+                std::cout << "Key does not exist" << std::endl;
+                std::cout << "Key added: " << vocab_map[token] << std::endl;
+                std::wcout << "token: " << token << std::endl;
+            }
+        }
+    }
+
+    // Copying map to vector of pairs
+    std::vector<std::pair<std::wstring, int>> vec(vocab_map.begin(), vocab_map.end());
+
+    // Sorting vector by value (the second element of the pair)
+    std::sort(vec.begin(), vec.end(), [](const std::pair<std::wstring, int> &a, const std::pair<std::wstring, int> &b) {
+        return a.second > b.second;
+    });
+
+    for (const auto &pair : vec)
+    {
+        vocab.push_back(pair.first);
+        std::wcout << pair.first << " " << pair.second << std::endl;
+    }
+
+    return a;
 }
 
 std::vector<std::string> tokenizer(const std::string &text)
@@ -122,6 +170,20 @@ std::wstring wstrip(const std::wstring &text)
 {
     std::wregex pattern(L"(^\\s+)|(\\s+$)");
     return std::regex_replace(text, pattern, L"");
+}
+
+std::vector<std::wstring> wtokenizer(const std::wstring &text)
+{
+    std::vector<std::wstring> tokens;
+    std::wstringstream ss(text);
+    std::wstring token;
+
+    while (ss >> token)
+    {
+        tokens.push_back(token);
+    }
+
+    return tokens;
 }
 
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
