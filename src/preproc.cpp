@@ -47,9 +47,9 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return std::regex_replace(in, re, rewrite);
 }
 
-std::vector<float> text_vectorization(const std::vector<std::wstring> &texts)
+ten text_vectorization(const std::vector<std::wstring> &texts)
 {
-    std::vector<float> a;
+    ten t;
     std::vector<std::wstring> vocab;
     std::unordered_map<std::wstring, float> vocab_map;
 
@@ -91,7 +91,7 @@ std::vector<float> text_vectorization(const std::vector<std::wstring> &texts)
         std::wcout << pair.first << " " << pair.second << std::endl;
     }
 
-    return a;
+    return t;
 }
 
 std::vector<std::string> tokenizer(const std::string &text)

@@ -57,8 +57,8 @@ int main()
         y[9],
     });
 
-    for (auto i : z)
-        std::cout << i << std::endl;
+    // for (auto i : z)
+    //     std::cout << i << std::endl;
 
     return 0;
 }
