@@ -10,3 +10,10 @@ pushd bin
 if not defined DevEnvDir (call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat")
 %NVCC% %FLAGS% %SRC%
 popd
+
+if %ERRORLEVEL% == 0 (
+    echo Compilation successful, running the program...
+    bin\dora.exe
+) else (
+    echo Compilation failed with error %ERRORLEVEL%.
+)
