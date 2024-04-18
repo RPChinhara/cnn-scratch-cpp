@@ -9,9 +9,6 @@ int main()
 {
     en_es data = load_en_es();
 
-    // std::wstring x;
-    // std::wstring y;
-
     std::vector<std::wstring> x(data.x.size());
     std::vector<std::wstring> y(data.y.size());
 
@@ -47,9 +44,6 @@ int main()
         std::wcout << y[i] << " " << x[i] << std::endl;
     }
 
-    // std::vector<std::wstring> sentences = {data.x[0], data.x[1], data.x[1], data.x[2], data.x[0],
-    //                                        data.x[0], data.x[1], data.x[0], data.x[0], data.x[2]};
-
     auto z = text_vectorization({
         y[0],
         y[1],
@@ -65,12 +59,6 @@ int main()
 
     for (auto i : z)
         std::cout << i << std::endl;
-
-    std::cout << 1 << std::endl;
-    std::cout << 1 << std::endl;
-    std::cout << 1 << std::endl;
-    std::cout << 1 << std::endl;
-    std::cout << 1 << std::endl;
 
     return 0;
 }

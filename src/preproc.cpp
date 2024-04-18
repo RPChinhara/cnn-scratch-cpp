@@ -51,7 +51,7 @@ std::vector<float> text_vectorization(const std::vector<std::wstring> &texts)
 {
     std::vector<float> a;
     std::vector<std::wstring> vocab;
-    std::unordered_map<std::wstring, int> vocab_map;
+    std::unordered_map<std::wstring, float> vocab_map;
 
     for (auto text : texts)
     {
@@ -63,12 +63,12 @@ std::vector<float> text_vectorization(const std::vector<std::wstring> &texts)
 
             if (vocab_map.find(token) != vocab_map.end())
             {
-                vocab_map[token] += 1;
+                vocab_map[token] += 1.0f;
                 std::cout << "Key exists" << std::endl;
             }
             else
             {
-                vocab_map.insert(std::pair<std::wstring, int>(token, 1));
+                vocab_map.insert(std::pair<std::wstring, float>(token, 1.0f));
 
                 std::cout << "Key does not exist" << std::endl;
                 std::cout << "Key added: " << vocab_map[token] << std::endl;
@@ -78,10 +78,10 @@ std::vector<float> text_vectorization(const std::vector<std::wstring> &texts)
     }
 
     // Copying map to vector of pairs
-    std::vector<std::pair<std::wstring, int>> vec(vocab_map.begin(), vocab_map.end());
+    std::vector<std::pair<std::wstring, float>> vec(vocab_map.begin(), vocab_map.end());
 
     // Sorting vector by value (the second element of the pair)
-    std::sort(vec.begin(), vec.end(), [](const std::pair<std::wstring, int> &a, const std::pair<std::wstring, int> &b) {
+    std::sort(vec.begin(), vec.end(), [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
         return a.second > b.second;
     });
 
