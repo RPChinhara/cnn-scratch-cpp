@@ -14,32 +14,32 @@ int main()
 
     for (int i = 0; i < 10; ++i)
     {
-        x[i] = wregex_replace(data.x[i], L"(á)", L"a");
-        x[i] = wregex_replace(x[i], L"(é)", L"e");
-        x[i] = wregex_replace(x[i], L"(í)", L"i");
-        x[i] = wregex_replace(x[i], L"(ó)", L"o");
-        x[i] = wregex_replace(x[i], L"(ú)", L"u");
+        x[i] = regex_replace(data.x[i], L"(á)", L"a");
+        x[i] = regex_replace(x[i], L"(é)", L"e");
+        x[i] = regex_replace(x[i], L"(í)", L"i");
+        x[i] = regex_replace(x[i], L"(ó)", L"o");
+        x[i] = regex_replace(x[i], L"(ú)", L"u");
 
-        x[i] = wregex_replace(x[i], L"(Á)", L"A");
-        x[i] = wregex_replace(x[i], L"(É)", L"E");
-        x[i] = wregex_replace(x[i], L"(Í)", L"I");
-        x[i] = wregex_replace(x[i], L"(Ó)", L"O");
-        x[i] = wregex_replace(x[i], L"(Ú)", L"U");
+        x[i] = regex_replace(x[i], L"(Á)", L"A");
+        x[i] = regex_replace(x[i], L"(É)", L"E");
+        x[i] = regex_replace(x[i], L"(Í)", L"I");
+        x[i] = regex_replace(x[i], L"(Ó)", L"O");
+        x[i] = regex_replace(x[i], L"(Ú)", L"U");
 
-        x[i] = wlower(x[i]);
-        y[i] = wlower(data.y[i]);
+        x[i] = lower(x[i]);
+        y[i] = lower(data.y[i]);
 
-        x[i] = wregex_replace(x[i], L"([^ a-z.?!,¿])", L"");
-        y[i] = wregex_replace(y[i], L"([^ a-z.?!,¿])", L"");
+        x[i] = regex_replace(x[i], L"([^ a-z.?!,¿])", L"");
+        y[i] = regex_replace(y[i], L"([^ a-z.?!,¿])", L"");
 
-        x[i] = wregex_replace(x[i], L"([.?!,¿])", L" $1 ");
-        y[i] = wregex_replace(y[i], L"([.?!,¿])", L" $1 ");
+        x[i] = regex_replace(x[i], L"([.?!,¿])", L" $1 ");
+        y[i] = regex_replace(y[i], L"([.?!,¿])", L" $1 ");
 
-        x[i] = wstrip(x[i]);
-        y[i] = wstrip(y[i]);
+        x[i] = strip(x[i]);
+        y[i] = strip(y[i]);
 
-        x[i] = wjoin({L"[START]", x[i], L"[END]"}, L" ");
-        y[i] = wjoin({L"[START]", y[i], L"[END]"}, L" ");
+        x[i] = join({L"[START]", x[i], L"[END]"}, L" ");
+        y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
 
         std::wcout << y[i] << " " << x[i] << std::endl;
     }

@@ -8,6 +8,32 @@
 #include <sstream>
 #include <unordered_map>
 
+std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator)
+{
+    if (strings.empty())
+    {
+        return L"";
+    }
+
+    std::wstring result = strings[0];
+    for (size_t i = 1; i < strings.size(); ++i)
+    {
+        result += separator + strings[i];
+    }
+
+    return result;
+}
+
+std::wstring lower(const std::wstring &text)
+{
+    std::wstring result;
+    for (wchar_t c : text)
+    {
+        result += std::towlower(c);
+    }
+    return result;
+}
+
 ten min_max_scaler(ten &dataset)
 {
     auto min_vals = Min(dataset);
@@ -47,6 +73,18 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return std::regex_replace(in, re, rewrite);
 }
 
+std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
+{
+    std::wregex regex(pattern);
+    return std::regex_replace(in, regex, rewrite);
+}
+
+std::wstring strip(const std::wstring &text)
+{
+    std::wregex pattern(L"(^\\s+)|(\\s+$)");
+    return std::regex_replace(text, pattern, L"");
+}
+
 ten text_vectorization(const std::vector<std::wstring> &texts)
 {
     ten t;
@@ -55,7 +93,7 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
 
     for (auto text : texts)
     {
-        auto tokens = wtokenizer(text);
+        auto tokens = tokenizer(text);
 
         for (auto token : tokens)
         {
@@ -108,6 +146,20 @@ std::vector<std::string> tokenizer(const std::string &text)
     return tokens;
 }
 
+std::vector<std::wstring> tokenizer(const std::wstring &text)
+{
+    std::vector<std::wstring> tokens;
+    std::wstringstream ss(text);
+    std::wstring token;
+
+    while (ss >> token)
+    {
+        tokens.push_back(token);
+    }
+
+    return tokens;
+}
+
 train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rand_state)
 {
     ten x_shuffled = shuffle(x, rand_state);
@@ -132,58 +184,6 @@ train_test train_test_split(const ten &x, const ten &y, const float test_size, c
         data.y_test[i - data.y_train.size] = y_shuffled[i];
 
     return data;
-}
-
-std::wstring wjoin(const std::vector<std::wstring> &strings, const std::wstring &separator)
-{
-    if (strings.empty())
-    {
-        return L"";
-    }
-
-    std::wstring result = strings[0];
-    for (size_t i = 1; i < strings.size(); ++i)
-    {
-        result += separator + strings[i];
-    }
-
-    return result;
-}
-
-std::wstring wlower(const std::wstring &text)
-{
-    std::wstring result;
-    for (wchar_t c : text)
-    {
-        result += std::towlower(c);
-    }
-    return result;
-}
-
-std::wstring wregex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
-{
-    std::wregex regex(pattern);
-    return std::regex_replace(in, regex, rewrite);
-}
-
-std::wstring wstrip(const std::wstring &text)
-{
-    std::wregex pattern(L"(^\\s+)|(\\s+$)");
-    return std::regex_replace(text, pattern, L"");
-}
-
-std::vector<std::wstring> wtokenizer(const std::wstring &text)
-{
-    std::vector<std::wstring> tokens;
-    std::wstringstream ss(text);
-    std::wstring token;
-
-    while (ss >> token)
-    {
-        tokens.push_back(token);
-    }
-
-    return tokens;
 }
 
 std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
