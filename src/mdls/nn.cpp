@@ -114,7 +114,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
         if (i % 10 == 0)
         {
-            for (const auto &message : buff)
+            for (auto message : buff)
                 std::cout << message << '\n';
             buff.clear();
         }
