@@ -127,7 +127,7 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
                   return a.second > b.second;
               });
 
-    for (auto &pair : vec)
+    for (auto pair : vec)
     {
         vocab.push_back(pair.first);
         std::wcout << pair.first << " " << pair.second << std::endl;
