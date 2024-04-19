@@ -4,20 +4,20 @@
 #include <cassert>
 #include <numeric>
 
-ten clip_by_value(const ten &t, float clipValMin, float clipValMax)
+ten clip_by_value(const ten &t, float clip_val_min, float clip_val_max)
 {
-    assert(clipValMin <= clipValMax);
-    ten newTensor = t;
+    assert(clip_val_min <= clip_val_max);
+    ten t_new = t;
 
     for (auto i = 0; i < t.size; ++i)
     {
-        if (t[i] < clipValMin)
-            newTensor[i] = clipValMin;
-        else if (t[i] > clipValMax)
-            newTensor[i] = clipValMax;
+        if (t[i] < clip_val_min)
+            t_new[i] = clip_val_min;
+        else if (t[i] > clip_val_max)
+            t_new[i] = clip_val_max;
     }
 
-    return newTensor;
+    return t_new;
 }
 
 ten slice(const ten &t, const size_t begin, const size_t size)
