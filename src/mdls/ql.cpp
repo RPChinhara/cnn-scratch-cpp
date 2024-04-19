@@ -34,7 +34,7 @@ Action QL::ChooseAction(size_t state)
         size_t max_idx = 0;
         float max = std::numeric_limits<float>::lowest();
 
-        for (size_t i = 0; i < sliced_q_table.size; ++i)
+        for (auto i = 0; i < sliced_q_table.size; ++i)
         {
             if (sliced_q_table[i] > max)
             {
@@ -54,7 +54,7 @@ void QL::UpdateQtable(size_t state, Action action, float reward, size_t next_sta
     ten sliced_q_table = slice(q_table, next_state, 1);
     float next_max_q = std::numeric_limits<float>::lowest();
 
-    for (size_t i = 0; i < sliced_q_table.size; ++i)
+    for (auto i = 0; i < sliced_q_table.size; ++i)
         if (sliced_q_table[i] > next_max_q)
             next_max_q = sliced_q_table[i];
 

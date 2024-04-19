@@ -16,7 +16,7 @@ std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &
     }
 
     std::wstring result = strings[0];
-    for (size_t i = 1; i < strings.size(); ++i)
+    for (auto i = 1; i < strings.size(); ++i)
     {
         result += separator + strings[i];
     }
@@ -27,7 +27,7 @@ std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &
 std::wstring lower(const std::wstring &text)
 {
     std::wstring result;
-    for (wchar_t c : text)
+    for (auto c : text)
     {
         result += std::towlower(c);
     }
@@ -47,7 +47,7 @@ ten one_hot(const ten &t, const size_t depth)
 
     std::vector<float> indices;
 
-    for (size_t i = 0; i < t.size; ++i)
+    for (auto i = 0; i < t.size; ++i)
     {
         if (i == 0)
             indices.push_back(t[i]);
@@ -55,7 +55,7 @@ ten one_hot(const ten &t, const size_t depth)
             indices.push_back(t[i] + (i * depth));
     }
 
-    for (size_t i = 0; i < newTensor.size; ++i)
+    for (auto i = 0; i < newTensor.size; ++i)
     {
         for (auto j : indices)
         {
@@ -87,13 +87,16 @@ std::wstring strip(const std::wstring &text)
 
 ten text_vectorization(const std::vector<std::wstring> &texts)
 {
-    ten t;
+    size_t max_seq_length = 0;
     std::vector<std::wstring> vocab;
     std::unordered_map<std::wstring, float> vocab_map;
 
     for (auto text : texts)
     {
         auto tokens = tokenizer(text);
+
+        if (tokens.size() > max_seq_length)
+            max_seq_length = tokens.size();
 
         for (auto token : tokens)
         {
@@ -119,17 +122,22 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
     std::vector<std::pair<std::wstring, float>> vec(vocab_map.begin(), vocab_map.end());
 
     // Sorting vector by value (the second element of the pair)
-    std::sort(vec.begin(), vec.end(), [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
-        return a.second > b.second;
-    });
+    std::sort(vec.begin(), vec.end(),
+              [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
+                  return a.second > b.second;
+              });
 
-    for (const auto &pair : vec)
+    for (auto &pair : vec)
     {
         vocab.push_back(pair.first);
         std::wcout << pair.first << " " << pair.second << std::endl;
     }
 
-    return t;
+    ten new_t = zeros({texts.size(), max_seq_length});
+
+    std::cout << new_t.shape[0] << " " << new_t.shape[1] << std::endl;
+
+    return new_t;
 }
 
 std::vector<std::string> tokenizer(const std::string &text)
@@ -171,16 +179,16 @@ train_test train_test_split(const ten &x, const ten &y, const float test_size, c
     data.x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
     data.y_test = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
 
-    for (size_t i = 0; i < data.x_train.size; ++i)
+    for (auto i = 0; i < data.x_train.size; ++i)
         data.x_train[i] = x_shuffled[i];
 
-    for (size_t i = 0; i < data.y_train.size; ++i)
+    for (auto i = 0; i < data.y_train.size; ++i)
         data.y_train[i] = y_shuffled[i];
 
-    for (size_t i = data.x_train.size; i < x.size; ++i)
+    for (auto i = data.x_train.size; i < x.size; ++i)
         data.x_test[i - data.x_train.size] = x_shuffled[i];
 
-    for (size_t i = data.y_train.size; i < y.size; ++i)
+    for (auto i = data.y_train.size; i < y.size; ++i)
         data.y_test[i - data.y_train.size] = y_shuffled[i];
 
     return data;
@@ -214,11 +222,11 @@ std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens)
 
     std::vector<std::string> tokensNoStopWords;
 
-    for (const std::string &token : tokens)
+    for (auto token : tokens)
     {
         bool found = false;
 
-        for (const std::string &stopWord : stopWords)
+        for (auto stopWord : stopWords)
         {
             if (stopWord == token)
             {

@@ -26,9 +26,9 @@ void CNN2D::Train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
 
     // size_t idx = 0;
 
-    // for (size_t i = 0; i < outputHeight; ++i)
+    // for (auto i = 0; i < outputHeight; ++i)
     // {
-    //     for (size_t j = 0; i < outputWidth; ++j)
+    //     for (auto j = 0; i < outputWidth; ++j)
     //     {
     //         // ouput[idx] =
     //     }

@@ -12,7 +12,7 @@ int main()
     std::vector<std::wstring> x(data.x.size());
     std::vector<std::wstring> y(data.y.size());
 
-    for (int i = 0; i < 10; ++i)
+    for (auto i = 0; i < 10; ++i)
     {
         x[i] = regex_replace(data.x[i], L"(á)", L"a");
         x[i] = regex_replace(x[i], L"(é)", L"e");
@@ -44,21 +44,22 @@ int main()
         std::wcout << y[i] << " " << x[i] << std::endl;
     }
 
-    auto z = text_vectorization({
-        y[0],
-        y[1],
-        y[2],
-        y[3],
-        y[4],
-        y[5],
-        y[6],
-        y[7],
-        y[8],
-        y[9],
-    });
+    std::vector<std::wstring> foo = {L"size suit of the vocab point bag card no win device egg hell kelvin",
+                                     L"adapt the layer to the text"};
+    auto z = text_vectorization(foo);
 
-    // for (auto i : z)
-    //     std::cout << i << std::endl;
+    // auto z = text_vectorization({
+    //     y[0],
+    //     y[1],
+    //     y[2],
+    //     y[3],
+    //     y[4],
+    //     y[5],
+    //     y[6],
+    //     y[7],
+    //     y[8],
+    //     y[9],
+    // });
 
     return 0;
 }

@@ -8,7 +8,7 @@ ten da_dz(const ten &t, act_enum act)
     switch (act)
     {
     case RELU: {
-        for (size_t i = 0; i < t.size; ++i)
+        for (auto i = 0; i < t.size; ++i)
         {
             if (t[i] > 0.0f)
                 newTensor[i] = 1.0f;

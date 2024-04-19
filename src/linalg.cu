@@ -13,13 +13,13 @@ ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
     {
     case CPU: {
 
-        for (size_t i = 0; i < tensor1.shape.front(); ++i)
+        for (auto i = 0; i < tensor1.shape.front(); ++i)
         {
-            for (size_t j = 0; j < tensor2.shape.back(); ++j)
+            for (auto j = 0; j < tensor2.shape.back(); ++j)
             {
                 float sum = 0.0;
 
-                for (size_t l = 0; l < tensor1.shape.back(); ++l)
+                for (auto l = 0; l < tensor1.shape.back(); ++l)
                     sum += tensor1[i * tensor1.shape.back() + l] * tensor2[l * tensor2.shape.back() + j];
 
                 newTensor[i * tensor2.shape.back() + j] = sum;
@@ -69,7 +69,7 @@ static size_t get_batch_size(const std::vector<size_t> &shape)
     assert(shape.size() > 1);
     size_t batchSize = 1;
 
-    for (size_t i = 0; i < shape.size() - 2; ++i)
+    for (auto i = 0; i < shape.size() - 2; ++i)
         batchSize *= shape[i];
 
     return batchSize;
@@ -83,18 +83,18 @@ ten transpose(const ten &t)
 
     std::vector<size_t> idx_rows;
 
-    for (size_t i = 0; i < t.size; ++i)
+    for (auto i = 0; i < t.size; ++i)
         idx_rows.push_back(i * t.shape.back());
 
     size_t batchSize = get_batch_size(t.shape);
 
     size_t idx = 0;
 
-    for (size_t i = 0; i < batchSize; ++i)
+    for (auto i = 0; i < batchSize; ++i)
     {
-        for (size_t j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
+        for (auto j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
         {
-            for (size_t k = 0; k < newTensor.shape.back(); ++k)
+            for (auto k = 0; k < newTensor.shape.back(); ++k)
             {
                 newTensor[idx] = t[idx_rows[k + (i * newTensor.shape.back())]];
                 idx_rows[k + (i * newTensor.shape.back())] += 1;

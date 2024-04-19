@@ -8,7 +8,7 @@ ten::ten(const std::vector<float> elem, const std::vector<size_t> shape)
 {
     assert(elem.size() != 0);
 
-    for (const size_t &i : shape)
+    for (auto i : shape)
         assert(i != 0);
     this->shape = std::move(shape);
 
@@ -96,12 +96,12 @@ ten ten::operator+(const ten &other) const
     ten newTensor = *this;
     if (ShapeEqual(shape, other.shape))
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] + other[i];
     }
     else if (shape.back() == other.shape.back())
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] + other[i % other.shape.back()];
     }
     else
@@ -156,17 +156,17 @@ ten ten::operator-(const ten &other) const
     ten newTensor = *this;
     if (ShapeEqual(shape, other.shape))
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] - other[i];
     }
     else if (shape.back() == other.shape.back())
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] - other[i % other.shape.back()];
     }
     else if (shape.front() == other.shape.front())
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
         {
             size_t idx = i / shape.back();
             newTensor[i] = elem[i] - other[idx];
@@ -184,7 +184,7 @@ ten ten::operator*(const ten &other) const
     ten newTensor = *this;
     if (ShapeEqual(shape, other.shape))
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] * other[i];
     }
     else
@@ -199,17 +199,17 @@ ten ten::operator/(const ten &other) const
     ten newTensor = *this;
     if (ShapeEqual(shape, other.shape))
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i];
     }
     else if (shape.back() == other.shape.back())
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
             newTensor[i] = elem[i] / other[i % other.shape.back()];
     }
     else if (shape.front() == other.shape.front())
     {
-        for (size_t i = 0; i < size; ++i)
+        for (auto i = 0; i < size; ++i)
         {
             size_t idx = i / shape.back();
             newTensor[i] = elem[i] / other[idx];
@@ -225,7 +225,7 @@ ten ten::operator/(const ten &other) const
 ten ten::operator+=(const ten &other) const
 {
     // assert(ShapeEqual(shape, other.shape));
-    for (size_t i = 0; i < size; ++i)
+    for (auto i = 0; i < size; ++i)
         elem[i] += other[i];
     return *this;
 }
@@ -238,7 +238,7 @@ float &ten::operator[](const size_t idx) const
 ten operator-(const float sca, const ten &t)
 {
     ten newTensor = t;
-    for (size_t i = 0; i < t.size; ++i)
+    for (auto i = 0; i < t.size; ++i)
         newTensor[i] = sca - t[i];
     return newTensor;
 }
@@ -246,7 +246,7 @@ ten operator-(const float sca, const ten &t)
 ten operator*(const float sca, const ten &t)
 {
     ten newTensor = t;
-    for (size_t i = 0; i < t.size; ++i)
+    for (auto i = 0; i < t.size; ++i)
         newTensor[i] = sca * t[i];
     return newTensor;
 }
@@ -284,19 +284,19 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
         if (t.size == 1)
         {
             os << "Tensor(";
-            for (size_t i = 0; i < t.shape.size(); ++i)
+            for (auto i = 0; i < t.shape.size(); ++i)
                 os << "[";
         }
         else
         {
             os << "Tensor(\n";
-            for (size_t i = 0; i < t.shape.size(); ++i)
+            for (auto i = 0; i < t.shape.size(); ++i)
                 os << "[";
         }
 
         if (t.size == 1)
         {
-            for (size_t i = 0; i < t.size; ++i)
+            for (auto i = 0; i < t.size; ++i)
                 if (i == t.size - 1)
                     os << std::to_string(t[i]);
                 else
@@ -307,14 +307,14 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
             std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(t.shape);
             size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(t.shape);
 
-            for (size_t i = 0; i < t.size; ++i)
+            for (auto i = 0; i < t.size; ++i)
             {
                 bool num_elem_each_batch_done = false;
                 size_t num_square_brackets = 0;
 
                 if (t.shape.size() > 2)
                 {
-                    for (int j = num_elem_each_batch.size() - 1; j >= 0; --j)
+                    for (auto j = num_elem_each_batch.size() - 1; j >= 0; --j)
                     {
                         if (i % num_elem_each_batch[j] == 0 && i != 0)
                         {
@@ -329,7 +329,7 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
                 {
                     os << "]\n";
 
-                    for (size_t i = 0; i < t.shape.size() - 1; ++i)
+                    for (auto i = 0; i < t.shape.size() - 1; ++i)
                         os << " ";
 
                     os << "[";
@@ -339,7 +339,7 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
                     if (num_elem_each_batch_done)
                     {
                         os << "]";
-                        for (size_t i = 0; i < num_square_brackets; ++i)
+                        for (auto i = 0; i < num_square_brackets; ++i)
                             os << "]";
 
                         os << "\n";
@@ -354,17 +354,17 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
                 {
                     if (num_elem_each_batch_done)
                     {
-                        for (size_t i = 0; i < num_square_brackets; ++i)
+                        for (auto i = 0; i < num_square_brackets; ++i)
                             os << "\n";
-                        for (size_t i = 0; i < t.shape.size() - num_square_brackets - 1; ++i)
+                        for (auto i = 0; i < t.shape.size() - num_square_brackets - 1; ++i)
                             os << " ";
-                        for (size_t i = 0; i < num_square_brackets + 1; ++i)
+                        for (auto i = 0; i < num_square_brackets + 1; ++i)
                             os << "[";
                     }
                     else
                     {
                         os << "\n";
-                        for (size_t i = 0; i < t.shape.size() - 2; ++i)
+                        for (auto i = 0; i < t.shape.size() - 2; ++i)
                             os << " ";
                         os << "[[";
                     }
@@ -396,12 +396,12 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
             }
         }
 
-        for (size_t i = 0; i < t.shape.size(); ++i)
+        for (auto i = 0; i < t.shape.size(); ++i)
             os << "]";
     }
 
     os << ", shape=(";
-    for (size_t i = 0; i < t.shape.size(); ++i)
+    for (auto i = 0; i < t.shape.size(); ++i)
     {
         if (i != t.shape.size() - 1)
             os << t.shape[i] << ", ";

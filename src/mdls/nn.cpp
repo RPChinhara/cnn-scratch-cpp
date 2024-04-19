@@ -36,7 +36,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
     w_b = init_params();
     w_b_mom = init_params();
 
-    for (size_t i = 1; i <= epochs; ++i)
+    for (auto i = 1; i <= epochs; ++i)
     {
         start_time = std::chrono::high_resolution_clock::now();
 
@@ -51,7 +51,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         x_shuffled = shuffle(x_train, rd_num);
         y_shuffled = shuffle(y_train, rd_num);
 
-        for (size_t j = 0; j < x_train.shape.front(); j += batch_size)
+        for (auto j = 0; j < x_train.shape.front(); j += batch_size)
         {
             assert(x_train.shape.front() >= batch_size && batch_size > 0);
 
@@ -68,7 +68,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
             a = forward_prop(x_batch, w_b.first, w_b.second);
 
-            for (size_t k = lyrs.size() - 1; k > 0; --k)
+            for (auto k = lyrs.size() - 1; k > 0; --k)
             {
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), act_types.back()));
@@ -161,7 +161,7 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
     std::vector<ten> w;
     std::vector<ten> b;
 
-    for (size_t i = 0; i < lyrs.size() - 1; ++i)
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
     {
         w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
         b.push_back(zeros({1, lyrs[i + 1]}));
@@ -174,7 +174,7 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
 {
     std::vector<ten> a;
 
-    for (size_t i = 0; i < lyrs.size() - 1; ++i)
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
     {
         if (i == 0)
         {

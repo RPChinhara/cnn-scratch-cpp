@@ -26,7 +26,7 @@ ten ReadMNISTImages(const std::string &filePath)
 
     std::vector<std::vector<uint8_t>> images(numImages, std::vector<uint8_t>(numRows * numCols));
 
-    for (uint32_t i = 0; i < numImages; ++i)
+    for (auto i = 0; i < numImages; ++i)
     {
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
@@ -34,11 +34,11 @@ ten ReadMNISTImages(const std::string &filePath)
     ten images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
-    for (uint32_t i = 0; i < numImages; ++i)
+    for (auto i = 0; i < numImages; ++i)
     {
-        for (uint32_t j = 0; j < numRows; ++j)
+        for (auto j = 0; j < numRows; ++j)
         {
-            for (uint32_t k = 0; k < numCols; ++k)
+            for (auto k = 0; k < numCols; ++k)
             {
                 images2[idx] = static_cast<float>(images[i][j * numCols + k]);
                 ++idx;
@@ -73,7 +73,7 @@ ten ReadMNISTLabels(const std::string &filePath)
     ten labels2 = zeros({numLabels, 1});
     size_t idx = 0;
 
-    for (uint32_t i = 0; i < numLabels; ++i)
+    for (auto i = 0; i < numLabels; ++i)
     {
         labels2[idx] = static_cast<float>(labels[i]);
         ++idx;

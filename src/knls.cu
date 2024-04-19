@@ -26,7 +26,7 @@ __global__ void MatMul(float *tensor1, float *tensor2, float *newTensor, size_t 
     {
         float sum = 0.0;
 
-        for (size_t l = 0; l < numColsTensor1; l++)
+        for (auto l = 0; l < numColsTensor1; l++)
             sum += tensor1[i * numColsTensor1 + l] * tensor2[l * numRowsTensor2 + j];
 
         newTensor[i * numRowsTensor2 + j] = sum;

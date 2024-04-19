@@ -58,7 +58,7 @@ imdb load_imdb()
 
         std::cout << "Text: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << std::endl;
-        for (int i = 0; i < tokens_no_stop_words.size(); ++i)
+        for (auto i = 0; i < tokens_no_stop_words.size(); ++i)
         {
             std::cout << tokens_no_stop_words[i] << std::endl;
         }

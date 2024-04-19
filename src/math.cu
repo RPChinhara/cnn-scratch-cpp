@@ -13,9 +13,9 @@ ten Argmax(const ten &t)
     float max = std::numeric_limits<float>::lowest();
     size_t max_idx = 0;
 
-    for (size_t i = 0; i < t.shape.front(); ++i)
+    for (auto i = 0; i < t.shape.front(); ++i)
     {
-        for (size_t j = 0; j < t.shape.back(); ++j)
+        for (auto j = 0; j < t.shape.back(); ++j)
         {
             if (t[idx] > max)
             {
@@ -40,7 +40,7 @@ ten Exp(const ten &t, dev_type dev)
     {
     case CPU: {
 
-        for (size_t i = 0; i < t.size; ++i)
+        for (auto i = 0; i < t.size; ++i)
             newTensor.elem[i] = expf(t.elem[i]);
 
         return newTensor;
@@ -78,7 +78,7 @@ ten Log(const ten &t, dev_type dev)
     switch (dev)
     {
     case CPU: {
-        for (size_t i = 0; i < t.size; ++i)
+        for (auto i = 0; i < t.size; ++i)
             newTensor.elem[i] = logf(t.elem[i]);
 
         return newTensor;
@@ -118,12 +118,12 @@ ten Max(const ten &t, const size_t axis)
     {
         newTensor = zeros({1, t.shape.back()});
 
-        for (size_t i = 0; i < t.shape.back(); ++i)
+        for (auto i = 0; i < t.shape.back(); ++i)
         {
             size_t idx = i;
             float max = std::numeric_limits<float>::lowest();
 
-            for (size_t j = 0; j < t.shape.front(); ++j)
+            for (auto j = 0; j < t.shape.front(); ++j)
             {
                 if (t[idx] > max)
                     max = t[idx];
@@ -138,11 +138,11 @@ ten Max(const ten &t, const size_t axis)
         newTensor = zeros({t.shape.front(), 1});
         size_t idx = 0;
 
-        for (size_t i = 0; i < t.shape.front(); ++i)
+        for (auto i = 0; i < t.shape.front(); ++i)
         {
             float max = std::numeric_limits<float>::lowest();
 
-            for (size_t j = 0; j < t.shape.back(); ++j)
+            for (auto j = 0; j < t.shape.back(); ++j)
             {
                 if (t[idx] > max)
                     max = t[idx];
@@ -160,12 +160,12 @@ ten Min(const ten &t)
 {
     ten newTensor = zeros({1, t.shape.back()});
 
-    for (size_t i = 0; i < t.shape.back(); ++i)
+    for (auto i = 0; i < t.shape.back(); ++i)
     {
         size_t idx = i;
         float min = std::numeric_limits<float>::max();
 
-        for (size_t j = 0; j < t.shape.front(); ++j)
+        for (auto j = 0; j < t.shape.front(); ++j)
         {
             if (t[idx] < min)
                 min = t[idx];
@@ -194,7 +194,7 @@ ten sum(const ten &t, const size_t axis)
             newTensor = zeros({1, 1});
             float sum = 0.0f;
 
-            for (size_t i = 0; i < t.size; ++i)
+            for (auto i = 0; i < t.size; ++i)
             {
                 sum += t[i];
             }
@@ -207,11 +207,11 @@ ten sum(const ten &t, const size_t axis)
         {
             newTensor = zeros({1, t.shape.back()});
 
-            for (size_t i = 0; i < t.shape.back(); ++i)
+            for (auto i = 0; i < t.shape.back(); ++i)
             {
                 size_t idx = i;
 
-                for (size_t j = 0; j < t.shape.front(); ++j)
+                for (auto j = 0; j < t.shape.front(); ++j)
                 {
                     newTensor[i] += t[idx];
                     idx += t.shape.back();
@@ -223,9 +223,9 @@ ten sum(const ten &t, const size_t axis)
             newTensor = zeros({t.shape.front(), 1});
             size_t idx = 0;
 
-            for (size_t i = 0; i < t.shape.front(); ++i)
+            for (auto i = 0; i < t.shape.front(); ++i)
             {
-                for (size_t j = 0; j < t.shape.back(); ++j)
+                for (auto j = 0; j < t.shape.back(); ++j)
                 {
                     newTensor[i] += t[idx];
                     ++idx;

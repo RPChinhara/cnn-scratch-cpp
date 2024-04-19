@@ -6,7 +6,7 @@ int main()
 {
     MNIST mnist = LoadMNIST();
 
-    for (size_t i = 0; i < 784; ++i)
+    for (auto i = 0; i < 784; ++i)
     {
 
         if (i % 28 == 0)

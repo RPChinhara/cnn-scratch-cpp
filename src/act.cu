@@ -14,7 +14,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
         switch (dev)
         {
         case CPU: {
-            for (size_t i = 0; i < t.size; ++i)
+            for (auto i = 0; i < t.size; ++i)
                 newTensor.elem[i] = std::max(0.0f, t.elem[i]);
 
             return newTensor;

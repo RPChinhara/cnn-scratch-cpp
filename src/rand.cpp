@@ -9,7 +9,7 @@ ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
 {
     ten newTensor = ten();
 
-    for (const size_t &i : shape)
+    for (auto i : shape)
         assert(i != 0);
 
     newTensor.shape = shape;
@@ -25,7 +25,7 @@ ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
     std::mt19937 rng(rd());
     std::normal_distribution<float> dist(mean, stdDev);
 
-    for (size_t i = 0; i < newTensor.size; ++i)
+    for (auto i = 0; i < newTensor.size; ++i)
         newTensor[i] = dist(rng);
 
     return newTensor;
@@ -36,12 +36,12 @@ ten shuffle(const ten &t, const size_t randomState)
     ten newTensor = t;
     std::mt19937 rng(randomState);
 
-    for (size_t i = t.shape.front() - 1; i > 0; --i)
+    for (auto i = t.shape.front() - 1; i > 0; --i)
     {
         std::uniform_int_distribution<> dist(0, i);
         int j = dist(rng);
 
-        for (size_t k = 0; k < t.shape.back(); ++k)
+        for (auto k = 0; k < t.shape.back(); ++k)
         {
             float temp = newTensor[(t.shape.back() - 1) * i + i + k];
             newTensor[(t.shape.back() - 1) * i + i + k] = newTensor[(t.shape.back() - 1) * j + j + k];
