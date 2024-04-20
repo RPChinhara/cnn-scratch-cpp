@@ -13,7 +13,6 @@ en_es load_en_es()
     // _setmode(_fileno(stdout), _O_U16TEXT);
 
     std::locale::global(std::locale("es_ES.UTF-8"));
-    // std::setlocale(LC_ALL, "es_ES.utf8");
 
     std::wifstream file("datas/spa.txt");
     if (!file)
