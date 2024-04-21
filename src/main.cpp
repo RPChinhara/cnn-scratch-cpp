@@ -12,8 +12,6 @@ int main()
     ten x = data.x;
     ten y = data.y;
 
-    // std::cout << shuffle(x, 5) << std::endl;
-
     y = one_hot(y, 3);
 
     train_test tr_te = train_test_split(x, y, 0.2, 42);
