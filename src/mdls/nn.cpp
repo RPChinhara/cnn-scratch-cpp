@@ -22,23 +22,13 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, 
 
 void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
 {
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_time;
-    size_t rd_num;
-    std::random_device rd;
-    std::vector<std::string> buff;
-    ten x_shuffled;
-    ten y_shuffled;
-    ten x_batch;
-    ten y_batch;
-    std::vector<ten> a_val;
-    std::vector<ten> dl_dz, dl_dw, dl_db;
-
     w_b = init_params();
     w_b_mom = init_params();
 
     for (auto i = 1; i <= epochs; ++i)
     {
-        start_time = std::chrono::high_resolution_clock::now();
+        std::chrono::time_point<std::chrono::high_resolution_clock> start_time =
+            std::chrono::high_resolution_clock::now();
 
         if (i > 10 && i < 20)
             lr = 0.009f;
@@ -47,9 +37,14 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         else
             lr = 0.001f;
 
-        rd_num = rd();
-        x_shuffled = shuffle(x_train, rd_num);
-        y_shuffled = shuffle(y_train, rd_num);
+        std::random_device rd;
+        size_t rd_num = rd();
+
+        ten x_shuffled = shuffle(x_train, rd_num);
+        ten y_shuffled = shuffle(y_train, rd_num);
+
+        ten x_batch;
+        ten y_batch;
 
         for (auto j = 0; j < x_train.shape.front(); j += batch_size)
         {
@@ -67,6 +62,8 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             }
 
             a = forward_prop(x_batch, w_b.first, w_b.second);
+
+            std::vector<ten> dl_dz, dl_dw, dl_db;
 
             for (auto k = lyrs.size() - 1; k > 0; --k)
             {
@@ -98,12 +95,14 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        a_val = forward_prop(x_val, w_b.first, w_b.second);
+        std::vector<ten> a_val = forward_prop(x_val, w_b.first, w_b.second);
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
+
+        std::vector<std::string> buff;
 
         buff.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
                        std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
