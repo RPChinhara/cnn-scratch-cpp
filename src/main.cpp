@@ -2,7 +2,7 @@
 #include "datas/iris.h"
 #include "mdls/nn.h"
 #include "preproc.h"
-#include "rand.h"
+#include "rd.h"
 
 #include <chrono>
 

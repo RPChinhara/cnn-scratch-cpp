@@ -6,7 +6,7 @@
 #include "losses.h"
 #include "math.hpp"
 #include "mets.h"
-#include "rand.h"
+#include "rd.h"
 #include "ten.h"
 
 #include <cassert>

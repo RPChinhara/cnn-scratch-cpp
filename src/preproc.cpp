@@ -1,7 +1,7 @@
 #include "preproc.h"
 #include "arrs.h"
 #include "math.hpp"
-#include "rand.h"
+#include "rd.h"
 
 #include <cwctype>
 #include <regex>
