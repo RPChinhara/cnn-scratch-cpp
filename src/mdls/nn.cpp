@@ -27,8 +27,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
     for (auto i = 1; i <= epochs; ++i)
     {
-        std::chrono::time_point<std::chrono::high_resolution_clock> start_time =
-            std::chrono::high_resolution_clock::now();
+        auto start_time = std::chrono::high_resolution_clock::now();
 
         if (i > 10 && i < 20)
             lr = 0.009f;
