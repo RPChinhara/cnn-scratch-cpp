@@ -38,7 +38,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             lr = 0.001f;
 
         std::random_device rd;
-        size_t rd_num = rd();
+        auto rd_num = rd();
 
         ten x_shuffled = shuffle(x_train, rd_num);
         ten y_shuffled = shuffle(y_train, rd_num);
