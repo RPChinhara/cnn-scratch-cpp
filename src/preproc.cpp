@@ -168,10 +168,10 @@ std::vector<std::wstring> tokenizer(const std::wstring &text)
     return tokens;
 }
 
-train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rand_state)
+train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rd_state)
 {
-    ten x_shuffled = shuffle(x, rand_state);
-    ten y_shuffled = shuffle(y, rand_state);
+    ten x_shuffled = shuffle(x, rd_state);
+    ten y_shuffled = shuffle(y, rd_state);
 
     train_test data;
     data.x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
