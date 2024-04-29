@@ -133,11 +133,11 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
         std::wcout << pair.first << " " << pair.second << std::endl;
     }
 
-    ten new_t = zeros({texts.size(), max_seq_length});
+    ten t_new = zeros({texts.size(), max_seq_length});
 
-    std::cout << new_t.shape[0] << " " << new_t.shape[1] << std::endl;
+    std::cout << t_new.shape[0] << " " << t_new.shape[1] << std::endl;
 
-    return new_t;
+    return t_new;
 }
 
 std::vector<std::string> tokenizer(const std::string &text)
