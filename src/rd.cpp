@@ -5,7 +5,7 @@
 #include <numeric>
 #include <random>
 
-ten normal_dist(const std::vector<size_t> &shape, const float mean, const float stdDev)
+ten normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev)
 {
     ten newTensor = ten();
 
@@ -23,7 +23,7 @@ ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
 
     std::random_device rd;
     std::mt19937 rng(rd());
-    std::normal_distribution<float> dist(mean, stdDev);
+    std::normal_distribution<float> dist(mean, std_dev);
 
     for (auto i = 0; i < newTensor.size; ++i)
         newTensor[i] = dist(rng);
