@@ -16,20 +16,20 @@ __global__ void Log(float *t, float *t_new, size_t n)
         t_new[id] = logf(t[id]);
 }
 
-__global__ void MatMul(float *tensor1, float *tensor2, float *t_new, size_t numRowsTensor1, size_t numColsTensor1,
-                       size_t numRowsTensor2)
+__global__ void matmul(float *t_1, float *t_2, float *t_new, size_t num_rows_t_1, size_t num_cols_t_1,
+                       size_t num_rows_t_2)
 {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
     int j = blockIdx.y * blockDim.y + threadIdx.y;
 
-    if (i < numRowsTensor1 && j < numRowsTensor2)
+    if (i < num_rows_t_1 && j < num_rows_t_2)
     {
         float sum = 0.0;
 
-        for (auto l = 0; l < numColsTensor1; l++)
-            sum += tensor1[i * numColsTensor1 + l] * tensor2[l * numRowsTensor2 + j];
+        for (auto l = 0; l < num_cols_t_1; l++)
+            sum += t_1[i * num_cols_t_1 + l] * t_2[l * num_rows_t_2 + j];
 
-        t_new[i * numRowsTensor2 + j] = sum;
+        t_new[i * num_rows_t_2 + j] = sum;
     }
 }
 

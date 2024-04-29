@@ -44,7 +44,7 @@ ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
 
         dim3 blockDim(16, 16);
         dim3 gridDim((numRowsTensor1 + blockDim.x - 1) / blockDim.x, (numRowsTensor2 + blockDim.y - 1) / blockDim.y);
-        MatMul<<<gridDim, blockDim>>>(tensorGPU1, tensorGPU2, newTensorGPU, numRowsTensor1, numColsTensor1,
+        matmul<<<gridDim, blockDim>>>(tensorGPU1, tensorGPU2, newTensorGPU, numRowsTensor1, numColsTensor1,
                                       numRowsTensor2);
 
         cudaError_t cudaError = cudaGetLastError();
