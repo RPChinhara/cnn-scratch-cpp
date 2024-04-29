@@ -22,30 +22,30 @@ ten clip_by_value(const ten &t, float clip_val_min, float clip_val_max)
 
 ten slice(const ten &t, const size_t begin, const size_t size)
 {
-    ten newTensor = zeros({size, t.shape.back()});
+    ten t_new = zeros({size, t.shape.back()});
 
     for (auto i = begin * t.shape.back(); i < (begin * t.shape.back()) + (size * t.shape.back()); ++i)
-        newTensor[i - (begin * t.shape.back())] = t[i];
+        t_new[i - (begin * t.shape.back())] = t[i];
 
-    return newTensor;
+    return t_new;
 }
 
 ten zeros(const std::vector<size_t> &shape)
 {
-    ten newTensor = ten();
+    ten t_new = ten();
 
     for (auto i : shape)
         assert(i != 0);
 
-    newTensor.shape = shape;
+    t_new.shape = shape;
 
-    if (newTensor.shape.size() > 0)
-        newTensor.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
+    if (t_new.shape.size() > 0)
+        t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
-        newTensor.size = 1;
+        t_new.size = 1;
 
-    newTensor.elem = new float[newTensor.size];
-    std::fill(newTensor.elem, newTensor.elem + newTensor.size, 0.0f);
+    t_new.elem = new float[t_new.size];
+    std::fill(t_new.elem, t_new.elem + t_new.size, 0.0f);
 
-    return newTensor;
+    return t_new;
 }

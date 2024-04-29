@@ -7,28 +7,28 @@
 
 ten normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev)
 {
-    ten newTensor = ten();
+    ten t_new = ten();
 
     for (auto i : shape)
         assert(i != 0);
 
-    newTensor.shape = shape;
+    t_new.shape = shape;
 
-    if (newTensor.shape.size() > 0)
-        newTensor.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
+    if (t_new.shape.size() > 0)
+        t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
-        newTensor.size = 1;
+        t_new.size = 1;
 
-    newTensor.elem = new float[newTensor.size];
+    t_new.elem = new float[t_new.size];
 
     std::random_device rd;
     std::mt19937 rng(rd());
     std::normal_distribution<float> dist(mean, std_dev);
 
-    for (auto i = 0; i < newTensor.size; ++i)
-        newTensor[i] = dist(rng);
+    for (auto i = 0; i < t_new.size; ++i)
+        t_new[i] = dist(rng);
 
-    return newTensor;
+    return t_new;
 }
 
 ten shuffle(const ten &t, const size_t rd_state)

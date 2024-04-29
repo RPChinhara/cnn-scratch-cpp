@@ -7,7 +7,7 @@
 
 ten Argmax(const ten &t)
 {
-    ten newTensor = zeros({t.shape.front()});
+    ten t_new = zeros({t.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
@@ -25,25 +25,25 @@ ten Argmax(const ten &t)
             ++idx;
         }
 
-        newTensor[i] = max_idx;
+        t_new[i] = max_idx;
         max = std::numeric_limits<float>::lowest();
     }
 
-    return newTensor;
+    return t_new;
 }
 
 ten Exp(const ten &t, dev_type dev)
 {
-    ten newTensor = t;
+    ten t_new = t;
 
     switch (dev)
     {
     case CPU: {
 
         for (auto i = 0; i < t.size; ++i)
-            newTensor.elem[i] = expf(t.elem[i]);
+            t_new.elem[i] = expf(t.elem[i]);
 
-        return newTensor;
+        return t_new;
     }
     case GPU: {
         float *tensorGPU, *newTensorGPU;
@@ -59,11 +59,11 @@ ten Exp(const ten &t, dev_type dev)
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(newTensor.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(t_new.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
         cudaFree(newTensorGPU);
 
-        return newTensor;
+        return t_new;
     }
     default:
         std::cout << "Unknown dev." << std::endl;
@@ -73,15 +73,15 @@ ten Exp(const ten &t, dev_type dev)
 
 ten Log(const ten &t, dev_type dev)
 {
-    ten newTensor = t;
+    ten t_new = t;
 
     switch (dev)
     {
     case CPU: {
         for (auto i = 0; i < t.size; ++i)
-            newTensor.elem[i] = logf(t.elem[i]);
+            t_new.elem[i] = logf(t.elem[i]);
 
-        return newTensor;
+        return t_new;
     }
     case GPU: {
         float *tensorGPU, *newTensorGPU;
@@ -97,11 +97,11 @@ ten Log(const ten &t, dev_type dev)
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(newTensor.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(t_new.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU);
         cudaFree(newTensorGPU);
 
-        return newTensor;
+        return t_new;
     }
     default:
         std::cout << "Unknown dev." << std::endl;
@@ -112,11 +112,11 @@ ten Log(const ten &t, dev_type dev)
 ten Max(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    ten newTensor;
+    ten t_new;
 
     if (axis == 0)
     {
-        newTensor = zeros({1, t.shape.back()});
+        t_new = zeros({1, t.shape.back()});
 
         for (auto i = 0; i < t.shape.back(); ++i)
         {
@@ -130,12 +130,12 @@ ten Max(const ten &t, const size_t axis)
                 idx += t.shape.back();
             }
 
-            newTensor[i] = max;
+            t_new[i] = max;
         }
     }
     else if (axis == 1)
     {
-        newTensor = zeros({t.shape.front(), 1});
+        t_new = zeros({t.shape.front(), 1});
         size_t idx = 0;
 
         for (auto i = 0; i < t.shape.front(); ++i)
@@ -149,16 +149,16 @@ ten Max(const ten &t, const size_t axis)
                 ++idx;
             }
 
-            newTensor[i] = max;
+            t_new[i] = max;
         }
     }
 
-    return newTensor;
+    return t_new;
 }
 
 ten Min(const ten &t)
 {
-    ten newTensor = zeros({1, t.shape.back()});
+    ten t_new = zeros({1, t.shape.back()});
 
     for (auto i = 0; i < t.shape.back(); ++i)
     {
@@ -172,40 +172,40 @@ ten Min(const ten &t)
             idx += t.shape.back();
         }
 
-        newTensor[i] = min;
+        t_new[i] = min;
     }
 
-    return newTensor;
+    return t_new;
 }
 
 ten sum(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    ten newTensor;
+    ten t_new;
 
     if (t.shape.size() == 1 || t.shape.front() == 1)
     {
         if (axis == 0)
         {
-            newTensor = t;
+            t_new = t;
         }
         else if (axis == 1)
         {
-            newTensor = zeros({1, 1});
+            t_new = zeros({1, 1});
             float sum = 0.0f;
 
             for (auto i = 0; i < t.size; ++i)
             {
                 sum += t[i];
             }
-            newTensor[0] = sum;
+            t_new[0] = sum;
         }
     }
     else
     {
         if (axis == 0)
         {
-            newTensor = zeros({1, t.shape.back()});
+            t_new = zeros({1, t.shape.back()});
 
             for (auto i = 0; i < t.shape.back(); ++i)
             {
@@ -213,26 +213,26 @@ ten sum(const ten &t, const size_t axis)
 
                 for (auto j = 0; j < t.shape.front(); ++j)
                 {
-                    newTensor[i] += t[idx];
+                    t_new[i] += t[idx];
                     idx += t.shape.back();
                 }
             }
         }
         else if (axis == 1)
         {
-            newTensor = zeros({t.shape.front(), 1});
+            t_new = zeros({t.shape.front(), 1});
             size_t idx = 0;
 
             for (auto i = 0; i < t.shape.front(); ++i)
             {
                 for (auto j = 0; j < t.shape.back(); ++j)
                 {
-                    newTensor[i] += t[idx];
+                    t_new[i] += t[idx];
                     ++idx;
                 }
             }
         }
     }
 
-    return newTensor;
+    return t_new;
 }

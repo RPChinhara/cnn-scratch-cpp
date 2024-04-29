@@ -7,7 +7,7 @@
 
 ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
 {
-    ten newTensor = zeros({tensor1.shape.front(), tensor2.shape.back()});
+    ten t_new = zeros({tensor1.shape.front(), tensor2.shape.back()});
 
     switch (dev)
     {
@@ -22,11 +22,11 @@ ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
                 for (auto l = 0; l < tensor1.shape.back(); ++l)
                     sum += tensor1[i * tensor1.shape.back() + l] * tensor2[l * tensor2.shape.back() + j];
 
-                newTensor[i * tensor2.shape.back() + j] = sum;
+                t_new[i * tensor2.shape.back() + j] = sum;
             }
         }
 
-        return newTensor;
+        return t_new;
     }
     case GPU: {
         assert(tensor1.shape.back() == tensor2.shape.front());
@@ -51,12 +51,12 @@ ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(newTensor.elem, newTensorGPU, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaMemcpy(t_new.elem, newTensorGPU, t_new.size * sizeof(float), cudaMemcpyDeviceToHost);
         cudaFree(tensorGPU1);
         cudaFree(tensorGPU2);
         cudaFree(newTensorGPU);
 
-        return newTensor;
+        return t_new;
     }
     default:
         std::cout << "Unknown dev." << std::endl;
@@ -79,7 +79,7 @@ ten transpose(const ten &t)
 {
     assert(t.shape.size() >= 2);
 
-    ten newTensor = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
+    ten t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
 
@@ -92,16 +92,16 @@ ten transpose(const ten &t)
 
     for (auto i = 0; i < batchSize; ++i)
     {
-        for (auto j = 0; j < newTensor.shape[newTensor.shape.size() - 2]; ++j)
+        for (auto j = 0; j < t_new.shape[t_new.shape.size() - 2]; ++j)
         {
-            for (auto k = 0; k < newTensor.shape.back(); ++k)
+            for (auto k = 0; k < t_new.shape.back(); ++k)
             {
-                newTensor[idx] = t[idx_rows[k + (i * newTensor.shape.back())]];
-                idx_rows[k + (i * newTensor.shape.back())] += 1;
+                t_new[idx] = t[idx_rows[k + (i * t_new.shape.back())]];
+                idx_rows[k + (i * t_new.shape.back())] += 1;
                 ++idx;
             }
         }
     }
 
-    return newTensor;
+    return t_new;
 }

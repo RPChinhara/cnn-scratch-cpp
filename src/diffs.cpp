@@ -3,7 +3,7 @@
 
 ten da_dz(const ten &t, act_enum act)
 {
-    ten newTensor = t;
+    ten t_new = t;
 
     switch (act)
     {
@@ -11,14 +11,14 @@ ten da_dz(const ten &t, act_enum act)
         for (auto i = 0; i < t.size; ++i)
         {
             if (t[i] > 0.0f)
-                newTensor[i] = 1.0f;
+                t_new[i] = 1.0f;
             else if (t[i] == 0.0f)
-                newTensor[i] = 0.0f;
+                t_new[i] = 0.0f;
             else
-                newTensor[i] = 0.0f;
+                t_new[i] = 0.0f;
         }
 
-        return newTensor;
+        return t_new;
     }
     default:
         std::cout << "Unknown act." << std::endl;

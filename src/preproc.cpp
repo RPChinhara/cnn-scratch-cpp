@@ -43,7 +43,7 @@ ten min_max_scaler(ten &dataset)
 
 ten one_hot(const ten &t, const size_t depth)
 {
-    ten newTensor = zeros({t.size, depth});
+    ten t_new = zeros({t.size, depth});
 
     std::vector<float> indices;
 
@@ -55,16 +55,16 @@ ten one_hot(const ten &t, const size_t depth)
             indices.push_back(t[i] + (i * depth));
     }
 
-    for (auto i = 0; i < newTensor.size; ++i)
+    for (auto i = 0; i < t_new.size; ++i)
     {
         for (auto j : indices)
         {
             if (i == j)
-                newTensor[i] = 1.0f;
+                t_new[i] = 1.0f;
         }
     }
 
-    return newTensor;
+    return t_new;
 }
 
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite)

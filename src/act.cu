@@ -9,15 +9,15 @@ ten act(const ten &t, act_enum act, dev_type dev)
     switch (act)
     {
     case RELU: {
-        ten newTensor = t;
+        ten t_new = t;
 
         switch (dev)
         {
         case CPU: {
             for (auto i = 0; i < t.size; ++i)
-                newTensor.elem[i] = std::max(0.0f, t.elem[i]);
+                t_new.elem[i] = std::max(0.0f, t.elem[i]);
 
-            return newTensor;
+            return t_new;
         }
         case GPU: {
             float *tensorGPU, *newTensorGPU;
@@ -33,11 +33,11 @@ ten act(const ten &t, act_enum act, dev_type dev)
             if (cudaError != cudaSuccess)
                 std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-            cudaMemcpy(newTensor.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+            cudaMemcpy(t_new.elem, newTensorGPU, t.size * sizeof(float), cudaMemcpyDeviceToHost);
             cudaFree(tensorGPU);
             cudaFree(newTensorGPU);
 
-            return newTensor;
+            return t_new;
         }
         default:
             std::cout << "Unknown dev." << std::endl;

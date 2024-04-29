@@ -1,8 +1,8 @@
 #pragma once
 
-__global__ void Exp(float *t, float *newTensor, size_t n);
-__global__ void Log(float *t, float *newTensor, size_t n);
-__global__ void MatMul(float *tensor1, float *tensor2, float *newTensor, size_t numRowsTensor1, size_t numColsTensor1,
+__global__ void Exp(float *t, float *t_new, size_t n);
+__global__ void Log(float *t, float *t_new, size_t n);
+__global__ void MatMul(float *tensor1, float *tensor2, float *t_new, size_t numRowsTensor1, size_t numColsTensor1,
                        size_t numRowsTensor2);
 // __global__ void OperatorPlus(float *in1, float *in2, float *out, size_t otherShapeBack, size_t k);
-__global__ void relu(float *t, float *newTensor, size_t n);
+__global__ void relu(float *t, float *t_new, size_t n);

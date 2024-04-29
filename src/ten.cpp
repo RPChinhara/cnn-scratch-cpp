@@ -93,32 +93,32 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
 
 ten ten::operator+(const ten &other) const
 {
-    ten newTensor = *this;
+    ten t_new = *this;
     if (ShapeEqual(shape, other.shape))
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] + other[i];
+            t_new[i] = elem[i] + other[i];
     }
     else if (shape.back() == other.shape.back())
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] + other[i % other.shape.back()];
+            t_new[i] = elem[i] + other[i % other.shape.back()];
     }
     else
     {
         std::cerr << "Shapes don't match." << std::endl;
     }
-    return newTensor;
+    return t_new;
 }
 
 // ten ten::operator+(const ten& t) const
 // {
-//     ten newTensor;
+//     ten t_new;
 //     if (ShapeEqual(shape, t.shape)) {
-//         newTensor = *this;
+//         t_new = *this;
 //         std::cout << "1" << std::endl;
-//         for (size_t i = 0; i < newTensor.size; ++i)
-//             newTensor[i] = elem[i] + t[i];
+//         for (size_t i = 0; i < t_new.size; ++i)
+//             t_new[i] = elem[i] + t[i];
 //     } else {
 //         // std::cout << "2" << std::endl;
 
@@ -140,86 +140,86 @@ ten ten::operator+(const ten &other) const
 //           td::cerr << "CUDA kernel launch error " + std::string(cudaGetErrorString(cudaError)) <<
 //                       std::endl;
 
-//         newTensor = *this;
-//         cudaMemcpy(newTensor.elem, C, newTensor.size * sizeof(float), cudaMemcpyDeviceToHost);
+//         t_new = *this;
+//         cudaMemcpy(t_new.elem, C, t_new.size * sizeof(float), cudaMemcpyDeviceToHost);
 //         cudaFree(A);
 //         cudaFree(B);
 //         cudaFree(C);
 
 //     }
 
-//     return newTensor;
+//     return t_new;
 // }
 
 ten ten::operator-(const ten &other) const
 {
-    ten newTensor = *this;
+    ten t_new = *this;
     if (ShapeEqual(shape, other.shape))
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] - other[i];
+            t_new[i] = elem[i] - other[i];
     }
     else if (shape.back() == other.shape.back())
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] - other[i % other.shape.back()];
+            t_new[i] = elem[i] - other[i % other.shape.back()];
     }
     else if (shape.front() == other.shape.front())
     {
         for (auto i = 0; i < size; ++i)
         {
             size_t idx = i / shape.back();
-            newTensor[i] = elem[i] - other[idx];
+            t_new[i] = elem[i] - other[idx];
         }
     }
     else
     {
         std::cerr << "Shapes don't match." << std::endl;
     }
-    return newTensor;
+    return t_new;
 }
 
 ten ten::operator*(const ten &other) const
 {
-    ten newTensor = *this;
+    ten t_new = *this;
     if (ShapeEqual(shape, other.shape))
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] * other[i];
+            t_new[i] = elem[i] * other[i];
     }
     else
     {
         std::cerr << "Shapes don't match." << std::endl;
     }
-    return newTensor;
+    return t_new;
 }
 
 ten ten::operator/(const ten &other) const
 {
-    ten newTensor = *this;
+    ten t_new = *this;
     if (ShapeEqual(shape, other.shape))
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] / other[i];
+            t_new[i] = elem[i] / other[i];
     }
     else if (shape.back() == other.shape.back())
     {
         for (auto i = 0; i < size; ++i)
-            newTensor[i] = elem[i] / other[i % other.shape.back()];
+            t_new[i] = elem[i] / other[i % other.shape.back()];
     }
     else if (shape.front() == other.shape.front())
     {
         for (auto i = 0; i < size; ++i)
         {
             size_t idx = i / shape.back();
-            newTensor[i] = elem[i] / other[idx];
+            t_new[i] = elem[i] / other[idx];
         }
     }
     else
     {
         std::cerr << "Shapes don't match." << std::endl;
     }
-    return newTensor;
+    return t_new;
 }
 
 ten ten::operator+=(const ten &other) const
@@ -237,18 +237,18 @@ float &ten::operator[](const size_t idx) const
 
 ten operator-(const float sca, const ten &t)
 {
-    ten newTensor = t;
+    ten t_new = t;
     for (auto i = 0; i < t.size; ++i)
-        newTensor[i] = sca - t[i];
-    return newTensor;
+        t_new[i] = sca - t[i];
+    return t_new;
 }
 
 ten operator*(const float sca, const ten &t)
 {
-    ten newTensor = t;
+    ten t_new = t;
     for (auto i = 0; i < t.size; ++i)
-        newTensor[i] = sca * t[i];
-    return newTensor;
+        t_new[i] = sca * t[i];
+    return t_new;
 }
 
 static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)
