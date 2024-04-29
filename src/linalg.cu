@@ -5,42 +5,42 @@
 
 #include <cassert>
 
-ten matmul(const ten &tensor1, const ten &tensor2, dev_type dev)
+ten matmul(const ten &t_1, const ten &t_2, dev_type dev)
 {
-    ten t_new = zeros({tensor1.shape.front(), tensor2.shape.back()});
+    ten t_new = zeros({t_1.shape.front(), t_2.shape.back()});
 
     switch (dev)
     {
     case CPU: {
 
-        for (auto i = 0; i < tensor1.shape.front(); ++i)
+        for (auto i = 0; i < t_1.shape.front(); ++i)
         {
-            for (auto j = 0; j < tensor2.shape.back(); ++j)
+            for (auto j = 0; j < t_2.shape.back(); ++j)
             {
                 float sum = 0.0;
 
-                for (auto l = 0; l < tensor1.shape.back(); ++l)
-                    sum += tensor1[i * tensor1.shape.back() + l] * tensor2[l * tensor2.shape.back() + j];
+                for (auto l = 0; l < t_1.shape.back(); ++l)
+                    sum += t_1[i * t_1.shape.back() + l] * t_2[l * t_2.shape.back() + j];
 
-                t_new[i * tensor2.shape.back() + j] = sum;
+                t_new[i * t_2.shape.back() + j] = sum;
             }
         }
 
         return t_new;
     }
     case GPU: {
-        assert(tensor1.shape.back() == tensor2.shape.front());
+        assert(t_1.shape.back() == t_2.shape.front());
 
-        size_t numRowsTensor1 = tensor1.shape.front();
-        size_t numColsTensor1 = tensor1.shape.back();
-        size_t numRowsTensor2 = tensor2.shape.back();
+        size_t numRowsTensor1 = t_1.shape.front();
+        size_t numColsTensor1 = t_1.shape.back();
+        size_t numRowsTensor2 = t_2.shape.back();
 
         float *tensorGPU1, *tensorGPU2, *newTensorGPU;
         cudaMalloc(&tensorGPU1, numRowsTensor1 * numColsTensor1 * sizeof(float));
         cudaMalloc(&tensorGPU2, numColsTensor1 * numRowsTensor2 * sizeof(float));
         cudaMalloc(&newTensorGPU, numRowsTensor1 * numRowsTensor2 * sizeof(float));
-        cudaMemcpy(tensorGPU1, tensor1.elem, tensor1.size * sizeof(float), cudaMemcpyHostToDevice);
-        cudaMemcpy(tensorGPU2, tensor2.elem, tensor2.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(tensorGPU1, t_1.elem, t_1.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(tensorGPU2, t_2.elem, t_2.size * sizeof(float), cudaMemcpyHostToDevice);
 
         dim3 blockDim(16, 16);
         dim3 gridDim((numRowsTensor1 + blockDim.x - 1) / blockDim.x, (numRowsTensor2 + blockDim.y - 1) / blockDim.y);
