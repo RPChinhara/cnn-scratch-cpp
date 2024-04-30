@@ -13,7 +13,7 @@ ten clip_by_value(const ten &t, float clip_val_min, float clip_val_max)
     {
         if (t[i] < clip_val_min)
             t_new[i] = clip_val_min;
-        else if (t[i] > clip_val_max)
+        else if (clip_val_max < t[i])
             t_new[i] = clip_val_max;
     }
 

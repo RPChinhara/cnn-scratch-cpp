@@ -10,7 +10,7 @@ ten da_dz(const ten &t, act_enum act)
     case RELU: {
         for (auto i = 0; i < t.size; ++i)
         {
-            if (t[i] > 0.0f)
+            if (0.0f < t[i])
                 t_new[i] = 1.0f;
             else if (t[i] == 0.0f)
                 t_new[i] = 0.0f;
