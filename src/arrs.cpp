@@ -7,6 +7,7 @@
 ten clip_by_value(const ten &t, float clip_val_min, float clip_val_max)
 {
     assert(clip_val_min <= clip_val_max);
+    
     ten t_new = t;
 
     for (auto i = 0; i < t.size; ++i)
