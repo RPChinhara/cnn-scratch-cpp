@@ -95,25 +95,25 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
     {
         auto tokens = tokenizer(text);
 
-        if (tokens.size() > max_seq_length)
+        if (max_seq_length < tokens.size())
             max_seq_length = tokens.size();
 
         for (auto token : tokens)
         {
-            std::wcout << token << std::endl;
+            // std::wcout << token << std::endl;
 
             if (vocab_map.find(token) != vocab_map.end())
             {
                 vocab_map[token] += 1.0f;
-                std::cout << "Key exists" << std::endl;
+                // std::cout << "Key exists" << std::endl;
             }
             else
             {
                 vocab_map.insert(std::pair<std::wstring, float>(token, 1.0f));
 
-                std::cout << "Key does not exist" << std::endl;
-                std::cout << "Key added: " << vocab_map[token] << std::endl;
-                std::wcout << "token: " << token << std::endl;
+                // std::cout << "Key does not exist" << std::endl;
+                // std::cout << "Key added: " << vocab_map[token] << std::endl;
+                // std::wcout << "token: " << token << std::endl;
             }
         }
     }
