@@ -3,6 +3,7 @@
 #include "math.hpp"
 #include "rd.h"
 
+#include <algorithm>
 #include <cwctype>
 #include <regex>
 #include <sstream>
@@ -121,6 +122,12 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
     // Copying map to vector of pairs
     std::vector<std::pair<std::wstring, float>> vec(vocab_map.begin(), vocab_map.end());
 
+    // Sort the vector in reverse alphabetical order based on the string
+    std::sort(vec.begin(), vec.end(),
+              [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
+                  return a.first > b.first; // Sorting by the wstring in reverse order
+              });
+
     // Sorting vector by value (the second element of the pair)
     std::sort(vec.begin(), vec.end(),
               [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
@@ -133,7 +140,12 @@ ten text_vectorization(const std::vector<std::wstring> &texts)
         std::wcout << pair.first << " " << pair.second << std::endl;
     }
 
+    std::cout << std::endl;
+
     ten t_new = zeros({texts.size(), max_seq_length});
+
+    for (auto i = 0; i < vocab.size(); ++i)
+        std::wcout << vocab[i] << std::endl;
 
     std::cout << t_new.shape[0] << " " << t_new.shape[1] << std::endl;
 
