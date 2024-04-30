@@ -45,10 +45,10 @@ int main()
 
     y = one_hot(y, 3);
 
-    train_test train_test = train_test_split(x, y, 0.2, 42);
-    train_test val_test = train_test_split(train_test.x_test, train_test.y_test, 0.5, 42);
+    train_test train_temp = train_test_split(x, y, 0.2, 42);
+    train_test val_test = train_test_split(train_temp.x_test, train_temp.y_test, 0.5, 42);
 
-    train_test.x_train = min_max_scaler(train_test.x_train);
+    train_temp.x_train = min_max_scaler(train_temp.x_train);
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
@@ -56,7 +56,7 @@ int main()
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    classifier.train(train_test.x_train, train_test.y_train, val_test.x_train, val_test.y_train);
+    classifier.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
