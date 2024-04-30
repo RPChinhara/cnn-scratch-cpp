@@ -14,7 +14,7 @@ ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
 
     t_new.shape = shape;
 
-    if (t_new.shape.size() > 0)
+    if (0 < t_new.shape.size())
         t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
         t_new.size = 1;
@@ -36,7 +36,7 @@ ten shuffle(const ten &t, const size_t rd_state)
     ten t_new = t;
     std::mt19937 rng(rd_state);
 
-    for (auto i = t.shape.front() - 1; i > 0; --i)
+    for (auto i = t.shape.front() - 1; 0 < i; --i)
     {
         std::uniform_int_distribution<> dist(0, i);
         int j = dist(rng);
