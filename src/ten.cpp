@@ -12,7 +12,7 @@ ten::ten(const std::vector<float> elem, const std::vector<size_t> shape)
         assert(i != 0);
     this->shape = std::move(shape);
 
-    if (this->shape.size() > 0)
+    if (0 < this->shape.size())
         size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     else
         size = 1;
@@ -312,9 +312,9 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
                 bool num_elem_each_batch_done = false;
                 size_t num_square_brackets = 0;
 
-                if (t.shape.size() > 2)
+                if (2 < t.shape.size())
                 {
-                    for (auto j = num_elem_each_batch.size() - 1; j >= 0; --j)
+                    for (auto j = num_elem_each_batch.size() - 1; 0 <= j; --j)
                     {
                         if (i % num_elem_each_batch[j] == 0 && i != 0)
                         {
