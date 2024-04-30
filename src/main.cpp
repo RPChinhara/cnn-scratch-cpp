@@ -1,5 +1,5 @@
-#include "datas/enes.h"
-#include "datas/imdb.h"
+#include "enes.h"
+#include "imdb.h"
 #include "preproc.h"
 
 #include <iostream>
