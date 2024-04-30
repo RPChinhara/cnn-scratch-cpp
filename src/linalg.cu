@@ -35,26 +35,26 @@ ten matmul(const ten &t_1, const ten &t_2, dev_type dev)
         size_t numColsTensor1 = t_1.shape.back();
         size_t numRowsTensor2 = t_2.shape.back();
 
-        float *tensorGPU1, *tensorGPU2, *newTensorGPU;
-        cudaMalloc(&tensorGPU1, numRowsTensor1 * numColsTensor1 * sizeof(float));
-        cudaMalloc(&tensorGPU2, numColsTensor1 * numRowsTensor2 * sizeof(float));
-        cudaMalloc(&newTensorGPU, numRowsTensor1 * numRowsTensor2 * sizeof(float));
-        cudaMemcpy(tensorGPU1, t_1.elem, t_1.size * sizeof(float), cudaMemcpyHostToDevice);
-        cudaMemcpy(tensorGPU2, t_2.elem, t_2.size * sizeof(float), cudaMemcpyHostToDevice);
+        float *t_gpu_1, *t_gpu_2, *t_gpu_new;
+        cudaMalloc(&t_gpu_1, numRowsTensor1 * numColsTensor1 * sizeof(float));
+        cudaMalloc(&t_gpu_2, numColsTensor1 * numRowsTensor2 * sizeof(float));
+        cudaMalloc(&t_gpu_new, numRowsTensor1 * numRowsTensor2 * sizeof(float));
+        cudaMemcpy(t_gpu_1, t_1.elem, t_1.size * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(t_gpu_2, t_2.elem, t_2.size * sizeof(float), cudaMemcpyHostToDevice);
 
         dim3 blockDim(16, 16);
         dim3 gridDim((numRowsTensor1 + blockDim.x - 1) / blockDim.x, (numRowsTensor2 + blockDim.y - 1) / blockDim.y);
-        matmul<<<gridDim, blockDim>>>(tensorGPU1, tensorGPU2, newTensorGPU, numRowsTensor1, numColsTensor1,
+        matmul<<<gridDim, blockDim>>>(t_gpu_1, t_gpu_2, t_gpu_new, numRowsTensor1, numColsTensor1,
                                       numRowsTensor2);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
             std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        cudaMemcpy(t_new.elem, newTensorGPU, t_new.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(tensorGPU1);
-        cudaFree(tensorGPU2);
-        cudaFree(newTensorGPU);
+        cudaMemcpy(t_new.elem, t_gpu_new, t_new.size * sizeof(float), cudaMemcpyDeviceToHost);
+        cudaFree(t_gpu_1);
+        cudaFree(t_gpu_2);
+        cudaFree(t_gpu_new);
 
         return t_new;
     }
