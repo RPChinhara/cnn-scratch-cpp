@@ -43,22 +43,9 @@ int main()
         std::wcout << y[i] << " " << x[i] << std::endl;
     }
 
-    std::vector<std::wstring> foo = {L"size suit of the vocab point bag card no win device egg hell kelvin",
-                                     L"adapt the layer to the text"};
-    auto z = text_vectorization(foo);
+    std::vector<std::wstring> foo = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
 
-    // auto z = text_vectorization({
-    //     y[0],
-    //     y[1],
-    //     y[2],
-    //     y[3],
-    //     y[4],
-    //     y[5],
-    //     y[6],
-    //     y[7],
-    //     y[8],
-    //     y[9],
-    // });
+    auto z = text_vectorization(foo);
 
     return 0;
 }
