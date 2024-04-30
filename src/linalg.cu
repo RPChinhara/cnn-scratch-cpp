@@ -66,7 +66,7 @@ ten matmul(const ten &t_1, const ten &t_2, dev_type dev)
 
 static size_t get_batch_size(const std::vector<size_t> &shape)
 {
-    assert(shape.size() > 1);
+    assert(1 < shape.size());
     size_t batchSize = 1;
 
     for (auto i = 0; i < shape.size() - 2; ++i)
@@ -77,7 +77,7 @@ static size_t get_batch_size(const std::vector<size_t> &shape)
 
 ten transpose(const ten &t)
 {
-    assert(t.shape.size() >= 2);
+    assert(2 <= t.shape.size());
 
     ten t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
 
