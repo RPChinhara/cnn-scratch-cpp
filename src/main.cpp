@@ -46,7 +46,7 @@ int main()
     std::vector<std::wstring> vocab = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
     std::vector<std::wstring> in = {L"foo qux bar qux baz dog sex"};
 
-    auto z = text_vectorization(vocab, in);
+    auto z = text_vectorization(vocab, in, 9);
 
     return 0;
 }

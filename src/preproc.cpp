@@ -86,7 +86,8 @@ std::wstring strip(const std::wstring &text)
     return std::regex_replace(text, pattern, L"");
 }
 
-ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::vector<std::wstring> &in)
+ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::vector<std::wstring> &in,
+                       const size_t out_seq_len)
 {
     size_t max_seq_length = 0;
     std::vector<std::wstring> vocab;
@@ -142,10 +143,12 @@ ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::v
 
     std::cout << std::endl;
 
-    ten t_new = zeros({vocabulary.size(), max_seq_length});
+    ten t_new = zeros({vocabulary.size(), out_seq_len});
 
-    for (auto i = 0; i < vocab.size(); ++i)
-        std::wcout << vocab[i] << std::endl;
+    for (auto pair : vec)
+    {
+        std::wcout << pair.first << std::endl;
+    }
 
     std::cout << t_new.shape[0] << " " << t_new.shape[1] << std::endl;
 

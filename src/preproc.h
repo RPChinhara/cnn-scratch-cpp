@@ -20,7 +20,8 @@ ten one_hot(const ten &t, const size_t depth);
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);
 std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite);
 std::wstring strip(const std::wstring &text);
-ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::vector<std::wstring> &in);
+ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::vector<std::wstring> &in,
+                       const size_t out_seq_len);
 std::vector<std::string> tokenizer(const std::string &text);
 std::vector<std::wstring> tokenizer(const std::wstring &text);
 train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rd_state);
