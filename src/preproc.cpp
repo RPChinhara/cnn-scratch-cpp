@@ -101,34 +101,20 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
 
         for (auto token : tokens)
         {
-            // std::wcout << token << std::endl;
-
             if (vocab_map.find(token) != vocab_map.end())
-            {
                 vocab_map[token] += 1.0f;
-                // std::cout << "Key exists" << std::endl;
-            }
             else
-            {
                 vocab_map.insert(std::pair<std::wstring, float>(token, 1.0f));
-
-                // std::cout << "Key does not exist" << std::endl;
-                // std::cout << "Key added: " << vocab_map[token] << std::endl;
-                // std::wcout << "token: " << token << std::endl;
-            }
         }
     }
 
-    // Copying map to vector of pairs
     std::vector<std::pair<std::wstring, float>> vec(vocab_map.begin(), vocab_map.end());
 
-    // Sort the vector in reverse alphabetical order based on the string
     std::sort(vec.begin(), vec.end(),
               [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
-                  return a.first > b.first; // Sorting by the wstring in reverse order
+                  return a.first > b.first;
               });
 
-    // Sorting vector by value (the second element of the pair)
     std::sort(vec.begin(), vec.end(),
               [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
                   return a.second > b.second;
@@ -137,8 +123,6 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
     for (auto pair : vec)
         std::wcout << pair.first << " " << pair.second << std::endl;
 
-    std::cout << std::endl;
-
     ten t_new = zeros({in.size(), out_seq_len});
 
     auto words = tokenizer(in[0]);
@@ -146,7 +130,8 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
     int idx = 0;
     for (const auto &word : words)
     {
-        bool found = false; // Flag to track if a match is found
+        bool found = false;
+
         for (size_t i = 0; i < vec.size(); ++i)
         {
             std::wcout << word << " " << vec[i].first << std::endl;
@@ -155,14 +140,14 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
                 std::cout << "fjdkfjdkjf: " << i << " " << idx << std::endl;
                 t_new[idx] = i + 2.0f;
                 std::cout << t_new[idx] << std::endl;
-                found = true; // Set found flag to true
-                break;        // Exit the inner loop once a match is found
+                found = true;
+                break;
             }
         }
-        if (!found) // If no match is found, set t_new[idx] to 0.0f
-        {
+        
+        if (!found)
             t_new[idx] = 1.0f;
-        }
+
         ++idx;
     }
 
