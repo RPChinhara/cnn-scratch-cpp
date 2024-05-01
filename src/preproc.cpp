@@ -143,14 +143,35 @@ ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::v
 
     std::cout << std::endl;
 
-    ten t_new = zeros({vocabulary.size(), out_seq_len});
+    ten t_new = zeros({in.size(), out_seq_len});
 
     for (auto pair : vec)
-    {
         std::wcout << pair.first << std::endl;
-    }
 
-    std::cout << t_new.shape[0] << " " << t_new.shape[1] << std::endl;
+    auto words = tokenizer(in[0]);
+
+    int idx = 0;
+    for (const auto &word : words)
+    {
+        bool found = false; // Flag to track if a match is found
+        for (size_t i = 0; i < vec.size(); ++i)
+        {
+            std::wcout << word << " " << vec[i].first << std::endl;
+            if (word == vec[i].first)
+            {
+                std::cout << "fjdkfjdkjf: " << i << " " << idx << std::endl;
+                t_new[idx] = i + 2.0f;
+                std::cout << t_new[idx] << std::endl;
+                found = true; // Set found flag to true
+                break;        // Exit the inner loop once a match is found
+            }
+        }
+        if (!found) // If no match is found, set t_new[idx] to 0.0f
+        {
+            t_new[idx] = 1.0f;
+        }
+        ++idx;
+    }
 
     return t_new;
 }

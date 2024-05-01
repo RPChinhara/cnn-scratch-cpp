@@ -48,5 +48,7 @@ int main()
 
     auto z = text_vectorization(vocab, in, 9);
 
+    std::cout << z << std::endl;
+
     return 0;
 }
