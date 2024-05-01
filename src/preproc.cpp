@@ -86,7 +86,7 @@ std::wstring strip(const std::wstring &text)
     return std::regex_replace(text, pattern, L"");
 }
 
-ten text_vectorization(const std::vector<std::wstring> &vocabulary)
+ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::vector<std::wstring> &in)
 {
     size_t max_seq_length = 0;
     std::vector<std::wstring> vocab;
