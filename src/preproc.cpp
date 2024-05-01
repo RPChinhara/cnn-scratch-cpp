@@ -90,7 +90,6 @@ ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::v
                        const size_t out_seq_len)
 {
     size_t max_seq_length = 0;
-    std::vector<std::wstring> vocab;
     std::unordered_map<std::wstring, float> vocab_map;
 
     for (auto text : vocabulary)
@@ -136,17 +135,11 @@ ten text_vectorization(const std::vector<std::wstring> &vocabulary, const std::v
               });
 
     for (auto pair : vec)
-    {
-        vocab.push_back(pair.first);
         std::wcout << pair.first << " " << pair.second << std::endl;
-    }
 
     std::cout << std::endl;
 
     ten t_new = zeros({in.size(), out_seq_len});
-
-    for (auto pair : vec)
-        std::wcout << pair.first << std::endl;
 
     auto words = tokenizer(in[0]);
 
