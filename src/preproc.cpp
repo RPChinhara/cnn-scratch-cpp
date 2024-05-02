@@ -133,13 +133,13 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
         if (i != 0)
             idx = i * out_seq_len;
 
-        for (auto j = 0; j < words.size(); ++j)
+        for (auto word : words)
         {
             bool found = false;
 
             for (auto k = 0; k < vocab_vec.size(); ++k)
             {
-                if (words[j] == vocab_vec[k].first)
+                if (word == vocab_vec[k].first)
                 {
                     t_new[idx] = k + 2.0f;
                     found = true;
