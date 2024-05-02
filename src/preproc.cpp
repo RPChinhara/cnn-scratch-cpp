@@ -108,47 +108,49 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
         }
     }
 
-    std::vector<std::pair<std::wstring, float>> vec(vocab_map.begin(), vocab_map.end());
+    std::vector<std::pair<std::wstring, float>> vocab_vec(vocab_map.begin(), vocab_map.end());
 
-    std::sort(vec.begin(), vec.end(),
+    std::sort(vocab_vec.begin(), vocab_vec.end(),
               [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
                   return a.first > b.first;
               });
 
-    std::sort(vec.begin(), vec.end(),
+    std::sort(vocab_vec.begin(), vocab_vec.end(),
               [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
                   return a.second > b.second;
               });
 
-    for (auto pair : vec)
+    for (auto pair : vocab_vec)
         std::wcout << pair.first << " " << pair.second << std::endl;
 
     ten t_new = zeros({in.size(), out_seq_len});
 
-    auto words = tokenizer(in[0]);
-
     int idx = 0;
-    for (const auto &word : words)
+    for (auto i = 0; i < in.size(); ++i)
     {
-        bool found = false;
+        auto words = tokenizer(in[i]);
 
-        for (size_t i = 0; i < vec.size(); ++i)
+        std::cout << words.size() << std::endl;
+
+        for (auto j = 0; j < words.size(); ++j)
         {
-            std::wcout << word << " " << vec[i].first << std::endl;
-            if (word == vec[i].first)
+            bool found = false;
+
+            for (size_t k = 0; k < vocab_vec.size(); ++k)
             {
-                std::cout << "fjdkfjdkjf: " << i << " " << idx << std::endl;
-                t_new[idx] = i + 2.0f;
-                std::cout << t_new[idx] << std::endl;
-                found = true;
-                break;
+                if (words[j] == vocab_vec[k].first)
+                {
+                    t_new[idx] = k + 2.0f;
+                    found = true;
+                    break;
+                }
             }
+
+            if (!found)
+                t_new[idx] = 1.0f;
+
+            ++idx;
         }
-
-        if (!found)
-            t_new[idx] = 1.0f;
-
-        ++idx;
     }
 
     return t_new;
