@@ -46,19 +46,19 @@ ten one_hot(const ten &t, const size_t depth)
 {
     ten t_new = zeros({t.size, depth});
 
-    std::vector<float> indices;
+    std::vector<float> idx;
 
     for (auto i = 0; i < t.size; ++i)
     {
         if (i == 0)
-            indices.push_back(t[i]);
+            idx.push_back(t[i]);
         else
-            indices.push_back(t[i] + (i * depth));
+            idx.push_back(t[i] + (i * depth));
     }
 
     for (auto i = 0; i < t_new.size; ++i)
     {
-        for (auto j : indices)
+        for (auto j : idx)
         {
             if (i == j)
                 t_new[i] = 1.0f;
