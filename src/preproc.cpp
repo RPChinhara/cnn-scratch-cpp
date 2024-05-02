@@ -144,7 +144,7 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
                 break;
             }
         }
-        
+
         if (!found)
             t_new[idx] = 1.0f;
 
