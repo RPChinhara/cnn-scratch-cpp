@@ -125,18 +125,19 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
 
     ten t_new = zeros({in.size(), out_seq_len});
 
-    int idx = 0;
+    size_t idx = 0;
     for (auto i = 0; i < in.size(); ++i)
     {
         auto words = tokenizer(in[i]);
 
-        std::cout << words.size() << std::endl;
+        if (i != 0)
+            idx = i * out_seq_len;
 
         for (auto j = 0; j < words.size(); ++j)
         {
             bool found = false;
 
-            for (size_t k = 0; k < vocab_vec.size(); ++k)
+            for (auto k = 0; k < vocab_vec.size(); ++k)
             {
                 if (words[j] == vocab_vec[k].first)
                 {

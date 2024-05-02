@@ -46,7 +46,7 @@ int main()
     std::vector<std::wstring> in = {L"foo qux bar qux baz dog sex"};
     std::vector<std::wstring> in_2 = {{L"foo qux bar"}, {L"qux baz dog sex"}, {L"qux baz dog sex"}};
 
-    auto z = text_vectorization(vocab, in, 9);
+    auto z = text_vectorization(vocab, in_2, 9);
 
     std::cout << z << std::endl;
 
