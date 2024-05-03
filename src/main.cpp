@@ -45,8 +45,14 @@ int main()
         y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
     }
 
-    std::wcout << x[135833] << std::endl;
-    std::wcout << y[135833] << std::endl;
+    for (auto i = 0; i < 20; ++i)
+    {
+        std::wcout << x[i] << std::endl;
+        std::wcout << y[i] << std::endl;
+    }
+
+    std::wcout << y[141369] << std::endl;
+    std::wcout << x[141369] << std::endl;
 
     std::vector<std::wstring> vocab = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
     std::vector<std::wstring> in = {L"foo qux bar qux baz dog sex"};

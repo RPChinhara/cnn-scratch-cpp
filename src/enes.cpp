@@ -24,22 +24,18 @@ en_es load_en_es()
     std::wstring line;
     while (std::getline(file, line))
     {
-        size_t pos = line.find(L"CC-BY");
+        size_t tab_pos = line.find(L"\t");
 
-        if (pos != std::wstring::npos)
-        {
-            line.erase(pos);
-        }
+        std::wstring english_part = line.substr(0, tab_pos);
+        std::wstring spanish_part = line.substr(tab_pos + 1);
 
-        pos = line.find_first_of(L".?!¿¡");
+        size_t cc_by_pos = spanish_part.find(L"CC-BY");
 
-        std::wstring extracted_y = line.substr(0, pos + 1);
-        y.push_back(extracted_y);
+        if (cc_by_pos != std::wstring::npos)
+            spanish_part.erase(cc_by_pos);
 
-        std::wstring extracted_x = line.substr(pos + 1);
-        std::wregex regex(L"\\s*(.*)");
-        std::wstring extracted_x_no_preceding_spaces = std::regex_replace(extracted_x, regex, L"$1");
-        x.push_back(extracted_x_no_preceding_spaces);
+        x.push_back(spanish_part);
+        y.push_back(english_part);
     }
 
     file.close();
