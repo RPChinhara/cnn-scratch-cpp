@@ -10,7 +10,7 @@ int main()
     std::vector<std::wstring> x(data.x.size());
     std::vector<std::wstring> y(data.y.size());
 
-    for (auto i = 0; i < 10; ++i)
+    for (auto i = 0; i < x.size(); ++i)
     {
         x[i] = regex_replace(data.x[i], L"(á)", L"a");
         x[i] = regex_replace(x[i], L"(é)", L"e");
@@ -38,15 +38,16 @@ int main()
 
         x[i] = join({L"[START]", x[i], L"[END]"}, L" ");
         y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
-
-        std::wcout << y[i] << " " << x[i] << std::endl;
     }
+
+    std::wcout << x[93723] << std::endl;
+    std::wcout << y[93723] << std::endl;
 
     std::vector<std::wstring> vocab = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
     std::vector<std::wstring> in = {L"foo qux bar qux baz dog sex"};
     std::vector<std::wstring> in_2 = {{L"foo qux bar"}, {L"qux baz dog sex"}, {L"qux baz dog sex"}};
 
-    auto z = text_vectorization(vocab, in, 9);
+    auto z = text_vectorization(vocab, in_2, 9);
 
     std::cout << z << std::endl;
 
