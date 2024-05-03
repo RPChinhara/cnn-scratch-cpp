@@ -25,6 +25,9 @@ int main()
         x[i] = regex_replace(x[i], L"(Ú)", L"U");
 
         x[i] = regex_replace(x[i], L"(ñ)", L"n");
+        x[i] = regex_replace(x[i], L"(Ñ)", L"N");
+        x[i] = regex_replace(x[i], L"(ü)", L"u");
+        x[i] = regex_replace(x[i], L"(Ü)", L"U");
 
         x[i] = lower(x[i]);
         y[i] = lower(data.y[i]);
@@ -42,8 +45,8 @@ int main()
         y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
     }
 
-    std::wcout << x[93723] << std::endl;
-    std::wcout << y[93723] << std::endl;
+    std::wcout << x[135833] << std::endl;
+    std::wcout << y[135833] << std::endl;
 
     std::vector<std::wstring> vocab = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
     std::vector<std::wstring> in = {L"foo qux bar qux baz dog sex"};
