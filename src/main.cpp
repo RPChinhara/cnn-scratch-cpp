@@ -24,6 +24,8 @@ int main()
         x[i] = regex_replace(x[i], L"(Ó)", L"O");
         x[i] = regex_replace(x[i], L"(Ú)", L"U");
 
+        x[i] = regex_replace(x[i], L"(ñ)", L"n");
+
         x[i] = lower(x[i]);
         y[i] = lower(data.y[i]);
 
