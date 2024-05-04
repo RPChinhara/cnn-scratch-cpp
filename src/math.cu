@@ -5,7 +5,7 @@
 
 #include <cassert>
 
-ten Argmax(const ten &t)
+ten argmax(const ten &t)
 {
     ten t_new = zeros({t.shape.front()});
 

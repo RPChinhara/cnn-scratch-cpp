@@ -45,6 +45,12 @@ int main()
         y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
     }
 
+    // auto vec_x = text_vectorization(x, in, 9);
+    // auto vec_y = text_vectorization(y, in, 9);
+
+    // std::cout << vec_x << std::endl;
+    // std::cout << vec_y << std::endl;
+
     for (auto i = 0; i < 20; ++i)
     {
         std::wcout << x[i] << std::endl;
@@ -61,12 +67,6 @@ int main()
     auto z = text_vectorization(vocab, in_2, 9);
     
     std::cout << z << std::endl;
-
-    auto vec_x = text_vectorization(x, in, 9);
-    auto vec_y = text_vectorization(y, in, 9);
-
-    std::cout << vec_x << std::endl;
-    std::cout << vec_y << std::endl;
 
     return 0;
 }
