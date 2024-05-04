@@ -15,8 +15,9 @@ en_es load_en_es()
     std::locale::global(std::locale("es_ES.UTF-8"));
 
     std::wifstream file("datas/spa.txt");
+
     if (!file)
-        std::wcerr << L"Failed to open the file." << std::endl;
+        std::cerr << "Failed to open the file." << std::endl;
 
     std::vector<std::wstring> x;
     std::vector<std::wstring> y;
