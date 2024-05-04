@@ -156,7 +156,7 @@ ten max(const ten &t, const size_t axis)
     return t_new;
 }
 
-ten Min(const ten &t)
+ten min(const ten &t)
 {
     ten t_new = zeros({1, t.shape.back()});
 

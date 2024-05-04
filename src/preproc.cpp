@@ -37,7 +37,7 @@ std::wstring lower(const std::wstring &text)
 
 ten min_max_scaler(ten &dataset)
 {
-    auto min_vals = Min(dataset);
+    auto min_vals = min(dataset);
     auto max_vals = max(dataset, 0);
     return (dataset - min_vals) / (max_vals - min_vals);
 }
