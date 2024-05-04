@@ -55,12 +55,18 @@ int main()
     std::wcout << x[141368] << std::endl;
 
     std::vector<std::wstring> vocab = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
-    std::vector<std::wstring> in = {L"foo qux bar qux baz dog sex"};
+    std::vector<std::wstring> in = {L"[START] foo qux bar qux baz dog sex [END]"};
     std::vector<std::wstring> in_2 = {{L"foo qux bar"}, {L"qux baz dog sex"}, {L"qux baz dog sex"}};
 
     auto z = text_vectorization(vocab, in_2, 9);
-
+    
     std::cout << z << std::endl;
+
+    auto vec_x = text_vectorization(x, in, 9);
+    auto vec_y = text_vectorization(y, in, 9);
+
+    std::cout << vec_x << std::endl;
+    std::cout << vec_y << std::endl;
 
     return 0;
 }
