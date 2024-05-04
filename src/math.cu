@@ -32,7 +32,7 @@ ten argmax(const ten &t)
     return t_new;
 }
 
-ten Exp(const ten &t, dev_type dev)
+ten exp(const ten &t, dev_type dev)
 {
     ten t_new = t;
 
