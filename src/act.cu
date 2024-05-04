@@ -44,7 +44,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
         }
     }
     case SOFTMAX: {
-        ten exp_scores = exp(t - Max(t, 1), CPU);
+        ten exp_scores = exp(t - max(t, 1), CPU);
         return exp_scores / sum(exp_scores, 1);
     }
     default:

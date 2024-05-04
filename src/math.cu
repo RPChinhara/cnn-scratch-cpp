@@ -109,7 +109,7 @@ ten log(const ten &t, dev_type dev)
     }
 }
 
-ten Max(const ten &t, const size_t axis)
+ten max(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
     ten t_new;
