@@ -71,7 +71,7 @@ ten exp(const ten &t, dev_type dev)
     }
 }
 
-ten Log(const ten &t, dev_type dev)
+ten log(const ten &t, dev_type dev)
 {
     ten t_new = t;
 
