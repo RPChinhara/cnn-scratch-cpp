@@ -91,7 +91,7 @@ ten Log(const ten &t, dev_type dev)
 
         constexpr int blockSize = 128;
         int gridSize = (t.size + blockSize - 1) / blockSize;
-        Log<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
+        log<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
 
         cudaError_t cudaError = cudaGetLastError();
         if (cudaError != cudaSuccess)
