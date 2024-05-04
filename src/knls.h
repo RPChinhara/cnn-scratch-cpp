@@ -1,6 +1,6 @@
 #pragma once
 
-__global__ void Exp(float *t, float *t_new, size_t n);
+__global__ void exp(float *t, float *t_new, size_t n);
 __global__ void Log(float *t, float *t_new, size_t n);
 __global__ void matmul(float *t1, float *t2, float *t_new, size_t num_rows_t1, size_t num_cols_t1,
                        size_t num_rows_t2);
