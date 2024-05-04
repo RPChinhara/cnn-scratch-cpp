@@ -4,10 +4,10 @@
 
 class ten;
 
-class CNN2D
+class cnn2d
 {
   public:
-    CNN2D(const std::vector<size_t> &filters, float const learning_rate);
+    cnn2d(const std::vector<size_t> &filters, float const learning_rate);
     void Train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal);
     void Predict(const ten &xTest, const ten &yTest);
 
@@ -41,7 +41,7 @@ int main()
     mnist.trainLabels = OneHot(mnist.trainLabels, 10);
     mnist.testLabels = OneHot(mnist.testLabels, 10);
 
-    CNN2D cnn2D = CNN2D({3, 128, 3}, 0.01f);
+    cnn2d cnn2D = cnn2d({3, 128, 3}, 0.01f);
     cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 
     return 0;
