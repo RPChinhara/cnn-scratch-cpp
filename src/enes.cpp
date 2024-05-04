@@ -8,10 +8,6 @@
 
 en_es load_en_es()
 {
-    // SetConsoleOutputCP(CP_UTF8);
-    // std::locale("es_ES.UTF-8");
-    // _setmode(_fileno(stdout), _O_U16TEXT);
-
     std::locale::global(std::locale("es_ES.UTF-8"));
 
     std::wifstream file("datas/spa.txt");
