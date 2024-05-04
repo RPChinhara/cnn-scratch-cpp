@@ -4,5 +4,5 @@
 
 class ten;
 
-ten matmul(const ten &t_1, const ten &t_2, dev_type dev);
+ten matmul(const ten &t1, const ten &t2, dev_type dev);
 ten transpose(const ten &t);
