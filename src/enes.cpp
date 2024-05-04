@@ -23,11 +23,11 @@ en_es load_en_es()
     {
         size_t tab_pos = line.find(L"\t");
 
-        std::wstring english_part = line.substr(0, tab_pos);
-        std::wstring spanish_part = line.substr(tab_pos + 1);
+        std::wstring en_part = line.substr(0, tab_pos);
+        std::wstring es_part = line.substr(tab_pos + 1);
 
-        x.push_back(spanish_part);
-        y.push_back(english_part);
+        x.push_back(es_part);
+        y.push_back(en_part);
     }
 
     file.close();
