@@ -86,8 +86,7 @@ std::wstring strip(const std::wstring &text)
     return std::regex_replace(text, pattern, L"");
 }
 
-ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in,
-                       const size_t out_seq_len)
+ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in)
 {
     std::unordered_map<std::wstring, float> vocab_map;
 

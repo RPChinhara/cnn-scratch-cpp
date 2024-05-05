@@ -57,10 +57,10 @@ int main()
     // auto z2 = text_vectorization(vocab, in, 9);
     // std::cout << z2 << std::endl;
 
-    auto vec_x = text_vectorization(x, in3, 20);
-    auto vec_y = text_vectorization(y, in, 20);
+    auto vec_x = text_vectorization(x, in);
+    auto vec_y = text_vectorization(y, in);
 
-    auto vec_example = text_vectorization(vocab, in2, 20);
+    auto vec_example = text_vectorization(vocab, in2);
 
     std::cout << vec_example << std::endl;
     std::cout << vec_x << std::endl;
