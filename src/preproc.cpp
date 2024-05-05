@@ -89,15 +89,15 @@ std::wstring strip(const std::wstring &text)
 ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in,
                        const size_t out_seq_len)
 {
-    size_t max_seq_length = 0;
+    // size_t max_seq_length = 0;
     std::unordered_map<std::wstring, float> vocab_map;
 
     for (auto text : vocab)
     {
         auto tokens = tokenizer(text);
 
-        if (max_seq_length < tokens.size())
-            max_seq_length = tokens.size();
+        // if (max_seq_length < tokens.size())
+        //     max_seq_length = tokens.size();
 
         for (auto token : tokens)
         {
@@ -112,16 +112,11 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
 
     std::sort(vocab_vec.begin(), vocab_vec.end(),
               [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
-                  return a.first > b.first;
+                  if (a.second != b.second)
+                      return a.second > b.second;
+                  else
+                      return a.first > b.first;
               });
-
-    std::sort(vocab_vec.begin(), vocab_vec.end(),
-              [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
-                  return a.second > b.second;
-              });
-
-    for (auto pair : vocab_vec)
-        std::wcout << pair.first << " " << pair.second << std::endl;
 
     ten t_new = zeros({in.size(), out_seq_len});
 
