@@ -114,7 +114,15 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
                       return a.first > b.first;
               });
 
-    ten t_new = zeros({in.size(), out_seq_len});
+    size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
+    for (auto i = 0; i < in.size(); ++i)
+    {
+        auto words = tokenizer(in[i]);
+        if (max_num_tokens < words.size())
+            max_num_tokens = words.size();
+    }
+
+    ten t_new = zeros({in.size(), max_num_tokens});
 
     size_t idx = 0;
     for (auto i = 0; i < in.size(); ++i)
@@ -122,7 +130,7 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
         auto words = tokenizer(in[i]);
 
         if (i != 0)
-            idx = i * out_seq_len;
+            idx = i * max_num_tokens;
 
         for (auto word : words)
         {

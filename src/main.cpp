@@ -48,7 +48,7 @@ int main()
     std::vector<std::wstring> vocab = {L"apple apple apple bar baz baz bada cat cat dog dog dog life life an an"};
 
     std::vector<std::wstring> in = {L"[START] foo qux bar qux baz dog sex [END]"};
-    std::vector<std::wstring> in2 = {{L"foo qux bar"}, {L"qux baz dog sex"}, {L"qux baz dog sex"}};
+    std::vector<std::wstring> in2 = {{L"foo qux bar"}, {L"qux baz dog sex"}, {L"qux baz dog sex sex"}};
     std::vector<std::wstring> in3;
     in3.push_back(x[108910]);
 
@@ -60,6 +60,9 @@ int main()
     auto vec_x = text_vectorization(x, in3, 20);
     auto vec_y = text_vectorization(y, in, 20);
 
+    auto vec_example = text_vectorization(vocab, in2, 20);
+
+    std::cout << vec_example << std::endl;
     std::cout << vec_x << std::endl;
     std::cout << vec_y << std::endl;
 
