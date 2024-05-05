@@ -89,15 +89,11 @@ std::wstring strip(const std::wstring &text)
 ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in,
                        const size_t out_seq_len)
 {
-    // size_t max_seq_length = 0;
     std::unordered_map<std::wstring, float> vocab_map;
 
     for (auto text : vocab)
     {
         auto tokens = tokenizer(text);
-
-        // if (max_seq_length < tokens.size())
-        //     max_seq_length = tokens.size();
 
         for (auto token : tokens)
         {
