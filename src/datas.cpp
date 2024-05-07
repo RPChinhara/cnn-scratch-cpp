@@ -4,7 +4,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <regex>
 #include <sstream>
 #include <stdio.h>
 #include <string>
