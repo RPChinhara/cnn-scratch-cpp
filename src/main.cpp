@@ -1,4 +1,4 @@
-#include "enes.h"
+#include "datas.h"
 #include "preproc.h"
 
 #include <iostream>
@@ -48,8 +48,8 @@ int main()
     auto vec_x = text_vectorization(x, x);
     auto vec_y = text_vectorization(y, y);
 
-    std::cout << vec_x << std::endl;
-    std::cout << vec_y << std::endl;
+    // std::cout << vec_x << std::endl;
+    // std::cout << vec_y << std::endl;
 
     return 0;
 }

@@ -1,7 +1,5 @@
 #include "datas.h"
 #include "arrs.h"
-#include "enes.h"
-#include "imdb.h"
 #include "preproc.h"
 
 #include <fstream>
