@@ -1,3 +1,4 @@
+#include "lyrs.h"
 #include "arrs.h"
 #include "dev.h"
 #include "diffs.h"
