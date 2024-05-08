@@ -1,55 +1,36 @@
 #include "datas.h"
+#include "lyrs.h"
 #include "preproc.h"
 
-#include <iostream>
+#include <chrono>
 
 int main()
 {
-    en_es data = load_en_es();
+    iris data = load_iris();
+    ten x = data.x;
+    ten y = data.y;
 
-    std::vector<std::wstring> x(data.x.size());
-    std::vector<std::wstring> y(data.y.size());
+    y = one_hot(y, 3);
 
-    for (auto i = 0; i < x.size(); ++i)
-    {
-        x[i] = regex_replace(data.x[i], L"á", L"a");
-        x[i] = regex_replace(x[i], L"é", L"e");
-        x[i] = regex_replace(x[i], L"í", L"i");
-        x[i] = regex_replace(x[i], L"ó", L"o");
-        x[i] = regex_replace(x[i], L"ú", L"u");
+    train_test train_temp = train_test_split(x, y, 0.2, 42);
+    train_test val_test = train_test_split(train_temp.x_test, train_temp.y_test, 0.5, 42);
 
-        x[i] = regex_replace(x[i], L"Á", L"A");
-        x[i] = regex_replace(x[i], L"É", L"E");
-        x[i] = regex_replace(x[i], L"Í", L"I");
-        x[i] = regex_replace(x[i], L"Ó", L"O");
-        x[i] = regex_replace(x[i], L"Ú", L"U");
+    train_temp.x_train = min_max_scaler(train_temp.x_train);
+    val_test.x_train = min_max_scaler(val_test.x_train);
+    val_test.x_test = min_max_scaler(val_test.x_test);
 
-        x[i] = regex_replace(x[i], L"ñ", L"n");
-        x[i] = regex_replace(x[i], L"Ñ", L"N");
-        x[i] = regex_replace(x[i], L"ü", L"u");
-        x[i] = regex_replace(x[i], L"Ü", L"U");
+    nn classifier = nn({4, 64, 64, 3}, {RELU, RELU, SOFTMAX}, 0.01f);
 
-        x[i] = lower(x[i]);
-        y[i] = lower(data.y[i]);
+    auto start = std::chrono::high_resolution_clock::now();
 
-        x[i] = regex_replace(x[i], L"[^ a-z.?!,¿]", L"");
-        y[i] = regex_replace(y[i], L"[^ a-z.?!,¿]", L"");
+    classifier.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
 
-        x[i] = regex_replace(x[i], L"([.?!,¿])", L" $1 ");
-        y[i] = regex_replace(y[i], L"([.?!,¿])", L" $1 ");
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
-        x[i] = strip(x[i]);
-        y[i] = strip(y[i]);
+    std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-        x[i] = join({L"[START]", x[i], L"[END]"}, L" ");
-        y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
-    }
-
-    auto vec_x = text_vectorization(x, x);
-    auto vec_y = text_vectorization(y, y);
-
-    // std::cout << vec_x << std::endl;
-    // std::cout << vec_y << std::endl;
+    classifier.pred(val_test.x_test, val_test.y_test);
 
     return 0;
 }
