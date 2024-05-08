@@ -47,7 +47,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
         for (auto j = 0; j < x_train.shape.front(); j += batch_size)
         {
-            assert(x_train.shape.front() >= batch_size && batch_size > 0);
+            assert(0 < batch_size && batch_size <= x_train.shape.front());
 
             if (x_train.shape.front() <= j + batch_size)
             {
