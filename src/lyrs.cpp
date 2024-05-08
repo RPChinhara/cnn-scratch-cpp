@@ -64,8 +64,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
             std::vector<ten> dl_dz, dl_dw, dl_db;
 
-            // for (auto k = lyrs.size() - 1; 0 < k; --k)
-            for (auto k = lyrs.size() - 1; k > 0; --k)
+            for (auto k = lyrs.size() - 1; 0 < k; --k)
             {
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), act_types.back()));
