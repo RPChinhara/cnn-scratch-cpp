@@ -49,7 +49,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         {
             assert(x_train.shape.front() >= batch_size && batch_size > 0);
 
-            if (j + batch_size >= x_train.shape.front())
+            if (x_train.shape.front() <= j + batch_size)
             {
                 x_batch = slice(x_shuffled, j, x_train.shape.front() - j);
                 y_batch = slice(y_shuffled, j, x_train.shape.front() - j);
