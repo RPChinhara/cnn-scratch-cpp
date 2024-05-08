@@ -45,67 +45,68 @@ class cnn2d
 };
 
 /*
-#include "iris.h"
-#include "nn.h"
-#include "preproc.h"
+  #include "iris.h"
+  #include "nn.h"
+  #include "preproc.h"
 
-#include <chrono>
+  #include <chrono>
 
-int main()
-{
-    iris data = load_iris();
-    ten x = data.x;
-    ten y = data.y;
+  int main()
+  {
+      iris data = load_iris();
+      ten x = data.x;
+      ten y = data.y;
 
-    y = one_hot(y, 3);
+      y = one_hot(y, 3);
 
-    train_test train_temp = train_test_split(x, y, 0.2, 42);
-    train_test val_test = train_test_split(train_temp.x_test, train_temp.y_test, 0.5, 42);
+      train_test train_temp = train_test_split(x, y, 0.2, 42);
+      train_test val_test = train_test_split(train_temp.x_test, train_temp.y_test, 0.5, 42);
 
-    train_temp.x_train = min_max_scaler(train_temp.x_train);
-    val_test.x_train = min_max_scaler(val_test.x_train);
-    val_test.x_test = min_max_scaler(val_test.x_test);
+      train_temp.x_train = min_max_scaler(train_temp.x_train);
+      val_test.x_train = min_max_scaler(val_test.x_train);
+      val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn classifier = nn({4, 64, 64, 3}, {RELU, RELU, SOFTMAX}, 0.01f);
+      nn classifier = nn({4, 64, 64, 3}, {RELU, RELU, SOFTMAX}, 0.01f);
 
-    auto start = std::chrono::high_resolution_clock::now();
+      auto start = std::chrono::high_resolution_clock::now();
 
-    classifier.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
+      classifier.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+      auto end = std::chrono::high_resolution_clock::now();
+      auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
-    std::cout << "Time taken: " << duration.count() << " seconds\n";
+      std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    classifier.pred(val_test.x_test, val_test.y_test);
+      classifier.pred(val_test.x_test, val_test.y_test);
 
-    return 0;
-}
+      return 0;
+  }
 
-#include "cnn2d.h"
-#include "mnist.h"
-#include "preproc.h"
+  #include "cnn2d.h"
+  #include "mnist.h"
+  #include "preproc.h"
 
-int main()
-{
-    MNIST mnist = LoadMNIST();
+  int main()
+  {
+      MNIST mnist = LoadMNIST();
 
-    for (auto i = 0; i < 784; ++i)
-    {
+      for (auto i = 0; i < 784; ++i)
+      {
 
-        if (i % 28 == 0)
-            std::cout << std::endl;
-        std::cout << mnist.trainImages[i] << "   ";
-    }
+          if (i % 28 == 0)
+              std::cout << std::endl;
+          std::cout << mnist.trainImages[i] << "   ";
+      }
 
-    mnist.trainImages / 255.0f;
-    mnist.testImages / 255.0f;
+      mnist.trainImages / 255.0f;
+      mnist.testImages / 255.0f;
 
-    mnist.trainLabels = OneHot(mnist.trainLabels, 10);
-    mnist.testLabels = OneHot(mnist.testLabels, 10);
+      mnist.trainLabels = OneHot(mnist.trainLabels, 10);
+      mnist.testLabels = OneHot(mnist.testLabels, 10);
 
-    cnn2d cnn2D = cnn2d({3, 128, 3}, 0.01f);
-    cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
+      cnn2d cnn2D = cnn2d({3, 128, 3}, 0.01f);
+      cnn2D.Train(mnist.trainImages, mnist.trainLabels, mnist.testImages, mnist.testLabels);
 
-    return 0;
-}
+      return 0;
+  }
+*/

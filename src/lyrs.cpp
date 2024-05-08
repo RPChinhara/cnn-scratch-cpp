@@ -6,7 +6,6 @@
 #include "losses.h"
 #include "math.hpp"
 #include "mets.h"
-#include "nn.h"
 #include "rd.h"
 #include "ten.h"
 
