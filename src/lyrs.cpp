@@ -29,9 +29,9 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
     {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        if (i > 10 && i < 20)
+        if (10 < i && i < 20)
             lr = 0.009f;
-        else if (i > 20 && i < 30)
+        else if (20 < i && i < 30)
             lr = 0.005f;
         else
             lr = 0.001f;
