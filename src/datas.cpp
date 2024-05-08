@@ -6,8 +6,6 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include <string>
-#include <vector>
 
 en_es load_en_es()
 {
