@@ -20,6 +20,8 @@ class cnn2d
     float learning_rate;
 };
 
+void embedding(const size_t input_dim, const size_t output_dim);
+
 class nn
 {
   public:

@@ -59,6 +59,10 @@ std::vector<ten> cnn2d::ForwardPropagation(const ten &input, const std::vector<t
     return weights;
 }
 
+void embedding(const size_t input_dim, const size_t output_dim)
+{
+}
+
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
 {
     this->lyrs = lyrs;
