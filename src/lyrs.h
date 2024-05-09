@@ -9,15 +9,15 @@ class ten;
 class cnn2d
 {
   public:
-    cnn2d(const std::vector<size_t> &filters, float const learning_rate);
-    void Train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal);
-    void Predict(const ten &xTest, const ten &yTest);
+    cnn2d(const std::vector<size_t> &filters, float const lr);
+    void train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal);
+    void pred(const ten &xTest, const ten &yTest);
 
   private:
-    std::vector<ten> ForwardPropagation(const ten &input, const std::vector<ten> &kernel, const size_t stride);
+    std::vector<ten> forward_prop(const ten &input, const std::vector<ten> &kernel, const size_t stride);
 
     std::vector<size_t> filters;
-    float learning_rate;
+    float lr;
 };
 
 class nn

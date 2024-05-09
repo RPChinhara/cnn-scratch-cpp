@@ -13,13 +13,13 @@
 #include <chrono>
 #include <random>
 
-cnn2d::cnn2d(const std::vector<size_t> &filters, float const learning_rate)
+cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr)
 {
     this->filters = filters;
-    this->learning_rate = learning_rate;
+    this->lr = lr;
 }
 
-void cnn2d::Train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal)
+void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal)
 {
     // ten kernel = zeros({3, 3});
     ten kernel = ten({1, -1, 1, 0, 1, 0, -1, 0, 1}, {3, 3});
@@ -48,11 +48,11 @@ void cnn2d::Train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     // std::cout << output << std::endl;
 }
 
-void cnn2d::Predict(const ten &xTest, const ten &yTest)
+void cnn2d::pred(const ten &xTest, const ten &yTest)
 {
 }
 
-std::vector<ten> cnn2d::ForwardPropagation(const ten &input, const std::vector<ten> &kernel, const size_t stride)
+std::vector<ten> cnn2d::forward_prop(const ten &input, const std::vector<ten> &kernel, const size_t stride)
 {
     std::vector<ten> weights;
 
