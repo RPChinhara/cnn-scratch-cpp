@@ -1,5 +1,6 @@
 #include "datas.h"
 #include "preproc.h"
+#include "rd.h"
 
 #include <iostream>
 #include <random>
@@ -59,6 +60,7 @@ int main()
 
     std::cout << dist(rng) << std::endl;
     std::cout << dist2(rng) << std::endl;
+    std::cout << uniform_dist({2, 3}) << std::endl;
 
     return 0;
 }
