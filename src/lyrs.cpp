@@ -240,19 +240,19 @@ ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind)
     for (auto i = 0; i < ind.size; ++i)
         assert(ind[i] < in_dim);
 
-    ten embeddings = uniform_dist({in_dim, out_dim});
+    ten embeddings_mat = uniform_dist({in_dim, out_dim});
 
-    std::cout << embeddings << std::endl;
+    std::cout << embeddings_mat << std::endl;
 
-    ten embeddings_ind = zeros({ind.shape.front(), ind.shape.back(), out_dim});
+    ten dense_vecs = zeros({ind.shape.front(), ind.shape.back(), out_dim});
 
     for (auto i = 0; i < ind.size; ++i)
     {
-        auto a = slice(embeddings, ind[i], 1);
+        auto a = slice(embeddings_mat, ind[i], 1);
 
         for (auto j = 0; j < a.size; ++j)
-            embeddings_ind[out_dim * i + j] = a[j];
+            dense_vecs[out_dim * i + j] = a[j];
     }
 
-    return embeddings_ind;
+    return dense_vecs;
 }
