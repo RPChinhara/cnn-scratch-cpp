@@ -251,16 +251,16 @@ ten operator*(const float sca, const ten &t)
     return t_new;
 }
 
-static size_t GetNumElemMostInnerMat(const std::vector<size_t> &shape)
+static size_t get_num_elem_most_inner_mat(const std::vector<size_t> &shape)
 {
     size_t last_shape = shape[shape.size() - 1];
     size_t second_last_shape = shape[shape.size() - 2];
     return second_last_shape * last_shape;
 }
 
-static std::vector<size_t> GetNumElemEachBatch(const std::vector<size_t> &shape)
+static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t> &shape)
 {
-    size_t num_elem = GetNumElemMostInnerMat(shape);
+    size_t num_elem = get_num_elem_most_inner_mat(shape);
     std::vector<size_t> num_elem_each_batch;
 
     for (auto it = std::rbegin(shape) + 2; it != std::rend(shape); ++it)
@@ -304,8 +304,8 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
         }
         else
         {
-            std::vector<size_t> num_elem_each_batch = GetNumElemEachBatch(t.shape);
-            size_t num_elem_most_inner_mat = GetNumElemMostInnerMat(t.shape);
+            std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
+            size_t num_elem_most_inner_mat = get_num_elem_most_inner_mat(t.shape);
 
             for (auto i = 0; i < t.size; ++i)
             {
