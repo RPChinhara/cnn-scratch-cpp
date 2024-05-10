@@ -239,5 +239,9 @@ ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind)
 {
     ten embeddings = uniform_dist({in_dim, out_dim});
 
+    ten t_new = ten({ind.shape.front(), ind.shape.back(), out_dim}, {0});
+
+    std::cout << t_new << std::endl;
+
     return embeddings;
 }
