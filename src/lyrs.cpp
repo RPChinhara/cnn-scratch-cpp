@@ -22,7 +22,7 @@ cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr)
 void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal)
 {
     // ten kernel = zeros({3, 3});
-    ten kernel = ten({1, -1, 1, 0, 1, 0, -1, 0, 1}, {3, 3});
+    ten kernel = ten({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
 
     size_t kernelHeight = kernel.shape.front();
     size_t kernelWidth = kernel.shape.back();

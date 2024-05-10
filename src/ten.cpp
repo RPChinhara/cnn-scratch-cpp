@@ -4,7 +4,7 @@
 #include <numeric>
 #include <string>
 
-ten::ten(const std::vector<float> elem, const std::vector<size_t> shape)
+ten::ten(const std::vector<size_t> &shape, const std::vector<float> &elem)
 {
     assert(elem.size() != 0);
 

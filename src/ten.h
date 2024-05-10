@@ -11,7 +11,7 @@ class ten
     float *elem = nullptr;
 
     ten() = default;
-    ten(const std::vector<float> elem, const std::vector<size_t> shape);
+    ten(const std::vector<size_t> &shape, const std::vector<float> &elem);
     ~ten();
     ten(const ten &other);
     ten(ten &&other);

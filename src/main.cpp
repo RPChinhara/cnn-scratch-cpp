@@ -55,7 +55,7 @@ int main()
 
     const size_t UNITS = 256;
 
-    ten ind = ten({2, 23, 1, 2, 3, 2, 33, 1, 5, 3}, {2, 5});
+    ten ind = ten({2, 5}, {2, 23, 1, 2, 3, 2, 33, 1, 5, 3});
 
     std::cout << ind << std::endl;
     std::cout << embedding(40, 4, ind) << std::endl;
