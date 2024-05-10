@@ -237,9 +237,22 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
 
 ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind)
 {
+    for (auto i = 0; i < ind.size; ++i)
+        assert(ind[i] < in_dim);
+
     ten embeddings = uniform_dist({in_dim, out_dim});
 
-    ten t_new = ten({ind.shape.front(), ind.shape.back(), out_dim}, {0});
+    std::cout << embeddings << std::endl;
 
-    return t_new;
+    ten embeddings_ind = zeros({ind.shape.front(), ind.shape.back(), out_dim});
+
+    for (auto i = 0; i < ind.size; ++i)
+    {
+        auto a = slice(embeddings, ind[i], 1);
+
+        for (auto j = 0; j < a.size; ++j)
+            embeddings_ind[out_dim * i + j] = a[j];
+    }
+
+    return embeddings_ind;
 }
