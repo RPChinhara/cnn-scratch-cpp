@@ -239,5 +239,5 @@ ten embedding(const size_t in_dim, const size_t out_dim)
 {
     ten embeddings = uniform_dist({in_dim, out_dim});
 
-    return ten();
+    return embeddings;
 }

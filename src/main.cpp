@@ -1,6 +1,6 @@
 #include "datas.h"
+#include "lyrs.h"
 #include "preproc.h"
-#include "rd.h"
 
 #include <iostream>
 #include <random>
@@ -53,14 +53,8 @@ int main()
     // std::cout << vec_x << std::endl;
     // std::cout << vec_y << std::endl;
 
-    std::random_device rd;
-    std::mt19937 rng(rd());
-    std::normal_distribution<float> dist(0.0f, 0.05f);
-    std::normal_distribution<float> dist2(0.0f, 0.05f);
-
-    std::cout << dist(rng) << std::endl;
-    std::cout << dist2(rng) << std::endl;
-    std::cout << uniform_dist({2, 3}) << std::endl;
+    const size_t UNITS = 256;
+    std::cout << embedding(2, 3) << std::endl;
 
     return 0;
 }
