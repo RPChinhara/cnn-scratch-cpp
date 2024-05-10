@@ -1,18 +1,18 @@
 #include "diffs.h"
 #include "ten.h"
 
-ten da_dz(const ten &t, act_enum act)
+ten da_dz(const ten &a, act_enum act)
 {
-    ten t_new = t;
+    ten t_new = a;
 
     switch (act)
     {
     case RELU: {
-        for (auto i = 0; i < t.size; ++i)
+        for (auto i = 0; i < a.size; ++i)
         {
-            if (0.0f < t[i])
+            if (0.0f < a[i])
                 t_new[i] = 1.0f;
-            else if (t[i] == 0.0f)
+            else if (a[i] == 0.0f)
                 t_new[i] = 0.0f;
             else
                 t_new[i] = 0.0f;

@@ -47,8 +47,8 @@ class nn
 ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind);
 
 /*
-  #include "cnn2d.h"
-  #include "mnist.h"
+  #include "datas.h"
+  #include "lyrs.h"
   #include "preproc.h"
 
   int main()
