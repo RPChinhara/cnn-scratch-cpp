@@ -7,7 +7,6 @@
 #include <cwctype>
 #include <regex>
 #include <sstream>
-#include <unordered_map>
 
 std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator)
 {
@@ -84,75 +83,6 @@ std::wstring strip(const std::wstring &text)
 {
     std::wregex pattern(L"(^\\s+)|(\\s+$)");
     return std::regex_replace(text, pattern, L"");
-}
-
-ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in)
-{
-    std::unordered_map<std::wstring, float> vocab_map;
-
-    for (auto text : vocab)
-    {
-        auto tokens = tokenizer(text);
-
-        for (auto token : tokens)
-        {
-            if (vocab_map.find(token) != vocab_map.end())
-                vocab_map[token] += 1.0f;
-            else
-                vocab_map.insert(std::pair<std::wstring, float>(token, 1.0f));
-        }
-    }
-
-    std::vector<std::pair<std::wstring, float>> vocab_vec(vocab_map.begin(), vocab_map.end());
-
-    std::sort(vocab_vec.begin(), vocab_vec.end(),
-              [](const std::pair<std::wstring, float> &a, const std::pair<std::wstring, float> &b) {
-                  if (a.second != b.second)
-                      return a.second > b.second;
-                  else
-                      return a.first > b.first;
-              });
-
-    size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
-    for (auto i = 0; i < in.size(); ++i)
-    {
-        auto words = tokenizer(in[i]);
-        if (max_num_tokens < words.size())
-            max_num_tokens = words.size();
-    }
-
-    ten t_new = zeros({in.size(), max_num_tokens});
-
-    size_t idx = 0;
-    for (auto i = 0; i < in.size(); ++i)
-    {
-        auto words = tokenizer(in[i]);
-
-        if (i != 0)
-            idx = i * max_num_tokens;
-
-        for (auto word : words)
-        {
-            bool found = false;
-
-            for (auto k = 0; k < vocab_vec.size(); ++k)
-            {
-                if (word == vocab_vec[k].first)
-                {
-                    t_new[idx] = k + 2.0f;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
-                t_new[idx] = 1.0f;
-
-            ++idx;
-        }
-    }
-
-    return t_new;
 }
 
 std::vector<std::string> tokenizer(const std::string &text)
