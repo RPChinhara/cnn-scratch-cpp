@@ -75,8 +75,8 @@ ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind);
       return 0;
   }
 
-  #include "iris.h"
-  #include "nn.h"
+  #include "datas.h"
+  #include "lyrs.h"
   #include "preproc.h"
 
   #include <chrono>

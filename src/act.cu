@@ -3,36 +3,36 @@
 #include "math.hpp"
 #include "ten.h"
 
-ten act(const ten &t, act_enum act, dev_type dev)
+ten act(const ten &z, act_enum act, dev_type dev)
 {
     switch (act)
     {
     case RELU: {
-        ten t_new = t;
+        ten t_new = z;
 
         switch (dev)
         {
         case CPU: {
-            for (auto i = 0; i < t.size; ++i)
-                t_new.elem[i] = std::max(0.0f, t.elem[i]);
+            for (auto i = 0; i < z.size; ++i)
+                t_new.elem[i] = std::fmax(0.0f, z.elem[i]);
 
             return t_new;
         }
         case GPU: {
             float *t_gpu, *t_gpu_new;
-            cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
-            cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
-            cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
+            cudaMalloc((void **)&t_gpu, z.size * sizeof(float));
+            cudaMalloc((void **)&t_gpu_new, z.size * sizeof(float));
+            cudaMemcpy(t_gpu, z.elem, z.size * sizeof(float), cudaMemcpyHostToDevice);
 
             constexpr int blockSize = 128;
-            int gridSize = (t.size + blockSize - 1) / blockSize;
-            relu<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
+            int gridSize = (z.size + blockSize - 1) / blockSize;
+            relu<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, z.size);
 
             cudaError_t cudaError = cudaGetLastError();
             if (cudaError != cudaSuccess)
                 std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-            cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+            cudaMemcpy(t_new.elem, t_gpu_new, z.size * sizeof(float), cudaMemcpyDeviceToHost);
             cudaFree(t_gpu);
             cudaFree(t_gpu_new);
 
@@ -44,7 +44,7 @@ ten act(const ten &t, act_enum act, dev_type dev)
         }
     }
     case SOFTMAX: {
-        ten exp_scores = exp(t - max(t, 1), CPU);
+        ten exp_scores = exp(z - max(z, 1), CPU);
         return exp_scores / sum(exp_scores, 1);
     }
     default:

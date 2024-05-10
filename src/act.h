@@ -11,4 +11,4 @@ enum act_enum
     SOFTMAX
 };
 
-ten act(const ten &t, act_enum act, dev_type dev);
+ten act(const ten &z, act_enum act, dev_type dev);
