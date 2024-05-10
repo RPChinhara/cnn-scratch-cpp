@@ -235,7 +235,7 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
     return a;
 }
 
-ten embedding(const size_t in_dim, const size_t out_dim)
+ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind)
 {
     ten embeddings = uniform_dist({in_dim, out_dim});
 

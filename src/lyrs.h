@@ -44,7 +44,7 @@ class nn
     size_t patience = 4;
 };
 
-ten embedding(const size_t in_dim, const size_t out_dim);
+ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind);
 
 /*
   #include "cnn2d.h"

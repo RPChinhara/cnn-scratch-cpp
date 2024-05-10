@@ -54,7 +54,11 @@ int main()
     // std::cout << vec_y << std::endl;
 
     const size_t UNITS = 256;
-    std::cout << embedding(2, 3) << std::endl;
+
+    ten ind = ten({2, 23, 1, 2, 3, 2, 33, 1, 5, 3}, {2, 5});
+
+    std::cout << ind << std::endl;
+    std::cout << embedding(40, 4, ind) << std::endl;
 
     return 0;
 }
