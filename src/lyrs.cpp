@@ -256,3 +256,7 @@ ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
 
     return dense_vecs;
 }
+
+void gru()
+{
+}
