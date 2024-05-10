@@ -15,7 +15,7 @@ struct train_test
 
 std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator);
 std::wstring lower(const std::wstring &text);
-ten min_max_scaler(ten &dataset);
+ten min_max_scaler(ten &data);
 ten one_hot(const ten &t, const size_t depth);
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);
 std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite);

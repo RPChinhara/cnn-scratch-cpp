@@ -35,11 +35,11 @@ std::wstring lower(const std::wstring &text)
     return result;
 }
 
-ten min_max_scaler(ten &dataset)
+ten min_max_scaler(ten &data)
 {
-    auto min_vals = min(dataset);
-    auto max_vals = max(dataset, 0);
-    return (dataset - min_vals) / (max_vals - min_vals);
+    auto min_vals = min(data);
+    auto max_vals = max(data, 0);
+    return (data - min_vals) / (max_vals - min_vals);
 }
 
 ten one_hot(const ten &t, const size_t depth)
