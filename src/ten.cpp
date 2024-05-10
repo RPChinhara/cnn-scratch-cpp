@@ -314,7 +314,7 @@ std::ostream &operator<<(std::ostream &os, const ten &t)
 
                 if (2 < t.shape.size())
                 {
-                    for (auto j = num_elem_each_batch.size() - 1; 0 <= j; --j)
+                    for (auto j = num_elem_each_batch.size() - 1; 0 < j; --j)
                     {
                         if (i % num_elem_each_batch[j] == 0 && i != 0)
                         {
