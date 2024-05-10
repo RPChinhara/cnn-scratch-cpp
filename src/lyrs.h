@@ -44,7 +44,7 @@ class nn
     size_t patience = 4;
 };
 
-ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind);
+ten embedding(const size_t vocab_size, const size_t out_dim, const ten &ind);
 
 /*
   #include "datas.h"

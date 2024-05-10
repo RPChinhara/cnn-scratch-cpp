@@ -235,12 +235,12 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
     return a;
 }
 
-ten embedding(const size_t in_dim, const size_t out_dim, const ten &ind)
+ten embedding(const size_t vocab_size, const size_t out_dim, const ten &ind)
 {
     for (auto i = 0; i < ind.size; ++i)
-        assert(ind[i] < in_dim);
+        assert(ind[i] < vocab_size);
 
-    ten embeddings_mat = uniform_dist({in_dim, out_dim});
+    ten embeddings_mat = uniform_dist({vocab_size, out_dim});
 
     std::cout << embeddings_mat << std::endl;
 
