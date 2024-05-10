@@ -235,23 +235,23 @@ std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const
     return a;
 }
 
-ten embedding(const size_t vocab_size, const size_t out_dim, const ten &ind)
+ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
 {
     for (auto i = 0; i < ind.size; ++i)
         assert(ind[i] < vocab_size);
 
-    ten embeddings_mat = uniform_dist({vocab_size, out_dim});
+    ten embeddings_mat = uniform_dist({vocab_size, cols});
 
     std::cout << embeddings_mat << std::endl;
 
-    ten dense_vecs = zeros({ind.shape.front(), ind.shape.back(), out_dim});
+    ten dense_vecs = zeros({ind.shape.front(), ind.shape.back(), cols});
 
     for (auto i = 0; i < ind.size; ++i)
     {
         auto a = slice(embeddings_mat, ind[i], 1);
 
         for (auto j = 0; j < a.size; ++j)
-            dense_vecs[out_dim * i + j] = a[j];
+            dense_vecs[cols * i + j] = a[j];
     }
 
     return dense_vecs;
