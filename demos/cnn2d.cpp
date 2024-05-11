@@ -8,7 +8,6 @@ int main()
 
     for (auto i = 0; i < 784; ++i)
     {
-
         if (i % 28 == 0)
             std::cout << std::endl;
         std::cout << mnist.trainImages[i] << "   ";
