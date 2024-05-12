@@ -48,12 +48,12 @@ ten act(const ten &z, act_enum act, dev_type dev)
         return exp_scores / sum(exp_scores, 1);
     }
     case TANH: {
-        ten t_new = z;
+        ten a = z;
 
         for (auto i = 0; i < z.size; ++i)
-                t_new.elem[i] = std::tanhf(z.elem[i]);
+                a.elem[i] = std::tanhf(z.elem[i]);
             
-        return t_new;
+        return a;
     }
     default:
         std::cout << "Unknown act." << std::endl;
