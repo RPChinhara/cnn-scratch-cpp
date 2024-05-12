@@ -67,25 +67,26 @@ gru::gru(const size_t units)
 
 std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
 {
-    size_t num_ins = 10;
-    size_t num_hiddens = 20;
+    w_z = normal_dist({num_ins, num_hiddens});
+    w_r = normal_dist({num_ins, num_hiddens});
+    w_h = normal_dist({num_ins, num_hiddens});
 
-    ten w_z = normal_dist({num_ins, num_hiddens});
-    ten w_r = normal_dist({num_ins, num_hiddens});
-    ten w_h = normal_dist({num_ins, num_hiddens});
+    u_z = normal_dist({num_hiddens, num_hiddens});
+    u_r = normal_dist({num_hiddens, num_hiddens});
+    u_h = normal_dist({num_hiddens, num_hiddens});
 
-    ten u_z = normal_dist({num_hiddens, num_hiddens});
-    ten u_r = normal_dist({num_hiddens, num_hiddens});
-    ten u_h = normal_dist({num_hiddens, num_hiddens});
+    b_z = zeros({1, num_hiddens});
+    b_r = zeros({1, num_hiddens});
+    b_h = zeros({1, num_hiddens});
 
-    ten b_z = zeros({1, num_hiddens});
-    ten b_r = zeros({1, num_hiddens});
-    ten b_h = zeros({1, num_hiddens});
+    h = zeros({batch_size, num_hiddens});
 }
 
-std::vector<ten> gru::forward(const ten &x, const ten &h_prev)
+std::vector<ten> gru::forward(const ten &x)
 {
     init_params();
+
+    auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SIGMOID, CPU);
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)

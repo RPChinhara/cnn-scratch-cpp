@@ -1,6 +1,7 @@
 #pragma once
 
 #include "act.h"
+#include "ten.h"
 
 #include <string>
 #include <vector>
@@ -23,12 +24,30 @@ class cnn2d
 
 class gru
 {
+  private:
+    size_t num_ins = 10;
+    size_t num_hiddens = 20;
+    size_t batch_size = 20;
+
+    ten w_z;
+    ten w_r;
+    ten w_h;
+
+    ten u_z;
+    ten u_r;
+    ten u_h;
+
+    ten b_z;
+    ten b_r;
+    ten b_h;
+
+    ten h;
+
+    std::pair<std::vector<ten>, std::vector<ten>> init_params();
+    std::vector<ten> forward(const ten &x);
+
   public:
     gru(const size_t units);
-
-  private:
-    std::pair<std::vector<ten>, std::vector<ten>> init_params();
-    std::vector<ten> forward(const ten &x, const ten &h_prev);
 };
 
 class nn
