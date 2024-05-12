@@ -65,6 +65,10 @@ gru::gru(const size_t units)
 {
 }
 
+std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
+{
+}
+
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
 {
     this->lyrs = lyrs;
@@ -261,10 +265,6 @@ ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
     }
 
     return dense_vecs;
-}
-
-void gru()
-{
 }
 
 ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in)

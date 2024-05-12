@@ -25,6 +25,9 @@ class gru
 {
   public:
     gru(const size_t units);
+
+  private:
+    std::pair<std::vector<ten>, std::vector<ten>> init_params();
 };
 
 class nn
