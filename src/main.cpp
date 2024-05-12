@@ -23,6 +23,11 @@ ten decoder()
     return ten();
 }
 
+ten cross_attention()
+{
+    return ten();
+}
+
 int main()
 {
     en_es data = load_en_es();
@@ -73,6 +78,7 @@ int main()
 
     auto context = encoder();
     auto logits = decoder();
+    auto result = cross_attention();
 
     return 0;
 }
