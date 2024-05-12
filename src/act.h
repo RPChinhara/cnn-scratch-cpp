@@ -8,7 +8,8 @@ enum act_enum
 {
     RELU,
     SIGMOID,
-    SOFTMAX
+    SOFTMAX,
+    TANH
 };
 
 ten act(const ten &z, act_enum act, dev_type dev);
