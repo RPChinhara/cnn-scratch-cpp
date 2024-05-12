@@ -21,6 +21,12 @@ class cnn2d
     float lr;
 };
 
+class gru
+{
+  public:
+    gru(const size_t units);
+};
+
 class nn
 {
   public:
@@ -46,5 +52,4 @@ class nn
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
-void gru();
 ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in);

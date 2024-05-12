@@ -61,6 +61,10 @@ std::vector<ten> cnn2d::forward_prop(const ten &input, const std::vector<ten> &k
     return weights;
 }
 
+gru::gru(const size_t units)
+{
+}
+
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
 {
     this->lyrs = lyrs;
