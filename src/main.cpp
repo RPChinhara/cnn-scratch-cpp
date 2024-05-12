@@ -18,12 +18,12 @@ ten encoder()
     return ten();
 }
 
-ten decoder()
+ten cross_attention()
 {
     return ten();
 }
 
-ten cross_attention()
+ten decoder()
 {
     return ten();
 }
@@ -77,8 +77,8 @@ int main()
     std::cout << vec_y << std::endl;
 
     auto context = encoder();
-    auto logits = decoder();
     auto result = cross_attention();
+    auto logits = decoder();
 
     return 0;
 }
