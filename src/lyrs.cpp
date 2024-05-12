@@ -87,6 +87,9 @@ std::vector<ten> gru::forward(const ten &x)
     init_params();
 
     auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SIGMOID, CPU);
+    auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SIGMOID, CPU);
+    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
+    h = (1 - z) * h + z * h_tilde;
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
