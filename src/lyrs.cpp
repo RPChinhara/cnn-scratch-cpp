@@ -84,9 +84,9 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
     ten w_r = normal_dist({hidden_size, hidden_size + input_size});
     ten w_h = normal_dist({hidden_size, hidden_size + input_size});
 
-    ten b_z = normal_dist({hidden_size});
-    ten b_r = normal_dist({hidden_size});
-    ten b_h = normal_dist({hidden_size});
+    ten b_z = zeros({hidden_size});
+    ten b_r = zeros({hidden_size});
+    ten b_h = zeros({hidden_size});
 }
 
 std::vector<ten> gru::forward(const ten &x, const ten &h_prev)
