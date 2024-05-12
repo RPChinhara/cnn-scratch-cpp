@@ -268,6 +268,14 @@ gru::gru(const size_t units)
 {
 }
 
+std::vector<ten> rnn::forward(const ten &x)
+{
+}
+
+rnn::rnn(const size_t units)
+{
+}
+
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
 {
     for (auto i = 0; i < ind.size; ++i)
