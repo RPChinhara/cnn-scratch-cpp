@@ -237,10 +237,6 @@ std::vector<ten> fnn::forward(const ten &x, const std::vector<ten> &w, const std
     return a;
 }
 
-gru::gru(const size_t units)
-{
-}
-
 std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
 {
     w_z = normal_dist({num_ins, num_hiddens});
@@ -266,6 +262,10 @@ std::vector<ten> gru::forward(const ten &x)
     auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SIGMOID, CPU);
     auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
     h = (1 - z) * h + z * h_tilde;
+}
+
+gru::gru(const size_t units)
+{
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
