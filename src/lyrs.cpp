@@ -54,7 +54,7 @@ void cnn2d::pred(const ten &xTest, const ten &yTest)
 {
 }
 
-std::vector<ten> cnn2d::forward_prop(const ten &input, const std::vector<ten> &kernel, const size_t stride)
+std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)
 {
     std::vector<ten> weights;
 
@@ -89,7 +89,7 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
     ten b_h = normal_dist({hidden_size});
 }
 
-std::vector<ten> gru::forward_prop(const ten &x, const ten &h_prev)
+std::vector<ten> gru::forward(const ten &x, const ten &h_prev)
 {
     init_params();
 }
@@ -141,7 +141,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
                 y_batch = slice(y_shuffled, j, batch_size);
             }
 
-            a = forward_prop(x_batch, w_b.first, w_b.second);
+            a = forward(x_batch, w_b.first, w_b.second);
 
             std::vector<ten> dl_dz, dl_dw, dl_db;
 
@@ -175,7 +175,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        std::vector<ten> a_val = forward_prop(x_val, w_b.first, w_b.second);
+        std::vector<ten> a_val = forward(x_val, w_b.first, w_b.second);
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
@@ -225,7 +225,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
 void nn::pred(const ten &x_test, const ten &y_test)
 {
-    a = forward_prop(x_test, w_b.first, w_b.second);
+    a = forward(x_test, w_b.first, w_b.second);
 
     std::cout << '\n';
     std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
@@ -249,7 +249,7 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<ten> nn::forward_prop(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
+std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
 {
     std::vector<ten> a;
 

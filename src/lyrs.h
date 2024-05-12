@@ -15,7 +15,7 @@ class cnn2d
     void pred(const ten &xTest, const ten &yTest);
 
   private:
-    std::vector<ten> forward_prop(const ten &input, const std::vector<ten> &kernel, const size_t stride);
+    std::vector<ten> forward(const ten &input, const std::vector<ten> &kernel, const size_t stride);
 
     std::vector<size_t> filters;
     float lr;
@@ -28,7 +28,7 @@ class gru
 
   private:
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
-    std::vector<ten> forward_prop(const ten &x, const ten &h_prev);
+    std::vector<ten> forward(const ten &x, const ten &h_prev);
 };
 
 class nn
@@ -40,7 +40,7 @@ class nn
 
   private:
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
-    std::vector<ten> forward_prop(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
+    std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
 
     std::vector<size_t> lyrs;
     std::vector<act_enum> act_types;
