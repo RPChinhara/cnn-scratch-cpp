@@ -28,6 +28,7 @@ class gru
 
   private:
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
+    std::vector<ten> forward_prop(const ten &x, const ten &h_prev);
 };
 
 class nn

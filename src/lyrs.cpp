@@ -67,6 +67,31 @@ gru::gru(const size_t units)
 
 std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
 {
+    // # Weight matrices
+    // self.Wz = np.random.randn(hidden_size, hidden_size + input_size)
+    // self.Wr = np.random.randn(hidden_size, hidden_size + input_size)
+    // self.Wh = np.random.randn(hidden_size, hidden_size + input_size)
+
+    // # Bias vectors
+    // self.bz = np.zeros(hidden_size)
+    // self.br = np.zeros(hidden_size)
+    // self.bh = np.zeros(hidden_size)
+
+    size_t input_size = 10;
+    size_t hidden_size = 20;
+
+    ten w_z = normal_dist({hidden_size, hidden_size + input_size});
+    ten w_r = normal_dist({hidden_size, hidden_size + input_size});
+    ten w_h = normal_dist({hidden_size, hidden_size + input_size});
+
+    ten b_z = normal_dist({hidden_size});
+    ten b_r = normal_dist({hidden_size});
+    ten b_h = normal_dist({hidden_size});
+}
+
+std::vector<ten> gru::forward_prop(const ten &x, const ten &h_prev)
+{
+    init_params();
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
