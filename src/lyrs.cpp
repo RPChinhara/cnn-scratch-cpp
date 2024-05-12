@@ -67,16 +67,6 @@ gru::gru(const size_t units)
 
 std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
 {
-    // # Weight matrices
-    // self.Wz = np.random.randn(hidden_size, hidden_size + input_size)
-    // self.Wr = np.random.randn(hidden_size, hidden_size + input_size)
-    // self.Wh = np.random.randn(hidden_size, hidden_size + input_size)
-
-    // # Bias vectors
-    // self.bz = np.zeros(hidden_size)
-    // self.br = np.zeros(hidden_size)
-    // self.bh = np.zeros(hidden_size)
-
     size_t num_ins = 10;
     size_t num_hiddens = 20;
 
