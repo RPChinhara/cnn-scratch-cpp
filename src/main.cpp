@@ -71,7 +71,7 @@ int main()
     std::cout << vec_x << std::endl;
     std::cout << vec_y << std::endl;
 
-    auto ex_context = encoder();
+    auto context = encoder();
     auto logits = decoder();
 
     return 0;
