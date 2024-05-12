@@ -77,20 +77,20 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
     // self.br = np.zeros(hidden_size)
     // self.bh = np.zeros(hidden_size)
 
-    size_t input_size = 10;
-    size_t hidden_size = 20;
+    size_t num_ins = 10;
+    size_t num_hiddens = 20;
 
-    ten w_z = normal_dist({hidden_size, hidden_size + input_size});
-    ten w_r = normal_dist({hidden_size, hidden_size + input_size});
-    ten w_h = normal_dist({hidden_size, hidden_size + input_size});
+    ten w_z = normal_dist({num_ins, num_hiddens});
+    ten w_r = normal_dist({num_ins, num_hiddens});
+    ten w_h = normal_dist({num_ins, num_hiddens});
 
-    ten u_z = normal_dist({hidden_size + input_size, hidden_size + input_size});
-    ten u_r = normal_dist({hidden_size + input_size, hidden_size + input_size});
-    ten u_h = normal_dist({hidden_size + input_size, hidden_size + input_size});
+    ten u_z = normal_dist({num_hiddens, num_hiddens});
+    ten u_r = normal_dist({num_hiddens, num_hiddens});
+    ten u_h = normal_dist({num_hiddens, num_hiddens});
 
-    ten b_z = zeros({1, hidden_size});
-    ten b_r = zeros({1, hidden_size});
-    ten b_h = zeros({1, hidden_size});
+    ten b_z = zeros({1, num_hiddens});
+    ten b_r = zeros({1, num_hiddens});
+    ten b_h = zeros({1, num_hiddens});
 }
 
 std::vector<ten> gru::forward(const ten &x, const ten &h_prev)
