@@ -61,45 +61,14 @@ std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel
     return weights;
 }
 
-gru::gru(const size_t units)
-{
-}
-
-std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
-{
-    w_z = normal_dist({num_ins, num_hiddens});
-    w_r = normal_dist({num_ins, num_hiddens});
-    w_h = normal_dist({num_ins, num_hiddens});
-
-    u_z = normal_dist({num_hiddens, num_hiddens});
-    u_r = normal_dist({num_hiddens, num_hiddens});
-    u_h = normal_dist({num_hiddens, num_hiddens});
-
-    b_z = zeros({1, num_hiddens});
-    b_r = zeros({1, num_hiddens});
-    b_h = zeros({1, num_hiddens});
-
-    h = zeros({batch_size, num_hiddens});
-}
-
-std::vector<ten> gru::forward(const ten &x)
-{
-    init_params();
-
-    auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SIGMOID, CPU);
-    auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SIGMOID, CPU);
-    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
-    h = (1 - z) * h + z * h_tilde;
-}
-
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
+fnn::fnn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
 {
     this->lyrs = lyrs;
     this->act_types = act_types;
     this->lr = lr;
 }
 
-void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
+void fnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
 {
     w_b = init_params();
     w_b_mom = init_params();
@@ -221,7 +190,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
     }
 }
 
-void nn::pred(const ten &x_test, const ten &y_test)
+void fnn::pred(const ten &x_test, const ten &y_test)
 {
     a = forward(x_test, w_b.first, w_b.second);
 
@@ -233,7 +202,7 @@ void nn::pred(const ten &x_test, const ten &y_test)
     std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
-std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
+std::pair<std::vector<ten>, std::vector<ten>> fnn::init_params()
 {
     std::vector<ten> w;
     std::vector<ten> b;
@@ -247,7 +216,7 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
+std::vector<ten> fnn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
 {
     std::vector<ten> a;
 
@@ -266,6 +235,37 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     }
 
     return a;
+}
+
+gru::gru(const size_t units)
+{
+}
+
+std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
+{
+    w_z = normal_dist({num_ins, num_hiddens});
+    w_r = normal_dist({num_ins, num_hiddens});
+    w_h = normal_dist({num_ins, num_hiddens});
+
+    u_z = normal_dist({num_hiddens, num_hiddens});
+    u_r = normal_dist({num_hiddens, num_hiddens});
+    u_h = normal_dist({num_hiddens, num_hiddens});
+
+    b_z = zeros({1, num_hiddens});
+    b_r = zeros({1, num_hiddens});
+    b_h = zeros({1, num_hiddens});
+
+    h = zeros({batch_size, num_hiddens});
+}
+
+std::vector<ten> gru::forward(const ten &x)
+{
+    init_params();
+
+    auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SIGMOID, CPU);
+    auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SIGMOID, CPU);
+    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
+    h = (1 - z) * h + z * h_tilde;
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
