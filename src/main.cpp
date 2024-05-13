@@ -80,10 +80,5 @@ int main()
     auto result = cross_attention();
     auto logits = decoder();
 
-    auto aa = ten({1, 6}, {-5, -0.5, 1, 1.2, 2, 3});
-    auto aa2 = ten({1, 4}, {-100.0, -50.0, -1.0, 0.0});
-    std::cout << act(aa, TANH, CPU) << std::endl;
-    std::cout << act(aa2, SIGMOID, CPU) << std::endl;
-
     return 0;
 }

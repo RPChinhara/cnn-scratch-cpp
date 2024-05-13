@@ -77,10 +77,15 @@ class gru
 class rnn
 {
   private:
+    size_t hidden_size;
+    float lr;
+    size_t seq_length;
+    size_t vocab_size;
+
     std::vector<ten> forward(const ten &x);
 
   public:
-    rnn(const size_t units);
+    rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr);
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);

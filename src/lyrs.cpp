@@ -272,8 +272,12 @@ std::vector<ten> rnn::forward(const ten &x)
 {
 }
 
-rnn::rnn(const size_t units)
+rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr)
 {
+    this->hidden_size = hidden_size;
+    this->vocab_size = vocab_size;
+    this->seq_length = hidden_size;
+    this->lr = hidden_size;
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
