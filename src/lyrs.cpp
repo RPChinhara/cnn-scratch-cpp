@@ -66,13 +66,13 @@ fnn::fnn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types
     this->lyrs = lyrs;
     this->act_types = act_types;
     this->lr = lr;
+
+    w_b = init_params();
+    w_b_mom = init_params();
 }
 
 void fnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
 {
-    w_b = init_params();
-    w_b_mom = init_params();
-
     for (auto i = 1; i <= epochs; ++i)
     {
         auto start_time = std::chrono::high_resolution_clock::now();
