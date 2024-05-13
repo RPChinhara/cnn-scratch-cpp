@@ -25,15 +25,16 @@ class cnn2d
 class fnn
 {
   private:
-    std::vector<ten> a;
-    std::vector<act_enum> act_types;
+    std::vector<size_t> lyrs;
     size_t batch_size = 10;
+    float lr;
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
-    float lr;
-    std::vector<size_t> lyrs;
     float mom = 0.1f;
     size_t patience = 4;
+
+    std::vector<ten> a;
+    std::vector<act_enum> act_types;
     std::pair<std::vector<ten>, std::vector<ten>> w_b;
     std::pair<std::vector<ten>, std::vector<ten>> w_b_mom;
 
@@ -53,12 +54,6 @@ class gru
     size_t num_hiddens = 20;
     size_t batch_size = 20;
 
-    ten b_z;
-    ten b_r;
-    ten b_h;
-
-    ten h;
-
     ten u_z;
     ten u_r;
     ten u_h;
@@ -66,6 +61,12 @@ class gru
     ten w_z;
     ten w_r;
     ten w_h;
+
+    ten b_z;
+    ten b_r;
+    ten b_h;
+
+    ten h;
 
     std::vector<ten> forward(const ten &x);
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
@@ -78,9 +79,15 @@ class rnn
 {
   private:
     size_t hidden_size;
-    float lr;
-    size_t seq_length;
     size_t vocab_size;
+    size_t seq_length;
+    float lr;
+
+    ten U;
+    ten V;
+    ten W;
+    ten b;
+    ten c;
 
     std::vector<ten> forward(const ten &x);
 

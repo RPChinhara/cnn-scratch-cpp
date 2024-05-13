@@ -278,6 +278,13 @@ rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_len
     this->vocab_size = vocab_size;
     this->seq_length = hidden_size;
     this->lr = hidden_size;
+
+    U = normal_dist({hidden_size, vocab_size});
+    V = normal_dist({vocab_size, hidden_size});
+    W = normal_dist({hidden_size, hidden_size});
+    
+    b = zeros({hidden_size, 1});
+    c = zeros({hidden_size, 1});
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
