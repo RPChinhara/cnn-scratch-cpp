@@ -10,29 +10,21 @@ class ten;
 
 class cnn2d
 {
-  public:
-    cnn2d(const std::vector<size_t> &filters, float const lr);
-    void train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal);
-    void pred(const ten &xTest, const ten &yTest);
-
   private:
-    std::vector<ten> forward(const ten &input, const std::vector<ten> &kernel, const size_t stride);
-
     std::vector<size_t> filters;
     float lr;
+
+    std::vector<ten> forward(const ten &input, const std::vector<ten> &kernel, const size_t stride);
+
+  public:
+    cnn2d(const std::vector<size_t> &filters, float const lr);
+    void pred(const ten &xTest, const ten &yTest);
+    void train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal);
 };
 
 class fnn
 {
-  public:
-    fnn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, float const lr);
-    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
-    void pred(const ten &x_test, const ten &y_test);
-
   private:
-    std::pair<std::vector<ten>, std::vector<ten>> init_params();
-    std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
-
     std::vector<size_t> lyrs;
     std::vector<act_enum> act_types;
     std::pair<std::vector<ten>, std::vector<ten>> w_b;
@@ -44,6 +36,14 @@ class fnn
     float grad_clip_threshold = 8.0f;
     float mom = 0.1f;
     size_t patience = 4;
+
+    std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
+    std::pair<std::vector<ten>, std::vector<ten>> init_params();
+
+  public:
+    fnn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, float const lr);
+    void pred(const ten &x_test, const ten &y_test);
+    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
 
 class gru
