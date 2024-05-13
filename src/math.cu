@@ -178,6 +178,16 @@ ten min(const ten &t)
     return t_new;
 }
 
+ten sqrt(const ten &x)
+{
+    ten y = x;
+
+    for (auto i = 0; i < x.size; ++i)
+        y.elem[i] = sqrtf(x.elem[i]);
+
+    return y;
+}
+
 ten sum(const ten &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
