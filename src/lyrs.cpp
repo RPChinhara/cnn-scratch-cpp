@@ -282,7 +282,7 @@ rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_len
     U = normal_dist({hidden_size, vocab_size});
     V = normal_dist({vocab_size, hidden_size});
     W = normal_dist({hidden_size, hidden_size});
-    
+
     b = zeros({hidden_size, 1});
     c = zeros({hidden_size, 1});
 }

@@ -25,16 +25,16 @@ class cnn2d
 class fnn
 {
   private:
-    std::vector<size_t> lyrs;
+    std::vector<ten> a;
+    std::vector<act_enum> act_types;
     size_t batch_size = 10;
-    float lr;
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
+    float lr;
+    std::vector<size_t> lyrs;
     float mom = 0.1f;
     size_t patience = 4;
 
-    std::vector<ten> a;
-    std::vector<act_enum> act_types;
     std::pair<std::vector<ten>, std::vector<ten>> w_b;
     std::pair<std::vector<ten>, std::vector<ten>> w_b_mom;
 
