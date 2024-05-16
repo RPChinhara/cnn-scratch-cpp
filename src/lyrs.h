@@ -50,7 +50,7 @@ class gru
     gru(const size_t units);
 };
 
-class mlp
+class nn
 {
   private:
     std::vector<ten> a;
@@ -70,7 +70,7 @@ class mlp
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
 
   public:
-    mlp(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, float const lr);
+    nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, float const lr);
     void pred(const ten &x_test, const ten &y_test);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
