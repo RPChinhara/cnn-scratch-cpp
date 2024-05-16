@@ -15,10 +15,21 @@
 #include <random>
 #include <unordered_map>
 
+std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)
+{
+    std::vector<ten> weights;
+
+    return weights;
+}
+
 cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr)
 {
     this->filters = filters;
     this->lr = lr;
+}
+
+void cnn2d::pred(const ten &xTest, const ten &yTest)
+{
 }
 
 void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal)
@@ -48,17 +59,6 @@ void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     // }
 
     // std::cout << output << std::endl;
-}
-
-void cnn2d::pred(const ten &xTest, const ten &yTest)
-{
-}
-
-std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)
-{
-    std::vector<ten> weights;
-
-    return weights;
 }
 
 std::vector<ten> gru::forward(const ten &x)
@@ -92,6 +92,41 @@ gru::gru(const size_t units)
 {
 }
 
+std::vector<ten> mlp::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
+{
+    std::vector<ten> a;
+
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
+    {
+        if (i == 0)
+        {
+            ten z = matmul(x, w[i], CPU) + b[i];
+            a.push_back(act(z, act_types[i], CPU));
+        }
+        else
+        {
+            ten z = matmul(a[i - 1], w[i], CPU) + b[i];
+            a.push_back(act(z, act_types[i], CPU));
+        }
+    }
+
+    return a;
+}
+
+std::pair<std::vector<ten>, std::vector<ten>> mlp::init_params()
+{
+    std::vector<ten> w;
+    std::vector<ten> b;
+
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
+    {
+        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
+        b.push_back(zeros({1, lyrs[i + 1]}));
+    }
+
+    return std::make_pair(w, b);
+}
+
 mlp::mlp(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
 {
     this->lyrs = lyrs;
@@ -100,6 +135,18 @@ mlp::mlp(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types
 
     w_b = init_params();
     w_b_mom = init_params();
+}
+
+void mlp::pred(const ten &x_test, const ten &y_test)
+{
+    a = forward(x_test, w_b.first, w_b.second);
+
+    std::cout << '\n';
+    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
+              << " - test accuracy: " << std::to_string(categorical_acc(y_test, a.back()));
+    std::cout << "\n\n";
+
+    std::cout << a.back() << "\n\n" << y_test << '\n';
 }
 
 void mlp::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
@@ -219,53 +266,6 @@ void mlp::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         //     break;
         // }
     }
-}
-
-void mlp::pred(const ten &x_test, const ten &y_test)
-{
-    a = forward(x_test, w_b.first, w_b.second);
-
-    std::cout << '\n';
-    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
-              << " - test accuracy: " << std::to_string(categorical_acc(y_test, a.back()));
-    std::cout << "\n\n";
-
-    std::cout << a.back() << "\n\n" << y_test << '\n';
-}
-
-std::pair<std::vector<ten>, std::vector<ten>> mlp::init_params()
-{
-    std::vector<ten> w;
-    std::vector<ten> b;
-
-    for (auto i = 0; i < lyrs.size() - 1; ++i)
-    {
-        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
-        b.push_back(zeros({1, lyrs[i + 1]}));
-    }
-
-    return std::make_pair(w, b);
-}
-
-std::vector<ten> mlp::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
-{
-    std::vector<ten> a;
-
-    for (auto i = 0; i < lyrs.size() - 1; ++i)
-    {
-        if (i == 0)
-        {
-            ten z = matmul(x, w[i], CPU) + b[i];
-            a.push_back(act(z, act_types[i], CPU));
-        }
-        else
-        {
-            ten z = matmul(a[i - 1], w[i], CPU) + b[i];
-            a.push_back(act(z, act_types[i], CPU));
-        }
-    }
-
-    return a;
 }
 
 std::vector<ten> rnn::forward(const ten &x)
