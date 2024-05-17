@@ -1,7 +1,7 @@
-#include <algorithm> // for std::sort
+#include <algorithm>
 #include <iostream>
 #include <set>
-#include <string> // for std::string
+#include <string>
 
 #include "lyrs.h"
 
