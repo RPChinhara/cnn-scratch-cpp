@@ -1,4 +1,3 @@
-#include "act.h"
 #include "datas.h"
 #include "lyrs.h"
 #include "preproc.h"
