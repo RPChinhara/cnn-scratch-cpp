@@ -5,12 +5,18 @@
 
 #include "lyrs.h"
 
-int main()
+std::vector<std::pair<char, size_t>> map_char_index(const std::string &text)
 {
-    std::string text = "This is GeeksforGeeks a software training institute";
+    std::vector<std::pair<char, size_t>> char_to_index;
 
-    std::sort(text.begin(), text.end());
+    for (auto i = 0; i < text.size(); ++i)
+        char_to_index.emplace_back(text[i], i);
 
+    return char_to_index;
+}
+
+std::string rm_duplicates(const std::string &text)
+{
     std::set<char> seen;
     std::string unique_text;
 
@@ -23,12 +29,17 @@ int main()
         }
     }
 
-    std::cout << unique_text << std::endl;
+    return unique_text;
+}
 
-    std::vector<std::pair<char, int>> char_to_index;
+int main()
+{
+    std::string text = "This is GeeksforGeeks a software training institute";
 
-    for (auto i = 0; i < unique_text.size(); ++i)
-        char_to_index.emplace_back(unique_text[i], i);
+    std::sort(text.begin(), text.end());
+
+    auto unique_text = rm_duplicates(text);
+    auto char_to_index = map_char_index(unique_text);
 
     for (const auto &pair : char_to_index)
         std::cout << "'" << pair.first << "' -> " << pair.second << std::endl;
