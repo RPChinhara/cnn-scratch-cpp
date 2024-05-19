@@ -4,7 +4,7 @@
 
 class ten;
 
-enum act_enum
+enum act_type
 {
     RELU,
     SIGMOID,
@@ -12,4 +12,4 @@ enum act_enum
     TANH
 };
 
-ten act(const ten &z, act_enum act, dev_type dev);
+ten act(const ten &z, act_type act, dev_type dev);

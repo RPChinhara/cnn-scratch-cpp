@@ -127,7 +127,7 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
     return std::make_pair(w, b);
 }
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, const float lr)
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr)
 {
     this->lyrs = lyrs;
     this->act_types = act_types;

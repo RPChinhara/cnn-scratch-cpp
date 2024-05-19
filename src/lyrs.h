@@ -54,7 +54,7 @@ class nn
 {
   private:
     std::vector<ten> a;
-    std::vector<act_enum> act_types;
+    std::vector<act_type> act_types;
     size_t batch_size = 10;
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
@@ -70,7 +70,7 @@ class nn
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
 
   public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<act_enum> &act_types, float const lr);
+    nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr);
     void pred(const ten &x_test, const ten &y_test);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };

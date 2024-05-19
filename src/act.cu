@@ -3,7 +3,7 @@
 #include "math.hpp"
 #include "ten.h"
 
-ten act(const ten &z, act_enum act, dev_type dev)
+ten act(const ten &z, act_type act, dev_type dev)
 {
     switch (act)
     {

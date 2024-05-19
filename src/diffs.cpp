@@ -1,7 +1,7 @@
 #include "diffs.h"
 #include "ten.h"
 
-ten da_dz(const ten &a, act_enum act)
+ten da_dz(const ten &a, act_type act)
 {
     ten t_new = a;
 
@@ -26,7 +26,7 @@ ten da_dz(const ten &a, act_enum act)
     }
 }
 
-ten dl_da_da_dz(const ten &y_true, const ten &y_pred, act_enum act)
+ten dl_da_da_dz(const ten &y_true, const ten &y_pred, act_type act)
 {
     switch (act)
     {
