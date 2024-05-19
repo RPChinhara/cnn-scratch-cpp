@@ -14,9 +14,9 @@ class ten
     ten(const std::vector<size_t> &shape, const std::vector<float> &elem);
     ~ten();
     ten(const ten &other);
-    ten(ten &&other);
+    ten(ten &&other) noexcept;
     ten &operator=(const ten &other);
-    ten &operator=(ten &&other);
+    ten &operator=(ten &&other) noexcept;
     ten operator+(const ten &other) const;
     ten operator-(const ten &other) const;
     ten operator*(const ten &other) const;

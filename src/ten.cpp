@@ -44,7 +44,7 @@ ten::ten(const ten &other)
     shape = other.shape;
 }
 
-ten::ten(ten &&other)
+ten::ten(ten &&other) noexcept
 {
     elem = other.elem;
     size = other.size;
@@ -67,7 +67,7 @@ ten &ten::operator=(const ten &other)
     return *this;
 }
 
-ten &ten::operator=(ten &&other)
+ten &ten::operator=(ten &&other) noexcept
 {
     if (this != &other)
     {
