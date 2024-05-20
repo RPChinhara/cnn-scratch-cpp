@@ -335,8 +335,12 @@ ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector
                   else
                       return a.first > b.first;
               });
+    
+    // for (auto i : vocab_vec)
+    //     std::wcout << i.first << " " << i.second << std::endl;
 
     size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
+
     for (auto i = 0; i < in.size(); ++i)
     {
         auto words = tokenizer(in[i]);
