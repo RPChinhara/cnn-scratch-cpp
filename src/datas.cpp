@@ -88,13 +88,12 @@ imdb load_imdb()
         std::string text_spell_corrected = regex_replace(text_no_emoji, "(.)\\1+", "$1$1");
 
         auto tokens = tokenizer(text_spell_corrected);
-        auto tokens_no_stop_words = RemoveStopWords(tokens);
 
         std::cout << "Text: " << idx + 1 << std::endl;
         std::cout << "++++++++++++++++++++++++++: " << std::endl;
-        for (auto i = 0; i < tokens_no_stop_words.size(); ++i)
+        for (auto i = 0; i < tokens.size(); ++i)
         {
-            std::cout << tokens_no_stop_words[i] << std::endl;
+            std::cout << tokens[i] << std::endl;
         }
         std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
         ++idx;
