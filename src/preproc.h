@@ -23,5 +23,3 @@ std::wstring strip(const std::wstring &text);
 std::vector<std::string> tokenizer(const std::string &text);
 std::vector<std::wstring> tokenizer(const std::wstring &text);
 train_test train_test_split(const ten &x, const ten &y, const float test_size, const size_t rd_state);
-
-std::vector<std::string> RemoveStopWords(const std::vector<std::string> &tokens);
