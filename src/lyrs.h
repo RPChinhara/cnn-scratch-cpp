@@ -96,4 +96,5 @@ class rnn
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
+ten text_vectorization(const std::vector<std::string> &vocab, const std::vector<std::string> &in);
 ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in);

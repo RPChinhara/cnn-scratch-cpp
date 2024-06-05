@@ -1,5 +1,6 @@
 #include "datas.h"
 #include "arrs.h"
+#include "lyrs.h"
 #include "preproc.h"
 
 #include <fstream>
@@ -76,28 +77,42 @@ imdb load_imdb()
         }
 
         std::string text = line.substr(startPos, endPos - startPos);
-        std::string text_no_link = regex_replace(text, R"((https?:\/\/|www\.)\S+)", "");
-        std::string text_no_html = regex_replace(text_no_link, "<[^>]*>", " ");
-        std::string text_sp_around_punc = regex_replace(text_no_html, "([.,!?-])", " $1 ");
-        std::string text_no_consecutive_sp = regex_replace(text_sp_around_punc, "\\s{2,}", " ");
-        std::string text_no_punc = regex_replace(text_no_consecutive_sp, "[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]", " ");
-        std::string text_no_num = regex_replace(text_no_punc, "\\d+", "");
-        std::string text_no_ascii = regex_replace(text_no_num, "[^\\x00-\\x7f]", " ");
-        std::string text_no_white_sp = regex_replace(text_no_ascii, "\\s+", " ");
-        std::string text_no_emoji = regex_replace(text_no_white_sp, "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
-        std::string text_spell_corrected = regex_replace(text_no_emoji, "(.)\\1+", "$1$1");
+        reviews.push_back(text);
 
-        auto tokens = tokenizer(text_spell_corrected);
+        // std::string text_no_link = regex_replace(text, R"((https?:\/\/|www\.)\S+)", "");
+        // std::string text_no_html = regex_replace(text_no_link, "<[^>]*>", " ");
+        // std::string text_sp_around_punc = regex_replace(text_no_html, "([.,!?-])", " $1 ");
+        // std::string text_no_consecutive_sp = regex_replace(text_sp_around_punc, "\\s{2,}", " ");
+        // std::string text_no_punc = regex_replace(text_no_consecutive_sp, "[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]", "
+        // "); std::string text_no_num = regex_replace(text_no_punc, "\\d+", ""); std::string text_no_ascii =
+        // regex_replace(text_no_num, "[^\\x00-\\x7f]", " "); std::string text_no_white_sp =
+        // regex_replace(text_no_ascii, "\\s+", " "); std::string text_no_emoji = regex_replace(text_no_white_sp,
+        // "[\xE2\x98\x80-\xE2\x9B\xBF]", ""); std::string text_spell_corrected = regex_replace(text_no_emoji,
+        // "(.)\\1+", "$1$1");
 
-        std::cout << "Text: " << idx + 1 << std::endl;
-        std::cout << "++++++++++++++++++++++++++: " << std::endl;
-        for (auto i = 0; i < tokens.size(); ++i)
-        {
-            std::cout << tokens[i] << std::endl;
-        }
-        std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
-        ++idx;
+        // auto tokens = tokenizer(text_spell_corrected);
+
+        // std::cout << "Text: " << idx + 1 << std::endl;
+        // std::cout << "++++++++++++++++++++++++++: " << std::endl;
+        // for (auto i = 0; i < tokens.size(); ++i)
+        // {
+        //     std::cout << tokens[i] << std::endl;
+        // }
+        // std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
+        // ++idx;
     }
+
+    file.close();
+
+    for (auto i = 0; i < reviews.size(); ++i)
+    {
+        reviews[i] = regex_replace(reviews[i], R"((https?:\/\/|www\.)\S+)", "");
+        std::string text_no_html = regex_replace(reviews[i], "<[^>]*>", " ");
+    }
+
+    std::cout << "running text_vectorization..." << std::endl;
+    auto vec_x = text_vectorization(reviews, reviews);
+    std::cout << vec_x << std::endl;
 
     return imdb();
 }
