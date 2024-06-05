@@ -4,7 +4,8 @@
 // 1. load_imdb() has to return vectorized tensor like tf.keras.datasets.imdb.load_data()
 //     - Continue use imdb dataset downloaded from Kaggle websites as instead of the datasets used for
 //     tf.keras.datasets.imdb.load_data() as it is conversome and the datasets has nothing to do with the order it's
-//     just random.
+//     just random as in the order of the dataset from tf.keras.datasets.imdb.load_data() and the dataset downloaded
+//     from the link on the tf.keras.datasets.imdb.load_data() don't muc.
 // 2. Implement Vanilla RNNs which are simplest form of RNNs. Has only single hidden layer.
 //     - Implement forward prop for many-to-one and many-to-many as these are more common. One-to-one and one-to-many
 //     are
