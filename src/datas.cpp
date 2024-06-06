@@ -57,13 +57,10 @@ imdb load_imdb()
     size_t idx = 0;
     while (std::getline(file, line))
     {
-        std::stringstream ss(line);
-        std::string value;
-
+        size_t endPos;
         size_t end_pos_positive = line.find(",positive");
         size_t end_pos_negative = line.find(",negative");
 
-        size_t endPos;
         if (end_pos_positive != std::string::npos)
         {
             endPos = end_pos_positive;
