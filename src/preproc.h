@@ -14,6 +14,7 @@ struct train_test
 };
 
 std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator);
+std::string lower(const std::string &text);
 std::wstring lower(const std::wstring &text);
 ten min_max_scaler(ten &data);
 ten one_hot(const ten &t, const size_t depth);

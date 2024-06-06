@@ -43,7 +43,7 @@ en_es load_en_es()
 
 imdb load_imdb()
 {
-    std::ifstream file("datas/IMDB Dataset.csv");
+    std::ifstream file("datas/imdb_test.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
@@ -106,13 +106,18 @@ imdb load_imdb()
 
     for (auto i = 0; i < reviews.size(); ++i)
     {
-        reviews[i] = regex_replace(reviews[i], R"((https?:\/\/|www\.)\S+)", "");
-        std::string text_no_html = regex_replace(reviews[i], "<[^>]*>", " ");
+        reviews[i] = lower(reviews[i]);
     }
 
-    std::cout << "running text_vectorization..." << std::endl;
-    auto vec_x = text_vectorization(reviews, reviews);
-    std::cout << vec_x << std::endl;
+    std::cout << reviews[0] << std::endl;
+
+    // std::cout << "running text_vectorization..." << std::endl;
+    // auto vec_x = text_vectorization(reviews, reviews);
+    // std::cout << vec_x << std::endl;
+
+    // imdb data;
+    // data.x = reviews;
+    // data.y = sentiments;
 
     return imdb();
 }

@@ -24,6 +24,16 @@ std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &
     return result;
 }
 
+std::string lower(const std::string &text)
+{
+    std::string result;
+    for (auto c : text)
+    {
+        result += std::tolower(c);
+    }
+    return result;
+}
+
 std::wstring lower(const std::wstring &text)
 {
     std::wstring result;
