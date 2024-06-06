@@ -79,27 +79,6 @@ imdb load_imdb()
         std::string text = line.substr(startPos, endPos - startPos);
         reviews.push_back(text);
 
-        // std::string text_no_link = regex_replace(text, R"((https?:\/\/|www\.)\S+)", "");
-        // std::string text_no_html = regex_replace(text_no_link, "<[^>]*>", " ");
-        // std::string text_sp_around_punc = regex_replace(text_no_html, "([.,!?-])", " $1 ");
-        // std::string text_no_consecutive_sp = regex_replace(text_sp_around_punc, "\\s{2,}", " ");
-        // std::string text_no_punc = regex_replace(text_no_consecutive_sp, "[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]", "
-        // "); std::string text_no_num = regex_replace(text_no_punc, "\\d+", ""); std::string text_no_ascii =
-        // regex_replace(text_no_num, "[^\\x00-\\x7f]", " "); std::string text_no_white_sp =
-        // regex_replace(text_no_ascii, "\\s+", " "); std::string text_no_emoji = regex_replace(text_no_white_sp,
-        // "[\xE2\x98\x80-\xE2\x9B\xBF]", ""); std::string text_spell_corrected = regex_replace(text_no_emoji,
-        // "(.)\\1+", "$1$1");
-
-        // auto tokens = tokenizer(text_spell_corrected);
-
-        // std::cout << "Text: " << idx + 1 << std::endl;
-        // std::cout << "++++++++++++++++++++++++++: " << std::endl;
-        // for (auto i = 0; i < tokens.size(); ++i)
-        // {
-        //     std::cout << tokens[i] << std::endl;
-        // }
-        // std::cout << "--------------------------: " << sentiments[idx] << std::endl << std::endl;
-        // ++idx;
     }
 
     file.close();
@@ -107,9 +86,19 @@ imdb load_imdb()
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
+        reviews[i] = regex_replace(reviews[i], R"((https?:\/\/|www\.)\S+)", "");
+        reviews[i] = regex_replace(reviews[i], "<[^>]*>", " ");
+        reviews[i] = regex_replace(reviews[i], "([.,!?-])", " $1 ");
+        reviews[i] = regex_replace(reviews[i], "\\s{2,}", " ");
+        reviews[i] = regex_replace(reviews[i], "[\"#$%&'()*+/:;<=>@\\[\\\\\\]^_`{|}~]", " ");
+        reviews[i] = regex_replace(reviews[i], "[^\\x00-\\x7f]", " ");
+        reviews[i] = regex_replace(reviews[i], "\\s+", " ");
+        reviews[i] = regex_replace(reviews[i], "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
+        reviews[i] = regex_replace(reviews[i], "(.)\\1+", "$1$1");
     }
 
-    std::cout << reviews[0] << std::endl;
+    for (auto i = 0; i < reviews.size(); ++i)
+        std::cout << reviews[i] << std::endl << std::endl;
 
     // std::cout << "running text_vectorization..." << std::endl;
     // auto vec_x = text_vectorization(reviews, reviews);
