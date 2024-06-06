@@ -57,22 +57,22 @@ imdb load_imdb()
     size_t idx = 0;
     while (std::getline(file, line))
     {
-        size_t endPos;
+        size_t end_pos;
         size_t end_pos_positive = line.find(",positive");
         size_t end_pos_negative = line.find(",negative");
 
         if (end_pos_positive != std::string::npos)
         {
-            endPos = end_pos_positive;
+            end_pos = end_pos_positive;
             sentiments.push_back(1.0f);
         }
         else if (end_pos_negative != std::string::npos)
         {
-            endPos = end_pos_negative;
+            end_pos = end_pos_negative;
             sentiments.push_back(0.0f);
         }
 
-        std::string text = line.substr(0, endPos - 0);
+        std::string text = line.substr(0, end_pos - 0);
         reviews.push_back(text);
     }
 
