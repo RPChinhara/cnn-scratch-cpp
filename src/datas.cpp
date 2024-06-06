@@ -94,10 +94,17 @@ imdb load_imdb()
         reviews[i] = regex_replace(reviews[i], "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
         reviews[i] = regex_replace(reviews[i], "(.)\\1+", "$1$1");
         reviews[i] = regex_replace(reviews[i], "\\s+", " ");
+
+        auto end_pos =
+            std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
+        reviews[i].erase(end_pos, reviews[i].end());
     }
 
     for (auto i = 0; i < reviews.size(); ++i)
         std::cout << reviews[i] << std::endl << std::endl;
+
+    std::cout << reviews[1][reviews[1].size() - 1] << std::endl << std::endl;
+    std::cout << reviews[1] << std::endl << std::endl;
 
     // std::cout << "running text_vectorization..." << std::endl;
     // auto vec_x = text_vectorization(reviews, reviews);
