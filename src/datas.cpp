@@ -82,6 +82,7 @@ imdb load_imdb()
 
     file.close();
 
+    // turn "<br /><br />"" to "br br" ?
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
