@@ -54,7 +54,6 @@ imdb load_imdb()
     std::string line;
     std::getline(file, line);
 
-    size_t idx = 0;
     while (std::getline(file, line))
     {
         size_t end_pos;
