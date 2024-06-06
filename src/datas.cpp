@@ -60,7 +60,7 @@ imdb load_imdb()
         std::stringstream ss(line);
         std::string value;
 
-        size_t startPos = 0;
+        size_t start_pos = 0;
         size_t endPosPositive = line.find(",positive");
         size_t endPosNegative = line.find(",negative");
 
@@ -76,7 +76,7 @@ imdb load_imdb()
             sentiments.push_back(0.0f);
         }
 
-        std::string text = line.substr(startPos, endPos - startPos);
+        std::string text = line.substr(start_pos, endPos - start_pos);
         reviews.push_back(text);
     }
 
