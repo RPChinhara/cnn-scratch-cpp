@@ -61,18 +61,18 @@ imdb load_imdb()
         std::string value;
 
         size_t start_pos = 0;
-        size_t endPosPositive = line.find(",positive");
-        size_t endPosNegative = line.find(",negative");
+        size_t end_pos_positive = line.find(",positive");
+        size_t end_pos_negative = line.find(",negative");
 
         size_t endPos;
-        if (endPosPositive != std::string::npos)
+        if (end_pos_positive != std::string::npos)
         {
-            endPos = endPosPositive;
+            endPos = end_pos_positive;
             sentiments.push_back(1.0f);
         }
-        else if (endPosNegative != std::string::npos)
+        else if (end_pos_negative != std::string::npos)
         {
-            endPos = endPosNegative;
+            endPos = end_pos_negative;
             sentiments.push_back(0.0f);
         }
 
