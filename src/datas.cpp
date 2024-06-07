@@ -77,10 +77,9 @@ imdb load_imdb()
 
     file.close();
 
-    // Compare datasets from tf and mine about using 30 ~ 50 datasets.
-    // It says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using
+    // In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using
     // training set?
-    // Maybe add num_words like arg to this function as well like tf does?
+    // Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
