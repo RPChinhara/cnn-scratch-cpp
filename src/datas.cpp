@@ -88,7 +88,6 @@ imdb load_imdb()
         reviews[i] = regex_replace(reviews[i], "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
         reviews[i] = regex_replace(reviews[i], "[^\\x00-\\x7f]", " ");
         reviews[i] = regex_replace(reviews[i], "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
-        reviews[i] = regex_replace(reviews[i], "(.)\\1+", "$1$1");
         reviews[i] = regex_replace(reviews[i], "\\s+", " ");
 
         auto end_pos =
