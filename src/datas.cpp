@@ -43,7 +43,7 @@ en_es load_en_es()
 
 imdb load_imdb()
 {
-    std::ifstream file("datas/imdb_test.csv");
+    std::ifstream file("datas/IMDB Dataset.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
@@ -77,8 +77,8 @@ imdb load_imdb()
 
     file.close();
 
-    // In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using
-    // training set?
+    // In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training
+    // set)" so maybe create vocab only using training set?
     // Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
     for (auto i = 0; i < reviews.size(); ++i)
     {
@@ -95,12 +95,6 @@ imdb load_imdb()
             std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
         reviews[i].erase(end_pos, reviews[i].end());
     }
-
-    for (auto i = 0; i < reviews.size(); ++i)
-        std::cout << reviews[i] << std::endl << std::endl;
-
-    std::cout << reviews[1][reviews[1].size() - 1] << std::endl << std::endl;
-    std::cout << reviews[1] << std::endl << std::endl;
 
     // std::cout << "running text_vectorization..." << std::endl;
     // auto vec_x = text_vectorization(reviews, reviews);
