@@ -78,6 +78,9 @@ imdb load_imdb()
     file.close();
 
     // Compare datasets from tf and mine about using 30 ~ 50 datasets.
+    // It says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using
+    // training set?
+    // Maybe add num_words like arg to this function as well like tf does?
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
@@ -99,8 +102,6 @@ imdb load_imdb()
 
     std::cout << reviews[1][reviews[1].size() - 1] << std::endl << std::endl;
     std::cout << reviews[1] << std::endl << std::endl;
-
-    // Maybe remove top less common words from vocabulary? Like I don't know top 10 ~ 50?
 
     // std::cout << "running text_vectorization..." << std::endl;
     // auto vec_x = text_vectorization(reviews, reviews);
