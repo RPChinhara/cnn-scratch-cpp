@@ -77,7 +77,6 @@ imdb load_imdb()
 
     file.close();
 
-    // check sentence that includes bytecodes or emoji like this?  e.g., line 1088
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
