@@ -77,7 +77,6 @@ imdb load_imdb()
 
     file.close();
 
-    // Follow all the order how tf has done preprocessing by chatgpt.
     // Compare datasets from tf and mine about using 30 ~ 50 datasets.
     for (auto i = 0; i < reviews.size(); ++i)
     {
