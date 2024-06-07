@@ -100,6 +100,8 @@ imdb load_imdb()
     std::cout << reviews[1][reviews[1].size() - 1] << std::endl << std::endl;
     std::cout << reviews[1] << std::endl << std::endl;
 
+    // Maybe remove top less common words from vocabulary? Like I don't know top 10 ~ 50?
+
     // std::cout << "running text_vectorization..." << std::endl;
     // auto vec_x = text_vectorization(reviews, reviews);
     // std::cout << vec_x << std::endl;
