@@ -77,7 +77,7 @@ imdb load_imdb()
 
     file.close();
 
-    // TODO: follow all the order how tf has done preprocessing
+    // Follow all the order how tf has done preprocessing.
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
