@@ -1,7 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
     - Start working on text_vectorization() on imdb_test.csv.
-    - Maybe use imdb_test.csv?
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
     - Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
     - Continue using the IMDb dataset downloaded from Kaggle instead of the datasets used for tf.keras.datasets.imdb.load_data() as it is cumbersome, and the datasets have nothing to do with the order. The order of the dataset from tf.keras.datasets.imdb.load_data() and the dataset downloaded from the link on the tf.keras.datasets.imdb.load_data() don't match.
