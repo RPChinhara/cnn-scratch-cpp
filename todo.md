@@ -15,3 +15,4 @@
 9. Implement interesting algorithms from papers.
 10. Come up with your own algorithms and models learned from papers.
 11. Solve and create new Mathematics and Physics problem theories using autoregressive transformer auto-generative type models.
+12. Create new things devices from 11.
