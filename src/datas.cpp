@@ -77,7 +77,6 @@ imdb load_imdb()
 
     file.close();
 
-    // TODO: Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
     for (auto i = 0; i < reviews.size(); ++i)
     {
         reviews[i] = lower(reviews[i]);
@@ -93,10 +92,6 @@ imdb load_imdb()
             std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
         reviews[i].erase(end_pos, reviews[i].end());
     }
-
-    // TODO: Start working on text_vectorization() on imdb_test.csv.
-    // TODO: In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the
-    // training set)" so maybe create vocab only using training set?
 
     // std::cout << "running text_vectorization..." << std::endl;
     // auto vec_x = text_vectorization(reviews, reviews);
