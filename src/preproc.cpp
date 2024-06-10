@@ -77,10 +77,6 @@ ten one_hot(const ten &t, const size_t depth)
     return t_new;
 }
 
-void pad_sequences()
-{
-}
-
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite)
 {
     std::regex re(pattern);

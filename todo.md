@@ -1,7 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
     - Start working on text_vectorization() on imdb_test.csv.
-      - text_vectorization() should not pad 0 as it is now. I haven't done truncation so that is fine?
+      - instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
     - Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
