@@ -1,5 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
+    - move train_test_split() to utils.h and change the name to split_dataset()?
     - Start working on text_vectorization() on imdb_test.csv.
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
     - Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
