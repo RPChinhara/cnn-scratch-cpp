@@ -1,9 +1,11 @@
 #pragma once
 
 #include "act.h"
+#include "preproc.h"
 #include "ten.h"
 
-#include <string>
+#include <random>
+#include <unordered_map>
 #include <vector>
 
 class ten;
@@ -96,5 +98,75 @@ class rnn
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
-ten text_vectorization(const std::vector<std::string> &vocab, const std::vector<std::string> &in);
-ten text_vectorization(const std::vector<std::wstring> &vocab, const std::vector<std::wstring> &in);
+
+template <typename T> ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in)
+{
+    std::unordered_map<T, float> vocab_map;
+
+    for (auto text : vocab)
+    {
+        auto tokens = tokenizer(text);
+
+        for (auto token : tokens)
+        {
+            if (vocab_map.find(token) != vocab_map.end())
+                vocab_map[token] += 1.0f;
+            else
+                vocab_map.insert(std::pair<T, float>(token, 1.0f));
+        }
+    }
+
+    std::vector<std::pair<T, float>> vocab_vec(vocab_map.begin(), vocab_map.end());
+
+    std::sort(vocab_vec.begin(), vocab_vec.end(), [](const std::pair<T, float> &a, const std::pair<T, float> &b) {
+        if (a.second != b.second)
+            return a.second > b.second;
+        else
+            return a.first > b.first;
+    });
+
+    // for (auto i : vocab_vec)
+    //     std::wcout << i.first << " " << i.second << std::endl;
+
+    size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
+
+    for (auto i = 0; i < in.size(); ++i)
+    {
+        auto words = tokenizer(in[i]);
+        if (max_num_tokens < words.size())
+            max_num_tokens = words.size();
+    }
+
+    ten t_new = zeros({in.size(), max_num_tokens});
+
+    size_t idx = 0;
+    for (auto i = 0; i < in.size(); ++i)
+    {
+        auto words = tokenizer(in[i]);
+
+        if (i != 0)
+            idx = i * max_num_tokens;
+
+        for (auto word : words)
+        {
+            bool found = false;
+
+            for (auto k = 0; k < vocab_vec.size(); ++k)
+            {
+                if (word == vocab_vec[k].first)
+                {
+                    t_new[idx] = k + 2.0f;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                t_new[idx] = 1.0f;
+
+            ++idx;
+        }
+    }
+
+    return t_new;
+}
