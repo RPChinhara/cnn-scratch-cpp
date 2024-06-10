@@ -43,7 +43,7 @@ en_es load_en_es()
 
 imdb load_imdb()
 {
-    std::ifstream file("datas/IMDB Dataset.csv");
+    std::ifstream file("datas/imdb_test.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
@@ -93,9 +93,12 @@ imdb load_imdb()
         reviews[i].erase(end_pos, reviews[i].end());
     }
 
-    // std::cout << "running text_vectorization..." << std::endl;
-    // auto vec_x = text_vectorization(reviews, reviews);
-    // std::cout << vec_x << std::endl;
+    for (auto i : reviews)
+        std::cout << i << std::endl << std::endl;
+
+    std::cout << "running text_vectorization..." << std::endl;
+    auto vec_x = text_vectorization(reviews, reviews);
+    std::cout << vec_x << std::endl;
 
     // imdb data;
     // data.x = reviews;
