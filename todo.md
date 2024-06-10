@@ -1,5 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
+    - text_vectorization() should not pad 0 as it is now. I haven't done truncation so that is fine?
     - move train_test_split() to utils.h and change the name to split_dataset()?
     - Start working on text_vectorization() on imdb_test.csv.
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
