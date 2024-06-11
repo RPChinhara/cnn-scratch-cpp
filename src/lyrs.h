@@ -1,6 +1,7 @@
 #pragma once
 
 #include "act.h"
+#include "arrs.h"
 #include "preproc.h"
 #include "ten.h"
 
@@ -124,9 +125,6 @@ template <typename T> ten text_vectorization(const std::vector<T> &vocab, const 
         else
             return a.first > b.first;
     });
-
-    // for (auto i : vocab_vec)
-    //     std::wcout << i.first << " " << i.second << std::endl;
 
     size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
 
