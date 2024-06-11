@@ -93,12 +93,8 @@ imdb load_imdb()
         reviews[i].erase(end_pos, reviews[i].end());
     }
 
-    for (auto i : reviews)
-        std::cout << i << std::endl << std::endl;
-
     std::cout << "running text_vectorization..." << std::endl;
     auto vec_x = text_vectorization(reviews, reviews);
-    std::cout << vec_x << std::endl;
 
     // imdb data;
     // data.x = reviews;
