@@ -2,8 +2,6 @@
   - load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
     - make templates for funcs in preproc.h?
     - Start working on text_vectorization() on imdb_test.csv.
-      - increase perf of text_vectorization()
-        - I think calling tokenizer twice is the issue.
       - instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
         - add args in text_vectorization() like output_sequence_length, max_token, ragged...
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
