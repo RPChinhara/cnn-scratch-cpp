@@ -100,7 +100,8 @@ class rnn
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
 
-template <typename T> ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in)
+template <typename T>
+ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, const size_t max_len)
 {
     std::unordered_map<T, float> vocab_map;
 
@@ -126,6 +127,8 @@ template <typename T> ten text_vectorization(const std::vector<T> &vocab, const 
             return a.first > b.first;
     });
 
+    // std::cout << "vocab_vec.size(): " << vocab_vec.size() << std::endl;
+
     size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
 
     for (auto i = 0; i < in.size(); ++i)
@@ -135,15 +138,18 @@ template <typename T> ten text_vectorization(const std::vector<T> &vocab, const 
             max_num_tokens = words.size();
     }
 
-    ten t_new = zeros({in.size(), max_num_tokens});
+    ten t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
+    const float padding_token = 1.0f;
+    const float oov_token = 1.0f;
+
     for (auto i = 0; i < in.size(); ++i)
     {
         auto words = tokenizer(in[i]);
 
         if (i != 0)
-            idx = i * max_num_tokens;
+            idx = i * max_len;
 
         for (auto word : words)
         {
@@ -153,14 +159,14 @@ template <typename T> ten text_vectorization(const std::vector<T> &vocab, const 
             {
                 if (word == vocab_vec[k].first)
                 {
-                    t_new[idx] = k + 2.0f;
+                    t_new[idx] = k + padding_token + oov_token;
                     found = true;
                     break;
                 }
             }
 
             if (!found)
-                t_new[idx] = 1.0f;
+                t_new[idx] = oov_token;
 
             ++idx;
         }
