@@ -6,6 +6,8 @@
 
 int main()
 {
+    const size_t depth = 3;
+
     const flaot test_size1 = 0.2f;
     const flaot test_size2 = 0.5f;
     const size_t rd_state = 42;
@@ -20,7 +22,7 @@ int main()
     ten x = data.x;
     ten y = data.y;
 
-    y = one_hot(y, 3);
+    y = one_hot(y, depth);
 
     train_test train_temp = split_dataset(x, y, test_size1, rd_state);
     train_test val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
