@@ -4,8 +4,9 @@
     - Start working on text_vectorization() on imdb_test.csv.
       - instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
         - add args in text_vectorization() like output_sequence_length, max_token, ragged...
+        - Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does? Because my vocab size is 121540 and example code has only set to 10000
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
-    - Maybe add num_words like arg to this function as well like tf.keras.datasets.imdb.load_data() does?
+  - I have to get good performance or prediction on imdb with a model made by tf first.
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
     - Implement forward propagation for many-to-one and many-to-many, as these are more common. One-to-one and one-to-many are less common. One-to-one might just be a regular neural network when you think about it...
     - Implement backpropagation for all the cases mentioned above.
