@@ -1,10 +1,10 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  - load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
-    - make templates for funcs in preproc.h?
+  - Load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
+    - Make templates for funcs in preproc.h?
     - Start working on text_vectorization() on imdb_test.csv.
-      - instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
-        - add args in text_vectorization() like output_sequence_length, max_token, ragged...
-        - Maybe add num_words as an arg to this function as well like tf.keras.datasets.imdb.load_data() does? Because my vocab size is 121540 and example code has only set to 10000
+      - Instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
+        - Add args in text_vectorization() like max_token, ragged...
+          - Creatre num_words as an arg for load_imdb() and pass that to text_vectorization as max_token?
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
   - I have to get good performance or prediction on imdb with a model made by tf first.
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
