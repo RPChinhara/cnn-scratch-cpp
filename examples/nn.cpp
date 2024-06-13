@@ -6,20 +6,31 @@
 
 int main()
 {
+    const flaot test_size1 = 0.2f;
+    const flaot test_size2 = 0.5f;
+    const size_t rd_state = 42;
+
+    const size_t num_in_neurons = 4;
+    const size_t num_hidden1_neurons = 64;
+    const size_t num_hidden2_neurons = 64;
+    const size_t num_out_neurons = 3;
+    const float lr = 0.01f;
+
     iris data = load_iris();
     ten x = data.x;
     ten y = data.y;
 
     y = one_hot(y, 3);
 
-    train_test train_temp = split_dataset(x, y, 0.2, 42);
-    train_test val_test = split_dataset(train_temp.x_test, train_temp.y_test, 0.5, 42);
+    train_test train_temp = split_dataset(x, y, test_size1, rd_state);
+    train_test val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
 
     train_temp.x_train = min_max_scaler(train_temp.x_train);
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn classifier = nn({4, 64, 64, 3}, {RELU, RELU, SOFTMAX}, 0.01f);
+    nn classifier =
+        nn({num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons}, {RELU, RELU, SOFTMAX}, lr);
 
     auto start = std::chrono::high_resolution_clock::now();
 
