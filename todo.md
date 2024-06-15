@@ -17,5 +17,5 @@
 4. Implement other famous modles like BERT, ConvLSTM.
 5. Implement interesting algorithms from papers.
 6. Come up with your own algorithms and models learned from papers.
-7. Solve and create new Mathematics and Physics problem theories using autoregressive transformer auto-generative type models.
+7. Use the best models, possibly autoregressive transformer models, to solve existing problems and discover new theories in mathematics and physics.
 8. Create new things/devices from 6 and 7.
