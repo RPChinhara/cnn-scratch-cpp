@@ -8,7 +8,10 @@ int main()
     std::vector<std::string> vocab = {"foo bar", "bar baz", "baz bada boom"};
     std::vector<std::string> x = {"foo qux bar", "qux baz"};
 
-    auto vec_y = text_vectorization(vocab, x, 7);
+    const size_t max_tokens = 35;
+    const size_t max_len = 7;
+
+    auto vec_y = text_vectorization(vocab, x, max_tokens, max_len);
 
     std::cout << vec_y << std::endl;
 
