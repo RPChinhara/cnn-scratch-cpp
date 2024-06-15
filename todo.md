@@ -1,6 +1,5 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
-    - Make templates for funcs in preproc.h?
     - Start working on text_vectorization() on imdb_test.csv.
       - Instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
         - Add args in text_vectorization() like max_token, ragged...
