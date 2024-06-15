@@ -101,7 +101,7 @@ class rnn
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
 
 template <typename T>
-ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, const size_t max_len)
+ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, size_t max_tokens, const size_t max_len)
 {
     std::unordered_map<T, float> vocab_map;
 
@@ -127,7 +127,13 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, co
             return a.first > b.first;
     });
 
-    // std::cout << "vocab_vec.size(): " << vocab_vec.size() << std::endl;
+    vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
+    vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
+
+    std::cout << "vocab size: " << vocab_vec.size() << std::endl;
+
+    for (auto i = 0; i < vocab_vec.size(); ++i)
+        std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
 
     size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
 
@@ -141,8 +147,12 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, co
     ten t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
-    const float padding_token = 1.0f;
-    const float oov_token = 1.0f;
+    const float oov_token = vocab_vec[1].second;
+
+    if (max_tokens > vocab_vec.size())
+        max_tokens = vocab_vec.size();
+
+    std::cout << "max_tokens: " << max_tokens << std::endl;
 
     for (auto i = 0; i < in.size(); ++i)
     {
@@ -155,11 +165,11 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, co
         {
             bool found = false;
 
-            for (auto k = 0; k < vocab_vec.size(); ++k)
+            for (auto k = 0; k < max_tokens; ++k)
             {
                 if (word == vocab_vec[k].first)
                 {
-                    t_new[idx] = k + padding_token + oov_token;
+                    t_new[idx] = k;
                     found = true;
                     break;
                 }
