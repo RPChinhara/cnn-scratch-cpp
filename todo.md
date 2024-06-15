@@ -18,4 +18,4 @@
 5. Implement interesting algorithms from papers.
 6. Come up with your own algorithms and models learned from papers.
 7. Use the best models, possibly autoregressive transformer models, to solve existing problems and discover new theories in mathematics and physics.
-8. Create new things/devices from 6 and 7.
+8. Create new things, possibly scientific devices, from 7.
