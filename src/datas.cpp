@@ -94,8 +94,11 @@ imdb load_imdb()
     }
 
     std::cout << "running text_vectorization..." << std::endl;
+
+    const size_t max_tokens = 10000;
     const size_t max_len = 200;
-    // auto vec_x = text_vectorization(reviews, reviews, max_len);
+
+    auto vec_x = text_vectorization(reviews, reviews, max_tokens, max_len);
     // std::cout << vec_x.shape.front() << " " << vec_x.shape.back() << std::endl;
 
     // imdb data;
