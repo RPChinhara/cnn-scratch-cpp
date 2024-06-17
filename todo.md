@@ -2,7 +2,6 @@
   - Load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
     - Start working on text_vectorization() on imdb_test.csv.
       - Instead of using pad_sequences() control padding and truncation with args in text_vectorization() I think this is the modern way
-        > Creatre num_words as an arg for load_imdb() and pass that to text_vectorization as max_token?
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
   - I have to get good performance or prediction on imdb with a model made by tf first.
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
