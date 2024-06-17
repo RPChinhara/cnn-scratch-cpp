@@ -1,6 +1,5 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
-    - Start working on text_vectorization() on imdb_test.csv.
     - In tf.keras.datasets.imdb.load_data() document it says "Words are ranked by how often they occur (in the training set)" so maybe create vocab only using training set?
   - I have to get good performance or prediction on imdb with a model made by tf first.
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
