@@ -1,5 +1,4 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  > Check load_imdb() is properly working.
   - ten x = zeros({150, 4}); should be data.x = zeros({150, 4}); in load_iris() I guess.
   - Try the preprocess inside while loop when reading the imdb file to improve perf.
   - I have to get good performance or prediction on imdb with a model made by tf first.
