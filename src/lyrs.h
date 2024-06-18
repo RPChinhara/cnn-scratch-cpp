@@ -133,14 +133,6 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, si
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
 
-    std::cout << "Vocab size: " << vocab_vec.size() << std::endl;
-
-    // for (auto i = 0; i < 30; ++i)
-    //     std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
-
-    for (auto i = 0; i < vocab_vec.size(); ++i)
-        std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
-
     ten t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
