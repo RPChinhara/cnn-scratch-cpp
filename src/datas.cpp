@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
+#include <vector>
 
 en_es load_en_es()
 {
@@ -43,7 +44,7 @@ en_es load_en_es()
 
 imdb load_imdb()
 {
-    std::ifstream file("datas/imdb_test.csv");
+    std::ifstream file("datas/IMDB Dataset.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
@@ -93,17 +94,23 @@ imdb load_imdb()
         reviews[i].erase(end_pos, reviews[i].end());
     }
 
-    std::cout << "running text_vectorization..." << std::endl;
+    size_t num_train = std::min(reviews.size(), static_cast<size_t>(25000));
+    size_t num_test = std::min(reviews.size(), static_cast<size_t>(50000));
 
+    std::vector<std::string> train(reviews.begin(), reviews.begin() + num_train);
+    std::vector<std::string> test;
+
+    if (reviews.size() > num_train)
+    {
+        test.assign(reviews.begin() + num_train, reviews.begin() + num_test);
+    }
     const size_t max_tokens = 10000;
     const size_t max_len = 200;
 
-    auto vec_x = text_vectorization(reviews, reviews, max_tokens, max_len);
-    // std::cout << vec_x.shape.front() << " " << vec_x.shape.back() << std::endl;
+    std::cout << train.back() << std::endl;
+    std::cout << test.front() << std::endl;
 
-    // imdb data;
-    // data.x = reviews;
-    // data.y = sentiments;
+    auto vec_x = text_vectorization(train, test, max_tokens, max_len);
 
     return imdb();
 }
