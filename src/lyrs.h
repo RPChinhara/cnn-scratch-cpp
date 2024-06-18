@@ -130,20 +130,6 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, si
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
 
-    std::cout << "vocab size: " << vocab_vec.size() << std::endl;
-
-    for (auto i = 0; i < vocab_vec.size(); ++i)
-        std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
-
-    size_t max_num_tokens = std::numeric_limits<size_t>::lowest();
-
-    for (auto i = 0; i < in.size(); ++i)
-    {
-        auto words = tokenizer(in[i]);
-        if (max_num_tokens < words.size())
-            max_num_tokens = words.size();
-    }
-
     ten t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
@@ -151,8 +137,6 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, si
 
     if (max_tokens > vocab_vec.size())
         max_tokens = vocab_vec.size();
-
-    std::cout << "max_tokens: " << max_tokens << std::endl;
 
     for (auto i = 0; i < in.size(); ++i)
     {
