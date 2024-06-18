@@ -100,8 +100,6 @@ imdb load_imdb()
     const size_t max_tokens = 10000;
     const size_t max_len = 200;
 
-    std::cout << train.back() << std::endl;
-
     imdb data;
     data.x = text_vectorization(train, reviews, max_tokens, max_len);
     data.y = zeros({sentiments.size(), 1});
