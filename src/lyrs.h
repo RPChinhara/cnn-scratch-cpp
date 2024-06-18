@@ -5,6 +5,7 @@
 #include "preproc.h"
 #include "ten.h"
 
+#include <cassert>
 #include <random>
 #include <unordered_map>
 #include <vector>
@@ -103,6 +104,8 @@ ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
 template <typename T>
 ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, size_t max_tokens, const size_t max_len)
 {
+    assert(max_tokens > 2);
+
     std::unordered_map<T, float> vocab_map;
 
     for (auto text : vocab)
@@ -129,6 +132,14 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, si
 
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
+
+    std::cout << "Vocab size: " << vocab_vec.size() << std::endl;
+
+    // for (auto i = 0; i < 30; ++i)
+    //     std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
+
+    for (auto i = 0; i < vocab_vec.size(); ++i)
+        std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
 
     ten t_new = zeros({in.size(), max_len});
 
