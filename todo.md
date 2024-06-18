@@ -1,8 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  - Load_imdb() has to return a vectorized tensor like tf.keras.datasets.imdb.load_data().
-    - ten x = zeros({150, 4}); should be data.x = zeros({150, 4}); in load_iris() I guess.
-    - Try the preprocess inside while loop when reading the imdb file to improve perf.
-    - What is 3: <UNUSED> in tensorflow.keras.datasets.imdb()?
+  > Check load_imdb() is properly working.
+  - ten x = zeros({150, 4}); should be data.x = zeros({150, 4}); in load_iris() I guess.
+  - Try the preprocess inside while loop when reading the imdb file to improve perf.
+  - What is 3: <UNUSED> in tensorflow.keras.datasets.imdb()?
   - I have to get good performance or prediction on imdb with a model made by tf first.
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
     - Implement forward propagation for many-to-one and many-to-many, as these are more common. One-to-one and one-to-many are less common. One-to-one might just be a regular neural network when you think about it...
