@@ -95,24 +95,21 @@ imdb load_imdb()
     }
 
     size_t num_train = std::min(reviews.size(), static_cast<size_t>(25000));
-    size_t num_test = std::min(reviews.size(), static_cast<size_t>(50000));
-
     std::vector<std::string> train(reviews.begin(), reviews.begin() + num_train);
-    std::vector<std::string> test;
 
-    if (reviews.size() > num_train)
-    {
-        test.assign(reviews.begin() + num_train, reviews.begin() + num_test);
-    }
     const size_t max_tokens = 10000;
     const size_t max_len = 200;
 
     std::cout << train.back() << std::endl;
-    std::cout << test.front() << std::endl;
 
-    auto vec_x = text_vectorization(train, test, max_tokens, max_len);
+    imdb data;
+    data.x = text_vectorization(train, reviews, max_tokens, max_len);
+    data.y = zeros({sentiments.size(), 1});
 
-    return imdb();
+    for (auto i = 0; i < sentiments.size(); ++i)
+        data.y[i] = sentiments[i];
+
+    return data;
 }
 
 iris load_iris()
