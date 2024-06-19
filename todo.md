@@ -14,6 +14,6 @@
 3. Work on other tutorials on TensorFlow sites, e.g., Neural machine translation with a Transformer and Keras.
 4. Implement other famous modles like BERT, ConvLSTM.
 5. Implement interesting algorithms from papers.
-6. Come up with your own algorithms and models learned from papers.
+6. Come up with your own architectures, algorithms, and models learned from papers.
 7. Use the best models, possibly autoregressive transformer models, to solve existing problems and discover new theories in mathematics and physics.
 8. Create new things, possibly scientific devices, from 7.
