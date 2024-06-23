@@ -49,6 +49,8 @@ imdb load_imdb()
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
 
+    std::cout << "Loading imdb dataset..." << std::endl;
+
     std::vector<std::string> reviews;
     std::vector<float> sentiments;
 
