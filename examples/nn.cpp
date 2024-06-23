@@ -8,8 +8,8 @@ int main()
 {
     const size_t depth = 3;
 
-    const flaot test_size1 = 0.2f;
-    const flaot test_size2 = 0.5f;
+    const float test_size1 = 0.2f;
+    const float test_size2 = 0.5f;
     const size_t rd_state = 42;
 
     const size_t num_in_neurons = 4;
