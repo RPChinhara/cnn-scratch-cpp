@@ -90,6 +90,7 @@ imdb load_imdb()
         reviews[i] = regex_replace(reviews[i], "[^\\x00-\\x7f]", " ");
         reviews[i] = regex_replace(reviews[i], "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
         reviews[i] = regex_replace(reviews[i], "\\s+", " ");
+        reviews[i] = reviews[i].insert(0, "[START] ");
 
         auto end_pos =
             std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
