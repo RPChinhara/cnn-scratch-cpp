@@ -1,5 +1,5 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  > I have to get good performance or prediction on imdb with a model made by tf first.
+  > Write code using simpleRNN with stock price dataset
   - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
     - Implement forward propagation for many-to-one and many-to-many, as these are more common. One-to-one and one-to-many are less common. One-to-one might just be a regular neural network when you think about it...
     - Implement backpropagation for all the cases mentioned above.
