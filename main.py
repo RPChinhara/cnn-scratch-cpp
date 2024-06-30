@@ -81,18 +81,16 @@ import matplotlib.pyplot as plt
 # Load and preprocess the dataset
 df = pd.read_csv('datas\AAPL.csv')  # Replace 'your_dataset.csv' with your actual dataset filename
 
-print(df)
 # Use 'Close' prices for simplicity, you can choose other features as needed
 data = df['Close'].values.reshape(-1, 1)
 
-print(data[0])
-print(data[1])
-print(data[2])
 print(data)
 
 # # Normalize the dataset
-# scaler = MinMaxScaler(feature_range=(0, 1))
-# scaled_data = scaler.fit_transform(data)
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaled_data = scaler.fit_transform(data)
+
+print(scaled_data)
 
 # # Split data into training and testing sets
 # train_size = int(len(scaled_data) * 0.8)

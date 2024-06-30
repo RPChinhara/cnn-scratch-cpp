@@ -46,9 +46,9 @@ std::wstring lower(const std::wstring &text)
 
 ten min_max_scaler(ten &data)
 {
-    auto min_vals = min(data);
-    auto max_vals = max(data, 0);
-    return (data - min_vals) / (max_vals - min_vals);
+    auto data_min = min(data);
+    auto data_max = max(data, 0);
+    return (data - data_min) / (data_max - data_min);
 }
 
 ten one_hot(const ten &t, const size_t depth)
