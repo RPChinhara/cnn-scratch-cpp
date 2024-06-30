@@ -24,8 +24,8 @@ int main()
 
     y = one_hot(y, depth);
 
-    train_test train_temp = split_dataset(x, y, test_size1, rd_state);
-    train_test val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
+    auto train_temp = split_dataset(x, y, test_size1, rd_state);
+    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
 
     train_temp.x_train = min_max_scaler(train_temp.x_train);
     val_test.x_train = min_max_scaler(val_test.x_train);
