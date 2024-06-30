@@ -18,8 +18,9 @@ ten load_aapl()
 
     size_t idx = 0;
     size_t num_datas = 10409;
+    size_t num_columns = 1;
 
-    ten data = zeros({num_datas, 1});
+    ten data = zeros({num_datas, num_columns});
 
     std::string line;
     std::getline(file, line);
