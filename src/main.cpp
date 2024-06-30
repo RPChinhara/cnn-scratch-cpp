@@ -1,7 +1,6 @@
 #include "arrs.h"
 #include "datas.h"
 #include "preproc.h"
-#include "ten.h"
 
 int main()
 {

@@ -93,18 +93,6 @@ scaled_data = scaler.fit_transform(data)
 train_size = int(len(scaled_data) * 0.8)
 train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
 
-print(train_data.shape)
-print(test_data.shape)
-
-print(train_data)
-print(test_data)
-
-x = tf.Variable(tf.random.uniform([150, 1], -1, 1))
-print(x)
-# Split `x` into 3 tensors along dimension 1
-s0, s1 = tf.split(x, num_or_size_splits=2, axis=0)
-print(s0)
-
 # Function to create sequences for RNN
 def create_sequences(data, seq_length):
     xs, ys = [], []
