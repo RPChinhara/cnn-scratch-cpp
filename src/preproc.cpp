@@ -123,20 +123,6 @@ std::vector<std::wstring> tokenizer(const std::wstring &text)
     return tokens;
 }
 
-std::pair<ten, ten> split_dataset(const ten &x, const float test_size)
-{
-    ten x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    ten x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-
-    for (auto i = 0; i < x_train.size; ++i)
-        x_train[i] = x[i];
-
-    for (auto i = x_train.size; i < x.size; ++i)
-        x_test[i - x_train.size] = x[i];
-
-    return std::make_pair(x_train, x_test);
-}
-
 train_test split_dataset(const ten &x, const ten &y, const float test_size, const size_t rd_state)
 {
     ten x_shuffled = shuffle(x, rd_state);

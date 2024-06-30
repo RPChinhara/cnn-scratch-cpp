@@ -23,5 +23,4 @@ std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, 
 std::wstring strip(const std::wstring &text);
 std::vector<std::string> tokenizer(const std::string &text);
 std::vector<std::wstring> tokenizer(const std::wstring &text);
-std::pair<ten, ten> split_dataset(const ten &x, const float test_size);
 train_test split_dataset(const ten &x, const ten &y, const float test_size, const size_t rd_state);

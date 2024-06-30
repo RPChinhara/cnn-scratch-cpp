@@ -1,3 +1,4 @@
+#include "arrs.h"
 #include "datas.h"
 #include "preproc.h"
 #include "ten.h"
@@ -8,10 +9,10 @@ int main()
 
     ten data = load_aapl();
     ten scaled_data = min_max_scaler(data);
-    auto train_test = split_dataset(scaled_data, test_size);
+    auto train_test = split(scaled_data, test_size);
 
-    // std::cout << train_test.first << std::endl;
-    std::cout << train_test.second << std::endl;
+    std::cout << train_test.first << std::endl;
+    // std::cout << train_test.second << std::endl;
 
     return 0;
 }

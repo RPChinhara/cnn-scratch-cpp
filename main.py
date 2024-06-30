@@ -76,6 +76,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import SimpleRNN, Dense
+import tensorflow as tf
 import matplotlib.pyplot as plt
 
 # Load and preprocess the dataset
@@ -98,22 +99,28 @@ print(test_data.shape)
 print(train_data)
 print(test_data)
 
-# # Function to create sequences for RNN
-# def create_sequences(data, seq_length):
-#     xs, ys = [], []
-#     for i in range(len(data) - seq_length - 1):
-#         x = data[i:(i + seq_length)]
-#         y = data[i + seq_length]
-#         xs.append(x)
-#         ys.append(y)
-#     return np.array(xs), np.array(ys)
+x = tf.Variable(tf.random.uniform([150, 1], -1, 1))
+print(x)
+# Split `x` into 3 tensors along dimension 1
+s0, s1 = tf.split(x, num_or_size_splits=2, axis=0)
+print(s0)
 
-# # Set sequence length
-# seq_length = 10
+# Function to create sequences for RNN
+def create_sequences(data, seq_length):
+    xs, ys = [], []
+    for i in range(len(data) - seq_length - 1):
+        x = data[i:(i + seq_length)]
+        y = data[i + seq_length]
+        xs.append(x)
+        ys.append(y)
+    return np.array(xs), np.array(ys)
 
-# # Create sequences for training and testing
-# X_train, y_train = create_sequences(train_data, seq_length)
-# X_test, y_test = create_sequences(test_data, seq_length)
+# Set sequence length
+seq_length = 10
+
+# Create sequences for training and testing
+X_train, y_train = create_sequences(train_data, seq_length)
+X_test, y_test = create_sequences(test_data, seq_length)
 
 # # Reshape input to be [samples, time steps, features] expected by RNN
 # X_train = np.reshape(X_train, (X_train.shape[0], seq_length, 1))
