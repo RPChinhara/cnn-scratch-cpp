@@ -84,17 +84,19 @@ df = pd.read_csv('datas\AAPL.csv')  # Replace 'your_dataset.csv' with your actua
 # Use 'Close' prices for simplicity, you can choose other features as needed
 data = df['Close'].values.reshape(-1, 1)
 
-print(data)
-
 # # Normalize the dataset
 scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_data = scaler.fit_transform(data)
 
-print(scaled_data)
+# Split data into training and testing sets
+train_size = int(len(scaled_data) * 0.8)
+train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
 
-# # Split data into training and testing sets
-# train_size = int(len(scaled_data) * 0.8)
-# train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
+print(train_data.shape)
+print(test_data.shape)
+
+print(train_data)
+print(test_data)
 
 # # Function to create sequences for RNN
 # def create_sequences(data, seq_length):
