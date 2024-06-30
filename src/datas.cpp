@@ -9,6 +9,41 @@
 #include <stdio.h>
 #include <vector>
 
+ten load_aapl()
+{
+    std::ifstream file("datas/aapl.csv");
+
+    if (!file.is_open())
+        std::cerr << "Failed to open the file." << std::endl;
+
+    size_t idx = 0;
+    size_t num_datas = 10409;
+
+    ten data = zeros({num_datas, 1});
+
+    std::string line;
+    std::getline(file, line);
+
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+        std::string value;
+
+        std::getline(ss, value, ',');
+        std::getline(ss, value, ',');
+        std::getline(ss, value, ',');
+        std::getline(ss, value, ',');
+        std::getline(ss, value, ',');
+
+        data[idx] = std::stof(value);
+        ++idx;
+    }
+
+    file.close();
+
+    return data;
+}
+
 en_es load_en_es()
 {
     std::locale::global(std::locale("es_ES.UTF-8"));

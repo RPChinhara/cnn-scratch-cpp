@@ -86,6 +86,8 @@ print(df)
 data = df['Close'].values.reshape(-1, 1)
 
 print(data[0])
+print(data[1])
+print(data[2])
 print(data)
 
 # # Normalize the dataset

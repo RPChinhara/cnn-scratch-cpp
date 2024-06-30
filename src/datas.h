@@ -31,6 +31,7 @@ struct mnist
     ten testLabels;
 };
 
+ten load_aapl();
 en_es load_en_es();
 imdb load_imdb();
 iris load_iris();
