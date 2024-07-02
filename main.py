@@ -110,20 +110,6 @@ seq_length = 10
 X_train, y_train = create_sequences(train_data, seq_length)
 X_test, y_test = create_sequences(test_data, seq_length)
 
-print(X_train[0])
-print(X_train[1])
-print(X_train[2])
-print(y_train[0])
-print(y_train[1])
-print(y_train[2])
-
-print(train_data.shape)
-print(X_train.shape)
-print(y_train.shape)
-
-print(X_test.shape)
-print(y_test.shape)
-
 # Reshape input to be [samples, time steps, features] expected by RNN
 X_train = np.reshape(X_train, (X_train.shape[0], seq_length, 1))
 X_test = np.reshape(X_test, (X_test.shape[0], seq_length, 1))
