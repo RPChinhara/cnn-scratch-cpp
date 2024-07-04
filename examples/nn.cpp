@@ -17,6 +17,8 @@ int main()
     const size_t num_hidden2_neurons = 64;
     const size_t num_out_neurons = 3;
     const float lr = 0.01f;
+    const std::vector<size_t> lyrs = {num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons};
+    const std::vector<act_type> act_types = {RELU, RELU, SOFTMAX};
 
     iris data = load_iris();
     ten x = data.x;
@@ -31,8 +33,7 @@ int main()
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn model =
-        nn({num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons}, {RELU, RELU, SOFTMAX}, lr);
+    nn model = nn(lyrs, act_types, lr);
 
     auto start = std::chrono::high_resolution_clock::now();
 
