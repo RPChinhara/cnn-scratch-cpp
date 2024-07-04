@@ -266,10 +266,6 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<ten> rnn::forward(const ten &x)
-{
-}
-
 rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr)
 {
     this->hidden_size = hidden_size;
@@ -283,6 +279,10 @@ rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_len
 
     // b = zeros({hidden_size, 1});
     // c = zeros({hidden_size, 1});
+}
+
+std::vector<ten> rnn::forward(const ten &x)
+{
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
