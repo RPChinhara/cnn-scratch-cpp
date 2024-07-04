@@ -59,6 +59,8 @@ std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel
     return weights;
 }
 
+// -----------------------------------------------------------------------------
+
 gru::gru(const size_t units)
 {
 }
@@ -89,6 +91,8 @@ std::vector<ten> gru::forward(const ten &x)
     auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
     h = (1 - z) * h + z * h_tilde;
 }
+
+// -----------------------------------------------------------------------------
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr)
 {
@@ -266,6 +270,8 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     return a;
 }
 
+// -----------------------------------------------------------------------------
+
 rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr)
 {
     this->hidden_size = hidden_size;
@@ -284,6 +290,8 @@ rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_len
 std::vector<ten> rnn::forward(const ten &x)
 {
 }
+
+// -----------------------------------------------------------------------------
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
 {
