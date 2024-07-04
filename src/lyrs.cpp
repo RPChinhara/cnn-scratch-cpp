@@ -59,6 +59,10 @@ std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel
     return weights;
 }
 
+gru::gru(const size_t units)
+{
+}
+
 std::vector<ten> gru::forward(const ten &x)
 {
     init_params();
@@ -84,10 +88,6 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
     b_h = zeros({1, num_hiddens});
 
     h = zeros({batch_size, num_hiddens});
-}
-
-gru::gru(const size_t units)
-{
 }
 
 std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
