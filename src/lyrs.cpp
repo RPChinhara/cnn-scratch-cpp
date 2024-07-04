@@ -13,13 +13,6 @@
 #include <cassert>
 #include <chrono>
 
-std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)
-{
-    std::vector<ten> weights;
-
-    return weights;
-}
-
 cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr)
 {
     this->filters = filters;
@@ -57,6 +50,13 @@ void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     // }
 
     // std::cout << output << std::endl;
+}
+
+std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)
+{
+    std::vector<ten> weights;
+
+    return weights;
 }
 
 std::vector<ten> gru::forward(const ten &x)
