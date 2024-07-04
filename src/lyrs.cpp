@@ -19,10 +19,6 @@ cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr)
     this->lr = lr;
 }
 
-void cnn2d::pred(const ten &xTest, const ten &yTest)
-{
-}
-
 void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal)
 {
     // ten kernel = zeros({3, 3});
@@ -50,6 +46,10 @@ void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     // }
 
     // std::cout << output << std::endl;
+}
+
+void cnn2d::pred(const ten &xTest, const ten &yTest)
+{
 }
 
 std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)

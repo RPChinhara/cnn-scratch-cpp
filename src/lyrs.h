@@ -22,8 +22,8 @@ class cnn2d
 
   public:
     cnn2d(const std::vector<size_t> &filters, float const lr);
-    void pred(const ten &xTest, const ten &yTest);
     void train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal);
+    void pred(const ten &xTest, const ten &yTest);
 };
 
 class gru
