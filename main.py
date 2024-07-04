@@ -110,38 +110,34 @@ seq_length = 10
 X_train, y_train = create_sequences(train_data, seq_length)
 X_test, y_test = create_sequences(test_data, seq_length)
 
-# Reshape input to be [samples, time steps, features] expected by RNN
-X_train = np.reshape(X_train, (X_train.shape[0], seq_length, 1))
-X_test = np.reshape(X_test, (X_test.shape[0], seq_length, 1))
+# Build the RNN model
+model = Sequential()
+model.add(SimpleRNN(units=50, activation='relu', input_shape=(seq_length, 1)))
+model.add(Dense(units=1))
 
-# # Build the RNN model
-# model = Sequential()
-# model.add(SimpleRNN(units=50, activation='relu', input_shape=(seq_length, 1)))
-# model.add(Dense(units=1))
+model.compile(optimizer='adam', loss='mean_squared_error')
 
-# model.compile(optimizer='adam', loss='mean_squared_error')
+# Train the model
+model.fit(X_train, y_train, epochs=10, batch_size=32)
 
-# # Train the model
-# model.fit(X_train, y_train, epochs=10, batch_size=32)
+# Evaluate the model
+train_loss = model.evaluate(X_train, y_train)
+test_loss = model.evaluate(X_test, y_test)
 
-# # Evaluate the model
-# train_loss = model.evaluate(X_train, y_train)
-# test_loss = model.evaluate(X_test, y_test)
+print(f"Train Loss: {train_loss}")
+print(f"Test Loss: {test_loss}")
 
-# print(f"Train Loss: {train_loss}")
-# print(f"Test Loss: {test_loss}")
+# Predictions
+predicted = model.predict(X_test)
+predicted_prices = scaler.inverse_transform(predicted)
 
-# # Predictions
-# predicted = model.predict(X_test)
-# predicted_prices = scaler.inverse_transform(predicted)
-
-# # Plotting
-# plt.figure(figsize=(14, 7))
-# plt.plot(df.index[-len(predicted_prices):], df['Close'].values[-len(predicted_prices):], label='Actual Prices')
-# plt.plot(df.index[-len(predicted_prices):], predicted_prices, label='Predicted Prices')
-# plt.title('Stock Price Prediction using Simple RNN')
-# plt.xlabel('Date')
-# plt.ylabel('Price')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
+# Plotting
+plt.figure(figsize=(14, 7))
+plt.plot(df.index[-len(predicted_prices):], df['Close'].values[-len(predicted_prices):], label='Actual Prices')
+plt.plot(df.index[-len(predicted_prices):], predicted_prices, label='Predicted Prices')
+plt.title('Stock Price Prediction using Simple RNN')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.legend()
+plt.grid(True)
+plt.show()
