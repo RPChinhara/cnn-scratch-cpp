@@ -100,18 +100,6 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, 
     w_b_mom = init_params();
 }
 
-void nn::pred(const ten &x_test, const ten &y_test)
-{
-    a = forward(x_test, w_b.first, w_b.second);
-
-    std::cout << '\n';
-    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
-              << " - test accuracy: " << std::to_string(categorical_acc(y_test, a.back()));
-    std::cout << "\n\n";
-
-    std::cout << a.back() << "\n\n" << y_test << '\n';
-}
-
 void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
 {
     for (auto i = 1; i <= epochs; ++i)
@@ -231,6 +219,32 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
     }
 }
 
+void nn::pred(const ten &x_test, const ten &y_test)
+{
+    a = forward(x_test, w_b.first, w_b.second);
+
+    std::cout << '\n';
+    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
+              << " - test accuracy: " << std::to_string(categorical_acc(y_test, a.back()));
+    std::cout << "\n\n";
+
+    std::cout << a.back() << "\n\n" << y_test << '\n';
+}
+
+std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
+{
+    std::vector<ten> w;
+    std::vector<ten> b;
+
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
+    {
+        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
+        b.push_back(zeros({1, lyrs[i + 1]}));
+    }
+
+    return std::make_pair(w, b);
+}
+
 std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
 {
     std::vector<ten> a;
@@ -250,20 +264,6 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     }
 
     return a;
-}
-
-std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
-{
-    std::vector<ten> w;
-    std::vector<ten> b;
-
-    for (auto i = 0; i < lyrs.size() - 1; ++i)
-    {
-        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
-        b.push_back(zeros({1, lyrs[i + 1]}));
-    }
-
-    return std::make_pair(w, b);
 }
 
 rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr)
