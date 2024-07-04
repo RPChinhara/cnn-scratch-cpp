@@ -31,19 +31,19 @@ int main()
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn classifier =
+    nn model =
         nn({num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons}, {RELU, RELU, SOFTMAX}, lr);
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    classifier.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
+    model.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
-    classifier.pred(val_test.x_test, val_test.y_test);
+    model.pred(val_test.x_test, val_test.y_test);
 
     return 0;
 }
