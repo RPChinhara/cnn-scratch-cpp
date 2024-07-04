@@ -90,41 +90,6 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params()
     h = zeros({batch_size, num_hiddens});
 }
 
-std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
-{
-    std::vector<ten> a;
-
-    for (auto i = 0; i < lyrs.size() - 1; ++i)
-    {
-        if (i == 0)
-        {
-            ten z = matmul(x, w[i], CPU) + b[i];
-            a.push_back(act(z, act_types[i], CPU));
-        }
-        else
-        {
-            ten z = matmul(a[i - 1], w[i], CPU) + b[i];
-            a.push_back(act(z, act_types[i], CPU));
-        }
-    }
-
-    return a;
-}
-
-std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
-{
-    std::vector<ten> w;
-    std::vector<ten> b;
-
-    for (auto i = 0; i < lyrs.size() - 1; ++i)
-    {
-        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
-        b.push_back(zeros({1, lyrs[i + 1]}));
-    }
-
-    return std::make_pair(w, b);
-}
-
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr)
 {
     this->lyrs = lyrs;
@@ -264,6 +229,41 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         //     break;
         // }
     }
+}
+
+std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
+{
+    std::vector<ten> a;
+
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
+    {
+        if (i == 0)
+        {
+            ten z = matmul(x, w[i], CPU) + b[i];
+            a.push_back(act(z, act_types[i], CPU));
+        }
+        else
+        {
+            ten z = matmul(a[i - 1], w[i], CPU) + b[i];
+            a.push_back(act(z, act_types[i], CPU));
+        }
+    }
+
+    return a;
+}
+
+std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
+{
+    std::vector<ten> w;
+    std::vector<ten> b;
+
+    for (auto i = 0; i < lyrs.size() - 1; ++i)
+    {
+        w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
+        b.push_back(zeros({1, lyrs[i + 1]}));
+    }
+
+    return std::make_pair(w, b);
 }
 
 std::vector<ten> rnn::forward(const ten &x)
