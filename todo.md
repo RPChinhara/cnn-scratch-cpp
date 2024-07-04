@@ -1,5 +1,4 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  - Implement Vanilla RNNs, which are the simplest form of RNNs. They have only a single hidden layer.
     > Init parameters u, v, w, and biases
     Implement forward propagation for many-to-one and many-to-many, as these are more common. One-to-one and one-to-many are less common. One-to-one might just be a regular neural network when you think about it...
     - Implement backpropagation for all the cases mentioned above.
