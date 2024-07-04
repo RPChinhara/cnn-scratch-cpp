@@ -272,13 +272,8 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
 
 // -----------------------------------------------------------------------------
 
-rnn::rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr)
+rnn::rnn(const size_t lr)
 {
-    this->hidden_size = hidden_size;
-    this->vocab_size = vocab_size;
-    this->seq_length = hidden_size;
-    this->lr = hidden_size;
-
     // U = uniform_dist({hidden_size, vocab_size}, -sqrt(1.0f / vocab_size), sqrt(1.0f / vocab_size));
     // V = uniform_dist({vocab_size, hidden_size}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
     // W = uniform_dist({hidden_size, hidden_size}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));

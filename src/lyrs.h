@@ -96,7 +96,7 @@ class rnn
     std::vector<ten> forward(const ten &x);
 
   public:
-    rnn(const size_t hidden_size, const size_t vocab_size, const size_t seq_length, const size_t lr);
+    rnn(const size_t lr);
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
