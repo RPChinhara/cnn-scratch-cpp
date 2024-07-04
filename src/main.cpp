@@ -1,5 +1,6 @@
 #include "arrs.h"
 #include "datas.h"
+#include "lyrs.h"
 #include "preproc.h"
 
 std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length)
@@ -26,6 +27,8 @@ int main()
 {
     const float test_size = 0.2f;
     const size_t seq_length = 10;
+    const size_t hidden_size = 0;
+    const size_t lr = 0.01;
 
     ten data = load_aapl();
     ten scaled_data = min_max_scaler(data);
@@ -33,6 +36,8 @@ int main()
 
     auto x_y_train = create_sequences(train_test.first, seq_length);
     auto x_y_test = create_sequences(train_test.second, seq_length);
+
+    rnn classifier = rnn(hidden_size, hidden_size, seq_length, lr);
 
     return 0;
 }
