@@ -47,8 +47,8 @@ class gru
 
     ten h;
 
-    std::vector<ten> forward(const ten &x);
     std::pair<std::vector<ten>, std::vector<ten>> init_params();
+    std::vector<ten> forward(const ten &x);
 
   public:
     gru(const size_t units);
