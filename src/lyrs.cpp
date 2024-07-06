@@ -257,6 +257,9 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     {
         if (i == 0)
         {
+            // x.T = (4, 10), w1 = (64, 4), w2 = (10(must), 64), w3 = (64, 3), output = (64, 3)
+            // x = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput = (10, 3)
+
             ten z = matmul(x, w[i], CPU) + b[i];
             a.push_back(act(z, act_types[i], CPU));
         }
@@ -274,12 +277,14 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
 
 rnn::rnn(const size_t lr)
 {
-    // U = uniform_dist({hidden_size, vocab_size}, -sqrt(1.0f / vocab_size), sqrt(1.0f / vocab_size));
-    // V = uniform_dist({vocab_size, hidden_size}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
-    // W = uniform_dist({hidden_size, hidden_size}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
+    size_t units = 50;
+    size_t seq_length = 10;
+    U = uniform_dist({1, units}, -sqrt(1.0f / vocab_size), sqrt(1.0f / vocab_size));
+    V = uniform_dist({units, units}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
+    W = uniform_dist({units, 1}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
 
-    // b = zeros({hidden_size, 1});
-    // c = zeros({hidden_size, 1});
+    b = zeros({hidden_size, 1});
+    c = zeros({1, 1});
 }
 
 std::vector<ten> rnn::forward(const ten &x)
