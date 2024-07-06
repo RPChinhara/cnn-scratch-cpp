@@ -49,7 +49,7 @@ en_es load_en_es()
 {
     std::locale::global(std::locale("es_ES.UTF-8"));
 
-    std::wifstream file("datas/spa.txt");
+    std::wifstream file("datas/en_es.txt");
 
     if (!file)
         std::cerr << "Failed to open the file." << std::endl;
@@ -80,7 +80,7 @@ en_es load_en_es()
 
 imdb load_imdb()
 {
-    std::ifstream file("datas/IMDB Dataset.csv");
+    std::ifstream file("datas/imdb.csv");
 
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
