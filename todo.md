@@ -1,5 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-    > Init parameters u, v, w, and biases
+    > Fix nn to use wx + b equation instead of current xw + b
+    - use snake case for names for datas like AAPL? 
+    - Init parameters u, v, w, and biases
     Implement forward propagation for many-to-one and many-to-many, as these are more common. One-to-one and one-to-many are less common. One-to-one might just be a regular neural network when you think about it...
     - Implement backpropagation for all the cases mentioned above.
   - Implement LSTM.
