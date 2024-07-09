@@ -49,7 +49,7 @@ en_es load_en_es()
 {
     std::locale::global(std::locale("es_ES.UTF-8"));
 
-    std::wifstream file("datas/en_es.txt");
+    std::wifstream file("datas/en-es.txt");
 
     if (!file)
         std::cerr << "Failed to open the file." << std::endl;
