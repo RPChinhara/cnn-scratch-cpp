@@ -71,73 +71,113 @@
 # plt.legend()
 # plt.show()
 
-import pandas as pd
+# import pandas as pd
+# import numpy as np
+# from sklearn.preprocessing import MinMaxScaler
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import SimpleRNN, Dense
+# import tensorflow as tf
+# import matplotlib.pyplot as plt
+
+# # Load and preprocess the dataset
+# df = pd.read_csv('datas\AAPL.csv')  # Replace 'your_dataset.csv' with your actual dataset filename
+
+# # Use 'Close' prices for simplicity, you can choose other features as needed
+# data = df['Close'].values.reshape(-1, 1)
+
+# # # Normalize the dataset
+# scaler = MinMaxScaler(feature_range=(0, 1))
+# scaled_data = scaler.fit_transform(data)
+
+# # Split data into training and testing sets
+# train_size = int(len(scaled_data) * 0.8)
+# train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
+
+# # Function to create sequences for RNN
+# def create_sequences(data, seq_length):
+#     xs, ys = [], []
+#     for i in range(len(data) - seq_length - 1):
+#         x = data[i:(i + seq_length)]
+#         y = data[i + seq_length]
+#         xs.append(x)
+#         ys.append(y)
+#     return np.array(xs), np.array(ys)
+
+# # Set sequence length
+# seq_length = 10
+
+# # Create sequences for training and testing
+# X_train, y_train = create_sequences(train_data, seq_length)
+# X_test, y_test = create_sequences(test_data, seq_length)
+
+# # Build the RNN model
+# model = Sequential()
+# model.add(SimpleRNN(units=50, activation='relu', input_shape=(seq_length, 1)))
+# model.add(Dense(units=1))
+
+# model.compile(optimizer='adam', loss='mean_squared_error')
+
+# # Train the model
+# model.fit(X_train, y_train, epochs=10, batch_size=32)
+
+# # Evaluate the model
+# train_loss = model.evaluate(X_train, y_train)
+# test_loss = model.evaluate(X_test, y_test)
+
+# print(f"Train Loss: {train_loss}")
+# print(f"Test Loss: {test_loss}")
+
+# # Predictions
+# predicted = model.predict(X_test)
+# predicted_prices = scaler.inverse_transform(predicted)
+
+# # Plotting
+# plt.figure(figsize=(14, 7))
+# plt.plot(df.index[-len(predicted_prices):], df['Close'].values[-len(predicted_prices):], label='Actual Prices')
+# plt.plot(df.index[-len(predicted_prices):], predicted_prices, label='Predicted Prices')
+# plt.title('Stock Price Prediction using Simple RNN')
+# plt.xlabel('Date')
+# plt.ylabel('Price')
+# plt.legend()
+# plt.grid(True)
+# plt.show()
+
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import SimpleRNN, Dense
 import tensorflow as tf
-import matplotlib.pyplot as plt
 
-# Load and preprocess the dataset
-df = pd.read_csv('datas\AAPL.csv')  # Replace 'your_dataset.csv' with your actual dataset filename
+# Example input
+X = np.array([[1.0, 0.5, -1.5], [2.0, -0.5, 1.0], [0.0, 1.0, 1.5]])
 
-# Use 'Close' prices for simplicity, you can choose other features as needed
-data = df['Close'].values.reshape(-1, 1)
+# Traditional notation
+# Weights and biases for the hidden layer
+W1 = np.array([[0.2, 0.8, -0.5], 
+               [0.5, -0.91, 0.26], 
+               [-0.27, 0.17, 0.87], 
+               [-0.27, 0.17, 0.87], 
+               [0.1, 0.1, 0.1]])
+b1 = np.array([[2.0], [3.0], [0.5], [-1.0], [-1.0]])
 
-# # Normalize the dataset
-scaler = MinMaxScaler(feature_range=(0, 1))
-scaled_data = scaler.fit_transform(data)
+# Forward propagation
+Z1 = np.dot(W1, X.T) + b1
+A1 = np.maximum(0, Z1)  # ReLU activation
 
-# Split data into training and testing sets
-train_size = int(len(scaled_data) * 0.8)
-train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
+print(W1.shape)
+print(X.T.shape)
+print(A1.shape)
 
-# Function to create sequences for RNN
-def create_sequences(data, seq_length):
-    xs, ys = [], []
-    for i in range(len(data) - seq_length - 1):
-        x = data[i:(i + seq_length)]
-        y = data[i + seq_length]
-        xs.append(x)
-        ys.append(y)
-    return np.array(xs), np.array(ys)
+print("Traditional output of the hidden layer:\n", A1)
 
-# Set sequence length
-seq_length = 10
+# TensorFlow/Keras notation
+dense_layer = tf.keras.layers.Dense(units=4, activation='relu')
 
-# Create sequences for training and testing
-X_train, y_train = create_sequences(train_data, seq_length)
-X_test, y_test = create_sequences(test_data, seq_length)
+# Initialize weights and biases (for demonstration purposes)
+dense_layer.build(input_shape=(None, 3))
+dense_layer.set_weights([np.array([[0.2, 0.8, -0.5, 0.3],
+                                   [0.5, -0.91, 0.26, -0.27],
+                                   [-0.27, 0.17, 0.87, 0.1]]), 
+                         np.array([2.0, 3.0, 0.5, -1.0])])
 
-# Build the RNN model
-model = Sequential()
-model.add(SimpleRNN(units=50, activation='relu', input_shape=(seq_length, 1)))
-model.add(Dense(units=1))
+# Forward pass
+output = dense_layer(X)
 
-model.compile(optimizer='adam', loss='mean_squared_error')
-
-# Train the model
-model.fit(X_train, y_train, epochs=10, batch_size=32)
-
-# Evaluate the model
-train_loss = model.evaluate(X_train, y_train)
-test_loss = model.evaluate(X_test, y_test)
-
-print(f"Train Loss: {train_loss}")
-print(f"Test Loss: {test_loss}")
-
-# Predictions
-predicted = model.predict(X_test)
-predicted_prices = scaler.inverse_transform(predicted)
-
-# Plotting
-plt.figure(figsize=(14, 7))
-plt.plot(df.index[-len(predicted_prices):], df['Close'].values[-len(predicted_prices):], label='Actual Prices')
-plt.plot(df.index[-len(predicted_prices):], predicted_prices, label='Predicted Prices')
-plt.title('Stock Price Prediction using Simple RNN')
-plt.xlabel('Date')
-plt.ylabel('Price')
-plt.legend()
-plt.grid(True)
-plt.show()
+print("TensorFlow output of the Dense layer:\n", output.numpy())
