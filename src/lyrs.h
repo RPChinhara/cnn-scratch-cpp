@@ -82,9 +82,6 @@ class nn
 class rnn
 {
   private:
-    size_t hidden_size;
-    size_t vocab_size;
-    size_t seq_length;
     float lr;
 
     ten U;
