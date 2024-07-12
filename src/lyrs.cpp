@@ -281,9 +281,9 @@ rnn::rnn(const size_t lr)
     size_t hidden_size = 50;
     size_t out_size = 1;
 
-    ten w_ih = uniform_dist({in_size, hidden_size}, -sqrt(1.0f / vocab_size), sqrt(1.0f / vocab_size));
-    ten w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
-    ten w_ho = uniform_dist({hidden_size, out_size}, -sqrt(1.0f / hidden_size), sqrt(1.0f / hidden_size));
+    ten w_ih = uniform_dist({in_size, hidden_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
+    ten w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size), sqrt(6.0f / hidden_size + hidden_size));
+    ten w_ho = uniform_dist({hidden_size, out_size}, -sqrt(6.0f / hidden_size + out_size), sqrt(6.0f / hidden_size + out_size));
 
     ten b_h = zeros({hidden_size, 1});
     ten b_o = zeros({out_size, 1});
