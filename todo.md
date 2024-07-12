@@ -1,5 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
+    - Fix param inits, the order is wrong should be like hidden_size, input_size for w_ih for example. Read what chatGPT says.
     > Implement forward propagation.
     - Implement backpropagation.
   - Implement LSTM.
