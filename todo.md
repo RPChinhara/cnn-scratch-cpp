@@ -1,7 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  > Init parameters u, v, w, and biases.
-  - Implement forward propagation.
-  - Implement backpropagation.
+  - Implement SimpleRNN
+    > Init parameters u, v, w, and biases.
+    - Implement forward propagation.
+    - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
