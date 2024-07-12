@@ -1,6 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    > Init parameters u, v, w, and biases.
+      Init parameters u, v, w, and biases.
+      > Change min and max args for uniform_dist when initializing params
     - Implement forward propagation.
     - Implement backpropagation.
   - Implement LSTM.
