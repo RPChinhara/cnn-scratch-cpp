@@ -299,6 +299,8 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x)
 {
+    
+
     return std::vector<ten>();
 }
 
