@@ -59,8 +59,6 @@ std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel
     return weights;
 }
 
-// -----------------------------------------------------------------------------
-
 gru::gru(const size_t units)
 {
 }
@@ -91,8 +89,6 @@ std::vector<ten> gru::forward(const ten &x)
     auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
     h = (1 - z) * h + z * h_tilde;
 }
-
-// -----------------------------------------------------------------------------
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr)
 {
@@ -273,17 +269,18 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     return a;
 }
 
-// -----------------------------------------------------------------------------
-
 rnn::rnn(const size_t lr)
 {
     size_t in_size = 10;
     size_t hidden_size = 50;
     size_t out_size = 1;
 
-    ten w_ih = uniform_dist({in_size, hidden_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
-    ten w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size), sqrt(6.0f / hidden_size + hidden_size));
-    ten w_ho = uniform_dist({hidden_size, out_size}, -sqrt(6.0f / hidden_size + out_size), sqrt(6.0f / hidden_size + out_size));
+    ten w_ih =
+        uniform_dist({in_size, hidden_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
+    ten w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size),
+                            sqrt(6.0f / hidden_size + hidden_size));
+    ten w_ho = uniform_dist({hidden_size, out_size}, -sqrt(6.0f / hidden_size + out_size),
+                            sqrt(6.0f / hidden_size + out_size));
 
     ten b_h = zeros({hidden_size, 1});
     ten b_o = zeros({out_size, 1});
@@ -292,8 +289,6 @@ rnn::rnn(const size_t lr)
 std::vector<ten> rnn::forward(const ten &x)
 {
 }
-
-// -----------------------------------------------------------------------------
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
 {
