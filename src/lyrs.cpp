@@ -276,10 +276,10 @@ rnn::rnn(const size_t lr)
     size_t out_size = 1;
 
     ten w_ih =
-        uniform_dist({in_size, hidden_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
+        uniform_dist({hidden_size, in_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
     ten w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size),
                             sqrt(6.0f / hidden_size + hidden_size));
-    ten w_ho = uniform_dist({hidden_size, out_size}, -sqrt(6.0f / hidden_size + out_size),
+    ten w_ho = uniform_dist({out_size, hidden_size}, -sqrt(6.0f / hidden_size + out_size),
                             sqrt(6.0f / hidden_size + out_size));
 
     ten b_h = zeros({hidden_size, 1});
