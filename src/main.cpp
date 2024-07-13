@@ -37,6 +37,7 @@ int main()
     auto x_y_test = create_sequences(train_test.second, seq_length);
 
     rnn model = rnn(lr);
+    model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     return 0;
 }

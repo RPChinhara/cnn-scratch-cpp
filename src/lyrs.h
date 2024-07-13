@@ -94,6 +94,7 @@ class rnn
 
   public:
     rnn(const size_t lr);
+    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);

@@ -284,10 +284,22 @@ rnn::rnn(const size_t lr)
 
     ten b_h = zeros({hidden_size, 1});
     ten b_o = zeros({out_size, 1});
+
+    // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
+    // std::cout << w_hh.shape.front() << " " << w_hh.shape.back() << std::endl;
+    // std::cout << w_ho.shape.front() << " " << w_ho.shape.back() << std::endl;
+    // std::cout << b_h.shape.front() << " " << b_h.shape.back() << std::endl;
+    // std::cout << b_o.shape.front() << " " << b_o.shape.back() << std::endl;
+}
+
+void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
+{
+    auto a = forward(x_train);
 }
 
 std::vector<ten> rnn::forward(const ten &x)
 {
+    return std::vector<ten>();
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
