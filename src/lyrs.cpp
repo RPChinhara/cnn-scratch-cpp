@@ -271,10 +271,6 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
 
 rnn::rnn(const size_t lr)
 {
-    size_t in_size = 10;
-    size_t hidden_size = 50;
-    size_t out_size = 1;
-
     w_ih =
         uniform_dist({hidden_size, in_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
     w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size),
@@ -299,12 +295,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x)
 {
-    size_t in_size = 10;
-    size_t hidden_size = 50;
-    size_t out_size = 1;
-    size_t seq_length = 10;
-
-    ten h_prev = zeros({hidden_size, 1});
+    ten h_prev = zeros({hidden_size, in_size});
 
     // size_t idx = 0;
     // for (auto i = 0; i < x_y_train.first.size; ++i)
@@ -320,7 +311,7 @@ std::vector<ten> rnn::forward(const ten &x)
     {
         auto a = slice(x, 0, 10);
 
-        h_prev = act(matmul(w_ih, a, CPU), TANH, GPU);
+        h_prev = act(matmul(w_ih, a, CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU);
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
     }
 

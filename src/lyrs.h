@@ -84,6 +84,11 @@ class rnn
   private:
     float lr;
 
+    size_t in_size = 1;
+    size_t hidden_size = 50;
+    size_t out_size = 1;
+    size_t seq_length = 10;
+
     ten w_ih;
     ten w_hh;
     ten w_ho;
