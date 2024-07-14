@@ -7,6 +7,8 @@
 
 ten matmul(const ten &t1, const ten &t2, dev_type dev)
 {
+    assert(t1.shape.back() == t2.shape.front());
+
     ten t_new = zeros({t1.shape.front(), t2.shape.back()});
 
     switch (dev)
@@ -29,8 +31,6 @@ ten matmul(const ten &t1, const ten &t2, dev_type dev)
         return t_new;
     }
     case GPU: {
-        assert(t1.shape.back() == t2.shape.front());
-
         size_t numRowsTensor1 = t1.shape.front();
         size_t numColsTensor1 = t1.shape.back();
         size_t numRowsTensor2 = t2.shape.back();
