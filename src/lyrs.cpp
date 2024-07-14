@@ -306,9 +306,21 @@ std::vector<ten> rnn::forward(const ten &x)
 
     ten h_prev = zeros({hidden_size, 1});
 
+    // size_t idx = 0;
+    // for (auto i = 0; i < x_y_train.first.size; ++i)
+    // for (auto i = 0; i < 3; ++i)
+    // {
+    //     auto a = slice(x_y_train.first, idx, 10);
+    //     std::cout << a << std::endl;
+
+    //     idx += seq_length;
+    // }
+
     for (auto i = 0; i < seq_length; ++i)
     {
-        // h_prev = act(matmul(w_ih, x, GPU), TANH, GPU);
+        auto a = slice(x, 0, 10);
+
+        h_prev = act(matmul(w_ih, a, GPU), TANH, GPU);
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
     }
 
