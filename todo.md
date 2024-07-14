@@ -1,7 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Implement forward propagation.
-      > Init hidden state
+    > Implement forward propagation.
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.

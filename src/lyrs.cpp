@@ -299,7 +299,11 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x)
 {
-    
+    size_t in_size = 10;
+    size_t hidden_size = 50;
+    size_t out_size = 1;
+
+    ten h_prev = zeros({hidden_size, 1});
 
     return std::vector<ten>();
 }
