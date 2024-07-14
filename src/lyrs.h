@@ -84,11 +84,11 @@ class rnn
   private:
     float lr;
 
-    ten U;
-    ten V;
-    ten W;
-    ten b;
-    ten c;
+    ten w_ih;
+    ten w_hh;
+    ten w_ho;
+    ten b_h;
+    ten b_o;
 
     std::vector<ten> forward(const ten &x);
 

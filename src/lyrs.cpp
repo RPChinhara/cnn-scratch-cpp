@@ -275,15 +275,15 @@ rnn::rnn(const size_t lr)
     size_t hidden_size = 50;
     size_t out_size = 1;
 
-    ten w_ih =
+    w_ih =
         uniform_dist({hidden_size, in_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
-    ten w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size),
-                            sqrt(6.0f / hidden_size + hidden_size));
-    ten w_ho = uniform_dist({out_size, hidden_size}, -sqrt(6.0f / hidden_size + out_size),
-                            sqrt(6.0f / hidden_size + out_size));
+    w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size),
+                        sqrt(6.0f / hidden_size + hidden_size));
+    w_ho = uniform_dist({out_size, hidden_size}, -sqrt(6.0f / hidden_size + out_size),
+                        sqrt(6.0f / hidden_size + out_size));
 
-    ten b_h = zeros({hidden_size, 1});
-    ten b_o = zeros({out_size, 1});
+    b_h = zeros({hidden_size, 1});
+    b_o = zeros({out_size, 1});
 
     // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
     // std::cout << w_hh.shape.front() << " " << w_hh.shape.back() << std::endl;
@@ -302,8 +302,15 @@ std::vector<ten> rnn::forward(const ten &x)
     size_t in_size = 10;
     size_t hidden_size = 50;
     size_t out_size = 1;
+    size_t seq_length = 10;
 
     ten h_prev = zeros({hidden_size, 1});
+
+    for (auto i = 0; i < seq_length; ++i)
+    {
+        // h_prev = act(matmul(w_ih, x, GPU), TANH, GPU);
+        // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
+    }
 
     return std::vector<ten>();
 }
