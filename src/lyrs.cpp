@@ -295,7 +295,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x)
 {
-    ten h_prev = zeros({hidden_size, in_size});
+    ten h_prev = zeros({hidden_size, seq_length});
 
     // size_t idx = 0;
     // for (auto i = 0; i < x_y_train.first.size; ++i)
@@ -311,7 +311,12 @@ std::vector<ten> rnn::forward(const ten &x)
     {
         auto a = slice(x, 0, 10);
 
-        h_prev = act(matmul(w_ih, a, CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU);
+        std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
+        std::cout << a.shape.front() << " " << a.shape.back() << std::endl;
+        std::cout << matmul(w_ih, transpose(a), CPU).shape.front() << " " << matmul(w_ih, transpose(a), CPU).shape.back() << std::endl;
+        std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back() << std::endl;
+
+        h_prev = act(matmul(w_ih, transpose(a), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU);
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
     }
 
