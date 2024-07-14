@@ -320,7 +320,7 @@ std::vector<ten> rnn::forward(const ten &x)
     {
         auto a = slice(x, 0, 10);
 
-        h_prev = act(matmul(w_ih, a, GPU), TANH, GPU);
+        h_prev = act(matmul(w_ih, a, CPU), TANH, GPU);
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
     }
 
