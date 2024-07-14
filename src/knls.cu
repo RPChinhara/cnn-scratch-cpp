@@ -26,7 +26,7 @@ __global__ void matmul(float *t1, float *t2, float *t_new, size_t num_rows_t1, s
     {
         float sum = 0.0;
 
-        for (auto l = 0; l < num_cols_t1; l++)
+        for (auto l = 0; l < num_cols_t1; ++l)
             sum += t1[i * num_cols_t1 + l] * t2[l * num_rows_t2 + j];
 
         t_new[i * num_rows_t2 + j] = sum;
