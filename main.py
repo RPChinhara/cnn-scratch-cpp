@@ -71,46 +71,46 @@
 # plt.legend()
 # plt.show()
 
-import pandas as pd
-import numpy as np
-from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import SimpleRNN, Dense
-import tensorflow as tf
-import matplotlib.pyplot as plt
+# import pandas as pd
+# import numpy as np
+# from sklearn.preprocessing import MinMaxScaler
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import SimpleRNN, Dense
+# import tensorflow as tf
+# import matplotlib.pyplot as plt
 
-# Load and preprocess the dataset
-df = pd.read_csv('datas\AAPL.csv')  # Replace 'your_dataset.csv' with your actual dataset filename
+# # Load and preprocess the dataset
+# df = pd.read_csv('datas\AAPL.csv')  # Replace 'your_dataset.csv' with your actual dataset filename
 
-# Use 'Close' prices for simplicity, you can choose other features as needed
-data = df['Close'].values.reshape(-1, 1)
+# # Use 'Close' prices for simplicity, you can choose other features as needed
+# data = df['Close'].values.reshape(-1, 1)
 
-# # Normalize the dataset
-scaler = MinMaxScaler(feature_range=(0, 1))
-scaled_data = scaler.fit_transform(data)
+# # # Normalize the dataset
+# scaler = MinMaxScaler(feature_range=(0, 1))
+# scaled_data = scaler.fit_transform(data)
 
-# Split data into training and testing sets
-train_size = int(len(scaled_data) * 0.8)
-train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
+# # Split data into training and testing sets
+# train_size = int(len(scaled_data) * 0.8)
+# train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
 
-# Function to create sequences for RNN
-def create_sequences(data, seq_length):
-    xs, ys = [], []
-    for i in range(len(data) - seq_length - 1):
-        x = data[i:(i + seq_length)]
-        y = data[i + seq_length]
-        xs.append(x)
-        ys.append(y)
-    return np.array(xs), np.array(ys)
+# # Function to create sequences for RNN
+# def create_sequences(data, seq_length):
+#     xs, ys = [], []
+#     for i in range(len(data) - seq_length - 1):
+#         x = data[i:(i + seq_length)]
+#         y = data[i + seq_length]
+#         xs.append(x)
+#         ys.append(y)
+#     return np.array(xs), np.array(ys)
 
-# Set sequence length
-seq_length = 10
+# # Set sequence length
+# seq_length = 10
 
-# Create sequences for training and testing
-X_train, y_train = create_sequences(train_data, seq_length)
-X_test, y_test = create_sequences(test_data, seq_length)
+# # Create sequences for training and testing
+# X_train, y_train = create_sequences(train_data, seq_length)
+# X_test, y_test = create_sequences(test_data, seq_length)
 
-print(X_train.shape)
+# print(X_train.shape)
 
 # # Build the RNN model
 # model = Sequential()
@@ -164,17 +164,21 @@ class SimpleRNN:
     def forward(self, inputs):
         h_prev = np.zeros((self.Wh.shape[0], 1))  # Initial hidden state
         for t in range(len(inputs)):
+            print(inputs[t].shape, " inputs[t].shape")
             x_t = inputs[t].reshape(-1, 1)
+            print(x_t.shape, " x_t.shape")
+            a = np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev)
+            print(a.shape, " a.shape")
+            print(self.bh.shape, " bh.shape")
             h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
-            print(h_prev.shape, " ficj")
         y = np.dot(self.Wy, h_prev) + self.by
         return y
 
 # Example usage:
-input_size = 10   # Dimension of input vector
+input_size = 1   # Dimension of input vector
 hidden_size = 50  # Dimension of hidden state
 output_size = 1  # Dimension of output vector
-seq_length = 4   # Length of input sequence
+seq_length = 10   # Length of input sequence
 
 rnn = SimpleRNN(input_size, hidden_size, output_size)
 
@@ -182,10 +186,6 @@ rnn = SimpleRNN(input_size, hidden_size, output_size)
 inputs = [np.random.randn(input_size) for _ in range(seq_length)]
 
 print(inputs)
-inputs = np.array(inputs)
-inputs_reshaped = inputs.reshape(-1, 1)
-print(inputs_reshaped.shape)
-print(inputs.shape)
 
 # Forward propagation
 output = rnn.forward(inputs)
