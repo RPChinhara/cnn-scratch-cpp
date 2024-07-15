@@ -273,14 +273,12 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
 
 rnn::rnn(const size_t lr)
 {
-    w_ih =
-        uniform_dist({hidden_size, in_size}, -sqrt(6.0f / in_size + hidden_size), sqrt(6.0f / in_size + hidden_size));
-    w_hh = uniform_dist({hidden_size, hidden_size}, -sqrt(6.0f / hidden_size + hidden_size),
-                        sqrt(6.0f / hidden_size + hidden_size));
-    w_ho = uniform_dist({out_size, hidden_size}, -sqrt(6.0f / hidden_size + out_size),
-                        sqrt(6.0f / hidden_size + out_size));
 
-    b_h = zeros({hidden_size, seq_length});
+    w_ih = uniform_dist({hidden_size, in_size});
+    w_hh = uniform_dist({hidden_size, hidden_size});
+    w_ho = uniform_dist({out_size, hidden_size});
+
+    b_h = zeros({hidden_size, batch_size});
     b_o = zeros({out_size, 1});
 
     // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
@@ -297,7 +295,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x)
 {
-    ten h_prev = zeros({hidden_size, seq_length});
+    ten h_prev = zeros({hidden_size, batch_size});
 
     // size_t idx = 0;
     // for (auto i = 0; i < x_y_train.first.size; ++i)
@@ -311,17 +309,17 @@ std::vector<ten> rnn::forward(const ten &x)
 
     for (auto i = 0; i < seq_length; ++i)
     {
-        auto x_t = slice(x, 0, 10);
+        // auto x_t = slice(x, 0, 10);
 
         std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
-        std::cout << x_t.shape.front() << " " << x_t.shape.back() << std::endl;
-        std::cout << matmul(w_ih, transpose(x_t), CPU).shape.front() << " "
-                  << matmul(w_ih, transpose(x_t), CPU).shape.back() << std::endl;
-        std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back()
-                  << std::endl
-                  << std::endl;
+        std::cout << x.shape.front() << " " << x.shape.back() << std::endl;
+        std::cout << matmul(w_ih, transpose(x), CPU).shape.front() << " "
+                  << matmul(w_ih, transpose(x), CPU).shape.back() << std::endl;
+        // std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back()
+        //           << std::endl
+        //           << std::endl;
 
-        h_prev = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU) + b_h;
+        // h_prev = act(matmul(w_ih, transpose(x), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU) + b_h;
         // ten y = matmul(w_ho, h_prev, CPU) + b_o;
 
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
