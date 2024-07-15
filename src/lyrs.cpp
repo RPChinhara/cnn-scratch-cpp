@@ -252,7 +252,7 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     for (auto i = 0; i < lyrs.size() - 1; ++i)
     {
         if (i == 0)
-        {   
+        {
             // (64, 10) -> (64, 1) or (64, 10) I think latter is clearer, but former is more performant.
             // (10, 64) -> (1, 64)
             // x.T = (4, 10), w1 = (64, 4), w2 = (10(must), 64), w3 = (64, 3), output = (64, 3)
@@ -315,15 +315,17 @@ std::vector<ten> rnn::forward(const ten &x)
 
         std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
         std::cout << x_t.shape.front() << " " << x_t.shape.back() << std::endl;
-        std::cout << matmul(w_ih, transpose(x_t), CPU).shape.front() << " " << matmul(w_ih, transpose(x_t), CPU).shape.back() << std::endl;
-        std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back() << std::endl << std::endl;
+        std::cout << matmul(w_ih, transpose(x_t), CPU).shape.front() << " "
+                  << matmul(w_ih, transpose(x_t), CPU).shape.back() << std::endl;
+        std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back()
+                  << std::endl
+                  << std::endl;
 
         h_prev = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU) + b_h;
         // ten y = matmul(w_ho, h_prev, CPU) + b_o;
 
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
         // y = np.dot(self.Wy, h_prev) + self.by
-
     }
 
     return std::vector<ten>();
