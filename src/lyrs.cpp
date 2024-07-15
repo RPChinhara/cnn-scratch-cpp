@@ -309,14 +309,14 @@ std::vector<ten> rnn::forward(const ten &x)
 
     for (auto i = 0; i < seq_length; ++i)
     {
-        auto a = slice(x, 0, 10);
+        auto x_t = slice(x, 0, 10);
 
         std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
-        std::cout << a.shape.front() << " " << a.shape.back() << std::endl;
-        std::cout << matmul(w_ih, transpose(a), CPU).shape.front() << " " << matmul(w_ih, transpose(a), CPU).shape.back() << std::endl;
+        std::cout << x_t.shape.front() << " " << x_t.shape.back() << std::endl;
+        std::cout << matmul(w_ih, transpose(x_t), CPU).shape.front() << " " << matmul(w_ih, transpose(x_t), CPU).shape.back() << std::endl;
         std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back() << std::endl;
 
-        h_prev = act(matmul(w_ih, transpose(a), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU);
+        h_prev = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU);
         // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
     }
 
