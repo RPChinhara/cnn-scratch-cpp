@@ -83,6 +83,7 @@ class rnn
 {
   private:
     float lr;
+    size_t batch_size = 8316;
 
     size_t in_size = 1;
     size_t hidden_size = 50;
