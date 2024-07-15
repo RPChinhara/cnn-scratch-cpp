@@ -1,6 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement forward propagation.
+      - What is the shape for each x which is multiplied by w_ih in the first place? It's (1, 10) now as it will be transposed, but is it really right?
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
