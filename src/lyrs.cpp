@@ -295,7 +295,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x)
 {
-    ten h_prev = zeros({hidden_size, batch_size});
+    ten h_t = zeros({hidden_size, batch_size});
 
     for (auto i = 0; i < seq_length; ++i)
     {
@@ -312,8 +312,8 @@ std::vector<ten> rnn::forward(const ten &x)
             x_t[i] = features[0];
         }
 
-        h_prev = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_prev, CPU) + b_h, TANH, GPU);
-        // ten y = matmul(w_ho, h_prev, CPU) + b_o;
+        h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        // ten y = matmul(w_ho, h_t, CPU) + b_o;
     }
 
     return std::vector<ten>();
