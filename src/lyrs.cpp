@@ -297,16 +297,6 @@ std::vector<ten> rnn::forward(const ten &x)
 {
     ten h_prev = zeros({hidden_size, batch_size});
 
-    // size_t idx = 0;
-    // for (auto i = 0; i < x_y_train.first.size; ++i)
-    // for (auto i = 0; i < 3; ++i)
-    // {
-    //     auto a = slice(x_y_train.first, idx, 10);
-    //     std::cout << a << std::endl;
-
-    //     idx += seq_length;
-    // }
-
     for (auto i = 0; i < seq_length; ++i)
     {
         size_t idx = i;
@@ -324,11 +314,6 @@ std::vector<ten> rnn::forward(const ten &x)
 
         if (i == 0)
             std::cout << x_t << std::endl;
-
-        //  auto x_t2 = slice(x, 10, 1);
-        // auto x_t3 = slice(x, 20, 1);
-        // std::cout << x_t2 << std::endl;
-        // std::cout << x_t3 << std::endl << std::endl;
 
         // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
         // std::cout << x.shape.front() << " " << x.shape[1] << " " << x.shape.back() << std::endl;
