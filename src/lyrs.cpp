@@ -279,7 +279,7 @@ rnn::rnn(const size_t lr)
     w_ho = uniform_dist({out_size, hidden_size});
 
     b_h = zeros({hidden_size, batch_size});
-    b_o = zeros({out_size, 1});
+    b_o = zeros({out_size, batch_size});
 
     // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
     // std::cout << w_hh.shape.front() << " " << w_hh.shape.back() << std::endl;
@@ -313,7 +313,7 @@ std::vector<ten> rnn::forward(const ten &x)
         }
 
         h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
-        // ten y = matmul(w_ho, h_t, CPU) + b_o;
+        ten y_t = matmul(w_ho, h_t, CPU) + b_o;
     }
 
     return std::vector<ten>();
