@@ -190,3 +190,15 @@ print(inputs)
 # Forward propagation
 output = rnn.forward(inputs)
 print("Output:", output)
+
+# Example data and weights
+batch_size = 32
+sequence_length = 10
+input_size = 5
+hidden_size = 20
+
+x = np.random.randn(batch_size, sequence_length, input_size)
+print(x[:, 0, :])
+print(x[0])
+print(x[1])
+print(x[2])

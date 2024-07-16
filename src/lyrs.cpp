@@ -309,12 +309,32 @@ std::vector<ten> rnn::forward(const ten &x)
 
     for (auto i = 0; i < seq_length; ++i)
     {
-        // auto x_t = slice(x, 0, 10);
+        size_t idx = i;
+        ten x_t = zeros({batch_size, in_size});
 
-        std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
-        std::cout << x.shape.front() << " " << x.shape.back() << std::endl;
-        std::cout << matmul(w_ih, transpose(x), CPU).shape.front() << " "
-                  << matmul(w_ih, transpose(x), CPU).shape.back() << std::endl;
+        for (auto i = 0; i < batch_size; ++i)
+        {
+            ten features;
+
+            features = slice(x, idx, 1);
+            idx += seq_length;
+
+            x_t[i] = features[0];
+        }
+
+        if (i == 0)
+            std::cout << x_t << std::endl;
+
+        //  auto x_t2 = slice(x, 10, 1);
+        // auto x_t3 = slice(x, 20, 1);
+        // std::cout << x_t2 << std::endl;
+        // std::cout << x_t3 << std::endl << std::endl;
+
+        // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
+        // std::cout << x.shape.front() << " " << x.shape[1] << " " << x.shape.back() << std::endl;
+        // std::cout << "before matmul " << std::endl;
+        // std::cout << matmul(w_ih, transpose(x), CPU).shape.front() << " "
+        //           << matmul(w_ih, transpose(x), CPU).shape.back() << std::endl;
         // std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back()
         //           << std::endl
         //           << std::endl;
