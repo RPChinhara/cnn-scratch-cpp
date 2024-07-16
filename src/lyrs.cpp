@@ -312,22 +312,8 @@ std::vector<ten> rnn::forward(const ten &x)
             x_t[i] = features[0];
         }
 
-        if (i == 0)
-            std::cout << x_t.shape.front() << " " << x.shape.back() << std::endl;
-
-        std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
-        // std::cout << matmul(w_ih, transpose(x), CPU).shape.front() << " "
-        //           << matmul(w_ih, transpose(x), CPU).shape.back() << std::endl;
-        // std::cout << matmul(w_hh, h_prev, CPU).shape.front() << " " << matmul(w_hh, h_prev, CPU).shape.back()
-        //           << std::endl
-        //           << std::endl;
-
-        h_prev = act(matmul(w_ih, transpose(x), CPU), TANH, GPU);
-        // h_prev = act(matmul(w_ih, transpose(x), CPU) + matmul(w_hh, h_prev, CPU), TANH, GPU) + b_h;
+        h_prev = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_prev, CPU) + b_h, TANH, GPU);
         // ten y = matmul(w_ho, h_prev, CPU) + b_o;
-
-        // h_prev = np.tanh(np.dot(self.Wx, x_t) + np.dot(self.Wh, h_prev) + self.bh)
-        // y = np.dot(self.Wy, h_prev) + self.by
     }
 
     return std::vector<ten>();
