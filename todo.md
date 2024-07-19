@@ -1,6 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement forward propagation.
+      - Is y_t correct?
+      - Shoud I add dense layer and why?
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
