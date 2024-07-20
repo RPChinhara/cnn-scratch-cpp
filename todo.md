@@ -3,6 +3,7 @@
     > Implement forward propagation.
       - Is y_t correct?
       - Shoud I add dense layer and why?
+      - Is the shape of w_ho correct?
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
