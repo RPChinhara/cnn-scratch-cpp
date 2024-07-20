@@ -339,10 +339,10 @@ std::vector<ten> rnn::forward(const ten &x)
         // 8316 1, 1 50 = 8316 50 -> 8316 50, 50 50 = 8316 50 -> 8316 50, 50 1 =
         // 8316 1
 
-        // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1 I
-        // think this is wrong because when you think about it it's weird that
+        // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
+        // I think this is wrong because when you think about it it's weird that
         // getting only one ouput even thougth I input 8316 batches.
-        
+
         h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) +
                       b_h,
                   TANH, GPU);
