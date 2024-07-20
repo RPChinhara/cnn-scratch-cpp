@@ -273,19 +273,12 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
 
 rnn::rnn(const size_t lr)
 {
-
     w_ih = uniform_dist({hidden_size, in_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
     w_ho = uniform_dist({out_size, hidden_size});
 
     b_h = zeros({hidden_size, batch_size});
     b_o = zeros({out_size, batch_size});
-
-    // std::cout << w_ih.shape.front() << " " << w_ih.shape.back() << std::endl;
-    // std::cout << w_hh.shape.front() << " " << w_hh.shape.back() << std::endl;
-    // std::cout << w_ho.shape.front() << " " << w_ho.shape.back() << std::endl;
-    // std::cout << b_h.shape.front() << " " << b_h.shape.back() << std::endl;
-    // std::cout << b_o.shape.front() << " " << b_o.shape.back() << std::endl;
 }
 
 void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
