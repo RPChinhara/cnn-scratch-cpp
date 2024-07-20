@@ -19,7 +19,8 @@ cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr)
     this->lr = lr;
 }
 
-void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal)
+void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal,
+                  const ten &yVal)
 {
     // ten kernel = zeros({3, 3});
     ten kernel = ten({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
@@ -52,7 +53,9 @@ void cnn2d::pred(const ten &xTest, const ten &yTest)
 {
 }
 
-std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride)
+std::vector<ten> cnn2d::forward(const ten &input,
+                                const std::vector<ten> &kernel,
+                                const size_t stride)
 {
     std::vector<ten> weights;
 
@@ -86,11 +89,13 @@ std::vector<ten> gru::forward(const ten &x)
 
     auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SIGMOID, CPU);
     auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SIGMOID, CPU);
-    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
+    auto h_tilde =
+        act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
     h = (1 - z) * h + z * h_tilde;
 }
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr)
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types,
+       const float lr)
 {
     this->lyrs = lyrs;
     this->act_types = act_types;
@@ -100,7 +105,8 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, 
     w_b_mom = init_params();
 }
 
-void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
+void nn::train(const ten &x_train, const ten &y_train, const ten &x_val,
+               const ten &y_val)
 {
     for (auto i = 1; i <= epochs; ++i)
     {
@@ -144,25 +150,33 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             for (auto k = lyrs.size() - 1; 0 < k; --k)
             {
                 if (k == lyrs.size() - 1)
-                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), act_types.back()));
+                    dl_dz.push_back(
+                        dl_da_da_dz(y_batch, a.back(), act_types.back()));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), CPU) *
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k],
+                                           transpose(w_b.first[k]), CPU) *
                                     da_dz(a[k - 1], act_types[k - 1]));
 
                 if (k == 1)
-                    dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], CPU));
+                    dl_dw.push_back(matmul(transpose(x_batch),
+                                           dl_dz[(lyrs.size() - 1) - k], CPU));
                 else
-                    dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], CPU));
+                    dl_dw.push_back(matmul(transpose(a[k - 2]),
+                                           dl_dz[(lyrs.size() - 1) - k], CPU));
 
                 dl_db.push_back(sum(dl_dz[(lyrs.size() - 1) - k], 0));
 
                 dl_dw[(lyrs.size() - 1) - k] =
-                    clip_by_value(dl_dw[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
+                    clip_by_value(dl_dw[(lyrs.size() - 1) - k],
+                                  -grad_clip_threshold, grad_clip_threshold);
                 dl_db[(lyrs.size() - 1) - k] =
-                    clip_by_value(dl_db[(lyrs.size() - 1) - k], -grad_clip_threshold, grad_clip_threshold);
+                    clip_by_value(dl_db[(lyrs.size() - 1) - k],
+                                  -grad_clip_threshold, grad_clip_threshold);
 
-                w_b_mom.first[k - 1] = mom * w_b_mom.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
-                w_b_mom.second[k - 1] = mom * w_b_mom.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
+                w_b_mom.first[k - 1] = mom * w_b_mom.first[k - 1] -
+                                       lr * dl_dw[(lyrs.size() - 1) - k];
+                w_b_mom.second[k - 1] = mom * w_b_mom.second[k - 1] -
+                                        lr * dl_db[(lyrs.size() - 1) - k];
 
                 w_b.first[k - 1] += w_b_mom.first[k - 1];
                 w_b.second[k - 1] += w_b_mom.second[k - 1];
@@ -174,18 +188,26 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         std::vector<ten> a_val = forward(x_val, w_b.first, w_b.second);
 
         auto end_time = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            end_time - start_time);
+        auto seconds =
+            std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
         std::vector<std::string> buff;
 
-        buff.push_back("Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
-                       std::to_string(seconds.count()) + "s " + std::to_string(remaining_ms.count()) +
-                       "ms/step - loss: " + std::to_string(categorical_cross_entropy(y_batch, a.back())) +
-                       " - accuracy: " + std::to_string(categorical_acc(y_batch, a.back())));
-        buff.back() += " - val_loss: " + std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
-                       " - val_accuracy: " + std::to_string(categorical_acc(y_val, a_val.back()));
+        buff.push_back(
+            "Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
+            std::to_string(seconds.count()) + "s " +
+            std::to_string(remaining_ms.count()) + "ms/step - loss: " +
+            std::to_string(categorical_cross_entropy(y_batch, a.back())) +
+            " - accuracy: " +
+            std::to_string(categorical_acc(y_batch, a.back())));
+        buff.back() +=
+            " - val_loss: " +
+            std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
+            " - val_accuracy: " +
+            std::to_string(categorical_acc(y_val, a_val.back()));
 
         if (i % 10 == 0)
         {
@@ -211,8 +233,8 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         // if (epochs_without_improvement >= patience)
         // {
         //     std::cout << '\n'
-        //               << "Early stopping at epoch " << i + 1 << " as validation loss did not improve for " <<
-        //               patience
+        //               << "Early stopping at epoch " << i + 1 << " as
+        //               validation loss did not improve for " << patience
         //               << " epochs." << '\n';
         //     break;
         // }
@@ -224,8 +246,10 @@ void nn::pred(const ten &x_test, const ten &y_test)
     a = forward(x_test, w_b.first, w_b.second);
 
     std::cout << '\n';
-    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back()))
-              << " - test accuracy: " << std::to_string(categorical_acc(y_test, a.back()));
+    std::cout << "test loss: "
+              << std::to_string(categorical_cross_entropy(y_test, a.back()))
+              << " - test accuracy: "
+              << std::to_string(categorical_acc(y_test, a.back()));
     std::cout << "\n\n";
 
     std::cout << a.back() << "\n\n" << y_test << '\n';
@@ -245,7 +269,8 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params()
     return std::make_pair(w, b);
 }
 
-std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b)
+std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w,
+                             const std::vector<ten> &b)
 {
     std::vector<ten> a;
 
@@ -253,10 +278,11 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     {
         if (i == 0)
         {
-            // (64, 10) -> (64, 1) or (64, 10) I think latter is clearer, but former is more performant.
-            // (10, 64) -> (1, 64)
-            // x.T = (4, 10), w1 = (64, 4), w2 = (10(must), 64), w3 = (64, 3), output = (64, 3)
-            // x = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput = (10, 3)
+            // (64, 10) -> (64, 1) or (64, 10) I think latter is clearer, but
+            // former is more performant. (10, 64) -> (1, 64) x.T = (4, 10), w1
+            // = (64, 4), w2 = (10(must), 64), w3 = (64, 3), output = (64, 3) x
+            // = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput =
+            // (10, 3)
 
             ten z = matmul(x, w[i], CPU) + b[i];
             a.push_back(act(z, act_types[i], CPU));
@@ -281,7 +307,8 @@ rnn::rnn(const size_t lr)
     b_o = zeros({out_size, batch_size});
 }
 
-void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val)
+void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val,
+                const ten &y_val)
 {
     auto a = forward(x_train);
 }
@@ -306,9 +333,12 @@ std::vector<ten> rnn::forward(const ten &x)
             x_t[i] = features[0];
         }
 
-        // std::cout << x_t.shape.front() << " " << x_t.shape.back() << std::endl;
+        // std::cout << x_t.shape.front() << " " << x_t.shape.back() <<
+        // std::endl;
 
-        h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) +
+                      b_h,
+                  TANH, GPU);
         ten y_t = matmul(w_ho, h_t, CPU) + b_o;
     }
 
