@@ -302,6 +302,7 @@ std::vector<ten> rnn::forward(const ten &x)
         size_t idx = i;
         ten x_t = zeros({batch_size, in_size});
 
+        // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto i = 0; i < batch_size; ++i)
         {
             ten features;
@@ -311,6 +312,8 @@ std::vector<ten> rnn::forward(const ten &x)
 
             x_t[i] = features[0];
         }
+
+        // std::cout << x_t.shape.front() << " " << x_t.shape.back() << std::endl;
 
         h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
         ten y_t = matmul(w_ho, h_t, CPU) + b_o;
