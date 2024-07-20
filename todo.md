@@ -2,7 +2,6 @@
   - Implement SimpleRNN
     > Implement forward propagation.
       - Is y_t correct?
-      - Shoud I add dense layer and why?
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
