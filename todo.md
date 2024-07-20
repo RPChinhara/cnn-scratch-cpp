@@ -1,7 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement forward propagation.
-      > ChatGPT from "so what are most common order when multiplying? wx of xw"
+      - Shapes for params like w_ih might be wrong these need to be fixed.
+        > ChatGPT from "so what are most common order when multiplying? wx of xw"
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
