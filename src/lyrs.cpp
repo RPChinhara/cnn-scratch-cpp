@@ -194,27 +194,19 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val,
             std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::vector<std::string> buff;
-
-        buff.push_back(
-            "Epoch " + std::to_string(i) + "/" + std::to_string(epochs) + "\n" +
-            std::to_string(seconds.count()) + "s " +
-            std::to_string(remaining_ms.count()) + "ms/step - loss: " +
-            std::to_string(categorical_cross_entropy(y_batch, a.back())) +
-            " - accuracy: " +
-            std::to_string(categorical_acc(y_batch, a.back())));
-        buff.back() +=
-            " - val_loss: " +
-            std::to_string(categorical_cross_entropy(y_val, a_val.back())) +
-            " - val_accuracy: " +
-            std::to_string(categorical_acc(y_val, a_val.back()));
-
-        if (i % 10 == 0)
-        {
-            for (auto message : buff)
-                std::cout << message << '\n';
-            buff.clear();
-        }
+        std::cout
+            << "Epoch " << std::to_string(i) + "/" << std::to_string(epochs)
+            << "\n"
+            << std::to_string(seconds.count()) << "s "
+            << std::to_string(remaining_ms.count()) << "ms/step - loss: "
+            << std::to_string(categorical_cross_entropy(y_batch, a.back()))
+            << " - accuracy: "
+            << std::to_string(categorical_acc(y_batch, a.back()))
+            << " - val_loss: "
+            << std::to_string(categorical_cross_entropy(y_val, a_val.back()))
+            << " - val_accuracy: "
+            << std::to_string(categorical_acc(y_val, a_val.back()))
+            << std::endl;
     }
 }
 
