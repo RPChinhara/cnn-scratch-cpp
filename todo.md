@@ -1,6 +1,5 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Do I need to use dense layer?
     - Implement backpropagation.
   - Implement LSTM.
   - Implement GRU.
