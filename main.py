@@ -112,8 +112,6 @@ seq_length = 10
 X_train, y_train = create_sequences(train_data, seq_length)
 X_test, y_test = create_sequences(test_data, seq_length)
 
-print(X_train.shape)
-
 # Build the RNN model
 model = Sequential()
 model.add(SimpleRNN(units=50, activation='relu', input_shape=(seq_length, 1)))
