@@ -310,7 +310,10 @@ rnn::rnn(const size_t lr)
 void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val,
                 const ten &y_val)
 {
-    auto a = forward(x_train);
+    for (auto i = 1; i <= epochs; ++i)
+    {
+        auto a = forward(x_train);
+    }
 }
 
 std::vector<ten> rnn::forward(const ten &x)
