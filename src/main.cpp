@@ -27,7 +27,7 @@ int main()
 {
     const float test_size = 0.2f;
     const size_t seq_length = 10;
-    const size_t lr = 0.01;
+    const size_t lr = 0.01f;
 
     ten data = load_aapl();
     ten scaled_data = min_max_scaler(data);
