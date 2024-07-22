@@ -289,13 +289,32 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val,
 {
     for (auto i = 1; i <= epochs; ++i)
     {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
         auto a = forward(x_train);
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            end_time - start_time);
+        auto seconds =
+            std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto remaining_ms = duration - seconds;
+
+        std::cout << "Epoch " + std::to_string(i) + "/" +
+                         std::to_string(epochs) + "\n" +
+                         std::to_string(seconds.count()) + "s " +
+                         std::to_string(remaining_ms.count()) +
+                         "ms/step - loss: " +
+                         std::to_string(
+                             categorical_cross_entropy(y_train, a.back()))
+                  << std::endl;
     }
 }
 
 std::vector<ten> rnn::forward(const ten &x)
 {
     ten h_t = zeros({hidden_size, batch_size});
+    std::vector<ten> y;
 
     for (auto i = 0; i < seq_length; ++i)
     {
@@ -326,10 +345,11 @@ std::vector<ten> rnn::forward(const ten &x)
         h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) +
                       b_h,
                   TANH, GPU);
-        ten y_t = matmul(w_ho, h_t, CPU) + b_o;
+
+        y.push_back(matmul(w_ho, h_t, CPU) + b_o);
     }
 
-    return std::vector<ten>();
+    return y;
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind)
