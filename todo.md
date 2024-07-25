@@ -1,5 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
+    - K&R Style is better and common?
     > Implement mse loss.
     - Implement backpropagation.
   - Implement LSTM.
