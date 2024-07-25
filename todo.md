@@ -1,6 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - K&R Style is better and common?
+    - K&R Style is better and common? What about spaces between each lines of code? What is common?
     > Implement mse loss.
     - Implement backpropagation.
   - Implement LSTM.
