@@ -6,8 +6,7 @@
 
 const size_t UNITS = 256;
 
-ten encoder()
-{
+ten encoder() {
     ten ind = ten({2, 5}, {2, 10, 1, 2, 3, 2, 15, 1, 5, 3});
 
     std::cout << embedding(16, 4, ind) << std::endl;
@@ -17,25 +16,21 @@ ten encoder()
     return ten();
 }
 
-ten cross_attention()
-{
+ten cross_attention() {
     return ten();
 }
 
-ten decoder()
-{
+ten decoder() {
     return ten();
 }
 
-int main()
-{
+int main() {
     en_es data = load_en_es();
 
     // std::vector<std::wstring> x(data.x.size());
     // std::vector<std::wstring> y(data.y.size());
 
-    // for (auto i = 0; i < x.size(); ++i)
-    // {
+    // for (auto i = 0; i < x.size(); ++i) {
     //     x[i] = regex_replace(data.x[i], L"á", L"a");
     //     x[i] = regex_replace(x[i], L"é", L"e");
     //     x[i] = regex_replace(x[i], L"í", L"i");
