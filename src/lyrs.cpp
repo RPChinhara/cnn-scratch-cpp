@@ -160,7 +160,8 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << std::to_string(i) + "/" << std::to_string(epochs) << "\n" << std::to_string(seconds.count()) << "s " << std::to_string(remaining_ms.count()) << "ms/step - loss: " << std::to_string(categorical_cross_entropy(y_batch, a.back())) << " - accuracy: " << std::to_string(categorical_acc(y_batch, a.back())) << " - val_loss: " << std::to_string(categorical_cross_entropy(y_val, a_val.back())) << " - val_accuracy: " << std::to_string(categorical_acc(y_val, a_val.back())) << std::endl;
+        std::cout << std::fixed << std::setprecision(5);
+        std::cout << "Epoch " << std::to_string(i) + "/" << epochs << "\n" << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << categorical_cross_entropy(y_batch, a.back()) << " - accuracy: " << categorical_acc(y_batch, a.back()) << " - val_loss: " << categorical_cross_entropy(y_val, a_val.back()) << " - val_accuracy: " << categorical_acc(y_val, a_val.back()) << std::endl;
     }
 }
 
@@ -168,7 +169,7 @@ void nn::pred(const ten &x_test, const ten &y_test) {
     a = forward(x_test, w_b.first, w_b.second);
 
     std::cout << '\n';
-    std::cout << "test loss: " << std::to_string(categorical_cross_entropy(y_test, a.back())) << " - test accuracy: " << std::to_string(categorical_acc(y_test, a.back()));
+    std::cout << "test loss: " << categorical_cross_entropy(y_test, a.back()) << " - test accuracy: " << categorical_acc(y_test, a.back());
     std::cout << "\n\n";
 
     std::cout << a.back() << "\n\n" << y_test << '\n';
