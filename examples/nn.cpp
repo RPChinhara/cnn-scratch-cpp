@@ -4,8 +4,7 @@
 
 #include <chrono>
 
-int main()
-{
+int main() {
     const size_t depth = 3;
 
     const float test_size1 = 0.2f;
@@ -17,8 +16,7 @@ int main()
     const size_t num_hidden2_neurons = 64;
     const size_t num_out_neurons = 3;
     const float lr = 0.01f;
-    const std::vector<size_t> lyrs = {num_in_neurons, num_hidden1_neurons,
-                                      num_hidden2_neurons, num_out_neurons};
+    const std::vector<size_t> lyrs = {num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons};
     const std::vector<act_type> act_types = {RELU, RELU, SOFTMAX};
 
     iris data = load_iris();
@@ -28,8 +26,7 @@ int main()
     y = one_hot(y, depth);
 
     auto train_temp = split_dataset(x, y, test_size1, rd_state);
-    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test,
-                                  test_size2, rd_state);
+    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
 
     train_temp.x_train = min_max_scaler(train_temp.x_train);
     val_test.x_train = min_max_scaler(val_test.x_train);
@@ -39,12 +36,10 @@ int main()
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    model.train(train_temp.x_train, train_temp.y_train, val_test.x_train,
-                val_test.y_train);
+    model.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration =
-        std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
     std::cout << "Time taken: " << duration.count() << " seconds\n";
 
