@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-int main()
-{
+int main() {
     const size_t max_tokens = 5000;
     const size_t max_len = 4;
 
