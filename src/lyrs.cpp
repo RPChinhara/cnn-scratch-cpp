@@ -229,7 +229,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << std::to_string(i) << "/" << std::to_string(epochs) << "\n" << std::to_string(seconds.count()) << "s " << std::to_string(remaining_ms.count()) << "ms/step - loss: " << std::to_string(categorical_cross_entropy(y_train, a.back())) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << "\n" << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << categorical_cross_entropy(y_train, a.back()) << std::endl;
     }
 }
 
