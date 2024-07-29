@@ -156,10 +156,8 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         std::vector<ten> a_val = forward(x_val, w_b.first, w_b.second);
 
         auto end_time = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-            end_time - start_time);
-        auto seconds =
-            std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
         std::cout << "Epoch " << std::to_string(i) + "/" << std::to_string(epochs) << "\n" << std::to_string(seconds.count()) << "s " << std::to_string(remaining_ms.count()) << "ms/step - loss: " << std::to_string(categorical_cross_entropy(y_batch, a.back())) << " - accuracy: " << std::to_string(categorical_acc(y_batch, a.back())) << " - val_loss: " << std::to_string(categorical_cross_entropy(y_val, a_val.back())) << " - val_accuracy: " << std::to_string(categorical_acc(y_val, a_val.back())) << std::endl;
