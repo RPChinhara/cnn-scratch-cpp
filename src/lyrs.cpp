@@ -161,7 +161,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         auto remaining_ms = duration - seconds;
 
         std::cout << std::fixed << std::setprecision(5);
-        std::cout << "Epoch " << std::to_string(i) + "/" << epochs << "\n" << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << categorical_cross_entropy(y_batch, a.back()) << " - accuracy: " << categorical_acc(y_batch, a.back()) << " - val_loss: " << categorical_cross_entropy(y_val, a_val.back()) << " - val_accuracy: " << categorical_acc(y_val, a_val.back()) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << "\n" << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << categorical_cross_entropy(y_batch, a.back()) << " - accuracy: " << categorical_acc(y_batch, a.back()) << " - val_loss: " << categorical_cross_entropy(y_val, a_val.back()) << " - val_accuracy: " << categorical_acc(y_val, a_val.back()) << std::endl;
     }
 }
 
