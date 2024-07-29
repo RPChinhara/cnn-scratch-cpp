@@ -2,12 +2,10 @@
 #include "lyrs.h"
 #include "preproc.h"
 
-int main()
-{
+int main() {
     MNIST mnist = LoadMNIST();
 
-    for (auto i = 0; i < 784; ++i)
-    {
+    for (auto i = 0; i < 784; ++i) {
         if (i % 28 == 0)
             std::cout << std::endl;
         std::cout << mnist.trainImages[i] << "   ";
