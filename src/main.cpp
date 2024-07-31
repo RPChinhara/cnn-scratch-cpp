@@ -1,40 +1,83 @@
-#include "arrs.h"
 #include "datas.h"
 #include "lyrs.h"
 #include "preproc.h"
+#include "losses.h"
+#include "math.hpp"
 
-std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length) {
-    ten x = zeros({data.size - seq_length - 1, seq_length, 1});
-    ten y = zeros({data.size - seq_length - 1, 1});
+#include <chrono>
 
-    size_t idx = 0;
-    for (auto i = 0; i < (data.size - seq_length - 1) * seq_length; ++i) {
-        if (i % seq_length == 0 && i != 0)
-            idx -= seq_length - 1;
-        x[i] = data[idx];
-        ++idx;
-    }
+float categorical_cross_entropy(const ten &y_true, const ten &y_pred) {
+    float sum = 0.0f;
+    constexpr float epsilon = 1e-15f;
+    size_t num_samples = y_true.shape.front();
+    ten y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
+    ten y_pred_logged = log(y_pred_clipped, CPU);
 
-    for (auto i = 0; i < data.size - seq_length - 1; ++i)
-        y[i] = data[i + seq_length];
+    for (auto i = 0; i < y_true.size; ++i)
+        sum += y_true[i] * y_pred_logged[i];
 
-    return std::make_pair(x, y);
+    return -sum / num_samples;
+}
+
+float categorical_accuracy(const ten &y_true, const ten &y_pred) {
+    ten idx_true = argmax(y_true);
+    ten pred_idx = argmax(y_pred);
+    float equal = 0.0f;
+
+    for (auto i = 0; i < idx_true.size; ++i)
+        if (idx_true[i] == pred_idx[i])
+            ++equal;
+
+    return equal / idx_true.size;
 }
 
 int main() {
-    const float test_size = 0.2f;
-    const size_t seq_length = 10;
-    const size_t lr = 0.01f;
+    const size_t depth = 3;
 
-    ten data = load_aapl();
-    ten scaled_data = min_max_scaler(data);
-    auto train_test = split(scaled_data, test_size);
+    const float test_size1 = 0.2f;
+    const float test_size2 = 0.5f;
+    const size_t rd_state = 42;
 
-    auto x_y_train = create_sequences(train_test.first, seq_length);
-    auto x_y_test = create_sequences(train_test.second, seq_length);
+    const size_t num_in_neurons = 4;
+    const size_t num_hidden1_neurons = 64;
+    const size_t num_hidden2_neurons = 64;
+    const size_t num_out_neurons = 3;
+    const float lr = 0.01f;
+    const std::vector<size_t> lyrs = {num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons};
+    const std::vector<act_type> act_types = {RELU, RELU, SOFTMAX};
 
-    rnn model = rnn(lr);
-    model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
+    iris data = load_iris();
+    ten x = data.x;
+    ten y = data.y;
+
+    y = one_hot(y, depth);
+
+    auto train_temp = split_dataset(x, y, test_size1, rd_state);
+    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
+
+    train_temp.x_train = min_max_scaler(train_temp.x_train);
+    val_test.x_train = min_max_scaler(val_test.x_train);
+    val_test.x_test = min_max_scaler(val_test.x_test);
+
+    nn model = nn(lyrs, act_types, lr, categorical_cross_entropy, categorical_accuracy);
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    model.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds" << std::endl << std::endl;
+
+    auto train_loss = model.evaluate(train_temp.x_train, train_temp.y_train);
+    auto test_loss = model.evaluate(val_test.x_test, val_test.y_test);
+    auto pred = model.predict(val_test.x_test);
+
+    std::cout << "Train loss: " << train_loss << std::endl;
+    std::cout << "Test loss: " << test_loss << std::endl;
+    std::cout << std::endl << pred << std::endl;
+    std::cout << std::endl << val_test.y_test << std::endl;
 
     return 0;
 }
