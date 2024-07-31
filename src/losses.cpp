@@ -17,3 +17,12 @@ float categorical_cross_entropy(const ten &y_true, const ten &y_pred)
 
     return -sum / num_samples;
 }
+
+float mse(const ten &y_true, const ten &y_pred) {
+    float sum = 0.0f;
+
+    for (auto i = 0; i < y_true.size; ++i)
+        sum += std::powf(y_true[i] - y_pred[i], 2.0f);
+
+    return sum / y_true.size;
+}   
