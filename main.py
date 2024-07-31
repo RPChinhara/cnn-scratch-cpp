@@ -133,12 +133,6 @@ print(f"Test Loss: {test_loss}")
 predicted = model.predict(X_test)
 predicted_prices = scaler.inverse_transform(predicted)
 
-print(predicted)
-print(predicted.shape)
-print(predicted_prices)
-print(predicted_prices.shape)
-print(X_test.shape)
-
 # Plotting
 plt.figure(figsize=(14, 7))
 plt.plot(df.index[-len(predicted_prices):], df['Close'].values[-len(predicted_prices):], label='Actual Prices')
