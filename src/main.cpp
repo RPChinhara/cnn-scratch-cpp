@@ -21,6 +21,15 @@ std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length) {
     return std::make_pair(x, y);
 }
 
+float mse(const ten &y_true, const ten &y_pred) {
+    float sum = 0.0f;
+
+    for (auto i = 0; i < y_true.size; ++i)
+        sum += std::powf(y_true[i] - y_pred[i], 2.0f);
+
+    return sum / y_true.size;
+}
+
 int main() {
     const float test_size = 0.2f;
     const size_t seq_length = 10;
@@ -33,7 +42,7 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, seq_length);
     auto x_y_test = create_sequences(train_test.second, seq_length);
 
-    rnn model = rnn(lr);
+    rnn model = rnn(lr, mse);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     return 0;
