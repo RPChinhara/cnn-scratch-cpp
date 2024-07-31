@@ -65,7 +65,6 @@ class nn {
     std::function<float(const ten&, const ten&)> metric;
     std::vector<size_t> lyrs;
     float mom = 0.1f;
-    size_t patience = 4;
 
     std::pair<std::vector<ten>, std::vector<ten>> w_b;
     std::pair<std::vector<ten>, std::vector<ten>> w_b_mom;
