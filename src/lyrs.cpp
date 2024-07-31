@@ -167,14 +167,16 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
     }
 }
 
-void nn::pred(const ten &x_test, const ten &y_test) {
-    a = forward(x_test, w_b.first, w_b.second);
+float nn::evaluate(const ten &x, const ten &y) {
+    a = forward(x, w_b.first, w_b.second);
 
-    std::cout << '\n';
-    std::cout << "test loss: " << categorical_cross_entropy(y_test, a.back()) << " - test accuracy: " << categorical_acc(y_test, a.back());
-    std::cout << "\n\n";
+    return categorical_cross_entropy(y, a.back());
+}
 
-    std::cout << a.back() << "\n\n" << y_test << '\n';
+ten nn::predict(const ten &x) {
+    a = forward(x, w_b.first, w_b.second);
+
+    return a.back();
 }
 
 std::pair<std::vector<ten>, std::vector<ten>> nn::init_params() {
