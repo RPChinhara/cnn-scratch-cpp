@@ -142,8 +142,7 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, si
 
     // size_t num_vocab = 200;
     // for (auto i = 0; i < num_vocab; ++i)
-    //     std::cout << i << ": " << vocab_vec[i].first << " " <<
-    //     vocab_vec[i].second << std::endl;
+    //     std::cout << i << ": " << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
 
     ten t_new = zeros({in.size(), max_len});
 
