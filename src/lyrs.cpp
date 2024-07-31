@@ -46,7 +46,7 @@ void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     // std::cout << output << std::endl;
 }
 
-void cnn2d::pred(const ten &xTest, const ten &yTest) {
+void cnn2d::predict(const ten &xTest, const ten &yTest) {
 }
 
 std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride) {

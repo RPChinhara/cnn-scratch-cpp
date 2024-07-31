@@ -22,7 +22,7 @@ class cnn2d {
   public:
     cnn2d(const std::vector<size_t> &filters, float const lr);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
-    void pred(const ten &xTest, const ten &yTest);
+    void predict(const ten &xTest, const ten &yTest);
 };
 
 class gru {
