@@ -83,10 +83,11 @@ std::vector<ten> gru::forward(const ten &x) {
     h = (1 - z) * h + z * h_tilde;
 }
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr) {
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr, std::function<float(const ten&, const ten&)> loss) {
     this->lyrs = lyrs;
     this->act_types = act_types;
     this->lr = lr;
+    this->loss = loss;
 
     w_b = init_params();
     w_b_mom = init_params();
@@ -162,15 +163,15 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
         std::cout << std::fixed << std::setprecision(5);
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
-        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << categorical_cross_entropy(y_batch, a.back()) << " - accuracy: " << categorical_acc(y_batch, a.back());
-        std::cout << " - val_loss: " << categorical_cross_entropy(y_val, a_val.back()) << " - val_accuracy: " << categorical_acc(y_val, a_val.back()) << std::endl;
+        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_batch, a.back()) << " - accuracy: " << categorical_acc(y_batch, a.back());
+        std::cout << " - val_loss: " << loss(y_val, a_val.back()) << " - val_accuracy: " << categorical_acc(y_val, a_val.back()) << std::endl;
     }
 }
 
 float nn::evaluate(const ten &x, const ten &y) {
     a = forward(x, w_b.first, w_b.second);
 
-    return categorical_cross_entropy(y, a.back());
+    return loss(y, a.back());
 }
 
 ten nn::predict(const ten &x) {

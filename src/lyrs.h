@@ -6,6 +6,7 @@
 #include "ten.h"
 
 #include <cassert>
+#include <functional>
 #include <random>
 #include <unordered_map>
 #include <vector>
@@ -60,6 +61,7 @@ class nn {
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
     float lr;
+    std::function<float(const ten&, const ten&)> loss;
     std::vector<size_t> lyrs;
     float mom = 0.1f;
     size_t patience = 4;
@@ -71,7 +73,7 @@ class nn {
     std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
 
   public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr);
+    nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr, std::function<float(const ten&, const ten&)> loss);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
     float evaluate(const ten &x, const ten &y);
     ten predict(const ten &x);
