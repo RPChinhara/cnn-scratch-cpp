@@ -106,26 +106,21 @@ class rnn
 
   public:
     rnn(const size_t lr);
-    void train(const ten &x_train, const ten &y_train, const ten &x_val,
-               const ten &y_val);
+    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
 
 template <typename T>
-ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
-                       size_t max_tokens, const size_t max_len)
-{
+ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, size_t max_tokens, const size_t max_len) {
     assert(max_tokens > 2);
 
     std::unordered_map<T, float> vocab_map;
 
-    for (auto text : vocab)
-    {
+    for (auto text : vocab) {
         auto tokens = tokenizer(text);
 
-        for (auto token : tokens)
-        {
+        for (auto token : tokens) {
             if (vocab_map.find(token) != vocab_map.end())
                 vocab_map[token] += 1.0f;
             else
@@ -133,16 +128,14 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
         }
     }
 
-    std::vector<std::pair<T, float>> vocab_vec(vocab_map.begin(),
-                                               vocab_map.end());
+    std::vector<std::pair<T, float>> vocab_vec(vocab_map.begin(), vocab_map.end());
 
-    std::sort(vocab_vec.begin(), vocab_vec.end(),
-              [](const std::pair<T, float> &a, const std::pair<T, float> &b) {
-                  if (a.second != b.second)
-                      return a.second > b.second;
-                  else
-                      return a.first > b.first;
-              });
+    std::sort(vocab_vec.begin(), vocab_vec.end(), [](const std::pair<T, float> &a, const std::pair<T, float> &b) {
+        if (a.second != b.second)
+            return a.second > b.second;
+        else
+            return a.first > b.first;
+    });
 
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
@@ -160,21 +153,17 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
     if (max_tokens > vocab_vec.size())
         max_tokens = vocab_vec.size();
 
-    for (auto i = 0; i < in.size(); ++i)
-    {
+    for (auto i = 0; i < in.size(); ++i) {
         auto words = tokenizer(in[i]);
 
         if (i != 0)
             idx = i * max_len;
 
-        for (auto word : words)
-        {
+        for (auto word : words) {
             bool found = false;
 
-            for (auto k = 0; k < max_tokens; ++k)
-            {
-                if (word == vocab_vec[k].first)
-                {
+            for (auto k = 0; k < max_tokens; ++k) {
+                if (word == vocab_vec[k].first) {
                     t_new[idx] = k;
                     found = true;
                     break;
