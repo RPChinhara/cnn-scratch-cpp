@@ -83,6 +83,7 @@ class nn {
 class rnn {
   private:
     float lr;
+    std::function<float(const ten&, const ten&)> loss;
     size_t batch_size = 8316;
     size_t epochs = 10;
 
@@ -100,7 +101,7 @@ class rnn {
     std::vector<ten> forward(const ten &x);
 
   public:
-    rnn(const size_t lr);
+    rnn(const size_t lr, std::function<float(const ten&, const ten&)> loss);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
 
