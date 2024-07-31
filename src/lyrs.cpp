@@ -3,7 +3,6 @@
 #include "dev.h"
 #include "diffs.h"
 #include "linalg.h"
-#include "losses.h"
 #include "math.hpp"
 #include "preproc.h"
 #include "rd.h"
@@ -214,7 +213,10 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     return a;
 }
 
-rnn::rnn(const size_t lr) {
+rnn::rnn(const size_t lr, std::function<float(const ten&, const ten&)> loss) {
+    this->lr = lr;
+    this->loss = loss;
+
     w_ih = uniform_dist({hidden_size, in_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
     w_ho = uniform_dist({out_size, hidden_size});
@@ -234,7 +236,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << mse(y_train, a.back()) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, a.back()) << std::endl;
     }
 }
 
