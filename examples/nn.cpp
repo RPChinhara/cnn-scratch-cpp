@@ -41,9 +41,16 @@ int main() {
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
-    std::cout << "Time taken: " << duration.count() << " seconds\n";
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds" << std::endl << std::endl;
 
-    model.pred(val_test.x_test, val_test.y_test);
+    auto train_loss = model.evaluate(train_temp.x_train, train_temp.y_train);
+    auto test_loss = model.evaluate(val_test.x_test, val_test.y_test);
+    auto pred = model.predict(val_test.x_test);
+
+    std::cout << "Train loss: " << train_loss << std::endl;
+    std::cout << "Test loss: " << test_loss << std::endl;
+    std::cout << std::endl << pred << std::endl;
+    std::cout << std::endl << val_test.y_test << std::endl;
 
     return 0;
 }
