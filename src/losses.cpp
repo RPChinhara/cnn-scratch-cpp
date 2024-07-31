@@ -4,8 +4,7 @@
 #include "math.hpp"
 #include "ten.h"
 
-float categorical_cross_entropy(const ten &y_true, const ten &y_pred)
-{
+float categorical_cross_entropy(const ten &y_true, const ten &y_pred) {
     float sum = 0.0f;
     constexpr float epsilon = 1e-15f;
     size_t num_samples = y_true.shape.front();
@@ -25,4 +24,4 @@ float mse(const ten &y_true, const ten &y_pred) {
         sum += std::powf(y_true[i] - y_pred[i], 2.0f);
 
     return sum / y_true.size;
-}   
+}
