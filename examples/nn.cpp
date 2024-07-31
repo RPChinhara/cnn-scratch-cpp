@@ -1,7 +1,6 @@
 #include "datas.h"
 #include "lyrs.h"
 #include "preproc.h"
-#include "losses.h"
 #include "math.hpp"
 
 #include <chrono>
