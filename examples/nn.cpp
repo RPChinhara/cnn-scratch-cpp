@@ -1,8 +1,34 @@
 #include "datas.h"
 #include "lyrs.h"
 #include "preproc.h"
+#include "math.hpp"
 
 #include <chrono>
+
+float categorical_cross_entropy(const ten &y_true, const ten &y_pred) {
+    float sum = 0.0f;
+    constexpr float epsilon = 1e-15f;
+    size_t num_samples = y_true.shape.front();
+    ten y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
+    ten y_pred_logged = log(y_pred_clipped, CPU);
+
+    for (auto i = 0; i < y_true.size; ++i)
+        sum += y_true[i] * y_pred_logged[i];
+
+    return -sum / num_samples;
+}
+
+float categorical_accuracy(const ten &y_true, const ten &y_pred) {
+    ten idx_true = argmax(y_true);
+    ten pred_idx = argmax(y_pred);
+    float equal = 0.0f;
+
+    for (auto i = 0; i < idx_true.size; ++i)
+        if (idx_true[i] == pred_idx[i])
+            ++equal;
+
+    return equal / idx_true.size;
+}
 
 int main() {
     const size_t depth = 3;
@@ -32,7 +58,7 @@ int main() {
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn model = nn(lyrs, act_types, lr);
+    nn model = nn(lyrs, act_types, lr, categorical_cross_entropy, categorical_accuracy);
 
     auto start = std::chrono::high_resolution_clock::now();
 
