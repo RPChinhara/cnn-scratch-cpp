@@ -236,7 +236,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, a.back()) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, transpose(a.back())) << std::endl;
     }
 }
 
