@@ -242,6 +242,9 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
 
 std::vector<ten> rnn::forward(const ten &x) {
     ten h_t = zeros({hidden_size, batch_size});
+    // ten y_t;
+
+    std::vector<ten> h;
     std::vector<ten> y;
 
     for (auto i = 0; i < seq_length; ++i) {
@@ -269,8 +272,10 @@ std::vector<ten> rnn::forward(const ten &x) {
         // getting only one ouput even thougth I input 8316 batches.
 
         h_t = act(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        ten y_t = matmul(w_hy, h_t, CPU) + b_y;
 
-        y.push_back(matmul(w_hy, h_t, CPU) + b_y);
+        h.push_back(h_t);
+        y.push_back(y_t);
     }
 
     return y;
