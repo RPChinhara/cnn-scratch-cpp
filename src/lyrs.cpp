@@ -219,10 +219,10 @@ rnn::rnn(const size_t lr, std::function<float(const ten&, const ten&)> loss) {
 
     w_hx = uniform_dist({hidden_size, in_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
-    w_ho = uniform_dist({out_size, hidden_size});
+    w_hy = uniform_dist({out_size, hidden_size});
 
     b_h = zeros({hidden_size, batch_size});
-    b_o = zeros({out_size, batch_size});
+    b_y = zeros({out_size, batch_size});
 }
 
 void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val) {
@@ -270,7 +270,7 @@ std::vector<ten> rnn::forward(const ten &x) {
 
         h_t = act(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
 
-        y.push_back(matmul(w_ho, h_t, CPU) + b_o);
+        y.push_back(matmul(w_hy, h_t, CPU) + b_y);
     }
 
     return y;

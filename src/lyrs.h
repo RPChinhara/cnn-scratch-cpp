@@ -93,9 +93,9 @@ class rnn {
 
     ten w_hx;
     ten w_hh;
-    ten w_ho;
+    ten w_hy;
     ten b_h;
-    ten b_o;
+    ten b_y;
 
     std::vector<ten> forward(const ten &x);
 
