@@ -217,7 +217,7 @@ rnn::rnn(const size_t lr, std::function<float(const ten&, const ten&)> loss) {
     this->lr = lr;
     this->loss = loss;
 
-    w_ih = uniform_dist({hidden_size, in_size});
+    w_hx = uniform_dist({hidden_size, in_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
     w_ho = uniform_dist({out_size, hidden_size});
 
@@ -268,7 +268,7 @@ std::vector<ten> rnn::forward(const ten &x) {
         // I think this is wrong because when you think about it it's weird that
         // getting only one ouput even thougth I input 8316 batches.
 
-        h_t = act(matmul(w_ih, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        h_t = act(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
 
         y.push_back(matmul(w_ho, h_t, CPU) + b_o);
     }

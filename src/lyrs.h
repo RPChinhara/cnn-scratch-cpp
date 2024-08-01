@@ -91,7 +91,7 @@ class rnn {
     size_t out_size = 1;
     size_t seq_length = 10;
 
-    ten w_ih;
+    ten w_hx;
     ten w_hh;
     ten w_ho;
     ten b_h;
