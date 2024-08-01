@@ -112,6 +112,9 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         ten x_batch;
         ten y_batch;
 
+        ten y_pred;
+        ten y_pred_val;
+
         for (auto j = 0; j < x_train.shape.front(); j += batch_size) {
             assert(0 < batch_size && batch_size <= x_train.shape.front());
 
@@ -124,12 +127,13 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             }
 
             a = forward(x_batch, w_b.first, w_b.second);
+            y_pred = a.back();
 
             std::vector<ten> dl_dz, dl_dw, dl_db;
 
             for (auto k = lyrs.size() - 1; 0 < k; --k) {
                 if (k == lyrs.size() - 1)
-                    dl_dz.push_back(dl_da_da_dz(y_batch, a.back(), act_types.back()));
+                    dl_dz.push_back(dl_da_da_dz(y_batch, y_pred, act_types.back()));
                 else
                     dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), CPU) * da_dz(a[k - 1], act_types[k - 1]));
 
@@ -154,6 +158,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         }
 
         std::vector<ten> a_val = forward(x_val, w_b.first, w_b.second);
+        y_pred_val = a_val.back();
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
@@ -162,8 +167,8 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
         std::cout << std::fixed << std::setprecision(5);
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
-        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_batch, a.back()) << " - accuracy: " << metric(y_batch, a.back());
-        std::cout << " - val_loss: " << loss(y_val, a_val.back()) << " - val_accuracy: " << metric(y_val, a_val.back()) << std::endl;
+        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_batch, y_pred) << " - accuracy: " << metric(y_batch, y_pred);
+        std::cout << " - val_loss: " << loss(y_val, y_pred_val) << " - val_accuracy: " << metric(y_val, y_pred_val) << std::endl;
     }
 }
 
