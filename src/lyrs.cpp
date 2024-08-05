@@ -81,6 +81,74 @@ std::vector<ten> gru::forward(const ten &x) {
     h = (1 - z) * h + z * h_tilde;
 }
 
+lstm::lstm(const size_t lr, std::function<float(const ten&, const ten&)> loss) {
+    this->lr = lr;
+    this->loss = loss;
+
+    w_hx = uniform_dist({hidden_size, in_size});
+    w_hh = uniform_dist({hidden_size, hidden_size});
+    w_hy = uniform_dist({out_size, hidden_size});
+
+    b_h = zeros({hidden_size, batch_size});
+    b_y = zeros({out_size, batch_size});
+}
+
+void lstm::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val) {
+    for (auto i = 1; i <= epochs; ++i) {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+        auto a = forward(x_train);
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto remaining_ms = duration - seconds;
+
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, a.back()) << std::endl;
+    }
+}
+
+std::vector<ten> lstm::forward(const ten &x) {
+    ten h_t = zeros({hidden_size, batch_size});
+    // ten y_t;
+
+    std::vector<ten> h;
+    std::vector<ten> y;
+
+    for (auto i = 0; i < seq_length; ++i) {
+        size_t idx = i;
+        ten x_t = zeros({batch_size, in_size});
+
+        // for (auto i = 0; i < batch_size * num_features; ++i)
+        for (auto i = 0; i < batch_size; ++i) {
+            ten features;
+
+            features = slice(x, idx, 1);
+            idx += seq_length;
+
+            x_t[i] = features[0];
+        }
+
+        // (now) 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50
+        // 8316 = 1 8316
+
+        // 8316 1, 1 50 = 8316 50 -> 8316 50, 50 50 = 8316 50 -> 8316 50, 50 1 =
+        // 8316 1
+
+        // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
+        // I think this is wrong because when you think about it it's weird that
+        // getting only one ouput even thougth I input 8316 batches.
+
+        h_t = act(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        ten y_t = matmul(w_hy, h_t, CPU) + b_y;
+
+        h.push_back(h_t);
+        y.push_back(y_t);
+    }
+
+    return y;
+}
+
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr, std::function<float(const ten&, const ten&)> loss, std::function<float(const ten&, const ten&)> metric) {
     this->lyrs = lyrs;
     this->act_types = act_types;

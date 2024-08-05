@@ -53,6 +53,31 @@ class gru {
     gru(const size_t units);
 };
 
+class lstm {
+  private:
+    float lr;
+    std::function<float(const ten&, const ten&)> loss;
+    size_t batch_size = 8316;
+    size_t epochs = 10;
+
+    size_t in_size = 1;
+    size_t hidden_size = 50;
+    size_t out_size = 1;
+    size_t seq_length = 10;
+
+    ten w_hx;
+    ten w_hh;
+    ten w_hy;
+    ten b_h;
+    ten b_y;
+
+    std::vector<ten> forward(const ten &x);
+
+  public:
+    lstm(const size_t lr, std::function<float(const ten&, const ten&)> loss);
+    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
+};
+
 class nn {
   private:
     std::vector<ten> a;
