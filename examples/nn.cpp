@@ -74,7 +74,7 @@ int main() {
     auto pred = model.predict(val_test.x_test);
 
     std::cout << "Train loss: " << train_loss << std::endl;
-    std::cout << "Test loss: " << test_loss << std::endl;
+    std::cout << "Test  loss: " << test_loss << std::endl;
     std::cout << std::endl << pred << std::endl;
     std::cout << std::endl << val_test.y_test << std::endl;
 
