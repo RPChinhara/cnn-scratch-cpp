@@ -13,6 +13,8 @@
 
 class ten;
 
+using TenPair = std::pair<std::vector<ten>, std::vector<ten>>;
+
 class cnn2d {
   private:
     std::vector<size_t> filters;
@@ -122,7 +124,7 @@ class rnn {
     ten b_h;
     ten b_y;
 
-    std::vector<ten> forward(const ten &x);
+    std::pair<std::vector<ten>, std::vector<ten>> forward(const ten &x);
 
   public:
     rnn(const size_t lr, std::function<float(const ten&, const ten&)> loss);

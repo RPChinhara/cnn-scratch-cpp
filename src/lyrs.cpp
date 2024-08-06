@@ -303,17 +303,29 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto a = forward(x_train);
+        auto y_pred = a.second.back();
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, transpose(a.back())) << std::endl;
+        for (auto i = 0; i < seq_length; ++i) {
+            ten dl_dyt;
+            ten dl_dht;
+
+            ten dl_dwhh;
+            ten dht_dwhh;
+            ten dl_dhy;
+            ten dl_dbh;
+            ten dl_dby;
+        }
+
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, transpose(y_pred)) << std::endl;
     }
 }
 
-std::vector<ten> rnn::forward(const ten &x) {
+std::pair<std::vector<ten>, std::vector<ten>> rnn::forward(const ten &x) {
     ten h_t = zeros({hidden_size, batch_size});
     // ten y_t;
 
@@ -351,7 +363,7 @@ std::vector<ten> rnn::forward(const ten &x) {
         y.push_back(y_t);
     }
 
-    return y;
+    return std::make_pair(h, y);
 }
 
 ten embedding(const size_t vocab_size, const size_t cols, const ten &ind) {
