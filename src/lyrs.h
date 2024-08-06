@@ -13,8 +13,6 @@
 
 class ten;
 
-using TenPair = std::pair<std::vector<ten>, std::vector<ten>>;
-
 class cnn2d {
   private:
     std::vector<size_t> filters;
