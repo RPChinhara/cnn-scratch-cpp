@@ -311,14 +311,7 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         auto remaining_ms = duration - seconds;
 
         for (auto i = 0; i < seq_length; ++i) {
-            ten dl_dyt;
-            ten dl_dht;
-
-            ten dl_dwhh;
-            ten dht_dwhh;
-            ten dl_dhy;
-            ten dl_dbh;
-            ten dl_dby;
+            ten dl_douput = -2.0f / y_train.size * (y_train - transpose(y_pred));
         }
 
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, transpose(y_pred)) << std::endl;
