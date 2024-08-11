@@ -81,6 +81,7 @@ class lstm {
 class nn {
   private:
     std::vector<ten> a;
+    std::vector<std::function<ten(const ten&)>> activation;
     std::vector<act_type> act_types;
     size_t batch_size = 10;
     size_t epochs = 200;
