@@ -18,26 +18,6 @@ ten act(const ten &z, act_type act, dev_type dev)
 
             return t_new;
         }
-        case GPU: {
-            float *t_gpu, *t_gpu_new;
-            cudaMalloc((void **)&t_gpu, z.size * sizeof(float));
-            cudaMalloc((void **)&t_gpu_new, z.size * sizeof(float));
-            cudaMemcpy(t_gpu, z.elem, z.size * sizeof(float), cudaMemcpyHostToDevice);
-
-            constexpr int blockSize = 128;
-            int gridSize = (z.size + blockSize - 1) / blockSize;
-            relu<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, z.size);
-
-            cudaError_t cudaError = cudaGetLastError();
-            if (cudaError != cudaSuccess)
-                std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
-
-            cudaMemcpy(t_new.elem, t_gpu_new, z.size * sizeof(float), cudaMemcpyDeviceToHost);
-            cudaFree(t_gpu);
-            cudaFree(t_gpu_new);
-
-            return t_new;
-        }
         default:
             std::cout << "Unknown dev." << std::endl;
             return ten();
