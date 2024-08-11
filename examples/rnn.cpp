@@ -21,7 +21,7 @@ std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length) {
     return std::make_pair(x, y);
 }
 
-float mse(const ten &y_true, const ten &y_pred) {
+float mean_squared_error(const ten &y_true, const ten &y_pred) {
     float sum = 0.0f;
 
     for (auto i = 0; i < y_true.size; ++i)
@@ -42,7 +42,7 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, seq_length);
     auto x_y_test = create_sequences(train_test.second, seq_length);
 
-    rnn model = rnn(lr, mse);
+    rnn model = rnn(lr, mean_squared_error);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     return 0;
