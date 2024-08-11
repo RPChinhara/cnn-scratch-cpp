@@ -47,14 +47,6 @@ ten act(const ten &z, act_type act, dev_type dev)
         ten exp_scores = exp(z - max(z, 1), CPU);
         return exp_scores / sum(exp_scores, 1);
     }
-    case TANH: {
-        ten a = z;
-
-        for (auto i = 0; i < z.size; ++i)
-            a.elem[i] = std::tanhf(z.elem[i]);
-
-        return a;
-    }
     default:
         std::cout << "Unknown act." << std::endl;
         return ten();

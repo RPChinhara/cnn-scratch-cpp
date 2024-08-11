@@ -75,9 +75,9 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params() {
 std::vector<ten> gru::forward(const ten &x) {
     init_params();
 
-    auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, TANH, CPU);
-    auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, TANH, CPU);
-    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, TANH, CPU);
+    auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SOFTMAX, CPU);
+    auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SOFTMAX, CPU);
+    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, SOFTMAX, CPU);
     h = (1 - z) * h + z * h_tilde;
 }
 
@@ -139,7 +139,7 @@ std::vector<ten> lstm::forward(const ten &x) {
         // I think this is wrong because when you think about it it's weird that
         // getting only one ouput even thougth I input 8316 batches.
 
-        h_t = act(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        // h_t = activationmatmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
         ten y_t = matmul(w_hy, h_t, CPU) + b_y;
 
         h.push_back(h_t);
@@ -286,8 +286,9 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     return a;
 }
 
-rnn::rnn(const size_t lr, std::function<float(const ten&, const ten&)> loss) {
+rnn::rnn(const size_t lr, std::function<ten(const ten&)> activation, std::function<float(const ten&, const ten&)> loss) {
     this->lr = lr;
+    this->activation = activation;
     this->loss = loss;
 
     w_hx = uniform_dist({hidden_size, in_size});
@@ -349,7 +350,7 @@ std::pair<std::vector<ten>, std::vector<ten>> rnn::forward(const ten &x) {
         // I think this is wrong because when you think about it it's weird that
         // getting only one ouput even thougth I input 8316 batches.
 
-        h_t = act(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        h_t = activation(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h);
         ten y_t = matmul(w_hy, h_t, CPU) + b_y;
 
         h.push_back(h_t);
