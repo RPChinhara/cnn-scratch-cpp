@@ -81,7 +81,7 @@ std::vector<ten> gru::forward(const ten &x) {
     h = (1 - z) * h + z * h_tilde;
 }
 
-lstm::lstm(const size_t lr, std::function<float(const ten&, const ten&)> loss) {
+lstm::lstm(const size_t lr, loss_func loss) {
     this->lr = lr;
     this->loss = loss;
 
@@ -149,7 +149,7 @@ std::vector<ten> lstm::forward(const ten &x) {
     return y;
 }
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, const float lr, std::function<float(const ten&, const ten&)> loss, std::function<float(const ten&, const ten&)> metric) {
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr, loss_func loss, metric_func metric) {
     this->lyrs = lyrs;
     this->act_types = act_types;
     this->lr = lr;
@@ -286,7 +286,7 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
     return a;
 }
 
-rnn::rnn(const size_t lr, std::function<ten(const ten&)> activation, std::function<float(const ten&, const ten&)> loss) {
+rnn::rnn(const size_t lr, act_func activation, loss_func loss) {
     this->lr = lr;
     this->activation = activation;
     this->loss = loss;

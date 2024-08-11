@@ -13,6 +13,11 @@
 
 class ten;
 
+using act_func = std::function<ten(const ten&)>;
+
+using loss_func = std::function<float(const ten&, const ten&)>;
+using metric_func = std::function<float(const ten&, const ten&)>;
+
 class cnn2d {
   private:
     std::vector<size_t> filters;
@@ -56,7 +61,7 @@ class gru {
 class lstm {
   private:
     float lr;
-    std::function<float(const ten&, const ten&)> loss;
+    loss_func loss;
     size_t batch_size = 8316;
     size_t epochs = 10;
 
@@ -74,21 +79,21 @@ class lstm {
     std::vector<ten> forward(const ten &x);
 
   public:
-    lstm(const size_t lr, std::function<float(const ten&, const ten&)> loss);
+    lstm(const size_t lr, loss_func loss);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
 
 class nn {
   private:
     std::vector<ten> a;
-    std::vector<std::function<ten(const ten&)>> activation;
+    act_func activation;
     std::vector<act_type> act_types;
     size_t batch_size = 10;
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
     float lr;
-    std::function<float(const ten&, const ten&)> loss;
-    std::function<float(const ten&, const ten&)> metric;
+    loss_func loss;
+    metric_func metric;
     std::vector<size_t> lyrs;
     float mom = 0.1f;
 
@@ -99,7 +104,7 @@ class nn {
     std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
 
   public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr, std::function<float(const ten&, const ten&)> loss, std::function<float(const ten&, const ten&)> metric);
+    nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr, loss_func loss, metric_func metric);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
     float evaluate(const ten &x, const ten &y);
     ten predict(const ten &x);
@@ -108,8 +113,8 @@ class nn {
 class rnn {
   private:
     float lr;
-    std::function<ten(const ten&)> activation;
-    std::function<float(const ten&, const ten&)> loss;
+    act_func activation;
+    loss_func loss;
     size_t batch_size = 8316;
     size_t epochs = 10;
 
@@ -127,7 +132,7 @@ class rnn {
     std::pair<std::vector<ten>, std::vector<ten>> forward(const ten &x);
 
   public:
-    rnn(const size_t lr, std::function<ten(const ten&)> activation, std::function<float(const ten&, const ten&)> loss);
+    rnn(const size_t lr, act_func activation, loss_func loss);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
 };
 
