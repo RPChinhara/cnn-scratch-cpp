@@ -7,7 +7,6 @@ class ten;
 enum act_type
 {
     RELU,
-    SIGMOID,
     SOFTMAX,
     TANH
 };

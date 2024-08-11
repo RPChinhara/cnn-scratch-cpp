@@ -43,14 +43,6 @@ ten act(const ten &z, act_type act, dev_type dev)
             return ten();
         }
     }
-    case SIGMOID: {
-        ten a = z;
-
-        for (auto i = 0; i < z.size; ++i)
-            a.elem[i] = 1.0f / (1.0f + std::expf(-z.elem[i]));
-
-        return a;
-    }
     case SOFTMAX: {
         ten exp_scores = exp(z - max(z, 1), CPU);
         return exp_scores / sum(exp_scores, 1);
