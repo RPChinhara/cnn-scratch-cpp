@@ -1,6 +1,5 @@
 #pragma once
 
-#include "act.h"
 #include "arrs.h"
 #include "preproc.h"
 #include "ten.h"

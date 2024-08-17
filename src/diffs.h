@@ -1,7 +1,5 @@
 #pragma once
 
-#include "act.h"
-
 class ten;
 
 ten da_dz(const ten &a);
