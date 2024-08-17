@@ -21,6 +21,15 @@ std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length) {
     return std::make_pair(x, y);
 }
 
+ten hyperbolic_tangent(const ten &z_t) {
+    ten h_t = z_t;
+
+    for (auto i = 0; i < z_t.size; ++i)
+        h_t.elem[i] = std::tanhf(z_t.elem[i]);
+
+    return h_t;
+}
+
 float mean_squared_error(const ten &y_true, const ten &y_pred) {
     float sum = 0.0f;
 
@@ -42,7 +51,7 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, seq_length);
     auto x_y_test = create_sequences(train_test.second, seq_length);
 
-    rnn model = rnn(lr, mean_squared_error);
+    rnn model = rnn(lr, hyperbolic_tangent, mean_squared_error);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     return 0;
