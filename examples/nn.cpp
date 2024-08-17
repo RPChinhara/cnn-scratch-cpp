@@ -5,6 +5,20 @@
 
 #include <chrono>
 
+ten relu(const ten &z) {
+    ten a = z;
+
+    for (auto i = 0; i < z.size; ++i)
+        a.elem[i] = std::fmax(0.0f, z.elem[i]);
+
+    return a;
+}
+
+ten softmax(const ten &z) {
+    ten exp_scores = exp(z - max(z, 1), CPU);
+    return exp_scores / sum(exp_scores, 1);
+}
+
 float categorical_cross_entropy(const ten &y_true, const ten &y_pred) {
     float sum = 0.0f;
     constexpr float epsilon = 1e-15f;
@@ -37,13 +51,11 @@ int main() {
     const float test_size2 = 0.5f;
     const size_t rd_state = 42;
 
-    const size_t num_in_neurons = 4;
-    const size_t num_hidden1_neurons = 64;
-    const size_t num_hidden2_neurons = 64;
-    const size_t num_out_neurons = 3;
+    const size_t num_in = 4;
+    const size_t num_hidden1 = 64;
+    const size_t num_hidden2 = 64;
+    const size_t num_out = 3;
     const float lr = 0.01f;
-    const std::vector<size_t> lyrs = {num_in_neurons, num_hidden1_neurons, num_hidden2_neurons, num_out_neurons};
-    const std::vector<act_type> act_types = {RELU, RELU, SOFTMAX};
 
     iris data = load_iris();
     ten x = data.x;
@@ -58,7 +70,7 @@ int main() {
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn model = nn(lyrs, act_types, lr, categorical_cross_entropy, categorical_accuracy);
+    nn model = nn({num_in, num_hidden1, num_hidden2, num_out}, {relu, relu, softmax}, lr, categorical_cross_entropy, categorical_accuracy);
 
     auto start = std::chrono::high_resolution_clock::now();
 
