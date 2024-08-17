@@ -75,10 +75,10 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params() {
 std::vector<ten> gru::forward(const ten &x) {
     init_params();
 
-    auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SOFTMAX, CPU);
-    auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SOFTMAX, CPU);
-    auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, SOFTMAX, CPU);
-    h = (1 - z) * h + z * h_tilde;
+    // auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SOFTMAX, CPU);
+    // auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SOFTMAX, CPU);
+    // auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, SOFTMAX, CPU);
+    // h = (1 - z) * h + z * h_tilde;
 }
 
 lstm::lstm(const size_t lr, loss_func loss) {
@@ -149,9 +149,9 @@ std::vector<ten> lstm::forward(const ten &x) {
     return y;
 }
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr, loss_func loss, metric_func metric) {
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &acts, float const lr, loss_func loss, metric_func metric) {
     this->lyrs = lyrs;
-    this->act_types = act_types;
+    this->acts = acts;
     this->lr = lr;
     this->loss = loss;
     this->metric = metric;
@@ -201,9 +201,9 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
 
             for (auto k = lyrs.size() - 1; 0 < k; --k) {
                 if (k == lyrs.size() - 1)
-                    dl_dz.push_back(dl_da_da_dz(y_batch, y_pred, act_types.back()));
+                    dl_dz.push_back(dl_da_da_dz(y_batch, y_pred));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), CPU) * da_dz(a[k - 1], act_types[k - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), CPU) * da_dz(a[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], CPU));
@@ -276,10 +276,10 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
             // (10, 3)
 
             ten z = matmul(x, w[i], CPU) + b[i];
-            a.push_back(act(z, act_types[i], CPU));
+            a.push_back(acts[i](z));
         } else {
             ten z = matmul(a[i - 1], w[i], CPU) + b[i];
-            a.push_back(act(z, act_types[i], CPU));
+            a.push_back(acts[i](z));
         }
     }
 

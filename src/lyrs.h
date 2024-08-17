@@ -87,8 +87,7 @@ class nn {
   private:
     std::vector<ten> a;
     act_func activation;
-    std::vector<act_type> act_types;
-    std::vector<act_func> act_func;
+    std::vector<act_func> acts;
     size_t batch_size = 10;
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
@@ -105,7 +104,7 @@ class nn {
     std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
 
   public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<act_type> &act_types, float const lr, loss_func loss, metric_func metric);
+    nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &acts, float const lr, loss_func loss, metric_func metric);
     void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
     float evaluate(const ten &x, const ten &y);
     ten predict(const ten &x);
