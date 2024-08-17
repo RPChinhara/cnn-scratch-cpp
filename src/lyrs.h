@@ -88,6 +88,7 @@ class nn {
     std::vector<ten> a;
     act_func activation;
     std::vector<act_type> act_types;
+    std::vector<act_func> act_func;
     size_t batch_size = 10;
     size_t epochs = 200;
     float grad_clip_threshold = 8.0f;
