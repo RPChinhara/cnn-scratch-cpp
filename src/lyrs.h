@@ -13,7 +13,6 @@
 class tensor;
 
 using act_func = std::function<tensor(const tensor&)>;
-
 using loss_func = std::function<float(const tensor&, const tensor&)>;
 using metric_func = std::function<float(const tensor&, const tensor&)>;
 
