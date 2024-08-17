@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <vector>
 
-ten load_aapl()
+tensor load_aapl()
 {
     std::ifstream file("datas/aapl.csv");
 
@@ -20,7 +20,7 @@ ten load_aapl()
     size_t num_datas = 10409;
     size_t num_columns = 1;
 
-    ten data = zeros({num_datas, num_columns});
+    tensor data = zeros({num_datas, num_columns});
 
     std::string line;
     std::getline(file, line);
@@ -213,7 +213,7 @@ iris load_iris()
     return data;
 }
 
-ten ReadMNISTImages(const std::string &filePath)
+tensor ReadMNISTImages(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -239,7 +239,7 @@ ten ReadMNISTImages(const std::string &filePath)
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
-    ten images2 = zeros({numImages, numRows, numCols});
+    tensor images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
     for (auto i = 0; i < numImages; ++i)
@@ -259,7 +259,7 @@ ten ReadMNISTImages(const std::string &filePath)
     return images2;
 }
 
-ten ReadMNISTLabels(const std::string &filePath)
+tensor ReadMNISTLabels(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary);
 
@@ -278,7 +278,7 @@ ten ReadMNISTLabels(const std::string &filePath)
 
     file.read(reinterpret_cast<char *>(labels.data()), numLabels);
 
-    ten labels2 = zeros({numLabels, 1});
+    tensor labels2 = zeros({numLabels, 1});
     size_t idx = 0;
 
     for (auto i = 0; i < numLabels; ++i)

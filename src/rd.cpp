@@ -1,13 +1,13 @@
 #include "rd.h"
-#include "ten.h"
+#include "tensor.h"
 
 #include <cassert>
 #include <numeric>
 #include <random>
 
-ten normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev)
+tensor normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev)
 {
-    ten t_new = ten();
+    tensor t_new = tensor();
 
     for (auto i : shape)
         assert(i != 0);
@@ -31,9 +31,9 @@ ten normal_dist(const std::vector<size_t> &shape, const float mean, const float 
     return t_new;
 }
 
-ten uniform_dist(const std::vector<size_t> &shape, const float min_val, const float max_val)
+tensor uniform_dist(const std::vector<size_t> &shape, const float min_val, const float max_val)
 {
-    ten t_new = ten();
+    tensor t_new = tensor();
 
     for (auto i : shape)
         assert(i != 0);
@@ -57,9 +57,9 @@ ten uniform_dist(const std::vector<size_t> &shape, const float min_val, const fl
     return t_new;
 }
 
-ten shuffle(const ten &t, const size_t rd_state)
+tensor shuffle(const tensor &t, const size_t rd_state)
 {
-    ten t_new = t;
+    tensor t_new = t;
     std::mt19937 rng(rd_state);
 
     for (auto i = t.shape.front() - 1; 0 < i; --i)

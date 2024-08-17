@@ -3,9 +3,9 @@
 #include "lyrs.h"
 #include "preproc.h"
 
-std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length) {
-    ten x = zeros({data.size - seq_length - 1, seq_length, 1});
-    ten y = zeros({data.size - seq_length - 1, 1});
+std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_length) {
+    tensor x = zeros({data.size - seq_length - 1, seq_length, 1});
+    tensor y = zeros({data.size - seq_length - 1, 1});
 
     size_t idx = 0;
     for (auto i = 0; i < (data.size - seq_length - 1) * seq_length; ++i) {
@@ -21,8 +21,8 @@ std::pair<ten, ten> create_sequences(const ten &data, const size_t seq_length) {
     return std::make_pair(x, y);
 }
 
-ten hyperbolic_tangent(const ten &z_t) {
-    ten h_t = z_t;
+tensor hyperbolic_tangent(const tensor &z_t) {
+    tensor h_t = z_t;
 
     for (auto i = 0; i < z_t.size; ++i)
         h_t.elem[i] = std::tanhf(z_t.elem[i]);
@@ -30,7 +30,7 @@ ten hyperbolic_tangent(const ten &z_t) {
     return h_t;
 }
 
-float mean_squared_error(const ten &y_true, const ten &y_pred) {
+float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
     float sum = 0.0f;
 
     for (auto i = 0; i < y_true.size; ++i)
@@ -44,8 +44,8 @@ int main() {
     const size_t seq_length = 10;
     const size_t lr = 0.01f;
 
-    ten data = load_aapl();
-    ten scaled_data = min_max_scaler(data);
+    tensor data = load_aapl();
+    tensor scaled_data = min_max_scaler(data);
     auto train_test = split(scaled_data, test_size);
 
     auto x_y_train = create_sequences(train_test.first, seq_length);

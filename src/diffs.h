@@ -1,6 +1,6 @@
 #pragma once
 
-class ten;
+class tensor;
 
-ten da_dz(const ten &a);
-ten dl_da_da_dz(const ten &y_true, const ten &y_pred);
+tensor da_dz(const tensor &a);
+tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred);

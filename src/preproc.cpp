@@ -44,16 +44,16 @@ std::wstring lower(const std::wstring &text)
     return result;
 }
 
-ten min_max_scaler(ten &data)
+tensor min_max_scaler(tensor &data)
 {
     auto data_min = min(data);
     auto data_max = max(data, 0);
     return (data - data_min) / (data_max - data_min);
 }
 
-ten one_hot(const ten &t, const size_t depth)
+tensor one_hot(const tensor &t, const size_t depth)
 {
-    ten t_new = zeros({t.size, depth});
+    tensor t_new = zeros({t.size, depth});
 
     std::vector<float> idx;
 
@@ -123,10 +123,10 @@ std::vector<std::wstring> tokenizer(const std::wstring &text)
     return tokens;
 }
 
-train_test split_dataset(const ten &x, const ten &y, const float test_size, const size_t rd_state)
+train_test split_dataset(const tensor &x, const tensor &y, const float test_size, const size_t rd_state)
 {
-    ten x_shuffled = shuffle(x, rd_state);
-    ten y_shuffled = shuffle(y, rd_state);
+    tensor x_shuffled = shuffle(x, rd_state);
+    tensor y_shuffled = shuffle(y, rd_state);
 
     train_test data;
     data.x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});

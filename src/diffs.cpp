@@ -1,8 +1,8 @@
 #include "diffs.h"
-#include "ten.h"
+#include "tensor.h"
 
-ten da_dz(const ten &a) {
-    ten t_new = a;
+tensor da_dz(const tensor &a) {
+    tensor t_new = a;
 
     for (auto i = 0; i < a.size; ++i)
     {
@@ -17,6 +17,6 @@ ten da_dz(const ten &a) {
     return t_new;
 }
 
-ten dl_da_da_dz(const ten &y_true, const ten &y_pred) {
+tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred) {
     return (y_pred - y_true);
 }

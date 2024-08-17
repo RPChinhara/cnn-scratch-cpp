@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ten.h"
+#include "tensor.h"
 
 #include <string>
 #include <vector>
@@ -13,25 +13,25 @@ struct en_es
 
 struct imdb
 {
-    ten x;
-    ten y;
+    tensor x;
+    tensor y;
 };
 
 struct iris
 {
-    ten x;
-    ten y;
+    tensor x;
+    tensor y;
 };
 
 struct mnist
 {
-    ten trainImages;
-    ten trainLabels;
-    ten testImages;
-    ten testLabels;
+    tensor trainImages;
+    tensor trainLabels;
+    tensor testImages;
+    tensor testLabels;
 };
 
-ten load_aapl();
+tensor load_aapl();
 en_es load_en_es();
 imdb load_imdb();
 iris load_iris();

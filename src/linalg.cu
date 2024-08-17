@@ -1,15 +1,15 @@
 #include "linalg.h"
 #include "arrs.h"
 #include "knls.h"
-#include "ten.h"
+#include "tensor.h"
 
 #include <cassert>
 
-ten matmul(const ten &t1, const ten &t2, dev_type dev)
+tensor matmul(const tensor &t1, const tensor &t2, dev_type dev)
 {
     assert(t1.shape.back() == t2.shape.front());
 
-    ten t_new = zeros({t1.shape.front(), t2.shape.back()});
+    tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
 
     switch (dev)
     {
@@ -60,7 +60,7 @@ ten matmul(const ten &t1, const ten &t2, dev_type dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return ten();
+        return tensor();
     }
 }
 
@@ -75,11 +75,11 @@ static size_t get_batch_size(const std::vector<size_t> &shape)
     return batchSize;
 }
 
-ten transpose(const ten &t)
+tensor transpose(const tensor &t)
 {
     assert(2 <= t.shape.size());
 
-    ten t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
+    tensor t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
 

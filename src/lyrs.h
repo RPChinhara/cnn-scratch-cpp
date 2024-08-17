@@ -2,7 +2,7 @@
 
 #include "arrs.h"
 #include "preproc.h"
-#include "ten.h"
+#include "tensor.h"
 
 #include <cassert>
 #include <functional>
@@ -10,24 +10,24 @@
 #include <unordered_map>
 #include <vector>
 
-class ten;
+class tensor;
 
-using act_func = std::function<ten(const ten&)>;
+using act_func = std::function<tensor(const tensor&)>;
 
-using loss_func = std::function<float(const ten&, const ten&)>;
-using metric_func = std::function<float(const ten&, const ten&)>;
+using loss_func = std::function<float(const tensor&, const tensor&)>;
+using metric_func = std::function<float(const tensor&, const tensor&)>;
 
 class cnn2d {
   private:
     std::vector<size_t> filters;
     float lr;
 
-    std::vector<ten> forward(const ten &input, const std::vector<ten> &kernel, const size_t stride);
+    std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
 
   public:
     cnn2d(const std::vector<size_t> &filters, float const lr);
-    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
-    void predict(const ten &xTest, const ten &yTest);
+    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
+    void predict(const tensor &xTest, const tensor &yTest);
 };
 
 class gru {
@@ -36,22 +36,22 @@ class gru {
     size_t num_hiddens = 20;
     size_t batch_size = 20;
 
-    ten u_z;
-    ten u_r;
-    ten u_h;
+    tensor u_z;
+    tensor u_r;
+    tensor u_h;
 
-    ten w_z;
-    ten w_r;
-    ten w_h;
+    tensor w_z;
+    tensor w_r;
+    tensor w_h;
 
-    ten b_z;
-    ten b_r;
-    ten b_h;
+    tensor b_z;
+    tensor b_r;
+    tensor b_h;
 
-    ten h;
+    tensor h;
 
-    std::pair<std::vector<ten>, std::vector<ten>> init_params();
-    std::vector<ten> forward(const ten &x);
+    std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
+    std::vector<tensor> forward(const tensor &x);
 
   public:
     gru(const size_t units);
@@ -69,22 +69,22 @@ class lstm {
     size_t out_size = 1;
     size_t seq_length = 10;
 
-    ten w_hx;
-    ten w_hh;
-    ten w_hy;
-    ten b_h;
-    ten b_y;
+    tensor w_hx;
+    tensor w_hh;
+    tensor w_hy;
+    tensor b_h;
+    tensor b_y;
 
-    std::vector<ten> forward(const ten &x);
+    std::vector<tensor> forward(const tensor &x);
 
   public:
     lstm(const size_t lr, loss_func loss);
-    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
+    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
 };
 
 class nn {
   private:
-    std::vector<ten> a;
+    std::vector<tensor> a;
     act_func activation;
     std::vector<act_func> acts;
     size_t batch_size = 10;
@@ -96,17 +96,17 @@ class nn {
     std::vector<size_t> lyrs;
     float mom = 0.1f;
 
-    std::pair<std::vector<ten>, std::vector<ten>> w_b;
-    std::pair<std::vector<ten>, std::vector<ten>> w_b_mom;
+    std::pair<std::vector<tensor>, std::vector<tensor>> w_b;
+    std::pair<std::vector<tensor>, std::vector<tensor>> w_b_mom;
 
-    std::pair<std::vector<ten>, std::vector<ten>> init_params();
-    std::vector<ten> forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b);
+    std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
+    std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b);
 
   public:
     nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &acts, float const lr, loss_func loss, metric_func metric);
-    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
-    float evaluate(const ten &x, const ten &y);
-    ten predict(const ten &x);
+    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
+    float evaluate(const tensor &x, const tensor &y);
+    tensor predict(const tensor &x);
 };
 
 class rnn {
@@ -122,23 +122,23 @@ class rnn {
     size_t out_size = 1;
     size_t seq_length = 10;
 
-    ten w_hx;
-    ten w_hh;
-    ten w_hy;
-    ten b_h;
-    ten b_y;
+    tensor w_hx;
+    tensor w_hh;
+    tensor w_hy;
+    tensor b_h;
+    tensor b_y;
 
-    std::pair<std::vector<ten>, std::vector<ten>> forward(const ten &x);
+    std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor &x);
 
   public:
     rnn(const size_t lr, act_func activation, loss_func loss);
-    void train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val);
+    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
 };
 
-ten embedding(const size_t vocab_size, const size_t cols, const ten &ind);
+tensor embedding(const size_t vocab_size, const size_t cols, const tensor &ind);
 
 template <typename T>
-ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, size_t max_tokens, const size_t max_len) {
+tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, size_t max_tokens, const size_t max_len) {
     assert(max_tokens > 2);
 
     std::unordered_map<T, float> vocab_map;
@@ -170,7 +170,7 @@ ten text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, si
     // for (auto i = 0; i < num_vocab; ++i)
     //     std::cout << i << ": " << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
 
-    ten t_new = zeros({in.size(), max_len});
+    tensor t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
     const float oov_token = vocab_vec[1].second;

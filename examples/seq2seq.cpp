@@ -6,22 +6,22 @@
 
 const size_t UNITS = 256;
 
-ten encoder() {
-    ten ind = ten({2, 5}, {2, 10, 1, 2, 3, 2, 15, 1, 5, 3});
+tensor encoder() {
+    tensor ind = tensor({2, 5}, {2, 10, 1, 2, 3, 2, 15, 1, 5, 3});
 
     std::cout << embedding(16, 4, ind) << std::endl;
 
     auto rnn = gru(UNITS);
 
-    return ten();
+    return tensor();
 }
 
-ten cross_attention() {
-    return ten();
+tensor cross_attention() {
+    return tensor();
 }
 
-ten decoder() {
-    return ten();
+tensor decoder() {
+    return tensor();
 }
 
 int main() {

@@ -5,8 +5,8 @@
 
 #include <chrono>
 
-ten relu(const ten &z) {
-    ten a = z;
+tensor relu(const tensor &z) {
+    tensor a = z;
 
     for (auto i = 0; i < z.size; ++i)
         a.elem[i] = std::fmax(0.0f, z.elem[i]);
@@ -14,17 +14,17 @@ ten relu(const ten &z) {
     return a;
 }
 
-ten softmax(const ten &z) {
-    ten exp_scores = exp(z - max(z, 1), CPU);
+tensor softmax(const tensor &z) {
+    tensor exp_scores = exp(z - max(z, 1), CPU);
     return exp_scores / sum(exp_scores, 1);
 }
 
-float categorical_cross_entropy(const ten &y_true, const ten &y_pred) {
+float categorical_cross_entropy(const tensor &y_true, const tensor &y_pred) {
     float sum = 0.0f;
     constexpr float epsilon = 1e-15f;
     size_t num_samples = y_true.shape.front();
-    ten y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
-    ten y_pred_logged = log(y_pred_clipped, CPU);
+    tensor y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
+    tensor y_pred_logged = log(y_pred_clipped, CPU);
 
     for (auto i = 0; i < y_true.size; ++i)
         sum += y_true[i] * y_pred_logged[i];
@@ -32,9 +32,9 @@ float categorical_cross_entropy(const ten &y_true, const ten &y_pred) {
     return -sum / num_samples;
 }
 
-float categorical_accuracy(const ten &y_true, const ten &y_pred) {
-    ten idx_true = argmax(y_true);
-    ten pred_idx = argmax(y_pred);
+float categorical_accuracy(const tensor &y_true, const tensor &y_pred) {
+    tensor idx_true = argmax(y_true);
+    tensor pred_idx = argmax(y_pred);
     float equal = 0.0f;
 
     for (auto i = 0; i < idx_true.size; ++i)
@@ -58,8 +58,8 @@ int main() {
     const float lr = 0.01f;
 
     iris data = load_iris();
-    ten x = data.x;
-    ten y = data.y;
+    tensor x = data.x;
+    tensor y = data.y;
 
     y = one_hot(y, depth);
 

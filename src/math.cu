@@ -1,13 +1,13 @@
 #include "math.hpp"
 #include "arrs.h"
 #include "knls.h"
-#include "ten.h"
+#include "tensor.h"
 
 #include <cassert>
 
-ten argmax(const ten &t)
+tensor argmax(const tensor &t)
 {
-    ten t_new = zeros({t.shape.front()});
+    tensor t_new = zeros({t.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
@@ -32,9 +32,9 @@ ten argmax(const ten &t)
     return t_new;
 }
 
-ten exp(const ten &t, dev_type dev)
+tensor exp(const tensor &t, dev_type dev)
 {
-    ten t_new = t;
+    tensor t_new = t;
 
     switch (dev)
     {
@@ -67,13 +67,13 @@ ten exp(const ten &t, dev_type dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return ten();
+        return tensor();
     }
 }
 
-ten log(const ten &t, dev_type dev)
+tensor log(const tensor &t, dev_type dev)
 {
-    ten t_new = t;
+    tensor t_new = t;
 
     switch (dev)
     {
@@ -105,14 +105,14 @@ ten log(const ten &t, dev_type dev)
     }
     default:
         std::cout << "Unknown dev." << std::endl;
-        return ten();
+        return tensor();
     }
 }
 
-ten max(const ten &t, const size_t axis)
+tensor max(const tensor &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    ten t_new;
+    tensor t_new;
 
     if (axis == 0)
     {
@@ -156,9 +156,9 @@ ten max(const ten &t, const size_t axis)
     return t_new;
 }
 
-ten min(const ten &t)
+tensor min(const tensor &t)
 {
-    ten t_new = zeros({1, t.shape.back()});
+    tensor t_new = zeros({1, t.shape.back()});
 
     for (auto i = 0; i < t.shape.back(); ++i)
     {
@@ -178,9 +178,9 @@ ten min(const ten &t)
     return t_new;
 }
 
-ten sqrt(const ten &x)
+tensor sqrt(const tensor &x)
 {
-    ten y = x;
+    tensor y = x;
 
     for (auto i = 0; i < x.size; ++i)
         y.elem[i] = sqrtf(x.elem[i]);
@@ -188,10 +188,10 @@ ten sqrt(const ten &x)
     return y;
 }
 
-ten sum(const ten &t, const size_t axis)
+tensor sum(const tensor &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
-    ten t_new;
+    tensor t_new;
 
     if (t.shape.size() == 1 || t.shape.front() == 1)
     {

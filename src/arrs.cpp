@@ -1,14 +1,14 @@
 #include "arrs.h"
-#include "ten.h"
+#include "tensor.h"
 
 #include <cassert>
 #include <numeric>
 
-ten clip_by_value(const ten &t, float clip_val_min, float clip_val_max)
+tensor clip_by_value(const tensor &t, float clip_val_min, float clip_val_max)
 {
     assert(clip_val_min <= clip_val_max);
 
-    ten t_new = t;
+    tensor t_new = t;
 
     for (auto i = 0; i < t.size; ++i)
     {
@@ -21,9 +21,9 @@ ten clip_by_value(const ten &t, float clip_val_min, float clip_val_max)
     return t_new;
 }
 
-ten slice(const ten &t, const size_t begin, const size_t size)
+tensor slice(const tensor &t, const size_t begin, const size_t size)
 {
-    ten t_new = zeros({size, t.shape.back()});
+    tensor t_new = zeros({size, t.shape.back()});
 
     for (auto i = begin * t.shape.back(); i < (begin * t.shape.back()) + (size * t.shape.back()); ++i)
         t_new[i - (begin * t.shape.back())] = t[i];
@@ -31,10 +31,10 @@ ten slice(const ten &t, const size_t begin, const size_t size)
     return t_new;
 }
 
-std::pair<ten, ten> split(const ten &x, const float test_size)
+std::pair<tensor, tensor> split(const tensor &x, const float test_size)
 {
-    ten x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    ten x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
+    tensor x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
+    tensor x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
 
     for (auto i = 0; i < x_train.size; ++i)
         x_train[i] = x[i];
@@ -45,9 +45,9 @@ std::pair<ten, ten> split(const ten &x, const float test_size)
     return std::make_pair(x_train, x_test);
 }
 
-ten zeros(const std::vector<size_t> &shape)
+tensor zeros(const std::vector<size_t> &shape)
 {
-    ten t_new = ten();
+    tensor t_new = tensor();
 
     for (auto i : shape)
         assert(i != 0);

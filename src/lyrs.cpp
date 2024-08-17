@@ -6,7 +6,7 @@
 #include "math.hpp"
 #include "preproc.h"
 #include "rd.h"
-#include "ten.h"
+#include "tensor.h"
 
 #include <cassert>
 #include <chrono>
@@ -16,9 +16,9 @@ cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr) {
     this->lr = lr;
 }
 
-void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const ten &yVal) {
-    // ten kernel = zeros({3, 3});
-    ten kernel = ten({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
+void cnn2d::train(const tensor &xTrain, const tensor &yTrain, const tensor &xVal, const tensor &yVal) {
+    // tensor kernel = zeros({3, 3});
+    tensor kernel = tensor({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
 
     size_t kernelHeight = kernel.shape.front();
     size_t kernelWidth = kernel.shape.back();
@@ -29,7 +29,7 @@ void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     size_t outputHeight = inputHeight - kernelHeight + 1;
     size_t outputWidth = inputWidth - kernelWidth + 1;
 
-    ten output = zeros({outputHeight, outputWidth});
+    tensor output = zeros({outputHeight, outputWidth});
 
     // size_t idx = 0;
 
@@ -44,11 +44,11 @@ void cnn2d::train(const ten &xTrain, const ten &yTrain, const ten &xVal, const t
     // std::cout << output << std::endl;
 }
 
-void cnn2d::predict(const ten &xTest, const ten &yTest) {
+void cnn2d::predict(const tensor &xTest, const tensor &yTest) {
 }
 
-std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel, const size_t stride) {
-    std::vector<ten> weights;
+std::vector<tensor> cnn2d::forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride) {
+    std::vector<tensor> weights;
 
     return weights;
 }
@@ -56,7 +56,7 @@ std::vector<ten> cnn2d::forward(const ten &input, const std::vector<ten> &kernel
 gru::gru(const size_t units) {
 }
 
-std::pair<std::vector<ten>, std::vector<ten>> gru::init_params() {
+std::pair<std::vector<tensor>, std::vector<tensor>> gru::init_params() {
     w_z = normal_dist({num_ins, num_hiddens});
     w_r = normal_dist({num_ins, num_hiddens});
     w_h = normal_dist({num_ins, num_hiddens});
@@ -72,7 +72,7 @@ std::pair<std::vector<ten>, std::vector<ten>> gru::init_params() {
     h = zeros({batch_size, num_hiddens});
 }
 
-std::vector<ten> gru::forward(const ten &x) {
+std::vector<tensor> gru::forward(const tensor &x) {
     init_params();
 
     // auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SOFTMAX, CPU);
@@ -93,7 +93,7 @@ lstm::lstm(const size_t lr, loss_func loss) {
     b_y = zeros({out_size, batch_size});
 }
 
-void lstm::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val) {
+void lstm::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -108,20 +108,20 @@ void lstm::train(const ten &x_train, const ten &y_train, const ten &x_val, const
     }
 }
 
-std::vector<ten> lstm::forward(const ten &x) {
-    ten h_t = zeros({hidden_size, batch_size});
-    // ten y_t;
+std::vector<tensor> lstm::forward(const tensor &x) {
+    tensor h_t = zeros({hidden_size, batch_size});
+    // tensor y_t;
 
-    std::vector<ten> h;
-    std::vector<ten> y;
+    std::vector<tensor> h;
+    std::vector<tensor> y;
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
-        ten x_t = zeros({batch_size, in_size});
+        tensor x_t = zeros({batch_size, in_size});
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto i = 0; i < batch_size; ++i) {
-            ten features;
+            tensor features;
 
             features = slice(x, idx, 1);
             idx += seq_length;
@@ -140,7 +140,7 @@ std::vector<ten> lstm::forward(const ten &x) {
         // getting only one ouput even thougth I input 8316 batches.
 
         // h_t = activationmatmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
-        ten y_t = matmul(w_hy, h_t, CPU) + b_y;
+        tensor y_t = matmul(w_hy, h_t, CPU) + b_y;
 
         h.push_back(h_t);
         y.push_back(y_t);
@@ -160,7 +160,7 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &acts, float
     w_b_mom = init_params();
 }
 
-void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val) {
+void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -174,14 +174,14 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
         std::random_device rd;
         auto rd_state = rd();
 
-        ten x_shuffled = shuffle(x_train, rd_state);
-        ten y_shuffled = shuffle(y_train, rd_state);
+        tensor x_shuffled = shuffle(x_train, rd_state);
+        tensor y_shuffled = shuffle(y_train, rd_state);
 
-        ten x_batch;
-        ten y_batch;
+        tensor x_batch;
+        tensor y_batch;
 
-        ten y_pred;
-        ten y_pred_val;
+        tensor y_pred;
+        tensor y_pred_val;
 
         for (auto j = 0; j < x_train.shape.front(); j += batch_size) {
             assert(0 < batch_size && batch_size <= x_train.shape.front());
@@ -197,7 +197,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             a = forward(x_batch, w_b.first, w_b.second);
             y_pred = a.back();
 
-            std::vector<ten> dl_dz, dl_dw, dl_db;
+            std::vector<tensor> dl_dz, dl_dw, dl_db;
 
             for (auto k = lyrs.size() - 1; 0 < k; --k) {
                 if (k == lyrs.size() - 1)
@@ -225,7 +225,7 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        std::vector<ten> a_val = forward(x_val, w_b.first, w_b.second);
+        std::vector<tensor> a_val = forward(x_val, w_b.first, w_b.second);
         y_pred_val = a_val.back();
 
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -240,21 +240,21 @@ void nn::train(const ten &x_train, const ten &y_train, const ten &x_val, const t
     }
 }
 
-float nn::evaluate(const ten &x, const ten &y) {
+float nn::evaluate(const tensor &x, const tensor &y) {
     a = forward(x, w_b.first, w_b.second);
 
     return loss(y, a.back());
 }
 
-ten nn::predict(const ten &x) {
+tensor nn::predict(const tensor &x) {
     a = forward(x, w_b.first, w_b.second);
 
     return a.back();
 }
 
-std::pair<std::vector<ten>, std::vector<ten>> nn::init_params() {
-    std::vector<ten> w;
-    std::vector<ten> b;
+std::pair<std::vector<tensor>, std::vector<tensor>> nn::init_params() {
+    std::vector<tensor> w;
+    std::vector<tensor> b;
 
     for (auto i = 0; i < lyrs.size() - 1; ++i) {
         w.push_back(normal_dist({lyrs[i], lyrs[i + 1]}, 0.0f, 0.2f));
@@ -264,8 +264,8 @@ std::pair<std::vector<ten>, std::vector<ten>> nn::init_params() {
     return std::make_pair(w, b);
 }
 
-std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std::vector<ten> &b) {
-    std::vector<ten> a;
+std::vector<tensor> nn::forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b) {
+    std::vector<tensor> a;
 
     for (auto i = 0; i < lyrs.size() - 1; ++i) {
         if (i == 0) {
@@ -275,10 +275,10 @@ std::vector<ten> nn::forward(const ten &x, const std::vector<ten> &w, const std:
             // = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput =
             // (10, 3)
 
-            ten z = matmul(x, w[i], CPU) + b[i];
+            tensor z = matmul(x, w[i], CPU) + b[i];
             a.push_back(acts[i](z));
         } else {
-            ten z = matmul(a[i - 1], w[i], CPU) + b[i];
+            tensor z = matmul(a[i - 1], w[i], CPU) + b[i];
             a.push_back(acts[i](z));
         }
     }
@@ -299,7 +299,7 @@ rnn::rnn(const size_t lr, act_func activation, loss_func loss) {
     b_y = zeros({out_size, batch_size});
 }
 
-void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const ten &y_val) {
+void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -312,27 +312,27 @@ void rnn::train(const ten &x_train, const ten &y_train, const ten &x_val, const 
         auto remaining_ms = duration - seconds;
 
         for (auto i = 0; i < seq_length; ++i) {
-            ten dl_douput = -2.0f / y_train.size * (y_train - transpose(y_pred));
+            tensor dl_douput = -2.0f / y_train.size * (y_train - transpose(y_pred));
         }
 
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, transpose(y_pred)) << std::endl;
     }
 }
 
-std::pair<std::vector<ten>, std::vector<ten>> rnn::forward(const ten &x) {
-    ten h_t = zeros({hidden_size, batch_size});
-    // ten y_t;
+std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
+    tensor h_t = zeros({hidden_size, batch_size});
+    // tensor y_t;
 
-    std::vector<ten> h;
-    std::vector<ten> y;
+    std::vector<tensor> h;
+    std::vector<tensor> y;
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
-        ten x_t = zeros({batch_size, in_size});
+        tensor x_t = zeros({batch_size, in_size});
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto i = 0; i < batch_size; ++i) {
-            ten features;
+            tensor features;
 
             features = slice(x, idx, 1);
             idx += seq_length;
@@ -351,7 +351,7 @@ std::pair<std::vector<ten>, std::vector<ten>> rnn::forward(const ten &x) {
         // getting only one ouput even thougth I input 8316 batches.
 
         h_t = activation(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h);
-        ten y_t = matmul(w_hy, h_t, CPU) + b_y;
+        tensor y_t = matmul(w_hy, h_t, CPU) + b_y;
 
         h.push_back(h_t);
         y.push_back(y_t);
@@ -360,15 +360,15 @@ std::pair<std::vector<ten>, std::vector<ten>> rnn::forward(const ten &x) {
     return std::make_pair(h, y);
 }
 
-ten embedding(const size_t vocab_size, const size_t cols, const ten &ind) {
+tensor embedding(const size_t vocab_size, const size_t cols, const tensor &ind) {
     for (auto i = 0; i < ind.size; ++i)
         assert(ind[i] < vocab_size);
 
-    ten embeddings_mat = uniform_dist({vocab_size, cols});
+    tensor embeddings_mat = uniform_dist({vocab_size, cols});
 
     std::cout << embeddings_mat << std::endl;
 
-    ten dense_vecs = zeros({ind.shape.front(), ind.shape.back(), cols});
+    tensor dense_vecs = zeros({ind.shape.front(), ind.shape.back(), cols});
 
     for (auto i = 0; i < ind.size; ++i) {
         auto a = slice(embeddings_mat, ind[i], 1);
