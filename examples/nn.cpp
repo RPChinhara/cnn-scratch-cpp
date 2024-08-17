@@ -51,10 +51,10 @@ int main() {
     const float test_size2 = 0.5f;
     const size_t rd_state = 42;
 
-    const size_t num_in = 4;
+    const size_t num_input = 4;
     const size_t num_hidden1 = 64;
     const size_t num_hidden2 = 64;
-    const size_t num_out = 3;
+    const size_t num_output = 3;
     const float lr = 0.01f;
 
     iris data = load_iris();
@@ -70,7 +70,7 @@ int main() {
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn model = nn({num_in, num_hidden1, num_hidden2, num_out}, {relu, relu, softmax}, lr, categorical_cross_entropy, categorical_accuracy);
+    nn model = nn({num_input, num_hidden1, num_hidden2, num_output}, {relu, relu, softmax}, lr, categorical_cross_entropy, categorical_accuracy);
 
     auto start = std::chrono::high_resolution_clock::now();
 
