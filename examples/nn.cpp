@@ -70,7 +70,7 @@ int main() {
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn model = nn({input_size, hidden1_size, hidden2_size, output_size}, {relu, relu, softmax}, lr, categorical_cross_entropy, categorical_accuracy);
+    nn model = nn({input_size, hidden1_size, hidden2_size, output_size}, {relu, relu, softmax}, categorical_cross_entropy, categorical_accuracy, lr);
 
     auto start = std::chrono::high_resolution_clock::now();
 

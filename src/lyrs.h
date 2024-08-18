@@ -100,7 +100,7 @@ class nn {
     std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b);
 
   public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const float lr, const loss_func &loss, const metric_func &metric);
+    nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr);
     void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
     float evaluate(const tensor &x, const tensor &y);
     tensor predict(const tensor &x);
