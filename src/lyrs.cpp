@@ -149,9 +149,9 @@ std::vector<tensor> lstm::forward(const tensor &x) {
     return y;
 }
 
-nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &acts, float const lr, loss_func loss, metric_func metric) {
+nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, float const lr, loss_func loss, metric_func metric) {
     this->lyrs = lyrs;
-    this->acts = acts;
+    this->activations = activations;
     this->lr = lr;
     this->loss = loss;
     this->metric = metric;
@@ -276,10 +276,10 @@ std::vector<tensor> nn::forward(const tensor &x, const std::vector<tensor> &w, c
             // (10, 3)
 
             tensor z = matmul(x, w[i], CPU) + b[i];
-            a.push_back(acts[i](z));
+            a.push_back(activations[i](z));
         } else {
             tensor z = matmul(a[i - 1], w[i], CPU) + b[i];
-            a.push_back(acts[i](z));
+            a.push_back(activations[i](z));
         }
     }
 
