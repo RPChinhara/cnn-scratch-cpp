@@ -1,7 +1,6 @@
 #include "lyrs.h"
 #include "arrs.h"
 #include "dev.h"
-#include "diffs.h"
 #include "linalg.h"
 #include "math.hpp"
 #include "preproc.h"
