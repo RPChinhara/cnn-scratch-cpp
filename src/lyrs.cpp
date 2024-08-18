@@ -160,6 +160,26 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
     w_b_mom = init_params();
 }
 
+tensor da_dz(const tensor &a) {
+    tensor t_new = a;
+
+    for (auto i = 0; i < a.size; ++i)
+    {
+        if (0.0f < a[i])
+            t_new[i] = 1.0f;
+        else if (a[i] == 0.0f)
+            t_new[i] = 0.0f;
+        else
+            t_new[i] = 0.0f;
+    }
+
+    return t_new;
+}
+
+tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred) {
+    return (y_pred - y_true);
+}
+
 void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
