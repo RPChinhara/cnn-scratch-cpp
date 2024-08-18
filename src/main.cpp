@@ -51,7 +51,7 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, seq_length);
     auto x_y_test = create_sequences(train_test.second, seq_length);
 
-    rnn model = rnn(lr, hyperbolic_tangent, mean_squared_error);
+    rnn model = rnn(hyperbolic_tangent, mean_squared_error, lr);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     return 0;

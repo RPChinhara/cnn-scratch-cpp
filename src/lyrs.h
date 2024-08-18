@@ -128,7 +128,7 @@ class rnn {
     std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor &x);
 
   public:
-    rnn(const size_t lr, const act_func &activation, const loss_func &loss);
+    rnn(const act_func &activation, const loss_func &loss, const float lr);
     void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
 };
 

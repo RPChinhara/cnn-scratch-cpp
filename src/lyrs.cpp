@@ -305,10 +305,10 @@ std::vector<tensor> nn::forward(const tensor &x, const std::vector<tensor> &w, c
     return a;
 }
 
-rnn::rnn(const size_t lr, const act_func &activation, const loss_func &loss) {
-    this->lr = lr;
+rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     this->activation = activation;
     this->loss = loss;
+    this->lr = lr;
 
     w_hx = uniform_dist({hidden_size, input_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
