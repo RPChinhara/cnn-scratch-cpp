@@ -194,7 +194,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
                 y_batch = slice(y_shuffled, j, batch_size);
             }
 
-            a = forward(x_batch, w_b.first, w_b.second);
+            std::vector<tensor> a = forward(x_batch, w_b.first, w_b.second);
             y_pred = a.back();
 
             std::vector<tensor> dl_dz, dl_dw, dl_db;
@@ -241,13 +241,13 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 }
 
 float nn::evaluate(const tensor &x, const tensor &y) {
-    a = forward(x, w_b.first, w_b.second);
+    std::vector<tensor> a = forward(x, w_b.first, w_b.second);
 
     return loss(y, a.back());
 }
 
 tensor nn::predict(const tensor &x) {
-    a = forward(x, w_b.first, w_b.second);
+    std::vector<tensor> a = forward(x, w_b.first, w_b.second);
 
     return a.back();
 }

@@ -83,7 +83,6 @@ class lstm {
 
 class nn {
   private:
-    std::vector<tensor> a;
     std::vector<act_func> acts;
     size_t batch_size = 10;
     size_t epochs = 200;
