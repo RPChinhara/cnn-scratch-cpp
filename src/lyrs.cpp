@@ -291,12 +291,12 @@ rnn::rnn(const size_t lr, act_func activation, loss_func loss) {
     this->activation = activation;
     this->loss = loss;
 
-    w_hx = uniform_dist({hidden_size, in_size});
+    w_hx = uniform_dist({hidden_size, input_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
-    w_hy = uniform_dist({out_size, hidden_size});
+    w_hy = uniform_dist({output_size, hidden_size});
 
     b_h = zeros({hidden_size, batch_size});
-    b_y = zeros({out_size, batch_size});
+    b_y = zeros({output_size, batch_size});
 }
 
 void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
@@ -328,7 +328,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
-        tensor x_t = zeros({batch_size, in_size});
+        tensor x_t = zeros({batch_size, input_size});
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto i = 0; i < batch_size; ++i) {
