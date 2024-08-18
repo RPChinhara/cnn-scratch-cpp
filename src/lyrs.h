@@ -83,14 +83,14 @@ class lstm {
 
 class nn {
   private:
+    std::vector<size_t> lyrs;
     std::vector<act_func> acts;
-    size_t batch_size = 10;
-    size_t epochs = 200;
-    float grad_clip_threshold = 8.0f;
-    float lr;
     loss_func loss;
     metric_func metric;
-    std::vector<size_t> lyrs;
+    float lr;
+    size_t epochs = 200;
+    size_t batch_size = 10;
+    float grad_clip_threshold = 8.0f;
     float mom = 0.1f;
 
     std::pair<std::vector<tensor>, std::vector<tensor>> w_b;
@@ -108,11 +108,11 @@ class nn {
 
 class rnn {
   private:
-    float lr;
     act_func activation;
     loss_func loss;
-    size_t batch_size = 8316;
+    float lr;
     size_t epochs = 10;
+    size_t batch_size = 8316;
 
     size_t in_size = 1;
     size_t hidden_size = 50;
