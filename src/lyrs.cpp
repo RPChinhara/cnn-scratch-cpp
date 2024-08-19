@@ -84,7 +84,7 @@ lstm::lstm(const size_t lr, loss_func loss) {
     this->lr = lr;
     this->loss = loss;
 
-    w_hx = uniform_dist({hidden_size, in_size});
+    w_xh = uniform_dist({hidden_size, in_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
     w_hy = uniform_dist({out_size, hidden_size});
 
@@ -138,7 +138,7 @@ std::vector<tensor> lstm::forward(const tensor &x) {
         // I think this is wrong because when you think about it it's weird that
         // getting only one ouput even thougth I input 8316 batches.
 
-        // h_t = activationmatmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
+        // h_t = activationmatmul(w_xh, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
         tensor y_t = matmul(w_hy, h_t, CPU) + b_y;
 
         h.push_back(h_t);
@@ -310,7 +310,7 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    w_hx = uniform_dist({hidden_size, input_size});
+    w_xh = uniform_dist({hidden_size, input_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
     w_hy = uniform_dist({output_size, hidden_size});
 
@@ -378,7 +378,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
         // I think this is wrong because when you think about it it's weird that getting only one ouput even thougth I input 8316 batches.
 
-        h_t = activation(matmul(w_hx, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h);
+        h_t = activation(matmul(w_xh, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h);
         tensor y_t = matmul(w_hy, h_t, CPU) + b_y;
 
         h.push_back(h_t);

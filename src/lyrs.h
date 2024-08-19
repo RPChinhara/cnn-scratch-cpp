@@ -81,7 +81,7 @@ class lstm {
     size_t out_size = 1;
     size_t seq_length = 10;
 
-    tensor w_hx;
+    tensor w_xh;
     tensor w_hh;
     tensor w_hy;
     tensor b_h;
@@ -132,7 +132,7 @@ class rnn {
     size_t output_size = 1;
     size_t seq_length = 10;
 
-    tensor w_hx;
+    tensor w_xh;
     tensor w_hh;
     tensor w_hy;
     tensor b_h;
