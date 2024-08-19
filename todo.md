@@ -3,6 +3,7 @@
     - Implement backpropagation.
       > For now, just implement all the backprop codes in chatgpt, and if it didn't work out then fix the problems.
         Don't think about what if won't work. Also review and learn about BPTT after implemented it.
+      > Done up to d_loss_d_W_hy. Next it delta_W_hy.
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
