@@ -330,12 +330,13 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        for (auto i = 0; i < seq_length; ++i) {
-            tensor dl_dy_pred = -2.0f / y_train.size * (transpose(y_train) - y_pred);
-            tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()), CPU);
+        tensor dl_dy_pred = -2.0f / y_train.size * (transpose(y_train) - y_pred);
+        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()), CPU);
 
-            w_hy = w_hy - lr * dl_dw_hy;
-            b_y = b_y - lr * dl_dy_pred; // dl_dy_pred should might be sum(dl_dy_pred, 0) which has shape (1, 8316) and sum(dl_dy_pred, 1) has (1, 1), but since dl_dy_pred is already (1, 8316) so...
+        w_hy = w_hy - lr * dl_dw_hy;
+        b_y = b_y - lr * dl_dy_pred; // dl_dy_pred should might be sum(dl_dy_pred, 0) which has shape (1, 8316) and sum(dl_dy_pred, 1) has (1, 1), but since dl_dy_pred is already (1, 8316) so...
+        
+        for (auto i = 0; i < seq_length; ++i) {
         }
 
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_pred) << std::endl;
