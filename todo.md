@@ -9,7 +9,7 @@
 2. Implement CNN.
 3. Work on other tutorials on TensorFlow sites, e.g., Neural machine translation with a Transformer and Keras.
 4. Implement other famous modles like BERT, ConvLSTM.
-5. Implement interesting algorithms from papers.
+5. Implement interesting algorithms from latest papers.
 6. Develop my own architectures, algorithms, and models.
 7. Use 7 to solve existing problems and discover new theories in mathematics and physics.
 8. Create new things, possibly scientific devices, from 7.
