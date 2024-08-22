@@ -334,13 +334,9 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             tensor dl_dy_pred = -2.0f / y_train.size * (transpose(y_train) - y_pred);
             tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()), CPU);
 
-            // d_loss_d_W_hy = np.dot(d_loss_d_output.T, hiddens[-1].reshape(1, -1))
-
-            std::cout << y_train.shape.front() << " " << y_train.shape.back() << std::endl;
-            std::cout << y_pred.shape.front() << " " << y_pred.shape.back() << std::endl;
-            std::cout << dl_dy_pred.shape.front() << " " << dl_dy_pred.shape.back() << std::endl;
-            std::cout << a.first.back().shape.front() << " " << a.first.back().shape.back() << std::endl;
+            std::cout << w_hy.shape.front() << " " << w_hy.shape.back() << std::endl;
             std::cout << dl_dw_hy.shape.front() << " " << dl_dw_hy.shape.back() << std::endl;
+            w_hy = w_hy - lr * dl_dw_hy;
         }
 
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, transpose(y_pred)) << std::endl;
