@@ -335,8 +335,21 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         w_hy = w_hy - lr * dl_dw_hy;
         b_y = b_y - lr * dl_dy_pred; // dl_dy_pred should might be sum(dl_dy_pred, 0) which has shape (1, 8316) and sum(dl_dy_pred, 1) has (1, 1), but since dl_dy_pred is already (1, 8316) so...
-        
+
         for (auto i = 0; i < seq_length; ++i) {
+
+            std::cout << dl_dy_pred.shape.front() << " " << dl_dy_pred.shape.back() << std::endl;
+            std::cout << w_hy.shape.front() << " " << w_hy.shape.back() << std::endl;
+
+            tensor dl_dh = matmul(transpose(dl_dy_pred), w_hy, CPU);
+
+            std::cout << dl_dh.shape.front() << " " << dl_dh.shape.back() << std::endl;
+
+            // d_loss_d_h = np.dot(d_loss_d_output[t], W_hy)
+            // d_loss_d_h = d_loss_d_h * (1 - hiddens[t+1]**2)  # derivative of tanh
+
+            // 8316 1, 1 50 or 50 1, 1 8316
+            // b_h = b_h - dl_dh;
         }
 
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_pred) << std::endl;
