@@ -1,8 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Implement BPTT.
-      > For now, just implement all the backprop codes in chatgpt, and if it didn't work out then fix the problems.
-        Don't think about what if won't work. Also review and learn about BPTT after implemented it.
+    > Implement BPTT.
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
