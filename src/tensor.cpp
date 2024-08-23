@@ -38,8 +38,7 @@ tensor::tensor(const tensor &other) {
     shape = other.shape;
 }
 
-tensor::tensor(tensor &&other) noexcept
-{
+tensor::tensor(tensor &&other) noexcept {
     elem = other.elem;
     size = other.size;
     shape = other.shape;
@@ -48,10 +47,8 @@ tensor::tensor(tensor &&other) noexcept
     other.size = 0;
 }
 
-tensor &tensor::operator=(const tensor &other)
-{
-    if (this != &other)
-    {
+tensor &tensor::operator=(const tensor &other) {
+    if (this != &other) {
         delete[] elem;
         elem = new float[other.size];
         std::copy(other.elem, other.elem + other.size, elem);
@@ -61,10 +58,8 @@ tensor &tensor::operator=(const tensor &other)
     return *this;
 }
 
-tensor &tensor::operator=(tensor &&other) noexcept
-{
-    if (this != &other)
-    {
+tensor &tensor::operator=(tensor &&other) noexcept {
+    if (this != &other) {
         delete[] elem;
 
         elem = other.elem;
@@ -77,29 +72,22 @@ tensor &tensor::operator=(tensor &&other) noexcept
     return *this;
 }
 
-static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size_t> &shape2)
-{
+static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size_t> &shape2) {
     bool equal = false;
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
         equal = true;
     return equal;
 }
 
-tensor tensor::operator+(const tensor &other) const
-{
+tensor tensor::operator+(const tensor &other) const {
     tensor t_new = *this;
-    if (ShapeEqual(shape, other.shape))
-    {
+    if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] + other[i];
-    }
-    else if (shape.back() == other.shape.back())
-    {
+    } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] + other[i % other.shape.back()];
-    }
-    else
-    {
+    } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
     return t_new;
@@ -145,87 +133,64 @@ tensor tensor::operator+(const tensor &other) const
 //     return t_new;
 // }
 
-tensor tensor::operator-(const tensor &other) const
-{
+tensor tensor::operator-(const tensor &other) const {
     tensor t_new = *this;
-    if (ShapeEqual(shape, other.shape))
-    {
+    if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] - other[i];
-    }
-    else if (shape.back() == other.shape.back())
-    {
+    } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] - other[i % other.shape.back()];
-    }
-    else if (shape.front() == other.shape.front())
-    {
+    } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i)
         {
             size_t idx = i / shape.back();
             t_new[i] = elem[i] - other[idx];
         }
-    }
-    else
-    {
+    } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
     return t_new;
 }
 
-tensor tensor::operator*(const tensor &other) const
-{
+tensor tensor::operator*(const tensor &other) const {
     tensor t_new = *this;
-    if (ShapeEqual(shape, other.shape))
-    {
+    if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] * other[i];
-    }
-    else
-    {
+    } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
     return t_new;
 }
 
-tensor tensor::operator/(const tensor &other) const
-{
+tensor tensor::operator/(const tensor &other) const {
     tensor t_new = *this;
-    if (ShapeEqual(shape, other.shape))
-    {
+    if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] / other[i];
-    }
-    else if (shape.back() == other.shape.back())
-    {
+    } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] / other[i % other.shape.back()];
-    }
-    else if (shape.front() == other.shape.front())
-    {
-        for (auto i = 0; i < size; ++i)
-        {
+    } else if (shape.front() == other.shape.front()) {
+        for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
             t_new[i] = elem[i] / other[idx];
         }
-    }
-    else
-    {
+    } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
     return t_new;
 }
 
-tensor tensor::operator+=(const tensor &other) const
-{
+tensor tensor::operator+=(const tensor &other) const {
     // assert(ShapeEqual(shape, other.shape));
     for (auto i = 0; i < size; ++i)
         elem[i] += other[i];
     return *this;
 }
 
-float &tensor::operator[](const size_t idx) const
-{
+float &tensor::operator[](const size_t idx) const {
     return elem[idx];
 }
 
