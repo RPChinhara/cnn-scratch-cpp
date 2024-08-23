@@ -1,6 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement BPTT.
+      > I think h_t should be only initialized to zero at the very beginning, after that I should use last h_t generated in forward()
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
