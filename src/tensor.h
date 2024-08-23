@@ -3,8 +3,7 @@
 #include <iostream>
 #include <vector>
 
-class tensor
-{
+class tensor {
   public:
     size_t size;
     std::vector<size_t> shape;

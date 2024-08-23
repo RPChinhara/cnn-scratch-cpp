@@ -4,8 +4,7 @@
 #include <numeric>
 #include <string>
 
-tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elem)
-{
+tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elem) {
     assert(elem.size() != 0);
 
     for (auto i : shape)
@@ -17,27 +16,22 @@ tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elem)
     else
         size = 1;
 
-    if (elem.size() == 1)
-    {
+    if (elem.size() == 1) {
         this->elem = new float[size];
         std::fill(this->elem, this->elem + size, *elem.data());
-    }
-    else
-    {
+    } else {
         assert(size == elem.size());
         this->elem = new float[size];
         memcpy(this->elem, elem.data(), size * sizeof(float));
     }
 }
 
-tensor::~tensor()
-{
+tensor::~tensor() {
     if (elem != nullptr)
         delete[] elem;
 }
 
-tensor::tensor(const tensor &other)
-{
+tensor::tensor(const tensor &other) {
     elem = new float[other.size];
     std::copy(other.elem, other.elem + other.size, elem);
     size = other.size;
