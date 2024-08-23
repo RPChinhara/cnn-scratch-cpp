@@ -341,7 +341,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             std::cout << dl_dy_pred.shape.front() << " " << dl_dy_pred.shape.back() << std::endl;
             std::cout << w_hy.shape.front() << " " << w_hy.shape.back() << std::endl;
 
-            tensor dl_dh = matmul(transpose(dl_dy_pred), w_hy, CPU);
+            tensor dy_pred_dh = w_hy;
+            tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh, CPU);
 
             std::cout << dl_dh.shape.front() << " " << dl_dh.shape.back() << std::endl;
 
