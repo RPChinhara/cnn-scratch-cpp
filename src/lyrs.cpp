@@ -364,6 +364,8 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
     std::vector<tensor> h;
     std::vector<tensor> y;
 
+    h.push_back(h_t);
+
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
         tensor x_t = zeros({batch_size, input_size});
