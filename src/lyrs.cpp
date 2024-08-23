@@ -332,24 +332,24 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor dl_dy_pred = -2.0f / y_train.size * (transpose(y_train) - y_pred);
         tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()), CPU);
+        tensor dl_dw_hh = zeros({hidden_size, hidden_size});
 
         for (auto i = 0; i < seq_length; ++i) {
-
-            std::cout << dl_dy_pred.shape.front() << " " << dl_dy_pred.shape.back() << std::endl;
-            std::cout << w_hy.shape.front() << " " << w_hy.shape.back() << std::endl;
-
             tensor dy_pred_dh = w_hy;
-            tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh, CPU);
+            tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh, CPU); // matmul(transpose(1 8316), 1 50)
 
+
+            tensor dh_dw_hh = a.first.front() * (1.0f - activation(a.first[i]) * activation(a.first[i]));
             std::cout << dl_dh.shape.front() << " " << dl_dh.shape.back() << std::endl;
-
-            // d_loss_d_h = np.dot(d_loss_d_output[t], W_hy)
-            // d_loss_d_h = d_loss_d_h * (1 - hiddens[t+1]**2)  # derivative of tanh
+            std::cout << dh_dw_hh.shape.front() << " " << dh_dw_hh.shape.back() << std::endl;
+            dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh), transpose(dh_dw_hh), CPU);
+            std::cout << dl_dw_hh.shape.front() << " " << dl_dw_hh.shape.back() << std::endl;
 
             // 8316 1, 1 50 or 50 1, 1 8316
             // b_h = b_h - dl_dh;
         }
 
+        w_hh = w_hh - lr * dl_dw_hh;
         w_hy = w_hy - lr * dl_dw_hy;
         b_y = b_y - lr * dl_dy_pred; // dl_dy_pred should might be sum(dl_dy_pred, 0) which has shape (1, 8316) and sum(dl_dy_pred, 1) has (1, 1), but since dl_dy_pred is already (1, 8316) so...
 

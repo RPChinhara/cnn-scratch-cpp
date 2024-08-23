@@ -1,6 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement BPTT.
+      - I think I have to add h_t which is intialized beginning of the rnn::forward() so that I can access very first h_t.
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
