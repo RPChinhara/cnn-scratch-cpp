@@ -351,7 +351,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         b_h = b_h - lr * dl_db_h;
         b_y = b_y - lr * dl_dy_pred; // dl_dy_pred should might be sum(dl_dy_pred, 0) which has shape (1, 8316) and sum(dl_dy_pred, 1) has (1, 1), but since dl_dy_pred is already (1, 8316) so...
 
-        std::cout << y_pred << std::endl;
+        // std::cout << y_pred << std::endl;
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_pred) << std::endl;
     }
 }
@@ -362,7 +362,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
     std::vector<tensor> h;
     std::vector<tensor> y;
 
-    std::cout << x.shape.front() << " " << x.shape.back() << std::endl;
+    std::cout << x << std::endl;
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
@@ -370,15 +370,15 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto j = 0; j < batch_size; ++j) {
-            tensor features;
-
-            features = slice(x, idx, 1);
+            tensor features = slice(x, idx, 1);
             idx += seq_length;
+            std::cout << idx << " " << features << std::endl;
+
 
             x_t[j] = features[0];
         }
 
-        std::cout << x_t << std::endl;
+        // std::cout << x_t << std::endl;
 
 
         // (now)
