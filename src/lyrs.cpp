@@ -362,8 +362,6 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
     std::vector<tensor> h;
     std::vector<tensor> y;
 
-    h.push_back(h_t);
-
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
         tensor x_t = zeros({batch_size, input_size});
@@ -390,6 +388,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
         h_t = activation(matmul(w_xh, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h);
         tensor y_t = matmul(w_hy, h_t, CPU) + b_y; // I don't need to calculate this every steps if it is of type Many-to-one. Only calculate if it's of type like One-to-may, Many-to-many.
+
 
         h.push_back(h_t);
         y.push_back(y_t);
