@@ -362,19 +362,24 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
     std::vector<tensor> h;
     std::vector<tensor> y;
 
+    std::cout << x.shape.front() << " " << x.shape.back() << std::endl;
+
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
         tensor x_t = zeros({batch_size, input_size});
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
-        for (auto i = 0; i < batch_size; ++i) {
+        for (auto j = 0; j < batch_size; ++j) {
             tensor features;
 
             features = slice(x, idx, 1);
             idx += seq_length;
 
-            x_t[i] = features[0];
+            x_t[j] = features[0];
         }
+
+        std::cout << x_t << std::endl;
+
 
         // (now)
         // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
