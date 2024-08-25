@@ -261,13 +261,11 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 
 float nn::evaluate(const tensor &x, const tensor &y) {
     std::vector<tensor> a = forward(x, w_b.first, w_b.second);
-
     return loss(y, a.back());
 }
 
 tensor nn::predict(const tensor &x) {
     std::vector<tensor> a = forward(x, w_b.first, w_b.second);
-
     return a.back();
 }
 
