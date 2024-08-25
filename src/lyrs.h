@@ -132,6 +132,7 @@ class rnn {
     size_t output_size = 1;
     size_t seq_length = 10;
 
+    tensor h_t;
     tensor w_xh;
     tensor w_hh;
     tensor w_hy;
