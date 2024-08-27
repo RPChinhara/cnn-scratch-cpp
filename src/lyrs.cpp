@@ -351,14 +351,11 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         b_h = b_h - lr * dl_db_h;
         b_y = b_y - lr * dl_dy_pred; // dl_dy_pred should might be sum(dl_dy_pred, 0) which has shape (1, 8316) and sum(dl_dy_pred, 1) has (1, 1), but since dl_dy_pred is already (1, 8316) so...
 
-        // std::cout << y_pred << std::endl;
         std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_pred) << std::endl;
     }
 }
 
 std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
-    // tensor y_t;
-
     std::vector<tensor> h;
     std::vector<tensor> y;
 
@@ -371,8 +368,6 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
             x_t[j] = x[idx];
             idx += seq_length;
         }
-
-        std::cout << x_t << std::endl;
 
         // (now)
         // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
