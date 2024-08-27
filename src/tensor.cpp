@@ -1,6 +1,7 @@
 #include "tensor.h"
 
 #include <cassert>
+#include <iomanip>
 #include <numeric>
 #include <string>
 
@@ -225,7 +226,10 @@ static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t> &sh
 }
 
 std::ostream &operator<<(std::ostream &os, const tensor &t) {
+    os << std::fixed << std::setprecision(8);
+
     size_t idx = 0;
+
     if (t.shape.size() == 0) {
         os << "Tensor(" << std::to_string(t[0]) << ", shape=())";
         return os;
@@ -243,9 +247,9 @@ std::ostream &operator<<(std::ostream &os, const tensor &t) {
         if (t.size == 1) {
             for (auto i = 0; i < t.size; ++i) {
                 if (i == t.size - 1)
-                    os << std::to_string(t[i]);
+                    os << t[i];
                 else
-                    os << std::to_string(t[i]) << " ";
+                    os << t[i] << " ";
             }
         } else {
             std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
@@ -301,7 +305,7 @@ std::ostream &operator<<(std::ostream &os, const tensor &t) {
                 }
 
                 if (i == t.size - 1) {
-                    os << std::to_string(t[i]);
+                    os << t[i];
                     continue;
                 }
 
@@ -309,12 +313,12 @@ std::ostream &operator<<(std::ostream &os, const tensor &t) {
                     idx = 0;
 
                 if (t.shape.back() == 1) {
-                    os << std::to_string(t[i]);
+                    os << t[i];
                 } else {
                     if (idx % (t.shape.back() - 1) == 0 && idx != 0)
-                        os << std::to_string(t[i]);
+                        os << t[i];
                     else
-                        os << std::to_string(t[i]) << " ";
+                        os << t[i] << " ";
                 }
 
                 ++idx;
