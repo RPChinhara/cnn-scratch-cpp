@@ -40,18 +40,14 @@ float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
 }
 
 int main() {
-    const float test_size = 0.2f;
-    const size_t seq_length = 10;
-    const size_t lr = 0.01f;
-
     tensor data = load_aapl();
     tensor scaled_data = min_max_scaler(data);
-    auto train_test = split(scaled_data, test_size);
+    auto train_test = split(scaled_data, 0.2f);
 
-    auto x_y_train = create_sequences(train_test.first, seq_length);
-    auto x_y_test = create_sequences(train_test.second, seq_length);
+    auto x_y_train = create_sequences(train_test.first, 10);
+    auto x_y_test = create_sequences(train_test.second, 10);
 
-    rnn model = rnn(hyperbolic_tangent, mean_squared_error, lr);
+    rnn model = rnn(hyperbolic_tangent, mean_squared_error, 0.01f);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     return 0;
