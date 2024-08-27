@@ -2,6 +2,9 @@
   - Implement SimpleRNN
     > Implement BPTT.
       > I think h_t should be only initialized to zero at the very beginning, after that I should use last h_t generated in forward()
+      - Check this for (auto j = 0; j < batch_size - seq_length; ++j) is right
+      - why is it printing tensors only up to certain decimal places?
+      - fix nn for all the pre daclarations
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
