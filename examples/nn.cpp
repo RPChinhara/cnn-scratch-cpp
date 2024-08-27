@@ -45,32 +45,20 @@ float categorical_accuracy(const tensor &y_true, const tensor &y_pred) {
 }
 
 int main() {
-    const size_t depth = 3;
-
-    const float test_size1 = 0.2f;
-    const float test_size2 = 0.5f;
-    const size_t rd_state = 42;
-
-    const size_t input_size = 4;
-    const size_t hidden1_size = 64;
-    const size_t hidden2_size = 64;
-    const size_t output_size = 3;
-    const float lr = 0.01f;
-
     iris data = load_iris();
     tensor x = data.x;
     tensor y = data.y;
 
-    y = one_hot(y, depth);
+    y = one_hot(y, 3);
 
-    auto train_temp = split_dataset(x, y, test_size1, rd_state);
-    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, test_size2, rd_state);
+    auto train_temp = split_dataset(x, y, 0.2f, 42);
+    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, 0.5f, 42);
 
     train_temp.x_train = min_max_scaler(train_temp.x_train);
     val_test.x_train = min_max_scaler(val_test.x_train);
     val_test.x_test = min_max_scaler(val_test.x_test);
 
-    nn model = nn({input_size, hidden1_size, hidden2_size, output_size}, {relu, relu, softmax}, categorical_cross_entropy, categorical_accuracy, lr);
+    nn model = nn({4, 64, 64, 3}, {relu, relu, softmax}, categorical_cross_entropy, categorical_accuracy, 0.01f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
