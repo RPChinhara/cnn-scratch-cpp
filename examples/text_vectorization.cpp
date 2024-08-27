@@ -1,7 +1,5 @@
 #include "lyrs.h"
 
-#include <iostream>
-
 int main() {
     std::vector<std::string> vocab = {"foo bar", "bar baz", "baz bada boom"};
     std::vector<std::string> in = {"foo qux bar", "qux baz"};
