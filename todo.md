@@ -1,7 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Implement BPTT.
-      > Check this for (auto j = 0; j < batch_size - seq_length; ++j) is right
+    > Implement BPTT.
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
