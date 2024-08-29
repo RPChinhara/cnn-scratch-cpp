@@ -361,13 +361,38 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
-        tensor x_t = zeros({batch_size, input_size});
+        tensor x_t = zeros({batch_size - 10, input_size});
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto j = 0; j < batch_size - seq_length; ++j) {
             x_t[j] = x[idx];
             idx += seq_length;
         }
+
+        if (i == seq_length - 1) {
+
+            std::cout << x_t[0] << std::endl;
+            std::cout << x_t[1] << std::endl;
+            std::cout << x_t[2] << std::endl;
+            std::cout << x_t[3] << std::endl;
+        }
+
+        // [0.00043548]
+        // [0.00039868]
+        // [0.00034961]
+        // [0.00036495]
+        // [0.00038335]
+        // [0.00042322]
+        // [0.00045695]
+        // [0.00048762]
+        // [0.00052749]
+        // [0.00060109]
+        // [0.00061336]
+        // [0.00059189]
+        // [0.00056736]
+        // [0.00057656]
+        // [0.00055816]
+        // [0.00052135]
 
         // (now)
         // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
