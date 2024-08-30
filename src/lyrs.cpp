@@ -78,6 +78,8 @@ std::vector<tensor> gru::forward(const tensor &x) {
     // auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SOFTMAX, CPU);
     // auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, SOFTMAX, CPU);
     // h = (1 - z) * h + z * h_tilde;
+
+    return std::vector<tensor>();
 }
 
 lstm::lstm(const size_t lr, loss_func loss) {
