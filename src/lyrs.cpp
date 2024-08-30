@@ -361,7 +361,8 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
-        tensor x_t = zeros({batch_size - 10, input_size});
+        // tensor x_t = zeros({batch_size - 10, input_size}); // This is the one should be used
+        tensor x_t = zeros({batch_size, input_size});
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto j = 0; j < batch_size - seq_length; ++j) {
