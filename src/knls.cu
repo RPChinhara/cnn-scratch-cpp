@@ -2,13 +2,6 @@
 
 
 
-__global__ void log(float *t, float *t_new, size_t n)
-{
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (id < n)
-        t_new[id] = logf(t[id]);
-}
 
 __global__ void matmul(float *t1, float *t2, float *t_new, size_t num_rows_t1, size_t num_cols_t1, size_t num_rows_t2)
 {

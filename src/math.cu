@@ -77,8 +77,14 @@ tensor exp(const tensor &t, dev_type dev) {
     }
 }
 
-tensor log(const tensor &t, dev_type dev)
-{
+__global__ void log(float *t, float *t_new, size_t n) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (id < n)
+        t_new[id] = logf(t[id]);
+}
+
+tensor log(const tensor &t, dev_type dev) {
     tensor t_new = t;
 
     switch (dev)
