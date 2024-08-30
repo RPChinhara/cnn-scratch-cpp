@@ -175,7 +175,7 @@ tensor da_dz(const tensor &a) { // dsoftmax_dz?
     return t_new;
 }
 
-tensor dcategorical_cross_entropy_dsoftmax_dsoftmax_dz(const tensor &y_true, const tensor &y_pred) { // dcategorical_cross_entropy_dsoftmax_dsoftmax_dz?
+tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred) { // dcategorical_cross_entropy_dsoftmax_dsoftmax_dz?
     return (y_pred - y_true);
 }
 
