@@ -32,8 +32,14 @@ tensor argmax(const tensor &t)
     return t_new;
 }
 
-tensor exp(const tensor &t, dev_type dev)
-{
+__global__ void exp(float *t, float *t_new, size_t n) {
+    int id = blockIdx.x * blockDim.x + threadIdx.x;
+
+    if (id < n)
+        t_new[id] = expf(t[id]);
+}
+
+tensor exp(const tensor &t, dev_type dev) {
     tensor t_new = t;
 
     switch (dev)

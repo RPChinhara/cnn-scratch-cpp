@@ -1,12 +1,6 @@
 #include "knls.h"
 
-__global__ void exp(float *t, float *t_new, size_t n)
-{
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if (id < n)
-        t_new[id] = expf(t[id]);
-}
 
 __global__ void log(float *t, float *t_new, size_t n)
 {
