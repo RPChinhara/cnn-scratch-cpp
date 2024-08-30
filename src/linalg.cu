@@ -1,6 +1,5 @@
 #include "linalg.h"
 #include "arrs.h"
-#include "knls.h"
 #include "tensor.h"
 
 #include <cassert>
