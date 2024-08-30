@@ -69,6 +69,11 @@ std::pair<std::vector<tensor>, std::vector<tensor>> gru::init_params() {
     b_h = zeros({1, num_hiddens});
 
     h = zeros({batch_size, num_hiddens});
+
+    std::vector<tensor> w;
+    std::vector<tensor> b;
+
+    return std::make_pair(w, b);
 }
 
 std::vector<tensor> gru::forward(const tensor &x) {
