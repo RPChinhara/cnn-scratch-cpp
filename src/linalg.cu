@@ -17,7 +17,6 @@ __global__ void matmul(float* A, float* B, float* C, int M, int N, int P) {
     }
 }
 
-
 tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
     assert(t1.shape.back() == t2.shape.front());
 
