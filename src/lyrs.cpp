@@ -166,6 +166,10 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
     w_b_mom = init_params();
 }
 
+void matmul_cpu() {
+    
+}
+
 tensor da_dz(const tensor &a) { // dsoftmax_dz?
     tensor t_new = a;
 
