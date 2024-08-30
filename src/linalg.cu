@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-__global__ void matrixMultiplyKernel(float* A, float* B, float* C, int M, int N, int P) {
+__global__ void matmul(float* A, float* B, float* C, int M, int N, int P) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -43,7 +43,6 @@ tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
         return t_new;
     }
     case GPU: {
-        std::cout << "fudkfjdkfj" << std::endl;
         int M = t1.shape.front();
         int N = t1.shape.back();
         int P = t2.shape.back();
@@ -59,7 +58,7 @@ tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
         dim3 threadsPerBlock(16, 16);
         dim3 numBlocks((P + threadsPerBlock.x - 1) / threadsPerBlock.x,(M + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
-        matrixMultiplyKernel<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
+        matmul<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
 
         cudaMemcpy(t_new.elem, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
 
