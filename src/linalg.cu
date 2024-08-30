@@ -4,20 +4,19 @@
 
 #include <cassert>
 
-__global__ void matmul(float *t1, float *t2, float *t_new, size_t num_rows_t1, size_t num_cols_t1, size_t num_rows_t2) {
-    int i = blockIdx.x * blockDim.x + threadIdx.x;
-    int j = blockIdx.y * blockDim.y + threadIdx.y;
+__global__ void matrixMultiplyKernel(float* A, float* B, float* C, int M, int N, int P) {
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if (i < num_rows_t1 && j < num_rows_t2)
-    {
-        float sum = 0.0;
-
-        for (auto l = 0; l < num_cols_t1; ++l)
-            sum += t1[i * num_cols_t1 + l] * t2[l * num_rows_t2 + j];
-
-        t_new[i * num_rows_t2 + j] = sum;
+    if (row < M && col < P) {
+        float value = 0;
+        for (int k = 0; k < N; ++k) {
+            value += A[row * N + k] * B[k * P + col];
+        }
+        C[row * P + col] = value;
     }
 }
+
 
 tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
     assert(t1.shape.back() == t2.shape.front());
@@ -44,30 +43,29 @@ tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
         return t_new;
     }
     case GPU: {
-        size_t numRowsTensor1 = t1.shape.front();
-        size_t numColsTensor1 = t1.shape.back();
-        size_t numRowsTensor2 = t2.shape.back();
+        std::cout << "fudkfjdkfj" << std::endl;
+        int M = t1.shape.front();
+        int N = t1.shape.back();
+        int P = t2.shape.back();
 
-        float *t1_gpu, *t2_gpu, *t_gpu_new;
-        cudaMalloc(&t1_gpu, numRowsTensor1 * numColsTensor1 * sizeof(float));
-        cudaMalloc(&t2_gpu, numColsTensor1 * numRowsTensor2 * sizeof(float));
-        cudaMalloc(&t_gpu_new, numRowsTensor1 * numRowsTensor2 * sizeof(float));
-        cudaMemcpy(t1_gpu, t1.elem, t1.size * sizeof(float), cudaMemcpyHostToDevice);
-        cudaMemcpy(t2_gpu, t2.elem, t2.size * sizeof(float), cudaMemcpyHostToDevice);
+        float* d_A, * d_B, * d_C;
+        cudaMalloc(&d_A, M * N * sizeof(float));
+        cudaMalloc(&d_B, N * P * sizeof(float));
+        cudaMalloc(&d_C, M * P * sizeof(float));
 
-        dim3 blockDim(16, 16);
-        dim3 gridDim((numRowsTensor1 + blockDim.x - 1) / blockDim.x, (numRowsTensor2 + blockDim.y - 1) / blockDim.y);
-        matmul<<<gridDim, blockDim>>>(t1_gpu, t2_gpu, t_gpu_new, numRowsTensor1, numColsTensor1,
-                                      numRowsTensor2);
+        cudaMemcpy(d_A, t1.elem, M * N * sizeof(float), cudaMemcpyHostToDevice);
+        cudaMemcpy(d_B, t2.elem, N * P * sizeof(float), cudaMemcpyHostToDevice);
 
-        cudaError_t cudaError = cudaGetLastError();
-        if (cudaError != cudaSuccess)
-            std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
+        dim3 threadsPerBlock(16, 16);
+        dim3 numBlocks((P + threadsPerBlock.x - 1) / threadsPerBlock.x,(M + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
-        cudaMemcpy(t_new.elem, t_gpu_new, t_new.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(t1_gpu);
-        cudaFree(t2_gpu);
-        cudaFree(t_gpu_new);
+        matrixMultiplyKernel<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
+
+        cudaMemcpy(t_new.elem, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
+
+        cudaFree(d_A);
+        cudaFree(d_B);
+        cudaFree(d_C);
 
         return t_new;
     }
