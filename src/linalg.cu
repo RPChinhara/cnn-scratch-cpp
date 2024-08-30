@@ -5,8 +5,22 @@
 
 #include <cassert>
 
-tensor matmul(const tensor &t1, const tensor &t2, dev_type dev)
-{
+__global__ void matmul(float *t1, float *t2, float *t_new, size_t num_rows_t1, size_t num_cols_t1, size_t num_rows_t2) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+
+    if (i < num_rows_t1 && j < num_rows_t2)
+    {
+        float sum = 0.0;
+
+        for (auto l = 0; l < num_cols_t1; ++l)
+            sum += t1[i * num_cols_t1 + l] * t2[l * num_rows_t2 + j];
+
+        t_new[i * num_rows_t2 + j] = sum;
+    }
+}
+
+tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
     assert(t1.shape.back() == t2.shape.front());
 
     tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
@@ -64,8 +78,7 @@ tensor matmul(const tensor &t1, const tensor &t2, dev_type dev)
     }
 }
 
-static size_t get_batch_size(const std::vector<size_t> &shape)
-{
+static size_t get_batch_size(const std::vector<size_t> &shape) {
     assert(1 < shape.size());
     size_t batchSize = 1;
 
@@ -75,8 +88,7 @@ static size_t get_batch_size(const std::vector<size_t> &shape)
     return batchSize;
 }
 
-tensor transpose(const tensor &t)
-{
+tensor transpose(const tensor &t) {
     assert(2 <= t.shape.size());
 
     tensor t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
