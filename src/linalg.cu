@@ -17,60 +17,35 @@ __global__ void matmul(float* A, float* B, float* C, int M, int N, int P) {
     }
 }
 
-tensor matmul(const tensor &t1, const tensor &t2, dev_type dev) {
+tensor matmul(const tensor &t1, const tensor &t2) {
     assert(t1.shape.back() == t2.shape.front());
 
     tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
 
-    switch (dev)
-    {
-    case CPU: {
+    int M = t1.shape.front();
+    int N = t1.shape.back();
+    int P = t2.shape.back();
 
-        for (auto i = 0; i < t1.shape.front(); ++i)
-        {
-            for (auto j = 0; j < t2.shape.back(); ++j)
-            {
-                float sum = 0.0;
+    float* d_A, * d_B, * d_C;
+    cudaMalloc(&d_A, M * N * sizeof(float));
+    cudaMalloc(&d_B, N * P * sizeof(float));
+    cudaMalloc(&d_C, M * P * sizeof(float));
 
-                for (auto l = 0; l < t1.shape.back(); ++l)
-                    sum += t1[i * t1.shape.back() + l] * t2[l * t2.shape.back() + j];
+    cudaMemcpy(d_A, t1.elem, M * N * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, t2.elem, N * P * sizeof(float), cudaMemcpyHostToDevice);
 
-                t_new[i * t2.shape.back() + j] = sum;
-            }
-        }
+    dim3 threadsPerBlock(16, 16);
+    dim3 numBlocks((P + threadsPerBlock.x - 1) / threadsPerBlock.x,(M + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
-        return t_new;
-    }
-    case GPU: {
-        int M = t1.shape.front();
-        int N = t1.shape.back();
-        int P = t2.shape.back();
+    matmul<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
 
-        float* d_A, * d_B, * d_C;
-        cudaMalloc(&d_A, M * N * sizeof(float));
-        cudaMalloc(&d_B, N * P * sizeof(float));
-        cudaMalloc(&d_C, M * P * sizeof(float));
+    cudaMemcpy(t_new.elem, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
 
-        cudaMemcpy(d_A, t1.elem, M * N * sizeof(float), cudaMemcpyHostToDevice);
-        cudaMemcpy(d_B, t2.elem, N * P * sizeof(float), cudaMemcpyHostToDevice);
+    cudaFree(d_A);
+    cudaFree(d_B);
+    cudaFree(d_C);
 
-        dim3 threadsPerBlock(16, 16);
-        dim3 numBlocks((P + threadsPerBlock.x - 1) / threadsPerBlock.x,(M + threadsPerBlock.y - 1) / threadsPerBlock.y);
-
-        matmul<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
-
-        cudaMemcpy(t_new.elem, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
-
-        cudaFree(d_A);
-        cudaFree(d_B);
-        cudaFree(d_C);
-
-        return t_new;
-    }
-    default:
-        std::cout << "Unknown dev." << std::endl;
-        return tensor();
-    }
+    return t_new;
 }
 
 static size_t get_batch_size(const std::vector<size_t> &shape) {

@@ -146,7 +146,7 @@ std::vector<tensor> lstm::forward(const tensor &x) {
         // getting only one ouput even thougth I input 8316 batches.
 
         // h_t = activationmatmul(w_xh, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
-        tensor y_t = matmul(w_hy, h_t, CPU) + b_y;
+        tensor y_t = matmul(w_hy, h_t) + b_y;
 
         h.push_back(h_t);
         y.push_back(y_t);
@@ -229,12 +229,12 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, y_pred));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k]), CPU) * da_dz(a[k - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k])) * da_dz(a[k - 1]));
 
                 if (k == 1)
-                    dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k], CPU));
+                    dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k]));
                 else
-                    dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k], CPU));
+                    dl_dw.push_back(matmul(transpose(a[k - 2]), dl_dz[(lyrs.size() - 1) - k]));
 
                 dl_db.push_back(sum(dl_dz[(lyrs.size() - 1) - k], 0));
 
@@ -299,10 +299,10 @@ std::vector<tensor> nn::forward(const tensor &x, const std::vector<tensor> &w, c
             // = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput =
             // (10, 3)
 
-            tensor z = matmul(x, w[i], CPU) + b[i];
+            tensor z = matmul(x, w[i]) + b[i];
             a.push_back(activations[i](z));
         } else {
-            tensor z = matmul(a[i - 1], w[i], CPU) + b[i];
+            tensor z = matmul(a[i - 1], w[i]) + b[i];
             a.push_back(activations[i](z));
         }
     }
@@ -338,17 +338,17 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto remaining_ms = duration - seconds;
 
         tensor dl_dy_pred = -2.0f / y_train.size * (transpose(y_train) - y_pred);
-        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()), CPU);
+        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()));
         tensor dl_dw_hh = zeros({hidden_size, hidden_size});
         tensor dl_db_h = zeros({hidden_size, batch_size});
 
         for (auto i = 0; i < seq_length; ++i) {
             tensor dy_pred_dh = w_hy;
-            tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh, CPU); // matmul(transpose(1 8316), 1 50)
+            tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh); // matmul(transpose(1 8316), 1 50)
 
 
             tensor dh_dw_hh = a.first.front() * (1.0f - activation(a.first[i]) * activation(a.first[i]));
-            dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh), transpose(dh_dw_hh), CPU);
+            dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh), transpose(dh_dw_hh));
 
             dl_db_h = dl_db_h + transpose(dl_dh);
         }
@@ -412,8 +412,8 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
         // I think this is wrong because when you think about it it's weird that getting only one ouput even thougth I input 8316 batches.
 
-        h_t = activation(matmul(w_xh, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h);
-        tensor y_t = matmul(w_hy, h_t, CPU) + b_y; // I don't need to calculate this every steps if it is of type Many-to-one. Only calculate if it's of type like One-to-may, Many-to-many.
+        h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
+        tensor y_t = matmul(w_hy, h_t) + b_y; // I don't need to calculate this every steps if it is of type Many-to-one. Only calculate if it's of type like One-to-may, Many-to-many.
 
 
         h.push_back(h_t);
