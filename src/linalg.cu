@@ -101,12 +101,9 @@ tensor transpose(const tensor &t) {
 
     size_t idx = 0;
 
-    for (auto i = 0; i < batchSize; ++i)
-    {
-        for (auto j = 0; j < t_new.shape[t_new.shape.size() - 2]; ++j)
-        {
-            for (auto k = 0; k < t_new.shape.back(); ++k)
-            {
+    for (auto i = 0; i < batchSize; ++i) {
+        for (auto j = 0; j < t_new.shape[t_new.shape.size() - 2]; ++j) {
+            for (auto k = 0; k < t_new.shape.back(); ++k) {
                 t_new[idx] = t[idx_rows[k + (i * t_new.shape.back())]];
                 idx_rows[k + (i * t_new.shape.back())] += 1;
                 ++idx;
