@@ -1,6 +1,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement BPTT.
+      - Check if tensor x_t = zeros({batch_size - 10, input_size}); is really right
       - Change size of shape for x_t, parameters, and maybe some others.
       - Update w_xh
   - Implement LSTM.
