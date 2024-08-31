@@ -38,42 +38,37 @@ __global__ void exp(float *t, float *t_new, size_t n) {
         t_new[id] = expf(t[id]);
 }
 
-tensor exp(const tensor &t, dev_type dev) {
+tensor exp(const tensor &t) {
     tensor t_new = t;
 
-    switch (dev)
-    {
-    case CPU: {
+    // switch (dev)
+    // {
+    // case CPU: {
 
-        for (auto i = 0; i < t.size; ++i)
-            t_new.elem[i] = expf(t.elem[i]);
+    //     for (auto i = 0; i < t.size; ++i)
+    //         t_new.elem[i] = expf(t.elem[i]);
 
-        return t_new;
-    }
-    case GPU: {
-        float *t_gpu, *t_gpu_new;
-        cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
-        cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
-        cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
+    //     return t_new;
+    // }
 
-        constexpr int blockSize = 128;
-        int gridSize = (t.size + blockSize - 1) / blockSize;
-        exp<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
+    float *t_gpu, *t_gpu_new;
+    cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
+    cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
+    cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
-        cudaError_t cudaError = cudaGetLastError();
-        if (cudaError != cudaSuccess)
-            std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
+    constexpr int blockSize = 128;
+    int gridSize = (t.size + blockSize - 1) / blockSize;
+    exp<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
 
-        cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(t_gpu);
-        cudaFree(t_gpu_new);
+    cudaError_t cudaError = cudaGetLastError();
+    if (cudaError != cudaSuccess)
+        std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        return t_new;
-    }
-    default:
-        std::cout << "Unknown dev." << std::endl;
-        return tensor();
-    }
+    cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(t_gpu);
+    cudaFree(t_gpu_new);
+
+    return t_new;
 }
 
 __global__ void log(float *t, float *t_new, size_t n) {
@@ -83,41 +78,36 @@ __global__ void log(float *t, float *t_new, size_t n) {
         t_new[id] = logf(t[id]);
 }
 
-tensor log(const tensor &t, dev_type dev) {
+tensor log(const tensor &t) {
     tensor t_new = t;
 
-    switch (dev)
-    {
-    case CPU: {
-        for (auto i = 0; i < t.size; ++i)
-            t_new.elem[i] = logf(t.elem[i]);
+    // switch (dev)
+    // {
+    // case CPU: {
+    //     for (auto i = 0; i < t.size; ++i)
+    //         t_new.elem[i] = logf(t.elem[i]);
 
-        return t_new;
-    }
-    case GPU: {
-        float *t_gpu, *t_gpu_new;
-        cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
-        cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
-        cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
+    //     return t_new;
+    // }
 
-        constexpr int blockSize = 128;
-        int gridSize = (t.size + blockSize - 1) / blockSize;
-        log<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
+    float *t_gpu, *t_gpu_new;
+    cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
+    cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
+    cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
-        cudaError_t cudaError = cudaGetLastError();
-        if (cudaError != cudaSuccess)
-            std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
+    constexpr int blockSize = 128;
+    int gridSize = (t.size + blockSize - 1) / blockSize;
+    log<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
 
-        cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
-        cudaFree(t_gpu);
-        cudaFree(t_gpu_new);
+    cudaError_t cudaError = cudaGetLastError();
+    if (cudaError != cudaSuccess)
+        std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-        return t_new;
-    }
-    default:
-        std::cout << "Unknown dev." << std::endl;
-        return tensor();
-    }
+    cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(t_gpu);
+    cudaFree(t_gpu_new);
+
+    return t_new;
 }
 
 tensor max(const tensor &t, const size_t axis)
