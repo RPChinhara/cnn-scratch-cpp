@@ -1,6 +1,5 @@
 #include "lyrs.h"
 #include "arrs.h"
-#include "dev.h"
 #include "linalg.h"
 #include "math.hpp"
 #include "preproc.h"
@@ -167,7 +166,7 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
 }
 
 void matmul_cpu() {
-    
+
 }
 
 tensor da_dz(const tensor &a) { // dsoftmax_dz?

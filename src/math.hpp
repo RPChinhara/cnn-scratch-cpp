@@ -1,7 +1,5 @@
 #pragma once
 
-#include "dev.h"
-
 class tensor;
 
 tensor argmax(const tensor &t);
