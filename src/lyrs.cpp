@@ -345,7 +345,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor dl_dw_hh = zeros({hidden_size, hidden_size});
         tensor dl_db_h = zeros({hidden_size, batch_size});
 
-        for (auto i = 0; i < seq_length; ++i) {
+        for (auto j = 0; j < seq_length; ++j) {
             tensor dy_pred_dh = w_hy;
             tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh); // matmul(transpose(1 8316), 1 50)
 
