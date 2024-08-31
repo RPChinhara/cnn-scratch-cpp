@@ -1,6 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement BPTT.
+      - Change size of shape for x_t, parameters, and maybe some others.
+      - Update w_xh
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
