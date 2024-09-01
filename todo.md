@@ -3,6 +3,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement BPTT.
+      - I think I have to reduce loss on RNN in Python the prediction for the X_test. Now it outputs last values 146.50725, 148.12473, and 149.45018 when the actual values are 168.820007, 170.210007, and 174.070007.
       > Check if tensor x_t = zeros({batch_size - 10, input_size}); is really right
       - Change size of shape for x_t, parameters, and maybe some others.
       - Update w_xh
