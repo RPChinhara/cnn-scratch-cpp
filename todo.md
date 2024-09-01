@@ -1,3 +1,5 @@
+- No serious refactorizations untill I get to 5.
+
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Implement BPTT.
