@@ -7,6 +7,7 @@
       - Change size of shape for x_t, parameters, and maybe some others.
       - Update w_xh
       - Check if how I calculating BPTT is correct like if transpose is used correctly at right place...
+      - Make evaluate() and predict()
   - Implement LSTM.
   - Implement GRU.
   - Implement Bidirectional RNNs.
