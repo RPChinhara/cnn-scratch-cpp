@@ -144,6 +144,8 @@ class rnn {
   public:
     rnn(const act_func &activation, const loss_func &loss, const float lr);
     void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
+    float evaluate(const tensor &x, const tensor &y);
+    tensor predict(const tensor &x);
 };
 
 tensor embedding(const size_t vocab_size, const size_t cols, const tensor &ind);

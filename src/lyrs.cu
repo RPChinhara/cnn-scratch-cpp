@@ -445,6 +445,16 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
     }
 }
 
+float rnn::evaluate(const tensor &x, const tensor &y) {
+    // std::vector<tensor> a = forward(x, w_b.first, w_b.second);
+    // return loss(y, a.back());
+    return 0.0f;
+}
+
+tensor rnn::predict(const tensor &x) {
+    return tensor();
+}
+
 std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
     std::vector<tensor> h;
     std::vector<tensor> y;
