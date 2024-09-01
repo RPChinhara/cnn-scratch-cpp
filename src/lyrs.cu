@@ -495,6 +495,8 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // [0.00055816]
         // [0.00052135]
 
+        // NOTE: I think it's 8317 instead...
+        
         // (now)
         // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
         // matmul(50 1, 1 8316) -> 50 8316 + matmul(50 50, 50 8316))) -> 50 8316
