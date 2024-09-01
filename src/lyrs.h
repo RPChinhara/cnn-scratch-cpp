@@ -125,7 +125,7 @@ class rnn {
     loss_func loss;
     float lr;
     size_t epochs = 10;
-    size_t batch_size = 8316;
+    size_t batch_size = 8317; // data size is (8327, 1) so batch size is 8327 - seq_length
 
     size_t input_size = 1;
     size_t hidden_size = 50;
