@@ -4,18 +4,18 @@
 #include "preproc.h"
 
 std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_length) {
-    tensor x = zeros({data.size - seq_length - 1, seq_length, 1});
-    tensor y = zeros({data.size - seq_length - 1, 1});
+    tensor x = zeros({data.size - seq_length, seq_length, 1});
+    tensor y = zeros({data.size - seq_length, 1});
 
     size_t idx = 0;
-    for (auto i = 0; i < (data.size - seq_length - 1) * seq_length; ++i) {
+    for (auto i = 0; i < (data.size - seq_length) * seq_length; ++i) {
         if (i % seq_length == 0 && i != 0)
             idx -= seq_length - 1;
         x[i] = data[idx];
         ++idx;
     }
 
-    for (auto i = 0; i < data.size - seq_length - 1; ++i)
+    for (auto i = 0; i < data.size - seq_length; ++i)
         y[i] = data[i + seq_length];
 
     return std::make_pair(x, y);
