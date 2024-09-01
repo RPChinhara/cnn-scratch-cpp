@@ -7,7 +7,6 @@
       - Change size of shape for x_t, parameters, and maybe some others.
       - Update w_xh
       - Check if how I calculating BPTT is correct like if transpose is used correctly at right place...
-      - Make evaluate() and predict()
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
   - Implement LSTM.
