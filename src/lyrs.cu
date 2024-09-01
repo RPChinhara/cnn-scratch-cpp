@@ -464,6 +464,8 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // tensor x_t = zeros({batch_size - 10, input_size}); // This is the one should be used
         tensor x_t = zeros({batch_size, input_size});
 
+        // NOTE: If I do this for loop, I may not need the create_sequences(), but I guess it'd help understand how rnn works. Maybe in the future, it could just use this for loop without create_sequences().
+        
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto j = 0; j < batch_size - seq_length; ++j) {
             x_t[j] = x[idx];
@@ -496,7 +498,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // [0.00052135]
 
         // NOTE: I think it's 8317 instead...
-        
+
         // (now)
         // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
         // matmul(50 1, 1 8316) -> 50 8316 + matmul(50 50, 50 8316))) -> 50 8316
