@@ -18,5 +18,5 @@
 3. Implement other famous modles like BERT.
 4. Implement interesting algorithms from latest papers.
 5. Develop my own architectures, algorithms, and models.
-6. Use 7 to solve existing problems and discover new theories in mathematics and physics.
-7. Create new things, possibly scientific devices, from 7.
+6. Use 5 to solve existing problems and discover new theories in mathematics and physics.
+7. Create new things, possibly scientific devices, from 6.
