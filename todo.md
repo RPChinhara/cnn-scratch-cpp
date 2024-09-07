@@ -12,6 +12,7 @@
   - Implement Bidirectional RNNs.
   - Implement Deep RNNs, which have multiple layers of RNNs stacked on top of each other and can be built with any of the basic RNN units (vanilla, LSTM, GRU).
   - Fix nn to use wx + b equation instead of current xw + b
+  - Do I want to things like this by taking arguments in main()? ./ml_program --learning_rate 0.001 --epochs 100
   - Implement CNN.
   - Implement ConvLSTM.
 2. Work on other tutorials on TensorFlow sites, e.g., Neural machine translation with a Transformer and Keras.
