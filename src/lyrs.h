@@ -125,7 +125,9 @@ class rnn {
     loss_func loss;
     float lr;
     size_t epochs = 10;
-    size_t batch_size = 8317; // data size is (8327, 1) so batch size is 8327 - seq_length. Maybe take batch_size as param in consturctor()? TF takes in train().
+    size_t batch_size = 8317;
+    // Data size is (8327, 1) so batch size is 8327 - seq_length which is max batch size I believe. Its range is 1 ~ data size - sequence length.
+    // Maybe take batch_size as param in consturctor()? TF takes in train().
 
     size_t input_size = 1;
     size_t hidden_size = 50;
