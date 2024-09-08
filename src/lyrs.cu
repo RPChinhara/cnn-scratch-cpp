@@ -466,7 +466,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto j = 0; j < batch_size; ++j) {
-            // NOTE: If I do this for loop, I may not need the create_sequences(), but I guess it'd help understand how rnn works. Maybe in the future, it could just use this for loop without create_sequences().
+            // If I do this for loop, I may not need the create_sequences(), but I guess it'd help understand how rnn works. Maybe in the future, it could just use this for loop without create_sequences().
             x_t[j] = x[idx];
             idx += seq_length;
         }
@@ -477,7 +477,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // 3 4 5 6 7 8 9 10 11 12  -> 13
         // 4 5 6 7 8 9 10 11 12 13 -> 14
 
-        // NOTE: I think it's 8317 instead...
+        // I think it's 8317 instead...
 
         // (now)
         // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
