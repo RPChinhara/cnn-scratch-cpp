@@ -436,6 +436,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             dl_db_h = dl_db_h + transpose(dl_dh);
         }
 
+        w_xh = w_xh - lr * dl_dw_hh;
         w_hh = w_hh - lr * dl_dw_hh;
         w_hy = w_hy - lr * dl_dw_hy;
         b_h = b_h - lr * dl_db_h;
@@ -466,7 +467,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
         // for (auto i = 0; i < batch_size * num_features; ++i)
         for (auto j = 0; j < batch_size; ++j) {
-            // If I do this for loop, I may not need the create_sequences(), but I guess it'd help understand how rnn works. Maybe in the future, it could just use this for loop without create_sequences().
+            // If I do this for loop, I may not need the create_sequences(), but I guess it'd help understand how rnn works. Maybe in the future, I could just use this for loop without create_sequences().
             x_t[j] = x[idx];
             idx += seq_length;
         }
