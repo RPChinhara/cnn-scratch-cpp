@@ -413,7 +413,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto h_y = forward(x_train);
-        auto y_pred = h_y.second.back();
+        auto y_pred = h_y.second.back(); // change to y_t instead?
 
         float n = static_cast<float>(y_train.shape.front());
 
@@ -423,7 +423,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor dl_db_h = zeros({hidden_size, batch_size}); // done
 
         for (auto j = 0; j < seq_length; ++j) {
-            tensor dy_pred_dh_t = w_hy;
+            tensor dy_pred_dh_t = w_hy; // done
             tensor dl_dh_t = matmul(transpose(dl_dy_pred), dy_pred_dh_t); // matmul(transpose(1 8316), 1 50)
 
 
