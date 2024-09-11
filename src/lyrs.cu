@@ -496,6 +496,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
         // I think this is wrong because when you think about it it's weird that getting only one ouput even thougth I input 8316 batches.
 
+        // Is it h_t = activation(matmul(w_hh, h_t) + matmul(w_xh, transpose(x_t)) + b_h); ?
         h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
         tensor y_t = matmul(w_hy, h_t) + b_y; // I don't need to calculate this every steps if it is of type Many-to-one. Only calculate if it's of type like One-to-may, Many-to-many.
 
