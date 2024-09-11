@@ -417,8 +417,9 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         float n = static_cast<float>(y_train.shape.front());
 
-        tensor dl_dy_pred = -2.0f / n * (transpose(y_train) - y_pred);
-        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()));
+        tensor dl_dy_pred = -2.0f / n * (transpose(y_train) - y_pred); // done
+        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back())); // done
+
         tensor dl_dw_hh = zeros({hidden_size, hidden_size});
         tensor dl_db_h = zeros({hidden_size, batch_size});
 
