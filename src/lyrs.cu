@@ -427,8 +427,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             tensor dl_dh = matmul(transpose(dl_dy_pred), dy_pred_dh); // matmul(transpose(1 8316), 1 50)
 
 
-            tensor dh_dw_hh = h_y.first.front() * (1.0f - activation(h_y.first[i]) * activation(h_y.first[i]));
-            dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh), transpose(dh_dw_hh));
+            tensor dh_t_dw_hh = h_y.first.front() * (1.0f - activation(h_y.first[i]) * activation(h_y.first[i]));
+            dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh), transpose(dh_t_dw_hh));
 
             dl_db_h = dl_db_h + transpose(dl_dh);
         }
