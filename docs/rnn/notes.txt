@@ -28,4 +28,4 @@ Imagine I have to calculate dl_d_why. In order to do that I have to get dl_d_y_p
 It is easier to imagine why matmul is used when batch size is 1. Since dl_d_y_pred is just a scaler in this case (1, 1). I'd just multiply this scaler into (1, 50) d_y_pred_d_w_hy.
 Then I will get dl_d_why. It's pretty simple. However, things get bit different when the batch size is greater than 1, in this case 8317. The shape of result is same (1, 50).
 I want to think of this calculation as adding gradients for each example as w_hy is used for all the examples. I add each examples(batch) so that it is taking account how each examples
-affect w_hy which also affect loss. Also just remember that whenever I encounter batch_size in shape, most likely I should use matmul.
+affect w_hy which also affect loss. Also just remember that whenever I encounter batch_size in shape, most likely I should use matmul based on this assumption.
