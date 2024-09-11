@@ -424,9 +424,19 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         for (auto j = 0; j < seq_length; ++j) {
             tensor dy_pred_dh_t = w_hy; // done
-            tensor dl_dh_t = matmul(transpose(dl_dy_pred), dy_pred_dh_t); // matmul(transpose(1 8316), 1 50) // maybe done
+            tensor dl_dh_t = matmul(transpose(dl_dy_pred), dy_pred_dh_t); // matmul(transpose(1 8317), 1 50) // maybe done
 
-            tensor dh_t_dw_hh = h_y.first.front() * (1.0f - activation(h_y.first[i]) * activation(h_y.first[i]));
+            tensor dh_t_dw_hh;
+            if (j == 0) {
+                tensor h_t = zeros({hidden_size, batch_size});
+                dh_t_dw_hh = (1.0f - activation(h_y.first[j]) * activation(h_y.first[j])) * h_t;
+            } else {
+                dh_t_dw_hh = (1.0f - activation(h_y.first[j]) * activation(h_y.first[j])) * h_y.first[j - 1];
+            }
+
+            std::cout << transpose(dl_dh_t).shape.front() << " " << transpose(dl_dh_t).shape.back() << std::endl;
+            std::cout << transpose(dh_t_dw_hh).shape.front() << " " << transpose(dh_t_dw_hh).shape.back() << std::endl;
+
             dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh_t), transpose(dh_t_dw_hh));
 
             dl_db_h = dl_db_h + transpose(dl_dh_t);
