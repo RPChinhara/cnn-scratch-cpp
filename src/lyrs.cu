@@ -419,9 +419,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor dl_dy_pred = -2.0f / n * (transpose(y_train) - y_pred); // done
         tensor dl_dw_hy = matmul(dl_dy_pred, transpose(h_y.first.back())); // done
-
-        tensor dl_dw_hh = zeros({hidden_size, hidden_size});
-        tensor dl_db_h = zeros({hidden_size, batch_size});
+        tensor dl_dw_hh = zeros({hidden_size, hidden_size}); // done
+        tensor dl_db_h = zeros({hidden_size, batch_size}); // done
 
         for (auto j = 0; j < seq_length; ++j) {
             tensor dy_pred_dh = w_hy;
