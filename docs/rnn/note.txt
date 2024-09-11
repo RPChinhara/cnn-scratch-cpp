@@ -1,4 +1,4 @@
-[Why use matmul when taking partial derivatives respect to some parameters]
+[ Why use matmul when taking partial derivatives respect to some parameters? ]
 
 When batch size is 8317:
 output_size = 1
