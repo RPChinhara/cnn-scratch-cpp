@@ -3,7 +3,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > why this one uses matmul, but others don't? tensor dl_dw_hy = matmul(dl_dy_pred, transpose(a.first.back()));
       > Update w_xh
       - Check if how I calculating BPTT is correct like if transpose is used correctly at right place...
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
