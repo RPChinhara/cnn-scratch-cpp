@@ -4,6 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - I think I still have to push back first h_t at the beginning of forward()
+      - I have to return matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h as z for partial derivative in line 509 (lyrs.cu)?
       > Update w_xh
       - Check if how I calculating BPTT is correct like if transpose is used correctly at right place...
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
