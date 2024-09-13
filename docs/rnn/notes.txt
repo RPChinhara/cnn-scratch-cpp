@@ -29,3 +29,35 @@ It is easier to imagine why matmul is used when batch size is 1. Since dl_d_y_pr
 Then I will get dl_d_why. It's pretty simple. However, things get bit different when the batch size is greater than 1, in this case 8317. The shape of result is same (1, 50).
 I want to think of this calculation as adding gradients for each example as w_hy is used for all the examples. I add each examples(batch) so that it is taking account how each examples
 affect w_hy which also affect loss. Also just remember that whenever I encounter batch_size in shape, most likely I should use matmul based on this assumption.
+
+[ BPTT ]
+
+BPTT process for an RNN with two time steps. This shows how to calculate gradients respect to Whh.
+
+h1 = fh(matmul(Wxh, x1) + matmul(Whh, h0) + bh)
+h2 = fh(matmul(Wxh, x2) + matmul(Whh, h1) + bh)
+y  = fy(matmul(Why, h2) + by)
+
+loss function at time step T = 2: L2 = L(y, y_true)
+
+T = 2
+dL2/dh2 = dL2/dy ⋅ dy/dh2 where dy/dh2 = Why
+Thus, dL2/dh2 = dL2/dy ⋅ Why
+dL2/dWhh (t = 2) = dL2/dh2 ⋅ dh2/dWhh where dh2/dWhh = squared(1 - h2) ⋅ transpose(h1)
+Thus, dL2/dWhh = dL2/dh2 ⋅ squared(1 - h2) ⋅ transpose(h1)
+
+T = 1
+dL2/dh1 = dL2/dh2 ⋅ dh2/dh1 where dh2/dh1 = squared(1 - h2) ⋅ Whh
+Thus, dL2/dh1 = dL2/dh2 ⋅ squared(1 - h2) ⋅ Whh
+dL2/dWhh (t = 1) = dL2/dh1 ⋅ h1/dWhh where dh1/dWhh = squared(1 - h1) ⋅ transpose(h0)
+Thus, dL2/dWhh = dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0)
+
+Total gradient with respect to Whh
+
+dL2/dWhh (t = 2) + dL2/dWhh (t = 1)
+dL2/dWhh = (dL2/dh2 ⋅ squared(1 - h2) ⋅ transpose(h1)) + (dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0))
+
+
+This is general equation of gradient with respect to Whh::
+dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ dht/dWhh where dht/dWhh = squared(1 - ht) ⋅ transpose(ht-1)
+Finally, dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ squared(1 - ht) ⋅ transpose(ht-1)
