@@ -4,6 +4,10 @@
   - Implement SimpleRNN
     - Implement BPTT.
       > I think I still have to push back first h_t at the beginning of forward()
+      - Check if my BPTT note is right by comparing with chatGPT,
+        and later search for BPTT again and recheck to make sure if is really correct.
+        Also, just remind myself that how to get dL/dWhh so that I could be sure that
+        it make sence.
       - Update w_xh
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
