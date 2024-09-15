@@ -3,8 +3,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      - I think I still have to push back first h_t at the beginning of forward()
-      > Update w_xh
+      > I think I still have to push back first h_t at the beginning of forward()
+      - Update w_xh
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
   - Implement either one-to-many or many-to-many
