@@ -55,7 +55,7 @@ Thus, dL2/dWhh = dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0)
 Total gradient with respect to Whh
 
 dL2/dWhh (t = 2) + dL2/dWhh (t = 1)
-dL2/dWhh = (dL2/dh2 ⋅ squared(1 - h2) ⋅ transpose(h1)) + (dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0))
+dL2/dWhh = (dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0)) + (dL2/dh2 ⋅ squared(1 - h2) ⋅ transpose(h1))
 
 
 This is general equation of gradient with respect to Whh::
