@@ -145,11 +145,6 @@ std::pair<std::vector<tensor>, std::vector<tensor>> gru::init_params() {
 std::vector<tensor> gru::forward(const tensor &x) {
     init_params();
 
-    // auto z = act(matmul(x, w_z, GPU) + matmul(u_z, h, GPU) + b_z, SOFTMAX, CPU);
-    // auto r = act(matmul(x, w_r, GPU) + matmul(u_r, h, GPU) + b_z, SOFTMAX, CPU);
-    // auto h_tilde = act(matmul(x, w_h, GPU) + matmul(u_h, r * h, GPU) + b_z, SOFTMAX, CPU);
-    // h = (1 - z) * h + z * h_tilde;
-
     return std::vector<tensor>();
 }
 
