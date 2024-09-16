@@ -61,3 +61,8 @@ dL2/dWhh = (dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0)) + (dL2/dh2 ⋅ square
 This is general equation of gradient with respect to Whh::
 dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ dht/dWhh where dht/dWhh = squared(1 - ht) ⋅ transpose(ht-1)
 Finally, dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ squared(1 - ht) ⋅ transpose(ht-1)
+
+[ Random ]
+
+- I set batch_size = 8317 in lyrs.h since data size is (8327, 1) so batch size is 8327 - seq_length which is max batch size I believe. Its range is 1 ~ data size - sequence length.
+- Maybe take batch_size as param in consturctor()? TF takes in train().
