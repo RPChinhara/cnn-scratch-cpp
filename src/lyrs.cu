@@ -95,7 +95,6 @@ cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr) {
 }
 
 void cnn2d::train(const tensor &xTrain, const tensor &yTrain, const tensor &xVal, const tensor &yVal) {
-    // tensor kernel = zeros({3, 3});
     tensor kernel = tensor({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
 
     size_t kernelHeight = kernel.shape.front();
@@ -108,18 +107,6 @@ void cnn2d::train(const tensor &xTrain, const tensor &yTrain, const tensor &xVal
     size_t outputWidth = inputWidth - kernelWidth + 1;
 
     tensor output = zeros({outputHeight, outputWidth});
-
-    // size_t idx = 0;
-
-    // for (auto i = 0; i < outputHeight; ++i)
-    // {
-    //     for (auto j = 0; i < outputWidth; ++j)
-    //     {
-    //         // ouput[idx] =
-    //     }
-    // }
-
-    // std::cout << output << std::endl;
 }
 
 void cnn2d::predict(const tensor &xTest, const tensor &yTest) {
