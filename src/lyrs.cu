@@ -176,44 +176,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train, const tensor &x_v
 }
 
 std::vector<tensor> lstm::forward(const tensor &x) {
-    tensor h_t = zeros({hidden_size, batch_size});
-    // tensor y_t;
-
-    std::vector<tensor> h;
-    std::vector<tensor> y;
-
-    for (auto i = 0; i < seq_length; ++i) {
-        size_t idx = i;
-        tensor x_t = zeros({batch_size, in_size});
-
-        // for (auto i = 0; i < batch_size * num_features; ++i)
-        for (auto i = 0; i < batch_size; ++i) {
-            tensor features;
-
-            features = slice(x, idx, 1);
-            idx += seq_length;
-
-            x_t[i] = features[0];
-        }
-
-        // (now) 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50
-        // 8316 = 1 8316
-
-        // 8316 1, 1 50 = 8316 50 -> 8316 50, 50 50 = 8316 50 -> 8316 50, 50 1 =
-        // 8316 1
-
-        // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
-        // I think this is wrong because when you think about it it's weird that
-        // getting only one ouput even thougth I input 8316 batches.
-
-        // h_t = activationmatmul(w_xh, transpose(x_t), CPU) + matmul(w_hh, h_t, CPU) + b_h, TANH, GPU);
-        tensor y_t = matmul(w_hy, h_t) + b_y;
-
-        h.push_back(h_t);
-        y.push_back(y_t);
-    }
-
-    return y;
+   return std::vector<tensor>();
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr) {
