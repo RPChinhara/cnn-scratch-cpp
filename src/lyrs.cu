@@ -433,11 +433,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
                 dh_t_dw_hh = (1.0f - activation(h_y.first[j]) * activation(h_y.first[j])) * h_y.first[j - 1];
             }
 
-            std::cout << transpose(dl_dh_t).shape.front() << " " << transpose(dl_dh_t).shape.back() << std::endl;
-            std::cout << transpose(dh_t_dw_hh).shape.front() << " " << transpose(dh_t_dw_hh).shape.back() << std::endl;
-
             dl_dw_hh = dl_dw_hh + matmul(transpose(dl_dh_t), transpose(dh_t_dw_hh));
-
             dl_db_h = dl_db_h + transpose(dl_dh_t);
         }
 
