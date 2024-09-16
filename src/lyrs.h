@@ -181,10 +181,6 @@ tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
 
-    // size_t num_vocab = 200;
-    // for (auto i = 0; i < num_vocab; ++i)
-    //     std::cout << i << ": " << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
-
     tensor t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
