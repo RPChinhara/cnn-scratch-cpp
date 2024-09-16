@@ -41,16 +41,6 @@ __global__ void exp(float *t, float *t_new, size_t n) {
 tensor exp(const tensor &t) {
     tensor t_new = t;
 
-    // switch (dev)
-    // {
-    // case CPU: {
-
-    //     for (auto i = 0; i < t.size; ++i)
-    //         t_new.elem[i] = expf(t.elem[i]);
-
-    //     return t_new;
-    // }
-
     float *t_gpu, *t_gpu_new;
     cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
     cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
@@ -80,15 +70,6 @@ __global__ void log(float *t, float *t_new, size_t n) {
 
 tensor log(const tensor &t) {
     tensor t_new = t;
-
-    // switch (dev)
-    // {
-    // case CPU: {
-    //     for (auto i = 0; i < t.size; ++i)
-    //         t_new.elem[i] = logf(t.elem[i]);
-
-    //     return t_new;
-    // }
 
     float *t_gpu, *t_gpu_new;
     cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
