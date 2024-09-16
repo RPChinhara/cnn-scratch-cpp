@@ -194,7 +194,7 @@ void matmul_cpu() {
 
 }
 
-tensor da_dz(const tensor &a) { // dsoftmax_dz?
+tensor da_dz(const tensor &a) {
     tensor t_new = a;
 
     for (auto i = 0; i < a.size; ++i)
@@ -210,7 +210,7 @@ tensor da_dz(const tensor &a) { // dsoftmax_dz?
     return t_new;
 }
 
-tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred) { // dcategorical_cross_entropy_dsoftmax_dsoftmax_dz?
+tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred) {
     return (y_pred - y_true);
 }
 
