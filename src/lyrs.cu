@@ -357,7 +357,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto h_y = forward(x_train);
-        auto y_pred = h_y.second.back(); // change to y_t instead?
+        auto y_pred = h_y.second.back();
 
         float n = static_cast<float>(y_train.shape.front());
 
