@@ -308,7 +308,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 
             std::vector<tensor> dl_dz, dl_dw, dl_db;
 
-            // just do normal loop like for (auto k = 0; k < lyrs.size(); ++k)?
+            // just do for (auto k = 0; k < lyrs.size(); ++k)?
             for (auto k = lyrs.size() - 1; 0 < k; --k) {
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, y_pred));
