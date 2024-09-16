@@ -399,8 +399,6 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    h_t = zeros({hidden_size, batch_size});
-
     w_xh = uniform_dist({hidden_size, input_size});
     w_hh = uniform_dist({hidden_size, hidden_size});
     w_hy = uniform_dist({output_size, hidden_size});
@@ -472,6 +470,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
     std::vector<tensor> h;
     std::vector<tensor> y;
 
+    h_t = zeros({hidden_size, batch_size});
     h.push_back(h_t); // add initial hidden state h0
 
     for (auto i = 0; i < seq_length; ++i) {
