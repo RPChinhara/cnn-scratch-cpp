@@ -32,7 +32,7 @@ tensor hyperbolic_tangent(const tensor &z_t) {
 
 float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
     float sum = 0.0f;
-    float n = static_cast<float>(y_true.shape.back()); // 8317 in this case
+    float n = static_cast<float>(y_true.shape.back());
 
     for (auto i = 0; i < y_true.size; ++i)
         sum += std::powf(y_true[i] - y_pred[i], 2.0f);
