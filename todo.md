@@ -3,8 +3,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > I think I still have to push back first h_t at the beginning of forward()
-      - Check if my BPTT note is right by comparing with chatGPT,
+      > Check if my BPTT note is right by comparing with chatGPT,
         and later search for BPTT again and recheck to make sure if is really correct.
         Also, just remind myself that how to get dL/dWhh so that I could be sure that
         it make sence.
