@@ -144,7 +144,6 @@ tensor tensor::operator/(const tensor &other) const {
 }
 
 tensor tensor::operator+=(const tensor &other) const {
-    // assert(ShapeEqual(shape, other.shape));
     for (auto i = 0; i < size; ++i)
         elem[i] += other[i];
     return *this;
