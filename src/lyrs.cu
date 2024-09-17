@@ -451,8 +451,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
 
         // Is it h_t = activation(matmul(w_hh, h_t) + matmul(w_xh, transpose(x_t)) + b_h); ?
         h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
-        tensor y_t = matmul(w_hy, h_t) + b_y; // I don't need to calculate this every steps if it is of type Many-to-one. Only calculate if it's of type like One-to-may, Many-to-many.
-
+        tensor y_t = matmul(w_hy, h_t) + b_y;
 
         h.push_back(h_t);
         y.push_back(y_t);
