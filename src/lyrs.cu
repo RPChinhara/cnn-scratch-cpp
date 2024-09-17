@@ -323,12 +323,6 @@ std::vector<tensor> nn::forward(const tensor &x, const std::vector<tensor> &w, c
 
     for (auto i = 0; i < lyrs.size() - 1; ++i) {
         if (i == 0) {
-            // (64, 10) -> (64, 1) or (64, 10) I think latter is clearer, but
-            // former is more performant. (10, 64) -> (1, 64) x.T = (4, 10), w1
-            // = (64, 4), w2 = (10(must), 64), w3 = (64, 3), output = (64, 3) x
-            // = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput =
-            // (10, 3)
-
             tensor z = matmul(x, w[i]) + b[i];
             a.push_back(activations[i](z));
         } else {
