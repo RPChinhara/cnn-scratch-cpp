@@ -427,28 +427,6 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
             idx += seq_length;
         }
 
-        // 1 2 3 4 5 6 7 8 9 10
-        // 1 2 3, 2 3 4, 3 4 5, 4 5 6, 5 6 7, 6 7 8, 7 8 9
-        // 4, 5, 6, 7, 8, 9 10
-
-        // 1 2 3 4 5 6 7 8 9 10 11 12 13 14
-        // 1 2 3 4 5 6 7 8 9 10    -> 11
-        // 2 3 4 5 6 7 8 9 10 11   -> 12
-        // 3 4 5 6 7 8 9 10 11 12  -> 13
-        // 4 5 6 7 8 9 10 11 12 13 -> 14
-
-        // I think it's 8317 instead...
-
-        // (now)
-        // 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
-        // matmul(50 1, 1 8316) -> 50 8316 + matmul(50 50, 50 8316))) -> 50 8316
-        // matmul(1 50, 50 8316) -> 1 8316
-
-        // 8316 1, 1 50 = 8316 50 -> 8316 50, 50 50 = 8316 50 -> 8316 50, 50 1 = 8316 1
-
-        // 50 8316, 8316 1 = 50 1 -> 50 50, 50 1 = 50 1 -> 1 50, 50 1 = 1 1
-        // I think this is wrong because when you think about it it's weird that getting only one ouput even thougth I input 8316 batches.
-
         h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
         tensor y_t = matmul(w_hy, h_t) + b_y;
 
