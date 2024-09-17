@@ -404,7 +404,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
     std::vector<tensor> y;
 
     h_t = zeros({hidden_size, batch_size});
-    h.push_back(h_t); // add initial hidden state h0
+    h.push_back(h_t);
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
