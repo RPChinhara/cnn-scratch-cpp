@@ -379,6 +379,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         w_xh = w_xh - lr * dl_dw_hh;
         w_hh = w_hh - lr * dl_dw_hh;
         w_hy = w_hy - lr * dl_dw_hy;
+
         b_h = b_h - lr * dl_db_h;
         b_y = b_y - lr * dl_dy_pred;
 
