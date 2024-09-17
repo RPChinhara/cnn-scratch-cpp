@@ -355,14 +355,14 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         float n = static_cast<float>(y_train.shape.front());
 
-        tensor dl_dy_pred = -2.0f / n * (transpose(y_train) - y_pred); // done
-        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(h_y.first.back())); // done
-        tensor dl_dw_hh = zeros({hidden_size, hidden_size}); // done
-        tensor dl_db_h = zeros({hidden_size, batch_size}); // done
+        tensor dl_dy_pred = -2.0f / n * (transpose(y_train) - y_pred);
+        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(h_y.first.back()));
+        tensor dl_dw_hh = zeros({hidden_size, hidden_size});
+        tensor dl_db_h = zeros({hidden_size, batch_size});
 
         for (auto j = 0; j < seq_length; ++j) {
-            tensor dy_pred_dh_t = w_hy; // done
-            tensor dl_dh_t = matmul(transpose(dl_dy_pred), dy_pred_dh_t); // matmul(transpose(1 8317), 1 50) // maybe done
+            tensor dy_pred_dh_t = w_hy;
+            tensor dl_dh_t = matmul(transpose(dl_dy_pred), dy_pred_dh_t);
 
             tensor dh_t_dw_hh;
             if (j == 0) {
