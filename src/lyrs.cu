@@ -8,16 +8,17 @@
 #include <cassert>
 #include <chrono>
 
-__global__ void matmul(float* A, float* B, float* C, int M, int N, int P) {
+__global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    if (row < M && col < P) {
+    if (row < m && col < p) {
         float value = 0;
-        for (int k = 0; k < N; ++k) {
-            value += A[row * N + k] * B[k * P + col];
+        for (int k = 0; k < n; ++k) {
+            value += a[row * n + k] * b[k * p + col];
         }
-        C[row * P + col] = value;
+
+        c[row * p + col] = value;
     }
 }
 
