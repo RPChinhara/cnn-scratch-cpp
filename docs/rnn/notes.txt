@@ -32,6 +32,8 @@ affect w_hy which also affect loss. Also just remember that whenever I encounter
 
 [ BPTT ]
 
+| This is when the model is many-to-one |
+
 BPTT process for an RNN with two time steps. This shows how to calculate gradients respect to Whh.
 
 h1 = fh(matmul(Wxh, x1) + matmul(Whh, h0) + bh)
@@ -61,6 +63,11 @@ dL2/dWhh = (dL2/dh1 ⋅ 1 - squared(h1) ⋅ transpose(h0)) + (dL2/dh2 ⋅ 1 - sq
 This is general equation of gradient with respect to Whh::
 dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ dht/dWhh where dht/dWhh = 1 - squared(ht) ⋅ transpose(ht-1)
 Finally, dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ 1 - squared(ht) ⋅ transpose(ht-1)
+
+| When the model is either one-to-many or many-to-many things are bit different |
+
+For simplicity, let's say I'm calculating dL/dh1. The equation is dL/dh1 + dL/dh2 ⋅ dh2/dh1 since h1 is contributing both
+loss at time step = 1, and future time step in this case which is h2.
 
 [ Random ]
 
