@@ -3,11 +3,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > Check if my BPTT note is right by comparing with chatGPT,
-        and later search for BPTT again and recheck to make sure if is really correct.
-        Also, just remind myself that how to get dL/dWhh so that I could be sure that
-        it make sence.
-      - Reimplement w_hh
+      > Recalculate w_hh
       - Update w_xh
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
