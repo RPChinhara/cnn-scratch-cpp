@@ -3,7 +3,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > Recalculate w_hh
+      > Check BPTT from the beginnig like dl/dy to make sure if it's correct.
+      - Recalculate w_hh
       - Update w_xh
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
