@@ -43,24 +43,24 @@ loss function at time step T = 2: L2 = L(y, y_true)
 T = 2
 dL2/dh2 = dL2/dy ⋅ dy/dh2 where dy/dh2 = Why
 Thus, dL2/dh2 = dL2/dy ⋅ Why
-dL2/dWhh (t = 2) = dL2/dh2 ⋅ dh2/dWhh where dh2/dWhh = squared(1 - h2) ⋅ transpose(h1)
-Thus, dL2/dWhh = dL2/dh2 ⋅ squared(1 - h2) ⋅ transpose(h1)
+dL2/dWhh (t = 2) = dL2/dh2 ⋅ dh2/dWhh where dh2/dWhh = 1 - squared(h2) ⋅ transpose(h1)
+Thus, dL2/dWhh = dL2/dh2 ⋅ 1 - squared(h2) ⋅ transpose(h1)
 
 T = 1
-dL2/dh1 = dL2/dh2 ⋅ dh2/dh1 where dh2/dh1 = squared(1 - h2) ⋅ Whh
-Thus, dL2/dh1 = dL2/dh2 ⋅ squared(1 - h2) ⋅ Whh
-dL2/dWhh (t = 1) = dL2/dh1 ⋅ h1/dWhh where dh1/dWhh = squared(1 - h1) ⋅ transpose(h0)
-Thus, dL2/dWhh = dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0)
+dL2/dh1 = dL2/dh2 ⋅ dh2/dh1 where dh2/dh1 = 1 - squared(h2) ⋅ Whh
+Thus, dL2/dh1 = dL2/dh2 ⋅ 1 - squared(h2) ⋅ Whh
+dL2/dWhh (t = 1) = dL2/dh1 ⋅ h1/dWhh where dh1/dWhh = 1 - squared(h1) ⋅ transpose(h0)
+Thus, dL2/dWhh = dL2/dh1 ⋅ 1 - squared(h1) ⋅ transpose(h0)
 
 Total gradient with respect to Whh
 
 dL2/dWhh (t = 2) + dL2/dWhh (t = 1)
-dL2/dWhh = (dL2/dh1 ⋅ squared(1 - h1) ⋅ transpose(h0)) + (dL2/dh2 ⋅ squared(1 - h2) ⋅ transpose(h1))
+dL2/dWhh = (dL2/dh1 ⋅ 1 - squared(h1) ⋅ transpose(h0)) + (dL2/dh2 ⋅ 1 - squared(h2) ⋅ transpose(h1))
 
 
 This is general equation of gradient with respect to Whh::
-dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ dht/dWhh where dht/dWhh = squared(1 - ht) ⋅ transpose(ht-1)
-Finally, dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ squared(1 - ht) ⋅ transpose(ht-1)
+dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ dht/dWhh where dht/dWhh = 1 - squared(ht) ⋅ transpose(ht-1)
+Finally, dL2/dWhh = sum t from 1 to 2 dL2/dht ⋅ 1 - squared(ht) ⋅ transpose(ht-1)
 
 [ Random ]
 
