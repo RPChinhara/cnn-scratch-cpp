@@ -351,18 +351,18 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto h_y = forward(x_train);
-        auto y_pred = h_y.second.back();
+        auto y_hat = h_y.second.back();
 
         float n = static_cast<float>(y_train.shape.front());
 
-        tensor dl_dy_pred = -2.0f / n * (transpose(y_train) - y_pred);
-        tensor dl_dw_hy = matmul(dl_dy_pred, transpose(h_y.first.back()));
+        tensor dl_dy_hat = -2.0f / n * (transpose(y_train) - y_hat);
+        tensor dl_dw_hy = matmul(dl_dy_hat, transpose(h_y.first.back()));
         tensor dl_dw_hh = zeros({hidden_size, hidden_size});
         tensor dl_db_h = zeros({hidden_size, batch_size});
 
         for (auto j = 0; j < seq_length; ++j) {
-            tensor dy_pred_dh_t = w_hy;
-            tensor dl_dh_t = matmul(transpose(dl_dy_pred), dy_pred_dh_t);
+            tensor dy_hat_dh_t = w_hy;
+            tensor dl_dh_t = matmul(transpose(dl_dy_hat), dy_hat_dh_t);
 
             tensor dh_t_dw_hh;
             if (j == 0) {
@@ -381,14 +381,14 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         w_hy = w_hy - lr * dl_dw_hy;
 
         b_h = b_h - lr * dl_db_h;
-        b_y = b_y - lr * dl_dy_pred;
+        b_y = b_y - lr * dl_dy_hat;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_pred) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_hat) << std::endl;
     }
 }
 
