@@ -361,15 +361,36 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor dl_dy_hat = -2.0f / n * (transpose(y_train) - y_hat);
         tensor dl_dw_hy  = matmul(dl_dy_hat, transpose(h_y.first.back()));
+        tensor dy_hat_dh_t = w_hy;
+        tensor dl_dh_t = matmul(transpose(dl_dy_hat), dy_hat_dh_t);
+
+        std::cout << dl_dh_t.shape.front() << " " << dl_dh_t.shape.back() << std::endl;
+        std::cout << (1.0f - sqrt(h_y.first.back())).shape.front() << " " << (1.0f - sqrt(h_y.first.back())).shape.back() << std::endl;
+        std::cout << h_y.first[h_y.first.size() - 1].shape.front() << " " << h_y.first[h_y.first.size() - 1].shape.back() << std::endl;
 
         for (auto j = 0; j < seq_length; ++j) {
-            tensor dy_hat_dh_t = w_hy;
-            tensor dl_dh_t = matmul(transpose(dl_dy_hat), dy_hat_dh_t);
+            // dl_dw_hh = matmul(transpose(dl_dh_t), matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1])));
+            auto a = matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1]));
+            std::cout << a.shape.front() << " " << a.shape.back() << std::endl;
+            std::cout << dl_dh_t.shape.front() << " " << dl_dh_t.shape.back() << std::endl;
+
+            // 8317 50 -> 1  50
+            // 50 8317 -> 50 1
+            // 50 8317 -> 50 1
+
+            // (7, 5)     (1, 5)
+            // 1 1 1 1 1  1 1 1 1 1
+            // 1 1 1 1 1
+            // 1 1 1 1 1
+            // 1 1 1 1 1
+            // 1 1 1 1 1
+            // 1 1 1 1 1
+            // 1 1 1 1 1
 
             dl_db_h = dl_db_h + transpose(dl_dh_t);
         }
 
-        w_xh = w_xh - lr * dl_dw_hh;
+        w_xh = w_xh - lr * dl_dw_xh;
         w_hh = w_hh - lr * dl_dw_hh;
         w_hy = w_hy - lr * dl_dw_hy;
 
