@@ -17,6 +17,8 @@
           Finally, you add this (1, 50) to first result.
 
           An another approch is, again matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1])) which will be shape of (50, 50). and then do another matmul on d_loss_d_h_t and result from previous operation to get (8317, 50). Lastly, sum along column to get (1, 50) and add to whh to each rows?
+
+          I guee current one is correct since it's direct and typically follows the standard RNN backpropagation steps.
         -
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
