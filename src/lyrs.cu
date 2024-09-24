@@ -353,13 +353,13 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto h_y = forward(x_train);
         auto y = h_y.second.back();
 
-        float n = static_cast<float>(y_train.shape.front());
+        float num_samples = static_cast<float>(y_train.shape.front());
 
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
         tensor d_loss_d_b_h  = zeros({hidden_size, batch_size});
 
-        tensor d_loss_d_y = -2.0f / n * (transpose(y_train) - y);
+        tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y);
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_y.first.back()));
 
