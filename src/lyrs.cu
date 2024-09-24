@@ -369,7 +369,9 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
         std::cout << (1.0f - sqrt(h_y.first.back())).shape.front() << " " << (1.0f - sqrt(h_y.first.back())).shape.back() << std::endl;
         std::cout << h_y.first[h_y.first.size() - 1].shape.front() << " " << h_y.first[h_y.first.size() - 1].shape.back() << std::endl;
+        std::cout << h_y.first.size() << std::endl;
 
+        auto idx = seq_length;
         for (auto j = 0; j < seq_length; ++j) {
             tensor d_loss_d_w_hh = matmul((transpose(d_loss_d_h_t) * (1.0f - sqrt(h_y.first.back()))), transpose(h_y.first[h_y.first.size() - 1]));
 
