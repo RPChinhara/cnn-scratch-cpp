@@ -355,24 +355,24 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         float n = static_cast<float>(y_train.shape.front());
 
-        tensor dl_dw_xh = zeros({hidden_size, input_size});
-        tensor dl_dw_hh = zeros({hidden_size, hidden_size});
-        tensor dl_db_h  = zeros({hidden_size, batch_size});
+        tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
+        tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
+        tensor d_loss_d_b_h  = zeros({hidden_size, batch_size});
 
-        tensor dl_dy_hat = -2.0f / n * (transpose(y_train) - y_hat);
-        tensor dl_dw_hy  = matmul(dl_dy_hat, transpose(h_y.first.back()));
-        tensor dy_hat_dh_t = w_hy;
-        tensor dl_dh_t = matmul(transpose(dl_dy_hat), dy_hat_dh_t);
+        tensor d_loss_d_y_hat = -2.0f / n * (transpose(y_train) - y_hat);
+        tensor d_loss_d_w_hy  = matmul(d_loss_d_y_hat, transpose(h_y.first.back()));
+        tensor d_y_hat_d_h_t = w_hy;
+        tensor d_loss_d_h_t = matmul(transpose(d_loss_d_y_hat), d_y_hat_d_h_t);
 
-        std::cout << dl_dh_t.shape.front() << " " << dl_dh_t.shape.back() << std::endl;
+        std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
         std::cout << (1.0f - sqrt(h_y.first.back())).shape.front() << " " << (1.0f - sqrt(h_y.first.back())).shape.back() << std::endl;
         std::cout << h_y.first[h_y.first.size() - 1].shape.front() << " " << h_y.first[h_y.first.size() - 1].shape.back() << std::endl;
 
         for (auto j = 0; j < seq_length; ++j) {
-            // dl_dw_hh = matmul(transpose(dl_dh_t), matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1])));
+            // d_loss_d_w_hh = matmul(transpose(d_loss_d_h_t), matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1])));
             auto a = matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1]));
             std::cout << a.shape.front() << " " << a.shape.back() << std::endl;
-            std::cout << dl_dh_t.shape.front() << " " << dl_dh_t.shape.back() << std::endl;
+            std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
 
             // 8317 50 -> 1  50
             // 50 8317 -> 50 1
@@ -387,15 +387,15 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             // 1 1 1 1 1
             // 1 1 1 1 1
 
-            dl_db_h = dl_db_h + transpose(dl_dh_t);
+            d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_t);
         }
 
-        w_xh = w_xh - lr * dl_dw_xh;
-        w_hh = w_hh - lr * dl_dw_hh;
-        w_hy = w_hy - lr * dl_dw_hy;
+        w_xh = w_xh - lr * d_loss_d_w_xh;
+        w_hh = w_hh - lr * d_loss_d_w_hh;
+        w_hy = w_hy - lr * d_loss_d_w_hy;
 
-        b_h = b_h - lr * dl_db_h;
-        b_y = b_y - lr * dl_dy_hat;
+        b_h = b_h - lr * d_loss_d_b_h;
+        b_y = b_y - lr * d_loss_d_y_hat;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);

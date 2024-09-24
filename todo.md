@@ -5,6 +5,7 @@
     - Implement BPTT.
       > Recalculate w_hh
       - Recalculate w_xh
+      - Evaluate which calculation reduces the loss more. Which is correct both of them?
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
   - Implement either one-to-many or many-to-many
