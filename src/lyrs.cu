@@ -371,10 +371,10 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         std::cout << h_y.first[h_y.first.size() - 1].shape.front() << " " << h_y.first[h_y.first.size() - 1].shape.back() << std::endl;
 
         for (auto j = 0; j < seq_length; ++j) {
-            // d_loss_d_w_hh = matmul(transpose(d_loss_d_h_t), matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1])));
-            auto d_loss_d_w_hh = matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1]));
-            std::cout << d_loss_d_w_hh.shape.front() << " " << d_loss_d_w_hh.shape.back() << std::endl;
-            std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
+            tensor d_loss_d_w_hh = matmul((transpose(d_loss_d_h_t) * (1.0f - sqrt(h_y.first.back()))), transpose(h_y.first[h_y.first.size() - 1]));
+
+            // std::cout << d_loss_d_w_hh.shape.front() << " " << d_loss_d_w_hh.shape.back() << std::endl;
+
 
             // 8317 50 -> 1  50
             // 50 8317 -> 50 1
