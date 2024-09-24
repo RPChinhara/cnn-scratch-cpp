@@ -4,7 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - Recalculate w_hh
-        > Calculate dL2/dh1
+        > Calculate dL2/dh1 (maybe I have to demostrate t from 3 not only from 2 like on the note to see the flow)
       - Recalculate w_xh
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
