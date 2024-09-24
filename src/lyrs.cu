@@ -351,7 +351,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto h_y = forward(x_train);
-        auto y_hat = h_y.second.back();
+        auto y = h_y.second.back();
 
         float n = static_cast<float>(y_train.shape.front());
 
@@ -359,12 +359,12 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
         tensor d_loss_d_b_h  = zeros({hidden_size, batch_size});
 
-        tensor d_loss_d_y_hat = -2.0f / n * (transpose(y_train) - y_hat);
+        tensor d_loss_d_y = -2.0f / n * (transpose(y_train) - y);
 
-        tensor d_loss_d_w_hy  = matmul(d_loss_d_y_hat, transpose(h_y.first.back()));
+        tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_y.first.back()));
 
-        tensor d_y_hat_d_h_t = w_hy;
-        tensor d_loss_d_h_t = matmul(transpose(d_loss_d_y_hat), d_y_hat_d_h_t);
+        tensor d_y_d_h_t = w_hy;
+        tensor d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_t);
 
         std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
         std::cout << (1.0f - sqrt(h_y.first.back())).shape.front() << " " << (1.0f - sqrt(h_y.first.back())).shape.back() << std::endl;
@@ -397,14 +397,14 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         w_hy = w_hy - lr * d_loss_d_w_hy;
 
         b_h = b_h - lr * d_loss_d_b_h;
-        b_y = b_y - lr * d_loss_d_y_hat;
+        b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y_hat) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y) << std::endl;
     }
 }
 
