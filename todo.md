@@ -6,7 +6,16 @@
       - Recalculate w_hh
         > Calculate dL2/dh1
       - Recalculate w_xh
-      - Evaluate which calculation reduces the loss more. Which is correct both of them?
+      - Evaluate which calculation for "d_loss_d_w_hh" reduces the loss more. Which is correct both of them?
+        -
+          8317 50 -> d_loss_d_h_t
+          50 8317 -> 1.0f - sqrt(h_y.first.back())
+          50 8317 -> h_y.first[h_y.first.size() - 1]
+
+          Currently, the calculation is matmul((transpose(d_loss_d_h_t) * (1.0f - sqrt(h_y.first.back()))), transpose(h_y.first[h_y.first.size() - 1])).
+          However, it could also be matmul(1.0f - sqrt(h_y.first.back()), transpose(h_y.first[h_y.first.size() - 1])) which will be shape of (50, 50). sum(d_loss_d_h_t, 0) which turns into shape of (1, 50).
+          Finally, you add this (1, 50) to first result.
+        -
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
   - Implement either one-to-many or many-to-many
