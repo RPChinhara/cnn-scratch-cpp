@@ -3,7 +3,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > Recalculate w_hh
+      - Recalculate w_hh
+        > Calculate dL2/dh1
       - Recalculate w_xh
       - Evaluate which calculation reduces the loss more. Which is correct both of them?
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
