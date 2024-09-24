@@ -377,20 +377,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
             // std::cout << d_loss_d_w_hh.shape.front() << " " << d_loss_d_w_hh.shape.back() << std::endl;
 
-
-            // 8317 50 -> 1  50
-            // 50 8317 -> 50 1
-            // 50 8317 -> 50 1
-
-            // (7, 5)     (1, 5)
-            // 1 1 1 1 1  1 1 1 1 1
-            // 1 1 1 1 1
-            // 1 1 1 1 1
-            // 1 1 1 1 1
-            // 1 1 1 1 1
-            // 1 1 1 1 1
-            // 1 1 1 1 1
-
             d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_t);
         }
 
