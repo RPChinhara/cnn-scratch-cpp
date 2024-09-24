@@ -360,11 +360,11 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor d_loss_d_b_h  = zeros({hidden_size, batch_size});
 
         tensor d_loss_d_y_hat = -2.0f / n * (transpose(y_train) - y_hat);
-        
-        tensor d_y_hat_d_h_t = w_hy;
-        tensor d_loss_d_h_t = matmul(transpose(d_loss_d_y_hat), d_y_hat_d_h_t);
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y_hat, transpose(h_y.first.back()));
+
+        tensor d_y_hat_d_h_t = w_hy;
+        tensor d_loss_d_h_t = matmul(transpose(d_loss_d_y_hat), d_y_hat_d_h_t);
 
         std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
         std::cout << (1.0f - sqrt(h_y.first.back())).shape.front() << " " << (1.0f - sqrt(h_y.first.back())).shape.back() << std::endl;
