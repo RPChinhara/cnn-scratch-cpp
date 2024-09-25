@@ -13,9 +13,7 @@ dl_d_y_pred = (output_size, batch_size)  d_y_pred_d_w_hy = (batch_size, hidden_s
                                       -> / .       .
                                       -> \ .         .
                                          [ 8317         ]
-
-------------------------------------------------------------------
-
+                                         
 When batch size is 1:
 output_size = 1
 batch_size  = 1
