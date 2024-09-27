@@ -364,20 +364,23 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_y.first.back()));
 
         tensor d_y_d_h_t = w_hy;
-        tensor d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_t);
+        tensor d_loss_d_h_t_10 = matmul(transpose(d_loss_d_y), d_y_d_h_t);
 
-        std::cout << d_loss_d_h_t.shape.front() << " " << d_loss_d_h_t.shape.back() << std::endl;
-        std::cout << (1.0f - sqrt(h_y.first.back())).shape.front() << " " << (1.0f - sqrt(h_y.first.back())).shape.back() << std::endl;
-        std::cout << h_y.first[h_y.first.size() - 1].shape.front() << " " << h_y.first[h_y.first.size() - 1].shape.back() << std::endl;
-        std::cout << h_y.first.size() << std::endl;
+        // d_loss_d_h_t_10                 -> (8317, 50)
+        // 1.0f - sqrt(h_y.first.back())   -> (50, 8317)
+        // h_y.first[h_y.first.size() - 1] -> (50, 8317)
+        // h_y.first.size()                -> 11
+        // d_loss_d_w_hh_10                -> (50, 50)
+        // d_loss_d_h_t_9                  -> (8317, 50)
 
-        auto idx = seq_length;
         for (auto j = 0; j < seq_length; ++j) {
-            tensor d_loss_d_w_hh = matmul((transpose(d_loss_d_h_t) * (1.0f - sqrt(h_y.first.back()))), transpose(h_y.first[h_y.first.size() - 1]));
+            tensor d_loss_d_w_hh_10 = matmul((transpose(d_loss_d_h_t_10) * (1.0f - sqrt(h_y.first.back()))), transpose(h_y.first[h_y.first.size() - 1]));
 
-            // std::cout << d_loss_d_w_hh.shape.front() << " " << d_loss_d_w_hh.shape.back() << std::endl;
+            auto d_loss_d_h_t_9 = matmul(d_loss_d_h_t_10 * transpose(1.0f - sqrt(h_y.first.back())), w_hh);
 
-            d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_t);
+            tensor d_loss_d_w_hh_9 = matmul((transpose(d_loss_d_h_t_9) * (1.0f - sqrt(h_y.first[h_y.first.size() - 1]))), transpose(h_y.first[h_y.first.size() - 2]));
+
+            d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_t_10);
         }
 
         w_xh = w_xh - lr * d_loss_d_w_xh;
