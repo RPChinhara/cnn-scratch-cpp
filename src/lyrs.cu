@@ -380,6 +380,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
             tensor d_loss_d_w_hh_9 = matmul((transpose(d_loss_d_h_t_9) * (1.0f - sqrt(h_y.first[9]))), transpose(h_y.first[8]));
 
+            // NOTE: I think I have to add dL/dht e.g., dL2/dh2 + dL2/dh1
             d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_final);
         }
 
@@ -388,7 +389,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         w_hy = w_hy - lr * d_loss_d_w_hy;
 
         b_h = b_h - lr * d_loss_d_b_h;
-        b_y = b_y - lr * d_loss_d_y;
+        b_y = b_y - lr * d_loss_d_y; // done
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
