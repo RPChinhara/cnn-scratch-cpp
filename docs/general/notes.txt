@@ -45,7 +45,7 @@ hidden_size = 50
 I have to multiply these to get final shape of (1, 50), so it will be either
 
 element-wise multiplication on (1, 50) and transpose(50, 1), and take matmul on previous result and (50, 50) or,
-element-wise multiplication on transpose(1, 50) and transpose(50, 1), and take matmul on transpose of previous result and (50, 50).
+element-wise multiplication on transpose(1, 50) and (50, 1), and take matmul on transpose of previous result and (50, 50).
 
 It's obviously clear that matmul on (1, 50) and (50, 1) is wrong since it'd result in (1, 1), then I won't be able to take matmul with (50, 50) although I could just multiply (1, 1) and (50, 50), but it won't lead to (1, 50).
 
