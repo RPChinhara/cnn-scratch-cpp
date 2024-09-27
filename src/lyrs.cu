@@ -364,9 +364,9 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_y.first.back()));
 
         tensor d_y_d_h_t = w_hy;
-        tensor d_loss_d_h_t_10 = matmul(transpose(d_loss_d_y), d_y_d_h_t);
+        tensor d_loss_d_h_final = matmul(transpose(d_loss_d_y), d_y_d_h_t);
 
-        // d_loss_d_h_t_10                 -> (8317, 50)
+        // d_loss_d_h_final                 -> (8317, 50)
         // 1.0f - sqrt(h_y.first.back())   -> (50, 8317)
         // h_y.first[h_y.first.size() - 1] -> (50, 8317)
         // h_y.first.size()                -> 11
@@ -374,13 +374,13 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         // d_loss_d_h_t_9                  -> (8317, 50)
 
         for (auto j = 0; j < seq_length; ++j) {
-            tensor d_loss_d_w_hh_10 = matmul((transpose(d_loss_d_h_t_10) * (1.0f - sqrt(h_y.first[10]))), transpose(h_y.first[9]));
+            tensor d_loss_d_w_hh_10 = matmul((transpose(d_loss_d_h_final) * (1.0f - sqrt(h_y.first[10]))), transpose(h_y.first[9]));
 
-            auto d_loss_d_h_t_9 = matmul(d_loss_d_h_t_10 * transpose(1.0f - sqrt(h_y.first[10])), w_hh);
+            auto d_loss_d_h_t_9 = matmul(d_loss_d_h_final * transpose(1.0f - sqrt(h_y.first[10])), w_hh);
 
             tensor d_loss_d_w_hh_9 = matmul((transpose(d_loss_d_h_t_9) * (1.0f - sqrt(h_y.first[9]))), transpose(h_y.first[8]));
 
-            d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_t_10);
+            d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_final);
         }
 
         w_xh = w_xh - lr * d_loss_d_w_xh;
