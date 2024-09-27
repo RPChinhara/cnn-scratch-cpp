@@ -49,4 +49,8 @@ element-wise multiplication on transpose(1, 50) and transpose(50, 1), and take m
 
 It's obviously clear that matmul on (1, 50) and (50, 1) is wrong since it'd result in (1, 1), then I won't be able to take matmul with (50, 50) although I could just multiply (1, 1) and (50, 50), but it won't lead to (1, 50).
 
-What I want to say here is that I think you don't want to mess with hidden_size ever. You don't want to counduct operations that destroy shape for hidden_size just keep shape for hidden_size, however I could mess with shapes for batch_size.
+What I want to say here is that I think you don't want to mess with hidden_size ever. You don't want to counduct operations that destroy shape for hidden_size just keep shape for hidden_size, however I could mess with shapes for batch_size. I think when I matmul on (1, 50) and (50, 1) it's just destroying hidden layers as if there are no more hidden layers exist in the model. I mean just think about it what does the result (1, 1) even mean considering below forward progation. I never got this shape!
+
+50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
+matmul(50 1, 1 8316) -> 50 8316 + matmul(50 50, 50 8316) -> 50 8316
+matmul(1 50, 50 8316) -> 1 8316
