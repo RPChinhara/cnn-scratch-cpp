@@ -4,8 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - Recalculate w_hh
-        > Check if all the d_loss_d_h_t and d_loss_d_w_hh make sense
-        - Use for loop to calculate w_hh by obseving the pattern above calculated time steps 10 to 7
+        > Use for loop to calculate w_hh by obseving the pattern
       - Recalculate w_xh
       - Recalculate b_h
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
