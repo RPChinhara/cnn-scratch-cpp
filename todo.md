@@ -4,7 +4,8 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - Recalculate w_hh
-        > Check if notes_temp.txt is correct.
+        > Calculate d_loss_d_h_t_8, and d_loss_d_w_hh_8, d_loss_d_h_t_7, and d_loss_d_w_hh_7
+        - Use for loop to calculate w_hh by obseving the pattern above calculated time steps 10 to 7
       - Recalculate w_xh
       - Recalculate b_h
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
