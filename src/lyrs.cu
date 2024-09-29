@@ -380,6 +380,12 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
             tensor d_loss_d_w_hh_9 = matmul((transpose(d_loss_d_h_t_9) * (1.0f - sqrt(h_y.first[9]))), transpose(h_y.first[8]));
 
+
+            // tensor d_loss_d_w_xh_10
+            // tensor d_loss_d_w_xh_9
+            // tensor d_loss_d_w_xh_8
+            // tensor d_loss_d_w_xh_7
+
             // NOTE: I think I have to add all the dL/dht e.g., dL2/dh2 + dL2/dh1
             d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_final);
         }
