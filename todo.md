@@ -4,7 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - Recalculate w_hh
-        > Calculate d_loss_d_h_t_8, and d_loss_d_w_hh_8, d_loss_d_h_t_7, and d_loss_d_w_hh_7 by using notes_temp.txt
+        > Check if all the d_loss_d_h_t and d_loss_d_w_hh make sense
         - Use for loop to calculate w_hh by obseving the pattern above calculated time steps 10 to 7
       - Recalculate w_xh
       - Recalculate b_h

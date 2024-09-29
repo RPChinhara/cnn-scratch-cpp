@@ -382,6 +382,12 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             tensor d_loss_d_h_t_8  = matmul(d_loss_d_h_t_9 * transpose(1.0f - sqrt(h_y.first[9])), w_hh);
             tensor d_loss_d_w_hh_8 = matmul((transpose(d_loss_d_h_t_8) * (1.0f - sqrt(h_y.first[8]))), transpose(h_y.first[7]));
 
+            tensor d_loss_d_h_t_7  = matmul(d_loss_d_h_t_8 * transpose(1.0f - sqrt(h_y.first[8])), w_hh);
+            tensor d_loss_d_w_hh_7 = matmul((transpose(d_loss_d_h_t_7) * (1.0f - sqrt(h_y.first[7]))), transpose(h_y.first[6]));
+
+            tensor d_loss_d_h_t_6  = matmul(d_loss_d_h_t_7 * transpose(1.0f - sqrt(h_y.first[7])), w_hh);
+            tensor d_loss_d_w_hh_6 = matmul((transpose(d_loss_d_h_t_6) * (1.0f - sqrt(h_y.first[6]))), transpose(h_y.first[5]));
+
             // tensor d_loss_d_w_xh_10
             // tensor d_loss_d_w_xh_9
             // tensor d_loss_d_w_xh_8
