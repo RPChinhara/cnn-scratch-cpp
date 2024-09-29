@@ -386,7 +386,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         w_xh = w_xh - lr * d_loss_d_w_xh; // incomplete
         w_hh = w_hh - lr * d_loss_d_w_hh; // incomplete
-        w_hy = w_hy - lr * d_loss_d_w_hy; // ?
+        w_hy = w_hy - lr * d_loss_d_w_hy; // done
 
         b_h = b_h - lr * d_loss_d_b_h;    // incomplete
         b_y = b_y - lr * d_loss_d_y;      // done
