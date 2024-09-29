@@ -1,13 +1,13 @@
 [Forward propagation]
 
-h1 = fh(matmul(Wxh, x1) + matmul(Whh, h0) + bh)
-h2 = fh(matmul(Wxh, x2) + matmul(Whh, h1) + bh)
-h3 = fh(matmul(Wxh, x3) + matmul(Whh, h2) + bh)
-h4 = fh(matmul(Wxh, x4) + matmul(Whh, h3) + bh)
+h1 = act(matmul(Wxh, x1) + matmul(Whh, h0) + bh)
+h2 = act(matmul(Wxh, x2) + matmul(Whh, h1) + bh)
+h3 = act(matmul(Wxh, x3) + matmul(Whh, h2) + bh)
+h4 = act(matmul(Wxh, x4) + matmul(Whh, h3) + bh)
 
-y  = fy(matmul(Why, h4) + by)
+y  = matmul(Why, h4) + by
 
-loss function at time step T = 3: L = L(y, y_true)
+Loss function at time step T = 4 is L = L(y, y_true)
 
 
 [BPTT]
