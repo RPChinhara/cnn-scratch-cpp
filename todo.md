@@ -6,6 +6,7 @@
       - Recalculate w_hh
         > Check if notes_temp.txt is correct.
       - Recalculate w_xh
+      - Recalculate b_h
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
   - Implement either one-to-many or many-to-many
