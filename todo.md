@@ -4,8 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - Recalculate w_hh
-        - Demostrate t from 3 not only from 2 like on the note to see the flow
-        > Mark updating which params are done
+        > Demostrate t from 3 not only from 2 like on the note to see the flow
       - Recalculate w_xh
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
       - add validation dataset?
