@@ -28,13 +28,13 @@ T = 2
 dL/dh2 = dL/dh3 ⋅ dh3/dh2 where dh3/dh2 = 1 - squared(h3) ⋅ Whh
 Thus, dL/dh2 = dL/dh3 ⋅ 1 - squared(h3) ⋅ Whh
 dL/dWhh (t = 2) = dL/dh2 ⋅ dh2/dWhh where dh2/dWhh = 1 - squared(h2) ⋅ transpose(h1)
-Thus, dL/dWhh = dL/dh2 ⋅ 1 - squared(h2) ⋅ transpose(h1)
+Thus, dL/dWhh (t = 2) = dL/dh2 ⋅ 1 - squared(h2) ⋅ transpose(h1)
 
 T = 1
 dL/dh1 = dL/dh2 ⋅ dh2/dh1 where dh2/dh1 = 1 - squared(h2) ⋅ Whh
 Thus, dL/dh1 = dL/dh2 ⋅ 1 - squared(h2) ⋅ Whh
 dL/dWhh (t = 1) = dL/dh1 ⋅ dh1/dWhh where dh1/dWhh = 1 - squared(h1) ⋅ transpose(h0)
-Thus, dL/dWhh = dL/dh1 ⋅ 1 - squared(h1) ⋅ transpose(h0)
+Thus, dL/dWhh (t = 1) = dL/dh1 ⋅ 1 - squared(h1) ⋅ transpose(h0)
 
 Total gradient with respect to Whh is,
 
