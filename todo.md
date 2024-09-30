@@ -3,9 +3,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      - Recalculate w_hh
-        > Make sure if the for loop is right
-      - Recalculate w_xh
+      > Recalculate w_xh
       - Recalculate b_h
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
         - Play around with the one wiht google colab to see if it really worth it change batch sizes. Does it improve the loss?
