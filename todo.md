@@ -8,7 +8,6 @@
       - Recalculate w_xh
       - Recalculate b_h
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
-      - add validation dataset?
   - Implement either one-to-many or many-to-many
     - Implement whichever is more famous so that I could learn how loss would work and its derivatives
   - Implement LSTM.
