@@ -364,8 +364,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_y.first.back()));
 
-        // d_loss_d_h_10                 -> (8317, 50)
-        // 1.0f - square(h_y.first.back())   -> (50, 8317)
+        // d_loss_d_h_10                   -> (8317, 50)
+        // 1.0f - square(h_y.first.back()) -> (50, 8317)
         // h_y.first[h_y.first.size() - 1] -> (50, 8317)
         // h_y.first.size()                -> 11
         // d_loss_d_w_hh_10                -> (50, 50)
