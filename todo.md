@@ -6,6 +6,7 @@
       > Recalculate w_xh
         - Research how to get w_xh although I have pretty sure how to get it, but just for in case.
       - Recalculate b_h
+      - Recheck if the whole BPTT make sense
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
         - Play around with the one wiht google colab to see if it really worth it change batch sizes. Does it improve the loss?
   - Implement either one-to-many or many-to-many
