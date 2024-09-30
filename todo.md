@@ -4,7 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       - Recalculate w_hh
-        > Use for loop to calculate w_hh by obseving the pattern
+        > Make sure if the for loop is right
       - Recalculate w_xh
       - Recalculate b_h
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
