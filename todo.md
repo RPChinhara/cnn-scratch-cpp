@@ -4,7 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       > Recalculate w_xh
-        - Research how to get w_xh although I have pretty sure how to get it, but just for in case.
+        - Calculation is almost similar except you multiply by transpose of x_t
       - Recalculate b_h
       - Recheck if the whole BPTT make sense
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
