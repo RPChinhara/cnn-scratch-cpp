@@ -170,6 +170,15 @@ tensor sqrt(const tensor &x)
     return y;
 }
 
+tensor square(const tensor &t) {
+    tensor y = t;
+
+    for (auto i = 0; i < t.size; ++i)
+        y.elem[i] = t.elem[i] * t.elem[i];
+
+    return y;
+}
+
 tensor sum(const tensor &t, const size_t axis)
 {
     assert(axis == 0 || axis == 1);
