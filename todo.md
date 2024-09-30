@@ -4,7 +4,8 @@
   - Implement SimpleRNN
     - Implement BPTT.
       > Recalculate w_xh
-        - Calculation is almost similar except you multiply by transpose of x_t
+        - Calculation is almost similar except for multiplying by transpose of x_t at the end instead of ht-1
+          - I think I have to use x_t used in forward(), but not x_train which is the param in train();
       - Recalculate b_h
       - Recheck if the whole BPTT make sense
       - Split into batch? Or make it adaptable to any batch size like I did for nn?
