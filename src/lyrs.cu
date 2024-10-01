@@ -351,8 +351,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto h_y = forward(x_train);
-        auto y = h_y.second.back();
+        auto [x_sequence, h_sequence, y_sequence] = forward(x_train);
+        auto y = y_sequence.back();
 
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
@@ -362,7 +362,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y);
 
-        tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_y.first.back()));
+        tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
         // d_loss_d_h_10                   -> (8317, 50)
         // 1.0f - square(h_y.first.back()) -> (50, 8317)
@@ -409,10 +409,10 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
                 tensor d_y_d_h_10 = w_hy;
                 d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(1.0f - square(h_y.first[j + 1])), w_hh);
+                d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(1.0f - square(h_sequence[j + 1])), w_hh);
             }
 
-            d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * (1.0f - square(h_y.first[j]))), transpose(h_y.first[j - 1]));
+            d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * (1.0f - square(h_sequence[j]))), transpose(h_sequence[j - 1]));
         }
 
         // NOTE: These a = a - lr * b is working. I've checked.
@@ -440,12 +440,13 @@ tensor rnn::predict(const tensor &x) {
     return tensor();
 }
 
-std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
-    std::vector<tensor> h;
-    std::vector<tensor> y;
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
+    std::vector<tensor> x_sequence;
+    std::vector<tensor> h_sequence;
+    std::vector<tensor> y_sequence;
 
     h_t = zeros({hidden_size, batch_size});
-    h.push_back(h_t);
+    h_sequence.push_back(h_t);
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
@@ -460,11 +461,12 @@ std::pair<std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x
         h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
         tensor y_t = matmul(w_hy, h_t) + b_y;
 
-        h.push_back(h_t);
-        y.push_back(y_t);
+        x_sequence.push_back(x_t);
+        h_sequence.push_back(h_t);
+        y_sequence.push_back(y_t);
     }
 
-    return std::make_pair(h, y);
+    return std::make_tuple(x_sequence, h_sequence, y_sequence);
 }
 
 tensor embedding(const size_t vocab_size, const size_t cols, const tensor &ind) {

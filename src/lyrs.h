@@ -7,6 +7,7 @@
 #include <cassert>
 #include <functional>
 #include <random>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -139,7 +140,7 @@ class rnn {
     tensor b_h;
     tensor b_y;
 
-    std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor &x);
+    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x);
 
   public:
     rnn(const act_func &activation, const loss_func &loss, const float lr);
