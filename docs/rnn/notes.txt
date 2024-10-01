@@ -1,3 +1,10 @@
+-------------------- create_sequences() --------------------
+Given following dataset, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], and I have to create sequence length of 3 it'd be
+[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8], [7, 8, 9], [8, 9, 10] which is exactly what create_sequences() does.
+However, inside forward() I decompose these so that I can process in batches like below,
+[1, 2, 3, 4, 5, 6, 7, 8], [2, 3, 4, 5, 6, 7, 8, 9], and [3, 4, 5, 6, 7, 8, 9, 10].
+So after all, I don't know if create_sequences() is really neccessaly I just did it since all the Python rnn examples do.
+
 -------------------- BPTT --------------------
 
 [This is when the model is many-to-one]
