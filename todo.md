@@ -3,10 +3,9 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > Recalculate b_h
+      > Batch size should be adaptable as size of 8317 is way worse than 32 when it comes to loss I just chekced on the google colab
       - Recheck if the whole BPTT make sense
-      - Split into batch? Or make it adaptable to any batch size like I did for nn?
-        - Play around with the one wiht google colab to see if it really worth it change batch sizes. Does it improve the loss?
+        - Recheck if calculation for d_loss_d_b_h is correct.
   - Implement either one-to-many or many-to-many
     - Implement whichever is more famous so that I could learn how loss would work and its derivatives
   - Implement LSTM.
