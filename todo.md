@@ -4,7 +4,7 @@
   - Implement SimpleRNN
     - Implement BPTT.
       > Recalculate w_xh
-        - Calculation is almost similar except for multiplying by transpose of x_t at the end instead of ht-1
+        > Calculation is almost similar except for multiplying by transpose of x_t at the end instead of ht-1
           - I think I have to use x_t used in forward(), but not x_train which is the param in train();
           - I'm pretty sure, it's x_t, but just make sure by comparing x_t and x_train
           - I think I should return x_t in forward() like I did for h_t and y_t, but I didn't do that in nn that's because in nn
