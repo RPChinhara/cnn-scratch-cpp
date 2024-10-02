@@ -421,11 +421,11 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
         // NOTE: These a = a - lr * b is working. I've checked.
-        w_xh = w_xh - lr * d_loss_d_w_xh; // incomplete
+        w_xh = w_xh - lr * d_loss_d_w_xh; // done
         w_hh = w_hh - lr * d_loss_d_w_hh; // done
         w_hy = w_hy - lr * d_loss_d_w_hy; // done
 
-        b_h = b_h - lr * d_loss_d_b_h;    // incomplete
+        b_h = b_h - lr * d_loss_d_b_h;    // done
         b_y = b_y - lr * d_loss_d_y;      // done
 
         auto end_time = std::chrono::high_resolution_clock::now();
