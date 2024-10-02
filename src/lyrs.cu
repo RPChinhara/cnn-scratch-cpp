@@ -404,9 +404,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             // d_loss_d_b_h = d_loss_d_b_h + transpose(d_loss_d_h_10);
         // }
 
-        std::cout << x_sequence[9].shape.front() << " " << x_sequence[9].shape.back() << std::endl;
-        // std::cout << x_sequence[10].shape.front() << " " << x_sequence[10].shape.back() << std::endl;
-
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
         // tensor d_loss_d_h_t;
         for (auto j = seq_length; j > 0; --j) {
@@ -464,6 +461,12 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::f
             x_t[j] = x[idx];
             idx += seq_length;
         }
+
+        // [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8], [7, 8, 9], [8, 9, 10] which is exactly what create_sequences() does.
+        // [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8], [7, 8, 9], [8, 9, 10] -> 1 batches
+        // [1, 2, 3], [2, 3, 4] -> [1, 2], [2, 3], [3, 4]                                          -> 2 batches
+        // [1, 2, 3], [2, 3, 4], [3, 4, 5]                                                         -> 3 batches
+        // [1, 2, 3, 4, 5, 6, 7, 8], [2, 3, 4, 5, 6, 7, 8, 9], and [3, 4, 5, 6, 7, 8, 9, 10]       -> 8 batches
 
         h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
         tensor y_t = matmul(w_hy, h_t) + b_y;
