@@ -3,9 +3,10 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > Try batch size of 1 as the loss was really good with it.
-      - Recheck if the whole BPTT make sense
+      > 1. Try batch size of 1 as the loss was really good with it.
+      2. If loss seems good recheck if the whole BPTT make sense
         - Recheck if calculation for d_loss_d_b_h is correct.
+      3. Make it adaptable so that I can use different batch sizes like 32?
   - Implement either one-to-many or many-to-many
     - Implement whichever is more famous so that I could learn how loss would work and its derivatives
   - Implement LSTM.
