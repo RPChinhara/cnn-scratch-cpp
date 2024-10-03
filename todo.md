@@ -3,7 +3,7 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Implement BPTT.
-      > Batch size should be adaptable as size of 8317 is way worse than 32 when it comes to loss I just chekced on the google colab
+      > Try batch size of 1 as the loss was really good with it.
       - Recheck if the whole BPTT make sense
         - Recheck if calculation for d_loss_d_b_h is correct.
   - Implement either one-to-many or many-to-many
