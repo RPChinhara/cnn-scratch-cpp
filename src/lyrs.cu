@@ -463,9 +463,9 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::f
             idx += seq_length;
         }
 
-        // [1, 2, 3], [2, 3, 4],    -> dataset
-        // [1], [2], 3],  [2], [3], [4]    -> batch size = 1
-        // [1, 2],  [2, 3],  [3, 4] -> batch size = 2
+        // [1, 2, 3], [2, 3, 4],        -> dataset
+        // [1], [2], 3],  [2], [3], [4] -> batch size = 1
+        // [1, 2],  [2, 3],  [3, 4]     -> batch size = 2
 
         // [1, 2, 3], [2, 3, 4], [3, 4, 5]               -> dataset
         // [1], [2], [3],  [2], [3], [4],  [3], [4], [5] -> batch size = 1
