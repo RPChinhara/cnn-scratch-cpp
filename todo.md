@@ -4,6 +4,14 @@
   - Implement SimpleRNN
     - Implement BPTT.
       > 1. Try batch size of 1 as the loss was really good with it.
+        - The way caluclate the loss is wrong if I'm using batch size of like 32.
+          First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
+          Then, in each epoch calculate losses in this case 3 times, and then accumulate these numbers and devide by 3 to get an average.
+          And this is the loss I log for each epochs.
+          Example calculation:
+          If you have 3 batches with losses of 0.5, 0.3, and 0.4:
+          Total Loss: total_loss = 0.5 + 0.3 + 0.4 = 1.2
+          Average Loss: average_loss = 1.2 / 3 = 0.4
       2. If loss seems good recheck if the whole BPTT make sense
         - Recheck if calculation for d_loss_d_b_h is correct.
       3. Make it adaptable so that I can use different batch sizes like 32?
