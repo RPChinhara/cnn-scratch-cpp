@@ -53,7 +53,7 @@ int main() {
 
     model.evaluate(x_y_train.first, x_y_train.second);
     model.evaluate(x_y_test.first, x_y_test.second);
-    
+
     model.predict(x_y_test.first);
 
     return 0;
