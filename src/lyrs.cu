@@ -485,7 +485,9 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::f
 
         x_sequence.push_back(x_t);
         h_sequence.push_back(h_t);
-        y_sequence.push_back(y_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
     }
 
     return std::make_tuple(x_sequence, h_sequence, y_sequence);
