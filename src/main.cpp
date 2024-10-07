@@ -48,6 +48,8 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
+    // Everything much with google colab up to here! (delete this after everything is done)
+
     rnn model = rnn(hyperbolic_tangent, mean_squared_error, 0.01f);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
