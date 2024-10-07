@@ -2,7 +2,6 @@
 
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Implement BPTT.
       > 1. Try batch size of 1 as the loss was really good with it.
         - The way caluclate the loss is wrong if I'm using batch size of like 32.
           First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
