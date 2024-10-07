@@ -13,7 +13,7 @@
           Total Loss: total_loss = 0.5 + 0.3 + 0.4 = 1.2
           Average Loss: average_loss = 1.2 / 3 = 0.4
       2. If loss seems good recheck if the whole BPTT make sense
-        - Recheck if calculation for d_loss_d_b_h is correct.
+        - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       3. Make it adaptable so that I can use different batch sizes like 32?
   - Implement either one-to-many or many-to-many
     - Implement whichever is more famous so that I could learn how loss would work and its derivatives
