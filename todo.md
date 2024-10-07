@@ -2,7 +2,7 @@
 
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Vanishing gradients might be occuring
+    - Vanishing gradients might be occuring -> I'm sure it's happening as when I logged all the gradients, it was all close to zeros or zeros
       - Solutions
         - Better Activation Functions: Using ReLU or its variants can help mitigate this issue.
         - Batch Normalization: Normalizing the input to each layer can help maintain the scale of gradients.
