@@ -5,7 +5,9 @@
     - Implement evaluate();
     - I have to inverse min_max_scaler() after the predict()
     - Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
-      > Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front() / seq_length; ++i) like I did for nn?
+      - It turs out that max batch size worked with large epoch size on google... What now?
+
+      - Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front() / seq_length; ++i) like I did for nn?
         And, instead of passing x_train, x_train[i] to forward() as it's batch size of 1?
 
       - Is calculating and logging the losses comes before the BPTT?
