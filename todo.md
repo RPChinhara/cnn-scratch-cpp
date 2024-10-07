@@ -2,6 +2,14 @@
 
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
+    - Vanishing gradients might be occuring
+      - Solutions
+        - Better Activation Functions: Using ReLU or its variants can help mitigate this issue.
+        - Batch Normalization: Normalizing the input to each layer can help maintain the scale of gradients.
+        - Residual Connections: Architectures like ResNets allow gradients to flow through skip connections, helping to maintain stronger gradient signals.
+        - Gradient Clipping: Preventing gradients from becoming too small or too large can also help.
+        - Use different optimizers like Adam, RMSprop
+        - Simplify the model
     - Implement evaluate();
     - I have to inverse min_max_scaler() after the predict()
     - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
