@@ -11,7 +11,7 @@
           If you have 3 batches with losses of 0.5, 0.3, and 0.4:
           Total Loss: total_loss = 0.5 + 0.3 + 0.4 = 1.2
           Average Loss: average_loss = 1.2 / 3 = 0.4
-      2. If loss seems good recheck if the whole BPTT make sense
+      2. If loss seems good (made implementin SimpleRNN!) recheck if the whole BPTT make sense
         - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       3. Make it adaptable so that I can use different batch sizes like 32?
         - Try various sizes on google colab, and if 1 is good no need to write code for adaptability?
