@@ -4,6 +4,8 @@
   - Implement SimpleRNN
     - Implement evaluate();
     - I have to inverse min_max_scaler() after the predict()
+    - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
+      If the values weren't good, I have to fix so that loss decrease like on google colab?
     - Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
       - It turs out that max batch size worked with large epoch size on google... What now?
 
