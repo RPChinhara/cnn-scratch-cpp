@@ -7,6 +7,8 @@
         And, instead of passing x_train, x_train[i] to forward() as it's batch size of 1?
 
       - Is calculating and logging the losses comes before the BPTT?
+        I've searched and the sequnece is:
+        Forward pass -> Loss Calculation -> Logging the loss -> BPTT
 
       - The way I caluclate the loss is wrong.
         If I'm using batch size of like 32. First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
