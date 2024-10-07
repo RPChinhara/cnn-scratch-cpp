@@ -11,6 +11,9 @@
           If you have 3 batches with losses of 0.5, 0.3, and 0.4:
           Total Loss: total_loss = 0.5 + 0.3 + 0.4 = 1.2
           Average Loss: average_loss = 1.2 / 3 = 0.4
+
+          So in my case with, it'd be 8317 / 1 = 8317 batches. Calulate losses for this much, then acculumuate, and then devide by 8317.
+          The result is what I log for each epochs.
       2. If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
         - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       3. Make it adaptable so that I can use different batch sizes like 32?
