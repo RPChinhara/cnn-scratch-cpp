@@ -2,8 +2,8 @@
 
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    > Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
-      - Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front() / seq_length; ++i) like I did for nn?
+    - Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
+      > Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front() / seq_length; ++i) like I did for nn?
         And, instead of passing x_train, x_train[i] to forward() as it's batch size of 1?
 
       - Is calculating and logging the losses comes before the BPTT?
