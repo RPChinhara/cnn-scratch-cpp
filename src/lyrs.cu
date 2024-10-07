@@ -454,7 +454,8 @@ float rnn::evaluate(const tensor &x, const tensor &y) {
 }
 
 tensor rnn::predict(const tensor &x) {
-    return tensor();
+    auto [x_sequence, h_sequence, y_sequence] = forward(x);
+    return y_sequence.front();
 }
 
 std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
