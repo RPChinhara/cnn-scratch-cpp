@@ -2,22 +2,22 @@
 
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-      > 1. Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good with it.
-        - The way I caluclate the loss is wrong.
-          If I'm using batch size of like 32. First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
-          Then, in each epoch calculate losses in this case 3 times, and then accumulate these numbers and devide by 3 to get an average.
-          And this is the loss I log for each epochs.
-          Example calculation:
-          If you have 3 batches with losses of 0.5, 0.3, and 0.4:
-          Total Loss: total_loss = 0.5 + 0.3 + 0.4 = 1.2
-          Average Loss: average_loss = 1.2 / 3 = 0.4
+    > Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good with it.
+      - The way I caluclate the loss is wrong.
+        If I'm using batch size of like 32. First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
+        Then, in each epoch calculate losses in this case 3 times, and then accumulate these numbers and devide by 3 to get an average.
+        And this is the loss I log for each epochs.
+        Example calculation:
+        If you have 3 batches with losses of 0.5, 0.3, and 0.4:
+        Total Loss: total_loss = 0.5 + 0.3 + 0.4 = 1.2
+        Average Loss: average_loss = 1.2 / 3 = 0.4
 
-          So in my case with, it'd be 8317 / 1 = 8317 batches. Calulate losses for this much, then acculumuate, and then devide by 8317.
-          The result is what I log for each epochs.
-      2. If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
-        - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
-      3. Make it adaptable so that I can use different batch sizes like 32?
-        - Try various sizes on google colab, and if 1 is good no need to write code for adaptability?
+        So in my case with, it'd be 8317 / 1 = 8317 batches. Calulate losses for this much, then acculumuate, and then devide by 8317.
+        The result is what I log for each epochs.
+    - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
+      - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
+    - Make it adaptable so that I can use different batch sizes like 32?
+      - Try various sizes on google colab, and if 1 is good no need to write code for adaptability?
   - Implement either one-to-many or many-to-many
     - Implement whichever is more famous so that I could learn how loss would work and its derivatives
   - Implement LSTM.
