@@ -53,10 +53,14 @@ int main() {
     rnn model = rnn(hyperbolic_tangent, mean_squared_error, 0.01f);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
-    model.evaluate(x_y_train.first, x_y_train.second);
-    model.evaluate(x_y_test.first, x_y_test.second);
+    auto train_loss = model.evaluate(x_y_train.first, x_y_train.second);
+    auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
 
-    model.predict(x_y_test.first);
+    auto predict = model.predict(x_y_test.first);
+
+    std::cout << "Train loss: " << train_loss << std::endl;
+    std::cout << "Test  loss: " << test_loss << std::endl;
+    // std::cout << std::endl << predict << std::endl;
 
     return 0;
 }
