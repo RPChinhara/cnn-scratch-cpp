@@ -3,13 +3,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     > Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
-      - Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front(); ++i)
-        like I did for nn?
-      - Or I just have to adjust within the forward()? Like below code?
-        for (auto j = 0; j < batch_size; ++j) {
-            x_t[j] = x[idx];
-            idx += seq_length;
-        }
+      - Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front(); ++i) like I did for nn?
+        And, instead of passing x_train, x_train[i] to forward() as it's batch size of 1?
 
       - The way I caluclate the loss is wrong.
         If I'm using batch size of like 32. First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
