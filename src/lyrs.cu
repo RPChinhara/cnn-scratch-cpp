@@ -351,6 +351,13 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
+        if (10 <= i && i < 20)
+            lr = 0.5f;
+        else if (20 <= i && i < 30)
+            lr = 0.1f;
+        else if (30 <= i)
+            lr = 0.05f;
+
         auto [x_sequence, h_sequence, y_sequence] = forward(x_train);
         auto y = y_sequence.back();
 
