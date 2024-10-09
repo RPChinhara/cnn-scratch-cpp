@@ -450,7 +450,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 }
 
 float rnn::evaluate(const tensor &x, const tensor &y) {
-    return 0.0f;
+    auto [x_sequence, h_sequence, y_sequence] = forward(x);
+    return loss(transpose(y), y_sequence.front());
 }
 
 tensor rnn::predict(const tensor &x) {
@@ -471,6 +472,8 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::f
 
         tensor x_t = zeros({batch_size, input_size});
 
+        // If I don't change this batch_size, in evaluate(), for test_loss, y_sequence shape would be (1, 8317) where it should be (1, 2072)
+        // as size of y_test given in evaluate() is (1, 2072).
         for (auto j = 0; j < batch_size; ++j) {
             x_t[j] = x[idx];
             idx += seq_length;
