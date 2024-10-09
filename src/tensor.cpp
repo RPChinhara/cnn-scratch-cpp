@@ -118,6 +118,9 @@ tensor tensor::operator*(const tensor &other) const {
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elem[i] * other[i];
+    } else if (shape.back() == other.shape.back()) {
+        for (auto i = 0; i < size; ++i)
+            t_new[i] = elem[i] * other[i % other.shape.back()];
     } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
