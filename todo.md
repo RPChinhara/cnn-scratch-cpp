@@ -55,6 +55,7 @@
 2. Work on other tutorials on TensorFlow sites, e.g., Neural machine translation with a Transformer and Keras.
 3. Implement other famous modles like BERT.
 4. Implement interesting algorithms from latest papers.
-5. Develop my own architectures, algorithms, and models.
-6. Use 5 to solve existing problems and discover new theories in mathematics and physics.
-7. Create new things, possibly scientific devices, from 6.
+5. Research about history, and implement old networks like Hopfield network?
+6. Develop my own architectures, algorithms, and models.
+7. Use 5 to solve existing problems and discover new theories in mathematics and physics.
+8. Create new things, possibly scientific devices, from 6.
