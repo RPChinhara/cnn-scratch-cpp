@@ -238,6 +238,8 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
         tensor y_pred;
         tensor y_pred_val;
 
+        float accumulated_loss = 0.0f;
+
         for (auto j = 0; j < x_train.shape.front(); j += batch_size) {
             assert(0 < batch_size && batch_size <= x_train.shape.front());
 
@@ -251,6 +253,8 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 
             std::vector<tensor> a = forward(x_batch, w_b.first, w_b.second);
             y_pred = a.back();
+
+            accumulated_loss += loss(y_batch, y_pred);
 
             std::vector<tensor> dl_dz, dl_dw, dl_db;
 
@@ -290,7 +294,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 
         std::cout << std::fixed << std::setprecision(5);
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
-        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_batch, y_pred) << " - accuracy: " << metric(y_batch, y_pred);
+        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / (x_train.shape.front() / batch_size) << " - accuracy: " << metric(y_batch, y_pred);
         std::cout << " - val_loss: " << loss(y_val, y_pred_val) << " - val_accuracy: " << metric(y_val, y_pred_val) << std::endl;
     }
 }
