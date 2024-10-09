@@ -10,7 +10,7 @@
         - Gradient Clipping: Preventing gradients from becoming too small or too large can also help.
         - Use different optimizers like Adam, RMSprop
         - Simplify the model
-    - Now that I have new min_max_scaler class use it for both nn and rnn
+    - Now that I have new min_max_scaler class just use it
     - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
       If the values weren't good, I have to fix so that loss decrease like on google colab?
     - Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
