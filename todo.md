@@ -10,7 +10,6 @@
         - Gradient Clipping: Preventing gradients from becoming too small or too large can also help.
         - Use different optimizers like Adam, RMSprop
         - Simplify the model
-    - Implement evaluate();
     - I have to inverse min_max_scaler() after the predict()
     - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
       If the values weren't good, I have to fix so that loss decrease like on google colab?
