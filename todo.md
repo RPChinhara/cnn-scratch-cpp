@@ -13,11 +13,6 @@
     - Now that I have new min_max_scaler class just use it
     - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
       If the values weren't good, I have to fix so that loss decrease like on google colab?
-    - Rewrite the code so that as if training is woking on batch size of 1 as the loss was really good on google colab.
-      - It turs out that max batch size worked with large epoch size on google... What now?
-
-      - Make for loop at the beginning of the train() which is for (auto i = 0; i < x.shape.front() / seq_length; ++i) like I did for nn?
-        And, instead of passing x_train, x_train[i] to forward() as it's batch size of 1?
 
       - Is calculating and logging the losses comes before the BPTT?
         I've searched and the sequnece is:
