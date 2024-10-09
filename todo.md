@@ -13,7 +13,7 @@
     - Now that I have new min_max_scaler class just use it
     - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
       If the values weren't good, I have to fix so that loss decrease like on google colab?
-    - Is calculating and logging the losses comes before the BPTT?
+    > Is calculating and logging the losses comes before the BPTT?
       I've searched and the sequnece is:
       Forward pass -> Loss Calculation -> Logging the loss -> BPTT
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
