@@ -294,7 +294,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 
         std::cout << std::fixed << std::setprecision(5);
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
-        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / (x_train.shape.front() / batch_size) << " - accuracy: " << metric(y_batch, y_pred);
+        std::cout << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / ceil(x_train.shape.front() / batch_size) << " - accuracy: " << metric(y_batch, y_pred);
         std::cout << " - val_loss: " << loss(y_val, y_pred_val) << " - val_accuracy: " << metric(y_val, y_pred_val) << std::endl;
     }
 }
