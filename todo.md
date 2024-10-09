@@ -13,10 +13,9 @@
     - Now that I have new min_max_scaler class just use it
     - Check inversed values so that I could determine if the model is working even though loss is not decreasing dramatically like on google colab.
       If the values weren't good, I have to fix so that loss decrease like on google colab?
-
-      - Is calculating and logging the losses comes before the BPTT?
-        I've searched and the sequnece is:
-        Forward pass -> Loss Calculation -> Logging the loss -> BPTT
+    - Is calculating and logging the losses comes before the BPTT?
+      I've searched and the sequnece is:
+      Forward pass -> Loss Calculation -> Logging the loss -> BPTT
 
       - The way I caluclate the loss is wrong.
         If I'm using batch size of like 32. First, devide total train dataset size by number batch size e.g., 80 / 32 = [2.5] = 3 batches.
