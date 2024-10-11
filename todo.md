@@ -37,6 +37,6 @@
 3. Implement other famous modles like BERT.
 4. Implement interesting algorithms from latest papers.
 5. Research about history, and implement old networks like Hopfield network?
-6. Develop my own architectures, algorithms, and models.
+6. Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature.
 7. Use 5 to solve existing problems and discover new theories in mathematics and physics.
 8. Create new things, possibly scientific devices, from 6.
