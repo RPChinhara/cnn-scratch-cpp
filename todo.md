@@ -9,7 +9,6 @@
         - Residual Connections: Architectures like ResNets allow gradients to flow through skip connections, helping to maintain stronger gradient signals.
         - Gradient Clipping: Preventing gradients from becoming too small or too large can also help.
         - Use different optimizers like Adam, RMSprop
-        - Simplify the model
     - Now that I have new min_max_scaler class just use it
     > Is calculating and logging the losses comes before the BPTT?
       I've searched and the sequnece is:
