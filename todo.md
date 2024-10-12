@@ -20,9 +20,8 @@
       - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
     - Make it adaptable so that I can use different batch sizes like 32?
       - Try various sizes on google colab, and if 1 is good no need to write code for adaptability?
-  - Implement either one-to-many or many-to-many
-    - Implement whichever is more famous so that I could learn how loss would work and its derivatives
   - Implement LSTM.
+    - Implement either one-to-many or many-to-many (Do whichever is more famous so that I could learn how loss would work and its derivatives)
   - Implement GRU.
   - Implement Bidirectional RNNs.
   - Implement Deep RNNs, which have multiple layers of RNNs stacked on top of each other and can be built with any of the basic RNN units (vanilla, LSTM, GRU).
