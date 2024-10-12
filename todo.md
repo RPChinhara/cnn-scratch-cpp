@@ -7,7 +7,7 @@
         - Better Activation Functions: Using ReLU or its variants can help mitigate this issue.
         - Batch Normalization: Normalizing the input to each layer can help maintain the scale of gradients.
         - Residual Connections: Architectures like ResNets allow gradients to flow through skip connections, helping to maintain stronger gradient signals.
-        - Gradient Clipping: Preventing gradients from becoming too small or too large can also help.
+        > Gradient Clipping: Preventing gradients from becoming too small or too large can also help.
         - Use different optimizers like Adam, RMSprop
     - Now that I have new min_max_scaler class just use it
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
