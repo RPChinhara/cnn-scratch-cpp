@@ -25,7 +25,7 @@
   - Implement ConvLSTM.
 2. Work on other tutorials on TensorFlow sites, e.g., Neural machine translation with a Transformer and Keras.
 3. Implement other famous modles like BERT.
-4. Implement interesting algorithms from latest papers.
+4. Implement algorithms from latest/famous/interesting papers.
 5. Research about history, and implement old networks like Hopfield network?
 6. Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature. For instance, Newton's laws of motion?
 7. Use 5 to solve existing problems and discover new theories in mathematics and physics.
