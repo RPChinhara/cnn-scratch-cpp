@@ -21,10 +21,6 @@
   - Implement GRU.
   - Implement Bidirectional RNNs.
   - Implement Deep RNNs, which have multiple layers of RNNs stacked on top of each other and can be built with any of the basic RNN units (vanilla, LSTM, GRU).
-  - Fix nn to use wx + b equation instead of current xw + b
-    (64, 10) -> (64, 1) or (64, 10) I think latter is clearer, but
-    former is more performant. (10, 64) -> (1, 64) x.T = (4, 10), w1 = (64, 4), w2 = (10(must), 64), w3 = (64, 3),
-    output = (64, 3) x = (10, 4), w1 = (4, 64), w2 = (64, 64), w3 = (64, 3), ouput = (10, 3)
   - Implement CNN.
   - Implement ConvLSTM.
 2. Work on other tutorials on TensorFlow sites, e.g., Neural machine translation with a Transformer and Keras.
