@@ -8,67 +8,55 @@
 #include <regex>
 #include <sstream>
 
-std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator)
-{
-    if (strings.empty())
-    {
+std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator) {
+    if (strings.empty()) {
         return L"";
     }
 
     std::wstring result = strings[0];
-    for (auto i = 1; i < strings.size(); ++i)
-    {
+    for (auto i = 1; i < strings.size(); ++i) {
         result += separator + strings[i];
     }
 
     return result;
 }
 
-std::string lower(const std::string &text)
-{
+std::string lower(const std::string &text) {
     std::string result;
-    for (auto c : text)
-    {
+    for (auto c : text) {
         result += std::tolower(c);
     }
     return result;
 }
 
-std::wstring lower(const std::wstring &text)
-{
+std::wstring lower(const std::wstring &text) {
     std::wstring result;
-    for (auto c : text)
-    {
+    for (auto c : text) {
         result += std::towlower(c);
     }
     return result;
 }
 
-tensor min_max_scaler(tensor &data)
-{
+tensor min_max_scaler(tensor &data) {
     auto data_min = min(data);
     auto data_max = max(data, 0);
     return (data - data_min) / (data_max - data_min);
 }
 
-tensor one_hot(const tensor &t, const size_t depth)
-{
+tensor one_hot(const tensor &t, const size_t depth) {
     tensor t_new = zeros({t.size, depth});
 
     std::vector<float> idx;
 
-    for (auto i = 0; i < t.size; ++i)
-    {
+    for (auto i = 0; i < t.size; ++i) {
         if (i == 0)
             idx.push_back(t[i]);
         else
             idx.push_back(t[i] + (i * depth));
     }
 
-    for (auto i = 0; i < t_new.size; ++i)
-    {
-        for (auto j : idx)
-        {
+    for (auto i = 0; i < t_new.size; ++i) {
+        for (auto j : idx) {
             if (i == j)
                 t_new[i] = 1.0f;
         }
