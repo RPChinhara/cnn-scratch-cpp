@@ -65,54 +65,46 @@ tensor one_hot(const tensor &t, const size_t depth) {
     return t_new;
 }
 
-std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite)
-{
+std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite) {
     std::regex re(pattern);
     return std::regex_replace(in, re, rewrite);
 }
 
-std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite)
-{
+std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite) {
     std::wregex regex(pattern);
     return std::regex_replace(in, regex, rewrite);
 }
 
-std::wstring strip(const std::wstring &text)
-{
+std::wstring strip(const std::wstring &text) {
     std::wregex pattern(L"(^\\s+)|(\\s+$)");
     return std::regex_replace(text, pattern, L"");
 }
 
-std::vector<std::string> tokenizer(const std::string &text)
-{
+std::vector<std::string> tokenizer(const std::string &text) {
     std::vector<std::string> tokens;
     std::stringstream ss(text);
     std::string token;
 
-    while (ss >> token)
-    {
+    while (ss >> token) {
         tokens.push_back(token);
     }
 
     return tokens;
 }
 
-std::vector<std::wstring> tokenizer(const std::wstring &text)
-{
+std::vector<std::wstring> tokenizer(const std::wstring &text) {
     std::vector<std::wstring> tokens;
     std::wstringstream ss(text);
     std::wstring token;
 
-    while (ss >> token)
-    {
+    while (ss >> token) {
         tokens.push_back(token);
     }
 
     return tokens;
 }
 
-train_test split_dataset(const tensor &x, const tensor &y, const float test_size, const size_t rd_state)
-{
+train_test split_dataset(const tensor &x, const tensor &y, const float test_size, const size_t rd_state) {
     tensor x_shuffled = shuffle(x, rd_state);
     tensor y_shuffled = shuffle(y, rd_state);
 
