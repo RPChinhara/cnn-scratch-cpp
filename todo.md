@@ -1,5 +1,3 @@
-- No serious refactorizations untill I get to 5.
-
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Vanishing gradients might be occuring -> I'm sure it's happening as when I logged all the gradients, it was all close to zeros or zeros
