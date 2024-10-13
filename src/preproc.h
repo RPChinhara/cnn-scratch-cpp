@@ -6,8 +6,7 @@
 #include <string>
 #include <vector>
 
-struct train_test
-{
+struct train_test {
     tensor x_train;
     tensor y_train;
     tensor x_test;
