@@ -87,22 +87,18 @@ tensor log(const tensor &t) {
     return t_new;
 }
 
-tensor max(const tensor &t, const size_t axis)
-{
+tensor max(const tensor &t, const size_t axis) {
     assert(axis == 0 || axis == 1);
     tensor t_new;
 
-    if (axis == 0)
-    {
+    if (axis == 0) {
         t_new = zeros({1, t.shape.back()});
 
-        for (auto i = 0; i < t.shape.back(); ++i)
-        {
+        for (auto i = 0; i < t.shape.back(); ++i) {
             size_t idx = i;
             float max = std::numeric_limits<float>::lowest();
 
-            for (auto j = 0; j < t.shape.front(); ++j)
-            {
+            for (auto j = 0; j < t.shape.front(); ++j) {
                 if (t[idx] > max)
                     max = t[idx];
                 idx += t.shape.back();
@@ -110,18 +106,14 @@ tensor max(const tensor &t, const size_t axis)
 
             t_new[i] = max;
         }
-    }
-    else if (axis == 1)
-    {
+    } else if (axis == 1) {
         t_new = zeros({t.shape.front(), 1});
         size_t idx = 0;
 
-        for (auto i = 0; i < t.shape.front(); ++i)
-        {
+        for (auto i = 0; i < t.shape.front(); ++i) {
             float max = std::numeric_limits<float>::lowest();
 
-            for (auto j = 0; j < t.shape.back(); ++j)
-            {
+            for (auto j = 0; j < t.shape.back(); ++j) {
                 if (t[idx] > max)
                     max = t[idx];
                 ++idx;
