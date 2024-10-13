@@ -4,20 +4,16 @@
 
 #include <cassert>
 
-tensor argmax(const tensor &t)
-{
+tensor argmax(const tensor &t) {
     tensor t_new = zeros({t.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
     size_t max_idx = 0;
 
-    for (auto i = 0; i < t.shape.front(); ++i)
-    {
-        for (auto j = 0; j < t.shape.back(); ++j)
-        {
-            if (t[idx] > max)
-            {
+    for (auto i = 0; i < t.shape.front(); ++i) {
+        for (auto j = 0; j < t.shape.back(); ++j) {
+            if (t[idx] > max) {
                 max = t[idx];
                 max_idx = j;
             }
