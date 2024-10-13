@@ -104,7 +104,6 @@ class nn {
     float lr;
     size_t epochs = 200;
     size_t batch_size = 10;
-    float grad_clip_threshold = 8.0f;
     float mom = 0.1f;
 
     std::pair<std::vector<tensor>, std::vector<tensor>> w_b;
