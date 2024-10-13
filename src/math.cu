@@ -163,55 +163,41 @@ tensor square(const tensor &t) {
     return y;
 }
 
-tensor sum(const tensor &t, const size_t axis)
-{
+tensor sum(const tensor &t, const size_t axis) {
     assert(axis == 0 || axis == 1);
     tensor t_new;
 
-    if (t.shape.size() == 1 || t.shape.front() == 1)
-    {
-        if (axis == 0)
-        {
+    if (t.shape.size() == 1 || t.shape.front() == 1) {
+        if (axis == 0) {
             t_new = t;
-        }
-        else if (axis == 1)
-        {
+        } else if (axis == 1) {
             t_new = zeros({1, 1});
             float sum = 0.0f;
 
-            for (auto i = 0; i < t.size; ++i)
-            {
+            for (auto i = 0; i < t.size; ++i) {
                 sum += t[i];
             }
+
             t_new[0] = sum;
         }
-    }
-    else
-    {
-        if (axis == 0)
-        {
+    } else {
+        if (axis == 0) {
             t_new = zeros({1, t.shape.back()});
 
-            for (auto i = 0; i < t.shape.back(); ++i)
-            {
+            for (auto i = 0; i < t.shape.back(); ++i) {
                 size_t idx = i;
 
-                for (auto j = 0; j < t.shape.front(); ++j)
-                {
+                for (auto j = 0; j < t.shape.front(); ++j) {
                     t_new[i] += t[idx];
                     idx += t.shape.back();
                 }
             }
-        }
-        else if (axis == 1)
-        {
+        } else if (axis == 1) {
             t_new = zeros({t.shape.front(), 1});
             size_t idx = 0;
 
-            for (auto i = 0; i < t.shape.front(); ++i)
-            {
-                for (auto j = 0; j < t.shape.back(); ++j)
-                {
+            for (auto i = 0; i < t.shape.front(); ++i) {
+                for (auto j = 0; j < t.shape.back(); ++j) {
                     t_new[i] += t[idx];
                     ++idx;
                 }
