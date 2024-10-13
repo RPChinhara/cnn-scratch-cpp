@@ -1,11 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Vanishing gradients might be occuring -> I'm sure it's happening as when I logged all the gradients, it was all close to zeros or zeros
-      - Solutions
-        > Better Activation Functions: Using ReLU or its variants can help mitigate this issue.
-        - Batch Normalization: Normalizing the input to each layer can help maintain the scale of gradients.
-        - Residual Connections: Architectures like ResNets allow gradients to flow through skip connections, helping to maintain stronger gradient signals.
-        - Use different optimizers like Adam, RMSprop
+    - Taccle the vanishing gradients
+      > Use relu, if possible leaky_relu
+      - Implement Adam
     - Now that I have new min_max_scaler class just use it
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
