@@ -126,17 +126,14 @@ tensor max(const tensor &t, const size_t axis) {
     return t_new;
 }
 
-tensor min(const tensor &t)
-{
+tensor min(const tensor &t) {
     tensor t_new = zeros({1, t.shape.back()});
 
-    for (auto i = 0; i < t.shape.back(); ++i)
-    {
+    for (auto i = 0; i < t.shape.back(); ++i) {
         size_t idx = i;
         float min = std::numeric_limits<float>::max();
 
-        for (auto j = 0; j < t.shape.front(); ++j)
-        {
+        for (auto j = 0; j < t.shape.front(); ++j) {
             if (t[idx] < min)
                 min = t[idx];
             idx += t.shape.back();
@@ -148,8 +145,7 @@ tensor min(const tensor &t)
     return t_new;
 }
 
-tensor sqrt(const tensor &x)
-{
+tensor sqrt(const tensor &x) {
     tensor y = x;
 
     for (auto i = 0; i < x.size; ++i)
