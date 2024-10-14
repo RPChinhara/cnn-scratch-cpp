@@ -2,7 +2,7 @@
   - Implement SimpleRNN
     - Taccle the vanishing gradients
       > Use relu, if possible leaky_relu
-      - Implement Adam
+      - Implement Adam (could be just using momentum?)
     - Now that I have new min_max_scaler class just use it
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
