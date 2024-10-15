@@ -30,13 +30,13 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
 //     return h_t;
 // }
 
-tensor relu(const tensor &z) {
-    tensor a = z;
+tensor relu(const tensor &z_t) {
+    tensor h_t = z_t;
 
-    for (auto i = 0; i < z.size; ++i)
-        a.elem[i] = std::fmax(0.0f, z.elem[i]);
+    for (auto i = 0; i < z_t.size; ++i)
+        h_t.elem[i] = std::fmax(0.0f, z_t.elem[i]);
 
-    return a;
+    return h_t;
 }
 
 float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
