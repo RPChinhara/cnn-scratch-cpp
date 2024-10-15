@@ -353,14 +353,8 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
 tensor relu_derivative(const tensor &a) {
     tensor t_new = a;
 
-    for (auto i = 0; i < a.size; ++i) {
-        if (0.0f < a[i])
-            t_new[i] = 1.0f;
-        else if (a[i] < 0.0f)
-            t_new[i] = 0.0f;
-        else if (a[i] == 0.0f)
-            t_new[i] = 0.0f;
-    }
+    for (auto i = 0; i < a.size; ++i)
+        t_new[i] = (a[i] > 0.0f) ? 1.0f : 0.0f;
 
     return t_new;
 }
