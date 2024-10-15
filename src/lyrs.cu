@@ -357,9 +357,9 @@ tensor derivative_relu(const tensor &a) {
     {
         if (0.0f < a[i])
             t_new[i] = 1.0f;
-        else if (a[i] == 0.0f)
+        else if (a[i] < 0.0f)
             t_new[i] = 0.0f;
-        else
+        else if (a[i] == 0.0f)
             t_new[i] = 0.0f;
     }
 
