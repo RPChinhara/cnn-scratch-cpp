@@ -350,7 +350,7 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     b_y = zeros({output_size, batch_size});
 }
 
-tensor derivative_relu(const tensor &a) {
+tensor relu_derivative(const tensor &a) {
     tensor t_new = a;
 
     for (auto i = 0; i < a.size; ++i) {
