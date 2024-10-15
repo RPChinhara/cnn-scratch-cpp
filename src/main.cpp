@@ -21,13 +21,22 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
     return std::make_pair(x, y);
 }
 
-tensor hyperbolic_tangent(const tensor &z_t) {
-    tensor h_t = z_t;
+// tensor hyperbolic_tangent(const tensor &z_t) {
+//     tensor h_t = z_t;
 
-    for (auto i = 0; i < z_t.size; ++i)
-        h_t.elem[i] = std::tanhf(z_t.elem[i]);
+//     for (auto i = 0; i < z_t.size; ++i)
+//         h_t.elem[i] = std::tanhf(z_t.elem[i]);
 
-    return h_t;
+//     return h_t;
+// }
+
+tensor relu(const tensor &z) {
+    tensor a = z;
+
+    for (auto i = 0; i < z.size; ++i)
+        a.elem[i] = std::fmax(0.0f, z.elem[i]);
+
+    return a;
 }
 
 float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
@@ -50,7 +59,7 @@ int main() {
 
     // Everything much with google colab up to here! (delete this after everything is done)
 
-    rnn model = rnn(hyperbolic_tangent, mean_squared_error, 0.01f);
+    rnn model = rnn(relu, mean_squared_error, 0.01f);
     model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
 
     auto train_loss = model.evaluate(x_y_train.first, x_y_train.second);
