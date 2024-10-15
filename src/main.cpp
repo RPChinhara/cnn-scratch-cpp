@@ -21,15 +21,6 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
     return std::make_pair(x, y);
 }
 
-// tensor hyperbolic_tangent(const tensor &z_t) {
-//     tensor h_t = z_t;
-
-//     for (auto i = 0; i < z_t.size; ++i)
-//         h_t.elem[i] = std::tanhf(z_t.elem[i]);
-
-//     return h_t;
-// }
-
 tensor relu(const tensor &z_t) {
     tensor h_t = z_t;
 

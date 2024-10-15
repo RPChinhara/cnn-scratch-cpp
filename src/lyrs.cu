@@ -350,6 +350,22 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     b_y = zeros({output_size, batch_size});
 }
 
+tensor derivative_relu(const tensor &a) {
+    tensor t_new = a;
+
+    for (auto i = 0; i < a.size; ++i)
+    {
+        if (0.0f < a[i])
+            t_new[i] = 1.0f;
+        else if (a[i] == 0.0f)
+            t_new[i] = 0.0f;
+        else
+            t_new[i] = 0.0f;
+    }
+
+    return t_new;
+}
+
 void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
 
     for (auto i = 1; i <= epochs; ++i) {
@@ -428,8 +444,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
                 d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(1.0f - square(h_sequence[j + 1])), w_hh);
             }
 
-            d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * (1.0f - square(h_sequence[j]))), x_sequence[j - 1]);
-            d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * (1.0f - square(h_sequence[j]))), transpose(h_sequence[j - 1]));
+            d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * derivative_relu(h_sequence[j])), x_sequence[j - 1]);
+            d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * derivative_relu(h_sequence[j])), transpose(h_sequence[j - 1]));
 
             d_loss_d_b_h  = d_loss_d_b_h + transpose(d_loss_d_h_t);
         }
