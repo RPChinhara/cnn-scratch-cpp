@@ -3,6 +3,7 @@
     - Tackle the vanishing gradients
       > Implement Adam
     - Now that I have new min_max_scaler class just use it
+    - Stop taking x_val and y_val? Try using validation datasets on google colab, and see if test loss is enough to decide it is not either over/under fitting. Essentially good loss.
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       - is derivative of relu right?
