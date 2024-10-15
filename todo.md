@@ -1,7 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Tackle the vanishing gradients
-      > Implement Adam (could be just using momentum?)
+      > Try leaky relu
+      - Implement Adam
     - Now that I have new min_max_scaler class just use it
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
