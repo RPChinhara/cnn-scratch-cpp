@@ -42,7 +42,10 @@ float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
 
 int main() {
     tensor data = load_aapl();
-    tensor scaled_data = min_max_scaler(data);
+    min_max_scaler2 scaler;
+    scaler.fit(data);
+    tensor scaled_data = scaler.transform(data);
+
     auto train_test = split(scaled_data, 0.2f);
 
     auto x_y_train = create_sequences(train_test.first, 10);
