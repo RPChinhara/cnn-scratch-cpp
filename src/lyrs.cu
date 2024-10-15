@@ -363,7 +363,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             lr = 0.05f;
 
         auto [x_sequence, h_sequence, y_sequence] = forward(x_train);
-        auto y = y_sequence.back();
+        auto y = y_sequence.front();
 
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
