@@ -104,10 +104,10 @@ class nn {
     float lr;
     size_t epochs = 200;
     size_t batch_size = 10;
-    float mom = 0.1f;
+    float momentum = 0.1f;
 
     std::pair<std::vector<tensor>, std::vector<tensor>> w_b;
-    std::pair<std::vector<tensor>, std::vector<tensor>> w_b_mom;
+    std::pair<std::vector<tensor>, std::vector<tensor>> w_b_momentum;
 
     std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
     std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b);

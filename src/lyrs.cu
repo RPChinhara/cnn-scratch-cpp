@@ -188,7 +188,7 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
     this->lr = lr;
 
     w_b = init_params();
-    w_b_mom = init_params();
+    w_b_momentum = init_params();
 }
 
 void matmul_cpu() {
@@ -267,11 +267,11 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
                 dl_dw[(lyrs.size() - 1) - k] = clip_by_value(dl_dw[(lyrs.size() - 1) - k], -8.0f, 8.0f);
                 dl_db[(lyrs.size() - 1) - k] = clip_by_value(dl_db[(lyrs.size() - 1) - k], -8.0f, 8.0f);
 
-                w_b_mom.first[k - 1] = mom * w_b_mom.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
-                w_b_mom.second[k - 1] = mom * w_b_mom.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
+                w_b_momentum.first[k - 1] = momentum * w_b_momentum.first[k - 1] - lr * dl_dw[(lyrs.size() - 1) - k];
+                w_b_momentum.second[k - 1] = momentum * w_b_momentum.second[k - 1] - lr * dl_db[(lyrs.size() - 1) - k];
 
-                w_b.first[k - 1] += w_b_mom.first[k - 1];
-                w_b.second[k - 1] += w_b_mom.second[k - 1];
+                w_b.first[k - 1] += w_b_momentum.first[k - 1];
+                w_b.second[k - 1] += w_b_momentum.second[k - 1];
             }
 
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
