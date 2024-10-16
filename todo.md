@@ -5,6 +5,9 @@
     - Now that I have new min_max_scaler class just use it
     - Stop taking x_val and y_val? Try using validation datasets on google colab, and see if test loss is enough to decide it is not either over/under fitting. Essentially good loss.
     - I think I don't need to evaluate for train dataset as it's already known at the end of training...
+    - In order for me to run evaluate() and predict() which mostly likely I'd pass test dataset which have different sizes than train dataset, I have to change "batch_size" in
+      forward(). What'd work for temporaly is take enum Phase in forward() which contains TRAIN and TEST, and switch batch_size based on these enum. By the way, batch_size is = 8317 when the enum is
+      TRAIN, and 2072 when it's TEST.
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       - is derivative of relu right?
