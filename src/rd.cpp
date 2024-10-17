@@ -5,6 +5,16 @@
 #include <numeric>
 #include <random>
 
+tensor glorot_uniform(const size_t fan_in, const size_t fan_out) {
+    auto limit = sqrt(6.0f / (fan_in + fan_out));
+    return uniform_dist({fan_in, fan_out}, -limit, limit);
+}
+
+// tensor glorot_uniform(const size_t num_out, const size_t num_in) {
+//     auto limit = sqrt(6.0f / (num_in + num_out));
+//     return uniform_dist({num_out, num_in}, -limit, limit);
+// }
+
 tensor normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev) {
     tensor t_new = tensor();
 
