@@ -335,9 +335,9 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    w_xh = uniform_dist({hidden_size, input_size});
-    w_hh = uniform_dist({hidden_size, hidden_size});
-    w_hy = uniform_dist({output_size, hidden_size});
+    w_xh = glorot_uniform(hidden_size, input_size);
+    w_hh = glorot_uniform(hidden_size, hidden_size);
+    w_hy = glorot_uniform(output_size, hidden_size);
 
     b_h = zeros({hidden_size, batch_size});
     b_y = zeros({output_size, batch_size});
@@ -356,13 +356,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
-
-        if (10 <= i && i < 20)
-            lr = 0.5f;
-        else if (20 <= i && i < 30)
-            lr = 0.1f;
-        else if (30 <= i)
-            lr = 0.05f;
 
         auto [x_sequence, h_sequence, y_sequence] = forward(x_train);
         auto y = y_sequence.front();
