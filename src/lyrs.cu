@@ -423,6 +423,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
                 d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(h_sequence[j + 1])), w_hh);
             }
 
+            // CHECK: These a = a + matmul(); works.
             d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j])), x_sequence[j - 1]);
             d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j])), transpose(h_sequence[j - 1]));
 
@@ -431,7 +432,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
-        // NOTE: These a = a - lr * b is working. I've checked.
+        // CHECK: These a = a - lr * b is working.
         w_xh = w_xh - lr * d_loss_d_w_xh;
         w_hh = w_hh - lr * d_loss_d_w_hh;
         w_hy = w_hy - lr * d_loss_d_w_hy;
