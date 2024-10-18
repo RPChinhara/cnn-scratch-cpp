@@ -432,6 +432,14 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
+        float beta1 = 0.9f;
+        float beta2 = 0.999f;
+        float epsilon = 1e-8f;
+
+        tensor m;
+        tensor v;
+        size_t t = 0;
+
         // CHECK: These a = a - lr * b is working.
         w_xh = w_xh - lr * d_loss_d_w_xh;
         w_hh = w_hh - lr * d_loss_d_w_hh;
