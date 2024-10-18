@@ -342,17 +342,17 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     b_h = zeros({hidden_size, batch_size});
     b_y = zeros({output_size, batch_size});
 
-    tensor m_w_xh = zeros({hidden_size, input_size});
-    tensor m_w_hh = zeros({hidden_size, hidden_size});
-    tensor m_w_hy = zeros({output_size, hidden_size});
-    tensor m_b_h  = zeros({hidden_size, batch_size});
-    tensor m_b_y  = zeros({output_size, batch_size});
+    m_w_xh = zeros({hidden_size, input_size});
+    m_w_hh = zeros({hidden_size, hidden_size});
+    m_w_hy = zeros({output_size, hidden_size});
+    m_b_h  = zeros({hidden_size, batch_size});
+    m_b_y  = zeros({output_size, batch_size});
 
-    tensor v_w_xh = zeros({hidden_size, input_size});
-    tensor v_w_hh = zeros({hidden_size, hidden_size});
-    tensor v_w_hy = zeros({output_size, hidden_size});
-    tensor v_b_h  = zeros({hidden_size, batch_size});
-    tensor v_b_y  = zeros({output_size, batch_size});
+    v_w_xh = zeros({hidden_size, input_size});
+    v_w_hh = zeros({hidden_size, hidden_size});
+    v_w_hy = zeros({output_size, hidden_size});
+    v_b_h  = zeros({hidden_size, batch_size});
+    v_b_y  = zeros({output_size, batch_size});
 }
 
 tensor relu_derivative(const tensor &h_t) {
@@ -381,6 +381,10 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         float num_samples = static_cast<float>(y_train.shape.front());
 
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y);
+
+        std::cout << y_train[0] << " " << y[0] << std::endl;
+        std::cout << y_train[4000] << " " << y[4000] << std::endl;
+        std::cout << y_train[8000] << " " << y[8000] << std::endl;
 
         // x_sequence                      -> (8317, 1)
         // h_sequence                      -> (50, 8317)
@@ -446,13 +450,62 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
-        // CHECK: These a = a - lr * b is working.
-        w_xh = w_xh - lr * d_loss_d_w_xh;
-        w_hh = w_hh - lr * d_loss_d_w_hh;
-        w_hy = w_hy - lr * d_loss_d_w_hy;
+        // # Update biased first moment estimate
+        // m[key] = beta1 * m[key] + (1 - beta1) * grads[key]
 
-        b_h = b_h - lr * d_loss_d_b_h;
-        b_y = b_y - lr * d_loss_d_y;
+        // # Update biased second moment estimate
+        // v[key] = beta2 * v[key] + (1 - beta2) * (grads[key] ** 2)
+
+        // # Compute bias-corrected first moment estimate
+        // m_hat = m[key] / (1 - beta1 ** t)
+
+        // # Compute bias-corrected second moment estimate
+        // v_hat = v[key] / (1 - beta2 ** t)
+
+        // # Update parameters
+        // params[key] -= learning_rate * m_hat / (np.sqrt(v_hat) + epsilon)
+
+        t += 1;
+
+        m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
+        m_w_hh = beta1 * m_w_hh + (1.0f - beta1) * d_loss_d_w_hh;
+        m_w_hy = beta1 * m_w_hy + (1.0f - beta1) * d_loss_d_w_hy;
+        m_b_h  = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        m_b_y  = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
+
+        v_w_xh = beta2 * v_w_xh + (1.0f - beta2) * square(d_loss_d_w_xh);
+        v_w_hh = beta2 * v_w_hh + (1.0f - beta2) * square(d_loss_d_w_hh);
+        v_w_hy = beta2 * v_w_hy + (1.0f - beta2) * square(d_loss_d_w_hy);
+        v_b_h = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
+        v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
+
+        tensor m_hat_w_xh = m_w_xh / (1.0f - powf(beta1, t));
+        tensor v_hat_w_xh = v_w_xh / (1.0f - powf(beta2, t));
+        w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
+
+        tensor m_hat_w_hh = m_w_hh / (1.0f - powf(beta1, t));
+        tensor v_hat_w_hh = v_w_hh / (1.0f - powf(beta2, t));
+        w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
+
+        tensor m_hat_w_hy = m_w_hy / (1.0f - powf(beta1, t));
+        tensor v_hat_w_hy = v_w_hy / (1.0f - powf(beta2, t));
+        w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
+
+        tensor m_hat_b_h = m_b_h / (1.0f - powf(beta1, t));
+        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
+        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
+
+        tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
+        tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
+        b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
+
+        // CHECK: These a = a - lr * b is working.
+        // w_xh = w_xh - lr * d_loss_d_w_xh;
+        // w_hh = w_hh - lr * d_loss_d_w_hh;
+        // w_hy = w_hy - lr * d_loss_d_w_hy;
+
+        // b_h = b_h - lr * d_loss_d_b_h;
+        // b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
