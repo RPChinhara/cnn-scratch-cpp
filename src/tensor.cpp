@@ -170,6 +170,20 @@ tensor operator*(const float sca, const tensor &t) {
     return t_new;
 }
 
+tensor operator+(const tensor &t, const float sca) {
+    tensor t_new = t;
+    for (auto i = 0; i < t.size; ++i)
+        t_new[i] = t[i] + sca;
+    return t_new;
+}
+
+tensor operator/(const tensor &t, const float sca) {
+    tensor t_new = t;
+    for (auto i = 0; i < t.size; ++i)
+        t_new[i] = t[i] / sca;
+    return t_new;
+}
+
 static size_t get_num_elem_most_inner_mat(const std::vector<size_t> &shape) {
     size_t last_shape = shape[shape.size() - 1];
     size_t second_last_shape = shape[shape.size() - 2];
