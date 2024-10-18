@@ -2,7 +2,6 @@
   - Implement SimpleRNN
     - Tackle the vanishing gradients
       > Implement Adam
-    - Maybe use glorot_uniform in nn as well like in Tensorflow Dense?
     - Now shapes for b_h and b_y are (hidden_size, batch_size), and (output_size, batch_size) respectively, I have to change batch_size to 1 so that the shape would much when I run evaluate() which
       takes dataset like x_test which has different batch_size than training. This is what did exactly on nn.
     - Now that I have new min_max_scaler class just use it
