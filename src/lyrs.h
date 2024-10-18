@@ -144,6 +144,18 @@ class rnn {
     tensor b_h;
     tensor b_y;
 
+    tensor m_w_xh;
+    tensor m_w_hh;
+    tensor m_w_hy;
+    tensor m_b_h;
+    tensor m_b_y;
+
+    tensor v_w_xh;
+    tensor v_w_hh;
+    tensor v_w_hy;
+    tensor v_b_h;
+    tensor v_b_y;
+
     std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x);
 
   public:
