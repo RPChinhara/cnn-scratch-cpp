@@ -127,6 +127,11 @@ class rnn {
     size_t epochs = 100;
     size_t batch_size = 8317;
 
+    float beta1 = 0.9f;
+    float beta2 = 0.999f;
+    float epsilon = 1e-8f;
+    size_t t = 0;
+
     size_t input_size = 1;
     size_t hidden_size = 50;
     size_t output_size = 1;
