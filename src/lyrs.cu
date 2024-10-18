@@ -360,6 +360,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto [x_sequence, h_sequence, y_sequence] = forward(x_train);
         auto y = y_sequence.front();
 
+        float error = loss(transpose(y_train), y);
+
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
         tensor d_loss_d_b_h  = zeros({hidden_size, batch_size});
@@ -453,7 +455,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(transpose(y_train), y) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
     }
 }
 
