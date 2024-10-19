@@ -1,6 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
-    - Now shapes for b_h and b_y are (hidden_size, batch_size), and (output_size, batch_size) respectively, I have to change batch_size to 1 so that the shape would much when I run evaluate() which
+    > Now shapes for b_h and b_y are (hidden_size, batch_size), and (output_size, batch_size) respectively, I have to change batch_size to 1 so that the shape would much when I run evaluate() which
       takes dataset like x_test which has different batch_size than training. This is what did exactly on nn.
     - Now that I have new min_max_scaler class just use it
       - In order for me to run evaluate() and predict() which mostly likely I'd pass test dataset which have different sizes than train dataset, I have to change "batch_size" in
