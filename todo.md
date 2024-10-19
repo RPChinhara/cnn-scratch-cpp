@@ -14,4 +14,4 @@
 3. Implement algorithms from latest/famous/interesting papers.
 4. Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature. For instance, Newton's laws of motion?
 5. Use '4' to solve existing problems and discover new theories in mathematics and physics.
-6. Create new things, possibly scientific devices, from '5'.
+6. Create new things, possibly scientific devices, using '4' and/or '5'.
