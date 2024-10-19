@@ -461,23 +461,21 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
 
         tensor m_hat_w_xh = m_w_xh / (1.0f - powf(beta1, t));
-        tensor v_hat_w_xh = v_w_xh / (1.0f - powf(beta2, t));
-        w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
-
         tensor m_hat_w_hh = m_w_hh / (1.0f - powf(beta1, t));
-        tensor v_hat_w_hh = v_w_hh / (1.0f - powf(beta2, t));
-        w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
-
         tensor m_hat_w_hy = m_w_hy / (1.0f - powf(beta1, t));
-        tensor v_hat_w_hy = v_w_hy / (1.0f - powf(beta2, t));
-        w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
-
         tensor m_hat_b_h = m_b_h / (1.0f - powf(beta1, t));
-        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
-        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
-
         tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
+
+        tensor v_hat_w_xh = v_w_xh / (1.0f - powf(beta2, t));
+        tensor v_hat_w_hh = v_w_hh / (1.0f - powf(beta2, t));
+        tensor v_hat_w_hy = v_w_hy / (1.0f - powf(beta2, t));
+        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
         tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
+
+        w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
+        w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
+        w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
+        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
         b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
         // CHECK: These a = a - lr * b is working.
