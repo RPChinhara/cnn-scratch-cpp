@@ -124,7 +124,7 @@ class rnn {
     act_func activation;
     loss_func loss;
     float lr;
-    size_t epochs = 100;
+    size_t epochs = 150;
     size_t batch_size = 8317;
 
     float beta1 = 0.9f;
