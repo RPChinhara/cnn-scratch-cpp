@@ -1,11 +1,8 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   - Implement SimpleRNN
     - Now that I have new min_max_scaler class just use it
-      > In order for me to run evaluate() and predict() which mostly likely I'd pass test dataset which have different sizes than train dataset, I have to change "batch_size" in
-        forward(). What'd work for temporaly is take enum Phase in forward() which contains TRAIN and TEST, and switch batch_size based on these enum. By the way, batch_size is = 8317 when the enum is
-        TRAIN, and 2072 when it's TEST.
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
-      - Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
+      > Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       - is derivative of relu right?
   - Implement LSTM.
     - Implement either one-to-many or many-to-many (Do whichever is more famous so that I could learn how loss would work and its derivatives)
