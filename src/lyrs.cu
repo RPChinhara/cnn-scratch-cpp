@@ -339,20 +339,20 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     w_hh = glorot_uniform(hidden_size, hidden_size);
     w_hy = glorot_uniform(output_size, hidden_size);
 
-    b_h = zeros({hidden_size, batch_size});
-    b_y = zeros({output_size, batch_size});
+    b_h = zeros({hidden_size, 1});
+    b_y = zeros({output_size, 1});
 
     m_w_xh = zeros({hidden_size, input_size});
     m_w_hh = zeros({hidden_size, hidden_size});
     m_w_hy = zeros({output_size, hidden_size});
-    m_b_h  = zeros({hidden_size, batch_size});
-    m_b_y  = zeros({output_size, batch_size});
+    m_b_h  = zeros({hidden_size, 1});
+    m_b_y  = zeros({output_size, 1});
 
     v_w_xh = zeros({hidden_size, input_size});
     v_w_hh = zeros({hidden_size, hidden_size});
     v_w_hy = zeros({output_size, hidden_size});
-    v_b_h  = zeros({hidden_size, batch_size});
-    v_b_y  = zeros({output_size, batch_size});
+    v_b_h  = zeros({hidden_size, 1});
+    v_b_y  = zeros({output_size, 1});
 }
 
 tensor relu_derivative(const tensor &h_t) {
@@ -376,7 +376,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
-        tensor d_loss_d_b_h  = zeros({hidden_size, batch_size});
+        tensor d_loss_d_b_h  = zeros({hidden_size, 1});
 
         float num_samples = static_cast<float>(y_train.shape.front());
 
@@ -445,7 +445,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
             d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j])), x_sequence[j - 1]);
             d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j])), transpose(h_sequence[j - 1]));
 
-            d_loss_d_b_h  = d_loss_d_b_h + transpose(d_loss_d_h_t);
+            d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t), 1);
         }
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
