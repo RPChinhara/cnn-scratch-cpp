@@ -523,8 +523,6 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::f
 
         tensor x_t = zeros({batch_size, input_size});
 
-        // If I don't change this batch_size, in evaluate(), for test_loss, y_sequence shape would be (1, 8317) where it should be (1, 2072)
-        // as size of y_test given in evaluate() is (1, 2072).
         for (auto j = 0; j < batch_size; ++j) {
             x_t[j] = x[idx];
             idx += seq_length;
