@@ -3,6 +3,7 @@
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       > Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
       - is derivative of relu right?
+    - do some clean ups e.g., delete comments
   - Implement LSTM.
     - Implement either one-to-many or many-to-many (Do whichever is more famous so that I could learn how loss would work and its derivatives)
   - Implement GRU.
