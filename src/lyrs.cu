@@ -450,21 +450,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
-        // # Update biased first moment estimate
-        // m[key] = beta1 * m[key] + (1 - beta1) * grads[key]
-
-        // # Update biased second moment estimate
-        // v[key] = beta2 * v[key] + (1 - beta2) * (grads[key] ** 2)
-
-        // # Compute bias-corrected first moment estimate
-        // m_hat = m[key] / (1 - beta1 ** t)
-
-        // # Compute bias-corrected second moment estimate
-        // v_hat = v[key] / (1 - beta2 ** t)
-
-        // # Update parameters
-        // params[key] -= learning_rate * m_hat / (np.sqrt(v_hat) + epsilon)
-
         t += 1;
 
         m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
