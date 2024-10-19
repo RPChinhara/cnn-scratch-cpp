@@ -129,7 +129,7 @@ class rnn {
 
     float beta1 = 0.9f;
     float beta2 = 0.999f;
-    float epsilon = 1e-8f;
+    float epsilon = 1e-7f;
     size_t t = 0;
 
     size_t input_size = 1;
@@ -156,7 +156,12 @@ class rnn {
     tensor v_b_h;
     tensor v_b_y;
 
-    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x);
+    enum Phase {
+      TRAIN,
+      TEST
+    };
+
+    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
 
   public:
     rnn(const act_func &activation, const loss_func &loss, const float lr);

@@ -369,7 +369,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, h_sequence, y_sequence] = forward(x_train);
+        auto [x_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
         auto y = y_sequence.front();
 
         float error = loss(transpose(y_train), y);
@@ -381,10 +381,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         float num_samples = static_cast<float>(y_train.shape.front());
 
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y);
-
-        std::cout << y_train[0] << " " << y[0] << std::endl;
-        std::cout << y_train[4000] << " " << y[4000] << std::endl;
-        std::cout << y_train[8000] << " " << y[8000] << std::endl;
 
         // x_sequence                      -> (8317, 1)
         // h_sequence                      -> (50, 8317)
@@ -502,19 +498,24 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 }
 
 float rnn::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, h_sequence, y_sequence] = forward(x);
+    auto [x_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return loss(transpose(y), y_sequence.front());
 }
 
 tensor rnn::predict(const tensor &x) {
-    auto [x_sequence, h_sequence, y_sequence] = forward(x);
-    return y_sequence.front();
+    auto [x_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    return transpose(y_sequence.front());
 }
 
-std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x) {
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
+
+    if (phase == Phase::TRAIN)
+        batch_size = 8317;
+    else
+        batch_size = 2072;
 
     h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);

@@ -60,7 +60,20 @@ int main() {
     auto predict = model.predict(x_y_test.first);
 
     std::cout << "Test  loss: " << test_loss << std::endl;
-    // std::cout << std::endl << predict << std::endl;
+
+    x_y_test.second = scaler.inverse_transform(x_y_test.second);
+    predict = scaler.inverse_transform(predict);
+
+    for (auto i = 0; i < x_y_test.second.size; ++i)
+        std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
+
+    std::cout << std::endl << predict.shape.front() << " " << predict.shape.back() << std::endl;
+
+    std::cout << std::endl << x_y_train.first.shape.front() << " " << x_y_train.first.shape.back() << std::endl;
+    std::cout << std::endl << x_y_train.second.shape.front() << " " << x_y_train.second.shape.back() << std::endl;
+
+    std::cout << std::endl << x_y_test.first.shape.front() << " " << x_y_test.first.shape.back() << std::endl;
+    std::cout << std::endl << x_y_test.second.shape.front() << " " << x_y_test.second.shape.back() << std::endl;
 
     return 0;
 }
