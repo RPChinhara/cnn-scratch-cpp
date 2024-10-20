@@ -42,25 +42,27 @@ float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
 
 int main() {
     tensor data = load_aapl();
-    tensor scaled_data = min_max_scaler(data);
+    min_max_scaler2 scaler;
+    scaler.fit(data);
+    tensor scaled_data = scaler.transform(data);
+
     auto train_test = split(scaled_data, 0.2f);
 
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    // Everything much with google colab up to here! (delete this after everything is done)
-
     rnn model = rnn(relu, mean_squared_error, 0.01f);
-    model.train(x_y_train.first, x_y_train.second, x_y_test.first, x_y_test.second);
+    model.train(x_y_train.first, x_y_train.second);
 
-    auto train_loss = model.evaluate(x_y_train.first, x_y_train.second);
     auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
+    auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
 
-    auto predict = model.predict(x_y_test.first);
+    x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
-    std::cout << "Train loss: " << train_loss << std::endl;
+    for (auto i = 0; i < x_y_test.second.size; ++i)
+        std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
+
     std::cout << "Test  loss: " << test_loss << std::endl;
-    // std::cout << std::endl << predict << std::endl;
 
     return 0;
 }
