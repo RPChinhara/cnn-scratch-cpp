@@ -19,19 +19,19 @@ dL/dWhh (t = 4) = dL/dh4 ⋅ dh4/dWhh where dh4/dWhh = act(z4) ⋅ transpose(h3)
 Thus, dL/dWhh (t = 4) = dL/dh4 ⋅ 1 - squared(h4) ⋅ transpose(h3)
 
 T = 3
-dL/dh3 = dL/dh4 ⋅ dh4/dh3 where dh4/dh3 = 1 - squared(h4) ⋅ Whh
+dL/dh3 = dL/dh4 ⋅ dh4/dh3 where dh4/dh3 = act(z4) ⋅ Whh
 Thus, dL/dh3 = dL/dh4 ⋅ 1 - squared(h4) ⋅ Whh
 dL/dWhh (t = 3) = dL/dh3 ⋅ dh3/dWhh where dh3/dWhh = act(z3) ⋅ transpose(h2)
 Thus, dL/dWhh (t = 3) = dL/dh3 ⋅ 1 - squared(h3) ⋅ transpose(h2)
 
 T = 2
-dL/dh2 = dL/dh3 ⋅ dh3/dh2 where dh3/dh2 = 1 - squared(h3) ⋅ Whh
+dL/dh2 = dL/dh3 ⋅ dh3/dh2 where dh3/dh2 = act(z3) ⋅ Whh
 Thus, dL/dh2 = dL/dh3 ⋅ 1 - squared(h3) ⋅ Whh
 dL/dWhh (t = 2) = dL/dh2 ⋅ dh2/dWhh where dh2/dWhh = act(z2) ⋅ transpose(h1)
 Thus, dL/dWhh (t = 2) = dL/dh2 ⋅ 1 - squared(h2) ⋅ transpose(h1)
 
 T = 1
-dL/dh1 = dL/dh2 ⋅ dh2/dh1 where dh2/dh1 = 1 - squared(h2) ⋅ Whh
+dL/dh1 = dL/dh2 ⋅ dh2/dh1 where dh2/dh1 = act(z2) ⋅ Whh
 Thus, dL/dh1 = dL/dh2 ⋅ 1 - squared(h2) ⋅ Whh
 dL/dWhh (t = 1) = dL/dh1 ⋅ dh1/dWhh where dh1/dWhh = act(z1) ⋅ transpose(h0)
 Thus, dL/dWhh (t = 1) = dL/dh1 ⋅ 1 - squared(h1) ⋅ transpose(h0)
