@@ -52,7 +52,7 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    rnn model = rnn(relu, mean_squared_error, 0.01f);
+    lstm model = lstm(relu, mean_squared_error, 0.01f);
 
     return 0;
 }

@@ -91,7 +91,7 @@ class lstm {
     std::vector<tensor> forward(const tensor &x);
 
   public:
-    lstm(const size_t lr, loss_func loss);
+    lstm(const act_func &activation, const loss_func &loss, const float lr);
     void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
 };
 

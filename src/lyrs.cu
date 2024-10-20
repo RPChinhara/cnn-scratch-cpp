@@ -149,7 +149,7 @@ std::vector<tensor> gru::forward(const tensor &x) {
     return std::vector<tensor>();
 }
 
-lstm::lstm(const size_t lr, loss_func loss) {
+lstm::lstm(const act_func &activation, const loss_func &loss, const float lr) {
     this->lr = lr;
     this->loss = loss;
 
