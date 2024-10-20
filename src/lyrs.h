@@ -165,7 +165,7 @@ class rnn {
 
   public:
     rnn(const act_func &activation, const loss_func &loss, const float lr);
-    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
+    void train(const tensor &x_train, const tensor &y_train);
     float evaluate(const tensor &x, const tensor &y);
     tensor predict(const tensor &x);
 };

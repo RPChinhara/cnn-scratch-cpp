@@ -364,8 +364,7 @@ tensor relu_derivative(const tensor &h_t) {
     return t_new;
 }
 
-void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
-
+void rnn::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
