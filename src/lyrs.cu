@@ -451,8 +451,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
         m_w_hh = beta1 * m_w_hh + (1.0f - beta1) * d_loss_d_w_hh;
         m_w_hy = beta1 * m_w_hy + (1.0f - beta1) * d_loss_d_w_hy;
-        m_b_h  = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
-        m_b_y  = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
+        m_b_h = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
 
         v_w_xh = beta2 * v_w_xh + (1.0f - beta2) * square(d_loss_d_w_xh);
         v_w_hh = beta2 * v_w_hh + (1.0f - beta2) * square(d_loss_d_w_hh);
