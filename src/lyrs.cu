@@ -430,7 +430,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
         b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
         b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
-        // CHECK: These a = a - lr * b is working.
         // w_xh = w_xh - lr * d_loss_d_w_xh;
         // w_hh = w_hh - lr * d_loss_d_w_hh;
         // w_hy = w_hy - lr * d_loss_d_w_hy;
