@@ -368,7 +368,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = loss(transpose(y_train), y_sequence.front());
 
@@ -385,13 +385,13 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
                 tensor d_y_d_h_10 = w_hy;
                 d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(h_sequence[j + 1])), w_hh);
+                d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(z_sequence[j])), w_hh);
             }
 
-            d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j])), x_sequence[j - 1]);
-            d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j])), transpose(h_sequence[j - 1]));
+            d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), x_sequence[j - 1]);
+            d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), transpose(h_sequence[j - 1]));
 
-            d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(h_sequence[j]), 1);
+            d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
         }
 
         tensor d_loss_d_w_hy  = matmul(d_loss_d_y, transpose(h_sequence.back()));
@@ -445,17 +445,18 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float rnn::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return loss(transpose(y), y_sequence.front());
 }
 
 tensor rnn::predict(const tensor &x) {
-    auto [x_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x, enum Phase phase) {
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
+    std::vector<tensor> z_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -477,17 +478,19 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::f
             idx += seq_length;
         }
 
-        h_t = activation(matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h);
+        tensor z_t = matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h;
+        h_t = activation(z_t);
         tensor y_t = matmul(w_hy, h_t) + b_y;
 
         x_sequence.push_back(x_t);
+        z_sequence.push_back(z_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
             y_sequence.push_back(y_t);
     }
 
-    return std::make_tuple(x_sequence, h_sequence, y_sequence);
+    return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
 }
 
 tensor embedding(const size_t vocab_size, const size_t cols, const tensor &ind) {

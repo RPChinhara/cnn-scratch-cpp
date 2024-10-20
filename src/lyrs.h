@@ -161,7 +161,7 @@ class rnn {
       TEST
     };
 
-    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
+    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
 
   public:
     rnn(const act_func &activation, const loss_func &loss, const float lr);
