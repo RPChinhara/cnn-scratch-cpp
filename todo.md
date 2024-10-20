@@ -2,7 +2,6 @@
   - Implement SimpleRNN
     - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
       > Especially recheck if calculation for d_loss_d_b_h is correct as I've never searched and compare with result from chatGPT
-      - is derivative of relu right?
   - Implement LSTM (many-to-many).
   - Implement GRU.
   - Implement Bidirectional RNNs.
