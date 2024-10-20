@@ -1,9 +1,16 @@
 [Forward propagation]
 
-h1 = act(matmul(Wxh, x1) + matmul(Whh, h0) + bh)
-h2 = act(matmul(Wxh, x2) + matmul(Whh, h1) + bh)
-h3 = act(matmul(Wxh, x3) + matmul(Whh, h2) + bh)
-h4 = act(matmul(Wxh, x4) + matmul(Whh, h3) + bh)
+z1 = matmul(Wxh, x1) + matmul(Whh, h0) + bh
+h1 = act(z1)
+
+z2 = matmul(Wxh, x2) + matmul(Whh, h1) + bh
+h2 = act(z2)
+
+z3 = matmul(Wxh, x3) + matmul(Whh, h2) + bh
+h3 = act(z3)
+
+z4 = matmul(Wxh, x4) + matmul(Whh, h3) + bh
+h4 = act(z4)
 
 y  = matmul(Why, h4) + by
 
