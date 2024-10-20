@@ -380,18 +380,6 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
 
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // x_sequence                      -> (8317, 1)
-        // h_sequence                      -> (50, 8317)
-        // y_sequence                      -> (1, 8317)
-        // y                               -> (1, 8317)
-        // y_train                         -> (8317, 1)
-        // d_loss_d_h_10                   -> (8317, 50)
-        // 1.0f - square(h_y.first.back()) -> (50, 8317)
-        // h_y.first[h_y.first.size() - 1] -> (50, 8317)
-        // h_y.first.size()                -> 11
-        // d_loss_d_w_hh_10                -> (50, 50)
-        // d_loss_d_h_t_9                  -> (8317, 50)
-
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
 
         for (auto j = seq_length; j > 0; --j) {
