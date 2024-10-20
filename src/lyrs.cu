@@ -428,7 +428,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         // }
 
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
-        
+
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_hy;
