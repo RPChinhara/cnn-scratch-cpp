@@ -370,9 +370,8 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto [x_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
-        auto y = y_sequence.front();
 
-        float error = loss(transpose(y_train), y);
+        float error = loss(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
@@ -380,7 +379,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train, const tensor &x_va
 
         float num_samples = static_cast<float>(y_train.shape.front());
 
-        tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y);
+        tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
         // x_sequence                      -> (8317, 1)
         // h_sequence                      -> (50, 8317)
