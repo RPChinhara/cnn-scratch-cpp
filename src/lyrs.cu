@@ -372,15 +372,13 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
 
         float error = loss(transpose(y_train), y_sequence.front());
 
+        tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
         tensor d_loss_d_b_h  = zeros({hidden_size, 1});
 
         float num_samples = static_cast<float>(y_train.shape.front());
-
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
-
-        tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
 
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
