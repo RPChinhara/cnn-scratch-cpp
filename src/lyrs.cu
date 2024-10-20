@@ -150,8 +150,9 @@ std::vector<tensor> gru::forward(const tensor &x) {
 }
 
 lstm::lstm(const act_func &activation, const loss_func &loss, const float lr) {
-    this->lr = lr;
+    this->activation = activation;
     this->loss = loss;
+    this->lr = lr;
 
     w_xh = uniform_dist({hidden_size, in_size});
     w_hh = uniform_dist({hidden_size, hidden_size});

@@ -72,8 +72,9 @@ class gru {
 
 class lstm {
   private:
-    float lr;
+    act_func activation;
     loss_func loss;
+    float lr;
     size_t batch_size = 8316;
     size_t epochs = 10;
 
