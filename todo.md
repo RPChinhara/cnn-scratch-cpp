@@ -1,6 +1,4 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  - Implement SimpleRNN
-    - If the loss is as low as loss on google colab (successefully implemented SimpleRNN!) recheck if the whole BPTT make sense
   - Implement LSTM (many-to-many).
   - Implement GRU.
   - Implement Bidirectional RNNs.
