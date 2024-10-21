@@ -21,11 +21,11 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
     return std::make_pair(x, y);
 }
 
-tensor relu(const tensor &z_t) {
+tensor hyperbolic_tangent(const tensor &z_t) {
     tensor h_t = z_t;
 
     for (auto i = 0; i < z_t.size; ++i)
-        h_t.elem[i] = std::fmax(0.0f, z_t.elem[i]);
+        h_t.elem[i] = std::tanhf(z_t.elem[i]);
 
     return h_t;
 }
@@ -52,7 +52,7 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    lstm model = lstm(relu, mean_squared_error, 0.01f);
+    lstm model = lstm(hyperbolic_tangent, mean_squared_error, 0.01f);
 
     return 0;
 }
