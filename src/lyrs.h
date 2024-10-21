@@ -78,9 +78,9 @@ class lstm {
     size_t batch_size = 8316;
     size_t epochs = 10;
 
-    size_t in_size = 1;
+    size_t input_size = 1;
     size_t hidden_size = 50;
-    size_t out_size = 1;
+    size_t output_size = 1;
     size_t seq_length = 10;
 
     tensor w_f;
