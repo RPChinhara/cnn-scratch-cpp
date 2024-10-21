@@ -154,12 +154,15 @@ lstm::lstm(const act_func &activation, const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    w_xh = uniform_dist({hidden_size, in_size});
-    w_hh = uniform_dist({hidden_size, hidden_size});
-    w_hy = uniform_dist({out_size, hidden_size});
+    w_f = zeros({hidden_size, hidden_size + input_size});
+    w_i = zeros({hidden_size, hidden_size + input_size});
+    w_c = zeros({hidden_size, hidden_size + input_size});
+    w_o = zeros({hidden_size, hidden_size + input_size});
 
-    b_h = zeros({hidden_size, batch_size});
-    b_y = zeros({out_size, batch_size});
+    b_f = zeros({hidden_size, 1});
+    b_i = zeros({hidden_size, 1});
+    b_c = zeros({hidden_size, 1});
+    b_o = zeros({hidden_size, 1});
 }
 
 void lstm::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {

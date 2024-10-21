@@ -83,11 +83,15 @@ class lstm {
     size_t out_size = 1;
     size_t seq_length = 10;
 
-    tensor w_xh;
-    tensor w_hh;
-    tensor w_hy;
-    tensor b_h;
-    tensor b_y;
+    tensor w_f;
+    tensor w_i;
+    tensor w_c;
+    tensor w_o;
+
+    tensor b_f;
+    tensor b_i;
+    tensor b_c;
+    tensor b_o;
 
     std::vector<tensor> forward(const tensor &x);
 
