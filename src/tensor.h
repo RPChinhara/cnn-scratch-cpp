@@ -21,6 +21,7 @@ class tensor {
     tensor operator*(const tensor &other) const;
     tensor operator/(const tensor &other) const;
     tensor operator+=(const tensor &other) const;
+    tensor operator-() const;
     float &operator[](const size_t idx) const;
     friend tensor operator+(const float sca, const tensor &t);
     friend tensor operator-(const float sca, const tensor &t);

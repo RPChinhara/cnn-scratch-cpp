@@ -157,6 +157,12 @@ tensor tensor::operator+=(const tensor &other) const {
     return *this;
 }
 
+tensor tensor::operator-() const {
+    for (auto i = 0; i < size; ++i)
+        elem[i] = -elem[i];
+    return *this;
+}
+
 float &tensor::operator[](const size_t idx) const {
     return elem[idx];
 }
