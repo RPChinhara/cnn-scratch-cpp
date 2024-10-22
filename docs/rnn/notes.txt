@@ -44,6 +44,63 @@ Thus, dL/dWhh = sum t from 1 to 2 dL/dht ⋅ 1 - squared(ht) ⋅ transpose(ht-1)
 For simplicity, let's say I'm calculating dL/dh1. The equation is dL/dh1 + dL/dh2 ⋅ dh2/dh1 since h1 is contributing both
 loss at time step = 1, and future time step in this case which is h2.
 
+-------------------- BPTT2 --------------------
+
+[Forward propagation]
+
+z1 = matmul(Wxh, x1) + matmul(Whh, h0) + bh
+h1 = act(z1)
+
+z2 = matmul(Wxh, x2) + matmul(Whh, h1) + bh
+h2 = act(z2)
+
+z3 = matmul(Wxh, x3) + matmul(Whh, h2) + bh
+h3 = act(z3)
+
+z4 = matmul(Wxh, x4) + matmul(Whh, h3) + bh
+h4 = act(z4)
+
+y  = matmul(Why, h4) + by
+
+Loss function at time step T = 4 is L = L(y, y_true)
+
+f(x)  = x^2
+f(x)' = 2x
+
+f(2)  = 2^2  = 4
+f(2)' = 2(2) = 4
+
+[BPTT]
+
+T = 4
+dL/dh4 = dL/dy ⋅ dy/dh4 where dy/dh4 = Why
+Thus, dL/dh4 = dL/dy ⋅ Why
+dL/dWhh (t = 4) = dL/dh4 ⋅ dh4/dWhh where dh4/dWhh = act(z4)' ⋅ transpose(h3)
+Thus, dL/dWhh (t = 4) = dL/dh4 ⋅ act(z4)' ⋅ transpose(h3)
+
+T = 3
+dL/dh3 = dL/dh4 ⋅ dh4/dh3 where dh4/dh3 = act(z4)' ⋅ Whh
+Thus, dL/dh3 = dL/dh4 ⋅ 1 - squared(h4) ⋅ Whh
+dL/dWhh (t = 3) = dL/dh3 ⋅ dh3/dWhh where dh3/dWhh = act(z3)' ⋅ transpose(h2)
+Thus, dL/dWhh (t = 3) = dL/dh3 ⋅ act(z3)' ⋅ transpose(h2)
+
+T = 2
+dL/dh2 = dL/dh3 ⋅ dh3/dh2 where dh3/dh2 = act(z3)' ⋅ Whh
+Thus, dL/dh2 = dL/dh3 ⋅ 1 - squared(h3) ⋅ Whh
+dL/dWhh (t = 2) = dL/dh2 ⋅ dh2/dWhh where dh2/dWhh = act(z2)' ⋅ transpose(h1)
+Thus, dL/dWhh (t = 2) = dL/dh2 ⋅ act(z2)' ⋅ transpose(h1)
+
+T = 1
+dL/dh1 = dL/dh2 ⋅ dh2/dh1 where dh2/dh1 = act(z2)' ⋅ Whh
+Thus, dL/dh1 = dL/dh2 ⋅ 1 - squared(h2) ⋅ Whh
+dL/dWhh (t = 1) = dL/dh1 ⋅ dh1/dWhh where dh1/dWhh = act(z1)' ⋅ transpose(h0)
+Thus, dL/dWhh (t = 1) = dL/dh1 ⋅ act(z1)' ⋅ transpose(h0)
+
+Total gradient with respect to Whh is,
+
+dL/dWhh (t = 1) + dL/dWhh (t = 2) + dL/dWhh (t = 3) + dL/dWhh (t = 4)
+dL/dWhh = (dL/dh1 ⋅ act(z1)' ⋅ transpose(h0)) + (dL/dh2 ⋅ act(z2)' ⋅ transpose(h1)) + (dL/dh3 ⋅ act(z3)' ⋅ transpose(h2)) + (dL/dh4 ⋅ act(z4)' ⋅ transpose(h3))
+
 -------------------- Random --------------------
 
 - I set batch_size = 8317 in lyrs.h since data size is (8327, 1) so batch size is 8327 - seq_length which is max batch size I believe. Its range is 1 ~ data size - sequence length.
