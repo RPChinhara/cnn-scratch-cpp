@@ -24,10 +24,7 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
 tensor sigmoid(const tensor &t) {
     tensor t_new = t;
 
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = -t_new[i];
-
-    return 1.0 / (1.0 + exp(t_new));
+    return 1.0 / (1.0 + exp(-t));
 }
 
 tensor hyperbolic_tangent(const tensor &z_t) {
