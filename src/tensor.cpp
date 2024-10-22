@@ -158,9 +158,10 @@ tensor tensor::operator+=(const tensor &other) const {
 }
 
 tensor tensor::operator-() const {
+    tensor t_new = *this;
     for (auto i = 0; i < size; ++i)
-        elem[i] = -elem[i];
-    return *this;
+        t_new[i] = -elem[i];
+    return t_new;
 }
 
 float &tensor::operator[](const size_t idx) const {
