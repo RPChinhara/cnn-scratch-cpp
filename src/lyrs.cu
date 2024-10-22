@@ -195,10 +195,6 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
     w_b_momentum = init_params();
 }
 
-void matmul_cpu() {
-
-}
-
 tensor da_dz(const tensor &a) {
     tensor t_new = a;
 
