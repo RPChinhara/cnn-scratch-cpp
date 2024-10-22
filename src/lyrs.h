@@ -83,6 +83,7 @@ class lstm {
     size_t output_size = 1;
     size_t seq_length = 10;
 
+    tensor h_t;
     tensor w_f;
     tensor w_i;
     tensor w_c;
@@ -93,7 +94,13 @@ class lstm {
     tensor b_c;
     tensor b_o;
 
-    std::vector<tensor> forward(const tensor &x);
+    enum Phase {
+      TRAIN,
+      TEST
+    };
+
+    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
+
 
   public:
     lstm(const act_func &activation, const loss_func &loss, const float lr);

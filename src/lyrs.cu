@@ -169,7 +169,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto a = forward(x_train);
+        auto a = forward(x_train, Phase::TRAIN);
 
         // float error = loss(transpose(y_train), y_sequence.front());
 
@@ -178,12 +178,73 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss(y_train, a.back()) << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << 0.0f << std::endl;
     }
 }
 
-std::vector<tensor> lstm::forward(const tensor &x) {
-   return std::vector<tensor>();
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> lstm::forward(const tensor &x, enum Phase phase) {
+    // std::vector<tensor> x_sequence;
+    // std::vector<tensor> z_sequence;
+    // std::vector<tensor> h_sequence;
+    // std::vector<tensor> y_sequence;
+
+    // if (phase == Phase::TRAIN)
+    //     batch_size = 8317;
+    // else
+    //     batch_size = 2072;
+
+    // h_t = zeros({hidden_size, batch_size});
+    // h_sequence.push_back(h_t);
+
+    // for (auto i = 0; i < seq_length; ++i) {
+    //     size_t idx = i;
+
+    //     tensor x_t = zeros({batch_size, input_size});
+
+    //     for (auto j = 0; j < batch_size; ++j) {
+    //         x_t[j] = x[idx];
+    //         idx += seq_length;
+    //     }
+
+    //     tensor z_t = matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h;
+    //     h_t = activation(z_t);
+    //     tensor y_t = matmul(w_hy, h_t) + b_y;
+
+    //     x_sequence.push_back(x_t);
+    //     z_sequence.push_back(z_t);
+    //     h_sequence.push_back(h_t);
+
+    //     if (i == seq_length - 1)
+    //         y_sequence.push_back(y_t);
+    // }
+
+    // return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
+
+    std::vector<tensor> x_sequence;
+    std::vector<tensor> h_sequence;
+
+    if (phase == Phase::TRAIN)
+        batch_size = 8317;
+    else
+        batch_size = 2072;
+
+    h_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(h_t);
+
+    for (auto i = 0; i < seq_length; ++i) {
+        size_t idx = i;
+
+        tensor x_t = zeros({batch_size, input_size});
+
+        for (auto j = 0; j < batch_size; ++j) {
+            x_t[j] = x[idx];
+            idx += seq_length;
+        }
+
+        tensor concat = vstack({h_t, transpose(x_t)});
+    }
+
+    return std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>>();
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr) {
