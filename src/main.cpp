@@ -59,6 +59,7 @@ int main() {
     auto x_y_test = create_sequences(train_test.second, 10);
 
     lstm model = lstm(hyperbolic_tangent, mean_squared_error, 0.01f);
+    model.train(x_y_train.first, x_y_train.second);
 
     return 0;
 }
