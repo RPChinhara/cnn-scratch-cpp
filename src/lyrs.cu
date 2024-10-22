@@ -171,6 +171,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         auto a = forward(x_train);
 
+        // float error = loss(transpose(y_train), y_sequence.front());
+
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
