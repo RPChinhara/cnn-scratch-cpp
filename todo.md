@@ -1,7 +1,6 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
   > Implement LSTM
     - better than this return? std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
-    - make acts.h?
     - return z in nn?
   - Implement GRU (many-to-many).
   - Implement Bidirectional RNNs.
