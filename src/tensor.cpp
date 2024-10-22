@@ -161,6 +161,13 @@ float &tensor::operator[](const size_t idx) const {
     return elem[idx];
 }
 
+tensor operator+(const float sca, const tensor &t) {
+    tensor t_new = t;
+    for (auto i = 0; i < t.size; ++i)
+        t_new[i] = sca + t[i];
+    return t_new;
+}
+
 tensor operator-(const float sca, const tensor &t) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
@@ -172,6 +179,13 @@ tensor operator*(const float sca, const tensor &t) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = sca * t[i];
+    return t_new;
+}
+
+tensor operator/(const float sca, const tensor &t) {
+    tensor t_new = t;
+    for (auto i = 0; i < t.size; ++i)
+        t_new[i] = sca / t[i];
     return t_new;
 }
 
