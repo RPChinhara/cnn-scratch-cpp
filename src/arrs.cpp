@@ -41,7 +41,12 @@ std::pair<tensor, tensor> split(const tensor &x, const float test_size) {
     return std::make_pair(x_train, x_test);
 }
 
-tensor stack(const std::vector<tensor> &ts) {
+tensor vstack(const std::vector<tensor> &ts) {
+    size_t first_dim = ts.front().shape.back();
+
+    for (auto i = 1; i < ts.size(); ++i)
+        assert(first_dim == ts[i].shape.back());
+
     size_t num_rows = 0;
 
     for (auto i = 0; i < ts.size(); ++i)
