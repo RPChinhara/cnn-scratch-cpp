@@ -242,6 +242,14 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         }
 
         tensor concat = vstack({h_t, transpose(x_t)});
+        tensor f_t = activation(matmul(w_f, concat) + b_f);
+
+        std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
+        std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
+
+        //    # Forget gate
+        // f_t = self.sigmoid(np.dot(self.W_f, concat) + self.b_f)
+
     }
 
     return std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>>();
