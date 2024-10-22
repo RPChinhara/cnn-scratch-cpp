@@ -1,5 +1,5 @@
 1. Working on a tutorial https://www.tensorflow.org/text/tutorials/nmt_with_attention
-  - Implement LSTM
+  > Implement LSTM
   - Implement GRU (many-to-many).
   - Implement Bidirectional RNNs.
   - Implement Deep RNNs, which have multiple layers of RNNs stacked on top of each other and can be built with any of the basic RNN units (vanilla, LSTM, GRU).
