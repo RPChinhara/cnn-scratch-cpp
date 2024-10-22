@@ -41,6 +41,25 @@ std::pair<tensor, tensor> split(const tensor &x, const float test_size) {
     return std::make_pair(x_train, x_test);
 }
 
+tensor stack(std::vector<tensor> &ts) {
+    size_t num_rows = 0;
+
+    for (auto i = 0; i < ts.size(); ++i)
+        num_rows += ts[i].shape.front();
+
+    tensor t_new = zeros({num_rows, ts.front().shape.back()});
+
+    size_t idx = 0;
+    for (auto i = 0; i < ts.size(); ++i) {
+        for (auto j = 0; j < ts[i].size; ++j) {
+            t_new[idx] = ts[i][j];
+            ++idx;
+        }
+    }
+
+    return t_new;
+}
+
 tensor zeros(const std::vector<size_t> &shape) {
     tensor t_new = tensor();
 
