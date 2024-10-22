@@ -165,7 +165,7 @@ lstm::lstm(const act_func &activation, const loss_func &loss, const float lr) {
     b_o = zeros({hidden_size, 1});
 }
 
-void lstm::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
+void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
