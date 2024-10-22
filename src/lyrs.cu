@@ -1,4 +1,5 @@
 #include "lyrs.h"
+#include "acts.h"
 #include "arrs.h"
 #include "math.hpp"
 #include "preproc.h"
@@ -242,7 +243,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         }
 
         tensor concat = vstack({h_t, transpose(x_t)});
-        tensor f_t = activation(matmul(w_f, concat) + b_f);
+        tensor f_t = sigmoid(matmul(w_f, concat) + b_f);
 
         std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
         std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
