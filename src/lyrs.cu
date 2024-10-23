@@ -150,8 +150,7 @@ std::vector<tensor> gru::forward(const tensor &x) {
     return std::vector<tensor>();
 }
 
-lstm::lstm(const act_func &activation, const loss_func &loss, const float lr) {
-    this->activation = activation;
+lstm::lstm(const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
@@ -249,16 +248,29 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
 
         tensor f_t = sigmoid(matmul(w_f, concat) + b_f);
         tensor i_t = sigmoid(matmul(w_i, concat) + b_i);
+        // tensor c_tilde_t = tanh
 
         std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
         std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
         std::cout << i_t.shape.front() << " " << i_t.shape.back() << std::endl;
 
-        //    # Forget gate
+        // # Forget gate
         // f_t = self.sigmoid(np.dot(self.W_f, concat) + self.b_f)
 
         // # Input gate
         // i_t = self.sigmoid(np.dot(self.W_i, concat) + self.b_i)
+
+        // # Candidate cell state
+        // C_tilde_t = self.tanh(np.dot(self.W_C, concat) + self.b_C)
+
+        // # Cell state update
+        // C_t = f_t * C_prev + i_t * C_tilde_t
+
+        // # Output gate
+        // o_t = self.sigmoid(np.dot(self.W_o, concat) + self.b_o)
+
+        // # Hidden state update
+        // h_t = o_t * self.tanh(C_t)
 
 
     }

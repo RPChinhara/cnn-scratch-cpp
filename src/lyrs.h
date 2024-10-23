@@ -72,7 +72,6 @@ class gru {
 
 class lstm {
   private:
-    act_func activation;
     loss_func loss;
     float lr;
     size_t batch_size = 8316;
@@ -85,7 +84,7 @@ class lstm {
 
     tensor h_t;
     tensor c_t;
-    
+
     tensor w_f;
     tensor w_i;
     tensor w_c;
@@ -105,7 +104,7 @@ class lstm {
 
 
   public:
-    lstm(const act_func &activation, const loss_func &loss, const float lr);
+    lstm(const loss_func &loss, const float lr);
     void train(const tensor &x_train, const tensor &y_train);
 };
 
