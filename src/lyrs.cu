@@ -232,6 +232,9 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
     h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
 
+    c_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(c_t);
+
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
 
@@ -243,7 +246,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         }
 
         tensor concat = vstack({h_t, transpose(x_t)});
-        
+
         tensor f_t = sigmoid(matmul(w_f, concat) + b_f);
         tensor i_t = sigmoid(matmul(w_i, concat) + b_i);
 
