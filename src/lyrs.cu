@@ -222,17 +222,18 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
 
     std::vector<tensor> x_sequence;
     std::vector<tensor> h_sequence;
+    std::vector<tensor> c_sequence;
 
     if (phase == Phase::TRAIN)
         batch_size = 8317;
     else
         batch_size = 2072;
 
-    h_t = zeros({hidden_size, batch_size});
+    tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
 
-    c_t = zeros({hidden_size, batch_size});
-    h_sequence.push_back(c_t);
+    tensor c_t = zeros({hidden_size, batch_size});
+    c_sequence.push_back(c_t);
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;

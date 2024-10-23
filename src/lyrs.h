@@ -82,9 +82,6 @@ class lstm {
     size_t output_size = 1;
     size_t seq_length = 10;
 
-    tensor h_t;
-    tensor c_t;
-
     tensor w_f;
     tensor w_i;
     tensor w_c;
