@@ -562,7 +562,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
     else
         batch_size = 2072;
 
-    h_t = zeros({hidden_size, batch_size});
+    tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
 
     for (auto i = 0; i < seq_length; ++i) {
