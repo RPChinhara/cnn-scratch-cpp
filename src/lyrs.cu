@@ -249,6 +249,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         tensor f_t = sigmoid(matmul(w_f, concat) + b_f);
         tensor i_t = sigmoid(matmul(w_i, concat) + b_i);
         tensor c_tilde_t = hyperbolic_tangent(matmul(w_c, concat) + b_c);
+        c_t = f_t * c_t + i_t * c_tilde_t;
 
         std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
         std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
