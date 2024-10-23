@@ -251,11 +251,14 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         tensor i_t = sigmoid(matmul(w_i, concat) + b_i);
         tensor c_tilde_t = hyperbolic_tangent(matmul(w_c, concat) + b_c);
         c_t = f_t * c_t + i_t * c_tilde_t;
+        tensor o_t = sigmoid(matmul(w_o, concat) + b_o);
 
         std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
         std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
         std::cout << i_t.shape.front() << " " << i_t.shape.back() << std::endl;
         std::cout << c_tilde_t.shape.front() << " " << c_tilde_t.shape.back() << std::endl;
+        std::cout << c_t.shape.front() << " " << c_t.shape.back() << std::endl;
+        std::cout << o_t.shape.front() << " " << o_t.shape.back() << std::endl;
 
         // # Forget gate
         // f_t = self.sigmoid(np.dot(self.W_f, concat) + self.b_f)
