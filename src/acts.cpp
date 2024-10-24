@@ -17,11 +17,11 @@ tensor sigmoid(const tensor &t) {
     return 1.0 / (1.0 + exp(-t));
 }
 
-tensor relu_derivative(const tensor &a) {
-    tensor t_new = a;
+tensor relu_derivative(const tensor &z) {
+    tensor t_new = z;
 
-    for (auto i = 0; i < a.size; ++i)
-        t_new[i] = (a[i] > 0.0f) ? 1.0f : 0.0f;
+    for (auto i = 0; i < z.size; ++i)
+        t_new[i] = (z[i] > 0.0f) ? 1.0f : 0.0f;
 
     return t_new;
 }
