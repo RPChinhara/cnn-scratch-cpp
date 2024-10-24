@@ -120,7 +120,7 @@ class nn {
     std::pair<std::vector<tensor>, std::vector<tensor>> w_b_momentum;
 
     std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
-    std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b);
+    std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b);
 
   public:
     nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr);

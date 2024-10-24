@@ -1,50 +1,82 @@
-#include "arrs.h"
 #include "datas.h"
 #include "lyrs.h"
+#include "math.hpp"
 #include "preproc.h"
 
-std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_length) {
-    tensor x = zeros({data.size - seq_length, seq_length, 1});
-    tensor y = zeros({data.size - seq_length, 1});
+#include <chrono>
 
-    size_t idx = 0;
-    for (auto i = 0; i < (data.size - seq_length) * seq_length; ++i) {
-        if (i % seq_length == 0 && i != 0)
-            idx -= seq_length - 1;
-        x[i] = data[idx];
-        ++idx;
-    }
+tensor relu(const tensor &z) {
+    tensor a = z;
 
-    for (auto i = 0; i < data.size - seq_length; ++i)
-        y[i] = data[i + seq_length];
+    for (auto i = 0; i < z.size; ++i)
+        a.elem[i] = std::fmax(0.0f, z.elem[i]);
 
-    return std::make_pair(x, y);
+    return a;
 }
 
-float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
+tensor softmax(const tensor &z) {
+    tensor exp_scores = exp(z - max(z, 1));
+    return exp_scores / sum(exp_scores, 1);
+}
+
+float categorical_cross_entropy(const tensor &y_true, const tensor &y_pred) {
     float sum = 0.0f;
-    float n = static_cast<float>(y_true.shape.back());
+    constexpr float epsilon = 1e-15f;
+    size_t num_samples = y_true.shape.front();
+    tensor y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
+    tensor y_pred_logged = log(y_pred_clipped);
 
     for (auto i = 0; i < y_true.size; ++i)
-        sum += std::powf(y_true[i] - y_pred[i], 2.0f);
+        sum += y_true[i] * y_pred_logged[i];
 
-    return sum / n;
+    return -sum / num_samples;
+}
+
+float categorical_accuracy(const tensor &y_true, const tensor &y_pred) {
+    tensor idx_true = argmax(y_true);
+    tensor pred_idx = argmax(y_pred);
+    float equal = 0.0f;
+
+    for (auto i = 0; i < idx_true.size; ++i)
+        if (idx_true[i] == pred_idx[i])
+            ++equal;
+
+    return equal / idx_true.size;
 }
 
 int main() {
-    tensor data = load_aapl();
+    iris data = load_iris();
+    tensor x = data.x;
+    tensor y = data.y;
 
-    min_max_scaler2 scaler;
-    scaler.fit(data);
-    tensor scaled_data = scaler.transform(data);
+    y = one_hot(y, 3);
 
-    auto train_test = split(scaled_data, 0.2f);
+    auto train_temp = split_dataset(x, y, 0.2f, 42);
+    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, 0.5f, 42);
 
-    auto x_y_train = create_sequences(train_test.first, 10);
-    auto x_y_test = create_sequences(train_test.second, 10);
+    train_temp.x_train = min_max_scaler(train_temp.x_train);
+    val_test.x_train = min_max_scaler(val_test.x_train);
+    val_test.x_test = min_max_scaler(val_test.x_test);
 
-    lstm model = lstm(mean_squared_error, 0.01f);
-    model.train(x_y_train.first, x_y_train.second);
+    nn model = nn({4, 64, 64, 3}, {relu, relu, softmax}, categorical_cross_entropy, categorical_accuracy, 0.01f);
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+    model.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds" << std::endl << std::endl;
+
+    auto train_loss = model.evaluate(train_temp.x_train, train_temp.y_train);
+    auto test_loss = model.evaluate(val_test.x_test, val_test.y_test);
+    auto pred = model.predict(val_test.x_test);
+
+    std::cout << "Train loss: " << train_loss << std::endl;
+    std::cout << "Test  loss: " << test_loss << std::endl;
+    std::cout << std::endl << pred << std::endl;
+    std::cout << std::endl << val_test.y_test << std::endl;
 
     return 0;
 }

@@ -346,7 +346,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
                 y_batch = slice(y_shuffled, j, batch_size);
             }
 
-            std::vector<tensor> a = forward(x_batch, w_b.first, w_b.second);
+            auto [z, a] = forward(x_batch, w_b.first, w_b.second);
             y_pred = a.back();
 
             accumulated_loss += loss(y_batch, y_pred);
@@ -357,7 +357,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, y_pred));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k])) * da_dz(a[k - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k])) * da_dz(z[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k]));
@@ -379,7 +379,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        std::vector<tensor> a_val = forward(x_val, w_b.first, w_b.second);
+        auto [z, a_val] = forward(x_val, w_b.first, w_b.second);
         y_pred_val = a_val.back();
 
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -395,12 +395,12 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
 }
 
 float nn::evaluate(const tensor &x, const tensor &y) {
-    std::vector<tensor> a = forward(x, w_b.first, w_b.second);
+    auto [z, a] = forward(x, w_b.first, w_b.second);
     return loss(y, a.back());
 }
 
 tensor nn::predict(const tensor &x) {
-    std::vector<tensor> a = forward(x, w_b.first, w_b.second);
+    auto [z, a] = forward(x, w_b.first, w_b.second);
     return a.back();
 }
 
@@ -416,20 +416,27 @@ std::pair<std::vector<tensor>, std::vector<tensor>> nn::init_params() {
     return std::make_pair(w, b);
 }
 
-std::vector<tensor> nn::forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b) {
-    std::vector<tensor> a;
+std::pair<std::vector<tensor>, std::vector<tensor>>  nn::forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b) {
+    std::vector<tensor> zs;
+    std::vector<tensor> as;
 
     for (auto i = 0; i < lyrs.size() - 1; ++i) {
         if (i == 0) {
             tensor z = matmul(x, w[i]) + b[i];
-            a.push_back(activations[i](z));
+            tensor a = activations[i](z);
+
+            zs.push_back(z);
+            as.push_back(a);
         } else {
-            tensor z = matmul(a[i - 1], w[i]) + b[i];
-            a.push_back(activations[i](z));
+            tensor z = matmul(as[i - 1], w[i]) + b[i];
+            tensor a = activations[i](z);
+
+            zs.push_back(z);
+            as.push_back(a);
         }
     }
 
-    return a;
+    return std::make_pair(zs, as);
 }
 
 rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
