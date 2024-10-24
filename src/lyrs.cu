@@ -171,16 +171,16 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto a = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, c_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
-        // float error = loss(transpose(y_train), y_sequence.front());
+        float error = loss(transpose(y_train), y_sequence.front());
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << 0.0f << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
     }
 }
 
@@ -229,14 +229,14 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         if (i == seq_length - 1)
             y_sequence.push_back(y_t);
 
-        std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
-        std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
-        std::cout << i_t.shape.front() << " " << i_t.shape.back() << std::endl;
-        std::cout << c_tilde_t.shape.front() << " " << c_tilde_t.shape.back() << std::endl;
-        std::cout << c_t.shape.front() << " " << c_t.shape.back() << std::endl;
-        std::cout << o_t.shape.front() << " " << o_t.shape.back() << std::endl;
-        std::cout << h_t.shape.front() << " " << h_t.shape.back() << std::endl;
-        std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
+        // std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
+        // std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
+        // std::cout << i_t.shape.front() << " " << i_t.shape.back() << std::endl;
+        // std::cout << c_tilde_t.shape.front() << " " << c_tilde_t.shape.back() << std::endl;
+        // std::cout << c_t.shape.front() << " " << c_t.shape.back() << std::endl;
+        // std::cout << o_t.shape.front() << " " << o_t.shape.back() << std::endl;
+        // std::cout << h_t.shape.front() << " " << h_t.shape.back() << std::endl;
+        // std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
     return std::make_tuple(x_sequence, c_sequence, h_sequence, y_sequence);
