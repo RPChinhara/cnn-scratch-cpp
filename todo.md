@@ -1,7 +1,6 @@
 - Implement Seq2seq (Just use ChatGPT and Google? Come back to the tutorials on Tensorflow sites if it was impossible)
   > Implement LSTM
     - better than this return? std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
-    - return z in nn?
   - Implement GRU (many-to-many).
   - Implement Bidirectional RNNs.
   - Implement Deep RNNs, which have multiple layers of RNNs stacked on top of each other and can be built with any of the basic RNN units (vanilla, LSTM, GRU).
