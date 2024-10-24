@@ -54,3 +54,14 @@ What I want to say here is that I think you don't want to mess with hidden_size 
 50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
 matmul(50 1, 1 8316) -> 50 8316 + matmul(50 50, 50 8316) -> 50 8316
 matmul(1 50, 50 8316) -> 1 8316
+
+-------------------- Forward propagation for neural network --------------------
+
+z1 = matmul(w1, x);
+a1 = matmul(z1);
+
+z2 = matmul(w2, a1);
+a2 = matmul(z2);
+
+z3 = matmul(w3, a2);
+a3 = matmul(z3);
