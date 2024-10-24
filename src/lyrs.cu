@@ -379,7 +379,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
             dl_dz.clear(), dl_dw.clear(), dl_db.clear();
         }
 
-        auto [z, a_val] = forward(x_val, w_b.first, w_b.second);
+        auto [z_val, a_val] = forward(x_val, w_b.first, w_b.second);
         y_pred_val = a_val.back();
 
         auto end_time = std::chrono::high_resolution_clock::now();
