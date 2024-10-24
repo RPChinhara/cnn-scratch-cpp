@@ -297,15 +297,6 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
     w_b_momentum = init_params();
 }
 
-tensor da_dz(const tensor &a) {
-    tensor t_new = a;
-
-    for (auto i = 0; i < a.size; ++i)
-        t_new[i] = (a[i] > 0.0f) ? 1.0f : 0.0f;
-
-    return t_new;
-}
-
 tensor dl_da_da_dz(const tensor &y_true, const tensor &y_pred) {
     return (y_pred - y_true);
 }
@@ -357,7 +348,7 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
                 if (k == lyrs.size() - 1)
                     dl_dz.push_back(dl_da_da_dz(y_batch, y_pred));
                 else
-                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k])) * da_dz(z[k - 1]));
+                    dl_dz.push_back(matmul(dl_dz[(lyrs.size() - 2) - k], transpose(w_b.first[k])) * relu_derivative(z[k - 1]));
 
                 if (k == 1)
                     dl_dw.push_back(matmul(transpose(x_batch), dl_dz[(lyrs.size() - 1) - k]));
@@ -462,15 +453,6 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     v_w_hy = zeros({output_size, hidden_size});
     v_b_h  = zeros({hidden_size, 1});
     v_b_y  = zeros({output_size, 1});
-}
-
-tensor relu_derivative(const tensor &h_t) {
-    tensor t_new = h_t;
-
-    for (auto i = 0; i < h_t.size; ++i)
-        t_new[i] = (h_t[i] > 0.0f) ? 1.0f : 0.0f;
-
-    return t_new;
 }
 
 void rnn::train(const tensor &x_train, const tensor &y_train) {
