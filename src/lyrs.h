@@ -86,11 +86,13 @@ class lstm {
     tensor w_i;
     tensor w_c;
     tensor w_o;
+    tensor w_y;
 
     tensor b_f;
     tensor b_i;
     tensor b_c;
     tensor b_o;
+    tensor b_y;
 
     enum Phase {
       TRAIN,

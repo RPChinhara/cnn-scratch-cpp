@@ -158,11 +158,13 @@ lstm::lstm(const loss_func &loss, const float lr) {
     w_i = zeros({hidden_size, hidden_size + input_size});
     w_c = zeros({hidden_size, hidden_size + input_size});
     w_o = zeros({hidden_size, hidden_size + input_size});
+    w_y = zeros({output_size, hidden_size});
 
     b_f = zeros({hidden_size, 1});
     b_i = zeros({hidden_size, 1});
     b_c = zeros({hidden_size, 1});
     b_o = zeros({hidden_size, 1});
+    b_y = zeros({output_size, 1});
 }
 
 void lstm::train(const tensor &x_train, const tensor &y_train) {
@@ -183,57 +185,21 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 }
 
 std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> lstm::forward(const tensor &x, enum Phase phase) {
-    // std::vector<tensor> x_sequence;
-    // std::vector<tensor> z_sequence;
-    // std::vector<tensor> h_sequence;
-    // std::vector<tensor> y_sequence;
-
-    // if (phase == Phase::TRAIN)
-    //     batch_size = 8317;
-    // else
-    //     batch_size = 2072;
-
-    // h_t = zeros({hidden_size, batch_size});
-    // h_sequence.push_back(h_t);
-
-    // for (auto i = 0; i < seq_length; ++i) {
-    //     size_t idx = i;
-
-    //     tensor x_t = zeros({batch_size, input_size});
-
-    //     for (auto j = 0; j < batch_size; ++j) {
-    //         x_t[j] = x[idx];
-    //         idx += seq_length;
-    //     }
-
-    //     tensor z_t = matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h;
-    //     h_t = activation(z_t);
-    //     tensor y_t = matmul(w_hy, h_t) + b_y;
-
-    //     x_sequence.push_back(x_t);
-    //     z_sequence.push_back(z_t);
-    //     h_sequence.push_back(h_t);
-
-    //     if (i == seq_length - 1)
-    //         y_sequence.push_back(y_t);
-    // }
-
-    // return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
-
     std::vector<tensor> x_sequence;
-    std::vector<tensor> h_sequence;
     std::vector<tensor> c_sequence;
+    std::vector<tensor> h_sequence;
+    std::vector<tensor> y_sequence;
 
     if (phase == Phase::TRAIN)
         batch_size = 8317;
     else
         batch_size = 2072;
 
-    tensor h_t = zeros({hidden_size, batch_size});
-    h_sequence.push_back(h_t);
-
     tensor c_t = zeros({hidden_size, batch_size});
     c_sequence.push_back(c_t);
+
+    tensor h_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(h_t);
 
     for (auto i = 0; i < seq_length; ++i) {
         size_t idx = i;
@@ -253,6 +219,15 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         c_t = f_t * c_t + i_t * c_tilde_t;
         tensor o_t = sigmoid(matmul(w_o, concat) + b_o);
         h_t = o_t * hyperbolic_tangent(c_t);
+        tensor y_t = matmul(w_y, h_t) + b_y;
+
+        x_sequence.push_back(x_t);
+        c_sequence.push_back(c_t);
+        h_sequence.push_back(h_t);
+        y_sequence.push_back(h_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
 
         std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
         std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
@@ -261,29 +236,10 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         std::cout << c_t.shape.front() << " " << c_t.shape.back() << std::endl;
         std::cout << o_t.shape.front() << " " << o_t.shape.back() << std::endl;
         std::cout << h_t.shape.front() << " " << h_t.shape.back() << std::endl;
-
-        // # Forget gate
-        // f_t = self.sigmoid(np.dot(self.W_f, concat) + self.b_f)
-
-        // # Input gate
-        // i_t = self.sigmoid(np.dot(self.W_i, concat) + self.b_i)
-
-        // # Candidate cell state
-        // C_tilde_t = self.tanh(np.dot(self.W_C, concat) + self.b_C)
-
-        // # Cell state update
-        // C_t = f_t * C_prev + i_t * C_tilde_t
-
-        // # Output gate
-        // o_t = self.sigmoid(np.dot(self.W_o, concat) + self.b_o)
-
-        // # Hidden state update
-        // h_t = o_t * self.tanh(C_t)
-
-
+        std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
-    return std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>>();
+    return std::make_tuple(x_sequence, c_sequence, h_sequence, y_sequence);
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr) {
