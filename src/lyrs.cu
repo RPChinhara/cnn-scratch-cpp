@@ -154,11 +154,11 @@ lstm::lstm(const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    w_f = zeros({hidden_size, hidden_size + input_size});
-    w_i = zeros({hidden_size, hidden_size + input_size});
-    w_c = zeros({hidden_size, hidden_size + input_size});
-    w_o = zeros({hidden_size, hidden_size + input_size});
-    w_y = zeros({output_size, hidden_size});
+    w_f = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_i = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_c = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_o = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_y = glorot_uniform(output_size, hidden_size);
 
     b_f = zeros({hidden_size, 1});
     b_i = zeros({hidden_size, 1});
@@ -174,6 +174,15 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         auto [x_sequence, c_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = loss(transpose(y_train), y_sequence.front());
+
+        float num_samples = static_cast<float>(y_train.shape.front());
+        tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
+
+        tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
+
+        w_y = w_y - lr * d_loss_d_w_y;
+
+        b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
