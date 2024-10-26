@@ -176,6 +176,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         float error = loss(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
+        tensor d_loss_d_w_o = zeros({hidden_size, hidden_size + input_size});
 
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
@@ -188,11 +189,30 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 // d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(c_sequence[j])), w_hh);
             }
 
+                // d_loss_d_w_o = d_loss_d_w_o + matmul();
+
+
             // d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), x_sequence[j - 1]);
             // d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), transpose(h_sequence[j - 1]));
 
             // d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
         }
+
+        // tensor f_t = sigmoid(matmul(w_f, concat) + b_f);
+        // tensor i_t = sigmoid(matmul(w_i, concat) + b_i);
+        // tensor c_tilde_t = hyperbolic_tangent(matmul(w_c, concat) + b_c);
+        // c_t = f_t * c_t + i_t * c_tilde_t;
+        // tensor o_t = sigmoid(matmul(w_o, concat) + b_o);
+        // h_t = o_t * hyperbolic_tangent(c_t);
+        // tensor y_t = matmul(w_y, h_t) + b_y;
+
+        // dL/dy * dy/dh_10 / * dh_10/do_t10 * do_t10/dw_o
+        // dL/dy * dy/dh_10 * dh_10/ddh_9 * dh_9/do_9 * do_9/d_wo
+        // dL/dy * dy/dh_10 * dh_10/dh_9 * dh_9/dh_8 * dh_8/do_8 * do_8/d_wo
+
+        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
+        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/df_t * df_t/dw_f
+        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/di_t * di_t/dw_i
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
@@ -245,6 +265,14 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         tensor o_t = sigmoid(matmul(w_o, concat) + b_o);
         h_t = o_t * hyperbolic_tangent(c_t);
         tensor y_t = matmul(w_y, h_t) + b_y;
+
+        // dL/dy * dy/dh_10 / * dh_10/do_t10 * do_t10/dw_o
+        // dL/dy * dy/dh_10 * dh_10/ddh_9 * dh_9/do_9 * do_9/d_wo
+        // dL/dy * dy/dh_10 * dh_10/dh_9 * dh_9/dh_8 * dh_8/do_8 * do_8/d_wo
+
+        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
+        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/df_t * df_t/dw_f
+        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/di_t * di_t/dw_i
 
         x_sequence.push_back(x_t);
         c_sequence.push_back(c_t);
