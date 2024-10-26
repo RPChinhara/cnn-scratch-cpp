@@ -171,7 +171,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, c_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [concat_sequence, c_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = loss(transpose(y_train), y_sequence.front());
 
@@ -232,7 +232,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 }
 
 std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> lstm::forward(const tensor &x, enum Phase phase) {
-    std::vector<tensor> x_sequence;
+    // std::vector<tensor> x_sequence;
+    std::vector<tensor> concat_sequence;
     std::vector<tensor> c_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
@@ -276,7 +277,9 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/df_t * df_t/dw_f
         // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/di_t * di_t/dw_i
 
-        x_sequence.push_back(x_t);
+        // x_sequence.push_back(x_t);
+
+        concat_sequence.push_back(concat);
         c_sequence.push_back(c_t);
         h_sequence.push_back(h_t);
         y_sequence.push_back(h_t);
@@ -294,7 +297,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         // std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
-    return std::make_tuple(x_sequence, c_sequence, h_sequence, y_sequence);
+    return std::make_tuple(concat_sequence, c_sequence, h_sequence, y_sequence);
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr) {
