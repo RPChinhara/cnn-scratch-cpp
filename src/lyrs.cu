@@ -175,8 +175,24 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         float error = loss(transpose(y_train), y_sequence.front());
 
+        tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
+
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
+
+        for (auto j = seq_length; j > 0; --j) {
+            if (j == seq_length) {
+                tensor d_y_d_h_10 = w_y;
+                d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+            } else {
+                // d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(c_sequence[j])), w_hh);
+            }
+
+            // d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), x_sequence[j - 1]);
+            // d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), transpose(h_sequence[j - 1]));
+
+            // d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+        }
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
