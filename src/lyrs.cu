@@ -246,6 +246,14 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
+float lstm::evaluate(const tensor &x, const tensor &y) {
+    return 0.0f;
+}
+
+tensor lstm::predict(const tensor &x) {
+    return tensor();
+}
+
 std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
