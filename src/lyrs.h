@@ -99,7 +99,7 @@ class lstm {
       TEST
     };
 
-    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 4> forward(const tensor &x, enum Phase phase);
 
 
   public:

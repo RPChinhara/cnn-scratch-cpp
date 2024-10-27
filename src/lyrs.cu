@@ -6,6 +6,7 @@
 #include "rd.h"
 #include "tensor.h"
 
+#include <array>
 #include <cassert>
 #include <chrono>
 
@@ -233,7 +234,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> lstm::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 4> lstm::forward(const tensor &x, enum Phase phase) {
     // std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> c_sequence;
@@ -309,7 +310,14 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
         // std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
-    return std::make_tuple(concat_sequence, c_sequence, h_sequence, y_sequence);
+    std::array<std::vector<tensor>, 4> myArray;
+
+    myArray[0] = concat_sequence;
+    myArray[1] = c_sequence;
+    myArray[2] = h_sequence;
+    myArray[3] = y_sequence;
+
+    return myArray;
 }
 
 nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr) {
