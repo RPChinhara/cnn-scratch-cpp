@@ -172,7 +172,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [concat_sequence, z_f_sequence, z_i_sequence, z_c_tilde_t_sequence, c_sequence, z_o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [concat_sequence, z_f_sequence, z_i_sequence, z_c_tilde_sequence, c_sequence, z_o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = loss(transpose(y_train), y_sequence.front());
 
@@ -260,7 +260,7 @@ std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase pha
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
     std::vector<tensor> z_i_sequence;
-    std::vector<tensor> z_c_tilde_t_sequence;
+    std::vector<tensor> z_c_tilde_sequence;
     std::vector<tensor> c_sequence;
     std::vector<tensor> z_o_sequence;
     std::vector<tensor> h_sequence;
@@ -310,7 +310,7 @@ std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase pha
         concat_sequence.push_back(concat_t);
         z_f_sequence.push_back(z_f_t);
         z_i_sequence.push_back(z_i_t);
-        z_c_tilde_t_sequence.push_back(z_c_tilde_t);
+        z_c_tilde_sequence.push_back(z_c_tilde_t);
         c_sequence.push_back(c_t);
         z_o_sequence.push_back(z_o_t);
         h_sequence.push_back(h_t);
@@ -333,7 +333,7 @@ std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase pha
     sequences[0] = concat_sequence;
     sequences[1] = z_f_sequence;
     sequences[2] = z_i_sequence;
-    sequences[3] = z_c_tilde_t_sequence;
+    sequences[3] = z_c_tilde_sequence;
     sequences[4] = c_sequence;
     sequences[5] = z_o_sequence;
     sequences[6] = h_sequence;
