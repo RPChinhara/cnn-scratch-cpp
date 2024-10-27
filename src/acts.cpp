@@ -25,3 +25,8 @@ tensor relu_derivative(const tensor &z) {
 
     return t_new;
 }
+
+tensor sigmoid_derivative(const tensor &z) {
+    tensor s = sigmoid(z);
+    return s * (1.0f - s);
+}
