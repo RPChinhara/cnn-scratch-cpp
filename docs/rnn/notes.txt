@@ -141,11 +141,30 @@ tensor o_2 = sigmoid(z_o_2);
 h_2 = o_2 * hyperbolic_tangent(c_2);
 tensor y_2 = matmul(w_y, h_2) + b_y;
 
-dL/dy_2 * dy_2/dh_2 * dh_2/do_2 * do_2/dconcat2 * dconcat2/dh_1 +
-dL/dy_2 * dy_2/dh_2 * dh_2/dc_2 * dc_2/df_2 * df_2/dconcat2 * dconcat2/dh_1 +
-dL/dy_2 * dy_2/dh_2 * dh_2/dc_2 * dc_2/di_2 * di_2/dconcat2 * dconcat2/dh_1 +
-dL/dy_2 * dy_2/dh_2 * dh_2/dc_2 * dc_2/dc_tilde_2 * dc_tilde_2/dconcat2 * dconcat2/dh_1
-= dL/dh_1
+Considering only output gate
+
+tensor concat_1 = vstack({h_0, transpose(x_1)});
+
+tensor z_o_1 = matmul(w_o, concat_1) + b_o;
+tensor o_1 = sigmoid(z_o_1);
+
+h_1 = o_1 * hyperbolic_tangent(c_t);
+
+tensor concat_2 = vstack({h_1, transpose(x_2)});
+
+tensor z_o_2 = matmul(w_o, concat_2) + b_o;
+tensor o_2 = sigmoid(z_o_2);
+
+h_2 = o_2 * hyperbolic_tangent(c_t);
+
+tensor concat_3 = vstack({h_2, transpose(x_3)});
+
+tensor z_o_3 = matmul(w_o, concat_3) + b_o;
+tensor o_3 = sigmoid(z_o_3);
+
+h_3 = o_3 * hyperbolic_tangent(c_t);
+
+tensor y_t = matmul(w_y, h_3) + b_y;
 
 -------------------- Random --------------------
 
