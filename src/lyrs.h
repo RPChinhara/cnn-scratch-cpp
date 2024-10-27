@@ -75,7 +75,7 @@ class lstm {
     loss_func loss;
     float lr;
     size_t batch_size = 8316;
-    size_t epochs = 10;
+    size_t epochs = 100;
 
     size_t input_size = 1;
     size_t hidden_size = 50;
@@ -100,7 +100,6 @@ class lstm {
     };
 
     std::array<std::vector<tensor>, 8> forward(const tensor &x, enum Phase phase);
-
 
   public:
     lstm(const loss_func &loss, const float lr);
