@@ -77,10 +77,10 @@ class lstm {
     size_t batch_size = 8316;
     size_t epochs = 100;
 
+    size_t seq_length = 10;
     size_t input_size = 1;
     size_t hidden_size = 50;
     size_t output_size = 1;
-    size_t seq_length = 10;
 
     tensor w_f;
     tensor w_i;
@@ -143,10 +143,10 @@ class rnn {
     float epsilon = 1e-7f;
     size_t t = 0;
 
+    size_t seq_length = 10;
     size_t input_size = 1;
     size_t hidden_size = 50;
     size_t output_size = 1;
-    size_t seq_length = 10;
 
     tensor w_xh;
     tensor w_hh;
