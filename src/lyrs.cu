@@ -227,6 +227,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // dL/dy * dy/dh_10 * dh_10/ddh_9 * dh_9/do_9 * do_9/d_wo
         // dL/dy * dy/dh_10 * dh_10/dh_9 * dh_9/dh_8 * dh_8/do_8 * do_8/d_wo
 
+        // dL/dy * dy/dh_10 * dh_10/do_10 * do_10/d_concat * d_concat/dh_9 * dh_9/do_9 * do_9/d_wo
+
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/df_t * df_t/dw_f
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/di_t * di_t/dw_i
@@ -285,32 +287,32 @@ std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase pha
             idx += seq_length;
         }
 
-        tensor concat = vstack({h_t, transpose(x_t)});
+        tensor concat_t = vstack({h_t, transpose(x_t)});
 
-        tensor z_f = matmul(w_f, concat) + b_f;
-        tensor f_t = sigmoid(z_f);
+        tensor z_f_t = matmul(w_f, concat_t) + b_f;
+        tensor f_t = sigmoid(z_f_t);
 
-        tensor z_i = matmul(w_i, concat) + b_i;
-        tensor i_t = sigmoid(z_i);
+        tensor z_i_t = matmul(w_i, concat_t) + b_i;
+        tensor i_t = sigmoid(z_i_t);
 
-        tensor z_c_tilde_t = matmul(w_c, concat) + b_c;
+        tensor z_c_tilde_t = matmul(w_c, concat_t) + b_c;
         tensor c_tilde_t = hyperbolic_tangent(z_c_tilde_t);
 
         c_t = f_t * c_t + i_t * c_tilde_t;
 
-        tensor z_o = matmul(w_o, concat) + b_o;
-        tensor o_t = sigmoid(z_o);
+        tensor z_o_t = matmul(w_o, concat_t) + b_o;
+        tensor o_t = sigmoid(z_o_t);
 
         h_t = o_t * hyperbolic_tangent(c_t);
 
         tensor y_t = matmul(w_y, h_t) + b_y;
 
-        concat_sequence.push_back(concat);
-        z_f_sequence.push_back(z_f);
-        z_i_sequence.push_back(z_i);
+        concat_sequence.push_back(concat_t);
+        z_f_sequence.push_back(z_f_t);
+        z_i_sequence.push_back(z_i_t);
         z_c_tilde_t_sequence.push_back(z_c_tilde_t);
         c_sequence.push_back(c_t);
-        z_o_sequence.push_back(z_o);
+        z_o_sequence.push_back(z_o_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
