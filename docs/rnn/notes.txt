@@ -101,6 +101,52 @@ Total gradient with respect to Whh is,
 dL/dWhh (t = 1) + dL/dWhh (t = 2) + dL/dWhh (t = 3) + dL/dWhh (t = 4)
 dL/dWhh = (dL/dh1 ⋅ act(z1)' ⋅ transpose(h0)) + (dL/dh2 ⋅ act(z2)' ⋅ transpose(h1)) + (dL/dh3 ⋅ act(z3)' ⋅ transpose(h2)) + (dL/dh4 ⋅ act(z4)' ⋅ transpose(h3))
 
+-------------------- LSTM BPTT --------------------
+
+tensor concat1 = vstack({h_0, transpose(x_1)});
+
+tensor z_f_1 = matmul(w_f, concat1) + b_f;
+tensor f_1 = sigmoid(z_f_1);
+
+tensor z_i_1 = matmul(w_i, concat1) + b_i;
+tensor i_1 = sigmoid(z_i_1);
+
+tensor z_c_tilde_1 = matmul(w_c, concat1) + b_c;
+tensor c_tilde_1 = hyperbolic_tangent(z_c_tilde_1);
+
+c_1 = f_1 * c_0 + i_1 * c_tilde_1;
+
+tensor z_o_1 = matmul(w_o, concat1) + b_o;
+tensor o_1 = sigmoid(z_o_1);
+
+h_1 = o_1 * hyperbolic_tangent(c_1);
+tensor y_1 = matmul(w_y, h_1) + b_y;
+
+tensor concat2 = vstack({h_1, transpose(x_2)});
+
+tensor z_f_2 = matmul(w_f, concat2) + b_f;
+tensor f_2 = sigmoid(z_f_2);
+
+tensor z_i_2 = matmul(w_i, concat2) + b_i;
+tensor i_2 = sigmoid(z_i_2);
+
+tensor z_c_tilde_2 = matmul(w_c, concat2) + b_c;
+tensor c_tilde_2 = hyperbolic_tangent(z_c_tilde_2);
+
+c_2 = f_2 * c_1 + i_2 * c_tilde_2;
+
+tensor z_o_2 = matmul(w_o, concat2) + b_o;
+tensor o_2 = sigmoid(z_o_2);
+
+h_2 = o_2 * hyperbolic_tangent(c_2);
+tensor y_2 = matmul(w_y, h_2) + b_y;
+
+dL/dy_2 * dy_2/dh_2 * dh_2/do_2 * do_2/dconcat2 * dconcat2/dh_1 +
+dL/dy_2 * dy_2/dh_2 * dh_2/dc_2 * dc_2/df_2 * df_2/dconcat2 * dconcat2/dh_1 +
+dL/dy_2 * dy_2/dh_2 * dh_2/dc_2 * dc_2/di_2 * di_2/dconcat2 * dconcat2/dh_1 +
+dL/dy_2 * dy_2/dh_2 * dh_2/dc_2 * dc_2/dc_tilde_2 * dc_tilde_2/dconcat2 * dconcat2/dh_1
+= dL/dh_1
+
 -------------------- Random --------------------
 
 - I set batch_size = 8317 in lyrs.h since data size is (8327, 1) so batch size is 8327 - seq_length which is max batch size I believe. Its range is 1 ~ data size - sequence length.
