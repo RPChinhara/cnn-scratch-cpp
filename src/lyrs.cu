@@ -235,7 +235,6 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 }
 
 std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase phase) {
-    // std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
     std::vector<tensor> z_i_sequence;
@@ -285,16 +284,6 @@ std::array<std::vector<tensor>, 8> lstm::forward(const tensor &x, enum Phase pha
         h_t = o_t * hyperbolic_tangent(c_t);
 
         tensor y_t = matmul(w_y, h_t) + b_y;
-
-        // dL/dy * dy/dh_10 / * dh_10/do_t10 * do_t10/dw_o
-        // dL/dy * dy/dh_10 * dh_10/ddh_9 * dh_9/do_9 * do_9/d_wo
-        // dL/dy * dy/dh_10 * dh_10/dh_9 * dh_9/dh_8 * dh_8/do_8 * do_8/d_wo
-
-        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
-        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/df_t * df_t/dw_f
-        // dL/dy * dy/dh_t10 / * dh_10/dc_t * dc_t/di_t * di_t/dw_i
-
-        // x_sequence.push_back(x_t);
 
         concat_sequence.push_back(concat);
         z_f_sequence.push_back(z_f);
