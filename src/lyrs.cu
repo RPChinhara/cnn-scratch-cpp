@@ -205,6 +205,11 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                                                     // 8317, 50               50, 8317                            50, 8317                             51, 8317
         }
 
+
+        // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
+        // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
+        // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is x
+
         // tensor concat = vstack({h_t, transpose(x_t)});
 
         // tensor z_f = matmul(w_f, concat) + b_f;
