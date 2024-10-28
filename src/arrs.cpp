@@ -28,6 +28,26 @@ tensor slice(const tensor &t, const size_t begin, const size_t size) {
     return t_new;
 }
 
+tensor vslice(const tensor &t, const size_t column) {
+    assert(t.shape.back() > column);
+
+    tensor t_new = zeros({t.shape.front(), t.shape.back() - 1});
+
+    std::vector<float> new_elem;
+    for (auto i = 0; i < t.size; ++i) {
+        size_t col = i % t.shape.back();
+        if (col == column)
+            continue;
+        else
+            new_elem.push_back(t[i]);
+    }
+
+    for (auto i = 0; i < new_elem.size(); ++i)
+        t_new[i] = new_elem[i];
+
+    return t_new;
+}
+
 std::pair<tensor, tensor> split(const tensor &x, const float test_size) {
     tensor x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
     tensor x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
