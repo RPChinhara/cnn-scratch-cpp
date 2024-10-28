@@ -182,8 +182,11 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // std::cout << d_loss_d_h_t.shape.front() <<  " " << d_loss_d_h_t.shape.back() << std::endl;
-        // std::cout << hyperbolic_tangent(c_sequence[10]).shape.front() <<  " " << hyperbolic_tangent(c_sequence[10]).shape.back() << std::endl;
+        std::cout << d_loss_d_h_t.shape.front() <<  " " << d_loss_d_h_t.shape.back() << std::endl;
+        std::cout << hyperbolic_tangent(c_sequence[10]).shape.front() <<  " " << hyperbolic_tangent(c_sequence[10]).shape.back() << std::endl;
+        std::cout << sigmoid_derivative(z_o_sequence[9]).shape.front() <<  " " << sigmoid_derivative(z_o_sequence[9]).shape.back() << std::endl;
+        std::cout << x_sequence[9].shape.front() <<  " " << x_sequence[9].shape.back() << std::endl;
+        std::cout << concat_sequence[9].shape.front() <<  " " << concat_sequence[9].shape.back() << std::endl;
         // std::cout << concat_sequence.back().shape.front() <<  " " << concat_sequence.back().shape.back() << std::endl;
         // std::cout << z_o_sequence.back().shape.front() <<  " " << z_o_sequence.back().shape.back() << std::endl;
         // std::cout << matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[0]) * sigmoid_derivative(z_o_sequence[0]), transpose(concat_sequence[0])).shape.front() << " " << matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[0]) * sigmoid_derivative(z_o_sequence[0]), transpose(concat_sequence[0])).shape.back() << std::endl;
@@ -194,10 +197,15 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
                 // d_loss_d_h_t = matmul(d_loss_d_h_t, w_o) * x_sequence[j];
+                // d_loss_d_h_t = matmul(d_loss_d_h_t * hyperbolic_tangent(c_sequence[j]), w_o);
+
+                // d_loss_d_h_t, hyperbolic_tangent(c_sequence[j]), sigmoid_derivative(z_o_sequence[j]), w_o,   x_sequence
+                // 8317, 50      50, 8317                           50, 8317                             50, 51 8317 1 = 8317 50
+                // possible shapes: 50 1, 
             }
 
             // d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j]), transpose(concat_sequence[j]));
-
+                                                    // 8317, 50               50, 8317                            50, 8317                             51, 8317
             // d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), x_sequence[j - 1]);
             // d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), transpose(h_sequence[j - 1]));
             // d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
