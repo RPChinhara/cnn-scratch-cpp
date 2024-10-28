@@ -33,17 +33,17 @@ tensor vslice(const tensor &t, const size_t column) {
 
     tensor t_new = zeros({t.shape.front(), t.shape.back() - 1});
 
-    std::vector<float> new_elem;
+    std::vector<float> new_elems;
     for (auto i = 0; i < t.size; ++i) {
         size_t col = i % t.shape.back();
         if (col == column)
             continue;
         else
-            new_elem.push_back(t[i]);
+            new_elems.push_back(t[i]);
     }
 
-    for (auto i = 0; i < new_elem.size(); ++i)
-        t_new[i] = new_elem[i];
+    for (auto i = 0; i < new_elems.size(); ++i)
+        t_new[i] = new_elems[i];
 
     return t_new;
 }
