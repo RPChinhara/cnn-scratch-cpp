@@ -99,7 +99,7 @@ class lstm {
       TEST
     };
 
-    std::array<std::vector<tensor>, 8> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 9> forward(const tensor &x, enum Phase phase);
 
   public:
     lstm(const loss_func &loss, const float lr);
