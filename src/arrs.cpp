@@ -28,15 +28,15 @@ tensor slice(const tensor &t, const size_t begin, const size_t size) {
     return t_new;
 }
 
-tensor vslice(const tensor &t, const size_t column) {
-    assert(t.shape.back() > column);
+tensor vslice(const tensor &t, const size_t col) {
+    assert(t.shape.back() > col);
 
     tensor t_new = zeros({t.shape.front(), t.shape.back() - 1});
 
     std::vector<float> new_elems;
     for (auto i = 0; i < t.size; ++i) {
-        size_t col = i % t.shape.back();
-        if (col == column)
+        size_t current_col = i % t.shape.back();
+        if (current_col == col)
             continue;
         else
             new_elems.push_back(t[i]);
