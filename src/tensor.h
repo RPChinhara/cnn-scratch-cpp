@@ -7,10 +7,10 @@ class tensor {
   public:
     size_t size;
     std::vector<size_t> shape;
-    float *elem = nullptr;
+    float *elems = nullptr;
 
     tensor() = default;
-    tensor(const std::vector<size_t> &shape, const std::vector<float> &elem);
+    tensor(const std::vector<size_t> &shape, const std::vector<float> &elems);
     ~tensor();
     tensor(const tensor &other);
     tensor(tensor &&other) noexcept;

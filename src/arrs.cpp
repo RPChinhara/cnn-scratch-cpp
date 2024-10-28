@@ -98,8 +98,8 @@ tensor zeros(const std::vector<size_t> &shape) {
     else
         t_new.size = 1;
 
-    t_new.elem = new float[t_new.size];
-    std::fill(t_new.elem, t_new.elem + t_new.size, 0.0f);
+    t_new.elems = new float[t_new.size];
+    std::fill(t_new.elems, t_new.elems + t_new.size, 0.0f);
 
     return t_new;
 }

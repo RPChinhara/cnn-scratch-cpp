@@ -31,7 +31,7 @@ tensor hyperbolic_tangent(const tensor &z_t) {
     tensor h_t = z_t;
 
     for (auto i = 0; i < z_t.size; ++i)
-        h_t.elem[i] = std::tanhf(z_t.elem[i]);
+        h_t.elems[i] = std::tanhf(z_t.elems[i]);
 
     return h_t;
 }

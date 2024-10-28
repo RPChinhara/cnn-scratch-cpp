@@ -38,15 +38,15 @@ tensor matmul(const tensor &t1, const tensor &t2) {
     cudaMalloc(&d_B, N * P * sizeof(float));
     cudaMalloc(&d_C, M * P * sizeof(float));
 
-    cudaMemcpy(d_A, t1.elem, M * N * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, t2.elem, N * P * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_A, t1.elems, M * N * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, t2.elems, N * P * sizeof(float), cudaMemcpyHostToDevice);
 
     dim3 threadsPerBlock(16, 16);
     dim3 numBlocks((P + threadsPerBlock.x - 1) / threadsPerBlock.x,(M + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
     matmul<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
 
-    cudaMemcpy(t_new.elem, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(t_new.elems, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
 
     cudaFree(d_A);
     cudaFree(d_B);
@@ -190,6 +190,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // std::cout << h_sequence[9].shape.front() <<  " " << h_sequence[9].shape.back() << std::endl;
         // std::cout << concat_sequence.back().shape.front() <<  " " << concat_sequence.back().shape.back() << std::endl;
         // std::cout << z_o_sequence.back().shape.front() <<  " " << z_o_sequence.back().shape.back() << std::endl;
+        // std::cout << vslice(w_o, w_o.shape.back() - 1).shape.front() <<  " " << vslice(w_o, w_o.shape.back() - 1).shape.back() << std::endl;
+        // std::cout << w_o.shape.front() <<  " " << w_o.shape.back() << std::endl;
         // std::cout << matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[0]) * sigmoid_derivative(z_o_sequence[0]), transpose(concat_sequence[0])).shape.front() << " " << matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[0]) * sigmoid_derivative(z_o_sequence[0]), transpose(concat_sequence[0])).shape.back() << std::endl;
 
         for (auto j = seq_length; j > 0; --j) {
@@ -197,12 +199,15 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 tensor d_y_d_h_10 = w_y;
                 d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                // d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), w_o[:, :hidden_size]);
-                //                       8317, 50      50, 8317                           50, 8317                                         50, 50
+                d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
+                                //    8317, 50                 50, 8317                            50, 8317                              50, 50
             }
 
             // d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j]), transpose(concat_sequence[j]));
-                                                    // 8317, 50               50, 8317                            50, 8317                             51, 8317
+                                                        // 8317, 50        50, 8317                            50, 8317                             51, 8317
+
+            // std::cout << 111 << std::endl;
+
         }
 
 

@@ -25,7 +25,7 @@ tensor relu(const tensor &z_t) {
     tensor h_t = z_t;
 
     for (auto i = 0; i < z_t.size; ++i)
-        h_t.elem[i] = std::fmax(0.0f, z_t.elem[i]);
+        h_t.elems[i] = std::fmax(0.0f, z_t.elems[i]);
 
     return h_t;
 }

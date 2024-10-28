@@ -5,8 +5,8 @@
 #include <numeric>
 #include <string>
 
-tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elem) {
-    assert(elem.size() != 0);
+tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elems) {
+    assert(elems.size() != 0);
 
     for (auto i : shape)
         assert(i != 0);
@@ -17,42 +17,42 @@ tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elem)
     else
         size = 1;
 
-    if (elem.size() == 1) {
-        this->elem = new float[size];
-        std::fill(this->elem, this->elem + size, *elem.data());
+    if (elems.size() == 1) {
+        this->elems = new float[size];
+        std::fill(this->elems, this->elems + size, *elems.data());
     } else {
-        assert(size == elem.size());
-        this->elem = new float[size];
-        memcpy(this->elem, elem.data(), size * sizeof(float));
+        assert(size == elems.size());
+        this->elems = new float[size];
+        memcpy(this->elems, elems.data(), size * sizeof(float));
     }
 }
 
 tensor::~tensor() {
-    if (elem != nullptr)
-        delete[] elem;
+    if (elems != nullptr)
+        delete[] elems;
 }
 
 tensor::tensor(const tensor &other) {
-    elem = new float[other.size];
-    std::copy(other.elem, other.elem + other.size, elem);
+    elems = new float[other.size];
+    std::copy(other.elems, other.elems + other.size, elems);
     size = other.size;
     shape = other.shape;
 }
 
 tensor::tensor(tensor &&other) noexcept {
-    elem = other.elem;
+    elems = other.elems;
     size = other.size;
     shape = other.shape;
 
-    other.elem = nullptr;
+    other.elems = nullptr;
     other.size = 0;
 }
 
 tensor &tensor::operator=(const tensor &other) {
     if (this != &other) {
-        delete[] elem;
-        elem = new float[other.size];
-        std::copy(other.elem, other.elem + other.size, elem);
+        delete[] elems;
+        elems = new float[other.size];
+        std::copy(other.elems, other.elems + other.size, elems);
         size = other.size;
         shape = other.shape;
     }
@@ -61,13 +61,13 @@ tensor &tensor::operator=(const tensor &other) {
 
 tensor &tensor::operator=(tensor &&other) noexcept {
     if (this != &other) {
-        delete[] elem;
+        delete[] elems;
 
-        elem = other.elem;
+        elems = other.elems;
         size = other.size;
         shape = other.shape;
 
-        other.elem = nullptr;
+        other.elems = nullptr;
         other.size = 0;
     }
     return *this;
@@ -84,15 +84,15 @@ tensor tensor::operator+(const tensor &other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] + other[i];
+            t_new[i] = elems[i] + other[i];
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
-            t_new[i] = elem[i] + other[idx];
+            t_new[i] = elems[i] + other[idx];
         }
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] + other[i % other.shape.back()];
+            t_new[i] = elems[i] + other[i % other.shape.back()];
     } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
@@ -103,15 +103,15 @@ tensor tensor::operator-(const tensor &other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] - other[i];
+            t_new[i] = elems[i] - other[i];
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
-            t_new[i] = elem[i] - other[idx];
+            t_new[i] = elems[i] - other[idx];
         }
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] - other[i % other.shape.back()];
+            t_new[i] = elems[i] - other[i % other.shape.back()];
     } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
@@ -122,10 +122,10 @@ tensor tensor::operator*(const tensor &other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] * other[i];
+            t_new[i] = elems[i] * other[i];
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] * other[i % other.shape.back()];
+            t_new[i] = elems[i] * other[i % other.shape.back()];
     } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
@@ -136,15 +136,15 @@ tensor tensor::operator/(const tensor &other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] / other[i];
+            t_new[i] = elems[i] / other[i];
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
-            t_new[i] = elem[i] / other[idx];
+            t_new[i] = elems[i] / other[idx];
         }
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
-            t_new[i] = elem[i] / other[i % other.shape.back()];
+            t_new[i] = elems[i] / other[i % other.shape.back()];
     } else {
         std::cerr << "Shapes don't match." << std::endl;
     }
@@ -153,19 +153,19 @@ tensor tensor::operator/(const tensor &other) const {
 
 tensor tensor::operator+=(const tensor &other) const {
     for (auto i = 0; i < size; ++i)
-        elem[i] += other[i];
+        elems[i] += other[i];
     return *this;
 }
 
 tensor tensor::operator-() const {
     tensor t_new = *this;
     for (auto i = 0; i < size; ++i)
-        t_new[i] = -elem[i];
+        t_new[i] = -elems[i];
     return t_new;
 }
 
 float &tensor::operator[](const size_t idx) const {
-    return elem[idx];
+    return elems[idx];
 }
 
 tensor operator+(const float sca, const tensor &t) {

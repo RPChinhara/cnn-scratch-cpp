@@ -9,7 +9,7 @@ tensor relu(const tensor &z) {
     tensor a = z;
 
     for (auto i = 0; i < z.size; ++i)
-        a.elem[i] = std::fmax(0.0f, z.elem[i]);
+        a.elems[i] = std::fmax(0.0f, z.elems[i]);
 
     return a;
 }

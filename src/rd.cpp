@@ -23,7 +23,7 @@ tensor normal_dist(const std::vector<size_t> &shape, const float mean, const flo
     else
         t_new.size = 1;
 
-    t_new.elem = new float[t_new.size];
+    t_new.elems = new float[t_new.size];
 
     std::random_device rd;
     std::mt19937 rng(rd());
@@ -65,7 +65,7 @@ tensor uniform_dist(const std::vector<size_t> &shape, const float min_val, const
     else
         t_new.size = 1;
 
-    t_new.elem = new float[t_new.size];
+    t_new.elems = new float[t_new.size];
 
     std::random_device rd;
     std::mt19937 rng(rd());

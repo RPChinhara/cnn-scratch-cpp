@@ -40,7 +40,7 @@ tensor exp(const tensor &t) {
     float *t_gpu, *t_gpu_new;
     cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
     cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
-    cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(t_gpu, t.elems, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
     constexpr int blockSize = 128;
     int gridSize = (t.size + blockSize - 1) / blockSize;
@@ -50,7 +50,7 @@ tensor exp(const tensor &t) {
     if (cudaError != cudaSuccess)
         std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-    cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(t_new.elems, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
     cudaFree(t_gpu);
     cudaFree(t_gpu_new);
 
@@ -70,7 +70,7 @@ tensor log(const tensor &t) {
     float *t_gpu, *t_gpu_new;
     cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
     cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
-    cudaMemcpy(t_gpu, t.elem, t.size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(t_gpu, t.elems, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
     constexpr int blockSize = 128;
     int gridSize = (t.size + blockSize - 1) / blockSize;
@@ -80,7 +80,7 @@ tensor log(const tensor &t) {
     if (cudaError != cudaSuccess)
         std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
 
-    cudaMemcpy(t_new.elem, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(t_new.elems, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
     cudaFree(t_gpu);
     cudaFree(t_gpu_new);
 
@@ -149,7 +149,7 @@ tensor sqrt(const tensor &x) {
     tensor y = x;
 
     for (auto i = 0; i < x.size; ++i)
-        y.elem[i] = sqrtf(x.elem[i]);
+        y.elems[i] = sqrtf(x.elems[i]);
 
     return y;
 }
@@ -158,7 +158,7 @@ tensor square(const tensor &t) {
     tensor y = t;
 
     for (auto i = 0; i < t.size; ++i)
-        y.elem[i] = t.elem[i] * t.elem[i];
+        y.elems[i] = t.elems[i] * t.elems[i];
 
     return y;
 }
