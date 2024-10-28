@@ -182,6 +182,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
+        // std::cout << d_loss_d_h_t.shape.front() <<  " " << d_loss_d_h_t.shape.back() << std::endl;
         // std::cout << hyperbolic_tangent(c_sequence[10]).shape.front() <<  " " << hyperbolic_tangent(c_sequence[10]).shape.back() << std::endl;
         // std::cout << concat_sequence.back().shape.front() <<  " " << concat_sequence.back().shape.back() << std::endl;
         // std::cout << z_o_sequence.back().shape.front() <<  " " << z_o_sequence.back().shape.back() << std::endl;
@@ -192,8 +193,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 tensor d_y_d_h_10 = w_y;
                 d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                // d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(c_sequence[j])), w_hh);
-
+                // d_loss_d_h_t = matmul(d_loss_d_h_t, w_o) * x_sequence[j];
             }
 
             // d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j]), transpose(concat_sequence[j]));
@@ -223,9 +223,9 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         // tensor y_t = matmul(w_y, h_t) + b_y;
 
-        // dL/dy * dy/dh_10 * dh_10/do_10 * do_t10/dw_o
-        // dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dconcat_10 * dconcat10/dh_9 * dh_9/do_9 * do_9/dwo
-        // dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dconcat_10 * dconcat10/dh_9 * dh_9/do_9 * do_9/dconcat_9 * dconcat9/dh_8 * dh_8/do_8 * do_8/dwo
+        // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dconcat_10 * dconcat10/dh_9) * dh_9/do_9 * do_9/dwo
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dconcat_10 * dconcat10/dh_9 * dh_9/do_9 * do_9/dconcat_9 * dconcat9/dh_8) * dh_8/do_8 * do_8/dwo
 
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/df_t * df_t/dw_f
