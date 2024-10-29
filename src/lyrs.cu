@@ -177,6 +177,9 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         float error = loss(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
+        tensor d_loss_d_w_f = zeros({hidden_size, hidden_size + input_size});
+        tensor d_loss_d_w_i = zeros({hidden_size, hidden_size + input_size});
+        tensor d_loss_d_w_c = zeros({hidden_size, hidden_size + input_size});
         tensor d_loss_d_w_o = zeros({hidden_size, hidden_size + input_size});
 
         float num_samples = static_cast<float>(y_train.shape.front());
@@ -195,6 +198,9 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                                 //    8317, 50                 50, 8317                            50, 8317                              50, 50
             }
 
+            // d_loss_d_w_f = d_loss_d_w_f +
+            // d_loss_d_w_i = d_loss_d_w_i +
+            // d_loss_d_w_c = d_loss_d_w_c +
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50        50, 8317                            50, 8317                             51, 8317
         }
@@ -236,6 +242,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         w_o = w_o - lr * d_loss_d_w_o;
         w_y = w_y - lr * d_loss_d_w_y;
 
+        // b_o = b_o - lr * d_loss_d_y;
         b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
