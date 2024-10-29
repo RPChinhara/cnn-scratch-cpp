@@ -210,7 +210,6 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         }
 
-
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is x
@@ -236,8 +235,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // tensor y_t = matmul(w_y, h_t) + b_y;
 
         // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
-        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dconcat_10 * dconcat10/dh_9) * dh_9/do_9 * do_9/dwo
-        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dconcat_10 * dconcat10/dh_9 * dh_9/do_9 * do_9/dconcat_9 * dconcat9/dh_8) * dh_8/do_8 * do_8/dwo
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dwo
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dwo
 
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/df_t * df_t/dw_f
