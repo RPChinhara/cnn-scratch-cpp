@@ -177,10 +177,16 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         float error = loss(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
+
         tensor d_loss_d_w_f = zeros({hidden_size, hidden_size + input_size});
         tensor d_loss_d_w_i = zeros({hidden_size, hidden_size + input_size});
         tensor d_loss_d_w_c = zeros({hidden_size, hidden_size + input_size});
         tensor d_loss_d_w_o = zeros({hidden_size, hidden_size + input_size});
+
+        tensor d_loss_d_b_f  = zeros({hidden_size, 1});
+        tensor d_loss_d_b_i  = zeros({hidden_size, 1});
+        tensor d_loss_d_b_c  = zeros({hidden_size, 1});
+        tensor d_loss_d_b_o  = zeros({hidden_size, 1});
 
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
@@ -198,11 +204,16 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                                 //    8317, 50                 50, 8317                            50, 8317                              50, 50
             }
 
-            // d_loss_d_w_f = d_loss_d_w_f +
-            // d_loss_d_w_i = d_loss_d_w_i +
-            // d_loss_d_w_c = d_loss_d_w_c +
+            // d_loss_d_w_f = d_loss_d_w_f + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            // d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            // d_loss_d_w_c = d_loss_d_w_c + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50        50, 8317                            50, 8317                             51, 8317
+
+            // d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+            // d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+            // d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+            d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
         }
 
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
