@@ -176,6 +176,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         float error = loss(transpose(y_train), y_sequence.front());
 
+        tensor d_loss_d_h_t_w_f = zeros({batch_size, hidden_size});
+        tensor d_loss_d_h_t_w_i = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_c = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_o = zeros({batch_size, hidden_size});
 
@@ -200,6 +202,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_y;
 
+                d_loss_d_h_t_w_f = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+                d_loss_d_h_t_w_i = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_c = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_o = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
