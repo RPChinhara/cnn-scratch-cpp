@@ -172,10 +172,11 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, z_c_tilde_sequence, c_sequence, z_o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, z_c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = loss(transpose(y_train), y_sequence.front());
 
+        tensor d_loss_d_h_t_w_c = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_o = zeros({batch_size, hidden_size});
 
         tensor d_loss_d_w_f = zeros({hidden_size, hidden_size + input_size});
@@ -198,6 +199,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_y;
+
+                d_loss_d_h_t_w_c = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_o = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
                 d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
@@ -206,7 +209,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
             // d_loss_d_w_f = d_loss_d_w_f + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             // d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-            // d_loss_d_w_c = d_loss_d_w_c + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_c = d_loss_d_w_c + matmul(transpose(d_loss_d_h_t_w_c) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1])); // done
                                                         // 8317, 50        50, 8317                            50, 8317                             51, 8317
 
@@ -277,7 +280,7 @@ tensor lstm::predict(const tensor &x) {
     return tensor();
 }
 
-std::array<std::vector<tensor>, 9> lstm::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 10> lstm::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
@@ -285,6 +288,7 @@ std::array<std::vector<tensor>, 9> lstm::forward(const tensor &x, enum Phase pha
     std::vector<tensor> z_c_tilde_sequence;
     std::vector<tensor> c_sequence;
     std::vector<tensor> z_o_sequence;
+    std::vector<tensor> o_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -336,6 +340,7 @@ std::array<std::vector<tensor>, 9> lstm::forward(const tensor &x, enum Phase pha
         z_c_tilde_sequence.push_back(z_c_tilde_t);
         c_sequence.push_back(c_t);
         z_o_sequence.push_back(z_o_t);
+        o_sequence.push_back(o_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
@@ -351,7 +356,7 @@ std::array<std::vector<tensor>, 9> lstm::forward(const tensor &x, enum Phase pha
         // std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
-    std::array<std::vector<tensor>, 9> sequences;
+    std::array<std::vector<tensor>, 10> sequences;
 
     sequences[0] = x_sequence;
     sequences[1] = concat_sequence;
@@ -360,8 +365,9 @@ std::array<std::vector<tensor>, 9> lstm::forward(const tensor &x, enum Phase pha
     sequences[4] = z_c_tilde_sequence;
     sequences[5] = c_sequence;
     sequences[6] = z_o_sequence;
-    sequences[7] = h_sequence;
-    sequences[8] = y_sequence;
+    sequences[7] = o_sequence;
+    sequences[8] = h_sequence;
+    sequences[9] = y_sequence;
 
     return sequences;
 }
