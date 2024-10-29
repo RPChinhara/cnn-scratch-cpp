@@ -213,7 +213,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
             // d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
             // d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
             // d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
-            d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+            d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
         }
 
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
@@ -253,7 +253,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         w_o = w_o - lr * d_loss_d_w_o;
         w_y = w_y - lr * d_loss_d_w_y;
 
-        // b_o = b_o - lr * d_loss_d_y;
+        b_o = b_o - lr * d_loss_d_b_o;
         b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
