@@ -244,7 +244,11 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
         // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
 
-        // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dw_c
+        // (dL/dy * dy/dh_10 * dh_10/d_c_10 * dc_10/dc_tilde_10 * dc_tilde_10/dwh_9) * dwh_9/dc_9 * dc_9/dc_tilde_9 * dc_tilde9/dw_c
+
+
+
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/df_t * df_t/dw_f
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/di_t * di_t/dw_i
 
