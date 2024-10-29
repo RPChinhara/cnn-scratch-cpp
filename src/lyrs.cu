@@ -182,17 +182,9 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // std::cout << d_loss_d_h_t.shape.front() <<  " " << d_loss_d_h_t.shape.back() << std::endl;
-        // std::cout << hyperbolic_tangent(c_sequence[10]).shape.front() <<  " " << hyperbolic_tangent(c_sequence[10]).shape.back() << std::endl;
-        // std::cout << sigmoid_derivative(z_o_sequence[9]).shape.front() <<  " " << sigmoid_derivative(z_o_sequence[9]).shape.back() << std::endl;
-        // std::cout << x_sequence[9].shape.front() <<  " " << x_sequence[9].shape.back() << std::endl;
-        // std::cout << concat_sequence[9].shape.front() <<  " " << concat_sequence[9].shape.back() << std::endl;
-        // std::cout << h_sequence[9].shape.front() <<  " " << h_sequence[9].shape.back() << std::endl;
-        // std::cout << concat_sequence.back().shape.front() <<  " " << concat_sequence.back().shape.back() << std::endl;
-        // std::cout << z_o_sequence.back().shape.front() <<  " " << z_o_sequence.back().shape.back() << std::endl;
-        // std::cout << vslice(w_o, w_o.shape.back() - 1).shape.front() <<  " " << vslice(w_o, w_o.shape.back() - 1).shape.back() << std::endl;
-        // std::cout << w_o.shape.front() <<  " " << w_o.shape.back() << std::endl;
-        // std::cout << matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[0]) * sigmoid_derivative(z_o_sequence[0]), transpose(concat_sequence[0])).shape.front() << " " << matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[0]) * sigmoid_derivative(z_o_sequence[0]), transpose(concat_sequence[0])).shape.back() << std::endl;
+        // c_sequence.size()      11
+        // z_o_sequence.size()    10
+        // concat_sequence.size() 10
 
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
@@ -203,11 +195,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                                 //    8317, 50                 50, 8317                            50, 8317                              50, 50
             }
 
-            // d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j]), transpose(concat_sequence[j]));
+            d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50        50, 8317                            50, 8317                             51, 8317
-
-            // std::cout << 111 << std::endl;
-
         }
 
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
@@ -235,8 +224,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // tensor y_t = matmul(w_y, h_t) + b_y;
 
         // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
-        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dwo
-        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dwo
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
 
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/dc_tilde_t * dc_tilde_t/dw_c
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/df_t * df_t/dw_f
@@ -244,6 +233,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
+        w_o = w_o - lr * d_loss_d_w_o;
         w_y = w_y - lr * d_loss_d_w_y;
 
         b_y = b_y - lr * d_loss_d_y;
