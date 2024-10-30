@@ -10,5 +10,5 @@
 4. Imeplement BERT
 5. Implement GAN
 6. Implement BART
-4. Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature. For instance, Newton's laws of motion?
-5. Solve existing problems and discover new theories in mathematics and physics
+7. Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature. For instance, Newton's laws of motion?
+8. Solve existing problems and discover new theories in mathematics and physics
