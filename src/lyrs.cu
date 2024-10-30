@@ -172,7 +172,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, z_c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = loss(transpose(y_train), y_sequence.front());
 
@@ -285,11 +285,12 @@ tensor lstm::predict(const tensor &x) {
     return tensor();
 }
 
-std::array<std::vector<tensor>, 10> lstm::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 11> lstm::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
     std::vector<tensor> z_i_sequence;
+    std::vector<tensor> i_sequence;
     std::vector<tensor> z_c_tilde_sequence;
     std::vector<tensor> c_sequence;
     std::vector<tensor> z_o_sequence;
@@ -342,6 +343,7 @@ std::array<std::vector<tensor>, 10> lstm::forward(const tensor &x, enum Phase ph
         concat_sequence.push_back(concat_t);
         z_f_sequence.push_back(z_f_t);
         z_i_sequence.push_back(z_i_t);
+        i_sequence.push_back(z_i_t);
         z_c_tilde_sequence.push_back(z_c_tilde_t);
         c_sequence.push_back(c_t);
         z_o_sequence.push_back(z_o_t);
@@ -361,18 +363,19 @@ std::array<std::vector<tensor>, 10> lstm::forward(const tensor &x, enum Phase ph
         // std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
-    std::array<std::vector<tensor>, 10> sequences;
+    std::array<std::vector<tensor>, 11> sequences;
 
-    sequences[0] = x_sequence;
-    sequences[1] = concat_sequence;
-    sequences[2] = z_f_sequence;
-    sequences[3] = z_i_sequence;
-    sequences[4] = z_c_tilde_sequence;
-    sequences[5] = c_sequence;
-    sequences[6] = z_o_sequence;
-    sequences[7] = o_sequence;
-    sequences[8] = h_sequence;
-    sequences[9] = y_sequence;
+    sequences[0]  = x_sequence;
+    sequences[1]  = concat_sequence;
+    sequences[2]  = z_f_sequence;
+    sequences[3]  = z_i_sequence;
+    sequences[4]  = i_sequence;
+    sequences[5]  = z_c_tilde_sequence;
+    sequences[6]  = c_sequence;
+    sequences[7]  = z_o_sequence;
+    sequences[8]  = o_sequence;
+    sequences[9]  = h_sequence;
+    sequences[10] = y_sequence;
 
     return sequences;
 }
