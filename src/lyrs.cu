@@ -208,6 +208,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 d_loss_d_h_t_w_c = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_o = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
+                // d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
                 d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
                                 //    8317, 50                 50, 8317                            50, 8317                              50, 50
             }
@@ -248,6 +249,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         // tensor y_t = matmul(w_y, h_t) + b_y;
 
+        // Check forward pass on https://en.wikipedia.org/wiki/Long_short-term_memory to remind myself that way to compute gradients make sense.
         // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
         // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
         // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
