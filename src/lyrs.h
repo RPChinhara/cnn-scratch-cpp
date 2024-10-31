@@ -82,6 +82,11 @@ class lstm {
     size_t hidden_size = 50;
     size_t output_size = 1;
 
+    float beta1 = 0.9f;
+    float beta2 = 0.999f;
+    float epsilon = 1e-7f;
+    size_t t = 0;
+
     tensor w_f;
     tensor w_i;
     tensor w_c;
@@ -93,6 +98,18 @@ class lstm {
     tensor b_c;
     tensor b_o;
     tensor b_y;
+
+    tensor m_w_xh;
+    tensor m_w_hh;
+    tensor m_w_hy;
+    tensor m_b_h;
+    tensor m_b_y;
+
+    tensor v_w_xh;
+    tensor v_w_hh;
+    tensor v_w_hy;
+    tensor v_b_h;
+    tensor v_b_y;
 
     enum Phase {
       TRAIN,
