@@ -199,6 +199,9 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // z_o_sequence.size()    10
         // concat_sequence.size() 10
 
+        // (1.0f - square(hyperbolic_tangent(c_sequence[0]))) 50 8317
+        // o_sequence[0]                                      50 8317
+
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_y;
@@ -208,7 +211,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 d_loss_d_h_t_w_c = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_o = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
+                d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j]), vslice(w_c, w_c.shape.back() - 1));
                 d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
                                        // 8317, 50                     50, 8317                            50, 8317                              50, 50
             }
@@ -270,6 +273,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
+        w_c = w_c - lr * d_loss_d_w_c;
         w_o = w_o - lr * d_loss_d_w_o;
         w_y = w_y - lr * d_loss_d_w_y;
 
