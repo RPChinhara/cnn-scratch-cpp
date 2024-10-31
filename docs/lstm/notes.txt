@@ -1,4 +1,4 @@
--------------------- Why use vslice in BPTT? --------------------
+-------------------- Why use vslice() in BPTT? --------------------
 
 Slice weights to (50, 50) from (50, 51) for using only columns multiplied to h. See example below.
 Only 1s and 2s will be multiplied to values that are h. All 3s are multpiled to x, and I only care about
