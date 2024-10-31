@@ -212,20 +212,20 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 d_loss_d_h_t_w_c = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_o = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                // d_loss_d_h_t_w_f = matmul(d_loss_d_h_t_w_f * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_tilde_sequence[j]), vslice(w_i, w_i.shape.back() - 1));
-                d_loss_d_h_t_w_i = matmul(d_loss_d_h_t_w_i * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_tilde_sequence[j]), vslice(w_i, w_i.shape.back() - 1));
-                d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * i_sequence[j]), vslice(w_c, w_c.shape.back() - 1));
+                d_loss_d_h_t_w_f = matmul(d_loss_d_h_t_w_f * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_sequence[j + 1] * sigmoid_derivative(z_f_sequence[j])), vslice(w_f, w_f.shape.back() - 1));
+                d_loss_d_h_t_w_i = matmul(d_loss_d_h_t_w_i * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_tilde_sequence[j] * sigmoid_derivative(z_i_sequence[j])), vslice(w_i, w_i.shape.back() - 1));
+                d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * i_sequence[j] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j])))), vslice(w_c, w_c.shape.back() - 1));
                 d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j + 1]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
                                        // 8317, 50                     50, 8317                                50, 8317                              50, 50
             }
 
-            // d_loss_d_w_f = d_loss_d_w_f + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_f = d_loss_d_w_f + matmul(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_h_t_w_i) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_tilde_sequence[j - 1] * sigmoid_derivative(z_i_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_c = d_loss_d_w_c + matmul(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), transpose(concat_sequence[j - 1]));
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50            50, 8317                            50, 8317                                 51, 8317
 
-            // d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+            d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t_w_f) * sigmoid_derivative(z_f_sequence[j - 1]), 1);
             d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t_w_i) * sigmoid_derivative(z_i_sequence[j - 1]), 1);
             d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t_w_c) * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), 1);
             d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t_w_o) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
@@ -275,11 +275,13 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
+        w_f = w_f - lr * d_loss_d_w_f;
         w_i = w_i - lr * d_loss_d_w_i;
         w_c = w_c - lr * d_loss_d_w_c;
         w_o = w_o - lr * d_loss_d_w_o;
         w_y = w_y - lr * d_loss_d_w_y;
 
+        b_f = b_f - lr * d_loss_d_b_f;
         b_i = b_i - lr * d_loss_d_b_i;
         b_c = b_c - lr * d_loss_d_b_c;
         b_o = b_o - lr * d_loss_d_b_o;
