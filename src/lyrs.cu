@@ -287,17 +287,49 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
-        w_f = w_f - lr * d_loss_d_w_f;
-        w_i = w_i - lr * d_loss_d_w_i;
-        w_c = w_c - lr * d_loss_d_w_c;
-        w_o = w_o - lr * d_loss_d_w_o;
-        w_y = w_y - lr * d_loss_d_w_y;
+        t += 1;
 
-        b_f = b_f - lr * d_loss_d_b_f;
-        b_i = b_i - lr * d_loss_d_b_i;
-        b_c = b_c - lr * d_loss_d_b_c;
-        b_o = b_o - lr * d_loss_d_b_o;
-        b_y = b_y - lr * d_loss_d_y;
+        m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
+        m_w_hh = beta1 * m_w_hh + (1.0f - beta1) * d_loss_d_w_hh;
+        m_w_hy = beta1 * m_w_hy + (1.0f - beta1) * d_loss_d_w_hy;
+        m_b_h = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
+
+        v_w_xh = beta2 * v_w_xh + (1.0f - beta2) * square(d_loss_d_w_xh);
+        v_w_hh = beta2 * v_w_hh + (1.0f - beta2) * square(d_loss_d_w_hh);
+        v_w_hy = beta2 * v_w_hy + (1.0f - beta2) * square(d_loss_d_w_hy);
+        v_b_h = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
+        v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
+
+        tensor m_hat_w_xh = m_w_xh / (1.0f - powf(beta1, t));
+        tensor m_hat_w_hh = m_w_hh / (1.0f - powf(beta1, t));
+        tensor m_hat_w_hy = m_w_hy / (1.0f - powf(beta1, t));
+        tensor m_hat_b_h = m_b_h / (1.0f - powf(beta1, t));
+        tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
+
+        tensor v_hat_w_xh = v_w_xh / (1.0f - powf(beta2, t));
+        tensor v_hat_w_hh = v_w_hh / (1.0f - powf(beta2, t));
+        tensor v_hat_w_hy = v_w_hy / (1.0f - powf(beta2, t));
+        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
+        tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
+
+        w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
+        w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
+        w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
+        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
+        b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
+
+        // w_f = w_f - lr * d_loss_d_w_f;
+        // w_i = w_i - lr * d_loss_d_w_i;
+        // w_c = w_c - lr * d_loss_d_w_c;
+        // w_o = w_o - lr * d_loss_d_w_o;
+        // w_y = w_y - lr * d_loss_d_w_y;
+
+        // b_f = b_f - lr * d_loss_d_b_f;
+        // b_i = b_i - lr * d_loss_d_b_i;
+        // b_c = b_c - lr * d_loss_d_b_c;
+        // b_o = b_o - lr * d_loss_d_b_o;
+        // b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);

@@ -99,16 +99,28 @@ class lstm {
     tensor b_o;
     tensor b_y;
 
-    tensor m_w_xh;
-    tensor m_w_hh;
-    tensor m_w_hy;
-    tensor m_b_h;
+    tensor m_w_f;
+    tensor m_w_i;
+    tensor m_w_c;
+    tensor m_w_o;
+    tensor m_w_y;
+
+    tensor m_b_f;
+    tensor m_b_i;
+    tensor m_b_c;
+    tensor m_b_o;
     tensor m_b_y;
 
-    tensor v_w_xh;
-    tensor v_w_hh;
-    tensor v_w_hy;
-    tensor v_b_h;
+    tensor v_w_f;
+    tensor v_w_i;
+    tensor v_w_c;
+    tensor v_w_o;
+    tensor v_w_y;
+
+    tensor v_b_f;
+    tensor v_b_i;
+    tensor v_b_c;
+    tensor v_b_o;
     tensor v_b_y;
 
     enum Phase {
