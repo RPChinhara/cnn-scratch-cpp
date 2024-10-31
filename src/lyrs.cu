@@ -224,7 +224,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                                                         // 8317, 50            50, 8317                            50, 8317                                 51, 8317
 
             // d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
-            // d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
+            d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t_w_i) * sigmoid_derivative(z_i_sequence[j - 1]), 1);
             d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t_w_c) * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), 1);
             d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t_w_o) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
         }
@@ -278,6 +278,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         w_o = w_o - lr * d_loss_d_w_o;
         w_y = w_y - lr * d_loss_d_w_y;
 
+        b_i = b_i - lr * d_loss_d_b_i;
         b_c = b_c - lr * d_loss_d_b_c;
         b_o = b_o - lr * d_loss_d_b_o;
         b_y = b_y - lr * d_loss_d_y;
