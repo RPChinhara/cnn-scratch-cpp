@@ -47,14 +47,14 @@ int main() {
     model.train(x_y_train.first, x_y_train.second);
 
     auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
-    // auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
+    auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
 
-    // x_y_test.second = scaler.inverse_transform(x_y_test.second);
+    x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
-    // for (auto i = 0; i < x_y_test.second.size; ++i)
-    //     std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
+    for (auto i = 0; i < x_y_test.second.size; ++i)
+        std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
 
-    // std::cout << "Test  loss: " << test_loss << std::endl;
+    std::cout << "Test  loss: " << test_loss << std::endl;
 
     return 0;
 }

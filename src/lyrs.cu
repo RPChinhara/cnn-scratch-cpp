@@ -302,7 +302,8 @@ float lstm::evaluate(const tensor &x, const tensor &y) {
 }
 
 tensor lstm::predict(const tensor &x) {
-    return tensor();
+    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    return transpose(y_sequence.front());
 }
 
 std::array<std::vector<tensor>, 12> lstm::forward(const tensor &x, enum Phase phase) {
