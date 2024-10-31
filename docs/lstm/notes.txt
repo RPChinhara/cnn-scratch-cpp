@@ -7,3 +7,98 @@ all I care is how much weights are related from this concatenation w * [h + x].
 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
 1 2 3          3 3 3 3 2 2 2 2 2 2 this is x
+
+-------------------- LSTM BPTT --------------------
+
+tensor concat1 = vstack({h_0, transpose(x_1)});
+
+tensor z_f_1 = matmul(w_f, concat1) + b_f;
+tensor f_1 = sigmoid(z_f_1);
+
+tensor z_i_1 = matmul(w_i, concat1) + b_i;
+tensor i_1 = sigmoid(z_i_1);
+
+tensor z_c_tilde_1 = matmul(w_c, concat1) + b_c;
+tensor c_tilde_1 = hyperbolic_tangent(z_c_tilde_1);
+
+c_1 = f_1 * c_0 + i_1 * c_tilde_1;
+
+tensor z_o_1 = matmul(w_o, concat1) + b_o;
+tensor o_1 = sigmoid(z_o_1);
+
+h_1 = o_1 * hyperbolic_tangent(c_1);
+tensor y_1 = matmul(w_y, h_1) + b_y;
+
+tensor concat2 = vstack({h_1, transpose(x_2)});
+
+tensor z_f_2 = matmul(w_f, concat2) + b_f;
+tensor f_2 = sigmoid(z_f_2);
+
+tensor z_i_2 = matmul(w_i, concat2) + b_i;
+tensor i_2 = sigmoid(z_i_2);
+
+tensor z_c_tilde_2 = matmul(w_c, concat2) + b_c;
+tensor c_tilde_2 = hyperbolic_tangent(z_c_tilde_2);
+
+c_2 = f_2 * c_1 + i_2 * c_tilde_2;
+
+tensor z_o_2 = matmul(w_o, concat2) + b_o;
+tensor o_2 = sigmoid(z_o_2);
+
+h_2 = o_2 * hyperbolic_tangent(c_2);
+tensor y_2 = matmul(w_y, h_2) + b_y;
+
+| Considering only w_o |
+
+tensor concat_1 = vstack({h_0, transpose(x_1)});
+
+tensor z_o_1 = matmul(w_o, concat_1) + b_o;
+tensor o_1 = sigmoid(z_o_1);
+
+h_1 = o_1 * hyperbolic_tangent(c_t);
+
+tensor concat_2 = vstack({h_1, transpose(x_2)});
+
+tensor z_o_2 = matmul(w_o, concat_2) + b_o;
+tensor o_2 = sigmoid(z_o_2);
+
+h_2 = o_2 * hyperbolic_tangent(c_t);
+
+tensor concat_3 = vstack({h_2, transpose(x_3)});
+
+tensor z_o_3 = matmul(w_o, concat_3) + b_o;
+tensor o_3 = sigmoid(z_o_3);
+
+h_3 = o_3 * hyperbolic_tangent(c_t);
+
+tensor y_t = matmul(w_y, h_3) + b_y;
+
+| Considering only w_c |
+
+tensor concat_1 = vstack({h_0, transpose(x_1)});
+
+tensor z_c_tilde_1 = matmul(w_c, concat_1) + b_c;
+tensor c_tilde_1 = hyperbolic_tangent(z_c_tilde_1);
+
+c_1 = f_1 * c_0 + i_1 * c_tilde_1;
+
+tensor z_o_1 = matmul(w_o, concat) + b_o;
+tensor o_1 = sigmoid(z_o_1);
+
+h_1 = o_1 * hyperbolic_tangent(c_1);
+
+tensor y_1 = matmul(w_y, h_1) + b_y;
+
+tensor concat_2 = vstack({h_1, transpose(x_2)});
+
+tensor z_c_tilde_2 = matmul(w_c, concat_2) + b_c;
+tensor c_tilde_2 = hyperbolic_tangent(z_c_tilde_2);
+
+c_2 = f_2 * c_1 + i_2 * c_tilde_2;
+
+tensor z_o_2 = matmul(w_o, concat) + b_o;
+tensor o_2 = sigmoid(z_o_2);
+
+h_2 = o_2 * hyperbolic_tangent(c_2);
+
+tensor y_2 = matmul(w_y, h_2) + b_y;
