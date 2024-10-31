@@ -211,8 +211,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
                 d_loss_d_h_t_w_c = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_o = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-                d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j]), vslice(w_c, w_c.shape.back() - 1));
-                d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
+                d_loss_d_h_t_w_c = matmul(d_loss_d_h_t_w_c * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * i_sequence[j]), vslice(w_c, w_c.shape.back() - 1));
+                d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j + 1]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
                                        // 8317, 50                     50, 8317                            50, 8317                              50, 50
             }
 
