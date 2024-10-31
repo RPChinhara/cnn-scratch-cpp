@@ -140,15 +140,15 @@ class rnn {
     size_t epochs = 150;
     size_t batch_size = 8317;
 
-    float beta1 = 0.9f;
-    float beta2 = 0.999f;
-    float epsilon = 1e-7f;
-    size_t t = 0;
-
     size_t seq_length = 10;
     size_t input_size = 1;
     size_t hidden_size = 50;
     size_t output_size = 1;
+
+    float beta1 = 0.9f;
+    float beta2 = 0.999f;
+    float epsilon = 1e-7f;
+    size_t t = 0;
 
     tensor w_xh;
     tensor w_hh;
