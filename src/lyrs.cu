@@ -217,7 +217,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
             }
 
             // d_loss_d_w_f = d_loss_d_w_f + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-            d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_w_i) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_h_t_w_i) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_c = d_loss_d_w_c + matmul(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), transpose(concat_sequence[j - 1]));
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50            50, 8317                            50, 8317                             51, 8317
@@ -228,6 +228,10 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
             d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t_w_o) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
         }
 
+        // Slice weights to (50, 50) from (50, 51) for using only columns multiplied to h. See example below.
+        // Only 1s and 2s will be multiplied to values that are h. All 3s are multpiled to x, and I only care about
+        // weights that are contributing to h because whem I'm trying to get gradients respect to h like below do_10/dw_o, dc_tilde_10/dw_c,
+        // all I care is how much weights are related from this concatenation w * [h + x].
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is h
         // 1 2 3          3 3 3 3 2 2 2 2 2 2 this is x
