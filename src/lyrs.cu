@@ -297,7 +297,8 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float lstm::evaluate(const tensor &x, const tensor &y) {
-    return 0.0f;
+    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    return loss(transpose(y), y_sequence.front());
 }
 
 tensor lstm::predict(const tensor &x) {
