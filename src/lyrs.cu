@@ -166,6 +166,18 @@ lstm::lstm(const loss_func &loss, const float lr) {
     b_c = zeros({hidden_size, 1});
     b_o = zeros({hidden_size, 1});
     b_y = zeros({output_size, 1});
+
+    m_w_xh = zeros({hidden_size, input_size});
+    m_w_hh = zeros({hidden_size, hidden_size});
+    m_w_hy = zeros({output_size, hidden_size});
+    m_b_h  = zeros({hidden_size, 1});
+    m_b_y  = zeros({output_size, 1});
+
+    v_w_xh = zeros({hidden_size, input_size});
+    v_w_hh = zeros({hidden_size, hidden_size});
+    v_w_hy = zeros({output_size, hidden_size});
+    v_b_h  = zeros({hidden_size, 1});
+    v_b_y  = zeros({output_size, 1});
 }
 
 void lstm::train(const tensor &x_train, const tensor &y_train) {
