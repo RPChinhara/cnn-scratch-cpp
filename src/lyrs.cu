@@ -217,7 +217,7 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
             }
 
             // d_loss_d_w_f = d_loss_d_w_f + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-            // d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_h_t) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_i = d_loss_d_w_i + matmul(transpose(d_loss_d_w_i) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_c = d_loss_d_w_c + matmul(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), transpose(concat_sequence[j - 1]));
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50            50, 8317                            50, 8317                             51, 8317
@@ -252,11 +252,11 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         // tensor y_t = matmul(w_y, h_t) + b_y;
 
+        // -------------------------------------------------------------------------------------------------------------------------
         // Check forward pass on https://en.wikipedia.org/wiki/Long_short-term_memory to remind myself that way to compute gradients make sense.
         // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
         // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
         // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
-
         // -------------------------------------------------------------------------------------------------------------------------
         // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dw_c
         // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dh_9) * dh_9/dc_9 * dc_9/dc_tilde_9 * dc_tilde9/dw_c
@@ -267,9 +267,10 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         // dh10/dc10 * dc10/d~c10 * d~c10/w_c
         // dh10/dc10 * dc10/d~c10 * d~c10/dh9 * dh9/dc9 * dc9/d~c9 * d~c9/wc
         // -------------------------------------------------------------------------------------------------------------------------
-
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/df_t * df_t/dw_f
+        // -------------------------------------------------------------------------------------------------------------------------
         // dL/dy * dy/dh_t10 * dh_10/dc_t * dc_t/di_t * di_t/dw_i
+        // -------------------------------------------------------------------------------------------------------------------------
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
