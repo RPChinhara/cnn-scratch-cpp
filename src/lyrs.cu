@@ -657,6 +657,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
         float error = loss(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
+        
         tensor d_loss_d_w_xh = zeros({hidden_size, input_size});
         tensor d_loss_d_w_hh = zeros({hidden_size, hidden_size});
         tensor d_loss_d_b_h  = zeros({hidden_size, 1});
