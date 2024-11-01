@@ -726,12 +726,14 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
         m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
         m_w_hh = beta1 * m_w_hh + (1.0f - beta1) * d_loss_d_w_hh;
         m_w_hy = beta1 * m_w_hy + (1.0f - beta1) * d_loss_d_w_hy;
+
         m_b_h = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
         m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
 
         v_w_xh = beta2 * v_w_xh + (1.0f - beta2) * square(d_loss_d_w_xh);
         v_w_hh = beta2 * v_w_hh + (1.0f - beta2) * square(d_loss_d_w_hh);
         v_w_hy = beta2 * v_w_hy + (1.0f - beta2) * square(d_loss_d_w_hy);
+
         v_b_h = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
         v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
 
@@ -750,6 +752,7 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
         w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
         w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
         w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
+        
         b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
         b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
