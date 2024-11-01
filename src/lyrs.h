@@ -4,6 +4,7 @@
 #include "preproc.h"
 #include "tensor.h"
 
+#include <array>
 #include <cassert>
 #include <functional>
 #include <random>

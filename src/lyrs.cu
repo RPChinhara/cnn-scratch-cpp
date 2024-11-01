@@ -6,7 +6,6 @@
 #include "rd.h"
 #include "tensor.h"
 
-#include <array>
 #include <cassert>
 #include <chrono>
 
