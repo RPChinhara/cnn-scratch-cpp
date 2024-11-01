@@ -461,15 +461,6 @@ std::array<std::vector<tensor>, 12> lstm::forward(const tensor &x, enum Phase ph
 
         if (i == seq_length - 1)
             y_sequence.push_back(y_t);
-
-        // std::cout << concat.shape.front() << " " << concat.shape.back() << std::endl;
-        // std::cout << f_t.shape.front() << " " << f_t.shape.back() << std::endl;
-        // std::cout << i_t.shape.front() << " " << i_t.shape.back() << std::endl;
-        // std::cout << c_tilde_t.shape.front() << " " << c_tilde_t.shape.back() << std::endl;
-        // std::cout << c_t.shape.front() << " " << c_t.shape.back() << std::endl;
-        // std::cout << o_t.shape.front() << " " << o_t.shape.back() << std::endl;
-        // std::cout << h_t.shape.front() << " " << h_t.shape.back() << std::endl;
-        // std::cout << y_t.shape.front() << " " << y_t.shape.back() << std::endl;
     }
 
     std::array<std::vector<tensor>, 12> sequences;
