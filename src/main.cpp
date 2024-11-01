@@ -1,4 +1,3 @@
-#include "datas.h"
 #include "lyrs.h"
 
 int main() {
