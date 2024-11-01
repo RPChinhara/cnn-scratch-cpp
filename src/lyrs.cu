@@ -249,10 +249,10 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
             d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
                                                         // 8317, 50            50, 8317                            50, 8317                                 51, 8317
 
-            d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t_w_f) * sigmoid_derivative(z_f_sequence[j - 1]), 1);
-            d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t_w_i) * sigmoid_derivative(z_i_sequence[j - 1]), 1);
-            d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t_w_c) * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), 1);
-            d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t_w_o) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
+            d_loss_d_b_f = d_loss_d_b_f + sum(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), 1);
+            d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t_w_i) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_tilde_sequence[j - 1] * sigmoid_derivative(z_i_sequence[j - 1]), 1);
+            d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), 1);
+            d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
         }
 
         // tensor concat = vstack({h_t, transpose(x_t)});
