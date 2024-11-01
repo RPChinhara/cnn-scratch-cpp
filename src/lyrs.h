@@ -46,29 +46,69 @@ class cnn_lstm_2d {
 
 class gru {
   private:
-    size_t num_ins = 10;
-    size_t num_hiddens = 20;
-    size_t batch_size = 20;
+    loss_func loss;
+    float lr;
+    size_t batch_size;
+    size_t epochs = 250;
 
-    tensor u_z;
-    tensor u_r;
-    tensor u_h;
+    size_t seq_length = 10;
+    size_t input_size = 1;
+    size_t hidden_size = 50;
+    size_t output_size = 1;
 
-    tensor w_z;
-    tensor w_r;
-    tensor w_h;
+    float beta1 = 0.9f;
+    float beta2 = 0.999f;
+    float epsilon = 1e-7f;
+    size_t t = 0;
 
-    tensor b_z;
-    tensor b_r;
-    tensor b_h;
+    tensor w_f;
+    tensor w_i;
+    tensor w_c;
+    tensor w_o;
+    tensor w_y;
 
-    tensor h;
+    tensor b_f;
+    tensor b_i;
+    tensor b_c;
+    tensor b_o;
+    tensor b_y;
 
-    std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
-    std::vector<tensor> forward(const tensor &x);
+    tensor m_w_f;
+    tensor m_w_i;
+    tensor m_w_c;
+    tensor m_w_o;
+    tensor m_w_y;
+
+    tensor m_b_f;
+    tensor m_b_i;
+    tensor m_b_c;
+    tensor m_b_o;
+    tensor m_b_y;
+
+    tensor v_w_f;
+    tensor v_w_i;
+    tensor v_w_c;
+    tensor v_w_o;
+    tensor v_w_y;
+
+    tensor v_b_f;
+    tensor v_b_i;
+    tensor v_b_c;
+    tensor v_b_o;
+    tensor v_b_y;
+
+    enum Phase {
+      TRAIN,
+      TEST
+    };
+
+    std::array<std::vector<tensor>, 12> forward(const tensor &x, enum Phase phase);
 
   public:
-    gru(const size_t units);
+    gru(const loss_func &loss, const float lr);
+    void train(const tensor &x_train, const tensor &y_train);
+    float evaluate(const tensor &x, const tensor &y);
+    tensor predict(const tensor &x);
 };
 
 class lstm {
