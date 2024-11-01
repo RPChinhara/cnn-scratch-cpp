@@ -150,7 +150,7 @@ dh10/dc10 * dc10/d~c10 * d~c10/dh9 * dh9/dc9 * dc9/d~c9 * d~c9/wc
 -------------------- Shapes --------------------
 
  d_loss_d_h_t_w_o = matmul(d_loss_d_h_t_w_o * transpose(hyperbolic_tangent(c_sequence[j + 1]) * sigmoid_derivative(z_o_sequence[j])), vslice(w_o, w_o.shape.back() - 1));
-                        // 8317, 50                     50, 8317                                50, 8317                              50, 50
+                           8317, 50                     50, 8317                                50, 8317                              50, 50
 
 d_loss_d_w_o = d_loss_d_w_o + matmul(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-                                            // 8317, 50            50, 8317                            50, 8317                                 51, 8317
+                                               8317, 50            50, 8317                            50, 8317                                 51, 8317
