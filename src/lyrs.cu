@@ -451,7 +451,7 @@ std::array<std::vector<tensor>, 12> lstm::forward(const tensor &x, enum Phase ph
         concat_sequence.push_back(concat_t);
         z_f_sequence.push_back(z_f_t);
         z_i_sequence.push_back(z_i_t);
-        i_sequence.push_back(z_i_t);
+        i_sequence.push_back(i_t);
         z_c_tilde_sequence.push_back(z_c_tilde_t);
         c_tilde_sequence.push_back(c_tilde_t);
         c_sequence.push_back(c_t);
