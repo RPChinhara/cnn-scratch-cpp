@@ -21,21 +21,6 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
     return std::make_pair(x, y);
 }
 
-tensor sigmoid(const tensor &t) {
-    tensor t_new = t;
-
-    return 1.0 / (1.0 + exp(-t));
-}
-
-tensor hyperbolic_tangent(const tensor &z_t) {
-    tensor h_t = z_t;
-
-    for (auto i = 0; i < z_t.size; ++i)
-        h_t.elems[i] = std::tanhf(z_t.elems[i]);
-
-    return h_t;
-}
-
 float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
     float sum = 0.0f;
     float n = static_cast<float>(y_true.shape.back());
@@ -58,8 +43,18 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    lstm model = lstm(hyperbolic_tangent, mean_squared_error, 0.01f);
+    lstm model = lstm(mean_squared_error, 0.01f);
     model.train(x_y_train.first, x_y_train.second);
+
+    auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
+    auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
+
+    x_y_test.second = scaler.inverse_transform(x_y_test.second);
+
+    for (auto i = 0; i < x_y_test.second.size; ++i)
+        std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
+
+    std::cout << "Test  loss: " << test_loss << std::endl;
 
     return 0;
 }
