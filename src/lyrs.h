@@ -74,7 +74,7 @@ class lstm {
   private:
     loss_func loss;
     float lr;
-    size_t batch_size = 8316;
+    size_t batch_size;
     size_t epochs = 250;
 
     size_t seq_length = 10;
