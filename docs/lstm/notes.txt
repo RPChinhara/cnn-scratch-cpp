@@ -102,3 +102,47 @@ tensor o_2 = sigmoid(z_o_2);
 h_2 = o_2 * hyperbolic_tangent(c_2);
 
 tensor y_2 = matmul(w_y, h_2) + b_y;
+
+-------------------- LSTM BPTT2 --------------------
+
+tensor concat = vstack({h_t, transpose(x_t)});
+
+tensor z_f = matmul(w_f, concat) + b_f;
+tensor f_t = sigmoid(z_f);
+
+tensor z_i = matmul(w_i, concat) + b_i;
+tensor i_t = sigmoid(z_i);
+
+tensor z_c_tilde_t = matmul(w_c, concat) + b_c;
+tensor c_tilde_t = hyperbolic_tangent(z_c_tilde_t);
+
+c_t = f_t * c_t + i_t * c_tilde_t;
+
+tensor z_o = matmul(w_o, concat) + b_o;
+tensor o_t = sigmoid(z_o);
+
+h_t = o_t * hyperbolic_tangent(c_t);
+
+tensor y_t = matmul(w_y, h_t) + b_y;
+
+=====================================================================================================================================
+Check forward pass on https://en.wikipedia.org/wiki/Long_short-term_memory to remind myself that way to compute gradients make sense.
+(dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+(dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
+(dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
+=====================================================================================================================================
+(dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dw_c
+(dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dh_9) * dh_9/dc_9 * dc_9/dc_tilde_9 * dc_tilde9/dw_c
+
+dh10/do10 * do10/wo
+dh10/do10 * do10/dh9 * dh9/do9 * do9/wo
+
+dh10/dc10 * dc10/d~c10 * d~c10/w_c
+dh10/dc10 * dc10/d~c10 * d~c10/dh9 * dh9/dc9 * dc9/d~c9 * d~c9/wc
+=====================================================================================================================================
+(dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/di_10 * di_10/dw_i
+(dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/di_10 * di_10/dh_9) * dh_9/dc_9 * dc_9/di_9 * di_9/dw_i
+=====================================================================================================================================
+(dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/df_10 * df_10/dw_f
+(dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/df_10 * df_10/dh_9) * dh_9/dc_9 * dc_9/df_9 * df_9/dw_f
+=====================================================================================================================================
