@@ -301,34 +301,96 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
 
         t += 1;
 
-        m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
-        m_w_hh = beta1 * m_w_hh + (1.0f - beta1) * d_loss_d_w_hh;
-        m_w_hy = beta1 * m_w_hy + (1.0f - beta1) * d_loss_d_w_hy;
-        m_b_h = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        // m_w_xh = beta1 * m_w_xh + (1.0f - beta1) * d_loss_d_w_xh;
+        // m_w_hh = beta1 * m_w_hh + (1.0f - beta1) * d_loss_d_w_hh;
+        // m_w_hy = beta1 * m_w_hy + (1.0f - beta1) * d_loss_d_w_hy;
+        // m_b_h  = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        // m_b_y  = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
+
+        // v_w_xh = beta2 * v_w_xh + (1.0f - beta2) * square(d_loss_d_w_xh);
+        // v_w_hh = beta2 * v_w_hh + (1.0f - beta2) * square(d_loss_d_w_hh);
+        // v_w_hy = beta2 * v_w_hy + (1.0f - beta2) * square(d_loss_d_w_hy);
+        // v_b_h  = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
+        // v_b_y  = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
+
+        // tensor m_hat_w_xh = m_w_xh / (1.0f - powf(beta1, t));
+        // tensor m_hat_w_hh = m_w_hh / (1.0f - powf(beta1, t));
+        // tensor m_hat_w_hy = m_w_hy / (1.0f - powf(beta1, t));
+        // tensor m_hat_b_h  = m_b_h / (1.0f - powf(beta1, t));
+        // tensor m_hat_b_y  = m_b_y / (1.0f - powf(beta1, t));
+
+        // tensor v_hat_w_xh = v_w_xh / (1.0f - powf(beta2, t));
+        // tensor v_hat_w_hh = v_w_hh / (1.0f - powf(beta2, t));
+        // tensor v_hat_w_hy = v_w_hy / (1.0f - powf(beta2, t));
+        // tensor v_hat_b_h  = v_b_h / (1.0f - powf(beta2, t));
+        // tensor v_hat_b_y  = v_b_y / (1.0f - powf(beta2, t));
+
+        // w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
+        // w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
+        // w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
+        // b_h  = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
+        // b_y  = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
+
+        // ---------------------------------------------------------------
+
+        m_w_f = beta1 * m_w_f + (1.0f - beta1) * d_loss_d_w_f;
+        m_w_i = beta1 * m_w_i + (1.0f - beta1) * d_loss_d_w_i;
+        m_w_c = beta1 * m_w_c + (1.0f - beta1) * d_loss_d_w_c;
+        m_w_o = beta1 * m_w_o + (1.0f - beta1) * d_loss_d_w_o;
+        m_w_y = beta1 * m_w_y + (1.0f - beta1) * d_loss_d_w_y;
+
+        m_b_f = beta1 * m_b_f + (1.0f - beta1) * d_loss_d_b_f;
+        m_b_i = beta1 * m_b_i + (1.0f - beta1) * d_loss_d_b_i;
+        m_b_c = beta1 * m_b_c + (1.0f - beta1) * d_loss_d_b_c;
+        m_b_o = beta1 * m_b_o + (1.0f - beta1) * d_loss_d_b_o;
         m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
 
-        v_w_xh = beta2 * v_w_xh + (1.0f - beta2) * square(d_loss_d_w_xh);
-        v_w_hh = beta2 * v_w_hh + (1.0f - beta2) * square(d_loss_d_w_hh);
-        v_w_hy = beta2 * v_w_hy + (1.0f - beta2) * square(d_loss_d_w_hy);
-        v_b_h = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
+        v_w_f = beta2 * v_w_f + (1.0f - beta2) * square(d_loss_d_w_f);
+        v_w_i = beta2 * v_w_i + (1.0f - beta2) * square(d_loss_d_w_i);
+        v_w_c = beta2 * v_w_c + (1.0f - beta2) * square(d_loss_d_w_c);
+        v_w_o = beta2 * v_w_o + (1.0f - beta2) * square(d_loss_d_w_o);
+        v_w_y = beta2 * v_w_y + (1.0f - beta2) * square(d_loss_d_w_y);
+
+        v_b_f = beta2 * v_b_f + (1.0f - beta2) * square(d_loss_d_b_f);
+        v_b_i = beta2 * v_b_i + (1.0f - beta2) * square(d_loss_d_b_i);
+        v_b_c = beta2 * v_b_c + (1.0f - beta2) * square(d_loss_d_b_c);
+        v_b_o = beta2 * v_b_o + (1.0f - beta2) * square(d_loss_d_b_o);
         v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
 
-        tensor m_hat_w_xh = m_w_xh / (1.0f - powf(beta1, t));
-        tensor m_hat_w_hh = m_w_hh / (1.0f - powf(beta1, t));
-        tensor m_hat_w_hy = m_w_hy / (1.0f - powf(beta1, t));
-        tensor m_hat_b_h = m_b_h / (1.0f - powf(beta1, t));
+        tensor m_hat_w_f = m_w_f / (1.0f - powf(beta1, t));
+        tensor m_hat_w_i = m_w_i / (1.0f - powf(beta1, t));
+        tensor m_hat_w_c = m_w_c / (1.0f - powf(beta1, t));
+        tensor m_hat_w_o = m_w_o / (1.0f - powf(beta1, t));
+        tensor m_hat_w_y = m_w_y / (1.0f - powf(beta1, t));
+
+        tensor m_hat_b_f = m_b_f / (1.0f - powf(beta1, t));
+        tensor m_hat_b_i = m_b_i / (1.0f - powf(beta1, t));
+        tensor m_hat_b_c = m_b_c / (1.0f - powf(beta1, t));
+        tensor m_hat_b_o = m_b_o / (1.0f - powf(beta1, t));
         tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
 
-        tensor v_hat_w_xh = v_w_xh / (1.0f - powf(beta2, t));
-        tensor v_hat_w_hh = v_w_hh / (1.0f - powf(beta2, t));
-        tensor v_hat_w_hy = v_w_hy / (1.0f - powf(beta2, t));
-        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
+        tensor v_hat_w_f = v_w_f / (1.0f - powf(beta2, t));
+        tensor v_hat_w_i = v_w_i / (1.0f - powf(beta2, t));
+        tensor v_hat_w_c = v_w_c / (1.0f - powf(beta2, t));
+        tensor v_hat_w_o = v_w_o / (1.0f - powf(beta2, t));
+        tensor v_hat_w_y = v_w_y / (1.0f - powf(beta2, t));
+
+        tensor v_hat_b_f = v_b_f / (1.0f - powf(beta2, t));
+        tensor v_hat_b_i = v_b_i / (1.0f - powf(beta2, t));
+        tensor v_hat_b_c = v_b_c / (1.0f - powf(beta2, t));
+        tensor v_hat_b_o = v_b_o / (1.0f - powf(beta2, t));
         tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
 
-        w_xh = w_xh - lr * m_hat_w_xh / (sqrt(v_hat_w_xh) + epsilon);
-        w_hh = w_hh - lr * m_hat_w_hh / (sqrt(v_hat_w_hh) + epsilon);
-        w_hy = w_hy - lr * m_hat_w_hy / (sqrt(v_hat_w_hy) + epsilon);
-        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
+        w_f = w_f - lr * m_hat_w_f / (sqrt(v_hat_w_f) + epsilon);
+        w_i = w_i - lr * m_hat_w_i / (sqrt(v_hat_w_i) + epsilon);
+        w_c = w_c - lr * m_hat_w_c / (sqrt(v_hat_w_c) + epsilon);
+        w_o = w_o - lr * m_hat_w_o / (sqrt(v_hat_w_o) + epsilon);
+        w_y = w_y - lr * m_hat_w_y / (sqrt(v_hat_w_y) + epsilon);
+
+        b_f = b_f - lr * m_hat_b_f / (sqrt(v_hat_b_f) + epsilon);
+        b_i = b_i - lr * m_hat_b_i / (sqrt(v_hat_b_i) + epsilon);
+        b_c = b_c - lr * m_hat_b_c / (sqrt(v_hat_b_c) + epsilon);
+        b_o = b_o - lr * m_hat_b_o / (sqrt(v_hat_b_o) + epsilon);
         b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
         // w_f = w_f - lr * d_loss_d_w_f;
