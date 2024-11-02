@@ -1,27 +1,5 @@
 #include "lyrs.h"
 
-// # Sample data
-// questions = [
-//     "Hello!",
-//     "How are you?",
-//     "What is your name?",
-//     "Tell me a joke.",
-//     "Goodbye!"
-// ]
-
-// answers = [
-//     "Hi there!",
-//     "I'm just a bunch of code, but I'm doing well!",
-//     "I'm a chatbot created with TensorFlow!",
-//     "Why don't scientists trust atoms? Because they make up everything!",
-//     "See you later!"
-// ]
-
-// std::vector<std::string> vocab = {"foo bar", "bar baz", "baz bada boom"};
-// std::vector<std::string> in = {"foo qux bar", "qux baz"};
-
-// std::cout << text_vectorization(vocab, in, 5000, 4) << std::endl;
-
 float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
     float sum = 0.0f;
     float n = static_cast<float>(y_true.shape.back());
