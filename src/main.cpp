@@ -24,7 +24,7 @@ tensor load_daily_dialog() {
         value = regex_replace(value, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
         value = regex_replace(value, "\\s*[^\\x00-\\x7f]\\s*", "");
         value = regex_replace(value, "[^\\x00-\\x7f]", "");
-        value = regex_replace(value, "'", "");
+        // value = regex_replace(value, "'", "");
         value = regex_replace(value, "\\s+", " ");
 
         data.push_back(value);
