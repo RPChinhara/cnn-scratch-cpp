@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-tensor load_daily_dialog() {
+tensor daily_dialog() {
     std::ifstream file("datas/daily_dialog.csv");
 
     if (!file.is_open())
@@ -39,7 +39,7 @@ tensor load_daily_dialog() {
 }
 
 int main() {
-    tensor data = load_daily_dialog();
+    tensor data = daily_dialog();
 
     gru model = gru(0.01f);
     // model.train(x_y_train.first, x_y_train.second);
