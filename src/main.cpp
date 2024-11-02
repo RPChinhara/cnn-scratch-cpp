@@ -20,20 +20,18 @@ tensor load_daily_dialog() {
 
         std::getline(ss, value, ']');
 
-        value = regex_replace(value, R"((https?:\/\/|www\.)\S+)", "");
-        value = regex_replace(value, "<[^>]*>", " ");
-        value = regex_replace(value, "\"", "");
+        value = lower(value);
         value = regex_replace(value, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
-        value = regex_replace(value, "[^\\x00-\\x7f]", " ");
-        value = regex_replace(value, "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
+        value = regex_replace(value, "\\s*[^\\x00-\\x7f]\\s*", "");
+        value = regex_replace(value, "[^\\x00-\\x7f]", "");
+        value = regex_replace(value, "'", "");
         value = regex_replace(value, "\\s+", " ");
 
         data.push_back(value);
     }
 
-    std::cout << data[0] << std::endl;
-    std::cout << data[1] << std::endl;
-    std::cout << data[data.size() - 1] << std::endl;
+    for (auto i = 0; i < 10; ++i)
+        std::cout << data[i] << std::endl;
 
     file.close();
 
