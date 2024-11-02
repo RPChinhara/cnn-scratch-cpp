@@ -46,7 +46,6 @@ class cnn_lstm_2d {
 
 class gru {
   private:
-    loss_func loss;
     float lr;
     size_t batch_size;
     size_t epochs = 250;
@@ -105,7 +104,7 @@ class gru {
     std::array<std::vector<tensor>, 12> forward(const tensor &x, enum Phase phase);
 
   public:
-    gru(const loss_func &loss, const float lr);
+    gru(const float lr);
     void train(const tensor &x_train, const tensor &y_train);
     float evaluate(const tensor &x, const tensor &y);
     tensor predict(const tensor &x);

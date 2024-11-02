@@ -120,8 +120,7 @@ std::vector<tensor> cnn2d::forward(const tensor &input, const std::vector<tensor
     return weights;
 }
 
-gru::gru(const loss_func &loss, const float lr) {
-    this->loss = loss;
+gru::gru(const float lr) {
     this->lr = lr;
 
     w_f = glorot_uniform(hidden_size, hidden_size + input_size);
@@ -167,7 +166,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 
         auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
-        float error = loss(transpose(y_train), y_sequence.front());
+        // float error = loss(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t_w_f = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_i = zeros({batch_size, hidden_size});
@@ -294,13 +293,14 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << 0.0f << std::endl;
     }
 }
 
 float gru::evaluate(const tensor &x, const tensor &y) {
     auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
-    return loss(transpose(y), y_sequence.front());
+    // return loss(transpose(y), y_sequence.front());
+    return 0.0f;
 }
 
 tensor gru::predict(const tensor &x) {
