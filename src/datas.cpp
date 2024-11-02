@@ -128,8 +128,7 @@ imdb load_imdb()
         reviews[i] = regex_replace(reviews[i], "\\s+", " ");
         reviews[i] = reviews[i].insert(0, "[START] ");
 
-        auto end_pos =
-            std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
+        auto end_pos = std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
         reviews[i].erase(end_pos, reviews[i].end());
     }
 
