@@ -27,6 +27,7 @@ tensor daily_dialog(const std::string& file_path) {
         value = regex_replace(value, "[^\\x00-\\x7f]", "");
         // value = regex_replace(value, "'", "");
         value = regex_replace(value, "\\s+", " ");
+        // value = value.insert(0, "[START] ");
 
         data.push_back(value);
     }
