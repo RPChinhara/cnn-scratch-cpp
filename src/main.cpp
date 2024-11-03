@@ -10,7 +10,7 @@ tensor daily_dialog(const std::string& file_path) {
         std::cerr << "Failed to open the file: " << file_path << std::endl;
 
     std::vector<std::string> data;
-    
+
     std::string line;
     std::getline(file, line);
 
@@ -21,7 +21,8 @@ tensor daily_dialog(const std::string& file_path) {
         std::getline(ss, value);
 
         value = lower(value);
-        value = regex_replace(value, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
+        value = regex_replace(value, "[.,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
+        value = regex_replace(value, "\"", "");
         value = regex_replace(value, "\\s*[^\\x00-\\x7f]\\s*", "");
         value = regex_replace(value, "[^\\x00-\\x7f]", "");
         // value = regex_replace(value, "'", "");
