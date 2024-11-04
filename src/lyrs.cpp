@@ -7,7 +7,6 @@
 #include "rd.h"
 #include "tensor.h"
 
-#include <cassert>
 #include <chrono>
 
 dora::dora(const loss_func &loss, const float lr) {
