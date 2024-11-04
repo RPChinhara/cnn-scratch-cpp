@@ -18,6 +18,32 @@ using act_func = std::function<tensor(const tensor&)>;
 using loss_func = std::function<float(const tensor&, const tensor&)>;
 using metric_func = std::function<float(const tensor&, const tensor&)>;
 
+class cnn2d {
+  private:
+    std::vector<size_t> filters;
+    float lr;
+
+    std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
+
+  public:
+    cnn2d(const std::vector<size_t> &filters, float const lr);
+    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
+    void predict(const tensor &xTest, const tensor &yTest);
+};
+
+class cnn_lstm_2d {
+  private:
+    std::vector<size_t> filters;
+    float lr;
+
+    std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
+
+  public:
+    cnn_lstm_2d(const std::vector<size_t> &filters, float const lr);
+    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
+    void predict(const tensor &xTest, const tensor &yTest);
+};
+
 class dora {
   private:
     loss_func loss;
@@ -83,32 +109,6 @@ class dora {
     void train(const tensor &x_train, const tensor &y_train);
     float evaluate(const tensor &x, const tensor &y);
     tensor predict(const tensor &x);
-};
-
-class cnn2d {
-  private:
-    std::vector<size_t> filters;
-    float lr;
-
-    std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
-
-  public:
-    cnn2d(const std::vector<size_t> &filters, float const lr);
-    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
-    void predict(const tensor &xTest, const tensor &yTest);
-};
-
-class cnn_lstm_2d {
-  private:
-    std::vector<size_t> filters;
-    float lr;
-
-    std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
-
-  public:
-    cnn_lstm_2d(const std::vector<size_t> &filters, float const lr);
-    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
-    void predict(const tensor &xTest, const tensor &yTest);
 };
 
 class gru {

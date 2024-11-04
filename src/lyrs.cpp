@@ -9,6 +9,35 @@
 
 #include <chrono>
 
+cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr) {
+    this->filters = filters;
+    this->lr = lr;
+}
+
+void cnn2d::train(const tensor &xTrain, const tensor &yTrain, const tensor &xVal, const tensor &yVal) {
+    tensor kernel = tensor({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
+
+    size_t kernelHeight = kernel.shape.front();
+    size_t kernelWidth = kernel.shape.back();
+
+    size_t inputHeight = xTrain.shape[1];
+    size_t inputWidth = xTrain.shape[2];
+
+    size_t outputHeight = inputHeight - kernelHeight + 1;
+    size_t outputWidth = inputWidth - kernelWidth + 1;
+
+    tensor output = zeros({outputHeight, outputWidth});
+}
+
+void cnn2d::predict(const tensor &xTest, const tensor &yTest) {
+}
+
+std::vector<tensor> cnn2d::forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride) {
+    std::vector<tensor> weights;
+
+    return weights;
+}
+
 dora::dora(const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
@@ -284,35 +313,6 @@ std::array<std::vector<tensor>, 12> dora::forward(const tensor &x, enum Phase ph
     sequences[11] = y_sequence;
 
     return sequences;
-}
-
-cnn2d::cnn2d(const std::vector<size_t> &filters, float const lr) {
-    this->filters = filters;
-    this->lr = lr;
-}
-
-void cnn2d::train(const tensor &xTrain, const tensor &yTrain, const tensor &xVal, const tensor &yVal) {
-    tensor kernel = tensor({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
-
-    size_t kernelHeight = kernel.shape.front();
-    size_t kernelWidth = kernel.shape.back();
-
-    size_t inputHeight = xTrain.shape[1];
-    size_t inputWidth = xTrain.shape[2];
-
-    size_t outputHeight = inputHeight - kernelHeight + 1;
-    size_t outputWidth = inputWidth - kernelWidth + 1;
-
-    tensor output = zeros({outputHeight, outputWidth});
-}
-
-void cnn2d::predict(const tensor &xTest, const tensor &yTest) {
-}
-
-std::vector<tensor> cnn2d::forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride) {
-    std::vector<tensor> weights;
-
-    return weights;
 }
 
 gru::gru(const float lr) {
