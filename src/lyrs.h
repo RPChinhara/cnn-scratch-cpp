@@ -330,6 +330,9 @@ tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
         auto tokens = tokenizer(text);
 
         for (auto token : tokens) {
+            token = regex_replace(token, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
+            token = lower(token);
+
             if (vocab_map.find(token) != vocab_map.end())
                 vocab_map[token] += 1.0f;
             else
@@ -349,6 +352,9 @@ tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<T, float>("", 0.0f));
 
+    // for (auto i : vocab_vec)
+    //   std::cout << i.first << " " << i.second << std::endl;
+
     tensor t_new = zeros({in.size(), max_len});
 
     size_t idx = 0;
@@ -363,7 +369,11 @@ tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
         if (i != 0)
             idx = i * max_len;
 
+        size_t words_processed = 0;
+
         for (auto word : words) {
+            ++words_processed;
+
             bool found = false;
 
             for (auto k = 0; k < max_tokens; ++k) {
@@ -376,6 +386,9 @@ tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in,
 
             if (!found)
                 t_new[idx] = oov_token;
+
+            if (words_processed == max_len)
+              break;
 
             ++idx;
         }
