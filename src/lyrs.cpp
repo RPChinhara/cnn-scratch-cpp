@@ -596,41 +596,29 @@ lstm::lstm(const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    w_f = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_i = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_c = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_o = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_y = glorot_uniform(output_size, hidden_size);
+    w_z = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
+    w_r = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
+    w_h = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
 
-    b_f = zeros({hidden_size, 1});
-    b_i = zeros({hidden_size, 1});
-    b_c = zeros({hidden_size, 1});
-    b_o = zeros({hidden_size, 1});
-    b_y = zeros({output_size, 1});
+    b_z = zeros((hidden_size, 1))
+    b_r = zeros((hidden_size, 1))
+    b_h = zeros((hidden_size, 1))
 
-    m_w_f = zeros({hidden_size, hidden_size + input_size});
-    m_w_i = zeros({hidden_size, hidden_size + input_size});
-    m_w_c = zeros({hidden_size, hidden_size + input_size});
-    m_w_o = zeros({hidden_size, hidden_size + input_size});
-    m_w_y = zeros({output_size, hidden_size});
+    m_w_z = zeros({hidden_size, hidden_size + input_size});
+    m_w_r = zeros({hidden_size, hidden_size + input_size});
+    m_w_h = zeros({hidden_size, hidden_size + input_size});
 
     m_b_f = zeros({hidden_size, 1});
     m_b_i = zeros({hidden_size, 1});
     m_b_c = zeros({hidden_size, 1});
-    m_b_o = zeros({hidden_size, 1});
-    m_b_y = zeros({output_size, 1});
 
-    v_w_f = zeros({hidden_size, hidden_size + input_size});
-    v_w_i = zeros({hidden_size, hidden_size + input_size});
-    v_w_c = zeros({hidden_size, hidden_size + input_size});
-    v_w_o = zeros({hidden_size, hidden_size + input_size});
-    v_w_y = zeros({output_size, hidden_size});
+    v_w_z = zeros({hidden_size, hidden_size + input_size});
+    v_w_r = zeros({hidden_size, hidden_size + input_size});
+    v_w_h = zeros({hidden_size, hidden_size + input_size});
 
     v_b_f = zeros({hidden_size, 1});
     v_b_i = zeros({hidden_size, 1});
     v_b_c = zeros({hidden_size, 1});
-    v_b_o = zeros({hidden_size, 1});
-    v_b_y = zeros({output_size, 1});
 }
 
 void lstm::train(const tensor &x_train, const tensor &y_train) {

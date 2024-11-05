@@ -118,50 +118,38 @@ class gru {
     size_t epochs = 250;
 
     size_t seq_length = 10;
-    size_t input_size = 1;
+    size_t input_size = 25;
     size_t hidden_size = 50;
-    size_t output_size = 1;
+    size_t output_size = 25;
 
     float beta1 = 0.9f;
     float beta2 = 0.999f;
     float epsilon = 1e-7f;
     size_t t = 0;
 
-    tensor w_f;
-    tensor w_i;
-    tensor w_c;
-    tensor w_o;
-    tensor w_y;
+    tensor w_z;
+    tensor w_r;
+    tensor w_h;
 
     tensor b_f;
     tensor b_i;
     tensor b_c;
-    tensor b_o;
-    tensor b_y;
 
-    tensor m_w_f;
-    tensor m_w_i;
-    tensor m_w_c;
-    tensor m_w_o;
-    tensor m_w_y;
+    tensor m_w_z;
+    tensor m_w_r;
+    tensor m_w_h;
 
     tensor m_b_f;
     tensor m_b_i;
     tensor m_b_c;
-    tensor m_b_o;
-    tensor m_b_y;
 
-    tensor v_w_f;
-    tensor v_w_i;
-    tensor v_w_c;
-    tensor v_w_o;
-    tensor v_w_y;
+    tensor v_w_z;
+    tensor v_w_r;
+    tensor v_w_h;
 
     tensor v_b_f;
     tensor v_b_i;
     tensor v_b_c;
-    tensor v_b_o;
-    tensor v_b_y;
 
     enum Phase {
       TRAIN,
