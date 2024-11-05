@@ -306,7 +306,7 @@ class rnn {
     tensor predict(const tensor &x);
 };
 
-tensor embedding(const size_t vocab_size, const size_t cols, const tensor &ind);
+tensor embedding(const size_t vocab_size, const size_t embedding_dim, const tensor &t);
 
 template <typename T>
 tensor text_vectorization(const std::vector<T> &vocab, const std::vector<T> &in, size_t max_tokens, const size_t max_len) {

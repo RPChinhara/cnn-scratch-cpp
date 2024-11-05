@@ -1174,18 +1174,18 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
     return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
 }
 
-tensor embedding(const size_t vocab_size, const size_t embedding_dim, const tensor &ind) {
-    for (auto i = 0; i < ind.size; ++i)
-        assert(ind[i] < vocab_size);
+tensor embedding(const size_t vocab_size, const size_t embedding_dim, const tensor &t) {
+    for (auto i = 0; i < t.size; ++i)
+        assert(t[i] < vocab_size);
 
     tensor embeddings_mat = uniform_dist({vocab_size, embedding_dim});
 
     std::cout << embeddings_mat << std::endl;
 
-    tensor dense_vecs = zeros({ind.shape.front(), ind.shape.back(), embedding_dim});
+    tensor dense_vecs = zeros({t.shape.front(), t.shape.back(), embedding_dim});
 
-    for (auto i = 0; i < ind.size; ++i) {
-        auto a = slice(embeddings_mat, ind[i], 1);
+    for (auto i = 0; i < t.size; ++i) {
+        auto a = slice(embeddings_mat, t[i], 1);
 
         for (auto j = 0; j < a.size; ++j)
             dense_vecs[embedding_dim * i + j] = a[j];
