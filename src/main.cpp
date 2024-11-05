@@ -49,5 +49,8 @@ int main() {
     gru model = gru(0.01f);
     // model.train(x_y_train.first, x_y_train.second);
 
+    auto ag = tensor({2, 3}, {0, 1, 2, 4, 4, 5});
+    std::cout << embedding(10, 10, ag) << std::endl;
+
     return 0;
 }
