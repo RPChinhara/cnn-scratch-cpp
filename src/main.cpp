@@ -39,31 +39,20 @@ std::vector<std::string> daily_dialog(const std::string& file_path) {
 }
 
 int main() {
+    auto input_target = daily_dialog("datas/daily_dialog/daily_dialog.csv");
     auto input = daily_dialog("datas/daily_dialog/daily_dialog_input.csv");
     auto target = daily_dialog("datas/daily_dialog/daily_dialog_target.csv");
 
-    std::vector<std::string> first_two_input;
-    std::vector<std::string> first_two_target;
+    auto input_id = text_vectorization(input_target, input, 5000, 25);
+    auto target_id = text_vectorization(input_target, target, 5000, 25);
 
-    for (size_t i = 0; i < 4; ++i)
-        first_two_input.push_back(input[i]);
+    for (auto i = 0; i < 5; ++i) {
+        std::cout << input_target[i] << std::endl;
+        std::cout << input[i] << std::endl;
+        std::cout << target[i] << std::endl;
+    }
 
-    for (size_t i = 0; i < 4; ++i)
-        first_two_target.push_back(target[i]);
-
-    for (size_t i = 0; i < 4; ++i)
-        std::cout << first_two_input[i] << std::endl;
-
-    std::cout << text_vectorization(first_two_input, first_two_input, 5000, 4) << std::endl;
-
-     for (size_t i = 0; i < 4; ++i)
-        std::cout << first_two_target[i] << std::endl;
-
-    // std::vector<std::string> in = {"say say jim jim jim", "for a say cat how jim", "dog"};
-
-    std::cout << text_vectorization(first_two_input, first_two_target, 5000, 4) << std::endl;
-
-    //TODO: What should max_len be?
+    std::cout << input_id << std::endl;
 
     gru model = gru(0.01f);
     // model.train(x_y_train.first, x_y_train.second);
