@@ -8,31 +8,10 @@
 #include <regex>
 #include <sstream>
 
-std::wstring join(const std::vector<std::wstring> &strings, const std::wstring &separator) {
-    if (strings.empty()) {
-        return L"";
-    }
-
-    std::wstring result = strings[0];
-    for (auto i = 1; i < strings.size(); ++i) {
-        result += separator + strings[i];
-    }
-
-    return result;
-}
-
 std::string lower(const std::string &text) {
     std::string result;
     for (auto c : text) {
         result += std::tolower(c);
-    }
-    return result;
-}
-
-std::wstring lower(const std::wstring &text) {
-    std::wstring result;
-    for (auto c : text) {
-        result += std::towlower(c);
     }
     return result;
 }
@@ -70,32 +49,10 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return std::regex_replace(in, re, rewrite);
 }
 
-std::wstring regex_replace(const std::wstring &in, const std::wstring &pattern, const std::wstring &rewrite) {
-    std::wregex regex(pattern);
-    return std::regex_replace(in, regex, rewrite);
-}
-
-std::wstring strip(const std::wstring &text) {
-    std::wregex pattern(L"(^\\s+)|(\\s+$)");
-    return std::regex_replace(text, pattern, L"");
-}
-
 std::vector<std::string> tokenizer(const std::string &text) {
     std::vector<std::string> tokens;
     std::stringstream ss(text);
     std::string token;
-
-    while (ss >> token) {
-        tokens.push_back(token);
-    }
-
-    return tokens;
-}
-
-std::vector<std::wstring> tokenizer(const std::wstring &text) {
-    std::vector<std::wstring> tokens;
-    std::wstringstream ss(text);
-    std::wstring token;
 
     while (ss >> token) {
         tokens.push_back(token);
