@@ -46,7 +46,6 @@ int main() {
     auto input_id = text_vectorization(input_target, input, 5000, 25);
     auto target_id = text_vectorization(input_target, target, 5000, 25);
 
-
     gru model = gru(0.01f);
     // model.train(x_y_train.first, x_y_train.second);
 
