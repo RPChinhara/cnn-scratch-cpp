@@ -318,41 +318,29 @@ std::array<std::vector<tensor>, 12> dora::forward(const tensor &x, enum Phase ph
 gru::gru(const float lr) {
     this->lr = lr;
 
-    w_f = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_i = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_c = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_o = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_y = glorot_uniform(output_size, hidden_size);
+    w_z = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
+    w_r = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
+    w_h = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
 
-    b_f = zeros({hidden_size, 1});
-    b_i = zeros({hidden_size, 1});
-    b_c = zeros({hidden_size, 1});
-    b_o = zeros({hidden_size, 1});
-    b_y = zeros({output_size, 1});
+    b_z = zeros((hidden_size, 1))
+    b_r = zeros((hidden_size, 1))
+    b_h = zeros((hidden_size, 1))
 
-    m_w_f = zeros({hidden_size, hidden_size + input_size});
-    m_w_i = zeros({hidden_size, hidden_size + input_size});
-    m_w_c = zeros({hidden_size, hidden_size + input_size});
-    m_w_o = zeros({hidden_size, hidden_size + input_size});
-    m_w_y = zeros({output_size, hidden_size});
+    m_w_z = zeros({hidden_size, hidden_size + input_size});
+    m_w_r = zeros({hidden_size, hidden_size + input_size});
+    m_w_h = zeros({hidden_size, hidden_size + input_size});
 
     m_b_f = zeros({hidden_size, 1});
     m_b_i = zeros({hidden_size, 1});
     m_b_c = zeros({hidden_size, 1});
-    m_b_o = zeros({hidden_size, 1});
-    m_b_y = zeros({output_size, 1});
 
-    v_w_f = zeros({hidden_size, hidden_size + input_size});
-    v_w_i = zeros({hidden_size, hidden_size + input_size});
-    v_w_c = zeros({hidden_size, hidden_size + input_size});
-    v_w_o = zeros({hidden_size, hidden_size + input_size});
-    v_w_y = zeros({output_size, hidden_size});
+    v_w_z = zeros({hidden_size, hidden_size + input_size});
+    v_w_r = zeros({hidden_size, hidden_size + input_size});
+    v_w_h = zeros({hidden_size, hidden_size + input_size});
 
     v_b_f = zeros({hidden_size, 1});
     v_b_i = zeros({hidden_size, 1});
     v_b_c = zeros({hidden_size, 1});
-    v_b_o = zeros({hidden_size, 1});
-    v_b_y = zeros({output_size, 1});
 }
 
 void gru::train(const tensor &x_train, const tensor &y_train) {
@@ -590,35 +578,64 @@ std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase pha
     sequences[11] = y_sequence;
 
     return sequences;
+
+    // # Concatenate previous hidden state and current input
+    // concat_hx = np.vstack((h_prev, x_t))
+
+    // # Update gate
+    // z_t = self.sigmoid(np.dot(self.Wz, concat_hx) + self.bz)
+
+    // # Reset gate
+    // r_t = self.sigmoid(np.dot(self.Wr, concat_hx) + self.br)
+
+    // # Candidate hidden state
+    // h_hat_t = np.tanh(np.dot(self.Wh, np.vstack((r_t * h_prev, x_t))) + self.bh)
+
+    // # Current hidden state
+    // h_t = (1 - z_t) * h_prev + z_t * h_hat_t
+
+    // return h_t, z_t, r_t, h_hat_t
 }
 
 lstm::lstm(const loss_func &loss, const float lr) {
     this->loss = loss;
     this->lr = lr;
 
-    w_z = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
-    w_r = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
-    w_h = glorot_uniform(hidden_size, hidden_size + input_size) * 0.01;
+    w_f = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_i = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_c = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_o = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_y = glorot_uniform(output_size, hidden_size);
 
-    b_z = zeros((hidden_size, 1))
-    b_r = zeros((hidden_size, 1))
-    b_h = zeros((hidden_size, 1))
+    b_f = zeros({hidden_size, 1});
+    b_i = zeros({hidden_size, 1});
+    b_c = zeros({hidden_size, 1});
+    b_o = zeros({hidden_size, 1});
+    b_y = zeros({output_size, 1});
 
-    m_w_z = zeros({hidden_size, hidden_size + input_size});
-    m_w_r = zeros({hidden_size, hidden_size + input_size});
-    m_w_h = zeros({hidden_size, hidden_size + input_size});
+    m_w_f = zeros({hidden_size, hidden_size + input_size});
+    m_w_i = zeros({hidden_size, hidden_size + input_size});
+    m_w_c = zeros({hidden_size, hidden_size + input_size});
+    m_w_o = zeros({hidden_size, hidden_size + input_size});
+    m_w_y = zeros({output_size, hidden_size});
 
     m_b_f = zeros({hidden_size, 1});
     m_b_i = zeros({hidden_size, 1});
     m_b_c = zeros({hidden_size, 1});
+    m_b_o = zeros({hidden_size, 1});
+    m_b_y = zeros({output_size, 1});
 
-    v_w_z = zeros({hidden_size, hidden_size + input_size});
-    v_w_r = zeros({hidden_size, hidden_size + input_size});
-    v_w_h = zeros({hidden_size, hidden_size + input_size});
+    v_w_f = zeros({hidden_size, hidden_size + input_size});
+    v_w_i = zeros({hidden_size, hidden_size + input_size});
+    v_w_c = zeros({hidden_size, hidden_size + input_size});
+    v_w_o = zeros({hidden_size, hidden_size + input_size});
+    v_w_y = zeros({output_size, hidden_size});
 
     v_b_f = zeros({hidden_size, 1});
     v_b_i = zeros({hidden_size, 1});
     v_b_c = zeros({hidden_size, 1});
+    v_b_o = zeros({hidden_size, 1});
+    v_b_y = zeros({output_size, 1});
 }
 
 void lstm::train(const tensor &x_train, const tensor &y_train) {
