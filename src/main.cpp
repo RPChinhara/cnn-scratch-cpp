@@ -46,13 +46,6 @@ int main() {
     auto input_id = text_vectorization(input_target, input, 5000, 25);
     auto target_id = text_vectorization(input_target, target, 5000, 25);
 
-    for (auto i = 0; i < 5; ++i) {
-        std::cout << input_target[i] << std::endl;
-        std::cout << input[i] << std::endl;
-        std::cout << target[i] << std::endl;
-    }
-
-    std::cout << input_id << std::endl;
 
     gru model = gru(0.01f);
     // model.train(x_y_train.first, x_y_train.second);
