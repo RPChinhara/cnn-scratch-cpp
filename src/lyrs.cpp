@@ -498,11 +498,6 @@ std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase pha
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
-    std::vector<tensor> z_i_sequence;
-    std::vector<tensor> i_sequence;
-    std::vector<tensor> z_c_tilde_sequence;
-    std::vector<tensor> c_tilde_sequence;
-    std::vector<tensor> c_sequence;
     std::vector<tensor> z_o_sequence;
     std::vector<tensor> o_sequence;
     std::vector<tensor> h_sequence;
@@ -512,9 +507,6 @@ std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase pha
         batch_size = 8317;
     else
         batch_size = 2072;
-
-    tensor c_t = zeros({hidden_size, batch_size});
-    c_sequence.push_back(c_t);
 
     tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
@@ -552,11 +544,6 @@ std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase pha
         // x_sequence.push_back(x_t);
         // concat_sequence.push_back(concat_t);
         // z_f_sequence.push_back(z_f_t);
-        // z_i_sequence.push_back(z_i_t);
-        // i_sequence.push_back(i_t);
-        // z_c_tilde_sequence.push_back(z_c_tilde_t);
-        // c_tilde_sequence.push_back(c_tilde_t);
-        // c_sequence.push_back(c_t);
         // z_o_sequence.push_back(z_o_t);
         // o_sequence.push_back(o_t);
         // h_sequence.push_back(h_t);
@@ -570,11 +557,6 @@ std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase pha
     // sequences[0]  = x_sequence;
     // sequences[1]  = concat_sequence;
     // sequences[2]  = z_f_sequence;
-    // sequences[3]  = z_i_sequence;
-    // sequences[4]  = i_sequence;
-    // sequences[5]  = z_c_tilde_sequence;
-    // sequences[6]  = c_tilde_sequence;
-    // sequences[7]  = c_sequence;
     // sequences[8]  = z_o_sequence;
     // sequences[9]  = o_sequence;
     // sequences[10]  = h_sequence;
