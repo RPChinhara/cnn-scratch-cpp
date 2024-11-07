@@ -49,8 +49,11 @@ int main() {
     auto input_token = text_vectorization(input_target, input, vocab_size, max_len);
     auto target_token = text_vectorization(input_target, target, vocab_size, max_len);
 
+    auto input_token.train_test = split(input_token, 0.2f);
+    auto target_token.train_test = split(target_token, 0.2f);
+
     gru model = gru(0.01f, vocab_size);
-    model.train(input_token, target_token);
+    model.train(input_token.train_test.first, target_token.train_test.first);
 
     return 0;
 }
