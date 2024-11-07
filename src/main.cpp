@@ -39,20 +39,15 @@ std::vector<std::string> daily_dialog(const std::string& file_path) {
 }
 
 int main() {
-    // auto input_target = daily_dialog("datas/daily_dialog/daily_dialog.csv");
-    // auto input = daily_dialog("datas/daily_dialog/daily_dialog_input.csv");
-    // auto target = daily_dialog("datas/daily_dialog/daily_dialog_target.csv");
+    auto input_target = daily_dialog("datas/daily_dialog/daily_dialog.csv");
+    auto input = daily_dialog("datas/daily_dialog/daily_dialog_input.csv");
+    auto target = daily_dialog("datas/daily_dialog/daily_dialog_target.csv");
 
-    // auto input_id = text_vectorization(input_target, input, 5000, 25);
-    // auto target_id = text_vectorization(input_target, target, 5000, 25);
+    auto input_token = text_vectorization(input_target, input, 5000, 25);
+    auto target_token = text_vectorization(input_target, target, 5000, 25);
 
     gru model = gru(0.01f);
-    // model.train(x_y_train.first, x_y_train.second);
-
-    auto ag = tensor({2, 3}, {0, 1, 2, 0, 1, 2});
-    auto word_embedding = embedding(6, 10, ag);
-    std::cout << word_embedding.mat << std::endl;
-    std::cout << word_embedding.dense_vecs << std::endl;
+    model.train(input_token, target_token);
 
     return 0;
 }

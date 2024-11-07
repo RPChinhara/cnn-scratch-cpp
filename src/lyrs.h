@@ -117,8 +117,10 @@ class gru {
     size_t batch_size;
     size_t epochs = 250;
 
+    size_t embedding_dim = 50;
+
     size_t seq_length = 25;
-    size_t input_size = 50;
+    size_t input_size = embedding_dim;
     size_t hidden_size = 50;
     size_t output_size = 25;
 
