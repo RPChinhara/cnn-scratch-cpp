@@ -43,10 +43,13 @@ int main() {
     auto input = daily_dialog("datas/daily_dialog/daily_dialog_input.csv");
     auto target = daily_dialog("datas/daily_dialog/daily_dialog_target.csv");
 
-    auto input_token = text_vectorization(input_target, input, 5000, 25);
-    auto target_token = text_vectorization(input_target, target, 5000, 25);
+    size_t vocab_size = 5000;
+    size_t max_len = 25;
 
-    gru model = gru(0.01f);
+    auto input_token = text_vectorization(input_target, input, vocab_size, max_len);
+    auto target_token = text_vectorization(input_target, target, vocab_size, max_len);
+
+    gru model = gru(0.01f, vocab_size);
     model.train(input_token, target_token);
 
     return 0;

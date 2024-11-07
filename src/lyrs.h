@@ -117,6 +117,7 @@ class gru {
     size_t batch_size;
     size_t epochs = 250;
 
+    size_t vocab_size;
     size_t embedding_dim = 50;
 
     size_t seq_length = 25;
@@ -161,7 +162,7 @@ class gru {
     std::array<std::vector<tensor>, 12> forward(const tensor &x, enum Phase phase);
 
   public:
-    gru(const float lr);
+    gru(const float lr, const size_t vocab_size);
     void train(const tensor &x_train, const tensor &y_train);
     float evaluate(const tensor &x, const tensor &y);
     tensor predict(const tensor &x);

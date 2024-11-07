@@ -315,8 +315,9 @@ std::array<std::vector<tensor>, 12> dora::forward(const tensor &x, enum Phase ph
     return sequences;
 }
 
-gru::gru(const float lr) {
+gru::gru(const float lr, const size_t vocab_size) {
     this->lr = lr;
+    this->vocab_size = vocab_size;
 
     w_z = glorot_uniform(hidden_size, hidden_size + input_size);
     w_r = glorot_uniform(hidden_size, hidden_size + input_size);
@@ -347,11 +348,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto word_embedding = embedding(5000, embedding_dim, x_train);
-
-        std::cout << word_embedding.mat.get_shape() << std::endl;
-        std::cout << word_embedding.dense_vecs.get_shape() << std::endl;
-        // std::cout << word_embedding.dense_vecs << std::endl;
+        auto word_embedding = embedding(vocab_size, embedding_dim, x_train);
 
         auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
