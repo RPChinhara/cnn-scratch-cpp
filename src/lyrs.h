@@ -118,7 +118,7 @@ class gru {
     size_t epochs = 250;
 
     size_t seq_length = 25;
-    size_t input_size = 1; // Depends on whether you're using embeddings. With embeddings, it’s the embedding dimension; otherwise, it could be 1
+    size_t input_size = 50;
     size_t hidden_size = 50;
     size_t output_size = 25;
 
