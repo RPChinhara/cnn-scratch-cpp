@@ -350,7 +350,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 
         auto word_embedding = embedding(vocab_size, embedding_dim, x_train);
 
-        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
 
         // float error = loss(transpose(y_train), y_sequence.front());
 
