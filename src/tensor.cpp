@@ -73,6 +73,21 @@ tensor &tensor::operator=(tensor &&other) noexcept {
     return *this;
 }
 
+const std::string tensor::get_shape() const {
+    std::string shapes = "(";
+
+    for (auto i = 0; i < shape.size(); ++i) {
+        if (i == shape.size() - 1)
+            shapes += std::to_string(shape[i]);
+        else
+            shapes += std::to_string(shape[i]) + ", ";
+    }
+
+    shapes += ")";
+
+    return shapes;
+}
+
 static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size_t> &shape2) {
     bool equal = false;
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
