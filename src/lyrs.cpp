@@ -378,7 +378,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // for (auto j = seq_length; j > 0; --j) {
+        for (auto j = seq_length; j > 0; --j) {
         //     if (j == seq_length) {
         //         tensor d_y_d_h_10 = w_y;
 
@@ -402,7 +402,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
         //     d_loss_d_b_i = d_loss_d_b_i + sum(transpose(d_loss_d_h_t_w_i) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_tilde_sequence[j - 1] * sigmoid_derivative(z_i_sequence[j - 1]), 1);
         //     d_loss_d_b_c = d_loss_d_b_c + sum(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), 1);
         //     d_loss_d_b_o = d_loss_d_b_o + sum(transpose(d_loss_d_h_t_w_o) * hyperbolic_tangent(c_sequence[j]) * sigmoid_derivative(z_o_sequence[j - 1]), 1);
-        // }
+        }
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
@@ -472,13 +472,13 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
         // w_i = w_i - lr * d_loss_d_w_i;
         // w_c = w_c - lr * d_loss_d_w_c;
         // w_o = w_o - lr * d_loss_d_w_o;
-        // w_y = w_y - lr * d_loss_d_w_y;
+        w_y = w_y - lr * d_loss_d_w_y;
 
         // b_f = b_f - lr * d_loss_d_b_f;
         // b_i = b_i - lr * d_loss_d_b_i;
         // b_c = b_c - lr * d_loss_d_b_c;
         // b_o = b_o - lr * d_loss_d_b_o;
-        // b_y = b_y - lr * d_loss_d_y;
+        b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
