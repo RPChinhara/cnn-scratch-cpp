@@ -133,33 +133,39 @@ class gru {
     tensor w_z;
     tensor w_r;
     tensor w_h;
+    tensor w_y;
 
-    tensor b_f;
-    tensor b_i;
-    tensor b_c;
+    tensor b_z;
+    tensor b_r;
+    tensor b_h;
+    tensor b_y;
 
     tensor m_w_z;
     tensor m_w_r;
     tensor m_w_h;
+    tensor m_w_y;
 
-    tensor m_b_f;
-    tensor m_b_i;
-    tensor m_b_c;
+    tensor m_b_z;
+    tensor m_b_r;
+    tensor m_b_h;
+    tensor m_b_y;
 
     tensor v_w_z;
     tensor v_w_r;
     tensor v_w_h;
+    tensor v_w_y;
 
-    tensor v_b_f;
-    tensor v_b_i;
-    tensor v_b_c;
+    tensor v_b_z;
+    tensor v_b_r;
+    tensor v_b_h;
+    tensor v_b_y;
 
     enum Phase {
       TRAIN,
       TEST
     };
 
-    std::array<std::vector<tensor>, 12> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 6> forward(const tensor &x, enum Phase phase);
 
   public:
     gru(const float lr, const size_t vocab_size);

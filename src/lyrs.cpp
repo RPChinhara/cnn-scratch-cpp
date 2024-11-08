@@ -322,26 +322,32 @@ gru::gru(const float lr, const size_t vocab_size) {
     w_z = glorot_uniform(hidden_size, hidden_size + input_size);
     w_r = glorot_uniform(hidden_size, hidden_size + input_size);
     w_h = glorot_uniform(hidden_size, hidden_size + input_size);
+    w_y = glorot_uniform(output_size, hidden_size);
 
-    b_f = zeros({hidden_size, 1});
-    b_i = zeros({hidden_size, 1});
-    b_c = zeros({hidden_size, 1});
+    b_z = zeros({hidden_size, 1});
+    b_r = zeros({hidden_size, 1});
+    b_h = zeros({hidden_size, 1});
+    b_y = zeros({hidden_size, 1});
 
     m_w_z = zeros({hidden_size, hidden_size + input_size});
     m_w_r = zeros({hidden_size, hidden_size + input_size});
     m_w_h = zeros({hidden_size, hidden_size + input_size});
+    m_w_y = zeros({output_size, hidden_size});
 
-    m_b_f = zeros({hidden_size, 1});
-    m_b_i = zeros({hidden_size, 1});
-    m_b_c = zeros({hidden_size, 1});
+    m_b_z = zeros({hidden_size, 1});
+    m_b_r = zeros({hidden_size, 1});
+    m_b_h = zeros({hidden_size, 1});
+    m_b_y = zeros({hidden_size, 1});
 
     v_w_z = zeros({hidden_size, hidden_size + input_size});
     v_w_r = zeros({hidden_size, hidden_size + input_size});
     v_w_h = zeros({hidden_size, hidden_size + input_size});
+    v_w_y = zeros({output_size, hidden_size});
 
-    v_b_f = zeros({hidden_size, 1});
-    v_b_i = zeros({hidden_size, 1});
-    v_b_c = zeros({hidden_size, 1});
+    v_b_z = zeros({hidden_size, 1});
+    v_b_r = zeros({hidden_size, 1});
+    v_b_h = zeros({hidden_size, 1});
+    v_b_y = zeros({hidden_size, 1});
 }
 
 void gru::train(const tensor &x_train, const tensor &y_train) {
@@ -350,7 +356,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 
         auto word_embedding = embedding(vocab_size, embedding_dim, x_train);
 
-        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
 
         // float error = loss(transpose(y_train), y_sequence.front());
 
@@ -484,22 +490,21 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float gru::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     // return loss(transpose(y), y_sequence.front());
     return 0.0f;
 }
 
 tensor gru::predict(const tensor &x) {
-    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
-    std::vector<tensor> z_f_sequence;
-    std::vector<tensor> z_o_sequence;
-    std::vector<tensor> o_sequence;
+    std::vector<tensor> z_t_sequence;
+    std::vector<tensor> r_t_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -523,63 +528,37 @@ std::array<std::vector<tensor>, 12> gru::forward(const tensor &x, enum Phase pha
 
         tensor concat_t = vstack({h_t, transpose(x_t)});
 
-        // tensor z_f_t = matmul(w_f, concat_t) + b_f;
-        // tensor f_t = sigmoid(z_f_t);
+        tensor z_t_z = matmul(w_z, concat_t) + b_z;
+        tensor z_t = sigmoid(z_t_z);
 
-        // tensor z_i_t = matmul(w_i, concat_t) + b_i;
-        // tensor i_t = sigmoid(z_i_t);
+        tensor r_t_z = matmul(w_r, concat_t) + b_r;
+        tensor r_t = sigmoid(r_t_z);
 
-        // tensor z_c_tilde_t = matmul(w_c, concat_t) + b_c;
-        // tensor c_tilde_t = hyperbolic_tangent(z_c_tilde_t);
+        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, x_t})) + b_h;
+        tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
 
-        // c_t = f_t * c_t + i_t * c_tilde_t;
+        h_t = (1.0f - z_t) * h_t + z_t * h_hat_t;
 
-        // tensor z_o_t = matmul(w_o, concat_t) + b_o;
-        // tensor o_t = sigmoid(z_o_t);
+        tensor y_t = matmul(w_y, h_t) + b_y;
 
-        // h_t = o_t * hyperbolic_tangent(c_t);
-
-        // tensor y_t = matmul(w_y, h_t) + b_y;
-
-        // x_sequence.push_back(x_t);
-        // concat_sequence.push_back(concat_t);
-        // z_f_sequence.push_back(z_f_t);
-        // z_o_sequence.push_back(z_o_t);
-        // o_sequence.push_back(o_t);
-        // h_sequence.push_back(h_t);
-
-        // if (i == seq_length - 1)
-        //     y_sequence.push_back(y_t);
+        x_sequence.push_back(x_t);
+        concat_sequence.push_back(concat_t);
+        z_t_sequence.push_back(z_t);
+        r_t_sequence.push_back(r_t);
+        h_sequence.push_back(h_t);
+        y_sequence.push_back(y_t);
     }
 
-    std::array<std::vector<tensor>, 12> sequences;
+    std::array<std::vector<tensor>, 6> sequences;
 
-    // sequences[0]  = x_sequence;
-    // sequences[1]  = concat_sequence;
-    // sequences[2]  = z_f_sequence;
-    // sequences[8]  = z_o_sequence;
-    // sequences[9]  = o_sequence;
-    // sequences[10]  = h_sequence;
-    // sequences[11] = y_sequence;
+    sequences[0]  = x_sequence;
+    sequences[1]  = concat_sequence;
+    sequences[2]  = z_t_sequence;
+    sequences[3]  = r_t_sequence;
+    sequences[4]  = h_sequence;
+    sequences[5] = y_sequence;
 
     return sequences;
-
-    // # Concatenate previous hidden state and current input
-    // concat_hx = np.vstack((h_prev, x_t))
-
-    // # Update gate
-    // z_t = self.sigmoid(np.dot(self.Wz, concat_hx) + self.bz)
-
-    // # Reset gate
-    // r_t = self.sigmoid(np.dot(self.Wr, concat_hx) + self.br)
-
-    // # Candidate hidden state
-    // h_hat_t = np.tanh(np.dot(self.Wh, np.vstack((r_t * h_prev, x_t))) + self.bh)
-
-    // # Current hidden state
-    // h_t = (1 - z_t) * h_prev + z_t * h_hat_t
-
-    // return h_t, z_t, r_t, h_hat_t
 }
 
 lstm::lstm(const loss_func &loss, const float lr) {
