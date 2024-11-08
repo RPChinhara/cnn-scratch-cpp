@@ -2,6 +2,7 @@
 #include "acts.h"
 #include "arrs.h"
 #include "linalg.h"
+#include "losses.h"
 #include "math.hpp"
 #include "preproc.h"
 #include "rd.h"
@@ -327,7 +328,7 @@ gru::gru(const float lr, const size_t vocab_size) {
     b_z = zeros({hidden_size, 1});
     b_r = zeros({hidden_size, 1});
     b_h = zeros({hidden_size, 1});
-    b_y = zeros({hidden_size, 1});
+    b_y = zeros({output_size, 1});
 
     m_w_z = zeros({hidden_size, hidden_size + input_size});
     m_w_r = zeros({hidden_size, hidden_size + input_size});
@@ -337,7 +338,7 @@ gru::gru(const float lr, const size_t vocab_size) {
     m_b_z = zeros({hidden_size, 1});
     m_b_r = zeros({hidden_size, 1});
     m_b_h = zeros({hidden_size, 1});
-    m_b_y = zeros({hidden_size, 1});
+    m_b_y = zeros({output_size, 1});
 
     v_w_z = zeros({hidden_size, hidden_size + input_size});
     v_w_r = zeros({hidden_size, hidden_size + input_size});
@@ -347,7 +348,7 @@ gru::gru(const float lr, const size_t vocab_size) {
     v_b_z = zeros({hidden_size, 1});
     v_b_r = zeros({hidden_size, 1});
     v_b_h = zeros({hidden_size, 1});
-    v_b_y = zeros({hidden_size, 1});
+    v_b_y = zeros({output_size, 1});
 }
 
 void gru::train(const tensor &x_train, const tensor &y_train) {
@@ -358,7 +359,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 
         auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
 
-        // float error = loss(transpose(y_train), y_sequence.front());
+        float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t_w_z = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_r = zeros({batch_size, hidden_size});
@@ -494,6 +495,8 @@ std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phas
     else
         batch_size = 15211;
 
+    tensor ones = tensor({hidden_size, batch_size}, {1.0f});
+
     tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
 
@@ -515,12 +518,46 @@ std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phas
         tensor r_t_z = matmul(w_r, concat_t) + b_r;
         tensor r_t = sigmoid(r_t_z);
 
-        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, x_t})) + b_h;
+        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, transpose(x_t)})) + b_h;
         tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
 
-        h_t = (1.0f - z_t) * h_t + z_t * h_hat_t;
+        h_t = (ones - z_t) * h_t + z_t * h_hat_t;
 
         tensor y_t = matmul(w_y, h_t) + b_y;
+
+        // std::cout << h_t.get_shape() << std::endl;
+        // std::cout << concat_t.get_shape() << std::endl;
+        // std::cout << r_t.get_shape() << std::endl;
+        // std::cout << x_t.get_shape() << std::endl;
+
+        // =====================================================================================================================================
+        // dL/dw_h: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // dL/dw_r: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // dL/dw_z: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // dL/dembedding:
+        // =====================================================================================================================================
+
+        // =====================================================================================================================================
+        // Check forward pass on https://en.wikipedia.org/wiki/Long_short-term_memory to remind myself that way to compute gradients make sense.
+        // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
+        // =====================================================================================================================================
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dw_c
+        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dh_9) * dh_9/dc_9 * dc_9/dc_tilde_9 * dc_tilde9/dw_c
+
+        // dh10/do10 * do10/wo
+        // dh10/do10 * do10/dh9 * dh9/do9 * do9/wo
+
+        // dh10/dc10 * dc10/d~c10 * d~c10/w_c
+        // dh10/dc10 * dc10/d~c10 * d~c10/dh9 * dh9/dc9 * dc9/d~c9 * d~c9/wc
+        // =====================================================================================================================================
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/di_10 * di_10/dw_i
+        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/di_10 * di_10/dh_9) * dh_9/dc_9 * dc_9/di_9 * di_9/dw_i
+        // =====================================================================================================================================
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/df_10 * df_10/dw_f
+        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/df_10 * df_10/dh_9) * dh_9/dc_9 * dc_9/df_9 * df_9/dw_f
+        // =====================================================================================================================================
 
         x_sequence.push_back(x_t);
         concat_sequence.push_back(concat_t);
@@ -534,11 +571,11 @@ std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phas
 
     std::array<std::vector<tensor>, 6> sequences;
 
-    sequences[0]  = x_sequence;
-    sequences[1]  = concat_sequence;
-    sequences[2]  = z_t_sequence;
-    sequences[3]  = r_t_sequence;
-    sequences[4]  = h_sequence;
+    sequences[0] = x_sequence;
+    sequences[1] = concat_sequence;
+    sequences[2] = z_t_sequence;
+    sequences[3] = r_t_sequence;
+    sequences[4] = h_sequence;
     sequences[5] = y_sequence;
 
     return sequences;
