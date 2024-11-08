@@ -509,9 +509,9 @@ std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phas
     std::vector<tensor> y_sequence;
 
     if (phase == Phase::TRAIN)
-        batch_size = 8317;
+        batch_size = 60841;
     else
-        batch_size = 2072;
+        batch_size = 15211;
 
     tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
@@ -546,7 +546,9 @@ std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phas
         z_t_sequence.push_back(z_t);
         r_t_sequence.push_back(r_t);
         h_sequence.push_back(h_t);
-        y_sequence.push_back(y_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
     }
 
     std::array<std::vector<tensor>, 6> sequences;
