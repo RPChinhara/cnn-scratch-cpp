@@ -360,20 +360,17 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 
         // float error = loss(transpose(y_train), y_sequence.front());
 
-        tensor d_loss_d_h_t_w_f = zeros({batch_size, hidden_size});
-        tensor d_loss_d_h_t_w_i = zeros({batch_size, hidden_size});
-        tensor d_loss_d_h_t_w_c = zeros({batch_size, hidden_size});
-        tensor d_loss_d_h_t_w_o = zeros({batch_size, hidden_size});
+        tensor d_loss_d_h_t_w_z = zeros({batch_size, hidden_size});
+        tensor d_loss_d_h_t_w_r = zeros({batch_size, hidden_size});
+        tensor d_loss_d_h_t_w_h = zeros({batch_size, hidden_size});
 
-        tensor d_loss_d_w_f = zeros({hidden_size, hidden_size + input_size});
-        tensor d_loss_d_w_i = zeros({hidden_size, hidden_size + input_size});
-        tensor d_loss_d_w_c = zeros({hidden_size, hidden_size + input_size});
-        tensor d_loss_d_w_o = zeros({hidden_size, hidden_size + input_size});
+        tensor d_loss_d_w_z = zeros({hidden_size, hidden_size + input_size});
+        tensor d_loss_d_w_r = zeros({hidden_size, hidden_size + input_size});
+        tensor d_loss_d_w_h = zeros({hidden_size, hidden_size + input_size});
 
-        tensor d_loss_d_b_f  = zeros({hidden_size, 1});
-        tensor d_loss_d_b_i  = zeros({hidden_size, 1});
-        tensor d_loss_d_b_c  = zeros({hidden_size, 1});
-        tensor d_loss_d_b_o  = zeros({hidden_size, 1});
+        tensor d_loss_d_b_z = zeros({hidden_size, 1});
+        tensor d_loss_d_b_r = zeros({hidden_size, 1});
+        tensor d_loss_d_b_h = zeros({hidden_size, 1});
 
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
@@ -411,73 +408,61 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
         // m_w_f = beta1 * m_w_f + (1.0f - beta1) * d_loss_d_w_f;
         // m_w_i = beta1 * m_w_i + (1.0f - beta1) * d_loss_d_w_i;
         // m_w_c = beta1 * m_w_c + (1.0f - beta1) * d_loss_d_w_c;
-        // m_w_o = beta1 * m_w_o + (1.0f - beta1) * d_loss_d_w_o;
         // m_w_y = beta1 * m_w_y + (1.0f - beta1) * d_loss_d_w_y;
 
         // m_b_f = beta1 * m_b_f + (1.0f - beta1) * d_loss_d_b_f;
         // m_b_i = beta1 * m_b_i + (1.0f - beta1) * d_loss_d_b_i;
         // m_b_c = beta1 * m_b_c + (1.0f - beta1) * d_loss_d_b_c;
-        // m_b_o = beta1 * m_b_o + (1.0f - beta1) * d_loss_d_b_o;
         // m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
 
         // v_w_f = beta2 * v_w_f + (1.0f - beta2) * square(d_loss_d_w_f);
         // v_w_i = beta2 * v_w_i + (1.0f - beta2) * square(d_loss_d_w_i);
         // v_w_c = beta2 * v_w_c + (1.0f - beta2) * square(d_loss_d_w_c);
-        // v_w_o = beta2 * v_w_o + (1.0f - beta2) * square(d_loss_d_w_o);
         // v_w_y = beta2 * v_w_y + (1.0f - beta2) * square(d_loss_d_w_y);
 
         // v_b_f = beta2 * v_b_f + (1.0f - beta2) * square(d_loss_d_b_f);
         // v_b_i = beta2 * v_b_i + (1.0f - beta2) * square(d_loss_d_b_i);
         // v_b_c = beta2 * v_b_c + (1.0f - beta2) * square(d_loss_d_b_c);
-        // v_b_o = beta2 * v_b_o + (1.0f - beta2) * square(d_loss_d_b_o);
         // v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
 
         // tensor m_hat_w_f = m_w_f / (1.0f - powf(beta1, t));
         // tensor m_hat_w_i = m_w_i / (1.0f - powf(beta1, t));
         // tensor m_hat_w_c = m_w_c / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_o = m_w_o / (1.0f - powf(beta1, t));
         // tensor m_hat_w_y = m_w_y / (1.0f - powf(beta1, t));
 
         // tensor m_hat_b_f = m_b_f / (1.0f - powf(beta1, t));
         // tensor m_hat_b_i = m_b_i / (1.0f - powf(beta1, t));
         // tensor m_hat_b_c = m_b_c / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_o = m_b_o / (1.0f - powf(beta1, t));
         // tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
 
         // tensor v_hat_w_f = v_w_f / (1.0f - powf(beta2, t));
         // tensor v_hat_w_i = v_w_i / (1.0f - powf(beta2, t));
         // tensor v_hat_w_c = v_w_c / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_o = v_w_o / (1.0f - powf(beta2, t));
         // tensor v_hat_w_y = v_w_y / (1.0f - powf(beta2, t));
 
         // tensor v_hat_b_f = v_b_f / (1.0f - powf(beta2, t));
         // tensor v_hat_b_i = v_b_i / (1.0f - powf(beta2, t));
         // tensor v_hat_b_c = v_b_c / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_o = v_b_o / (1.0f - powf(beta2, t));
         // tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
 
         // w_f = w_f - lr * m_hat_w_f / (sqrt(v_hat_w_f) + epsilon);
         // w_i = w_i - lr * m_hat_w_i / (sqrt(v_hat_w_i) + epsilon);
         // w_c = w_c - lr * m_hat_w_c / (sqrt(v_hat_w_c) + epsilon);
-        // w_o = w_o - lr * m_hat_w_o / (sqrt(v_hat_w_o) + epsilon);
         // w_y = w_y - lr * m_hat_w_y / (sqrt(v_hat_w_y) + epsilon);
 
         // b_f = b_f - lr * m_hat_b_f / (sqrt(v_hat_b_f) + epsilon);
         // b_i = b_i - lr * m_hat_b_i / (sqrt(v_hat_b_i) + epsilon);
         // b_c = b_c - lr * m_hat_b_c / (sqrt(v_hat_b_c) + epsilon);
-        // b_o = b_o - lr * m_hat_b_o / (sqrt(v_hat_b_o) + epsilon);
         // b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
-        // w_f = w_f - lr * d_loss_d_w_f;
-        // w_i = w_i - lr * d_loss_d_w_i;
-        // w_c = w_c - lr * d_loss_d_w_c;
-        // w_o = w_o - lr * d_loss_d_w_o;
+        // w_z = w_z - lr * d_loss_d_w_z;
+        // w_r = w_r - lr * d_loss_d_w_r;
+        // w_h = w_h - lr * d_loss_d_w_h;
         w_y = w_y - lr * d_loss_d_w_y;
 
-        // b_f = b_f - lr * d_loss_d_b_f;
-        // b_i = b_i - lr * d_loss_d_b_i;
-        // b_c = b_c - lr * d_loss_d_b_c;
-        // b_o = b_o - lr * d_loss_d_b_o;
+        // b_z = b_z - lr * d_loss_d_b_z;
+        // b_r = b_r - lr * d_loss_d_b_r;
+        // b_h = b_h - lr * d_loss_d_b_h;
         b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -622,10 +607,10 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
         tensor d_loss_d_w_c = zeros({hidden_size, hidden_size + input_size});
         tensor d_loss_d_w_o = zeros({hidden_size, hidden_size + input_size});
 
-        tensor d_loss_d_b_f  = zeros({hidden_size, 1});
-        tensor d_loss_d_b_i  = zeros({hidden_size, 1});
-        tensor d_loss_d_b_c  = zeros({hidden_size, 1});
-        tensor d_loss_d_b_o  = zeros({hidden_size, 1});
+        tensor d_loss_d_b_f = zeros({hidden_size, 1});
+        tensor d_loss_d_b_i = zeros({hidden_size, 1});
+        tensor d_loss_d_b_c = zeros({hidden_size, 1});
+        tensor d_loss_d_b_o = zeros({hidden_size, 1});
 
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
