@@ -359,7 +359,7 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
 
         auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
 
-        float error = mean_squared_error(transpose(y_train), y_sequence.front());
+        float error = categorical_cross_entropy(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t_w_z = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_r = zeros({batch_size, hidden_size});
@@ -523,7 +523,8 @@ std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phas
 
         h_t = (ones - z_t) * h_t + z_t * h_hat_t;
 
-        tensor y_t = matmul(w_y, h_t) + b_y;
+        tensor y_t_z = matmul(w_y, h_t) + b_y;
+        tensor y_t = softmax(y_t_z);
 
         // std::cout << h_t.get_shape() << std::endl;
         // std::cout << concat_t.get_shape() << std::endl;

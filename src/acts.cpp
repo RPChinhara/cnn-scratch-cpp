@@ -17,6 +17,11 @@ tensor sigmoid(const tensor &t) {
     return 1.0 / (1.0 + exp(-t));
 }
 
+tensor softmax(const tensor &z) {
+    tensor exp_scores = exp(z - max(z, 1));
+    return exp_scores / sum(exp_scores, 1);
+}
+
 tensor relu_derivative(const tensor &z) {
     tensor t_new = z;
 
