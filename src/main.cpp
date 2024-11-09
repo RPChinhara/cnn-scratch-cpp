@@ -252,8 +252,8 @@ tensor gru2::predict(const tensor &x) {
 std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
-    std::vector<tensor> z_t_sequence;
-    std::vector<tensor> r_t_sequence;
+    std::vector<tensor> z_sequence;
+    std::vector<tensor> r_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -295,8 +295,8 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
 
         x_sequence.push_back(x_t);
         concat_sequence.push_back(concat_t);
-        z_t_sequence.push_back(z_t);
-        r_t_sequence.push_back(r_t);
+        z_sequence.push_back(z_t);
+        r_sequence.push_back(r_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
@@ -307,8 +307,8 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
 
     sequences[0] = x_sequence;
     sequences[1] = concat_sequence;
-    sequences[2] = z_t_sequence;
-    sequences[3] = r_t_sequence;
+    sequences[2] = z_sequence;
+    sequences[3] = r_sequence;
     sequences[4] = h_sequence;
     sequences[5] = y_sequence;
 
