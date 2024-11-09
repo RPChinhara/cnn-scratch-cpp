@@ -219,7 +219,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << 0.0f << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
     }
 }
 
