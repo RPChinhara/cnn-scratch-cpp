@@ -242,10 +242,10 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
-    if (phase == Phase::TRAIN)
-        batch_size = 60841;
+   if (phase == Phase::TRAIN)
+        batch_size = 8317;
     else
-        batch_size = 15211;
+        batch_size = 2072;
 
     tensor ones = tensor({hidden_size, batch_size}, {1.0f});
 
