@@ -62,7 +62,7 @@ class gru2 {
       TEST
     };
 
-    std::array<std::vector<tensor>, 6> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 7> forward(const tensor &x, enum Phase phase);
 
   public:
     gru2(const float lr);
@@ -109,7 +109,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_sequence, r_sequence, concat_2_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -130,8 +130,6 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 
         // d_loss_d_h_t_w_h: (8317, 50)
         // z_t_sequence:     (50, 8317)
-
-        std::cout << z_t_sequence.size() << std::endl;
 
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
@@ -240,20 +238,21 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float gru2::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_sequence, r_sequence, concat_2_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
 tensor gru2::predict(const tensor &x) {
-    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_sequence, r_sequence, concat_2_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 7> gru2::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_sequence;
     std::vector<tensor> r_sequence;
+    std::vector<tensor> concat_2_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -285,7 +284,9 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
         tensor r_t_z = matmul(w_r, concat_t) + b_r;
         tensor r_t = sigmoid(r_t_z);
 
-        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, transpose(x_t)})) + b_h;
+        tensor concat_2_t = vstack({r_t * h_t, transpose(x_t)});
+
+        tensor h_hat_t_z = matmul(w_h, concat_2_t) + b_h;
         tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
 
         h_t = (ones - z_t) * h_t + z_t * h_hat_t;
@@ -297,20 +298,22 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
         concat_sequence.push_back(concat_t);
         z_sequence.push_back(z_t);
         r_sequence.push_back(r_t);
+        concat_2_sequence.push_back(concat_2_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
             y_sequence.push_back(y_t);
     }
 
-    std::array<std::vector<tensor>, 6> sequences;
+    std::array<std::vector<tensor>, 7> sequences;
 
     sequences[0] = x_sequence;
     sequences[1] = concat_sequence;
     sequences[2] = z_sequence;
     sequences[3] = r_sequence;
-    sequences[4] = h_sequence;
-    sequences[5] = y_sequence;
+    sequences[4] = concat_2_sequence;
+    sequences[5] = h_sequence;
+    sequences[6] = y_sequence;
 
     return sequences;
 }
