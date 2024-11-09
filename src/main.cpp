@@ -65,15 +65,14 @@ class gru2 {
     std::array<std::vector<tensor>, 6> forward(const tensor &x, enum Phase phase);
 
   public:
-    gru2(const float lr, const size_t vocab_size);
+    gru2(const float lr);
     void train(const tensor &x_train, const tensor &y_train);
     float evaluate(const tensor &x, const tensor &y);
     tensor predict(const tensor &x);
 };
 
-gru2::gru2(const float lr, const size_t vocab_size) {
+gru2::gru2(const float lr) {
     this->lr = lr;
-    this->vocab_size = vocab_size;
 
     w_z = glorot_uniform(hidden_size, hidden_size + input_size);
     w_r = glorot_uniform(hidden_size, hidden_size + input_size);
@@ -110,7 +109,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
