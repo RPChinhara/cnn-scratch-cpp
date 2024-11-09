@@ -52,6 +52,7 @@ int main() {
     auto input_token_train_test = split(input_token, 0.2f);
     auto target_token_train_test = split(target_token, 0.2f);
 
+    // TODO: Check vocab.size() as it may not be 5000
     gru model = gru(0.01f, vocab_size);
     model.train(input_token_train_test.first, target_token_train_test.first);
 
