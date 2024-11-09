@@ -128,9 +128,10 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // d_loss_d_h_t_w_h:  (8317, 50)
-        // z_t_sequence:      (50, 8317)
-        // concat_2_sequence: (51, 8317)
+        // d_loss_d_h_t_w_h:   (8317, 50)
+        // z_t_sequence:       (50, 8317)
+        // concat_2_sequence:  (51, 8317)
+        // h_hat_t_z_sequence: (50, 8317)
 
         // (50, 51) * (51, 8317)
 
@@ -148,7 +149,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             } else {
         //         d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_sequence[j + 1] * sigmoid_derivative(z_f_sequence[j])), vslice(w_f, w_f.shape.back() - 1));
         //         d_loss_d_h_t_w_r = matmul(d_loss_d_h_t_w_r * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_tilde_sequence[j] * sigmoid_derivative(z_i_sequence[j])), vslice(w_i, w_i.shape.back() - 1));
-        //         d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * i_sequence[j] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j])))), vslice(w_c, w_c.shape.back() - 1));
+                d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1)); // NOTE: r_t instead of -> vslice(w_h, w_h.shape.back() - 1) ???
             }
 
         //     d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), transpose(concat_sequence[j - 1]));
@@ -227,7 +228,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 
         // w_z = w_z - lr * d_loss_d_w_z;
         // w_r = w_r - lr * d_loss_d_w_r;
-        // w_h = w_h - lr * d_loss_d_w_h;
+        w_h = w_h - lr * d_loss_d_w_h;
         w_y = w_y - lr * d_loss_d_w_y;
 
         // b_z = b_z - lr * d_loss_d_b_z;
