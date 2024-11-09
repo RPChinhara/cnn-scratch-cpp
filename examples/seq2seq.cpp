@@ -1,78 +1,59 @@
-#include "datas.h"
 #include "lyrs.h"
-#include "preproc.h"
 
-#include <iostream>
+#include <fstream>
+#include <sstream>
 
-const size_t UNITS = 256;
+std::vector<std::string> daily_dialog(const std::string& file_path) {
+    std::ifstream file(file_path);
 
-tensor encoder() {
-    tensor ind = tensor({2, 5}, {2, 10, 1, 2, 3, 2, 15, 1, 5, 3});
+    if (!file.is_open())
+        std::cerr << "Failed to open the file: " << file_path << std::endl;
 
-    std::cout << embedding(16, 4, ind) << std::endl;
+    std::vector<std::string> data;
 
-    auto rnn = gru(UNITS);
+    std::string line;
+    std::getline(file, line);
 
-    return tensor();
-}
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string value;
 
-tensor cross_attention() {
-    return tensor();
-}
+        std::getline(ss, value);
 
-tensor decoder() {
-    return tensor();
+        value = lower(value);
+        value = regex_replace(value, "[.,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
+        value = regex_replace(value, "\"", "");
+        value = regex_replace(value, "\\s*[^\\x00-\\x7f]\\s*", "");
+        value = regex_replace(value, "[^\\x00-\\x7f]", "");
+        // value = regex_replace(value, "'", "");
+        value = regex_replace(value, "\\s+", " ");
+        value = regex_replace(value, "\\s+$", "");
+        value = value.insert(0, "[START] ");
+
+        data.push_back(value);
+    }
+
+    file.close();
+
+    return data;
 }
 
 int main() {
-    en_es data = load_en_es();
+    auto input_target = daily_dialog("datas/daily_dialog/daily_dialog.csv");
+    auto input = daily_dialog("datas/daily_dialog/daily_dialog_input.csv");
+    auto target = daily_dialog("datas/daily_dialog/daily_dialog_target.csv");
 
-    std::vector<std::wstring> x(data.x.size());
-    std::vector<std::wstring> y(data.y.size());
+    size_t vocab_size = 5000;
+    size_t max_len = 25;
 
-    for (auto i = 0; i < x.size(); ++i) {
-        x[i] = regex_replace(data.x[i], L"á", L"a");
-        x[i] = regex_replace(x[i], L"é", L"e");
-        x[i] = regex_replace(x[i], L"í", L"i");
-        x[i] = regex_replace(x[i], L"ó", L"o");
-        x[i] = regex_replace(x[i], L"ú", L"u");
+    auto input_token = text_vectorization(input_target, input, vocab_size, max_len);
+    auto target_token = text_vectorization(input_target, target, vocab_size, max_len);
 
-        x[i] = regex_replace(x[i], L"Á", L"A");
-        x[i] = regex_replace(x[i], L"É", L"E");
-        x[i] = regex_replace(x[i], L"Í", L"I");
-        x[i] = regex_replace(x[i], L"Ó", L"O");
-        x[i] = regex_replace(x[i], L"Ú", L"U");
+    auto input_token_train_test = split(input_token, 0.2f);
+    auto target_token_train_test = split(target_token, 0.2f);
 
-        x[i] = regex_replace(x[i], L"ñ", L"n");
-        x[i] = regex_replace(x[i], L"Ñ", L"N");
-        x[i] = regex_replace(x[i], L"ü", L"u");
-        x[i] = regex_replace(x[i], L"Ü", L"U");
-
-        x[i] = lower(x[i]);
-        y[i] = lower(data.y[i]);
-
-        x[i] = regex_replace(x[i], L"[^ a-z.?!,¿]", L"");
-        y[i] = regex_replace(y[i], L"[^ a-z.?!,¿]", L"");
-
-        x[i] = regex_replace(x[i], L"([.?!,¿])", L" $1 ");
-        y[i] = regex_replace(y[i], L"([.?!,¿])", L" $1 ");
-
-        x[i] = strip(x[i]);
-        y[i] = strip(y[i]);
-
-        x[i] = join({L"[START]", x[i], L"[END]"}, L" ");
-        y[i] = join({L"[START]", y[i], L"[END]"}, L" ");
-    }
-
-    auto vec_x = text_vectorization(x, x);
-    auto vec_y = text_vectorization(y, y);
-
-    std::cout << vec_x << std::endl;
-    std::cout << vec_y << std::endl;
-
-    auto context = encoder();
-    auto result = cross_attention();
-    auto logits = decoder();
+    gru model = gru(0.01f, vocab_size);
+    model.train(input_token_train_test.first, target_token_train_test.first);
 
     return 0;
 }
