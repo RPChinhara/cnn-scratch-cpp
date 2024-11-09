@@ -287,6 +287,7 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
         //          (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dw_h
 
         // dL/dw_r: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dw_r
+        //          (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dr_9 * dr_9/dw_r
 
         // dL/dw_z: (dL/dy * dy/dh_10) * dh_10/dz_10 * dz_10/dw_z
         // =====================================================================================================================================
