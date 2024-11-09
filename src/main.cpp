@@ -17,13 +17,10 @@ class gru2 {
     size_t batch_size;
     size_t epochs = 250;
 
-    size_t vocab_size;
-    size_t embedding_dim = 50;
-
-    size_t seq_length = 25;
-    size_t input_size = embedding_dim;
+    size_t seq_length = 10;
+    size_t input_size = 1;
     size_t hidden_size = 50;
-    size_t output_size = 25;
+    size_t output_size = 1;
 
     float beta1 = 0.9f;
     float beta2 = 0.999f;
@@ -113,11 +110,9 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto word_embedding = embedding(vocab_size, embedding_dim, x_train);
-
         auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
 
-        float error = categorical_cross_entropy(transpose(y_train), y_sequence.front());
+        float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t_w_z = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_r = zeros({batch_size, hidden_size});
