@@ -225,8 +225,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 
 float gru2::evaluate(const tensor &x, const tensor &y) {
     auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
-    // return loss(transpose(y), y_sequence.front());
-    return 0.0f;
+    return mean_squared_error(transpose(y), y_sequence.front());
 }
 
 tensor gru2::predict(const tensor &x) {
