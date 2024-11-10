@@ -161,6 +161,9 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             d_loss_d_b_h = d_loss_d_b_h + sum(transpose(d_loss_d_h_t_w_h) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))), 1);
         }
 
+        // OBSERVE:
+        // d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1)) test losses: 0.000609079
+
         // tensor concat_t = vstack({h_t, transpose(x_t)});
 
         // tensor z_t_z = matmul(w_z, concat_t) + b_z;
@@ -321,8 +324,7 @@ std::array<std::vector<tensor>, 11> gru2::forward(const tensor &x, enum Phase ph
 
         h_t = (ones - z_t) * h_t + z_t * h_hat_t;
 
-        tensor y_t_z = matmul(w_y, h_t) + b_y;
-        tensor y_t = softmax(y_t_z);
+        tensor y_t = matmul(w_y, h_t) + b_y;
 
         x_sequence.push_back(x_t);
         concat_sequence.push_back(concat_t);
