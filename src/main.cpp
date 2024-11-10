@@ -62,7 +62,7 @@ class gru2 {
       TEST
     };
 
-    std::array<std::vector<tensor>, 8> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 10> forward(const tensor &x, enum Phase phase);
 
   public:
     gru2(const float lr);
@@ -109,7 +109,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -144,7 +144,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
                 tensor d_y_d_h_10 = w_y;
 
         //         d_loss_d_h_t_w_z = matmul(transpose(d_loss_d_y), d_y_d_h_10);
-        //         d_loss_d_h_t_w_r = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+                d_loss_d_h_t_w_r = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_h = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
         //         d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_sequence[j + 1] * sigmoid_derivative(z_f_sequence[j])), vslice(w_f, w_f.shape.back() - 1));
@@ -153,7 +153,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             }
 
         //     d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-        //     d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_i) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_tilde_sequence[j - 1] * sigmoid_derivative(z_i_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            // d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * h_sequence[j], sigmoid_derivative(z_f_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_h = d_loss_d_w_h + matmul(transpose(d_loss_d_h_t_w_h) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))), transpose(concat_2_sequence[j - 1]));
 
         //     d_loss_d_b_z = d_loss_d_b_z + sum(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), 1);
@@ -264,19 +264,21 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float gru2::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, concat_sequence, z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
 tensor gru2::predict(const tensor &x) {
-    auto [x_sequence, concat_sequence, z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 8> gru2::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
+    std::vector<tensor> z_t_z_sequence;
     std::vector<tensor> z_sequence;
+    std::vector<tensor> r_t_z_sequence;
     std::vector<tensor> r_sequence;
     std::vector<tensor> concat_2_sequence;
     std::vector<tensor> h_hat_t_z_sequence;
@@ -323,7 +325,9 @@ std::array<std::vector<tensor>, 8> gru2::forward(const tensor &x, enum Phase pha
 
         x_sequence.push_back(x_t);
         concat_sequence.push_back(concat_t);
+        z_t_z_sequence.push_back(z_t_z);
         z_sequence.push_back(z_t);
+        r_t_z_sequence.push_back(r_t_z);
         r_sequence.push_back(r_t);
         concat_2_sequence.push_back(concat_2_t);
         h_hat_t_z_sequence.push_back(h_hat_t_z);
@@ -333,16 +337,18 @@ std::array<std::vector<tensor>, 8> gru2::forward(const tensor &x, enum Phase pha
             y_sequence.push_back(y_t);
     }
 
-    std::array<std::vector<tensor>, 8> sequences;
+    std::array<std::vector<tensor>, 10> sequences;
 
     sequences[0] = x_sequence;
     sequences[1] = concat_sequence;
-    sequences[2] = z_sequence;
-    sequences[3] = r_sequence;
-    sequences[4] = concat_2_sequence;
-    sequences[5] = h_hat_t_z_sequence;
-    sequences[6] = h_sequence;
-    sequences[7] = y_sequence;
+    sequences[2] = z_t_z_sequence;
+    sequences[3] = z_sequence;
+    sequences[4] = r_t_z_sequence;
+    sequences[5] = r_sequence;
+    sequences[6] = concat_2_sequence;
+    sequences[7] = h_hat_t_z_sequence;
+    sequences[8] = h_sequence;
+    sequences[9] = y_sequence;
 
     return sequences;
 }
