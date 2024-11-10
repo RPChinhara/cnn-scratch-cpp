@@ -194,65 +194,65 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 
         t += 1;
 
-        // m_w_f = beta1 * m_w_f + (1.0f - beta1) * d_loss_d_w_f;
-        // m_w_i = beta1 * m_w_i + (1.0f - beta1) * d_loss_d_w_i;
-        // m_w_c = beta1 * m_w_c + (1.0f - beta1) * d_loss_d_w_c;
-        // m_w_y = beta1 * m_w_y + (1.0f - beta1) * d_loss_d_w_y;
+        m_w_z = beta1 * m_w_z + (1.0f - beta1) * d_loss_d_w_z;
+        m_w_r = beta1 * m_w_r + (1.0f - beta1) * d_loss_d_w_r;
+        m_w_h = beta1 * m_w_h + (1.0f - beta1) * d_loss_d_w_h;
+        m_w_y = beta1 * m_w_y + (1.0f - beta1) * d_loss_d_w_y;
 
-        // m_b_f = beta1 * m_b_f + (1.0f - beta1) * d_loss_d_b_f;
-        // m_b_i = beta1 * m_b_i + (1.0f - beta1) * d_loss_d_b_i;
-        // m_b_c = beta1 * m_b_c + (1.0f - beta1) * d_loss_d_b_c;
-        // m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
+        m_b_z = beta1 * m_b_z + (1.0f - beta1) * d_loss_d_b_z;
+        m_b_r = beta1 * m_b_r + (1.0f - beta1) * d_loss_d_b_r;
+        m_b_h = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
 
-        // v_w_f = beta2 * v_w_f + (1.0f - beta2) * square(d_loss_d_w_f);
-        // v_w_i = beta2 * v_w_i + (1.0f - beta2) * square(d_loss_d_w_i);
-        // v_w_c = beta2 * v_w_c + (1.0f - beta2) * square(d_loss_d_w_c);
-        // v_w_y = beta2 * v_w_y + (1.0f - beta2) * square(d_loss_d_w_y);
+        v_w_z = beta2 * v_w_z + (1.0f - beta2) * square(d_loss_d_w_z);
+        v_w_r = beta2 * v_w_r + (1.0f - beta2) * square(d_loss_d_w_r);
+        v_w_h = beta2 * v_w_h + (1.0f - beta2) * square(d_loss_d_w_h);
+        v_w_y = beta2 * v_w_y + (1.0f - beta2) * square(d_loss_d_w_y);
 
-        // v_b_f = beta2 * v_b_f + (1.0f - beta2) * square(d_loss_d_b_f);
-        // v_b_i = beta2 * v_b_i + (1.0f - beta2) * square(d_loss_d_b_i);
-        // v_b_c = beta2 * v_b_c + (1.0f - beta2) * square(d_loss_d_b_c);
-        // v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
+        v_b_z = beta2 * v_b_z + (1.0f - beta2) * square(d_loss_d_b_z);
+        v_b_r = beta2 * v_b_r + (1.0f - beta2) * square(d_loss_d_b_r);
+        v_b_h = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
+        v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
 
-        // tensor m_hat_w_f = m_w_f / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_i = m_w_i / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_c = m_w_c / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_y = m_w_y / (1.0f - powf(beta1, t));
+        tensor m_hat_w_z = m_w_z / (1.0f - powf(beta1, t));
+        tensor m_hat_w_r = m_w_r / (1.0f - powf(beta1, t));
+        tensor m_hat_w_h = m_w_h / (1.0f - powf(beta1, t));
+        tensor m_hat_w_y = m_w_y / (1.0f - powf(beta1, t));
 
-        // tensor m_hat_b_f = m_b_f / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_i = m_b_i / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_c = m_b_c / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
+        tensor m_hat_b_z = m_b_z / (1.0f - powf(beta1, t));
+        tensor m_hat_b_r = m_b_r / (1.0f - powf(beta1, t));
+        tensor m_hat_b_h = m_b_h / (1.0f - powf(beta1, t));
+        tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
 
-        // tensor v_hat_w_f = v_w_f / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_i = v_w_i / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_c = v_w_c / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_y = v_w_y / (1.0f - powf(beta2, t));
+        tensor v_hat_w_z = v_w_z / (1.0f - powf(beta2, t));
+        tensor v_hat_w_r = v_w_r / (1.0f - powf(beta2, t));
+        tensor v_hat_w_h = v_w_h / (1.0f - powf(beta2, t));
+        tensor v_hat_w_y = v_w_y / (1.0f - powf(beta2, t));
 
-        // tensor v_hat_b_f = v_b_f / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_i = v_b_i / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_c = v_b_c / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
+        tensor v_hat_b_z = v_b_z / (1.0f - powf(beta2, t));
+        tensor v_hat_b_r = v_b_r / (1.0f - powf(beta2, t));
+        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
+        tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
 
-        // w_f = w_f - lr * m_hat_w_f / (sqrt(v_hat_w_f) + epsilon);
-        // w_i = w_i - lr * m_hat_w_i / (sqrt(v_hat_w_i) + epsilon);
-        // w_c = w_c - lr * m_hat_w_c / (sqrt(v_hat_w_c) + epsilon);
-        // w_y = w_y - lr * m_hat_w_y / (sqrt(v_hat_w_y) + epsilon);
+        w_z = w_z - lr * m_hat_w_z / (sqrt(v_hat_w_z) + epsilon);
+        w_r = w_r - lr * m_hat_w_r / (sqrt(v_hat_w_r) + epsilon);
+        w_h = w_h - lr * m_hat_w_h / (sqrt(v_hat_w_h) + epsilon);
+        w_y = w_y - lr * m_hat_w_y / (sqrt(v_hat_w_y) + epsilon);
 
-        // b_f = b_f - lr * m_hat_b_f / (sqrt(v_hat_b_f) + epsilon);
-        // b_i = b_i - lr * m_hat_b_i / (sqrt(v_hat_b_i) + epsilon);
-        // b_c = b_c - lr * m_hat_b_c / (sqrt(v_hat_b_c) + epsilon);
-        // b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
+        b_z = b_z - lr * m_hat_b_z / (sqrt(v_hat_b_z) + epsilon);
+        b_r = b_r - lr * m_hat_b_r / (sqrt(v_hat_b_r) + epsilon);
+        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
+        b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
-        w_z = w_z - lr * d_loss_d_w_z;
-        w_r = w_r - lr * d_loss_d_w_r;
-        w_h = w_h - lr * d_loss_d_w_h;
-        w_y = w_y - lr * d_loss_d_w_y;
+        // w_z = w_z - lr * d_loss_d_w_z;
+        // w_r = w_r - lr * d_loss_d_w_r;
+        // w_h = w_h - lr * d_loss_d_w_h;
+        // w_y = w_y - lr * d_loss_d_w_y;
 
-        b_z = b_z - lr * d_loss_d_b_z;
-        b_r = b_r - lr * d_loss_d_b_r;
-        b_h = b_h - lr * d_loss_d_b_h;
-        b_y = b_y - lr * d_loss_d_y;
+        // b_z = b_z - lr * d_loss_d_b_z;
+        // b_r = b_r - lr * d_loss_d_b_r;
+        // b_h = b_h - lr * d_loss_d_b_h;
+        // b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
