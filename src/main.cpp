@@ -162,7 +162,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
         }
 
         // OBSERVE:
-        // d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1)) test losses: 0.000609079
+        // d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1)) test losses: 0.000609079, 0.0015165
 
         // tensor concat_t = vstack({h_t, transpose(x_t)});
 
