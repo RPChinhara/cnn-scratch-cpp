@@ -62,7 +62,7 @@ class gru2 {
       TEST
     };
 
-    std::array<std::vector<tensor>, 10> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 11> forward(const tensor &x, enum Phase phase);
 
   public:
     gru2(const float lr);
@@ -109,7 +109,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -264,16 +264,16 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float gru2::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
 tensor gru2::predict(const tensor &x) {
-    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 11> gru2::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_t_z_sequence;
@@ -282,6 +282,7 @@ std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase ph
     std::vector<tensor> r_sequence;
     std::vector<tensor> concat_2_sequence;
     std::vector<tensor> h_hat_t_z_sequence;
+    std::vector<tensor> h_hat_t_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -331,24 +332,26 @@ std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase ph
         r_sequence.push_back(r_t);
         concat_2_sequence.push_back(concat_2_t);
         h_hat_t_z_sequence.push_back(h_hat_t_z);
+        h_hat_t_sequence.push_back(h_hat_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
             y_sequence.push_back(y_t);
     }
 
-    std::array<std::vector<tensor>, 10> sequences;
+    std::array<std::vector<tensor>, 11> sequences;
 
-    sequences[0] = x_sequence;
-    sequences[1] = concat_sequence;
-    sequences[2] = z_t_z_sequence;
-    sequences[3] = z_sequence;
-    sequences[4] = r_t_z_sequence;
-    sequences[5] = r_sequence;
-    sequences[6] = concat_2_sequence;
-    sequences[7] = h_hat_t_z_sequence;
-    sequences[8] = h_sequence;
-    sequences[9] = y_sequence;
+    sequences[0]  = x_sequence;
+    sequences[1]  = concat_sequence;
+    sequences[2]  = z_t_z_sequence;
+    sequences[3]  = z_sequence;
+    sequences[4]  = r_t_z_sequence;
+    sequences[5]  = r_sequence;
+    sequences[6]  = concat_2_sequence;
+    sequences[7]  = h_hat_t_z_sequence;
+    sequences[8]  = h_hat_t_sequence;
+    sequences[9]  = h_sequence;
+    sequences[10] = y_sequence;
 
     return sequences;
 }
