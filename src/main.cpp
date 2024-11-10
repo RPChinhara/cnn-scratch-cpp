@@ -143,16 +143,16 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_y;
 
-        //         d_loss_d_h_t_w_z = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+                d_loss_d_h_t_w_z = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_r = matmul(transpose(d_loss_d_y), d_y_d_h_10);
                 d_loss_d_h_t_w_h = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-        //         d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_sequence[j + 1] * sigmoid_derivative(z_f_sequence[j])), vslice(w_f, w_f.shape.back() - 1));
+                d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(h_hat_t_sequence[j] * sigmoid_derivative(z_t_z_sequence[j])), vslice(w_z, w_z.shape.back() - 1));
                 d_loss_d_h_t_w_r = matmul(d_loss_d_h_t_w_r * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * h_sequence[j + 1] * sigmoid_derivative(r_t_z_sequence[j])), vslice(w_r, w_r.shape.back() - 1));
                 d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1)); // NOTE: r_t instead of -> vslice(w_h, w_h.shape.back() - 1) ???
             }
 
-        //     d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_z) * h_hat_t_sequence[j - 1] * sigmoid_derivative(z_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * h_sequence[j] * sigmoid_derivative(r_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
             d_loss_d_w_h = d_loss_d_w_h + matmul(transpose(d_loss_d_h_t_w_h) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))), transpose(concat_2_sequence[j - 1]));
 
@@ -244,7 +244,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
         // b_c = b_c - lr * m_hat_b_c / (sqrt(v_hat_b_c) + epsilon);
         // b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
-        // w_z = w_z - lr * d_loss_d_w_z;
+        w_z = w_z - lr * d_loss_d_w_z;
         w_r = w_r - lr * d_loss_d_w_r;
         w_h = w_h - lr * d_loss_d_w_h;
         w_y = w_y - lr * d_loss_d_w_y;
