@@ -1,5 +1,6 @@
 #include "arrs.h"
 #include "datas.h"
+#include "losses.h"
 #include "lyrs.h"
 #include "preproc.h"
 
@@ -28,16 +29,6 @@ tensor relu(const tensor &z_t) {
         h_t.elems[i] = std::fmax(0.0f, z_t.elems[i]);
 
     return h_t;
-}
-
-float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
-    float sum = 0.0f;
-    float n = static_cast<float>(y_true.shape.back());
-
-    for (auto i = 0; i < y_true.size; ++i)
-        sum += std::powf(y_true[i] - y_pred[i], 2.0f);
-
-    return sum / n;
 }
 
 int main() {
