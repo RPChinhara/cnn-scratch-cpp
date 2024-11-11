@@ -62,7 +62,7 @@ class gru2 {
       TEST
     };
 
-    std::array<std::vector<tensor>, 6> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 10> forward(const tensor &x, enum Phase phase);
 
   public:
     gru2(const float lr);
@@ -109,7 +109,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -132,98 +132,98 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_y;
 
-        //         d_loss_d_h_t_w_z = matmul(transpose(d_loss_d_y), d_y_d_h_10);
-        //         d_loss_d_h_t_w_r = matmul(transpose(d_loss_d_y), d_y_d_h_10);
-        //         d_loss_d_h_t_w_h = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+                d_loss_d_h_t_w_z = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+                d_loss_d_h_t_w_r = matmul(transpose(d_loss_d_y), d_y_d_h_10);
+                d_loss_d_h_t_w_h = matmul(transpose(d_loss_d_y), d_y_d_h_10);
             } else {
-        //         d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_sequence[j + 1] * sigmoid_derivative(z_f_sequence[j])), vslice(w_f, w_f.shape.back() - 1));
-        //         d_loss_d_h_t_w_r = matmul(d_loss_d_h_t_w_r * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * c_tilde_sequence[j] * sigmoid_derivative(z_i_sequence[j])), vslice(w_i, w_i.shape.back() - 1));
-        //         d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(o_sequence[j] * (1.0f - square(hyperbolic_tangent(c_sequence[j + 1]))) * i_sequence[j] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j])))), vslice(w_c, w_c.shape.back() - 1));
+                d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(h_hat_t_sequence[j] * sigmoid_derivative(z_t_z_sequence[j])), vslice(w_z, w_z.shape.back() - 1));
+                d_loss_d_h_t_w_r = matmul(d_loss_d_h_t_w_r * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j + 1]) * sigmoid_derivative(r_t_z_sequence[j])), vslice(w_r, w_r.shape.back() - 1));
+                d_loss_d_h_t_w_h = d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), r_sequence[j]));
             }
+            // NOTE: Could be (1.0f - square(h_hat_t_sequence[j - 1])), and this applies to all that have partial derivative of tanh
+            d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_z) * h_hat_t_sequence[j - 1] * sigmoid_derivative(z_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j]) * sigmoid_derivative(r_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+            d_loss_d_w_h = d_loss_d_w_h + matmul(transpose(d_loss_d_h_t_w_h) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))), transpose(concat_2_sequence[j - 1]));
 
-        //     d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-        //     d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_i) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_tilde_sequence[j - 1] * sigmoid_derivative(z_i_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-        //     d_loss_d_w_h = d_loss_d_w_h + matmul(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), transpose(concat_sequence[j - 1]));
-
-        //     d_loss_d_b_z = d_loss_d_b_z + sum(transpose(d_loss_d_h_t_w_f) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_sequence[j] * sigmoid_derivative(z_f_sequence[j - 1]), 1);
-        //     d_loss_d_b_r = d_loss_d_b_r + sum(transpose(d_loss_d_h_t_w_i) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * c_tilde_sequence[j - 1] * sigmoid_derivative(z_i_sequence[j - 1]), 1);
-        //     d_loss_d_b_h = d_loss_d_b_h + sum(transpose(d_loss_d_h_t_w_c) * o_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(c_sequence[j]))) * i_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(z_c_tilde_sequence[j - 1]))), 1);
+            d_loss_d_b_z = d_loss_d_b_z + sum(transpose(d_loss_d_h_t_w_z) * h_hat_t_sequence[j - 1] * sigmoid_derivative(z_t_z_sequence[j - 1]), 1);
+            d_loss_d_b_r = d_loss_d_b_r + sum(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j]) * sigmoid_derivative(r_t_z_sequence[j - 1]), 1);
+            d_loss_d_b_h = d_loss_d_b_h + sum(transpose(d_loss_d_h_t_w_h) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))), 1);
         }
 
-        // =====================================================================================================================================
-        // dL/dw_h: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dw_h
-        //          (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dw_h
+        // OBSERVE:
+        // d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1))
+        // test losses: 0.000609079, 0.0015165, 0.000932636, 0.00047658, 0.00147116, 0.000575935
 
-        // dL/dw_r: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dw_r
-        //          (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dr_9 * dr_9/dw_r
 
-        // dL/dw_z: (dL/dy * dy/dh_10) * dh_10/dz_10 * dz_10/dw_z
-        //          (dL/dy * dy/dh_10 * dh_10/dz_10 * dz_10/dh_9) * dh_9/dz_9 * dz_9/dw_z
-        // =====================================================================================================================================
+        // d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j]) * sigmoid_derivative(r_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
+        // test losses: 0.000374682, 0.000617785, 0.000426879, 9.53731e-05, 0.00111133, 7.91521e-05
+
+        // d_loss_d_h_t_w_h = d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), r_sequence[j]));
+        // test losses: 0.000197716, 0.00106668, 0.000345796, 0.000150323, 0.000243591
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
         t += 1;
 
-        // m_w_f = beta1 * m_w_f + (1.0f - beta1) * d_loss_d_w_f;
-        // m_w_i = beta1 * m_w_i + (1.0f - beta1) * d_loss_d_w_i;
-        // m_w_c = beta1 * m_w_c + (1.0f - beta1) * d_loss_d_w_c;
-        // m_w_y = beta1 * m_w_y + (1.0f - beta1) * d_loss_d_w_y;
+        m_w_z = beta1 * m_w_z + (1.0f - beta1) * d_loss_d_w_z;
+        m_w_r = beta1 * m_w_r + (1.0f - beta1) * d_loss_d_w_r;
+        m_w_h = beta1 * m_w_h + (1.0f - beta1) * d_loss_d_w_h;
+        m_w_y = beta1 * m_w_y + (1.0f - beta1) * d_loss_d_w_y;
 
-        // m_b_f = beta1 * m_b_f + (1.0f - beta1) * d_loss_d_b_f;
-        // m_b_i = beta1 * m_b_i + (1.0f - beta1) * d_loss_d_b_i;
-        // m_b_c = beta1 * m_b_c + (1.0f - beta1) * d_loss_d_b_c;
-        // m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
+        m_b_z = beta1 * m_b_z + (1.0f - beta1) * d_loss_d_b_z;
+        m_b_r = beta1 * m_b_r + (1.0f - beta1) * d_loss_d_b_r;
+        m_b_h = beta1 * m_b_h + (1.0f - beta1) * d_loss_d_b_h;
+        m_b_y = beta1 * m_b_y + (1.0f - beta1) * d_loss_d_y;
 
-        // v_w_f = beta2 * v_w_f + (1.0f - beta2) * square(d_loss_d_w_f);
-        // v_w_i = beta2 * v_w_i + (1.0f - beta2) * square(d_loss_d_w_i);
-        // v_w_c = beta2 * v_w_c + (1.0f - beta2) * square(d_loss_d_w_c);
-        // v_w_y = beta2 * v_w_y + (1.0f - beta2) * square(d_loss_d_w_y);
+        v_w_z = beta2 * v_w_z + (1.0f - beta2) * square(d_loss_d_w_z);
+        v_w_r = beta2 * v_w_r + (1.0f - beta2) * square(d_loss_d_w_r);
+        v_w_h = beta2 * v_w_h + (1.0f - beta2) * square(d_loss_d_w_h);
+        v_w_y = beta2 * v_w_y + (1.0f - beta2) * square(d_loss_d_w_y);
 
-        // v_b_f = beta2 * v_b_f + (1.0f - beta2) * square(d_loss_d_b_f);
-        // v_b_i = beta2 * v_b_i + (1.0f - beta2) * square(d_loss_d_b_i);
-        // v_b_c = beta2 * v_b_c + (1.0f - beta2) * square(d_loss_d_b_c);
-        // v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
+        v_b_z = beta2 * v_b_z + (1.0f - beta2) * square(d_loss_d_b_z);
+        v_b_r = beta2 * v_b_r + (1.0f - beta2) * square(d_loss_d_b_r);
+        v_b_h = beta2 * v_b_h + (1.0f - beta2) * square(d_loss_d_b_h);
+        v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(d_loss_d_y);
 
-        // tensor m_hat_w_f = m_w_f / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_i = m_w_i / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_c = m_w_c / (1.0f - powf(beta1, t));
-        // tensor m_hat_w_y = m_w_y / (1.0f - powf(beta1, t));
+        tensor m_hat_w_z = m_w_z / (1.0f - powf(beta1, t));
+        tensor m_hat_w_r = m_w_r / (1.0f - powf(beta1, t));
+        tensor m_hat_w_h = m_w_h / (1.0f - powf(beta1, t));
+        tensor m_hat_w_y = m_w_y / (1.0f - powf(beta1, t));
 
-        // tensor m_hat_b_f = m_b_f / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_i = m_b_i / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_c = m_b_c / (1.0f - powf(beta1, t));
-        // tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
+        tensor m_hat_b_z = m_b_z / (1.0f - powf(beta1, t));
+        tensor m_hat_b_r = m_b_r / (1.0f - powf(beta1, t));
+        tensor m_hat_b_h = m_b_h / (1.0f - powf(beta1, t));
+        tensor m_hat_b_y = m_b_y / (1.0f - powf(beta1, t));
 
-        // tensor v_hat_w_f = v_w_f / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_i = v_w_i / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_c = v_w_c / (1.0f - powf(beta2, t));
-        // tensor v_hat_w_y = v_w_y / (1.0f - powf(beta2, t));
+        tensor v_hat_w_z = v_w_z / (1.0f - powf(beta2, t));
+        tensor v_hat_w_r = v_w_r / (1.0f - powf(beta2, t));
+        tensor v_hat_w_h = v_w_h / (1.0f - powf(beta2, t));
+        tensor v_hat_w_y = v_w_y / (1.0f - powf(beta2, t));
 
-        // tensor v_hat_b_f = v_b_f / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_i = v_b_i / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_c = v_b_c / (1.0f - powf(beta2, t));
-        // tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
+        tensor v_hat_b_z = v_b_z / (1.0f - powf(beta2, t));
+        tensor v_hat_b_r = v_b_r / (1.0f - powf(beta2, t));
+        tensor v_hat_b_h = v_b_h / (1.0f - powf(beta2, t));
+        tensor v_hat_b_y = v_b_y / (1.0f - powf(beta2, t));
 
-        // w_f = w_f - lr * m_hat_w_f / (sqrt(v_hat_w_f) + epsilon);
-        // w_i = w_i - lr * m_hat_w_i / (sqrt(v_hat_w_i) + epsilon);
-        // w_c = w_c - lr * m_hat_w_c / (sqrt(v_hat_w_c) + epsilon);
-        // w_y = w_y - lr * m_hat_w_y / (sqrt(v_hat_w_y) + epsilon);
+        w_z = w_z - lr * m_hat_w_z / (sqrt(v_hat_w_z) + epsilon);
+        w_r = w_r - lr * m_hat_w_r / (sqrt(v_hat_w_r) + epsilon);
+        w_h = w_h - lr * m_hat_w_h / (sqrt(v_hat_w_h) + epsilon);
+        w_y = w_y - lr * m_hat_w_y / (sqrt(v_hat_w_y) + epsilon);
 
-        // b_f = b_f - lr * m_hat_b_f / (sqrt(v_hat_b_f) + epsilon);
-        // b_i = b_i - lr * m_hat_b_i / (sqrt(v_hat_b_i) + epsilon);
-        // b_c = b_c - lr * m_hat_b_c / (sqrt(v_hat_b_c) + epsilon);
-        // b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
+        b_z = b_z - lr * m_hat_b_z / (sqrt(v_hat_b_z) + epsilon);
+        b_r = b_r - lr * m_hat_b_r / (sqrt(v_hat_b_r) + epsilon);
+        b_h = b_h - lr * m_hat_b_h / (sqrt(v_hat_b_h) + epsilon);
+        b_y = b_y - lr * m_hat_b_y / (sqrt(v_hat_b_y) + epsilon);
 
         // w_z = w_z - lr * d_loss_d_w_z;
         // w_r = w_r - lr * d_loss_d_w_r;
         // w_h = w_h - lr * d_loss_d_w_h;
-        w_y = w_y - lr * d_loss_d_w_y;
+        // w_y = w_y - lr * d_loss_d_w_y;
 
         // b_z = b_z - lr * d_loss_d_b_z;
         // b_r = b_r - lr * d_loss_d_b_r;
         // b_h = b_h - lr * d_loss_d_b_h;
-        b_y = b_y - lr * d_loss_d_y;
+        // b_y = b_y - lr * d_loss_d_y;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
@@ -235,20 +235,24 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float gru2::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
 tensor gru2::predict(const tensor &x) {
-    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase phase) {
-    std::vector<tensor> x_sequence;
+std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> concat_sequence;
-    std::vector<tensor> z_t_sequence;
-    std::vector<tensor> r_t_sequence;
+    std::vector<tensor> z_t_z_sequence;
+    std::vector<tensor> z_sequence;
+    std::vector<tensor> r_t_z_sequence;
+    std::vector<tensor> r_sequence;
+    std::vector<tensor> concat_2_sequence;
+    std::vector<tensor> h_hat_t_z_sequence;
+    std::vector<tensor> h_hat_t_sequence;
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
@@ -256,8 +260,6 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
         batch_size = 8317;
     else
         batch_size = 2072;
-
-    tensor ones = tensor({hidden_size, batch_size}, {1.0f});
 
     tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
@@ -280,32 +282,41 @@ std::array<std::vector<tensor>, 6> gru2::forward(const tensor &x, enum Phase pha
         tensor r_t_z = matmul(w_r, concat_t) + b_r;
         tensor r_t = sigmoid(r_t_z);
 
-        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, transpose(x_t)})) + b_h;
+        tensor concat_2_t = vstack({r_t * h_t, transpose(x_t)});
+
+        tensor h_hat_t_z = matmul(w_h, concat_2_t) + b_h;
         tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
 
-        h_t = (ones - z_t) * h_t + z_t * h_hat_t;
+        h_t = (1.0f - z_t) * h_t + z_t * h_hat_t;
 
-        tensor y_t_z = matmul(w_y, h_t) + b_y;
-        tensor y_t = softmax(y_t_z);
+        tensor y_t = matmul(w_y, h_t) + b_y;
 
-        x_sequence.push_back(x_t);
         concat_sequence.push_back(concat_t);
-        z_t_sequence.push_back(z_t);
-        r_t_sequence.push_back(r_t);
+        z_t_z_sequence.push_back(z_t_z);
+        z_sequence.push_back(z_t);
+        r_t_z_sequence.push_back(r_t_z);
+        r_sequence.push_back(r_t);
+        concat_2_sequence.push_back(concat_2_t);
+        h_hat_t_z_sequence.push_back(h_hat_t_z);
+        h_hat_t_sequence.push_back(h_hat_t);
         h_sequence.push_back(h_t);
 
         if (i == seq_length - 1)
             y_sequence.push_back(y_t);
     }
 
-    std::array<std::vector<tensor>, 6> sequences;
+    std::array<std::vector<tensor>, 10> sequences;
 
-    sequences[0] = x_sequence;
-    sequences[1] = concat_sequence;
-    sequences[2] = z_t_sequence;
-    sequences[3] = r_t_sequence;
-    sequences[4] = h_sequence;
-    sequences[5] = y_sequence;
+    sequences[0]  = concat_sequence;
+    sequences[1]  = z_t_z_sequence;
+    sequences[2]  = z_sequence;
+    sequences[3]  = r_t_z_sequence;
+    sequences[4]  = r_sequence;
+    sequences[5]  = concat_2_sequence;
+    sequences[6]  = h_hat_t_z_sequence;
+    sequences[7]  = h_hat_t_sequence;
+    sequences[8]  = h_sequence;
+    sequences[9] = y_sequence;
 
     return sequences;
 }
