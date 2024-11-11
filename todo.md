@@ -1,6 +1,5 @@
 1. Implement Seq2seq (Just use ChatGPT and Google? Come back to the tutorials on Tensorflow sites if it was impossible)
-  > Implement GRU
-  - Implement Bidirectional RNNs
+  > Implement Bidirectional RNNs
   - Implement Deep RNNs, which have multiple layers of RNNs stacked on top of each other and can be built with any of the basic RNN units (vanilla, LSTM, GRU)
   - Implement CNN
   - Implement ConvLSTM
