@@ -128,18 +128,6 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
         float num_samples = static_cast<float>(y_train.shape.front());
         tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // d_loss_d_h_t_w_h:   (8317, 50)
-        // z_t_sequence:       (50, 8317)
-        // concat_2_sequence:  (51, 8317)
-        // h_hat_t_z_sequence: (50, 8317)
-        // only h_sequence is of size 11, other is 10
-
-        // (50, 51) * (51, 8317)
-
-        // 1 2 3     1 2 3 1 2 3
-        // 1 2 3     1 2 3 1 2 3
-        // 1 2 3     1 2 3 1 2 3
-
         for (auto j = seq_length; j > 0; --j) {
             if (j == seq_length) {
                 tensor d_y_d_h_10 = w_y;
@@ -172,36 +160,6 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 
         // d_loss_d_h_t_w_h = d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), r_sequence[j]));
         // test losses: 0.000197716, 0.00106668, 0.000345796, 0.000150323, 0.000243591
-
-
-        // tensor concat_t = vstack({h_t, transpose(x_t)});
-
-        // tensor z_t_z = matmul(w_z, concat_t) + b_z;
-        // tensor z_t = sigmoid(z_t_z);
-
-        // tensor r_t_z = matmul(w_r, concat_t) + b_r;
-        // tensor r_t = sigmoid(r_t_z);
-
-        // tensor concat_2_t = vstack({r_t * h_t, transpose(x_t)});
-
-        // tensor h_hat_t_z = matmul(w_h, concat_2_t) + b_h;
-        // tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
-
-        // h_t = (ones - z_t) * h_t + z_t * h_hat_t;
-
-        // tensor y_t_z = matmul(w_y, h_t) + b_y;
-        // tensor y_t = softmax(y_t_z);
-
-        // =====================================================================================================================================
-        // dL/dw_h: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dw_h
-        //          (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dw_h
-
-        // dL/dw_r: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dw_r
-        //          (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dr_9 * dr_9/dw_r
-
-        // dL/dw_z: (dL/dy * dy/dh_10) * dh_10/dz_10 * dz_10/dw_z
-        //          (dL/dy * dy/dh_10 * dh_10/dz_10 * dz_10/dh_9) * dh_9/dz_9 * dz_9/dw_z
-        // =====================================================================================================================================
 
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
