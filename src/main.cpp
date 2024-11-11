@@ -150,17 +150,6 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             d_loss_d_b_h = d_loss_d_b_h + sum(transpose(d_loss_d_h_t_w_h) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))), 1);
         }
 
-        // OBSERVE:
-        // d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1))
-        // test losses: 0.000609079, 0.0015165, 0.000932636, 0.00047658, 0.00147116, 0.000575935
-
-
-        // d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j]) * sigmoid_derivative(r_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-        // test losses: 0.000374682, 0.000617785, 0.000426879, 9.53731e-05, 0.00111133, 7.91521e-05
-
-        // d_loss_d_h_t_w_h = d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), r_sequence[j]));
-        // test losses: 0.000197716, 0.00106668, 0.000345796, 0.000150323, 0.000243591, 0.000283452, 0.000299031, 8.95659e-05
-
         tensor d_loss_d_w_y  = matmul(d_loss_d_y, transpose(h_sequence.back()));
 
         t += 1;
