@@ -3,12 +3,12 @@
 #include "datas.h"
 #include "linalg.h"
 #include "losses.h"
-#include "lyrs.h"
 #include "math.hpp"
 #include "preproc.h"
 #include "rd.h"
 #include "tensor.h"
 
+#include <array>
 #include <chrono>
 
 class gru2 {
