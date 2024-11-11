@@ -168,7 +168,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 
 
         // d_loss_d_w_r = d_loss_d_w_r + matmul(transpose(d_loss_d_h_t_w_r) * z_sequence[j - 1] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j - 1]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j]) * sigmoid_derivative(r_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
-        // test losses: 0.000374682, 0.000617785, 0.000426879, 9.53731e-05, 0.00111133
+        // test losses: 0.000374682, 0.000617785, 0.000426879, 9.53731e-05, 0.00111133, 7.91521e-05
 
 
         // tensor concat_t = vstack({h_t, transpose(x_t)});
