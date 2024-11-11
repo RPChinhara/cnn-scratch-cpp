@@ -62,7 +62,7 @@ class gru2 {
       TEST
     };
 
-    std::array<std::vector<tensor>, 11> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 10> forward(const tensor &x, enum Phase phase);
 
   public:
     gru2(const float lr);
@@ -109,7 +109,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -171,7 +171,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
         // test losses: 0.000374682, 0.000617785, 0.000426879, 9.53731e-05, 0.00111133, 7.91521e-05
 
         // d_loss_d_h_t_w_h = d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), r_sequence[j]));
-        // test losses: 0.000197716
+        // test losses: 0.000197716, 0.00106668, 0.000345796
 
 
         // tensor concat_t = vstack({h_t, transpose(x_t)});
@@ -277,17 +277,16 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
 }
 
 float gru2::evaluate(const tensor &x, const tensor &y) {
-    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
 tensor gru2::predict(const tensor &x) {
-    auto [x_sequence, concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 11> gru2::forward(const tensor &x, enum Phase phase) {
-    std::vector<tensor> x_sequence;
+std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase phase) {
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_t_z_sequence;
     std::vector<tensor> z_sequence;
@@ -334,7 +333,6 @@ std::array<std::vector<tensor>, 11> gru2::forward(const tensor &x, enum Phase ph
 
         tensor y_t = matmul(w_y, h_t) + b_y;
 
-        x_sequence.push_back(x_t);
         concat_sequence.push_back(concat_t);
         z_t_z_sequence.push_back(z_t_z);
         z_sequence.push_back(z_t);
@@ -349,19 +347,18 @@ std::array<std::vector<tensor>, 11> gru2::forward(const tensor &x, enum Phase ph
             y_sequence.push_back(y_t);
     }
 
-    std::array<std::vector<tensor>, 11> sequences;
+    std::array<std::vector<tensor>, 10> sequences;
 
-    sequences[0]  = x_sequence;
-    sequences[1]  = concat_sequence;
-    sequences[2]  = z_t_z_sequence;
-    sequences[3]  = z_sequence;
-    sequences[4]  = r_t_z_sequence;
-    sequences[5]  = r_sequence;
-    sequences[6]  = concat_2_sequence;
-    sequences[7]  = h_hat_t_z_sequence;
-    sequences[8]  = h_hat_t_sequence;
-    sequences[9]  = h_sequence;
-    sequences[10] = y_sequence;
+    sequences[0]  = concat_sequence;
+    sequences[1]  = z_t_z_sequence;
+    sequences[2]  = z_sequence;
+    sequences[3]  = r_t_z_sequence;
+    sequences[4]  = r_sequence;
+    sequences[5]  = concat_2_sequence;
+    sequences[6]  = h_hat_t_z_sequence;
+    sequences[7]  = h_hat_t_sequence;
+    sequences[8]  = h_sequence;
+    sequences[9] = y_sequence;
 
     return sequences;
 }
