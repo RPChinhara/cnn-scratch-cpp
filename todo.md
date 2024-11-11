@@ -1,6 +1,6 @@
 > Implement CNN
 - Implement ConvLSTM
-- Implement Seq2seq (Just use ChatGPT and Google? Come back to the tutorials on Tensorflow sites if it was impossible)
+- Implement Seq2seq
 - Implement Transformer
 - Implement Autoencoder
 - Imeplement BERT
