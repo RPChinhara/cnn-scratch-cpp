@@ -150,7 +150,7 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
             } else {
                 d_loss_d_h_t_w_z = matmul(d_loss_d_h_t_w_z * transpose(h_hat_t_sequence[j] * sigmoid_derivative(z_t_z_sequence[j])), vslice(w_z, w_z.shape.back() - 1));
                 d_loss_d_h_t_w_r = matmul(d_loss_d_h_t_w_r * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), h_sequence[j + 1]) * sigmoid_derivative(r_t_z_sequence[j])), vslice(w_r, w_r.shape.back() - 1));
-                d_loss_d_h_t_w_h = matmul(d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j])))), vslice(w_h, w_h.shape.back() - 1)); // NOTE: r_t instead of -> vslice(w_h, w_h.shape.back() - 1) ???
+                d_loss_d_h_t_w_h = d_loss_d_h_t_w_h * transpose(z_sequence[j] * (1.0f - square(hyperbolic_tangent(h_hat_t_z_sequence[j]))) * matmul(vslice(w_h, w_h.shape.back() - 1), r_sequence[j]));
             }
             // NOTE: Could be (1.0f - square(h_hat_t_sequence[j - 1])), and this applies to all that have partial derivative of tanh
             d_loss_d_w_z = d_loss_d_w_z + matmul(transpose(d_loss_d_h_t_w_z) * h_hat_t_sequence[j - 1] * sigmoid_derivative(z_t_z_sequence[j - 1]), transpose(concat_sequence[j - 1]));
