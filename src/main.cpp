@@ -16,7 +16,7 @@ class cnn_2d {
     float lr;
     std::vector<size_t> filters;
 
-    std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
+    std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride);
 
   public:
     cnn_2d();
@@ -50,7 +50,7 @@ float cnn_2d::evaluate(const tensor &x_test, const tensor &y_test) {
 void cnn_2d::predict(const tensor &x_test, const tensor &y_test) {
 }
 
-std::vector<tensor> cnn_2d::forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride) {
+std::vector<tensor> cnn_2d::forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride) {
     std::vector<tensor> weights;
 
     return weights;
