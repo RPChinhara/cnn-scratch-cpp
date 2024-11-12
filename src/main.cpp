@@ -62,7 +62,7 @@ int main() {
     for (auto i = 0; i < 784; ++i) {
         if (i % 28 == 0)
             std::cout << std::endl;
-        std::cout << data.trainImages[i] << "   ";
+        std::cout << data.trainImages[i] << " ";
     }
 
     data.trainImages / 255.0f;
