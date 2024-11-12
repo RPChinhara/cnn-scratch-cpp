@@ -13,20 +13,18 @@
 
 class cnn_2d {
   private:
-    std::vector<size_t> filters;
     float lr;
+    std::vector<size_t> filters;
 
     std::vector<tensor> forward(const tensor &input, const std::vector<tensor> &kernel, const size_t stride);
 
   public:
-    cnn_2d(const std::vector<size_t> &filters, float const lr);
+    cnn_2d();
     void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
     void predict(const tensor &xTest, const tensor &yTest);
 };
 
-cnn_2d::cnn_2d(const std::vector<size_t> &filters, float const lr) {
-    this->filters = filters;
-    this->lr = lr;
+cnn_2d::cnn_2d() {
 }
 
 void cnn_2d::train(const tensor &xTrain, const tensor &yTrain, const tensor &xVal, const tensor &yVal) {
@@ -68,7 +66,7 @@ int main() {
     data.trainLabels = one_hot(data.trainLabels, 10);
     data.testLabels = one_hot(data.testLabels, 10);
 
-    cnn_2d model = cnn_2d({3, 128, 3}, 0.01f);
+    cnn_2d model = cnn_2d();
     model.train(data.trainImages, data.trainLabels, data.testImages, data.testLabels);
 
     return 0;
