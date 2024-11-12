@@ -14,7 +14,15 @@
 class cnn_2d {
   private:
     float lr;
-    std::vector<size_t> filters;
+
+    tensor conv1_kernel;
+    tensor conv2_kernel;
+
+    tensor fc1_w;
+    tensor fc1_b;
+
+    tensor fc2_w;
+    tensor fc2_b;
 
     std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride);
 
@@ -26,21 +34,17 @@ class cnn_2d {
 };
 
 cnn_2d::cnn_2d() {
+    conv1_kernel = normal_dist({3, 3});
+    conv2_kernel = normal_dist({3, 3});
+
+    fc1_w = normal_dist({32 * 7 * 7});
+    fc1_b = zeros({1, 1});
+
+    fc2_w = normal_dist({128});
+    fc2_b = zeros({1, 1});
 }
 
 void cnn_2d::train(const tensor &x_train, const tensor &y_train) {
-    tensor kernel = tensor({3, 3}, {1, -1, 1, 0, 1, 0, -1, 0, 1});
-
-    size_t kernelHeight = kernel.shape.front();
-    size_t kernelWidth = kernel.shape.back();
-
-    size_t inputHeight = x_train.shape[1];
-    size_t inputWidth = x_train.shape[2];
-
-    size_t outputHeight = inputHeight - kernelHeight + 1;
-    size_t outputWidth = inputWidth - kernelWidth + 1;
-
-    tensor output = zeros({outputHeight, outputWidth});
 }
 
 float cnn_2d::evaluate(const tensor &x_test, const tensor &y_test) {
