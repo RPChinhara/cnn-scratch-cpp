@@ -1,5 +1,4 @@
 > Implement CNN
-- Implement ConvLSTM
 - Implement Seq2seq
 - Implement Transformer
 - Implement Autoencoder
