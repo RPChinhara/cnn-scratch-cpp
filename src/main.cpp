@@ -15,7 +15,7 @@ class cnn2d {
   private:
     float lr;
     size_t batch_size;
-    size_t epochs = 150;
+    size_t epochs = 5;
 
     tensor conv1_kernel;
     tensor conv2_kernel;
@@ -80,8 +80,9 @@ int main() {
     mnist data = load_mnist();
 
     for (auto i = 0; i < 784 * 3; ++i) {
-        if (i % 28 == 0 && i % 783 != 0)
+        if (i % 28 == 0 && i != 0)
             std::cout << std::endl;
+
         std::cout << data.trainImages[i] << " ";
 
         if (i % 783 == 0 && i != 0)
