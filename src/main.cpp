@@ -1,89 +1,57 @@
 #include "acts.h"
-#include "arrs.h"
 #include "datas.h"
-#include "linalg.h"
 #include "losses.h"
+#include "lyrs.h"
 #include "math.hpp"
 #include "preproc.h"
-#include "rd.h"
-#include "tensor.h"
 
 #include <chrono>
 
-constexpr float lr = 0.01f;
-constexpr size_t batch_size = 32;
-constexpr size_t epochs = 5;
+float categorical_accuracy(const tensor &y_true, const tensor &y_pred) {
+    tensor idx_true = argmax(y_true);
+    tensor pred_idx = argmax(y_pred);
+    float equal = 0.0f;
 
-tensor conv1_kernel = normal_dist({3, 3});
-tensor conv2_kernel = normal_dist({3, 3});
+    for (auto i = 0; i < idx_true.size; ++i)
+        if (idx_true[i] == pred_idx[i])
+            ++equal;
 
-tensor fc1_w = normal_dist({32 * 7 * 7});
-tensor fc1_b = zeros({1, 1});
-
-tensor fc2_w = normal_dist({128});
-tensor fc2_b = zeros({1, 1});
-
-void cnn2d_train(const tensor &x_train, const tensor &y_train) {
-    for (auto i = 1; i <= epochs; ++i) {
-        auto start_time = std::chrono::high_resolution_clock::now();
-
-        // auto = forward();
-
-        float error = 0.0f;
-
-        auto end_time = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-        auto remaining_ms = duration - seconds;
-
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
-    }
-}
-
-float cnn2d_evaluate(const tensor &x_test, const tensor &y_test) {
-    return 0.0f;
-}
-
-void cnn2d_predict(const tensor &x_test, const tensor &y_test) {
-}
-
-std::vector<tensor> cnn2d_forward(const tensor &x) {
-    std::vector<tensor> weights;
-
-    return weights;
+    return equal / idx_true.size;
 }
 
 int main() {
-    mnist data = load_mnist();
+    iris data = load_iris();
+    tensor x = data.x;
+    tensor y = data.y;
 
-    size_t num_digits = 10;
-    const size_t image_size = 784;
-    const size_t image_dim = 28;
+    min_max_scaler2 scaler;
+    scaler.fit(x);
+    tensor scaled_x = scaler.transform(x);
 
-    for (auto i = 0; i < num_digits; ++i) {
-        for (auto j = 0; j < image_size; ++j) {
-            if (j % image_dim == 0 && j != 0)
-                std::cout << std::endl;
+    y = one_hot(y, 3);
 
-            std::cout << data.train_images[i * image_size + j] << " ";
-        }
+    auto train_temp = split_dataset(scaled_x, y, 0.2f, 42);
+    auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, 0.5f, 42);
 
-        std::cout << "\n\n";
-    }
+    nn model = nn({4, 64, 64, 3}, {relu, relu, softmax}, categorical_cross_entropy, categorical_accuracy, 0.01f);
 
-    for (auto i = 0; i < data.train_images.size; ++i)
-        data.train_images[i] /= 255.0f;
+    auto start = std::chrono::high_resolution_clock::now();
 
-    for (auto i = 0; i < data.test_images.size; ++i)
-        data.test_images[i] /= 255.0f;
+    model.train(train_temp.x_train, train_temp.y_train, val_test.x_train, val_test.y_train);
 
-    data.train_images.reshape({60000, 28, 28, 1});
-    data.test_images.reshape({10000, 28, 28, 1});
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
 
-    data.train_labels = one_hot(data.train_labels, 10);
-    data.test_labels = one_hot(data.test_labels, 10);
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds" << std::endl << std::endl;
 
-    cnn2d_train(data.train_images, data.train_labels);
+    auto train_loss = model.evaluate(train_temp.x_train, train_temp.y_train);
+    auto test_loss = model.evaluate(val_test.x_test, val_test.y_test);
+    auto pred = model.predict(val_test.x_test);
+
+    std::cout << "Train loss: " << train_loss << std::endl;
+    std::cout << "Test  loss: " << test_loss << std::endl;
+    std::cout << std::endl << pred << std::endl;
+    std::cout << std::endl << val_test.y_test << std::endl;
 
     return 0;
 }

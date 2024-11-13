@@ -24,14 +24,14 @@ int main() {
     tensor x = data.x;
     tensor y = data.y;
 
+    min_max_scaler2 scaler;
+    scaler.fit(x);
+    tensor scaled_x = scaler.transform(x);
+
     y = one_hot(y, 3);
 
-    auto train_temp = split_dataset(x, y, 0.2f, 42);
+    auto train_temp = split_dataset(scaled_x, y, 0.2f, 42);
     auto val_test = split_dataset(train_temp.x_test, train_temp.y_test, 0.5f, 42);
-
-    train_temp.x_train = min_max_scaler(train_temp.x_train);
-    val_test.x_train = min_max_scaler(val_test.x_train);
-    val_test.x_test = min_max_scaler(val_test.x_test);
 
     nn model = nn({4, 64, 64, 3}, {relu, relu, softmax}, categorical_cross_entropy, categorical_accuracy, 0.01f);
 
