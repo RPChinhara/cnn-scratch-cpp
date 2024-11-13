@@ -43,18 +43,6 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return std::regex_replace(in, re, rewrite);
 }
 
-std::vector<std::string> tokenizer(const std::string &text) {
-    std::vector<std::string> tokens;
-    std::stringstream ss(text);
-    std::string token;
-
-    while (ss >> token) {
-        tokens.push_back(token);
-    }
-
-    return tokens;
-}
-
 train_test split_dataset(const tensor &x, const tensor &y, const float test_size, const size_t rd_state) {
     tensor x_shuffled = shuffle(x, rd_state);
     tensor y_shuffled = shuffle(y, rd_state);
@@ -78,4 +66,16 @@ train_test split_dataset(const tensor &x, const tensor &y, const float test_size
         data.y_test[i - data.y_train.size] = y_shuffled[i];
 
     return data;
+}
+
+std::vector<std::string> tokenizer(const std::string &text) {
+    std::vector<std::string> tokens;
+    std::stringstream ss(text);
+    std::string token;
+
+    while (ss >> token) {
+        tokens.push_back(token);
+    }
+
+    return tokens;
 }
