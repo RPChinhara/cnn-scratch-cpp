@@ -11,6 +11,15 @@ tensor hyperbolic_tangent(const tensor &z_t) {
     return h_t;
 }
 
+tensor relu(const tensor &z) {
+    tensor a = z;
+
+    for (auto i = 0; i < z.size; ++i)
+        a.elems[i] = std::fmax(0.0f, z.elems[i]);
+
+    return a;
+}
+
 tensor sigmoid(const tensor &t) {
     tensor t_new = t;
 
