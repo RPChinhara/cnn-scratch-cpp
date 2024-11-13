@@ -34,7 +34,7 @@ tensor relu(const tensor &z_t) {
 int main() {
     tensor data = load_aapl();
 
-    min_max_scaler2 scaler;
+    min_max_scaler scaler;
     scaler.fit(data);
     tensor scaled_data = scaler.transform(data);
 

@@ -331,7 +331,7 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
 int main() {
     tensor data = load_aapl();
 
-    min_max_scaler2 scaler;
+    min_max_scaler scaler;
     scaler.fit(data);
     tensor scaled_data = scaler.transform(data);
 
