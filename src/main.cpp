@@ -11,7 +11,7 @@
 
 #include <chrono>
 
-class cnn_2d {
+class cnn2d {
   private:
     float lr;
 
@@ -27,13 +27,13 @@ class cnn_2d {
     std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride);
 
   public:
-    cnn_2d();
+    cnn2d();
     void train(const tensor &x_train, const tensor &y_train);
     float evaluate(const tensor &x_test, const tensor &y_test);
     void predict(const tensor &x_test, const tensor &y_test);
 };
 
-cnn_2d::cnn_2d() {
+cnn2d::cnn2d() {
     conv1_kernel = normal_dist({3, 3});
     conv2_kernel = normal_dist({3, 3});
 
@@ -44,17 +44,17 @@ cnn_2d::cnn_2d() {
     fc2_b = zeros({1, 1});
 }
 
-void cnn_2d::train(const tensor &x_train, const tensor &y_train) {
+void cnn2d::train(const tensor &x_train, const tensor &y_train) {
 }
 
-float cnn_2d::evaluate(const tensor &x_test, const tensor &y_test) {
+float cnn2d::evaluate(const tensor &x_test, const tensor &y_test) {
     return 0.0f;
 }
 
-void cnn_2d::predict(const tensor &x_test, const tensor &y_test) {
+void cnn2d::predict(const tensor &x_test, const tensor &y_test) {
 }
 
-std::vector<tensor> cnn_2d::forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride) {
+std::vector<tensor> cnn2d::forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride) {
     std::vector<tensor> weights;
 
     return weights;
@@ -75,7 +75,7 @@ int main() {
     data.trainLabels = one_hot(data.trainLabels, 10);
     data.testLabels = one_hot(data.testLabels, 10);
 
-    cnn_2d model = cnn_2d();
+    cnn2d model = cnn2d();
     model.train(data.trainImages, data.trainLabels);
 
     return 0;
