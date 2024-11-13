@@ -82,14 +82,17 @@ int main() {
     for (auto i = 0; i < 784 * 3; ++i) {
         if (i % 28 == 0 && i % 783 != 0)
             std::cout << std::endl;
-        std::cout << data.trainImages[i] << "  ";
+        std::cout << data.trainImages[i] << " ";
 
         if (i % 783 == 0 && i != 0)
             std::cout << std::endl;
     }
 
-    data.trainImages / 255.0f;
-    data.testImages / 255.0f;
+    for (auto i = 0; i < data.trainImages.size; ++i)
+        data.trainImages[i] /= 255.0f;
+
+    for (auto i = 0; i < data.testImages.size; ++i)
+        data.testImages[i] /= 255.0f;
 
     data.trainLabels = one_hot(data.trainLabels, 10);
     data.testLabels = one_hot(data.testLabels, 10);
