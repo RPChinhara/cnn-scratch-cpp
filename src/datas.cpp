@@ -9,8 +9,7 @@
 #include <stdio.h>
 #include <vector>
 
-tensor load_aapl()
-{
+tensor load_aapl() {
     std::ifstream file("datas/aapl.csv");
 
     if (!file.is_open())
@@ -25,8 +24,7 @@ tensor load_aapl()
     std::string line;
     std::getline(file, line);
 
-    while (std::getline(file, line))
-    {
+    while (std::getline(file, line)) {
         std::stringstream ss(line);
         std::string value;
 
@@ -45,8 +43,7 @@ tensor load_aapl()
     return data;
 }
 
-imdb load_imdb()
-{
+imdb load_imdb() {
     std::ifstream file("datas/imdb.csv");
 
     if (!file.is_open())
@@ -60,19 +57,15 @@ imdb load_imdb()
     std::string line;
     std::getline(file, line);
 
-    while (std::getline(file, line))
-    {
+    while (std::getline(file, line)) {
         size_t end_pos;
         size_t end_pos_positive = line.find(",positive");
         size_t end_pos_negative = line.find(",negative");
 
-        if (end_pos_positive != std::string::npos)
-        {
+        if (end_pos_positive != std::string::npos) {
             end_pos = end_pos_positive;
             sentiments.push_back(1.0f);
-        }
-        else if (end_pos_negative != std::string::npos)
-        {
+        } else if (end_pos_negative != std::string::npos) {
             end_pos = end_pos_negative;
             sentiments.push_back(0.0f);
         }
@@ -83,8 +76,7 @@ imdb load_imdb()
 
     file.close();
 
-    for (auto i = 0; i < reviews.size(); ++i)
-    {
+    for (auto i = 0; i < reviews.size(); ++i) {
         reviews[i] = lower(reviews[i]);
         reviews[i] = regex_replace(reviews[i], R"((https?:\/\/|www\.)\S+)", "");
         reviews[i] = regex_replace(reviews[i], "<[^>]*>", " ");
@@ -115,8 +107,7 @@ imdb load_imdb()
     return data;
 }
 
-iris load_iris()
-{
+iris load_iris() {
     std::ifstream file("datas/iris.csv");
 
     if (!file.is_open())
@@ -132,8 +123,7 @@ iris load_iris()
     std::string line;
     std::getline(file, line);
 
-    while (std::getline(file, line))
-    {
+    while (std::getline(file, line)) {
         std::stringstream ss(line);
         std::string value;
 
@@ -157,18 +147,13 @@ iris load_iris()
 
         std::getline(ss, value);
 
-        if (value == "Iris-setosa")
-        {
+        if (value == "Iris-setosa") {
             data.y[idx_y] = 0.0f;
             ++idx_y;
-        }
-        else if (value == "Iris-versicolor")
-        {
+        } else if (value == "Iris-versicolor") {
             data.y[idx_y] = 1.0f;
             ++idx_y;
-        }
-        else if (value == "Iris-virginica")
-        {
+        } else if (value == "Iris-virginica") {
             data.y[idx_y] = 2.0f;
             ++idx_y;
         }
