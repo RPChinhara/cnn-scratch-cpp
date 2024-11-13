@@ -88,6 +88,18 @@ const std::string tensor::get_shape() const {
     return shapes;
 }
 
+tensor &tensor::reshape(const std::vector<size_t> &new_shape) {
+    size_t new_size = 1;
+    for (size_t dim : new_shape)
+        new_size *= dim;
+
+    if (new_size != size)
+        std::cerr << "New shape does not match tensor size" << std::endl;
+
+    shape = new_shape;
+    return *this;
+}
+
 static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size_t> &shape2) {
     bool equal = false;
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
