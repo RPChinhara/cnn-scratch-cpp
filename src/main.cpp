@@ -65,25 +65,25 @@ int main() {
             if (j % image_dim == 0 && j != 0)
                 std::cout << std::endl;
 
-            std::cout << data.trainImages[i * image_size + j] << " ";
+            std::cout << data.train_images[i * image_size + j] << " ";
         }
 
         std::cout << "\n\n";
     }
 
-    for (auto i = 0; i < data.trainImages.size; ++i)
-        data.trainImages[i] /= 255.0f;
+    for (auto i = 0; i < data.train_images.size; ++i)
+        data.train_images[i] /= 255.0f;
 
-    for (auto i = 0; i < data.testImages.size; ++i)
-        data.testImages[i] /= 255.0f;
+    for (auto i = 0; i < data.test_images.size; ++i)
+        data.test_images[i] /= 255.0f;
 
-    data.trainImages.reshape({60000, 28, 28, 1});
-    data.testImages.reshape({10000, 28, 28, 1});
+    data.train_images.reshape({60000, 28, 28, 1});
+    data.test_images.reshape({10000, 28, 28, 1});
 
-    data.trainLabels = one_hot(data.trainLabels, 10);
-    data.testLabels = one_hot(data.testLabels, 10);
+    data.train_labels = one_hot(data.train_labels, 10);
+    data.test_labels = one_hot(data.test_labels, 10);
 
-    cnn2d_train(data.trainImages, data.trainLabels);
+    cnn2d_train(data.train_images, data.train_labels);
 
     return 0;
 }

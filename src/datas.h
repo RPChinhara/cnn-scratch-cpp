@@ -16,10 +16,10 @@ struct iris {
 };
 
 struct mnist {
-    tensor trainImages;
-    tensor trainLabels;
-    tensor testImages;
-    tensor testLabels;
+    tensor train_images;
+    tensor train_labels;
+    tensor test_images;
+    tensor test_labels;
 };
 
 tensor load_aapl();
