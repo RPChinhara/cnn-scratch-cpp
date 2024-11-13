@@ -1,36 +1,11 @@
+#include "acts.h"
 #include "datas.h"
+#include "losses.h"
 #include "lyrs.h"
 #include "math.hpp"
 #include "preproc.h"
 
 #include <chrono>
-
-tensor relu(const tensor &z) {
-    tensor a = z;
-
-    for (auto i = 0; i < z.size; ++i)
-        a.elems[i] = std::fmax(0.0f, z.elems[i]);
-
-    return a;
-}
-
-tensor softmax(const tensor &z) {
-    tensor exp_scores = exp(z - max(z, 1));
-    return exp_scores / sum(exp_scores, 1);
-}
-
-float categorical_cross_entropy(const tensor &y_true, const tensor &y_pred) {
-    float sum = 0.0f;
-    constexpr float epsilon = 1e-15f;
-    size_t num_samples = y_true.shape.front();
-    tensor y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f - epsilon);
-    tensor y_pred_logged = log(y_pred_clipped);
-
-    for (auto i = 0; i < y_true.size; ++i)
-        sum += y_true[i] * y_pred_logged[i];
-
-    return -sum / num_samples;
-}
 
 float categorical_accuracy(const tensor &y_true, const tensor &y_pred) {
     tensor idx_true = argmax(y_true);
