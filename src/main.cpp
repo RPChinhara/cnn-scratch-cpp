@@ -103,6 +103,8 @@ int main() {
     data.test_labels = one_hot(data.test_labels, 10);
 
     cnn2d_train(data.train_images, data.train_labels);
+    auto test_loss = cnn2d_evaluate(data.test_images, data.test_labels);
+    cnn2d_predict(data.test_images, data.test_labels);
 
     return 0;
 }
