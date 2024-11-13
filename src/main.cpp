@@ -79,14 +79,19 @@ std::vector<tensor> cnn2d::forward(const tensor &x) {
 int main() {
     mnist data = load_mnist();
 
-    for (auto i = 0; i < 784 * 3; ++i) {
-        if (i % 28 == 0 && i != 0)
-            std::cout << std::endl;
+    size_t num_digits = 10;
+    const size_t image_size = 784;
+    const size_t image_dim = 28;
 
-        std::cout << data.trainImages[i] << " ";
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < image_size; ++j) {
+            if (j % image_dim == 0 && j != 0)
+                std::cout << std::endl;
 
-        if (i % 783 == 0 && i != 0)
-            std::cout << std::endl;
+            std::cout << data.trainImages[i * image_size + j] << " ";
+        }
+
+        std::cout << "\n\n";
     }
 
     for (auto i = 0; i < data.trainImages.size; ++i)
