@@ -179,8 +179,7 @@ iris load_iris()
     return data;
 }
 
-tensor ReadMNISTImages(const std::string &filePath)
-{
+tensor ReadMNISTImages(const std::string &filePath) {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
@@ -200,20 +199,16 @@ tensor ReadMNISTImages(const std::string &filePath)
 
     std::vector<std::vector<uint8_t>> images(numImages, std::vector<uint8_t>(numRows * numCols));
 
-    for (auto i = 0; i < numImages; ++i)
-    {
+    for (auto i = 0; i < numImages; ++i) {
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
     }
 
     tensor images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
 
-    for (auto i = 0; i < numImages; ++i)
-    {
-        for (auto j = 0; j < numRows; ++j)
-        {
-            for (auto k = 0; k < numCols; ++k)
-            {
+    for (auto i = 0; i < numImages; ++i) {
+        for (auto j = 0; j < numRows; ++j) {
+            for (auto k = 0; k < numCols; ++k) {
                 images2[idx] = static_cast<float>(images[i][j * numCols + k]);
                 ++idx;
             }
@@ -225,8 +220,7 @@ tensor ReadMNISTImages(const std::string &filePath)
     return images2;
 }
 
-tensor ReadMNISTLabels(const std::string &filePath)
-{
+tensor ReadMNISTLabels(const std::string &filePath) {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
@@ -247,8 +241,7 @@ tensor ReadMNISTLabels(const std::string &filePath)
     tensor labels2 = zeros({numLabels, 1});
     size_t idx = 0;
 
-    for (auto i = 0; i < numLabels; ++i)
-    {
+    for (auto i = 0; i < numLabels; ++i) {
         labels2[idx] = static_cast<float>(labels[i]);
         ++idx;
     }
@@ -258,8 +251,7 @@ tensor ReadMNISTLabels(const std::string &filePath)
     return labels2;
 }
 
-mnist load_mnist()
-{
+mnist load_mnist() {
     mnist data;
     data.train_images = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
     data.train_labels = ReadMNISTLabels("datas/mnist/train-labels-idx1-ubyte");
