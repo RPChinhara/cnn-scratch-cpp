@@ -5,20 +5,17 @@
 #include <string>
 #include <vector>
 
-struct imdb
-{
+struct imdb {
     tensor x;
     tensor y;
 };
 
-struct iris
-{
+struct iris {
     tensor x;
     tensor y;
 };
 
-struct mnist
-{
+struct mnist {
     tensor trainImages;
     tensor trainLabels;
     tensor testImages;
