@@ -199,9 +199,8 @@ tensor ReadMNISTImages(const std::string &filePath) {
 
     std::vector<std::vector<uint8_t>> images(numImages, std::vector<uint8_t>(numRows * numCols));
 
-    for (auto i = 0; i < numImages; ++i) {
+    for (auto i = 0; i < numImages; ++i)
         file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
-    }
 
     tensor images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
