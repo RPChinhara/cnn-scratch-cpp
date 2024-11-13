@@ -26,7 +26,7 @@ class cnn2d {
     tensor fc2_w;
     tensor fc2_b;
 
-    std::vector<tensor> forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride);
+    std::vector<tensor> forward(const tensor &x);
 
   public:
     cnn2d();
@@ -70,7 +70,7 @@ float cnn2d::evaluate(const tensor &x_test, const tensor &y_test) {
 void cnn2d::predict(const tensor &x_test, const tensor &y_test) {
 }
 
-std::vector<tensor> cnn2d::forward(const tensor &x, const std::vector<tensor> &kernel, const size_t stride) {
+std::vector<tensor> cnn2d::forward(const tensor &x) {
     std::vector<tensor> weights;
 
     return weights;
