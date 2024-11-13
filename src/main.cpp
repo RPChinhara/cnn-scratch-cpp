@@ -79,10 +79,13 @@ std::vector<tensor> cnn2d::forward(const tensor &x) {
 int main() {
     mnist data = load_mnist();
 
-    for (auto i = 0; i < 784; ++i) {
-        if (i % 28 == 0)
+    for (auto i = 0; i < 784 * 3; ++i) {
+        if (i % 28 == 0 && i % 783 != 0)
             std::cout << std::endl;
-        std::cout << data.trainImages[i] << " ";
+        std::cout << data.trainImages[i] << "  ";
+
+        if (i % 783 == 0 && i != 0)
+            std::cout << std::endl;
     }
 
     data.trainImages / 255.0f;
