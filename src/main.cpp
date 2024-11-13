@@ -14,6 +14,8 @@
 class cnn2d {
   private:
     float lr;
+    size_t batch_size;
+    size_t epochs = 150;
 
     tensor conv1_kernel;
     tensor conv2_kernel;
@@ -45,6 +47,17 @@ cnn2d::cnn2d() {
 }
 
 void cnn2d::train(const tensor &x_train, const tensor &y_train) {
+    for (auto i = 1; i <= epochs; ++i) {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto remaining_ms = duration - seconds;
+
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << 0.0f << std::endl;
+    }
 }
 
 float cnn2d::evaluate(const tensor &x_test, const tensor &y_test) {
