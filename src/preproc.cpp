@@ -16,12 +16,6 @@ std::string lower(const std::string &text) {
     return result;
 }
 
-tensor min_max_scaler(tensor &data) {
-    auto data_min = min(data);
-    auto data_max = max(data, 0);
-    return (data - data_min) / (data_max - data_min);
-}
-
 tensor one_hot(const tensor &t, const size_t depth) {
     tensor t_new = zeros({t.size, depth});
 

@@ -45,7 +45,6 @@ class min_max_scaler2 {
 };
 
 std::string lower(const std::string &text);
-tensor min_max_scaler(tensor &data);
 tensor one_hot(const tensor &t, const size_t depth);
 std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);
 std::vector<std::string> tokenizer(const std::string &text);
