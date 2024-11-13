@@ -13,14 +13,14 @@ struct train_test {
     tensor y_test;
 };
 
-class min_max_scaler2 {
+class min_max_scaler {
   private:
     tensor data_min;
     tensor data_max;
     bool is_fitted;
 
   public:
-    min_max_scaler2() : data_min(), data_max(), is_fitted(false) {}
+    min_max_scaler() : data_min(), data_max(), is_fitted(false) {}
 
     void fit(const tensor& data) {
         data_min = min(data);

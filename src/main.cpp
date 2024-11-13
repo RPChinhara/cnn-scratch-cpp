@@ -24,7 +24,7 @@ int main() {
     tensor x = data.x;
     tensor y = data.y;
 
-    min_max_scaler2 scaler;
+    min_max_scaler scaler;
     scaler.fit(x);
     tensor scaled_x = scaler.transform(x);
 
