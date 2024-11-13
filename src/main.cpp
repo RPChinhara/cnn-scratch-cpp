@@ -94,14 +94,8 @@ int main() {
     for (auto i = 0; i < data.testImages.size; ++i)
         data.testImages[i] /= 255.0f;
 
-    std::cout << data.trainImages.get_shape() << std::endl;
-    std::cout << data.testImages.get_shape() << std::endl;
-
     data.trainImages.reshape({60000, 28, 28, 1});
     data.testImages.reshape({10000, 28, 28, 1});
-
-    std::cout << data.trainImages.get_shape() << std::endl;
-    std::cout << data.testImages.get_shape() << std::endl;
 
     data.trainLabels = one_hot(data.trainLabels, 10);
     data.testLabels = one_hot(data.testLabels, 10);
