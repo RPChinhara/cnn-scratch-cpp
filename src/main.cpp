@@ -23,11 +23,36 @@ tensor fc1_b = zeros({1, 1});
 tensor fc2_w = normal_dist({128});
 tensor fc2_b = zeros({1, 1});
 
+tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
+
+    return tensor();
+}
+
+tensor cnn2d_max_pool(const tensor &x) {
+
+    return tensor();
+}
+
+tensor cnn2d_forward(const tensor &x) {
+    auto x_conv1 = cnn2d_convolution(x, conv1_kernel);
+    x_conv1 = relu(x_conv1);
+    x_conv1 = cnn2d_max_pool(x_conv1);
+
+    auto x_conv2 = cnn2d_convolution(x_conv1, conv2_kernel);
+    x_conv2 = relu(x_conv2);
+    x_conv2 = cnn2d_max_pool(x_conv2);
+
+    auto x_fc = matmul(fc1_w, x_conv2) + fc1_b;
+    x_fc = matmul(fc2_w, x_fc) + fc2_b;
+
+    return x_fc;
+}
+
 void cnn2d_train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        // auto = forward();
+        auto y = cnn2d_forward(x_train);
 
         float error = 0.0f;
 
@@ -45,12 +70,6 @@ float cnn2d_evaluate(const tensor &x_test, const tensor &y_test) {
 }
 
 void cnn2d_predict(const tensor &x_test, const tensor &y_test) {
-}
-
-std::vector<tensor> cnn2d_forward(const tensor &x) {
-    std::vector<tensor> weights;
-
-    return weights;
 }
 
 int main() {
