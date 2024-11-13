@@ -1,4 +1,3 @@
-#include "lyrs.h"
 #include "acts.h"
 #include "arrs.h"
 #include "datas.h"
@@ -11,42 +10,20 @@
 
 #include <chrono>
 
-class cnn2d {
-  private:
-    float lr;
-    size_t batch_size;
-    size_t epochs = 5;
+constexpr float lr = 0.01f;
+constexpr size_t batch_size = 32;
+constexpr size_t epochs = 5;
 
-    tensor conv1_kernel;
-    tensor conv2_kernel;
+tensor conv1_kernel = normal_dist({3, 3});
+tensor conv2_kernel = normal_dist({3, 3});
 
-    tensor fc1_w;
-    tensor fc1_b;
+tensor fc1_w = normal_dist({32 * 7 * 7});
+tensor fc1_b = zeros({1, 1});
 
-    tensor fc2_w;
-    tensor fc2_b;
+tensor fc2_w = normal_dist({128});
+tensor fc2_b = zeros({1, 1});
 
-    std::vector<tensor> forward(const tensor &x);
-
-  public:
-    cnn2d();
-    void train(const tensor &x_train, const tensor &y_train);
-    float evaluate(const tensor &x_test, const tensor &y_test);
-    void predict(const tensor &x_test, const tensor &y_test);
-};
-
-cnn2d::cnn2d() {
-    conv1_kernel = normal_dist({3, 3});
-    conv2_kernel = normal_dist({3, 3});
-
-    fc1_w = normal_dist({32 * 7 * 7});
-    fc1_b = zeros({1, 1});
-
-    fc2_w = normal_dist({128});
-    fc2_b = zeros({1, 1});
-}
-
-void cnn2d::train(const tensor &x_train, const tensor &y_train) {
+void cnn2d_train(const tensor &x_train, const tensor &y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -63,14 +40,14 @@ void cnn2d::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float cnn2d::evaluate(const tensor &x_test, const tensor &y_test) {
+float cnn2d_evaluate(const tensor &x_test, const tensor &y_test) {
     return 0.0f;
 }
 
-void cnn2d::predict(const tensor &x_test, const tensor &y_test) {
+void cnn2d_predict(const tensor &x_test, const tensor &y_test) {
 }
 
-std::vector<tensor> cnn2d::forward(const tensor &x) {
+std::vector<tensor> cnn2d_forward(const tensor &x) {
     std::vector<tensor> weights;
 
     return weights;
@@ -106,8 +83,7 @@ int main() {
     data.trainLabels = one_hot(data.trainLabels, 10);
     data.testLabels = one_hot(data.testLabels, 10);
 
-    cnn2d model = cnn2d();
-    model.train(data.trainImages, data.trainLabels);
+    cnn2d_train(data.trainImages, data.trainLabels);
 
     return 0;
 }
