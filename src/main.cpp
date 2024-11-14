@@ -14,8 +14,8 @@ constexpr float lr = 0.01f;
 constexpr size_t batch_size = 32;
 constexpr size_t epochs = 5;
 
-tensor conv1_kernel = normal_dist({3, 3});
-tensor conv2_kernel = normal_dist({3, 3});
+tensor kernel1 = normal_dist({3, 3});
+tensor kernel2 = normal_dist({3, 3});
 
 tensor fc1_w = normal_dist({32 * 7 * 7});
 tensor fc1_b = zeros({1, 1});
@@ -34,11 +34,11 @@ tensor cnn2d_max_pool(const tensor &x) {
 }
 
 tensor cnn2d_forward(const tensor &x) {
-    auto x_conv1 = cnn2d_convolution(x, conv1_kernel);
+    auto x_conv1 = cnn2d_convolution(x, kernel1);
     x_conv1 = relu(x_conv1);
     x_conv1 = cnn2d_max_pool(x_conv1);
 
-    auto x_conv2 = cnn2d_convolution(x_conv1, conv2_kernel);
+    auto x_conv2 = cnn2d_convolution(x_conv1, kernel2);
     x_conv2 = relu(x_conv2);
     x_conv2 = cnn2d_max_pool(x_conv2);
 
