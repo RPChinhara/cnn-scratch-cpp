@@ -17,11 +17,11 @@ constexpr size_t epochs = 5;
 tensor kernel1 = normal_dist({3, 3});
 tensor kernel2 = normal_dist({3, 3});
 
-tensor fc1_w = normal_dist({32 * 7 * 7});
-tensor fc1_b = zeros({1, 1});
+tensor w1 = normal_dist({32 * 7 * 7});
+tensor b1 = zeros({1, 1});
 
-tensor fc2_w = normal_dist({128});
-tensor fc2_b = zeros({1, 1});
+tensor w2 = normal_dist({128});
+tensor b2 = zeros({1, 1});
 
 tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
 
@@ -42,8 +42,8 @@ tensor cnn2d_forward(const tensor &x) {
     x_conv2 = relu(x_conv2);
     x_conv2 = cnn2d_max_pool(x_conv2);
 
-    auto x_fc = matmul(fc1_w, x_conv2) + fc1_b;
-    x_fc = matmul(fc2_w, x_fc) + fc2_b;
+    auto x_fc = matmul(w1, x_conv2) + b1;
+    x_fc = matmul(w2, x_fc) + b2;
 
     return x_fc;
 }
