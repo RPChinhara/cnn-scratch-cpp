@@ -75,9 +75,9 @@ void cnn2d_predict(const tensor &x_test, const tensor &y_test) {
 int main() {
     mnist data = load_mnist();
 
-    size_t num_digits = 10;
-    const size_t image_size = 784;
-    const size_t image_dim = 28;
+    constexpr size_t num_digits = 10;
+    constexpr size_t image_size = 784;
+    constexpr size_t image_dim = 28;
 
     for (auto i = 0; i < num_digits; ++i) {
         for (auto j = 0; j < image_size; ++j) {
