@@ -10,6 +10,19 @@ tensor glorot_uniform(const size_t num_out, const size_t num_in) {
     return uniform_dist({num_out, num_in}, -limit, limit);
 }
 
+tensor glorot_uniform(const std::vector<size_t> &shape) {
+    assert(1 < shape.size());
+
+    size_t num_in = 1;
+    for (auto i = 0; i < shape.size() - 1; ++i)
+        num_in *= shape[i];
+
+    size_t num_out = shape.back();
+
+    auto limit = sqrt(6.0f / (num_in + num_out));
+    return uniform_dist(shape, -limit, limit);
+}
+
 tensor normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev) {
     tensor t_new = tensor();
 
