@@ -23,7 +23,7 @@ tensor b1 = zeros({1, 1});
 tensor w2 = normal_dist({128});
 tensor b2 = zeros({1, 1});
 
-tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
+tensor cnn2d_convolution(const tensor &x, const tensor &kernel, const size_t stride = 1, const size_t padding = 0) {
     // Add padding to the input matrix here? For example,
     //        0 0 0 0
     // 1 1 -> 0 1 1 0
@@ -33,8 +33,8 @@ tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
     size_t kernel_height = 3, kernel_width = 3;
     size_t input_height = 28, input_width = 28;
 
-    size_t output_height = (input_height - kernel_height);
-    size_t output_width = (input_width - kernel_width);
+    size_t output_height = (input_height - kernel_height) / stride + 1;
+    size_t output_width = (input_width - kernel_width) / stride + 1;
 
     tensor output = zeros({output_height, output_width});
 
