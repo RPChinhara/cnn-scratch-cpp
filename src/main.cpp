@@ -29,21 +29,12 @@ tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
     // 1 1 -> 0 1 1 0
     // 1 1    0 1 1 0
     //        0 0 0 0
-    
-    constexpr size_t num_digits = 10;
-    constexpr size_t image_size = 784;
-    constexpr size_t image_dim = 28;
 
-    for (auto i = 0; i < num_digits; ++i) {
-        for (auto j = 0; j < image_size; ++j) {
-            if (j % image_dim == 0 && j != 0)
-                std::cout << std::endl;
+    size_t kernel_height = 3, kernel_width = 3;
+    size_t input_height = 28, input_width = 28;
 
-            std::cout << x[i * image_size + j] << " ";
-        }
-
-        std::cout << "\n\n";
-    }
+    size_t output_height = (input_height - kernel_height);
+    size_t output_width = (input_width - kernel_width);
 
     return tensor();
 }
