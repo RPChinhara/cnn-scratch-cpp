@@ -24,6 +24,26 @@ tensor w2 = normal_dist({128});
 tensor b2 = zeros({1, 1});
 
 tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
+    // Add padding to the input matrix here? For example,
+    //        0 0 0 0
+    // 1 1 -> 0 1 1 0
+    // 1 1    0 1 1 0
+    //        0 0 0 0
+    
+    constexpr size_t num_digits = 10;
+    constexpr size_t image_size = 784;
+    constexpr size_t image_dim = 28;
+
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < image_size; ++j) {
+            if (j % image_dim == 0 && j != 0)
+                std::cout << std::endl;
+
+            std::cout << x[i * image_size + j] << " ";
+        }
+
+        std::cout << "\n\n";
+    }
 
     return tensor();
 }
