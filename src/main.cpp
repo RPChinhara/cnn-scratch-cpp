@@ -36,7 +36,9 @@ tensor cnn2d_convolution(const tensor &x, const tensor &kernel) {
     size_t output_height = (input_height - kernel_height);
     size_t output_width = (input_width - kernel_width);
 
-    return tensor();
+    tensor output = zeros({output_height, output_width});
+
+    return output;
 }
 
 tensor cnn2d_max_pool(const tensor &x) {
