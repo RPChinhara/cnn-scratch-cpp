@@ -10,7 +10,7 @@ tensor glorot_uniform(const size_t num_out, const size_t num_in) {
     return uniform_dist({num_out, num_in}, -limit, limit);
 }
 
-tensor glorot_uniform(const std::vector<size_t> &shape) {
+tensor glorot_uniform(const std::vector<size_t>& shape) {
     assert(1 < shape.size());
 
     size_t num_in = 1;
@@ -23,7 +23,7 @@ tensor glorot_uniform(const std::vector<size_t> &shape) {
     return uniform_dist(shape, -limit, limit);
 }
 
-tensor normal_dist(const std::vector<size_t> &shape, const float mean, const float std_dev) {
+tensor normal_dist(const std::vector<size_t>& shape, const float mean, const float std_dev) {
     tensor t_new = tensor();
 
     for (auto i : shape)
@@ -65,7 +65,7 @@ tensor shuffle(const tensor& t, const size_t rd_state) {
     return t_new;
 }
 
-tensor uniform_dist(const std::vector<size_t> &shape, const float min_val, const float max_val) {
+tensor uniform_dist(const std::vector<size_t>& shape, const float min_val, const float max_val) {
     tensor t_new = tensor();
 
     for (auto i : shape)
