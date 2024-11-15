@@ -32,14 +32,14 @@ tensor::~tensor() {
         delete[] elems;
 }
 
-tensor::tensor(const tensor &other) {
+tensor::tensor(const tensor& other) {
     elems = new float[other.size];
     std::copy(other.elems, other.elems + other.size, elems);
     size = other.size;
     shape = other.shape;
 }
 
-tensor::tensor(tensor &&other) noexcept {
+tensor::tensor(tensor&& other) noexcept {
     elems = other.elems;
     size = other.size;
     shape = other.shape;
@@ -48,7 +48,7 @@ tensor::tensor(tensor &&other) noexcept {
     other.size = 0;
 }
 
-tensor &tensor::operator=(const tensor &other) {
+tensor& tensor::operator=(const tensor &other) {
     if (this != &other) {
         delete[] elems;
         elems = new float[other.size];
@@ -59,7 +59,7 @@ tensor &tensor::operator=(const tensor &other) {
     return *this;
 }
 
-tensor &tensor::operator=(tensor &&other) noexcept {
+tensor& tensor::operator=(tensor &&other) noexcept {
     if (this != &other) {
         delete[] elems;
 
@@ -88,7 +88,7 @@ const std::string tensor::get_shape() const {
     return shapes;
 }
 
-tensor &tensor::reshape(const std::vector<size_t> &new_shape) {
+tensor& tensor::reshape(const std::vector<size_t> &new_shape) {
     size_t new_size = 1;
     for (size_t dim : new_shape)
         new_size *= dim;
@@ -191,8 +191,16 @@ tensor tensor::operator-() const {
     return t_new;
 }
 
-float &tensor::operator[](const size_t idx) const {
+float& tensor::operator[](const size_t idx) const {
     return elems[idx];
+}
+
+float& tensor::operator()(const size_t i, const size_t j) {
+    return elems[i * shape.back() + j];
+}
+
+const float& tensor::operator()(const size_t i, const size_t j) const {
+    return elems[i * shape.back() + j];
 }
 
 tensor operator+(const float sca, const tensor &t) {
