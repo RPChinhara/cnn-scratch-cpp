@@ -62,13 +62,13 @@ class gru2 {
       TEST
     };
 
-    std::array<std::vector<tensor>, 10> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 10> forward(const tensor& x, enum Phase phase);
 
   public:
     gru2(const float lr);
-    void train(const tensor &x_train, const tensor &y_train);
-    float evaluate(const tensor &x, const tensor &y);
-    tensor predict(const tensor &x);
+    void train(const tensor& x_train, const tensor& y_train);
+    float evaluate(const tensor& x, const tensor& y);
+    tensor predict(const tensor& x);
 };
 
 gru2::gru2(const float lr) {
@@ -105,7 +105,7 @@ gru2::gru2(const float lr) {
     v_b_y = zeros({output_size, 1});
 }
 
-void gru2::train(const tensor &x_train, const tensor &y_train) {
+void gru2::train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -223,17 +223,17 @@ void gru2::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float gru2::evaluate(const tensor &x, const tensor &y) {
+float gru2::evaluate(const tensor& x, const tensor& y) {
     auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
-tensor gru2::predict(const tensor &x) {
+tensor gru2::predict(const tensor& x) {
     auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 10> gru2::forward(const tensor& x, enum Phase phase) {
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_t_z_sequence;
     std::vector<tensor> z_sequence;
@@ -310,7 +310,7 @@ std::array<std::vector<tensor>, 10> gru2::forward(const tensor &x, enum Phase ph
     return sequences;
 }
 
-std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_length) {
+std::pair<tensor, tensor> create_sequences(const tensor& data, const size_t seq_length) {
     tensor x = zeros({data.size - seq_length, seq_length, 1});
     tensor y = zeros({data.size - seq_length, 1});
 
