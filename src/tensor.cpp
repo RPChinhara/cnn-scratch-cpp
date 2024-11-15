@@ -5,7 +5,7 @@
 #include <numeric>
 #include <string>
 
-tensor::tensor(const std::vector<size_t> &shape, const std::vector<float> &elems) {
+tensor::tensor(const std::vector<size_t>& shape, const std::vector<float>& elems) {
     assert(elems.size() != 0);
 
     for (auto i : shape)
