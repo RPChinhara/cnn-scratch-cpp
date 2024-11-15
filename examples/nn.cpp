@@ -7,7 +7,7 @@
 
 #include <chrono>
 
-float categorical_accuracy(const tensor &y_true, const tensor &y_pred) {
+float categorical_accuracy(const tensor& y_true, const tensor& y_pred) {
     tensor idx_true = argmax(y_true);
     tensor pred_idx = argmax(y_pred);
     float equal = 0.0f;
