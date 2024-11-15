@@ -45,7 +45,7 @@ gru::gru(const float lr, const size_t vocab_size) {
     v_b_y = zeros({output_size, 1});
 }
 
-void gru::train(const tensor &x_train, const tensor &y_train) {
+void gru::train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -165,18 +165,18 @@ void gru::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float gru::evaluate(const tensor &x, const tensor &y) {
+float gru::evaluate(const tensor& x, const tensor& y) {
     auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     // return loss(transpose(y), y_sequence.front());
     return 0.0f;
 }
 
-tensor gru::predict(const tensor &x) {
+tensor gru::predict(const tensor& x) {
     auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 6> gru::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 6> gru::forward(const tensor& x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_t_sequence;
@@ -317,7 +317,7 @@ lstm::lstm(const loss_func &loss, const float lr) {
     v_b_y = zeros({output_size, 1});
 }
 
-void lstm::train(const tensor &x_train, const tensor &y_train) {
+void lstm::train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -454,17 +454,17 @@ void lstm::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float lstm::evaluate(const tensor &x, const tensor &y) {
+float lstm::evaluate(const tensor& x, const tensor& y) {
     auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return loss(transpose(y), y_sequence.front());
 }
 
-tensor lstm::predict(const tensor &x) {
+tensor lstm::predict(const tensor& x) {
     auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::array<std::vector<tensor>, 12> lstm::forward(const tensor &x, enum Phase phase) {
+std::array<std::vector<tensor>, 12> lstm::forward(const tensor& x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> concat_sequence;
     std::vector<tensor> z_f_sequence;
@@ -564,7 +564,7 @@ nn::nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations
     w_b_momentum = init_params();
 }
 
-void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val) {
+void nn::train(const tensor& x_train, const tensor& y_train, const tensor& x_val, const tensor& y_val) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -648,12 +648,12 @@ void nn::train(const tensor &x_train, const tensor &y_train, const tensor &x_val
     }
 }
 
-float nn::evaluate(const tensor &x, const tensor &y) {
+float nn::evaluate(const tensor& x, const tensor& y) {
     auto [z, a] = forward(x, w_b.first, w_b.second);
     return loss(y, a.back());
 }
 
-tensor nn::predict(const tensor &x) {
+tensor nn::predict(const tensor& x) {
     auto [z, a] = forward(x, w_b.first, w_b.second);
     return a.back();
 }
@@ -670,7 +670,7 @@ std::pair<std::vector<tensor>, std::vector<tensor>> nn::init_params() {
     return std::make_pair(w, b);
 }
 
-std::pair<std::vector<tensor>, std::vector<tensor>>  nn::forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b) {
+std::pair<std::vector<tensor>, std::vector<tensor>>  nn::forward(const tensor& x, const std::vector<tensor> &w, const std::vector<tensor> &b) {
     std::vector<tensor> zs;
     std::vector<tensor> as;
 
@@ -720,7 +720,7 @@ rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
     v_b_y  = zeros({output_size, 1});
 }
 
-void rnn::train(const tensor &x_train, const tensor &y_train) {
+void rnn::train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -804,17 +804,17 @@ void rnn::train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float rnn::evaluate(const tensor &x, const tensor &y) {
+float rnn::evaluate(const tensor& x, const tensor& y) {
     auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return loss(transpose(y), y_sequence.front());
 }
 
-tensor rnn::predict(const tensor &x) {
+tensor rnn::predict(const tensor& x) {
     auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
-std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor &x, enum Phase phase) {
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor& x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> z_sequence;
     std::vector<tensor> h_sequence;
@@ -853,7 +853,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
     return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
 }
 
-embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const tensor &t) {
+embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const tensor& t) {
     for (auto i = 0; i < t.size; ++i)
         assert(t[i] < vocab_size);
 
