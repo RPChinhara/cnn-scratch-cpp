@@ -72,13 +72,13 @@ class gru {
       TEST
     };
 
-    std::array<std::vector<tensor>, 6> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 6> forward(const tensor& x, enum Phase phase);
 
   public:
     gru(const float lr, const size_t vocab_size);
-    void train(const tensor &x_train, const tensor &y_train);
-    float evaluate(const tensor &x, const tensor &y);
-    tensor predict(const tensor &x);
+    void train(const tensor& x_train, const tensor& y_train);
+    float evaluate(const tensor& x, const tensor& y);
+    tensor predict(const tensor& x);
 };
 
 class lstm {
@@ -139,13 +139,13 @@ class lstm {
       TEST
     };
 
-    std::array<std::vector<tensor>, 12> forward(const tensor &x, enum Phase phase);
+    std::array<std::vector<tensor>, 12> forward(const tensor& x, enum Phase phase);
 
   public:
     lstm(const loss_func &loss, const float lr);
-    void train(const tensor &x_train, const tensor &y_train);
-    float evaluate(const tensor &x, const tensor &y);
-    tensor predict(const tensor &x);
+    void train(const tensor& x_train, const tensor& y_train);
+    float evaluate(const tensor& x, const tensor& y);
+    tensor predict(const tensor& x);
 };
 
 class nn {
@@ -163,13 +163,13 @@ class nn {
     std::pair<std::vector<tensor>, std::vector<tensor>> w_b_momentum;
 
     std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
-    std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, const std::vector<tensor> &w, const std::vector<tensor> &b);
+    std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor& x, const std::vector<tensor> &w, const std::vector<tensor> &b);
 
   public:
     nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr);
-    void train(const tensor &x_train, const tensor &y_train, const tensor &x_val, const tensor &y_val);
-    float evaluate(const tensor &x, const tensor &y);
-    tensor predict(const tensor &x);
+    void train(const tensor& x_train, const tensor& y_train, const tensor& x_val, const tensor& y_val);
+    float evaluate(const tensor& x, const tensor& y);
+    tensor predict(const tensor& x);
 };
 
 class rnn {
@@ -213,13 +213,13 @@ class rnn {
       TEST
     };
 
-    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor &x, enum Phase phase);
+    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor& x, enum Phase phase);
 
   public:
     rnn(const act_func &activation, const loss_func &loss, const float lr);
-    void train(const tensor &x_train, const tensor &y_train);
-    float evaluate(const tensor &x, const tensor &y);
-    tensor predict(const tensor &x);
+    void train(const tensor& x_train, const tensor& y_train);
+    float evaluate(const tensor& x, const tensor& y);
+    tensor predict(const tensor& x);
 };
 
 class embedding {
@@ -227,7 +227,7 @@ class embedding {
     tensor mat;
     tensor dense_vecs;
 
-    embedding(const size_t vocab_size, const size_t embedding_dim, const tensor &t);
+    embedding(const size_t vocab_size, const size_t embedding_dim, const tensor& t);
 };
 
 tensor text_vectorization(const std::vector<std::string> &vocab, const std::vector<std::string> &in, size_t max_tokens, const size_t max_len);
