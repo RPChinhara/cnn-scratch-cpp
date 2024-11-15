@@ -50,7 +50,7 @@ tensor matmul(const tensor& t1, const tensor& t2) {
     return t_new;
 }
 
-static size_t get_batch_size(const std::vector<size_t> &shape) {
+static size_t get_batch_size(const std::vector<size_t>& shape) {
     assert(1 < shape.size());
     size_t batchSize = 1;
 
