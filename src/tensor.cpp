@@ -59,7 +59,7 @@ tensor& tensor::operator=(const tensor &other) {
     return *this;
 }
 
-tensor& tensor::operator=(tensor &&other) noexcept {
+tensor& tensor::operator=(tensor&& other) noexcept {
     if (this != &other) {
         delete[] elems;
 

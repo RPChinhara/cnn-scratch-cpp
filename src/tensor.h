@@ -13,7 +13,7 @@ class tensor {
     tensor(const std::vector<size_t> &shape, const std::vector<float> &elems);
     ~tensor();
     tensor(const tensor &other);
-    tensor(tensor &&other) noexcept;
+    tensor(tensor&& other) noexcept;
     tensor& operator=(const tensor& other);
     tensor& operator=(tensor&& other) noexcept;
 
