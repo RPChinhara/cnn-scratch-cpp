@@ -48,7 +48,7 @@ tensor::tensor(tensor&& other) noexcept {
     other.size = 0;
 }
 
-tensor& tensor::operator=(const tensor &other) {
+tensor& tensor::operator=(const tensor& other) {
     if (this != &other) {
         delete[] elems;
         elems = new float[other.size];
@@ -107,7 +107,7 @@ static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size
     return equal;
 }
 
-tensor tensor::operator+(const tensor &other) const {
+tensor tensor::operator+(const tensor& other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
@@ -126,7 +126,7 @@ tensor tensor::operator+(const tensor &other) const {
     return t_new;
 }
 
-tensor tensor::operator-(const tensor &other) const {
+tensor tensor::operator-(const tensor& other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
@@ -145,7 +145,7 @@ tensor tensor::operator-(const tensor &other) const {
     return t_new;
 }
 
-tensor tensor::operator*(const tensor &other) const {
+tensor tensor::operator*(const tensor& other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
@@ -159,7 +159,7 @@ tensor tensor::operator*(const tensor &other) const {
     return t_new;
 }
 
-tensor tensor::operator/(const tensor &other) const {
+tensor tensor::operator/(const tensor& other) const {
     tensor t_new = *this;
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
@@ -178,7 +178,7 @@ tensor tensor::operator/(const tensor &other) const {
     return t_new;
 }
 
-tensor tensor::operator+=(const tensor &other) const {
+tensor tensor::operator+=(const tensor& other) const {
     for (auto i = 0; i < size; ++i)
         elems[i] += other[i];
     return *this;
@@ -203,42 +203,42 @@ const float& tensor::operator()(const size_t i, const size_t j) const {
     return elems[i * shape.back() + j];
 }
 
-tensor operator+(const float sca, const tensor &t) {
+tensor operator+(const float sca, const tensor& t) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = sca + t[i];
     return t_new;
 }
 
-tensor operator-(const float sca, const tensor &t) {
+tensor operator-(const float sca, const tensor& t) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = sca - t[i];
     return t_new;
 }
 
-tensor operator*(const float sca, const tensor &t) {
+tensor operator*(const float sca, const tensor& t) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = sca * t[i];
     return t_new;
 }
 
-tensor operator/(const float sca, const tensor &t) {
+tensor operator/(const float sca, const tensor& t) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = sca / t[i];
     return t_new;
 }
 
-tensor operator+(const tensor &t, const float sca) {
+tensor operator+(const tensor& t, const float sca) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = t[i] + sca;
     return t_new;
 }
 
-tensor operator/(const tensor &t, const float sca) {
+tensor operator/(const tensor& t, const float sca) {
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = t[i] / sca;
@@ -262,7 +262,7 @@ static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t> &sh
     return num_elem_each_batch;
 }
 
-std::ostream &operator<<(std::ostream &os, const tensor &t) {
+std::ostream &operator<<(std::ostream &os, const tensor& t) {
     os << std::fixed << std::setprecision(8);
 
     size_t idx = 0;
