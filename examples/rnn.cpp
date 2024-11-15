@@ -4,7 +4,7 @@
 #include "lyrs.h"
 #include "preproc.h"
 
-std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_length) {
+std::pair<tensor, tensor> create_sequences(const tensor& data, const size_t seq_length) {
     tensor x = zeros({data.size - seq_length, seq_length, 1});
     tensor y = zeros({data.size - seq_length, 1});
 
@@ -22,7 +22,7 @@ std::pair<tensor, tensor> create_sequences(const tensor &data, const size_t seq_
     return std::make_pair(x, y);
 }
 
-tensor relu(const tensor &z_t) {
+tensor relu(const tensor& z_t) {
     tensor h_t = z_t;
 
     for (auto i = 0; i < z_t.size; ++i)
