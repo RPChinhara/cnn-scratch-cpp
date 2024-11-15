@@ -57,7 +57,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
     return output;
 }
 
-tensor lenet_max_pool(const tensor& x, const tensor& kernel, const size_t pool_size = 2, const size_t stride = 2) {
+tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t input_height = 9;
     size_t input_width = 9;
 
