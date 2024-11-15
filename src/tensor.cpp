@@ -100,7 +100,7 @@ tensor& tensor::reshape(const std::vector<size_t>& new_shape) {
     return *this;
 }
 
-static bool ShapeEqual(const std::vector<size_t> &shape1, const std::vector<size_t> &shape2) {
+static bool ShapeEqual(const std::vector<size_t>& shape1, const std::vector<size_t>& shape2) {
     bool equal = false;
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
         equal = true;
