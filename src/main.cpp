@@ -41,11 +41,11 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
 
     tensor output = zeros({output_height, output_width});
 
-    for (int i = 0; i < output_height; ++i) {
-        for (int j = 0; j < output_width; ++j) {
+    for (size_t i = 0; i < output_height; ++i) {
+        for (size_t j = 0; j < output_width; ++j) {
             float sum = 0.0;
-            for (int m = 0; m < kernel_height; ++m) {
-                for (int n = 0; n < kernel_width; ++n) {
+            for (size_t m = 0; m < kernel_height; ++m) {
+                for (size_t n = 0; n < kernel_width; ++n) {
                     sum += x(i + m, j + n) * kernel(m, n);
                 }
             }
