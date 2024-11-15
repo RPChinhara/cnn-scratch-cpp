@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-tensor argmax(const tensor &t) {
+tensor argmax(const tensor& t) {
     tensor t_new = zeros({t.shape.front()});
 
     size_t idx = 0;
@@ -34,7 +34,7 @@ __global__ void exp(float *t, float *t_new, size_t n) {
         t_new[id] = expf(t[id]);
 }
 
-tensor exp(const tensor &t) {
+tensor exp(const tensor& t) {
     tensor t_new = t;
 
     float *t_gpu, *t_gpu_new;
@@ -64,7 +64,7 @@ __global__ void log(float *t, float *t_new, size_t n) {
         t_new[id] = logf(t[id]);
 }
 
-tensor log(const tensor &t) {
+tensor log(const tensor& t) {
     tensor t_new = t;
 
     float *t_gpu, *t_gpu_new;
@@ -87,7 +87,7 @@ tensor log(const tensor &t) {
     return t_new;
 }
 
-tensor max(const tensor &t, const size_t axis) {
+tensor max(const tensor& t, const size_t axis) {
     assert(axis == 0 || axis == 1);
     tensor t_new;
 
@@ -126,7 +126,7 @@ tensor max(const tensor &t, const size_t axis) {
     return t_new;
 }
 
-tensor min(const tensor &t) {
+tensor min(const tensor& t) {
     tensor t_new = zeros({1, t.shape.back()});
 
     for (auto i = 0; i < t.shape.back(); ++i) {
@@ -145,7 +145,7 @@ tensor min(const tensor &t) {
     return t_new;
 }
 
-tensor sqrt(const tensor &x) {
+tensor sqrt(const tensor& x) {
     tensor y = x;
 
     for (auto i = 0; i < x.size; ++i)
@@ -154,7 +154,7 @@ tensor sqrt(const tensor &x) {
     return y;
 }
 
-tensor square(const tensor &t) {
+tensor square(const tensor& t) {
     tensor y = t;
 
     for (auto i = 0; i < t.size; ++i)
@@ -163,7 +163,7 @@ tensor square(const tensor &t) {
     return y;
 }
 
-tensor sum(const tensor &t, const size_t axis) {
+tensor sum(const tensor& t, const size_t axis) {
     assert(axis == 0 || axis == 1);
     tensor t_new;
 
