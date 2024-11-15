@@ -44,8 +44,8 @@ class min_max_scaler {
 
 };
 
-std::string lower(const std::string &text);
+std::string lower(const std::string& text);
 tensor one_hot(const tensor& t, const size_t depth);
-std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite);
+std::string regex_replace(const std::string& in, const std::string& pattern, const std::string& rewrite);
 train_test split_dataset(const tensor& x, const tensor& y, const float test_size, const size_t rd_state);
-std::vector<std::string> tokenizer(const std::string &text);
+std::vector<std::string> tokenizer(const std::string& text);
