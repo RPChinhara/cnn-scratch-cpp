@@ -19,7 +19,7 @@ __global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
     }
 }
 
-tensor matmul(const tensor &t1, const tensor &t2) {
+tensor matmul(const tensor& t1, const tensor& t2) {
     assert(t1.shape.back() == t2.shape.front());
 
     tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
@@ -60,7 +60,7 @@ static size_t get_batch_size(const std::vector<size_t> &shape) {
     return batchSize;
 }
 
-tensor transpose(const tensor &t) {
+tensor transpose(const tensor& t) {
     assert(2 <= t.shape.size());
 
     tensor t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
