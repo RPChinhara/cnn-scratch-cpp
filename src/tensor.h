@@ -7,7 +7,7 @@ class tensor {
   public:
     size_t size;
     std::vector<size_t> shape;
-    float *elems = nullptr;
+    float* elems = nullptr;
 
     tensor() = default;
     tensor(const std::vector<size_t>& shape, const std::vector<float>& elems);
