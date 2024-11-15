@@ -88,7 +88,7 @@ const std::string tensor::get_shape() const {
     return shapes;
 }
 
-tensor& tensor::reshape(const std::vector<size_t> &new_shape) {
+tensor& tensor::reshape(const std::vector<size_t>& new_shape) {
     size_t new_size = 1;
     for (size_t dim : new_shape)
         new_size *= dim;
