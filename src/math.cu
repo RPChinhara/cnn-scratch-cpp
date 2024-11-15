@@ -27,7 +27,7 @@ tensor argmax(const tensor& t) {
     return t_new;
 }
 
-__global__ void exp(float *t, float *t_new, size_t n) {
+__global__ void exp(float* t, float* t_new, size_t n) {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (id < n)
