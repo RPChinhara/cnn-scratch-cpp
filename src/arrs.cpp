@@ -61,7 +61,7 @@ std::pair<tensor, tensor> split(const tensor& x, const float test_size) {
     return std::make_pair(x_train, x_test);
 }
 
-tensor vstack(const std::vector<tensor> &ts) {
+tensor vstack(const std::vector<tensor>& ts) {
     size_t first_dim = ts.front().shape.back();
 
     for (auto i = 1; i < ts.size(); ++i)
@@ -85,7 +85,7 @@ tensor vstack(const std::vector<tensor> &ts) {
     return t_new;
 }
 
-tensor zeros(const std::vector<size_t> &shape) {
+tensor zeros(const std::vector<size_t>& shape) {
     tensor t_new = tensor();
 
     for (auto i : shape)
