@@ -23,7 +23,7 @@ tensor b1 = zeros({1, 1});
 tensor w2 = normal_dist({128});
 tensor b2 = zeros({1, 1});
 
-tensor cnn2d_convolution(const tensor &x, const tensor &kernel, const size_t stride = 1, const size_t padding = 0) {
+tensor cnn2d_convolution(const tensor& x, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
     // Add padding to the input matrix here? For example,
     //        0 0 0 0
     // 1 1 -> 0 1 1 0
@@ -54,12 +54,12 @@ tensor cnn2d_convolution(const tensor &x, const tensor &kernel, const size_t str
     return output;
 }
 
-tensor cnn2d_max_pool(const tensor &x) {
+tensor cnn2d_max_pool(const tensor& x) {
 
     return tensor();
 }
 
-tensor cnn2d_forward(const tensor &x) {
+tensor cnn2d_forward(const tensor& x) {
     auto x_conv1 = cnn2d_convolution(x, kernel1);
     x_conv1 = relu(x_conv1);
     x_conv1 = cnn2d_max_pool(x_conv1);
@@ -74,7 +74,7 @@ tensor cnn2d_forward(const tensor &x) {
     return x_fc;
 }
 
-void cnn2d_train(const tensor &x_train, const tensor &y_train) {
+void cnn2d_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -91,11 +91,11 @@ void cnn2d_train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float cnn2d_evaluate(const tensor &x_test, const tensor &y_test) {
+float cnn2d_evaluate(const tensor& x_test, const tensor& y_test) {
     return 0.0f;
 }
 
-void cnn2d_predict(const tensor &x_test, const tensor &y_test) {
+void cnn2d_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
