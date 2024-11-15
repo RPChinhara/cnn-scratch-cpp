@@ -14,11 +14,11 @@ class tensor {
     ~tensor();
     tensor(const tensor &other);
     tensor(tensor &&other) noexcept;
-    tensor &operator=(const tensor &other);
-    tensor &operator=(tensor &&other) noexcept;
+    tensor& operator=(const tensor& other);
+    tensor& operator=(tensor&& other) noexcept;
 
     const std::string get_shape() const;
-    tensor &reshape(const std::vector<size_t> &new_shape);
+    tensor& reshape(const std::vector<size_t>& new_shape);
 
     tensor operator+(const tensor &other) const;
     tensor operator-(const tensor &other) const;
@@ -26,7 +26,9 @@ class tensor {
     tensor operator/(const tensor &other) const;
     tensor operator+=(const tensor &other) const;
     tensor operator-() const;
-    float &operator[](const size_t idx) const;
+    float& operator[](const size_t idx) const;
+    float& operator()(const size_t i, const size_t j);
+    const float& operator()(const size_t i, const size_t j) const;
 
     friend tensor operator+(const float sca, const tensor &t);
     friend tensor operator-(const float sca, const tensor &t);
