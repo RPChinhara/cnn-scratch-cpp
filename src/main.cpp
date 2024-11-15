@@ -66,7 +66,24 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 
     tensor output = zeros({output_height, output_width});
 
-    return tensor();
+    for (size_t i = 0; i < output_height; ++i) {
+        for (size_t j = 0; j < output_width; ++j) {
+            float max_val = -std::numeric_limits<float>::infinity(); // Start with the smallest possible value
+
+            for (size_t m = 0; m < pool_size; ++m) {
+                for (size_t n = 0; n < pool_size; ++n) {
+                    float val = x(i * stride + m, j * stride + n); // Use stride to move the window
+
+                    if (val > max_val)
+                        max_val = val; // Update the maximum value
+                }
+            }
+
+            output(i, j) = max_val; // Assign the maximum value to the output
+        }
+    }
+
+    return output;
 }
 
 tensor lenet_forward(const tensor& x) {
@@ -112,38 +129,50 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    mnist data = load_mnist();
+    // mnist data = load_mnist();
 
-    constexpr size_t num_digits = 10;
-    constexpr size_t image_size = 784;
-    constexpr size_t image_dim = 28;
+    // constexpr size_t num_digits = 10;
+    // constexpr size_t image_size = 784;
+    // constexpr size_t image_dim = 28;
 
-    for (auto i = 0; i < num_digits; ++i) {
-        for (auto j = 0; j < image_size; ++j) {
-            if (j % image_dim == 0 && j != 0)
-                std::cout << std::endl;
+    // for (auto i = 0; i < num_digits; ++i) {
+    //     for (auto j = 0; j < image_size; ++j) {
+    //         if (j % image_dim == 0 && j != 0)
+    //             std::cout << std::endl;
 
-            std::cout << data.train_images[i * image_size + j] << " ";
-        }
+    //         std::cout << data.train_images[i * image_size + j] << " ";
+    //     }
 
-        std::cout << "\n\n";
-    }
+    //     std::cout << "\n\n";
+    // }
 
-    for (auto i = 0; i < data.train_images.size; ++i)
-        data.train_images[i] /= 255.0f;
+    // for (auto i = 0; i < data.train_images.size; ++i)
+    //     data.train_images[i] /= 255.0f;
 
-    for (auto i = 0; i < data.test_images.size; ++i)
-        data.test_images[i] /= 255.0f;
+    // for (auto i = 0; i < data.test_images.size; ++i)
+    //     data.test_images[i] /= 255.0f;
 
-    data.train_images.reshape({60000, 28, 28, 1});
-    data.test_images.reshape({10000, 28, 28, 1});
+    // data.train_images.reshape({60000, 28, 28, 1});
+    // data.test_images.reshape({10000, 28, 28, 1});
 
-    data.train_labels = one_hot(data.train_labels, 10);
-    data.test_labels = one_hot(data.test_labels, 10);
+    // data.train_labels = one_hot(data.train_labels, 10);
+    // data.test_labels = one_hot(data.test_labels, 10);
 
-    lenet_train(data.train_images, data.train_labels);
-    auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
-    lenet_predict(data.test_images, data.test_labels);
+    // lenet_train(data.train_images, data.train_labels);
+    // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
+    // lenet_predict(data.test_images, data.test_labels);
+
+    auto ad = tensor({ 9, 9 }, { 0,   1,  2,  3,  4,  5,  6,  7,  8,
+                                 9,  10, 11, 12, 13, 14, 15, 16, 17,
+                                 18, 19, 20, 21, 22, 23, 24, 25, 26,
+                                 27, 28, 29, 30, 31, 32, 33, 34, 35,
+                                 36, 37, 38, 39, 40, 41, 42, 43, 44,
+                                 45, 46, 47, 48, 49, 50, 51, 52, 53,
+                                 54, 55, 56, 57, 58, 59, 60, 61, 62,
+                                 63, 64, 65, 66, 67, 68, 69, 70, 71,
+                                 72, 73, 74, 75, 76, 77, 78, 79, 80});
+
+    std::cout << lenet_max_pool(ad) << std::endl;
 
     return 0;
 }
