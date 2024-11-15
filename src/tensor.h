@@ -36,5 +36,5 @@ class tensor {
     friend tensor operator/(const float sca, const tensor& t);
     friend tensor operator+(const tensor& t, const float sca);
     friend tensor operator/(const tensor& t, const float sca);
-    friend std::ostream &operator<<(std::ostream &os, const tensor& t);
+    friend std::ostream& operator<<(std::ostream& os, const tensor& t);
 };

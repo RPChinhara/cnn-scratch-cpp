@@ -262,7 +262,7 @@ static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t> &sh
     return num_elem_each_batch;
 }
 
-std::ostream &operator<<(std::ostream &os, const tensor& t) {
+std::ostream& operator<<(std::ostream& os, const tensor& t) {
     os << std::fixed << std::setprecision(8);
 
     size_t idx = 0;
