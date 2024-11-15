@@ -44,6 +44,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
     for (size_t i = 0; i < output_height; ++i) {
         for (size_t j = 0; j < output_width; ++j) {
             float sum = 0.0;
+
             for (size_t m = 0; m < kernel_height; ++m) {
                 for (size_t n = 0; n < kernel_width; ++n) {
                     sum += x(i + m, j + n) * kernel(m, n);
