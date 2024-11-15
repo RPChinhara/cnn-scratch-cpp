@@ -245,13 +245,13 @@ tensor operator/(const tensor& t, const float sca) {
     return t_new;
 }
 
-static size_t get_num_elem_most_inner_mat(const std::vector<size_t> &shape) {
+static size_t get_num_elem_most_inner_mat(const std::vector<size_t>& shape) {
     size_t last_shape = shape[shape.size() - 1];
     size_t second_last_shape = shape[shape.size() - 2];
     return second_last_shape * last_shape;
 }
 
-static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t> &shape) {
+static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t>& shape) {
     size_t num_elem = get_num_elem_most_inner_mat(shape);
     std::vector<size_t> num_elem_each_batch;
 
