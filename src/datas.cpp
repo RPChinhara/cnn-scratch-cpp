@@ -172,10 +172,10 @@ tensor ReadMNISTImages(const std::string& filePath) {
 
     uint32_t magicNumber, numImages, numRows, numCols;
 
-    file.read(reinterpret_cast<char *>(&magicNumber), sizeof(magicNumber));
-    file.read(reinterpret_cast<char *>(&numImages), sizeof(numImages));
-    file.read(reinterpret_cast<char *>(&numRows), sizeof(numRows));
-    file.read(reinterpret_cast<char *>(&numCols), sizeof(numCols));
+    file.read(reinterpret_cast<char*>(&magicNumber), sizeof(magicNumber));
+    file.read(reinterpret_cast<char*>(&numImages), sizeof(numImages));
+    file.read(reinterpret_cast<char*>(&numRows), sizeof(numRows));
+    file.read(reinterpret_cast<char*>(&numCols), sizeof(numCols));
 
     magicNumber = _byteswap_ulong(magicNumber);
     numImages = _byteswap_ulong(numImages);
@@ -185,7 +185,7 @@ tensor ReadMNISTImages(const std::string& filePath) {
     std::vector<std::vector<uint8_t>> images(numImages, std::vector<uint8_t>(numRows * numCols));
 
     for (auto i = 0; i < numImages; ++i)
-        file.read(reinterpret_cast<char *>(images[i].data()), numRows * numCols);
+        file.read(reinterpret_cast<char*>(images[i].data()), numRows * numCols);
 
     tensor images2 = zeros({numImages, numRows, numCols});
     size_t idx = 0;
@@ -212,15 +212,15 @@ tensor ReadMNISTLabels(const std::string& filePath) {
 
     uint32_t magicNumber, numLabels;
 
-    file.read(reinterpret_cast<char *>(&magicNumber), sizeof(magicNumber));
-    file.read(reinterpret_cast<char *>(&numLabels), sizeof(numLabels));
+    file.read(reinterpret_cast<char*>(&magicNumber), sizeof(magicNumber));
+    file.read(reinterpret_cast<char*>(&numLabels), sizeof(numLabels));
 
     magicNumber = _byteswap_ulong(magicNumber);
     numLabels = _byteswap_ulong(numLabels);
 
     std::vector<uint8_t> labels(numLabels);
 
-    file.read(reinterpret_cast<char *>(labels.data()), numLabels);
+    file.read(reinterpret_cast<char*>(labels.data()), numLabels);
 
     tensor labels2 = zeros({numLabels, 1});
     size_t idx = 0;
