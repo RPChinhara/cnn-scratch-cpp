@@ -30,9 +30,11 @@ tensor cnn2d_convolution(const tensor& x, const tensor& kernel, const size_t str
     // 1 1    0 1 1 0
     //        0 0 0 0
 
-    size_t kernel_height = 3, kernel_width = 3;
-    // size_t input_height = 28, input_width = 28;
-    size_t input_height = 9, input_width = 9;
+    size_t kernel_height = kernel.shape.front();
+    size_t kernel_width = kernel.shape.back();
+
+    size_t input_height = x.shape.front();
+    size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
@@ -47,6 +49,7 @@ tensor cnn2d_convolution(const tensor& x, const tensor& kernel, const size_t str
                     sum += x(i + m, j + n) * kernel(m, n);
                 }
             }
+
             output(i, j) = sum;
         }
     }
@@ -132,21 +135,33 @@ int main() {
     // auto test_loss = cnn2d_evaluate(data.test_images, data.test_labels);
     // cnn2d_predict(data.test_images, data.test_labels);
 
-    auto a = tensor({9, 9}, {0,  1,  2,  3,  4,  5,  6,  7,  8,
-                             9, 10, 11, 12, 13, 14, 15, 16, 17,
-                            18, 19, 20, 21, 22, 23, 24, 25, 26,
-                            27, 28, 29, 30, 31, 32, 33, 34, 35,
-                            36, 37, 38, 39, 40, 41, 42, 43, 44,
-                            45, 46, 47, 48, 49, 50, 51, 52, 53,
-                            54, 55, 56, 57, 58, 59, 60, 61, 62,
-                            63, 64, 65, 66, 67, 68, 69, 70, 71,
-                            72, 73, 74, 75, 76, 77, 78, 79, 80, });
-    auto kernel_3x3 = tensor({3, 3}, {1});
+    // auto a = tensor({9, 9}, {0,  1,  2,  3,  4,  5,  6,  7,  8,
+    //                          9, 10, 11, 12, 13, 14, 15, 16, 17,
+    //                         18, 19, 20, 21, 22, 23, 24, 25, 26,
+    //                         27, 28, 29, 30, 31, 32, 33, 34, 35,
+    //                         36, 37, 38, 39, 40, 41, 42, 43, 44,
+    //                         45, 46, 47, 48, 49, 50, 51, 52, 53,
+    //                         54, 55, 56, 57, 58, 59, 60, 61, 62,
+    //                         63, 64, 65, 66, 67, 68, 69, 70, 71,
+    //                         72, 73, 74, 75, 76, 77, 78, 79, 80, });
+    // auto kernel_3x3 = tensor({3, 3}, {1});
+
+    // auto output = cnn2d_convolution(a, kernel_3x3);
+
+    // std::cout << a << std::endl;
+    // std::cout << output << std::endl;
+
+     auto a = tensor({3, 3}, {0, 1, 2, 3, 4, 5, 6, 7, 8,});
+
+    auto kernel_3x3 = tensor({2, 2}, {1});
 
     auto output = cnn2d_convolution(a, kernel_3x3);
 
-    std::cout << a << std::endl;
     std::cout << output << std::endl;
+
+    // 0 1 2    8  12
+    // 3 4 5    20 24
+    // 6 7 8
 
     return 0;
 }
