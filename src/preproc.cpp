@@ -16,7 +16,7 @@ std::string lower(const std::string &text) {
     return result;
 }
 
-tensor one_hot(const tensor &t, const size_t depth) {
+tensor one_hot(const tensor& t, const size_t depth) {
     tensor t_new = zeros({t.size, depth});
 
     std::vector<float> idx;
@@ -43,7 +43,7 @@ std::string regex_replace(const std::string &in, const std::string &pattern, con
     return std::regex_replace(in, re, rewrite);
 }
 
-train_test split_dataset(const tensor &x, const tensor &y, const float test_size, const size_t rd_state) {
+train_test split_dataset(const tensor& x, const tensor& y, const float test_size, const size_t rd_state) {
     tensor x_shuffled = shuffle(x, rd_state);
     tensor y_shuffled = shuffle(y, rd_state);
 
