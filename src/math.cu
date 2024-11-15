@@ -37,9 +37,9 @@ __global__ void exp(float *t, float *t_new, size_t n) {
 tensor exp(const tensor& t) {
     tensor t_new = t;
 
-    float *t_gpu, *t_gpu_new;
-    cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
-    cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
+    float* t_gpu, * t_gpu_new;
+    cudaMalloc((void**)&t_gpu, t.size * sizeof(float));
+    cudaMalloc((void**)&t_gpu_new, t.size * sizeof(float));
     cudaMemcpy(t_gpu, t.elems, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
     constexpr int blockSize = 128;
@@ -57,7 +57,7 @@ tensor exp(const tensor& t) {
     return t_new;
 }
 
-__global__ void log(float *t, float *t_new, size_t n) {
+__global__ void log(float* t, float* t_new, size_t n) {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (id < n)
@@ -67,9 +67,9 @@ __global__ void log(float *t, float *t_new, size_t n) {
 tensor log(const tensor& t) {
     tensor t_new = t;
 
-    float *t_gpu, *t_gpu_new;
-    cudaMalloc((void **)&t_gpu, t.size * sizeof(float));
-    cudaMalloc((void **)&t_gpu_new, t.size * sizeof(float));
+    float* t_gpu, * t_gpu_new;
+    cudaMalloc((void**)&t_gpu, t.size * sizeof(float));
+    cudaMalloc((void**)&t_gpu_new, t.size * sizeof(float));
     cudaMemcpy(t_gpu, t.elems, t.size * sizeof(float), cudaMemcpyHostToDevice);
 
     constexpr int blockSize = 128;
