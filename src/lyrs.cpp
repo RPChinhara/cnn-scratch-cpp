@@ -869,7 +869,7 @@ embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const 
     }
 }
 
-tensor text_vectorization(const std::vector<std::string> &vocab, const std::vector<std::string> &in, size_t max_tokens, const size_t max_len) {
+tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len) {
     assert(max_tokens > 2);
 
     std::unordered_map<std::string, float> vocab_map;
