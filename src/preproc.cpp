@@ -8,7 +8,7 @@
 #include <regex>
 #include <sstream>
 
-std::string lower(const std::string &text) {
+std::string lower(const std::string& text) {
     std::string result;
     for (auto c : text) {
         result += std::tolower(c);
@@ -38,7 +38,7 @@ tensor one_hot(const tensor& t, const size_t depth) {
     return t_new;
 }
 
-std::string regex_replace(const std::string &in, const std::string &pattern, const std::string &rewrite) {
+std::string regex_replace(const std::string& in, const std::string& pattern, const std::string& rewrite) {
     std::regex re(pattern);
     return std::regex_replace(in, re, rewrite);
 }
@@ -68,7 +68,7 @@ train_test split_dataset(const tensor& x, const tensor& y, const float test_size
     return data;
 }
 
-std::vector<std::string> tokenizer(const std::string &text) {
+std::vector<std::string> tokenizer(const std::string& text) {
     std::vector<std::string> tokens;
     std::stringstream ss(text);
     std::string token;
