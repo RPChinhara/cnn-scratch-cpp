@@ -3,7 +3,7 @@
 #include "math.hpp"
 #include "tensor.h"
 
-float categorical_cross_entropy(const tensor &y_true, const tensor &y_pred) {
+float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
     constexpr float epsilon = 1e-15f;
     size_t num_samples = y_true.shape.front();
@@ -16,7 +16,7 @@ float categorical_cross_entropy(const tensor &y_true, const tensor &y_pred) {
     return -sum / num_samples;
 }
 
-float mean_squared_error(const tensor &y_true, const tensor &y_pred) {
+float mean_squared_error(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
     float n = static_cast<float>(y_true.shape.back());
 
