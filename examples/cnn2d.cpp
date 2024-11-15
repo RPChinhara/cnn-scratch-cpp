@@ -23,7 +23,7 @@ tensor fc1_b = zeros({1, 1});
 tensor fc2_w = normal_dist({128});
 tensor fc2_b = zeros({1, 1});
 
-void cnn2d_train(const tensor &x_train, const tensor &y_train) {
+void cnn2d_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -40,14 +40,14 @@ void cnn2d_train(const tensor &x_train, const tensor &y_train) {
     }
 }
 
-float cnn2d_evaluate(const tensor &x_test, const tensor &y_test) {
+float cnn2d_evaluate(const tensor& x_test, const tensor& y_test) {
     return 0.0f;
 }
 
-void cnn2d_predict(const tensor &x_test, const tensor &y_test) {
+void cnn2d_predict(const tensor& x_test, const tensor& y_test) {
 }
 
-std::vector<tensor> cnn2d_forward(const tensor &x) {
+std::vector<tensor> cnn2d_forward(const tensor& x) {
     std::vector<tensor> weights;
 
     return weights;
