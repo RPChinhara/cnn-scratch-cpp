@@ -164,7 +164,7 @@ iris load_iris() {
     return data;
 }
 
-tensor ReadMNISTImages(const std::string &filePath) {
+tensor ReadMNISTImages(const std::string& filePath) {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
@@ -204,7 +204,7 @@ tensor ReadMNISTImages(const std::string &filePath) {
     return images2;
 }
 
-tensor ReadMNISTLabels(const std::string &filePath) {
+tensor ReadMNISTLabels(const std::string& filePath) {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
