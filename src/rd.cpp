@@ -48,7 +48,7 @@ tensor normal_dist(const std::vector<size_t> &shape, const float mean, const flo
     return t_new;
 }
 
-tensor shuffle(const tensor &t, const size_t rd_state) {
+tensor shuffle(const tensor& t, const size_t rd_state) {
     tensor t_new = t;
     std::mt19937 rng(rd_state);
 
