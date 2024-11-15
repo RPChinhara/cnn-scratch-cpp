@@ -23,7 +23,7 @@ tensor b1 = zeros({1, 1});
 tensor w2 = normal_dist({128});
 tensor b2 = zeros({1, 1});
 
-tensor cnn2d_convolution(const tensor& x, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
+tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
     // Add padding to the input matrix here? For example,
     //        0 0 0 0
     // 1 1 -> 0 1 1 0
@@ -57,20 +57,20 @@ tensor cnn2d_convolution(const tensor& x, const tensor& kernel, const size_t str
     return output;
 }
 
-tensor cnn2d_max_pool(const tensor& x) {
+tensor lenet_max_pool(const tensor& x) {
 
     return tensor();
 }
 
-tensor cnn2d_forward(const tensor& x) {
-    auto x_conv1 = cnn2d_convolution(x, kernel1);
+tensor lenet_forward(const tensor& x) {
+    auto x_conv1 = lenet_convolution(x, kernel1);
     std::cout << x_conv1 << std::endl;
     // x_conv1 = relu(x_conv1);
-    // x_conv1 = cnn2d_max_pool(x_conv1);
+    // x_conv1 = lenet_max_pool(x_conv1);
 
-    // auto x_conv2 = cnn2d_convolution(x_conv1, kernel2);
+    // auto x_conv2 = lenet_convolution(x_conv1, kernel2);
     // x_conv2 = relu(x_conv2);
-    // x_conv2 = cnn2d_max_pool(x_conv2);
+    // x_conv2 = lenet_max_pool(x_conv2);
 
     // auto x_fc = matmul(w1, x_conv2) + b1;
     // x_fc = matmul(w2, x_fc) + b2;
@@ -80,11 +80,11 @@ tensor cnn2d_forward(const tensor& x) {
     return tensor();
 }
 
-void cnn2d_train(const tensor& x_train, const tensor& y_train) {
+void lenet_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto y = cnn2d_forward(x_train);
+        auto y = lenet_forward(x_train);
 
         float error = 0.0f;
 
@@ -97,11 +97,11 @@ void cnn2d_train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float cnn2d_evaluate(const tensor& x_test, const tensor& y_test) {
+float lenet_evaluate(const tensor& x_test, const tensor& y_test) {
     return 0.0f;
 }
 
-void cnn2d_predict(const tensor& x_test, const tensor& y_test) {
+void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
@@ -134,9 +134,9 @@ int main() {
     data.train_labels = one_hot(data.train_labels, 10);
     data.test_labels = one_hot(data.test_labels, 10);
 
-    cnn2d_train(data.train_images, data.train_labels);
-    auto test_loss = cnn2d_evaluate(data.test_images, data.test_labels);
-    cnn2d_predict(data.test_images, data.test_labels);
+    lenet_train(data.train_images, data.train_labels);
+    auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
+    lenet_predict(data.test_images, data.test_labels);
 
     return 0;
 }
