@@ -108,12 +108,11 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 tensor lenet_forward(const tensor& x) {
     auto x_conv1 = lenet_convolution(x, kernel1);
     x_conv1 = relu(x_conv1);
+    x_conv1 = lenet_max_pool(x_conv1);
 
-    // x_conv1 = lenet_max_pool(x_conv1);
-
-    // auto x_conv2 = lenet_convolution(x_conv1, kernel2);
-    // x_conv2 = relu(x_conv2);
-    // x_conv2 = lenet_max_pool(x_conv2);
+    auto x_conv2 = lenet_convolution(x_conv1, kernel2);
+    x_conv2 = relu(x_conv2);
+    x_conv2 = lenet_max_pool(x_conv2);
 
     // auto x_fc = matmul(w1, x_conv2) + b1;
     // x_fc = matmul(w2, x_fc) + b2;
@@ -148,72 +147,35 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // mnist data = load_mnist();
+    mnist data = load_mnist();
 
-    // constexpr size_t num_digits = 10;
-    // constexpr size_t image_size = 784;
-    // constexpr size_t image_dim = 28;
+    constexpr size_t num_digits = 1;
+    constexpr size_t image_size = 784;
+    constexpr size_t image_dim = 28;
 
-    // for (auto i = 0; i < num_digits; ++i) {
-    //     for (auto j = 0; j < image_size; ++j) {
-    //         if (j % image_dim == 0 && j != 0)
-    //             std::cout << std::endl;
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < image_size; ++j) {
+            if (j % image_dim == 0 && j != 0)
+                std::cout << std::endl;
 
-    //         std::cout << data.train_images[i * image_size + j] << " ";
-    //     }
+            std::cout << data.train_images[i * image_size + j] << " ";
+        }
 
-    //     std::cout << "\n\n";
-    // }
+        std::cout << "\n\n";
+    }
 
-    // for (auto i = 0; i < data.train_images.size; ++i)
-    //     data.train_images[i] /= 255.0f;
+    for (auto i = 0; i < data.train_images.size; ++i)
+        data.train_images[i] /= 255.0f;
 
-    // for (auto i = 0; i < data.test_images.size; ++i)
-    //     data.test_images[i] /= 255.0f;
+    for (auto i = 0; i < data.test_images.size; ++i)
+        data.test_images[i] /= 255.0f;
 
-    // data.train_labels = one_hot(data.train_labels, 10);
-    // data.test_labels = one_hot(data.test_labels, 10);
+    data.train_labels = one_hot(data.train_labels, 10);
+    data.test_labels = one_hot(data.test_labels, 10);
 
-    // lenet_train(data.train_images, data.train_labels);
-    // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
-    // lenet_predict(data.test_images, data.test_labels);
-
-    auto t1 = tensor({ 2, 5, 5 }, { 0, 1, 2, 4, 5,
-                                    3, 4, 5, 6, 7,
-                                    3, 4, 5, 6, 7,
-                                    3, 4, 5, 6, 7,
-                                    6, 7, 8, 6, 7,
-
-                                    0, 1, 2, 4, 5,
-                                    3, 4, 5, 6, 7,
-                                    3, 4, 5, 6, 7,
-                                    3, 4, 5, 6, 7,
-                                    6, 7, 8, 6, 7,});
-
-    auto t2 = tensor({ 5, 3, 3 }, { 0, 1, 2,
-                                    3, 4, 5,
-                                    6, 7, 8,
-
-                                    9, 10, 11,
-                                    12, 13, 14,
-                                    15, 16, 17,
-
-                                    9, 10, 11,
-                                    12, 13, 14,
-                                    15, 16, 17,
-
-                                    0, 1, 2,
-                                    3, 4, 5,
-                                    6, 7, 8,
-
-                                    4, 4, 4,
-                                    4, 4, 4,
-                                    4, 4, 4,
-
-                                   });
-
-    std::cout << t1 << std::endl;
-    std::cout << lenet_max_pool(t1) << std::endl;
+    lenet_train(data.train_images, data.train_labels);
+    auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
+    lenet_predict(data.test_images, data.test_labels);
 
     return 0;
 }
