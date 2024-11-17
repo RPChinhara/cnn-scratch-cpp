@@ -10,6 +10,8 @@ tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max) {
         exit(1);
     }
 
+    tensor t_new = t;
+
     for (auto i = 0; i < t.size; ++i) {
         if (t[i] < clip_val_min)
             t_new[i] = clip_val_min;
