@@ -41,8 +41,8 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
 
     tensor outputs = zeros({x.shape.front(), output_height, output_width});
 
-    for (size_t g = 0; g < x.shape.front(); ++g) {
-        auto t = slice(x, g * input_height, input_height);
+    for (size_t b = 0; b < x.shape.front(); ++b) {
+        auto t = slice(x, b * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
 
@@ -61,7 +61,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
         }
 
         for (size_t i = 0; i < output.size; ++i)
-            outputs[g * output.size + i] = output[i];
+            outputs[b * output.size + i] = output[i];
     }
 
     return outputs;
@@ -76,8 +76,8 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 
     tensor outputs = zeros({x.shape.front(), output_height, output_width});
 
-    for (size_t g = 0; g < x.shape.front(); ++g) {
-        auto t = slice(x, g * input_height, input_height);
+    for (size_t b = 0; b < x.shape.front(); ++b) {
+        auto t = slice(x, b * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
 
@@ -99,7 +99,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
         }
 
         for (size_t i = 0; i < output.size; ++i)
-            outputs[g * output.size + i] = output[i];
+            outputs[b * output.size + i] = output[i];
     }
 
     return outputs;
