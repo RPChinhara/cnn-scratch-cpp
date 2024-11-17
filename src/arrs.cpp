@@ -5,9 +5,10 @@
 #include <numeric>
 
 tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max) {
-    assert(clip_val_min <= clip_val_max);
-
-    tensor t_new = t;
+    if (clip_val_min > clip_val_max) {
+        std::cerr << "error: clip_val_min should not be greater than clip_val_max" << std::endl;
+        exit(1);
+    }
 
     for (auto i = 0; i < t.size; ++i) {
         if (t[i] < clip_val_min)
