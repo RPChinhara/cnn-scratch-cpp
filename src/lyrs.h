@@ -147,30 +147,6 @@ class lstm {
     tensor predict(const tensor& x);
 };
 
-class nn {
-  private:
-    std::vector<size_t> lyrs;
-    std::vector<act_func> activations;
-    loss_func loss;
-    metric_func metric;
-    float lr;
-    size_t epochs = 200;
-    size_t batch_size = 10;
-    float momentum = 0.1f;
-
-    std::pair<std::vector<tensor>, std::vector<tensor>> w_b;
-    std::pair<std::vector<tensor>, std::vector<tensor>> w_b_momentum;
-
-    std::pair<std::vector<tensor>, std::vector<tensor>> init_params();
-    std::pair<std::vector<tensor>, std::vector<tensor>> forward(const tensor& x, const std::vector<tensor> &w, const std::vector<tensor> &b);
-
-  public:
-    nn(const std::vector<size_t> &lyrs, const std::vector<act_func> &activations, const loss_func &loss, const metric_func &metric, const float lr);
-    void train(const tensor& x_train, const tensor& y_train, const tensor& x_val, const tensor& y_val);
-    float evaluate(const tensor& x, const tensor& y);
-    tensor predict(const tensor& x);
-};
-
 class rnn {
   private:
     act_func activation;
