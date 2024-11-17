@@ -147,56 +147,6 @@ class lstm {
     tensor predict(const tensor& x);
 };
 
-class rnn {
-  private:
-    act_func activation;
-    loss_func loss;
-    float lr;
-    size_t epochs = 150;
-    size_t batch_size = 8317;
-
-    size_t seq_length = 10;
-    size_t input_size = 1;
-    size_t hidden_size = 50;
-    size_t output_size = 1;
-
-    float beta1 = 0.9f;
-    float beta2 = 0.999f;
-    float epsilon = 1e-7f;
-    size_t t = 0;
-
-    tensor w_xh;
-    tensor w_hh;
-    tensor w_hy;
-    tensor b_h;
-    tensor b_y;
-
-    tensor m_w_xh;
-    tensor m_w_hh;
-    tensor m_w_hy;
-    tensor m_b_h;
-    tensor m_b_y;
-
-    tensor v_w_xh;
-    tensor v_w_hh;
-    tensor v_w_hy;
-    tensor v_b_h;
-    tensor v_b_y;
-
-    enum Phase {
-      TRAIN,
-      TEST
-    };
-
-    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor& x, enum Phase phase);
-
-  public:
-    rnn(const act_func &activation, const loss_func &loss, const float lr);
-    void train(const tensor& x_train, const tensor& y_train);
-    float evaluate(const tensor& x, const tensor& y);
-    tensor predict(const tensor& x);
-};
-
 class embedding {
   public:
     tensor mat;
