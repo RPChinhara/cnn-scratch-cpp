@@ -39,10 +39,10 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    tensor outputs = zeros({2, output_height, output_width});
+    tensor outputs = zeros({x.shape.front(), output_height, output_width});
 
-    for (size_t g = 0; g < 2; ++g) {
-        auto t = slice(x, g * 3, 3);
+    for (size_t g = 0; g < x.shape.front(); ++g) {
+        auto t = slice(x, g * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
 
@@ -172,48 +172,21 @@ int main() {
     // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
     // lenet_predict(data.test_images, data.test_labels);
 
-    // auto ad = tensor({ 2, 9, 9 }, { 0,   1,  2,  3,  4,  5,  6,  7,  8,
-    //                                 9,  10, 11, 12, 13, 14, 15, 16, 17,
-    //                                 18, 19, 20, 21, 22, 23, 24, 25, 26,
-    //                                 27, 28, 29, 30, 31, 32, 33, 34, 35,
-    //                                 36, 37, 38, 39, 40, 41, 42, 43, 44,
-    //                                 45, 46, 47, 48, 49, 50, 51, 52, 53,
-    //                                 54, 55, 56, 57, 58, 59, 60, 61, 62,
-    //                                 63, 64, 65, 66, 67, 68, 69, 70, 71,
-    //                                 72, 73, 74, 75, 76, 77, 78, 79, 80,
-
-    //                                 0,   1,  2,  3,  4,  5,  6,  7,  8,
-    //                                 9,  10, 11, 12, 13, 14, 15, 16, 17,
-    //                                 18, 19, 20, 21, 22, 23, 24, 25, 26,
-    //                                 27, 28, 29, 30, 31, 32, 33, 34, 35,
-    //                                 36, 37, 38, 39, 40, 41, 42, 43, 44,
-    //                                 45, 46, 47, 48, 49, 50, 51, 52, 53,
-    //                                 54, 55, 56, 57, 58, 59, 60, 61, 62,
-    //                                 63, 64, 65, 66, 67, 68, 69, 70, 71,
-    //                                 72, 73, 74, 75, 76, 77, 78, 79, 80
-    //                               });
-
-    // auto kernel3 = tensor({3, 3}, {1});
-    // // std::cout << lenet_max_pool(ad) << std::endl;
-
-    // std::cout << ad << std::endl;
-    // std::cout << lenet_convolution(ad, kernel3) << std::endl;
-    // std::cout << ad(9, 0) << std::endl;
-    // std::cout << ad(9, 1) << std::endl;
-    // std::cout << ad(9, 2) << std::endl;
-    // std::cout << ad(9, 3) << std::endl;
-    // std::cout << ad(17, 1) << std::endl;
-
-    auto t2 = tensor({ 2, 3, 3 }, { 0, 1, 2,
+    auto t2 = tensor({ 3, 3, 3 }, { 0, 1, 2,
                                     3, 4, 5,
                                     6, 7, 8,
 
                                     9, 10, 11,
                                    12, 13, 14,
-                                   15, 16, 17});
+                                   15, 16, 17,
+
+                                    18, 13, 11,
+                                   12, 13, 14,
+                                   15, 16, 17
+
+                                   });
 
     auto kernel_2x2 = tensor({2, 2}, {1});
-    // std::cout << lenet_max_pool(ad) << std::endl;
 
     std::cout << t2 << std::endl;
     std::cout << lenet_convolution(t2, kernel_2x2) << std::endl;
