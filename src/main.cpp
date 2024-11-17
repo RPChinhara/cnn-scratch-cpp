@@ -162,12 +162,6 @@ int main() {
     for (auto i = 0; i < data.test_images.size; ++i)
         data.test_images[i] /= 255.0f;
 
-    // std::cout << data.train_images.get_shape() << std::endl;
-    // std::cout << data.train_images.get_shape() << std::endl;
-
-    // data.train_images.reshape({60000, 28, 28, 1});
-    // data.test_images.reshape({10000, 28, 28, 1});
-
     data.train_labels = one_hot(data.train_labels, 10);
     data.test_labels = one_hot(data.test_labels, 10);
 
