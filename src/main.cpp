@@ -39,15 +39,13 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    tensor outputs2 = zeros({2, output_height, output_width});
-
-    size_t idx = 0;
+    tensor outputs = zeros({2, output_height, output_width});
 
     for (size_t g = 0; g < 2; ++g) {
         auto t = slice(x, g * 3, 3);
 
         tensor output = zeros({output_height, output_width});
-        
+
         for (size_t i = 0; i < output_height; ++i) {
             for (size_t j = 0; j < output_width; ++j) {
                 float sum = 0.0;
@@ -63,10 +61,10 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
         }
 
         for (size_t i = 0; i < output.size; ++i)
-            outputs2[idx++] = output[i];
+            outputs[g * output.size + i] = output[i];
     }
 
-    return outputs2;
+    return outputs;
 }
 
 tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
