@@ -1,7 +1,7 @@
 @echo off
 
 set NVCC=nvcc
-set FLAGS=-arch sm_75 -I ..\src -o dora --optimize 3 -std c++20 --threads 0 --use_fast_math -Xcompiler "/O2 /MD /MP /GL"
+set FLAGS=-arch sm_75 -I ..\src -o dora --optimize 3 -std c++20 --threads 0 --use_fast_math -Xcompiler "/O2 /MT /MP /GL"
 set SRC=..\src\acts.cpp ..\src\arrs.cpp ..\src\datas.cpp ..\src\linalg.cu ..\src\losses.cpp ..\src\lyrs.cpp ..\src\main.cpp ..\src\math.cu ..\src\preproc.cpp ..\src\rd.cpp ..\src\tensor.cpp
 
 if not exist bin mkdir bin
