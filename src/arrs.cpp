@@ -91,8 +91,12 @@ tensor vstack(const std::vector<tensor>& ts) {
 tensor zeros(const std::vector<size_t>& shape) {
     tensor t_new = tensor();
 
-    for (auto i : shape)
-        assert(i != 0);
+    for (auto i : shape) {
+        if (i == 0) {
+            std::cerr << "error: dimension value cannot be zero" << std::endl;
+            exit(1);
+        }
+    }
 
     t_new.shape = shape;
 
