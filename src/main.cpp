@@ -68,8 +68,8 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
 }
 
 tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
-    size_t input_height = 9;
-    size_t input_width = 9;
+    size_t input_height = x.shape[x.shape.size() - 2];
+    size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - pool_size) / stride + 1;
     size_t output_width = (input_width - pool_size) / stride + 1;
