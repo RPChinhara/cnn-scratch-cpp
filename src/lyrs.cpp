@@ -8,6 +8,7 @@
 #include "rd.h"
 #include "tensor.h"
 
+#include <cassert>
 #include <chrono>
 
 gru::gru(const float lr, const size_t vocab_size) {
