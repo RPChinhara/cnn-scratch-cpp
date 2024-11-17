@@ -47,6 +47,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t str
         auto t = slice(x, g * 3, 3);
 
         tensor output = zeros({output_height, output_width});
+        
         for (size_t i = 0; i < output_height; ++i) {
             for (size_t j = 0; j < output_width; ++j) {
                 float sum = 0.0;
