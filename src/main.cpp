@@ -74,26 +74,35 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     size_t output_height = (input_height - pool_size) / stride + 1;
     size_t output_width = (input_width - pool_size) / stride + 1;
 
-    tensor output = zeros({output_height, output_width});
+    tensor outputs = zeros({x.shape.front(), output_height, output_width});
 
-    for (size_t i = 0; i < output_height; ++i) {
-        for (size_t j = 0; j < output_width; ++j) {
-            float max_val = -std::numeric_limits<float>::infinity();
+    for (size_t g = 0; g < x.shape.front(); ++g) {
+        auto t = slice(x, g * input_height, input_height);
 
-            for (size_t m = 0; m < pool_size; ++m) {
-                for (size_t n = 0; n < pool_size; ++n) {
-                    float val = x(i * stride + m, j * stride + n);
+        tensor output = zeros({output_height, output_width});
 
-                    if (val > max_val)
-                        max_val = val;
+        for (size_t i = 0; i < output_height; ++i) {
+            for (size_t j = 0; j < output_width; ++j) {
+                float max_val = -std::numeric_limits<float>::infinity();
+
+                for (size_t m = 0; m < pool_size; ++m) {
+                    for (size_t n = 0; n < pool_size; ++n) {
+                        float val = t(i * stride + m, j * stride + n);
+
+                        if (val > max_val)
+                            max_val = val;
+                    }
                 }
-            }
 
-            output(i, j) = max_val;
+                output(i, j) = max_val;
+            }
         }
+
+        for (size_t i = 0; i < output.size; ++i)
+            outputs[g * output.size + i] = output[i];
     }
 
-    return output;
+    return outputs;
 }
 
 tensor lenet_forward(const tensor& x) {
@@ -169,11 +178,17 @@ int main() {
     // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
     // lenet_predict(data.test_images, data.test_labels);
 
-    auto t1 = tensor({ 5, 5 }, { 0, 1, 2, 4, 5,
-                                 3, 4, 5, 6, 7,
-                                 3, 4, 5, 6, 7,
-                                 3, 4, 5, 6, 7,
-                                 6, 7, 8, 6, 7, });
+    auto t1 = tensor({ 2, 5, 5 }, { 0, 1, 2, 4, 5,
+                                    3, 4, 5, 6, 7,
+                                    3, 4, 5, 6, 7,
+                                    3, 4, 5, 6, 7,
+                                    6, 7, 8, 6, 7,
+
+                                    0, 1, 2, 4, 5,
+                                    3, 4, 5, 6, 7,
+                                    3, 4, 5, 6, 7,
+                                    3, 4, 5, 6, 7,
+                                    6, 7, 8, 6, 7,});
 
     auto t2 = tensor({ 5, 3, 3 }, { 0, 1, 2,
                                     3, 4, 5,
