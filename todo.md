@@ -1,13 +1,13 @@
-> Implement CNN
-- Implement ResNet
-- Implement AlexNet
-- Implement VGG
-- Implement Seq2seq
-- Implement Transformer
-- Implement Autoencoder
-- Imeplement BERT
-- Implement GAN
-- Implement BART
-- Implement Mamba
+> LeNet
+- ResNet
+- AlexNet
+- VGG
+- Seq2seq
+- Transformer
+- Autoencoder
+- BERT
+- GAN
+- BART
+- Mamba
 - Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature. For instance, Newton's laws of motion?
 - Solve existing problems and discover new theories in mathematics and physics
