@@ -9,129 +9,159 @@
 #include "tensor.h"
 
 #include <array>
-#include <cassert>
 #include <chrono>
-#include <functional>
 
-using act_func = std::function<tensor(const tensor&)>;
-using loss_func = std::function<float(const tensor&, const tensor&)>;
-using metric_func = std::function<float(const tensor&, const tensor&)>;
+float lr = 0.01f;
+size_t batch_size;
+size_t epochs = 250;
 
-class lstm {
-  private:
-    loss_func loss;
-    float lr;
-    size_t batch_size;
-    size_t epochs = 250;
+size_t seq_length = 10;
+size_t input_size = 1;
+size_t hidden_size = 50;
+size_t output_size = 1;
 
-    size_t seq_length = 10;
-    size_t input_size = 1;
-    size_t hidden_size = 50;
-    size_t output_size = 1;
+float beta1 = 0.9f;
+float beta2 = 0.999f;
+float epsilon = 1e-7f;
+size_t t = 0;
 
-    float beta1 = 0.9f;
-    float beta2 = 0.999f;
-    float epsilon = 1e-7f;
-    size_t t = 0;
+tensor w_f = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_i = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_c = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_o = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_y = glorot_uniform(output_size, hidden_size);
 
-    tensor w_f;
-    tensor w_i;
-    tensor w_c;
-    tensor w_o;
-    tensor w_y;
+tensor b_f = zeros({hidden_size, 1});
+tensor b_i = zeros({hidden_size, 1});
+tensor b_c = zeros({hidden_size, 1});
+tensor b_o = zeros({hidden_size, 1});
+tensor b_y = zeros({output_size, 1});
 
-    tensor b_f;
-    tensor b_i;
-    tensor b_c;
-    tensor b_o;
-    tensor b_y;
+tensor m_w_f = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_i = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_c = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_o = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_y = zeros({output_size, hidden_size});
 
-    tensor m_w_f;
-    tensor m_w_i;
-    tensor m_w_c;
-    tensor m_w_o;
-    tensor m_w_y;
+tensor m_b_f = zeros({hidden_size, 1});
+tensor m_b_i = zeros({hidden_size, 1});
+tensor m_b_c = zeros({hidden_size, 1});
+tensor m_b_o = zeros({hidden_size, 1});
+tensor m_b_y = zeros({output_size, 1});
 
-    tensor m_b_f;
-    tensor m_b_i;
-    tensor m_b_c;
-    tensor m_b_o;
-    tensor m_b_y;
+tensor v_w_f = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_i = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_c = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_o = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_y = zeros({output_size, hidden_size});
 
-    tensor v_w_f;
-    tensor v_w_i;
-    tensor v_w_c;
-    tensor v_w_o;
-    tensor v_w_y;
+tensor v_b_f = zeros({hidden_size, 1});
+tensor v_b_i = zeros({hidden_size, 1});
+tensor v_b_c = zeros({hidden_size, 1});
+tensor v_b_o = zeros({hidden_size, 1});
+tensor v_b_y = zeros({output_size, 1});
 
-    tensor v_b_f;
-    tensor v_b_i;
-    tensor v_b_c;
-    tensor v_b_o;
-    tensor v_b_y;
-
-    enum Phase {
-      TRAIN,
-      TEST
-    };
-
-    std::array<std::vector<tensor>, 12> forward(const tensor& x, enum Phase phase);
-
-  public:
-    lstm(const loss_func &loss, const float lr);
-    void train(const tensor& x_train, const tensor& y_train);
-    float evaluate(const tensor& x, const tensor& y);
-    tensor predict(const tensor& x);
+enum Phase {
+    TRAIN,
+    TEST
 };
 
-lstm::lstm(const loss_func &loss, const float lr) {
-    this->loss = loss;
-    this->lr = lr;
+std::array<std::vector<tensor>, 12> lstm_forward(const tensor& x, enum Phase phase) {
+    std::vector<tensor> x_sequence;
+    std::vector<tensor> concat_sequence;
+    std::vector<tensor> z_f_sequence;
+    std::vector<tensor> z_i_sequence;
+    std::vector<tensor> i_sequence;
+    std::vector<tensor> z_c_tilde_sequence;
+    std::vector<tensor> c_tilde_sequence;
+    std::vector<tensor> c_sequence;
+    std::vector<tensor> z_o_sequence;
+    std::vector<tensor> o_sequence;
+    std::vector<tensor> h_sequence;
+    std::vector<tensor> y_sequence;
 
-    w_f = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_i = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_c = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_o = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_y = glorot_uniform(output_size, hidden_size);
+    if (phase == Phase::TRAIN)
+        batch_size = 8317;
+    else
+        batch_size = 2072;
 
-    b_f = zeros({hidden_size, 1});
-    b_i = zeros({hidden_size, 1});
-    b_c = zeros({hidden_size, 1});
-    b_o = zeros({hidden_size, 1});
-    b_y = zeros({output_size, 1});
+    tensor c_t = zeros({hidden_size, batch_size});
+    c_sequence.push_back(c_t);
 
-    m_w_f = zeros({hidden_size, hidden_size + input_size});
-    m_w_i = zeros({hidden_size, hidden_size + input_size});
-    m_w_c = zeros({hidden_size, hidden_size + input_size});
-    m_w_o = zeros({hidden_size, hidden_size + input_size});
-    m_w_y = zeros({output_size, hidden_size});
+    tensor h_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(h_t);
 
-    m_b_f = zeros({hidden_size, 1});
-    m_b_i = zeros({hidden_size, 1});
-    m_b_c = zeros({hidden_size, 1});
-    m_b_o = zeros({hidden_size, 1});
-    m_b_y = zeros({output_size, 1});
+    for (auto i = 0; i < seq_length; ++i) {
+        size_t idx = i;
 
-    v_w_f = zeros({hidden_size, hidden_size + input_size});
-    v_w_i = zeros({hidden_size, hidden_size + input_size});
-    v_w_c = zeros({hidden_size, hidden_size + input_size});
-    v_w_o = zeros({hidden_size, hidden_size + input_size});
-    v_w_y = zeros({output_size, hidden_size});
+        tensor x_t = zeros({batch_size, input_size});
 
-    v_b_f = zeros({hidden_size, 1});
-    v_b_i = zeros({hidden_size, 1});
-    v_b_c = zeros({hidden_size, 1});
-    v_b_o = zeros({hidden_size, 1});
-    v_b_y = zeros({output_size, 1});
+        for (auto j = 0; j < batch_size; ++j) {
+            x_t[j] = x[idx];
+            idx += seq_length;
+        }
+
+        tensor concat_t = vstack({h_t, transpose(x_t)});
+
+        tensor z_f_t = matmul(w_f, concat_t) + b_f;
+        tensor f_t = sigmoid(z_f_t);
+
+        tensor z_i_t = matmul(w_i, concat_t) + b_i;
+        tensor i_t = sigmoid(z_i_t);
+
+        tensor z_c_tilde_t = matmul(w_c, concat_t) + b_c;
+        tensor c_tilde_t = hyperbolic_tangent(z_c_tilde_t);
+
+        c_t = f_t * c_t + i_t * c_tilde_t;
+
+        tensor z_o_t = matmul(w_o, concat_t) + b_o;
+        tensor o_t = sigmoid(z_o_t);
+
+        h_t = o_t * hyperbolic_tangent(c_t);
+
+        tensor y_t = matmul(w_y, h_t) + b_y;
+
+        x_sequence.push_back(x_t);
+        concat_sequence.push_back(concat_t);
+        z_f_sequence.push_back(z_f_t);
+        z_i_sequence.push_back(z_i_t);
+        i_sequence.push_back(i_t);
+        z_c_tilde_sequence.push_back(z_c_tilde_t);
+        c_tilde_sequence.push_back(c_tilde_t);
+        c_sequence.push_back(c_t);
+        z_o_sequence.push_back(z_o_t);
+        o_sequence.push_back(o_t);
+        h_sequence.push_back(h_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
+    }
+
+    std::array<std::vector<tensor>, 12> sequences;
+
+    sequences[0]  = x_sequence;
+    sequences[1]  = concat_sequence;
+    sequences[2]  = z_f_sequence;
+    sequences[3]  = z_i_sequence;
+    sequences[4]  = i_sequence;
+    sequences[5]  = z_c_tilde_sequence;
+    sequences[6]  = c_tilde_sequence;
+    sequences[7]  = c_sequence;
+    sequences[8]  = z_o_sequence;
+    sequences[9]  = o_sequence;
+    sequences[10]  = h_sequence;
+    sequences[11] = y_sequence;
+
+    return sequences;
 }
 
-void lstm::train(const tensor& x_train, const tensor& y_train) {
+void lstm_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = lstm_forward(x_train, Phase::TRAIN);
 
-        float error = loss(transpose(y_train), y_sequence.front());
+        float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t_w_f = zeros({batch_size, hidden_size});
         tensor d_loss_d_h_t_w_i = zeros({batch_size, hidden_size});
@@ -262,103 +292,14 @@ void lstm::train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float lstm::evaluate(const tensor& x, const tensor& y) {
-    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
-    return loss(transpose(y), y_sequence.front());
+float lstm_evaluate(const tensor& x, const tensor& y) {
+    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = lstm_forward(x, Phase::TEST);
+    return mean_squared_error(transpose(y), y_sequence.front());
 }
 
-tensor lstm::predict(const tensor& x) {
-    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+tensor lstm_predict(const tensor& x) {
+    auto [x_sequence, concat_sequence, z_f_sequence, z_i_sequence, i_sequence, z_c_tilde_sequence, c_tilde_sequence, c_sequence, z_o_sequence, o_sequence, h_sequence, y_sequence] = lstm_forward(x, Phase::TEST);
     return transpose(y_sequence.front());
-}
-
-std::array<std::vector<tensor>, 12> lstm::forward(const tensor& x, enum Phase phase) {
-    std::vector<tensor> x_sequence;
-    std::vector<tensor> concat_sequence;
-    std::vector<tensor> z_f_sequence;
-    std::vector<tensor> z_i_sequence;
-    std::vector<tensor> i_sequence;
-    std::vector<tensor> z_c_tilde_sequence;
-    std::vector<tensor> c_tilde_sequence;
-    std::vector<tensor> c_sequence;
-    std::vector<tensor> z_o_sequence;
-    std::vector<tensor> o_sequence;
-    std::vector<tensor> h_sequence;
-    std::vector<tensor> y_sequence;
-
-    if (phase == Phase::TRAIN)
-        batch_size = 8317;
-    else
-        batch_size = 2072;
-
-    tensor c_t = zeros({hidden_size, batch_size});
-    c_sequence.push_back(c_t);
-
-    tensor h_t = zeros({hidden_size, batch_size});
-    h_sequence.push_back(h_t);
-
-    for (auto i = 0; i < seq_length; ++i) {
-        size_t idx = i;
-
-        tensor x_t = zeros({batch_size, input_size});
-
-        for (auto j = 0; j < batch_size; ++j) {
-            x_t[j] = x[idx];
-            idx += seq_length;
-        }
-
-        tensor concat_t = vstack({h_t, transpose(x_t)});
-
-        tensor z_f_t = matmul(w_f, concat_t) + b_f;
-        tensor f_t = sigmoid(z_f_t);
-
-        tensor z_i_t = matmul(w_i, concat_t) + b_i;
-        tensor i_t = sigmoid(z_i_t);
-
-        tensor z_c_tilde_t = matmul(w_c, concat_t) + b_c;
-        tensor c_tilde_t = hyperbolic_tangent(z_c_tilde_t);
-
-        c_t = f_t * c_t + i_t * c_tilde_t;
-
-        tensor z_o_t = matmul(w_o, concat_t) + b_o;
-        tensor o_t = sigmoid(z_o_t);
-
-        h_t = o_t * hyperbolic_tangent(c_t);
-
-        tensor y_t = matmul(w_y, h_t) + b_y;
-
-        x_sequence.push_back(x_t);
-        concat_sequence.push_back(concat_t);
-        z_f_sequence.push_back(z_f_t);
-        z_i_sequence.push_back(z_i_t);
-        i_sequence.push_back(i_t);
-        z_c_tilde_sequence.push_back(z_c_tilde_t);
-        c_tilde_sequence.push_back(c_tilde_t);
-        c_sequence.push_back(c_t);
-        z_o_sequence.push_back(z_o_t);
-        o_sequence.push_back(o_t);
-        h_sequence.push_back(h_t);
-
-        if (i == seq_length - 1)
-            y_sequence.push_back(y_t);
-    }
-
-    std::array<std::vector<tensor>, 12> sequences;
-
-    sequences[0]  = x_sequence;
-    sequences[1]  = concat_sequence;
-    sequences[2]  = z_f_sequence;
-    sequences[3]  = z_i_sequence;
-    sequences[4]  = i_sequence;
-    sequences[5]  = z_c_tilde_sequence;
-    sequences[6]  = c_tilde_sequence;
-    sequences[7]  = c_sequence;
-    sequences[8]  = z_o_sequence;
-    sequences[9]  = o_sequence;
-    sequences[10]  = h_sequence;
-    sequences[11] = y_sequence;
-
-    return sequences;
 }
 
 std::pair<tensor, tensor> create_sequences(const tensor& data, const size_t seq_length) {
@@ -391,12 +332,11 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    lstm model = lstm(mean_squared_error, 0.01f);
-    model.train(x_y_train.first, x_y_train.second);
+    lstm_train(x_y_train.first, x_y_train.second);
 
-    auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
-    auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
+    auto test_loss = lstm_evaluate(x_y_test.first, x_y_test.second);
 
+    auto predict = scaler.inverse_transform(lstm_predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
     for (auto i = 0; i < x_y_test.second.size; ++i)
