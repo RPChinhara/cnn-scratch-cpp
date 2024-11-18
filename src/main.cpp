@@ -10,9 +10,9 @@
 
 #include <chrono>
 
-constexpr float lr = 0.01f;
+constexpr float lr          = 0.01f;
 constexpr size_t batch_size = 32;
-constexpr size_t epochs = 1;
+constexpr size_t epochs     = 1;
 
 tensor kernel1 = normal_dist({3, 3});
 tensor kernel2 = normal_dist({3, 3});
