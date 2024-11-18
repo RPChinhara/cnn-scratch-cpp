@@ -11,105 +11,137 @@
 #include <array>
 #include <chrono>
 
-class gru2 {
-  private:
-    float lr;
-    size_t batch_size;
-    size_t epochs = 150;
+float lr = 0.01f;
+size_t batch_size;
+size_t epochs = 150;
 
-    size_t seq_length = 10;
-    size_t input_size = 1;
-    size_t hidden_size = 50;
-    size_t output_size = 1;
+size_t seq_length = 10;
+size_t input_size = 1;
+size_t hidden_size = 50;
+size_t output_size = 1;
 
-    float beta1 = 0.9f;
-    float beta2 = 0.999f;
-    float epsilon = 1e-7f;
-    size_t t = 0;
+float beta1 = 0.9f;
+float beta2 = 0.999f;
+float epsilon = 1e-7f;
+size_t t = 0;
 
-    tensor w_z;
-    tensor w_r;
-    tensor w_h;
-    tensor w_y;
+tensor w_z = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_r = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_h = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_y = glorot_uniform(output_size, hidden_size);
 
-    tensor b_z;
-    tensor b_r;
-    tensor b_h;
-    tensor b_y;
+tensor b_z = zeros({hidden_size, 1});
+tensor b_r = zeros({hidden_size, 1});
+tensor b_h = zeros({hidden_size, 1});
+tensor b_y = zeros({output_size, 1});
 
-    tensor m_w_z;
-    tensor m_w_r;
-    tensor m_w_h;
-    tensor m_w_y;
+tensor m_w_z = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_r = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_h = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_y = zeros({output_size, hidden_size});
 
-    tensor m_b_z;
-    tensor m_b_r;
-    tensor m_b_h;
-    tensor m_b_y;
+tensor m_b_z = zeros({hidden_size, 1});
+tensor m_b_r = zeros({hidden_size, 1});
+tensor m_b_h = zeros({hidden_size, 1});
+tensor m_b_y = zeros({output_size, 1});
 
-    tensor v_w_z;
-    tensor v_w_r;
-    tensor v_w_h;
-    tensor v_w_y;
+tensor v_w_z = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_r = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_h = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_y = zeros({output_size, hidden_size});
 
-    tensor v_b_z;
-    tensor v_b_r;
-    tensor v_b_h;
-    tensor v_b_y;
+tensor v_b_z = zeros({hidden_size, 1});
+tensor v_b_r = zeros({hidden_size, 1});
+tensor v_b_h = zeros({hidden_size, 1});
+tensor v_b_y = zeros({output_size, 1});
 
-    enum Phase {
-      TRAIN,
-      TEST
-    };
-
-    std::array<std::vector<tensor>, 10> forward(const tensor& x, enum Phase phase);
-
-  public:
-    gru2(const float lr);
-    void train(const tensor& x_train, const tensor& y_train);
-    float evaluate(const tensor& x, const tensor& y);
-    tensor predict(const tensor& x);
+enum Phase {
+    TRAIN,
+    TEST
 };
 
-gru2::gru2(const float lr) {
-    this->lr = lr;
+std::array<std::vector<tensor>, 10> gru_forward(const tensor& x, enum Phase phase) {
+    std::vector<tensor> concat_sequence;
+    std::vector<tensor> z_t_z_sequence;
+    std::vector<tensor> z_sequence;
+    std::vector<tensor> r_t_z_sequence;
+    std::vector<tensor> r_sequence;
+    std::vector<tensor> concat_2_sequence;
+    std::vector<tensor> h_hat_t_z_sequence;
+    std::vector<tensor> h_hat_t_sequence;
+    std::vector<tensor> h_sequence;
+    std::vector<tensor> y_sequence;
 
-    w_z = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_r = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_h = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_y = glorot_uniform(output_size, hidden_size);
+    if (phase == Phase::TRAIN)
+        batch_size = 8317;
+    else
+        batch_size = 2072;
 
-    b_z = zeros({hidden_size, 1});
-    b_r = zeros({hidden_size, 1});
-    b_h = zeros({hidden_size, 1});
-    b_y = zeros({output_size, 1});
+    tensor h_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(h_t);
 
-    m_w_z = zeros({hidden_size, hidden_size + input_size});
-    m_w_r = zeros({hidden_size, hidden_size + input_size});
-    m_w_h = zeros({hidden_size, hidden_size + input_size});
-    m_w_y = zeros({output_size, hidden_size});
+    for (auto i = 0; i < seq_length; ++i) {
+        size_t idx = i;
 
-    m_b_z = zeros({hidden_size, 1});
-    m_b_r = zeros({hidden_size, 1});
-    m_b_h = zeros({hidden_size, 1});
-    m_b_y = zeros({output_size, 1});
+        tensor x_t = zeros({batch_size, input_size});
 
-    v_w_z = zeros({hidden_size, hidden_size + input_size});
-    v_w_r = zeros({hidden_size, hidden_size + input_size});
-    v_w_h = zeros({hidden_size, hidden_size + input_size});
-    v_w_y = zeros({output_size, hidden_size});
+        for (auto j = 0; j < batch_size; ++j) {
+            x_t[j] = x[idx];
+            idx += seq_length;
+        }
 
-    v_b_z = zeros({hidden_size, 1});
-    v_b_r = zeros({hidden_size, 1});
-    v_b_h = zeros({hidden_size, 1});
-    v_b_y = zeros({output_size, 1});
+        tensor concat_t = vstack({h_t, transpose(x_t)});
+
+        tensor z_t_z = matmul(w_z, concat_t) + b_z;
+        tensor z_t = sigmoid(z_t_z);
+
+        tensor r_t_z = matmul(w_r, concat_t) + b_r;
+        tensor r_t = sigmoid(r_t_z);
+
+        tensor concat_2_t = vstack({r_t * h_t, transpose(x_t)});
+
+        tensor h_hat_t_z = matmul(w_h, concat_2_t) + b_h;
+        tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
+
+        h_t = (1.0f - z_t) * h_t + z_t * h_hat_t;
+
+        tensor y_t = matmul(w_y, h_t) + b_y;
+
+        concat_sequence.push_back(concat_t);
+        z_t_z_sequence.push_back(z_t_z);
+        z_sequence.push_back(z_t);
+        r_t_z_sequence.push_back(r_t_z);
+        r_sequence.push_back(r_t);
+        concat_2_sequence.push_back(concat_2_t);
+        h_hat_t_z_sequence.push_back(h_hat_t_z);
+        h_hat_t_sequence.push_back(h_hat_t);
+        h_sequence.push_back(h_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
+    }
+
+    std::array<std::vector<tensor>, 10> sequences;
+
+    sequences[0] = concat_sequence;
+    sequences[1] = z_t_z_sequence;
+    sequences[2] = z_sequence;
+    sequences[3] = r_t_z_sequence;
+    sequences[4] = r_sequence;
+    sequences[5] = concat_2_sequence;
+    sequences[6] = h_hat_t_z_sequence;
+    sequences[7] = h_hat_t_sequence;
+    sequences[8] = h_sequence;
+    sequences[9] = y_sequence;
+
+    return sequences;
 }
 
-void gru2::train(const tensor& x_train, const tensor& y_train) {
+void gru_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = gru_forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -223,91 +255,14 @@ void gru2::train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float gru2::evaluate(const tensor& x, const tensor& y) {
-    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+float gru_evaluate(const tensor& x, const tensor& y) {
+    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = gru_forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
-tensor gru2::predict(const tensor& x) {
-    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+tensor gru_predict(const tensor& x) {
+    auto [concat_sequence, z_t_z_sequence, z_sequence, r_t_z_sequence, r_sequence, concat_2_sequence, h_hat_t_z_sequence, h_hat_t_sequence, h_sequence, y_sequence] = gru_forward(x, Phase::TEST);
     return transpose(y_sequence.front());
-}
-
-std::array<std::vector<tensor>, 10> gru2::forward(const tensor& x, enum Phase phase) {
-    std::vector<tensor> concat_sequence;
-    std::vector<tensor> z_t_z_sequence;
-    std::vector<tensor> z_sequence;
-    std::vector<tensor> r_t_z_sequence;
-    std::vector<tensor> r_sequence;
-    std::vector<tensor> concat_2_sequence;
-    std::vector<tensor> h_hat_t_z_sequence;
-    std::vector<tensor> h_hat_t_sequence;
-    std::vector<tensor> h_sequence;
-    std::vector<tensor> y_sequence;
-
-    if (phase == Phase::TRAIN)
-        batch_size = 8317;
-    else
-        batch_size = 2072;
-
-    tensor h_t = zeros({hidden_size, batch_size});
-    h_sequence.push_back(h_t);
-
-    for (auto i = 0; i < seq_length; ++i) {
-        size_t idx = i;
-
-        tensor x_t = zeros({batch_size, input_size});
-
-        for (auto j = 0; j < batch_size; ++j) {
-            x_t[j] = x[idx];
-            idx += seq_length;
-        }
-
-        tensor concat_t = vstack({h_t, transpose(x_t)});
-
-        tensor z_t_z = matmul(w_z, concat_t) + b_z;
-        tensor z_t = sigmoid(z_t_z);
-
-        tensor r_t_z = matmul(w_r, concat_t) + b_r;
-        tensor r_t = sigmoid(r_t_z);
-
-        tensor concat_2_t = vstack({r_t * h_t, transpose(x_t)});
-
-        tensor h_hat_t_z = matmul(w_h, concat_2_t) + b_h;
-        tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
-
-        h_t = (1.0f - z_t) * h_t + z_t * h_hat_t;
-
-        tensor y_t = matmul(w_y, h_t) + b_y;
-
-        concat_sequence.push_back(concat_t);
-        z_t_z_sequence.push_back(z_t_z);
-        z_sequence.push_back(z_t);
-        r_t_z_sequence.push_back(r_t_z);
-        r_sequence.push_back(r_t);
-        concat_2_sequence.push_back(concat_2_t);
-        h_hat_t_z_sequence.push_back(h_hat_t_z);
-        h_hat_t_sequence.push_back(h_hat_t);
-        h_sequence.push_back(h_t);
-
-        if (i == seq_length - 1)
-            y_sequence.push_back(y_t);
-    }
-
-    std::array<std::vector<tensor>, 10> sequences;
-
-    sequences[0] = concat_sequence;
-    sequences[1] = z_t_z_sequence;
-    sequences[2] = z_sequence;
-    sequences[3] = r_t_z_sequence;
-    sequences[4] = r_sequence;
-    sequences[5] = concat_2_sequence;
-    sequences[6] = h_hat_t_z_sequence;
-    sequences[7] = h_hat_t_sequence;
-    sequences[8] = h_sequence;
-    sequences[9] = y_sequence;
-
-    return sequences;
 }
 
 std::pair<tensor, tensor> create_sequences(const tensor& data, const size_t seq_length) {
@@ -340,11 +295,9 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    gru2 model = gru2(0.01f);
-    model.train(x_y_train.first, x_y_train.second);
-
-    auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
-    auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
+    gru_train(x_y_train.first, x_y_train.second);
+    auto test_loss = gru_evaluate(x_y_test.first, x_y_test.second);
+    auto predict = scaler.inverse_transform(gru_predict(x_y_test.first));
 
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
