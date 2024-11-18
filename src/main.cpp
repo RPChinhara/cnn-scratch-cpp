@@ -10,7 +10,7 @@
 
 #include <chrono>
 
-constexpr float lr          = 0.01f;
+constexpr float  lr         = 0.01f;
 constexpr size_t batch_size = 32;
 constexpr size_t epochs     = 1;
 
