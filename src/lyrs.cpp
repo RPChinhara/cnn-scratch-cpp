@@ -1,15 +1,11 @@
 #include "lyrs.h"
-#include "acts.h"
 #include "arrs.h"
-#include "linalg.h"
-#include "losses.h"
-#include "math.hpp"
 #include "preproc.h"
 #include "rd.h"
-#include "tensor.h"
 
 #include <cassert>
-#include <chrono>
+#include <random>
+#include <unordered_map>
 
 embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const tensor& t) {
     for (auto i = 0; i < t.size; ++i)
