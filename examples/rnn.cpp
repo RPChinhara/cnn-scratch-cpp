@@ -8,98 +8,94 @@
 #include "rd.h"
 #include "tensor.h"
 
-#include <cassert>
 #include <chrono>
-#include <functional>
 
-using act_func = std::function<tensor(const tensor&)>;
-using loss_func = std::function<float(const tensor&, const tensor&)>;
-using metric_func = std::function<float(const tensor&, const tensor&)>;
+float lr = 0.01f;
+size_t epochs = 150;
+size_t batch_size = 8317;
 
-class rnn {
-  private:
-    act_func activation;
-    loss_func loss;
-    float lr;
-    size_t epochs = 150;
-    size_t batch_size = 8317;
+size_t seq_length = 10;
+size_t input_size = 1;
+size_t hidden_size = 50;
+size_t output_size = 1;
 
-    size_t seq_length = 10;
-    size_t input_size = 1;
-    size_t hidden_size = 50;
-    size_t output_size = 1;
+float beta1 = 0.9f;
+float beta2 = 0.999f;
+float epsilon = 1e-7f;
+size_t t = 0;
 
-    float beta1 = 0.9f;
-    float beta2 = 0.999f;
-    float epsilon = 1e-7f;
-    size_t t = 0;
+tensor w_xh = glorot_uniform(hidden_size, input_size);
+tensor w_hh = glorot_uniform(hidden_size, hidden_size);
+tensor w_hy = glorot_uniform(output_size, hidden_size);
 
-    tensor w_xh;
-    tensor w_hh;
-    tensor w_hy;
-    tensor b_h;
-    tensor b_y;
+tensor b_h = zeros({hidden_size, 1});
+tensor b_y = zeros({output_size, 1});
 
-    tensor m_w_xh;
-    tensor m_w_hh;
-    tensor m_w_hy;
-    tensor m_b_h;
-    tensor m_b_y;
+tensor m_w_xh = zeros({hidden_size, input_size});
+tensor m_w_hh = zeros({hidden_size, hidden_size});
+tensor m_w_hy = zeros({output_size, hidden_size});
 
-    tensor v_w_xh;
-    tensor v_w_hh;
-    tensor v_w_hy;
-    tensor v_b_h;
-    tensor v_b_y;
+tensor m_b_h  = zeros({hidden_size, 1});
+tensor m_b_y  = zeros({output_size, 1});
 
-    enum Phase {
-      TRAIN,
-      TEST
-    };
+tensor v_w_xh = zeros({hidden_size, input_size});
+tensor v_w_hh = zeros({hidden_size, hidden_size});
+tensor v_w_hy = zeros({output_size, hidden_size});
 
-    std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor& x, enum Phase phase);
+tensor v_b_h  = zeros({hidden_size, 1});
+tensor v_b_y  = zeros({output_size, 1});
 
-  public:
-    rnn(const act_func &activation, const loss_func &loss, const float lr);
-    void train(const tensor& x_train, const tensor& y_train);
-    float evaluate(const tensor& x, const tensor& y);
-    tensor predict(const tensor& x);
+enum Phase {
+    TRAIN,
+    TEST
 };
 
-rnn::rnn(const act_func &activation, const loss_func &loss, const float lr) {
-    this->activation = activation;
-    this->loss = loss;
-    this->lr = lr;
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn_forward(const tensor& x, enum Phase phase) {
+    std::vector<tensor> x_sequence;
+    std::vector<tensor> z_sequence;
+    std::vector<tensor> h_sequence;
+    std::vector<tensor> y_sequence;
 
-    w_xh = glorot_uniform(hidden_size, input_size);
-    w_hh = glorot_uniform(hidden_size, hidden_size);
-    w_hy = glorot_uniform(output_size, hidden_size);
+    if (phase == Phase::TRAIN)
+        batch_size = 8317;
+    else
+        batch_size = 2072;
 
-    b_h = zeros({hidden_size, 1});
-    b_y = zeros({output_size, 1});
+    tensor h_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(h_t);
 
-    m_w_xh = zeros({hidden_size, input_size});
-    m_w_hh = zeros({hidden_size, hidden_size});
-    m_w_hy = zeros({output_size, hidden_size});
+    for (auto i = 0; i < seq_length; ++i) {
+        size_t idx = i;
 
-    m_b_h  = zeros({hidden_size, 1});
-    m_b_y  = zeros({output_size, 1});
+        tensor x_t = zeros({batch_size, input_size});
 
-    v_w_xh = zeros({hidden_size, input_size});
-    v_w_hh = zeros({hidden_size, hidden_size});
-    v_w_hy = zeros({output_size, hidden_size});
+        for (auto j = 0; j < batch_size; ++j) {
+            x_t[j] = x[idx];
+            idx += seq_length;
+        }
 
-    v_b_h  = zeros({hidden_size, 1});
-    v_b_y  = zeros({output_size, 1});
+        tensor z_t = matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h;
+        h_t = relu(z_t);
+        tensor y_t = matmul(w_hy, h_t) + b_y;
+
+        x_sequence.push_back(x_t);
+        z_sequence.push_back(z_t);
+        h_sequence.push_back(h_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
+    }
+
+    return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
 }
 
-void rnn::train(const tensor& x_train, const tensor& y_train) {
+void rnn_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
+        auto [x_sequence, z_sequence, h_sequence, y_sequence] = rnn_forward(x_train, Phase::TRAIN);
 
-        float error = loss(transpose(y_train), y_sequence.front());
+        float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
         tensor d_loss_d_h_t = zeros({batch_size, hidden_size});
 
@@ -177,53 +173,14 @@ void rnn::train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float rnn::evaluate(const tensor& x, const tensor& y) {
-    auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
-    return loss(transpose(y), y_sequence.front());
+float rnn_evaluate(const tensor& x, const tensor& y) {
+    auto [x_sequence, z_sequence, h_sequence, y_sequence] = rnn_forward(x, Phase::TEST);
+    return mean_squared_error(transpose(y), y_sequence.front());
 }
 
-tensor rnn::predict(const tensor& x) {
-    auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+tensor rnn_predict(const tensor& x) {
+    auto [x_sequence, z_sequence, h_sequence, y_sequence] = rnn_forward(x, Phase::TEST);
     return transpose(y_sequence.front());
-}
-
-std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn::forward(const tensor& x, enum Phase phase) {
-    std::vector<tensor> x_sequence;
-    std::vector<tensor> z_sequence;
-    std::vector<tensor> h_sequence;
-    std::vector<tensor> y_sequence;
-
-    if (phase == Phase::TRAIN)
-        batch_size = 8317;
-    else
-        batch_size = 2072;
-
-    tensor h_t = zeros({hidden_size, batch_size});
-    h_sequence.push_back(h_t);
-
-    for (auto i = 0; i < seq_length; ++i) {
-        size_t idx = i;
-
-        tensor x_t = zeros({batch_size, input_size});
-
-        for (auto j = 0; j < batch_size; ++j) {
-            x_t[j] = x[idx];
-            idx += seq_length;
-        }
-
-        tensor z_t = matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h;
-        h_t = activation(z_t);
-        tensor y_t = matmul(w_hy, h_t) + b_y;
-
-        x_sequence.push_back(x_t);
-        z_sequence.push_back(z_t);
-        h_sequence.push_back(h_t);
-
-        if (i == seq_length - 1)
-            y_sequence.push_back(y_t);
-    }
-
-    return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
 }
 
 std::pair<tensor, tensor> create_sequences(const tensor& data, const size_t seq_length) {
@@ -256,12 +213,11 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
-    rnn model = rnn(relu, mean_squared_error, 0.01f);
-    model.train(x_y_train.first, x_y_train.second);
+    rnn_train(x_y_train.first, x_y_train.second);
 
-    auto test_loss = model.evaluate(x_y_test.first, x_y_test.second);
-    auto predict = scaler.inverse_transform(model.predict(x_y_test.first));
-
+    auto test_loss = rnn_evaluate(x_y_test.first, x_y_test.second);
+    
+    auto predict = scaler.inverse_transform(rnn_predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
     for (auto i = 0; i < x_y_test.second.size; ++i)
