@@ -10,19 +10,19 @@
 
 #include <chrono>
 
-float lr = 0.01f;
-size_t epochs = 150;
-size_t batch_size = 8317;
+constexpr float  lr          = 0.01f;
+constexpr size_t epochs      = 150;
+size_t           batch_size  = 0;
 
-size_t seq_length = 10;
-size_t input_size = 1;
-size_t hidden_size = 50;
-size_t output_size = 1;
+constexpr size_t seq_length  = 10;
+constexpr size_t input_size  = 1;
+constexpr size_t hidden_size = 50;
+constexpr size_t output_size = 1;
 
-float beta1 = 0.9f;
-float beta2 = 0.999f;
-float epsilon = 1e-7f;
-size_t t = 0;
+constexpr float  beta1       = 0.9f;
+constexpr float  beta2       = 0.999f;
+constexpr float  epsilon     = 1e-7f;
+size_t           t           = 0;
 
 tensor w_xh = glorot_uniform(hidden_size, input_size);
 tensor w_hh = glorot_uniform(hidden_size, hidden_size);
@@ -216,7 +216,7 @@ int main() {
     rnn_train(x_y_train.first, x_y_train.second);
 
     auto test_loss = rnn_evaluate(x_y_test.first, x_y_test.second);
-    
+
     auto predict = scaler.inverse_transform(rnn_predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
