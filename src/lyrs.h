@@ -1,17 +1,6 @@
 #pragma once
 
-#include "arrs.h"
-#include "preproc.h"
 #include "tensor.h"
-
-#include <array>
-#include <functional>
-#include <random>
-#include <tuple>
-#include <unordered_map>
-#include <vector>
-
-class tensor;
 
 class embedding {
   public:
