@@ -296,9 +296,10 @@ int main() {
     auto x_y_test = create_sequences(train_test.second, 10);
 
     gru_train(x_y_train.first, x_y_train.second);
-    auto test_loss = gru_evaluate(x_y_test.first, x_y_test.second);
-    auto predict = scaler.inverse_transform(gru_predict(x_y_test.first));
 
+    auto test_loss = gru_evaluate(x_y_test.first, x_y_test.second);
+
+    auto predict = scaler.inverse_transform(gru_predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
 
     for (auto i = 0; i < x_y_test.second.size; ++i)
