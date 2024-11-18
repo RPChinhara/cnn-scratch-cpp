@@ -13,111 +13,167 @@
 #include <chrono>
 #include <fstream>
 
-class gru {
-  private:
-    float lr;
-    size_t batch_size;
-    size_t epochs = 250;
+size_t vocab_size = 5000;
+size_t max_len = 25;
 
-    size_t vocab_size;
-    size_t embedding_dim = 50;
+float lr = 0.01f;
+size_t batch_size;
+size_t epochs = 250;
 
-    size_t seq_length = 25;
-    size_t input_size = embedding_dim;
-    size_t hidden_size = 50;
-    size_t output_size = 25;
+size_t embedding_dim = 50;
 
-    float beta1 = 0.9f;
-    float beta2 = 0.999f;
-    float epsilon = 1e-7f;
-    size_t t = 0;
+size_t seq_length = 25;
+size_t input_size = embedding_dim;
+size_t hidden_size = 50;
+size_t output_size = 25;
 
-    tensor w_z;
-    tensor w_r;
-    tensor w_h;
-    tensor w_y;
+float beta1 = 0.9f;
+float beta2 = 0.999f;
+float epsilon = 1e-7f;
+size_t t = 0;
 
-    tensor b_z;
-    tensor b_r;
-    tensor b_h;
-    tensor b_y;
-
-    tensor m_w_z;
-    tensor m_w_r;
-    tensor m_w_h;
-    tensor m_w_y;
-
-    tensor m_b_z;
-    tensor m_b_r;
-    tensor m_b_h;
-    tensor m_b_y;
-
-    tensor v_w_z;
-    tensor v_w_r;
-    tensor v_w_h;
-    tensor v_w_y;
-
-    tensor v_b_z;
-    tensor v_b_r;
-    tensor v_b_h;
-    tensor v_b_y;
-
-    enum Phase {
-      TRAIN,
-      TEST
-    };
-
-    std::array<std::vector<tensor>, 6> forward(const tensor& x, enum Phase phase);
-
-  public:
-    gru(const float lr, const size_t vocab_size);
-    void train(const tensor& x_train, const tensor& y_train);
-    float evaluate(const tensor& x, const tensor& y);
-    tensor predict(const tensor& x);
+enum Phase {
+    TRAIN,
+    TEST
 };
 
-gru::gru(const float lr, const size_t vocab_size) {
-    this->lr = lr;
-    this->vocab_size = vocab_size;
+tensor w_z = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_r = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_h = glorot_uniform(hidden_size, hidden_size + input_size);
+tensor w_y = glorot_uniform(output_size, hidden_size);
 
-    w_z = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_r = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_h = glorot_uniform(hidden_size, hidden_size + input_size);
-    w_y = glorot_uniform(output_size, hidden_size);
+tensor b_z = zeros({hidden_size, 1});
+tensor b_r = zeros({hidden_size, 1});
+tensor b_h = zeros({hidden_size, 1});
+tensor b_y = zeros({output_size, 1});
 
-    b_z = zeros({hidden_size, 1});
-    b_r = zeros({hidden_size, 1});
-    b_h = zeros({hidden_size, 1});
-    b_y = zeros({output_size, 1});
+tensor m_w_z = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_r = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_h = zeros({hidden_size, hidden_size + input_size});
+tensor m_w_y = zeros({output_size, hidden_size});
 
-    m_w_z = zeros({hidden_size, hidden_size + input_size});
-    m_w_r = zeros({hidden_size, hidden_size + input_size});
-    m_w_h = zeros({hidden_size, hidden_size + input_size});
-    m_w_y = zeros({output_size, hidden_size});
+tensor m_b_z = zeros({hidden_size, 1});
+tensor m_b_r = zeros({hidden_size, 1});
+tensor m_b_h = zeros({hidden_size, 1});
+tensor m_b_y = zeros({output_size, 1});
 
-    m_b_z = zeros({hidden_size, 1});
-    m_b_r = zeros({hidden_size, 1});
-    m_b_h = zeros({hidden_size, 1});
-    m_b_y = zeros({output_size, 1});
+tensor v_w_z = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_r = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_h = zeros({hidden_size, hidden_size + input_size});
+tensor v_w_y = zeros({output_size, hidden_size});
 
-    v_w_z = zeros({hidden_size, hidden_size + input_size});
-    v_w_r = zeros({hidden_size, hidden_size + input_size});
-    v_w_h = zeros({hidden_size, hidden_size + input_size});
-    v_w_y = zeros({output_size, hidden_size});
+tensor v_b_z = zeros({hidden_size, 1});
+tensor v_b_r = zeros({hidden_size, 1});
+tensor v_b_h = zeros({hidden_size, 1});
+tensor v_b_y = zeros({output_size, 1});
 
-    v_b_z = zeros({hidden_size, 1});
-    v_b_r = zeros({hidden_size, 1});
-    v_b_h = zeros({hidden_size, 1});
-    v_b_y = zeros({output_size, 1});
+std::array<std::vector<tensor>, 6> gru_forward(const tensor& x, enum Phase phase) {
+    std::vector<tensor> x_sequence;
+    std::vector<tensor> concat_sequence;
+    std::vector<tensor> z_t_sequence;
+    std::vector<tensor> r_t_sequence;
+    std::vector<tensor> h_sequence;
+    std::vector<tensor> y_sequence;
+
+    if (phase == Phase::TRAIN)
+        batch_size = 60841;
+    else
+        batch_size = 15211;
+
+    tensor ones = tensor({hidden_size, batch_size}, {1.0f});
+
+    tensor h_t = zeros({hidden_size, batch_size});
+    h_sequence.push_back(h_t);
+
+    for (auto i = 0; i < seq_length; ++i) {
+        size_t idx = i;
+
+        tensor x_t = zeros({batch_size, input_size});
+
+        for (auto j = 0; j < batch_size; ++j) {
+            x_t[j] = x[idx];
+            idx += seq_length;
+        }
+
+        tensor concat_t = vstack({h_t, transpose(x_t)});
+
+        tensor z_t_z = matmul(w_z, concat_t) + b_z;
+        tensor z_t = sigmoid(z_t_z);
+
+        tensor r_t_z = matmul(w_r, concat_t) + b_r;
+        tensor r_t = sigmoid(r_t_z);
+
+        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, transpose(x_t)})) + b_h;
+        tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
+
+        h_t = (ones - z_t) * h_t + z_t * h_hat_t;
+
+        tensor y_t_z = matmul(w_y, h_t) + b_y;
+        tensor y_t = softmax(y_t_z);
+
+        // std::cout << h_t.get_shape() << std::endl;
+        // std::cout << concat_t.get_shape() << std::endl;
+        // std::cout << r_t.get_shape() << std::endl;
+        // std::cout << x_t.get_shape() << std::endl;
+
+        // =====================================================================================================================================
+        // dL/dw_h: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // dL/dw_r: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // dL/dw_z: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // dL/dembedding:
+        // =====================================================================================================================================
+
+        // =====================================================================================================================================
+        // Check forward pass on https://en.wikipedia.org/wiki/Long_short-term_memory to remind myself that way to compute gradients make sense.
+        // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
+        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
+        // =====================================================================================================================================
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dw_c
+        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dh_9) * dh_9/dc_9 * dc_9/dc_tilde_9 * dc_tilde9/dw_c
+
+        // dh10/do10 * do10/wo
+        // dh10/do10 * do10/dh9 * dh9/do9 * do9/wo
+
+        // dh10/dc10 * dc10/d~c10 * d~c10/w_c
+        // dh10/dc10 * dc10/d~c10 * d~c10/dh9 * dh9/dc9 * dc9/d~c9 * d~c9/wc
+        // =====================================================================================================================================
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/di_10 * di_10/dw_i
+        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/di_10 * di_10/dh_9) * dh_9/dc_9 * dc_9/di_9 * di_9/dw_i
+        // =====================================================================================================================================
+        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/df_10 * df_10/dw_f
+        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/df_10 * df_10/dh_9) * dh_9/dc_9 * dc_9/df_9 * df_9/dw_f
+        // =====================================================================================================================================
+
+        x_sequence.push_back(x_t);
+        concat_sequence.push_back(concat_t);
+        z_t_sequence.push_back(z_t);
+        r_t_sequence.push_back(r_t);
+        h_sequence.push_back(h_t);
+
+        if (i == seq_length - 1)
+            y_sequence.push_back(y_t);
+    }
+
+    std::array<std::vector<tensor>, 6> sequences;
+
+    sequences[0] = x_sequence;
+    sequences[1] = concat_sequence;
+    sequences[2] = z_t_sequence;
+    sequences[3] = r_t_sequence;
+    sequences[4] = h_sequence;
+    sequences[5] = y_sequence;
+
+    return sequences;
 }
 
-void gru::train(const tensor& x_train, const tensor& y_train) {
+void gru_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto word_embedding = embedding(vocab_size, embedding_dim, x_train);
 
-        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(word_embedding.dense_vecs, Phase::TRAIN);
+        auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = gru_forward(word_embedding.dense_vecs, Phase::TRAIN);
 
         float error = categorical_cross_entropy(transpose(y_train), y_sequence.front());
 
@@ -231,115 +287,15 @@ void gru::train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float gru::evaluate(const tensor& x, const tensor& y) {
-    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+float gru_evaluate(const tensor& x, const tensor& y) {
+    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = gru_forward(x, Phase::TEST);
     // return loss(transpose(y), y_sequence.front());
     return 0.0f;
 }
 
-tensor gru::predict(const tensor& x) {
-    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
+tensor gru_predict(const tensor& x) {
+    auto [x_sequence, concat_sequence, z_t_sequence, r_t_sequence, h_sequence, y_sequence] = gru_forward(x, Phase::TEST);
     return transpose(y_sequence.front());
-}
-
-std::array<std::vector<tensor>, 6> gru::forward(const tensor& x, enum Phase phase) {
-    std::vector<tensor> x_sequence;
-    std::vector<tensor> concat_sequence;
-    std::vector<tensor> z_t_sequence;
-    std::vector<tensor> r_t_sequence;
-    std::vector<tensor> h_sequence;
-    std::vector<tensor> y_sequence;
-
-    if (phase == Phase::TRAIN)
-        batch_size = 60841;
-    else
-        batch_size = 15211;
-
-    tensor ones = tensor({hidden_size, batch_size}, {1.0f});
-
-    tensor h_t = zeros({hidden_size, batch_size});
-    h_sequence.push_back(h_t);
-
-    for (auto i = 0; i < seq_length; ++i) {
-        size_t idx = i;
-
-        tensor x_t = zeros({batch_size, input_size});
-
-        for (auto j = 0; j < batch_size; ++j) {
-            x_t[j] = x[idx];
-            idx += seq_length;
-        }
-
-        tensor concat_t = vstack({h_t, transpose(x_t)});
-
-        tensor z_t_z = matmul(w_z, concat_t) + b_z;
-        tensor z_t = sigmoid(z_t_z);
-
-        tensor r_t_z = matmul(w_r, concat_t) + b_r;
-        tensor r_t = sigmoid(r_t_z);
-
-        tensor h_hat_t_z = matmul(w_h, vstack({r_t * h_t, transpose(x_t)})) + b_h;
-        tensor h_hat_t = hyperbolic_tangent(h_hat_t_z);
-
-        h_t = (ones - z_t) * h_t + z_t * h_hat_t;
-
-        tensor y_t_z = matmul(w_y, h_t) + b_y;
-        tensor y_t = softmax(y_t_z);
-
-        // std::cout << h_t.get_shape() << std::endl;
-        // std::cout << concat_t.get_shape() << std::endl;
-        // std::cout << r_t.get_shape() << std::endl;
-        // std::cout << x_t.get_shape() << std::endl;
-
-        // =====================================================================================================================================
-        // dL/dw_h: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
-        // dL/dw_r: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
-        // dL/dw_z: (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
-        // dL/dembedding:
-        // =====================================================================================================================================
-
-        // =====================================================================================================================================
-        // Check forward pass on https://en.wikipedia.org/wiki/Long_short-term_memory to remind myself that way to compute gradients make sense.
-        // (dL/dy * dy/dh_10) * dh_10/do_10 * do_t10/dw_o
-        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9) * dh_9/do_9 * do_9/dw_o
-        // (dL/dy * dy/dh_10 * dh_10/do_10 * do_10/dh_9 * dh_9/do_9 * do_9/dh_8) * dh_8/do_8 * do_8/dw_o
-        // =====================================================================================================================================
-        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dw_c
-        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/dc_tilde_10 * dc_tilde_10/dh_9) * dh_9/dc_9 * dc_9/dc_tilde_9 * dc_tilde9/dw_c
-
-        // dh10/do10 * do10/wo
-        // dh10/do10 * do10/dh9 * dh9/do9 * do9/wo
-
-        // dh10/dc10 * dc10/d~c10 * d~c10/w_c
-        // dh10/dc10 * dc10/d~c10 * d~c10/dh9 * dh9/dc9 * dc9/d~c9 * d~c9/wc
-        // =====================================================================================================================================
-        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/di_10 * di_10/dw_i
-        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/di_10 * di_10/dh_9) * dh_9/dc_9 * dc_9/di_9 * di_9/dw_i
-        // =====================================================================================================================================
-        // (dL/dy * dy/dh_10) * dh_10/dc_10 * dc_10/df_10 * df_10/dw_f
-        // (dL/dy * dy/dh_10 * dh_10/dc_10 * dc_10/df_10 * df_10/dh_9) * dh_9/dc_9 * dc_9/df_9 * df_9/dw_f
-        // =====================================================================================================================================
-
-        x_sequence.push_back(x_t);
-        concat_sequence.push_back(concat_t);
-        z_t_sequence.push_back(z_t);
-        r_t_sequence.push_back(r_t);
-        h_sequence.push_back(h_t);
-
-        if (i == seq_length - 1)
-            y_sequence.push_back(y_t);
-    }
-
-    std::array<std::vector<tensor>, 6> sequences;
-
-    sequences[0] = x_sequence;
-    sequences[1] = concat_sequence;
-    sequences[2] = z_t_sequence;
-    sequences[3] = r_t_sequence;
-    sequences[4] = h_sequence;
-    sequences[5] = y_sequence;
-
-    return sequences;
 }
 
 std::vector<std::string> daily_dialog(const std::string& file_path) {
@@ -382,9 +338,6 @@ int main() {
     auto input = daily_dialog("datas/daily_dialog/daily_dialog_input.csv");
     auto target = daily_dialog("datas/daily_dialog/daily_dialog_target.csv");
 
-    size_t vocab_size = 5000;
-    size_t max_len = 25;
-
     auto input_token = text_vectorization(input_target, input, vocab_size, max_len);
     auto target_token = text_vectorization(input_target, target, vocab_size, max_len);
 
@@ -392,8 +345,7 @@ int main() {
     auto target_token_train_test = split(target_token, 0.2f);
 
     // TODO: Check vocab.size() as it may not be 5000
-    gru model = gru(0.01f, vocab_size);
-    model.train(input_token_train_test.first, target_token_train_test.first);
+    gru_train(input_token_train_test.first, target_token_train_test.first);
 
     return 0;
 }
