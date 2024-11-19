@@ -12,7 +12,7 @@
 
 constexpr float  lr          = 0.01f;
 constexpr size_t batch_size  = 32;
-constexpr size_t epochs      = 1;
+constexpr size_t epochs      = 10;
 
 constexpr size_t input_size  = 25;
 constexpr size_t output_size = 10;
@@ -124,7 +124,7 @@ tensor lenet_forward(const tensor& x) {
     // TODO: Can I do x_conv2.reshape({25, 60000});?
     x_conv2.reshape({60000, 25});
 
-    tensor y = matmul(w, transpose(x_conv2)) + b;
+    tensor y = softmax(matmul(w, transpose(x_conv2)) + b);
 
     return y;
 }
@@ -135,7 +135,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor y = lenet_forward(x_train);
 
-        float error = 0.0f;
+        float error = categorical_cross_entropy(y_train, transpose(y));
 
         // w = w - lr * d_loss_d_w;
         // b = b - lr * d_loss_d_y;
