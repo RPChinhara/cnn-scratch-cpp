@@ -10,18 +10,18 @@
 
 #include <chrono>
 
-constexpr float  lr         = 0.01f;
-constexpr size_t batch_size = 32;
-constexpr size_t epochs     = 1;
+constexpr float  lr          = 0.01f;
+constexpr size_t batch_size  = 32;
+constexpr size_t epochs      = 1;
+
+constexpr size_t input_size  = 25;
+constexpr size_t output_size = 10;
 
 tensor kernel1 = normal_dist({3, 3});
 tensor kernel2 = normal_dist({3, 3});
 
-tensor w1 = normal_dist({32 * 7 * 7});
-tensor b1 = zeros({1, 1});
-
-tensor w2 = normal_dist({128});
-tensor b2 = zeros({1, 1});
+tensor w = normal_dist({output_size, input_size});
+tensor b = zeros({output_size, 1});
 
 tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
     // Add padding to the input matrix here? For example,
@@ -106,27 +106,34 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 }
 
 tensor lenet_forward(const tensor& x) {
-    auto x_conv1 = lenet_convolution(x, kernel1);
+    tensor x_conv1 = lenet_convolution(x, kernel1);
     x_conv1 = relu(x_conv1);
     x_conv1 = lenet_max_pool(x_conv1);
 
-    auto x_conv2 = lenet_convolution(x_conv1, kernel2);
+    tensor x_conv2 = lenet_convolution(x_conv1, kernel2);
     x_conv2 = relu(x_conv2);
     x_conv2 = lenet_max_pool(x_conv2);
 
-    // auto x_fc = matmul(w1, x_conv2) + b1;
-    // x_fc = matmul(w2, x_fc) + b2;
+    // x_conv1 (after convolution): (60000, 26, 26)
+    // x_conv1 (after max pooling): (60000, 13, 13)
+    // x_conv2 (after convolution): (60000, 11, 11)
+    // x_conv2 (after max pooling): (60000, 5, 5)
 
-    // return x_fc;
+    // (10, 25) * (25, 1) + (10, 1) -> do this 60000 for train and 10000 for test
 
-    return tensor();
+    // TODO: Can I do x_conv2.reshape({25, 60000});?
+    x_conv2.reshape({60000, 25});
+
+    tensor y = matmul(w, transpose(x_conv2)) + b;
+
+    return y;
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto y = lenet_forward(x_train);
+        tensor y = lenet_forward(x_train);
 
         float error = 0.0f;
 
