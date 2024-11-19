@@ -18,6 +18,7 @@ class tensor {
     tensor& operator=(tensor&& other) noexcept;
 
     const std::string get_shape() const;
+    tensor& reshape(const std::vector<size_t>& new_shape);
 
     tensor operator+(const tensor& other) const;
     tensor operator-(const tensor& other) const;
