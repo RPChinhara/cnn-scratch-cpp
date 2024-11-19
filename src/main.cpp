@@ -137,6 +137,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         float error = 0.0f;
 
+        // w = w - lr * d_loss_d_w;
+        // b = b - lr * d_loss_d_y;
+
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
