@@ -14,14 +14,21 @@ constexpr float  lr          = 0.01f;
 constexpr size_t batch_size  = 32;
 constexpr size_t epochs      = 10;
 
-constexpr size_t input_size  = 25;
+constexpr size_t input_size  = 16;
+constexpr size_t hidden1_size = 120;
+constexpr size_t hidden2_size = 84;
 constexpr size_t output_size = 10;
 
-tensor kernel1 = normal_dist({3, 3});
-tensor kernel2 = normal_dist({3, 3});
+tensor kernel1 = normal_dist({5, 5});
+tensor kernel2 = normal_dist({5, 5});
 
-tensor w = normal_dist({output_size, input_size});
-tensor b = zeros({output_size, 1});
+tensor w1 = normal_dist({hidden1_size, input_size});
+tensor w2 = normal_dist({hidden2_size, hidden1_size});
+tensor w3 = normal_dist({output_size, hidden2_size});
+
+tensor b1 = zeros({hidden1_size, 1});
+tensor b2 = zeros({hidden2_size, 1});
+tensor b3 = zeros({output_size, 1});
 
 tensor lenet_convolution(const tensor& x, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
     // Add padding to the input matrix here? For example,
@@ -106,25 +113,33 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 }
 
 tensor lenet_forward(const tensor& x) {
-    tensor x_conv1 = lenet_convolution(x, kernel1);
-    x_conv1 = relu(x_conv1);
-    x_conv1 = lenet_max_pool(x_conv1);
+    tensor c1 = lenet_convolution(x, kernel1);
+    c1 = relu(c1);
+    std::cout << c1.get_shape() << "\n";
 
-    tensor x_conv2 = lenet_convolution(x_conv1, kernel2);
-    x_conv2 = relu(x_conv2);
-    x_conv2 = lenet_max_pool(x_conv2);
+    tensor s2 = lenet_max_pool(c1);
+    std::cout << s2.get_shape() << "\n";
 
-    // x_conv1 (after convolution): (60000, 26, 26)
-    // x_conv1 (after max pooling): (60000, 13, 13)
-    // x_conv2 (after convolution): (60000, 11, 11)
-    // x_conv2 (after max pooling): (60000, 5, 5)
+    tensor c3 = lenet_convolution(s2, kernel2);
+    c3 = relu(c3);
+    std::cout << c3.get_shape() << "\n";
 
-    // (10, 25) * (25, 1) + (10, 1) -> do this 60000 for train and 10000 for test
+    tensor s4 = lenet_max_pool(c3);
+    std::cout << s4.get_shape() << "\n";
 
     // TODO: Can I do x_conv2.reshape({25, 60000});?
-    x_conv2.reshape({60000, 25});
+    s4.reshape({60000, 16});
 
-    tensor y = softmax(matmul(w, transpose(x_conv2)) + b);
+    // (120, 16) * (16, 60000) -> (84, 120) * (120, 60000) -> (10, 84) * (84, 60000)
+
+    tensor f5 = matmul(w1, transpose(s4)) + b1;
+    std::cout << f5.get_shape() << "\n";
+
+    tensor f6 = matmul(w2, f5) + b2;
+    std::cout << f6.get_shape() << "\n";
+
+    tensor y = softmax(matmul(w3, f6) + b3);
+    std::cout << y.get_shape() << "\n";
 
     return y;
 }
