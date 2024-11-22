@@ -10,14 +10,14 @@
 
 #include <chrono>
 
-constexpr float  lr          = 0.01f;
-constexpr size_t batch_size  = 32;
-constexpr size_t epochs      = 10;
+constexpr float  lr           = 0.01f;
+constexpr size_t batch_size   = 32;
+constexpr size_t epochs       = 10;
 
-constexpr size_t input_size  = 16;
+constexpr size_t input_size   = 16;
 constexpr size_t hidden1_size = 120;
 constexpr size_t hidden2_size = 84;
-constexpr size_t output_size = 10;
+constexpr size_t output_size  = 10;
 
 constexpr size_t num_kernels1 = 6;
 constexpr size_t num_kernels2 = 16;
