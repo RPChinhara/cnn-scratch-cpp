@@ -164,7 +164,7 @@ iris load_iris() {
     return data;
 }
 
-tensor ReadMNISTImages(const std::string& filePath) {
+tensor read_mnist_imgs(const std::string& filePath) {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
@@ -204,7 +204,7 @@ tensor ReadMNISTImages(const std::string& filePath) {
     return images2;
 }
 
-tensor ReadMNISTLabels(const std::string& filePath) {
+tensor read_mnist_labels(const std::string& filePath) {
     std::ifstream file(filePath, std::ios::binary);
 
     if (!file.is_open())
@@ -237,10 +237,10 @@ tensor ReadMNISTLabels(const std::string& filePath) {
 
 mnist load_mnist() {
     mnist data;
-    data.train_imgs = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
-    data.train_labels = ReadMNISTLabels("datas/mnist/train-labels-idx1-ubyte");
-    data.test_imgs  = ReadMNISTImages("datas/mnist/t10k-images-idx3-ubyte");
-    data.test_labels  = ReadMNISTLabels("datas/mnist/t10k-labels-idx1-ubyte");
+    data.train_imgs = read_mnist_imgs("datas/mnist/train-images-idx3-ubyte");
+    data.train_labels = read_mnist_labels("datas/mnist/train-labels-idx1-ubyte");
+    data.test_imgs  = read_mnist_imgs("datas/mnist/t10k-images-idx3-ubyte");
+    data.test_labels  = read_mnist_labels("datas/mnist/t10k-labels-idx1-ubyte");
 
     return data;
 }
