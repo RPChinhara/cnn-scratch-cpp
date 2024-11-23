@@ -134,6 +134,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 }
 
 tensor lenet_forward(const tensor& x) {
+    std::cout << x.get_shape() << "\n";
     tensor c1 = lenet_convolution(x, kernel1);
     c1 = relu(c1);
     std::cout << c1.get_shape() << "\n";
