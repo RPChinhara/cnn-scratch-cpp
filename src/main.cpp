@@ -23,7 +23,7 @@ constexpr size_t num_kernels1 = 6;
 constexpr size_t num_kernels2 = 16;
 
 tensor kernel1 = normal_dist({6, 5, 5});
-tensor kernel2 = normal_dist({6, 5, 5});
+tensor kernel2 = normal_dist({16, 5, 5});
 
 tensor w1 = normal_dist({hidden1_size, input_size});
 tensor w2 = normal_dist({hidden2_size, hidden1_size});
@@ -138,15 +138,15 @@ tensor lenet_forward(const tensor& x) {
     c1 = relu(c1);
     std::cout << c1.get_shape() << "\n";
 
-    // tensor s2 = lenet_max_pool(c1);
-    // std::cout << s2.get_shape() << "\n";
+    tensor s2 = lenet_max_pool(c1);
+    std::cout << s2.get_shape() << "\n";
 
-    // tensor c3 = lenet_convolution(s2, kernel2);
-    // c3 = relu(c3);
-    // std::cout << c3.get_shape() << "\n";
+    tensor c3 = lenet_convolution(s2, kernel2);
+    c3 = relu(c3);
+    std::cout << c3.get_shape() << "\n";
 
-    // tensor s4 = lenet_max_pool(c3);
-    // std::cout << s4.get_shape() << "\n";
+    tensor s4 = lenet_max_pool(c3);
+    std::cout << s4.get_shape() << "\n";
 
     // TODO: Can I do x_conv2.reshape({25, 60000});?
     // s4.reshape({60000, 16});
@@ -212,35 +212,35 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // mnist data = load_mnist();
+    mnist data = load_mnist();
 
-    // constexpr size_t num_digits = 1;
-    // constexpr size_t img_size = 784;
-    // constexpr size_t img_dim = 28;
+    constexpr size_t num_digits = 1;
+    constexpr size_t img_size = 784;
+    constexpr size_t img_dim = 28;
 
-    // for (auto i = 0; i < num_digits; ++i) {
-    //     for (auto j = 0; j < img_size; ++j) {
-    //         if (j % img_dim == 0 && j != 0)
-    //             std::cout << std::endl;
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < img_size; ++j) {
+            if (j % img_dim == 0 && j != 0)
+                std::cout << std::endl;
 
-    //         std::cout << data.train_imgs[i * img_size + j] << " ";
-    //     }
+            std::cout << data.train_imgs[i * img_size + j] << " ";
+        }
 
-    //     std::cout << "\n\n";
-    // }
+        std::cout << "\n\n";
+    }
 
-    // for (auto i = 0; i < data.train_imgs.size; ++i)
-    //     data.train_imgs[i] /= 255.0f;
+    for (auto i = 0; i < data.train_imgs.size; ++i)
+        data.train_imgs[i] /= 255.0f;
 
-    // for (auto i = 0; i < data.test_imgs.size; ++i)
-    //     data.test_imgs[i] /= 255.0f;
+    for (auto i = 0; i < data.test_imgs.size; ++i)
+        data.test_imgs[i] /= 255.0f;
 
-    // // data.train_labels = one_hot(data.train_labels, 10);
-    // // data.test_labels = one_hot(data.test_labels, 10);
+    // data.train_labels = one_hot(data.train_labels, 10);
+    // data.test_labels = one_hot(data.test_labels, 10);
 
-    // lenet_train(data.train_imgs, data.train_labels);
-    // // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
-    // // lenet_predict(data.test_imgs, data.test_labels);
+    lenet_train(data.train_imgs, data.train_labels);
+    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    // lenet_predict(data.test_imgs, data.test_labels);
 
 
     tensor a = tensor({2, 2, 3, 3}, {44, 2, 22,
@@ -261,7 +261,10 @@ int main() {
 
                                      });
 
+    tensor kernel22 = tensor({1, 2, 2}, {1, 1, 1, 1});
+
     std::cout << lenet_max_pool(a, 2, 1) << "\n";
+    std::cout << lenet_convolution(a, kernel22) << "\n";
 
     return 0;
 }
