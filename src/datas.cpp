@@ -170,28 +170,28 @@ tensor read_mnist_imgs(const std::string& filePath) {
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
 
-    uint32_t magic_num, num_imgs, numRows, numCols;
+    uint32_t magic_num, num_imgs, num_rows, numCols;
 
     file.read(reinterpret_cast<char*>(&magic_num), sizeof(magic_num));
     file.read(reinterpret_cast<char*>(&num_imgs), sizeof(num_imgs));
-    file.read(reinterpret_cast<char*>(&numRows), sizeof(numRows));
+    file.read(reinterpret_cast<char*>(&num_rows), sizeof(num_rows));
     file.read(reinterpret_cast<char*>(&numCols), sizeof(numCols));
 
     magic_num = _byteswap_ulong(magic_num);
     num_imgs = _byteswap_ulong(num_imgs);
-    numRows = _byteswap_ulong(numRows);
+    num_rows = _byteswap_ulong(num_rows);
     numCols = _byteswap_ulong(numCols);
 
-    std::vector<std::vector<uint8_t>> images(num_imgs, std::vector<uint8_t>(numRows * numCols));
+    std::vector<std::vector<uint8_t>> images(num_imgs, std::vector<uint8_t>(num_rows * numCols));
 
     for (auto i = 0; i < num_imgs; ++i)
-        file.read(reinterpret_cast<char*>(images[i].data()), numRows * numCols);
+        file.read(reinterpret_cast<char*>(images[i].data()), num_rows * numCols);
 
-    tensor images2 = zeros({num_imgs, numRows, numCols});
+    tensor images2 = zeros({num_imgs, num_rows, numCols});
     size_t idx = 0;
 
     for (auto i = 0; i < num_imgs; ++i) {
-        for (auto j = 0; j < numRows; ++j) {
+        for (auto j = 0; j < num_rows; ++j) {
             for (auto k = 0; k < numCols; ++k) {
                 images2[idx] = static_cast<float>(images[i][j * numCols + k]);
                 ++idx;
