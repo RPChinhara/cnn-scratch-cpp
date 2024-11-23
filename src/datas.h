@@ -16,9 +16,9 @@ struct iris {
 };
 
 struct mnist {
-    tensor train_images;
+    tensor train_imgs;
     tensor train_labels;
-    tensor test_images;
+    tensor test_imgs;
     tensor test_labels;
 };
 

@@ -237,9 +237,9 @@ tensor ReadMNISTLabels(const std::string& filePath) {
 
 mnist load_mnist() {
     mnist data;
-    data.train_images = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
+    data.train_imgs = ReadMNISTImages("datas/mnist/train-images-idx3-ubyte");
     data.train_labels = ReadMNISTLabels("datas/mnist/train-labels-idx1-ubyte");
-    data.test_images  = ReadMNISTImages("datas/mnist/t10k-images-idx3-ubyte");
+    data.test_imgs  = ReadMNISTImages("datas/mnist/t10k-images-idx3-ubyte");
     data.test_labels  = ReadMNISTLabels("datas/mnist/t10k-labels-idx1-ubyte");
 
     return data;

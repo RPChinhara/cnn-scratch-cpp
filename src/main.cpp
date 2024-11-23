@@ -223,24 +223,24 @@ int main() {
     //         if (j % img_dim == 0 && j != 0)
     //             std::cout << std::endl;
 
-    //         std::cout << data.train_images[i * img_size + j] << " ";
+    //         std::cout << data.train_imgs[i * img_size + j] << " ";
     //     }
 
     //     std::cout << "\n\n";
     // }
 
-    // for (auto i = 0; i < data.train_images.size; ++i)
-    //     data.train_images[i] /= 255.0f;
+    // for (auto i = 0; i < data.train_imgs.size; ++i)
+    //     data.train_imgs[i] /= 255.0f;
 
-    // for (auto i = 0; i < data.test_images.size; ++i)
-    //     data.test_images[i] /= 255.0f;
+    // for (auto i = 0; i < data.test_imgs.size; ++i)
+    //     data.test_imgs[i] /= 255.0f;
 
     // // data.train_labels = one_hot(data.train_labels, 10);
     // // data.test_labels = one_hot(data.test_labels, 10);
 
-    // lenet_train(data.train_images, data.train_labels);
-    // // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
-    // // lenet_predict(data.test_images, data.test_labels);
+    // lenet_train(data.train_imgs, data.train_labels);
+    // // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    // // lenet_predict(data.test_imgs, data.test_labels);
 
 
     tensor a = tensor({2, 2, 3, 3}, {44, 2, 22,
