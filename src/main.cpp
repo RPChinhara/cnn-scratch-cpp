@@ -239,5 +239,69 @@ int main() {
     // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
     // lenet_predict(data.test_imgs, data.test_labels);
 
+    // (60000, 28, 28)
+    // (60000, 6, 24, 24)
+    // (60000, 6, 12, 12)
+    // (60000, 16, 8, 8)
+    // (60000, 16, 4, 4)
+    // (120, 60000)
+    // (84, 60000)
+    // (10, 60000)
+
+    tensor x1 = tensor(
+        {2, 2, 3, 3},
+        {
+           44,   2,  22,
+            4,   8,   6,
+            5,   4,  66,
+
+            6,   5,   3,
+            4,   7,   8,
+            7,  32,   7,
+
+            1, 288,   8,
+            7,   4,   6,
+            5,  32,   6,
+
+           56,   1,  24,
+            4,   4,   6,
+           22,   5,   6
+        }
+    );
+
+    tensor x2 = tensor(
+        {2, 1, 3, 3},
+        {
+           44,   2,  22,
+            4,   8,   6,
+            5,   4,  66,
+
+           56,   1,  24,
+            4,   4,   6,
+           22,   5,   6
+        }
+    );
+
+    tensor x3 = tensor(
+        {2, 3, 3},
+        {
+           44,   2,  22,
+            4,   8,   6,
+            5,   4,  66,
+
+           56,   1,  24,
+            4,   4,   6,
+           22,   5,   6
+        }
+    );
+
+    tensor kernel1 = tensor({2, 2, 2}, {1, 1, 1, 1, 1, 1, 1, 1});
+    tensor kernel2 = tensor({1, 2, 2}, {1, 1, 1, 1});
+
+    std::cout << lenet_convolution(x1, kernel2) << "\n";
+
+    // TODO: How to calculate number of mats in each tensor?
+    // for (auto )
+
     return 0;
 }
