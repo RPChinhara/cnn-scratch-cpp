@@ -14,7 +14,7 @@ constexpr float  lr           = 0.01f;
 constexpr size_t batch_size   = 32;
 constexpr size_t epochs       = 10;
 
-constexpr size_t input_size   = 16;
+constexpr size_t input_size   = 256;
 constexpr size_t hidden1_size = 120;
 constexpr size_t hidden2_size = 84;
 constexpr size_t output_size  = 10;
@@ -149,21 +149,18 @@ tensor lenet_forward(const tensor& x) {
     std::cout << s4.get_shape() << "\n";
 
     // TODO: Can I do x_conv2.reshape({25, 60000});?
-    // s4.reshape({60000, 16});
+    s4.reshape({60000, 256});
 
-    // (120, 16) * (16, 60000) -> (84, 120) * (120, 60000) -> (10, 84) * (84, 60000)
+    tensor f5 = matmul(w1, transpose(s4)) + b1;
+    std::cout << f5.get_shape() << "\n";
 
-    // tensor f5 = matmul(w1, transpose(s4)) + b1;
-    // std::cout << f5.get_shape() << "\n";
+    tensor f6 = matmul(w2, f5) + b2;
+    std::cout << f6.get_shape() << "\n";
 
-    // tensor f6 = matmul(w2, f5) + b2;
-    // std::cout << f6.get_shape() << "\n";
+    tensor y = softmax(matmul(w3, f6) + b3);
+    std::cout << y.get_shape() << "\n";
 
-    // tensor y = softmax(matmul(w3, f6) + b3);
-    // std::cout << y.get_shape() << "\n";
-
-    // return y;
-    return tensor();
+    return y;
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
@@ -172,8 +169,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor y = lenet_forward(x_train);
 
-        // float error = categorical_cross_entropy(y_train, transpose(y));
-        float error = 0.0f;
+        float error = categorical_cross_entropy(y_train, transpose(y));
 
         // tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
