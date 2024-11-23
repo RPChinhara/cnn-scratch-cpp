@@ -182,18 +182,18 @@ tensor read_mnist_imgs(const std::string& filePath) {
     num_rows = _byteswap_ulong(num_rows);
     num_cols = _byteswap_ulong(num_cols);
 
-    std::vector<std::vector<uint8_t>> images(num_imgs, std::vector<uint8_t>(num_rows * num_cols));
+    std::vector<std::vector<uint8_t>> imgs(num_imgs, std::vector<uint8_t>(num_rows * num_cols));
 
     for (auto i = 0; i < num_imgs; ++i)
-        file.read(reinterpret_cast<char*>(images[i].data()), num_rows * num_cols);
+        file.read(reinterpret_cast<char*>(imgs[i].data()), num_rows * num_cols);
 
-    tensor images2 = zeros({num_imgs, num_rows, num_cols});
+    tensor imgs_t = zeros({num_imgs, num_rows, num_cols});
     size_t idx = 0;
 
     for (auto i = 0; i < num_imgs; ++i) {
         for (auto j = 0; j < num_rows; ++j) {
             for (auto k = 0; k < num_cols; ++k) {
-                images2[idx] = static_cast<float>(images[i][j * num_cols + k]);
+                imgs_t[idx] = static_cast<float>(imgs[i][j * num_cols + k]);
                 ++idx;
             }
         }
@@ -201,7 +201,7 @@ tensor read_mnist_imgs(const std::string& filePath) {
 
     file.close();
 
-    return images2;
+    return imgs_t;
 }
 
 tensor read_mnist_labels(const std::string& filePath) {
