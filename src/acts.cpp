@@ -11,36 +11,36 @@ tensor hyperbolic_tangent(const tensor& x) {
     return y;
 }
 
-tensor relu(const tensor& z) {
-    tensor a = z;
+tensor relu(const tensor& x) {
+    tensor y = x;
 
-    for (auto i = 0; i < z.size; ++i)
-        a.elems[i] = std::fmax(0.0f, z.elems[i]);
+    for (auto i = 0; i < x.size; ++i)
+        y.elems[i] = std::fmax(0.0f, x.elems[i]);
 
-    return a;
+    return y;
 }
 
-tensor sigmoid(const tensor& t) {
-    tensor t_new = t;
+tensor sigmoid(const tensor& x) {
+    tensor y = x;
 
-    return 1.0 / (1.0 + exp(-t));
+    return 1.0 / (1.0 + exp(-x));
 }
 
-tensor softmax(const tensor& z) {
-    tensor exp_scores = exp(z - max(z, 1));
+tensor softmax(const tensor& x) {
+    tensor exp_scores = exp(x - max(x, 1));
     return exp_scores / sum(exp_scores, 1);
 }
 
-tensor relu_derivative(const tensor& z) {
-    tensor t_new = z;
+tensor relu_derivative(const tensor& x) {
+    tensor y = x;
 
-    for (auto i = 0; i < z.size; ++i)
-        t_new[i] = (z[i] > 0.0f) ? 1.0f : 0.0f;
+    for (auto i = 0; i < x.size; ++i)
+        y[i] = (x[i] > 0.0f) ? 1.0f : 0.0f;
 
-    return t_new;
+    return y;
 }
 
-tensor sigmoid_derivative(const tensor& z) {
-    tensor s = sigmoid(z);
-    return s * (1.0f - s);
+tensor sigmoid_derivative(const tensor& x) {
+    tensor y = sigmoid(x);
+    return y * (1.0f - y);
 }
