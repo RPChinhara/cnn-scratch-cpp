@@ -199,7 +199,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 }
 
 float lenet_evaluate(const tensor& x_test, const tensor& y_test) {
-    return 0.0f;
+    auto y = lenet_forward(x_test);
+    return categorical_cross_entropy(y_train, transpose(y));
 }
 
 void lenet_predict(const tensor& x_test, const tensor& y_test) {
@@ -233,8 +234,8 @@ int main() {
     // data.test_labels = one_hot(data.test_labels, 10);
 
     lenet_train(data.train_images, data.train_labels);
-    auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
-    lenet_predict(data.test_images, data.test_labels);
+    // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
+    // lenet_predict(data.test_images, data.test_labels);
 
     return 0;
 }
