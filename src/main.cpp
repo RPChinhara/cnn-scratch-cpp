@@ -22,8 +22,8 @@ constexpr size_t output_size  = 10;
 constexpr size_t num_kernels1 = 6;
 constexpr size_t num_kernels2 = 16;
 
-tensor kernel1 = normal_dist({5, 5});
-tensor kernel2 = normal_dist({5, 5});
+tensor kernel1 = normal_dist({6, 5, 5});
+tensor kernel2 = normal_dist({6, 5, 5});
 
 tensor w1 = normal_dist({hidden1_size, input_size});
 tensor w2 = normal_dist({hidden2_size, hidden1_size});
@@ -33,15 +33,21 @@ tensor b1 = zeros({hidden1_size, 1});
 tensor b2 = zeros({hidden2_size, 1});
 tensor b3 = zeros({output_size, 1});
 
-tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
+tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
+    if (kernels.shape.size() != 3) {
+        std::cerr << __FILE__ << "(" << __LINE__ << "): error: size of kernel should be 3" << std::endl;
+        exit(1);
+    }
+
     // Add padding to the input matrix here? For example,
     //        0 0 0 0
     // 1 1 -> 0 1 1 0
     // 1 1    0 1 1 0
     //        0 0 0 0
 
-    size_t kernel_height = kernel.shape.front();
-    size_t kernel_width = kernel.shape.back();
+    size_t num_kernels = kernels.shape.front();
+    size_t kernel_height = kernels.shape[1];
+    size_t kernel_width = kernels.shape.back();
 
     size_t input_height = x.shape[x.shape.size() - 2];
     size_t input_width = x.shape.back();
@@ -53,11 +59,12 @@ tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor
 
     size_t idx = 0;
     for (size_t b = 0; b < x.shape.front(); ++b) {
-        auto t = slice(x, b * input_height, input_height);
+        auto image = slice(x, b * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
 
-        for (size_t c = 0; c < num_kernels; ++c) {
+        for (size_t k = 0; k < num_kernels; ++k) {
+            auto kernel = slice(kernels, k * kernel_height, kernel_height);
 
             for (size_t i = 0; i < output_height; ++i) {
                 for (size_t j = 0; j < output_width; ++j) {
@@ -65,7 +72,7 @@ tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor
 
                     for (size_t m = 0; m < kernel_height; ++m) {
                         for (size_t n = 0; n < kernel_width; ++n) {
-                            sum += t(i + m, j + n) * kernel(m, n);
+                            sum += image(i + m, j + n) * kernel(m, n);
                         }
                     }
 
@@ -122,7 +129,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 }
 
 tensor lenet_forward(const tensor& x) {
-    tensor c1 = lenet_convolution(x, num_kernels1, kernel1);
+    tensor c1 = lenet_convolution(x, kernel1);
     c1 = relu(c1);
     std::cout << c1.get_shape() << "\n";
 
@@ -222,8 +229,8 @@ int main() {
     for (auto i = 0; i < data.test_images.size; ++i)
         data.test_images[i] /= 255.0f;
 
-    data.train_labels = one_hot(data.train_labels, 10);
-    data.test_labels = one_hot(data.test_labels, 10);
+    // data.train_labels = one_hot(data.train_labels, 10);
+    // data.test_labels = one_hot(data.test_labels, 10);
 
     lenet_train(data.train_images, data.train_labels);
     auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
