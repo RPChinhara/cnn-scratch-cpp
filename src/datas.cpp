@@ -210,22 +210,22 @@ tensor read_mnist_labels(const std::string& filePath) {
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
 
-    uint32_t magic_num, numLabels;
+    uint32_t magic_num, num_labels;
 
     file.read(reinterpret_cast<char*>(&magic_num), sizeof(magic_num));
-    file.read(reinterpret_cast<char*>(&numLabels), sizeof(numLabels));
+    file.read(reinterpret_cast<char*>(&num_labels), sizeof(num_labels));
 
     magic_num = _byteswap_ulong(magic_num);
-    numLabels = _byteswap_ulong(numLabels);
+    num_labels = _byteswap_ulong(num_labels);
 
-    std::vector<uint8_t> labels(numLabels);
+    std::vector<uint8_t> labels(num_labels);
 
-    file.read(reinterpret_cast<char*>(labels.data()), numLabels);
+    file.read(reinterpret_cast<char*>(labels.data()), num_labels);
 
-    tensor labels2 = zeros({numLabels, 1});
+    tensor labels2 = zeros({num_labels, 1});
     size_t idx = 0;
 
-    for (auto i = 0; i < numLabels; ++i) {
+    for (auto i = 0; i < num_labels; ++i) {
         labels2[idx] = static_cast<float>(labels[i]);
         ++idx;
     }
