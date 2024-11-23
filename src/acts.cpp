@@ -2,13 +2,13 @@
 #include "math.hpp"
 #include "tensor.h"
 
-tensor hyperbolic_tangent(const tensor& z_t) {
-    tensor h_t = z_t;
+tensor hyperbolic_tangent(const tensor& x) {
+    tensor y = x;
 
-    for (auto i = 0; i < z_t.size; ++i)
-        h_t.elems[i] = std::tanhf(z_t.elems[i]);
+    for (auto i = 0; i < x.size; ++i)
+        y.elems[i] = std::tanhf(x.elems[i]);
 
-    return h_t;
+    return y;
 }
 
 tensor relu(const tensor& z) {
