@@ -239,8 +239,8 @@ mnist load_mnist() {
     mnist data;
     data.train_imgs = read_mnist_imgs("datas/mnist/train-images-idx3-ubyte");
     data.train_labels = read_mnist_labels("datas/mnist/train-labels-idx1-ubyte");
-    data.test_imgs  = read_mnist_imgs("datas/mnist/t10k-images-idx3-ubyte");
-    data.test_labels  = read_mnist_labels("datas/mnist/t10k-labels-idx1-ubyte");
+    data.test_imgs = read_mnist_imgs("datas/mnist/t10k-images-idx3-ubyte");
+    data.test_labels = read_mnist_labels("datas/mnist/t10k-labels-idx1-ubyte");
 
     return data;
 }
