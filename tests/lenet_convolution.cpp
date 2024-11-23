@@ -25,7 +25,6 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 
     tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
-    std::cout << num_kernels << std::endl;
     size_t idx = 0;
     for (size_t b = 0; b < x.shape.front(); ++b) {
         auto img = slice(x, b * input_height, input_height);
@@ -69,7 +68,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 // (10, 60000)
 
 int main () {
-    tensor x = tensor(
+    tensor x1 = tensor(
         {2, 2, 3, 3},
         {
            44,   2,  22,
@@ -90,9 +89,39 @@ int main () {
         }
     );
 
-    tensor kernel = tensor({2, 2, 2}, {1, 1, 1, 1, 1, 1, 1, 1});
+    tensor x2 = tensor(
+        {2, 1, 3, 3},
+        {
+           44,   2,  22,
+            4,   8,   6,
+            5,   4,  66,
 
-    std::cout << lenet_convolution(x, kernel) << "\n";
+           56,   1,  24,
+            4,   4,   6,
+           22,   5,   6
+        }
+    );
+
+    tensor x3 = tensor(
+        {2, 3, 3},
+        {
+           44,   2,  22,
+            4,   8,   6,
+            5,   4,  66,
+
+           56,   1,  24,
+            4,   4,   6,
+           22,   5,   6
+        }
+    );
+
+    tensor kernel1 = tensor({2, 2, 2}, {1, 1, 1, 1, 1, 1, 1, 1});
+    tensor kernel2 = tensor({1, 2, 2}, {1, 1, 1, 1});
+
+    std::cout << lenet_convolution(x1, kernel2) << "\n";
+
+    // TODO: How to calculate number of mats in each tensor?
+    for (auto )
 
     return 0;
 }
