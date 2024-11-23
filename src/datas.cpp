@@ -170,14 +170,14 @@ tensor read_mnist_imgs(const std::string& filePath) {
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
 
-    uint32_t magicNumber, numImages, numRows, numCols;
+    uint32_t magic_num, numImages, numRows, numCols;
 
-    file.read(reinterpret_cast<char*>(&magicNumber), sizeof(magicNumber));
+    file.read(reinterpret_cast<char*>(&magic_num), sizeof(magic_num));
     file.read(reinterpret_cast<char*>(&numImages), sizeof(numImages));
     file.read(reinterpret_cast<char*>(&numRows), sizeof(numRows));
     file.read(reinterpret_cast<char*>(&numCols), sizeof(numCols));
 
-    magicNumber = _byteswap_ulong(magicNumber);
+    magic_num = _byteswap_ulong(magic_num);
     numImages = _byteswap_ulong(numImages);
     numRows = _byteswap_ulong(numRows);
     numCols = _byteswap_ulong(numCols);
@@ -210,12 +210,12 @@ tensor read_mnist_labels(const std::string& filePath) {
     if (!file.is_open())
         std::cerr << "Failed to open the file." << std::endl;
 
-    uint32_t magicNumber, numLabels;
+    uint32_t magic_num, numLabels;
 
-    file.read(reinterpret_cast<char*>(&magicNumber), sizeof(magicNumber));
+    file.read(reinterpret_cast<char*>(&magic_num), sizeof(magic_num));
     file.read(reinterpret_cast<char*>(&numLabels), sizeof(numLabels));
 
-    magicNumber = _byteswap_ulong(magicNumber);
+    magic_num = _byteswap_ulong(magic_num);
     numLabels = _byteswap_ulong(numLabels);
 
     std::vector<uint8_t> labels(numLabels);
