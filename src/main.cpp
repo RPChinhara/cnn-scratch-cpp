@@ -33,6 +33,21 @@ tensor b1 = zeros({hidden1_size, 1});
 tensor b2 = zeros({hidden2_size, 1});
 tensor b3 = zeros({output_size, 1});
 
+void print_imgs(const tensor& imgs, size_t num_digits) {
+    constexpr size_t img_size = 784;
+    constexpr size_t img_dim = 28;
+
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < img_size; ++j) {
+            if (j % img_dim == 0 && j != 0)
+                std::cout << std::endl;
+
+            std::cout << imgs[i * img_size + j] << " ";
+        }
+        std::cout << "\n\n";
+    }
+}
+
 tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
     if (kernels.shape.size() != 3) {
         std::cerr << __FILE__ << "(" << __LINE__ << "): error: size of kernel should be 3" << std::endl;
@@ -211,20 +226,8 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 int main() {
     mnist data = load_mnist();
 
-    constexpr size_t num_digits = 1;
-    constexpr size_t img_size = 784;
-    constexpr size_t img_dim = 28;
-
-    for (auto i = 0; i < num_digits; ++i) {
-        for (auto j = 0; j < img_size; ++j) {
-            if (j % img_dim == 0 && j != 0)
-                std::cout << std::endl;
-
-            std::cout << data.train_imgs[i * img_size + j] << " ";
-        }
-
-        std::cout << "\n\n";
-    }
+    constexpr size_t num_digits = 2;
+    print_imgs(data.train_imgs, num_digits);
 
     for (auto i = 0; i < data.train_imgs.size; ++i)
         data.train_imgs[i] /= 255.0f;
