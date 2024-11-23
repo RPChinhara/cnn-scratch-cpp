@@ -212,56 +212,35 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // mnist data = load_mnist();
+    mnist data = load_mnist();
 
-    // constexpr size_t num_digits = 1;
-    // constexpr size_t img_size = 784;
-    // constexpr size_t img_dim = 28;
+    constexpr size_t num_digits = 2;
+    constexpr size_t img_size = 784;
+    constexpr size_t img_dim = 28;
 
-    // for (auto i = 0; i < num_digits; ++i) {
-    //     for (auto j = 0; j < img_size; ++j) {
-    //         if (j % img_dim == 0 && j != 0)
-    //             std::cout << std::endl;
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < img_size; ++j) {
+            if (j % img_dim == 0 && j != 0)
+                std::cout << std::endl;
 
-    //         std::cout << data.train_images[i * img_size + j] << " ";
-    //     }
+            std::cout << data.train_imgs[i * img_size + j] << " ";
+        }
 
-    //     std::cout << "\n\n";
-    // }
+        std::cout << "\n\n";
+    }
 
-    // for (auto i = 0; i < data.train_images.size; ++i)
-    //     data.train_images[i] /= 255.0f;
+    for (auto i = 0; i < data.train_imgs.size; ++i)
+        data.train_imgs[i] /= 255.0f;
 
-    // for (auto i = 0; i < data.test_images.size; ++i)
-    //     data.test_images[i] /= 255.0f;
+    for (auto i = 0; i < data.test_imgs.size; ++i)
+        data.test_imgs[i] /= 255.0f;
 
-    // // data.train_labels = one_hot(data.train_labels, 10);
-    // // data.test_labels = one_hot(data.test_labels, 10);
+    // data.train_labels = one_hot(data.train_labels, 10);
+    // data.test_labels = one_hot(data.test_labels, 10);
 
-    // lenet_train(data.train_images, data.train_labels);
-    // // auto test_loss = lenet_evaluate(data.test_images, data.test_labels);
-    // // lenet_predict(data.test_images, data.test_labels);
-
-
-    tensor a = tensor({2, 2, 3, 3}, {44, 2, 22,
-                                     4, 8, 6,
-                                     5, 4, 66,
-
-                                     6, 5, 3,
-                                     4, 7, 8,
-                                     7, 32, 7,
-
-                                     1, 288, 8,
-                                     7, 4, 6,
-                                     5, 32, 6,
-
-                                     56, 1, 24,
-                                     4, 4, 6,
-                                     22, 5, 6,
-
-                                     });
-
-    std::cout << lenet_max_pool(a, 2, 1) << "\n";
+    lenet_train(data.train_imgs, data.train_labels);
+    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    // lenet_predict(data.test_imgs, data.test_labels);
 
     return 0;
 }
