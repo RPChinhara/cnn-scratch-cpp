@@ -59,7 +59,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 
     size_t idx = 0;
     for (size_t b = 0; b < x.shape.front(); ++b) {
-        auto image = slice(x, b * input_height, input_height);
+        auto img = slice(x, b * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
 
@@ -72,7 +72,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 
                     for (size_t m = 0; m < kernel_height; ++m) {
                         for (size_t n = 0; n < kernel_width; ++n) {
-                            sum += image(i + m, j + n) * kernel(m, n);
+                            sum += img(i + m, j + n) * kernel(m, n);
                         }
                     }
 
@@ -105,7 +105,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     size_t num_img = batch_size * num_kernels;
 
     for (size_t b = 0; b < num_img; ++b) {
-        auto image = slice(x, b * input_height, input_height);
+        auto img = slice(x, b * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
 
@@ -115,7 +115,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 
                 for (size_t m = 0; m < pool_size; ++m) {
                     for (size_t n = 0; n < pool_size; ++n) {
-                        float val = image(i * stride + m, j * stride + n);
+                        float val = img(i * stride + m, j * stride + n);
 
                         if (val > max_val)
                             max_val = val;
@@ -215,15 +215,15 @@ int main() {
     // mnist data = load_mnist();
 
     // constexpr size_t num_digits = 1;
-    // constexpr size_t image_size = 784;
-    // constexpr size_t image_dim = 28;
+    // constexpr size_t img_size = 784;
+    // constexpr size_t img_dim = 28;
 
     // for (auto i = 0; i < num_digits; ++i) {
-    //     for (auto j = 0; j < image_size; ++j) {
-    //         if (j % image_dim == 0 && j != 0)
+    //     for (auto j = 0; j < img_size; ++j) {
+    //         if (j % img_dim == 0 && j != 0)
     //             std::cout << std::endl;
 
-    //         std::cout << data.train_images[i * image_size + j] << " ";
+    //         std::cout << data.train_images[i * img_size + j] << " ";
     //     }
 
     //     std::cout << "\n\n";
