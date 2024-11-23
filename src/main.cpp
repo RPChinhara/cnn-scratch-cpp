@@ -239,29 +239,5 @@ int main() {
     // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
     // lenet_predict(data.test_imgs, data.test_labels);
 
-
-    tensor a = tensor({2, 2, 3, 3}, {44, 2, 22,
-                                     4, 8, 6,
-                                     5, 4, 66,
-
-                                     6, 5, 3,
-                                     4, 7, 8,
-                                     7, 32, 7,
-
-                                     1, 288, 8,
-                                     7, 4, 6,
-                                     5, 32, 6,
-
-                                     56, 1, 24,
-                                     4, 4, 6,
-                                     22, 5, 6,
-
-                                     });
-
-    tensor kernel22 = tensor({1, 2, 2}, {1, 1, 1, 1});
-
-    std::cout << lenet_max_pool(a, 2, 1) << "\n";
-    std::cout << lenet_convolution(a, kernel22) << "\n";
-
     return 0;
 }
