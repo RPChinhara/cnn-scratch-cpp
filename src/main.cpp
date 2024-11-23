@@ -91,15 +91,20 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 }
 
 tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
+    size_t num_kernels = x.shape[1];
+
     size_t input_height = x.shape[x.shape.size() - 2];
     size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - pool_size) / stride + 1;
     size_t output_width = (input_width - pool_size) / stride + 1;
 
-    tensor outputs = zeros({x.shape.front(), output_height, output_width});
+    tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
-    for (size_t b = 0; b < x.shape.front(); ++b) {
+    size_t batch_size = x.shape.front();
+    size_t num_img = batch_size * num_kernels;
+
+    for (size_t b = 0; b < num_img; ++b) {
         auto image = slice(x, b * input_height, input_height);
 
         tensor output = zeros({output_height, output_width});
@@ -238,21 +243,21 @@ int main() {
     // // lenet_predict(data.test_images, data.test_labels);
 
 
-    tensor a = tensor({2, 2, 3, 3}, {1, 2, 3,
-                                     4, 5, 6,
-                                     7, 8, 9,
+    tensor a = tensor({2, 2, 3, 3}, {44, 2, 22,
+                                     4, 8, 6,
+                                     5, 4, 66,
 
-                                     1, 2, 3,
-                                     4, 5, 6,
-                                     7, 8, 9,
+                                     6, 5, 3,
+                                     4, 7, 8,
+                                     7, 32, 7,
 
-                                     1, 2, 3,
-                                     4, 5, 6,
-                                     7, 8, 9,
+                                     1, 288, 8,
+                                     7, 4, 6,
+                                     5, 32, 6,
 
-                                     1, 2, 3,
-                                     4, 5, 6,
-                                     7, 8, 9,
+                                     56, 1, 24,
+                                     4, 4, 6,
+                                     22, 5, 6,
 
                                      });
 
