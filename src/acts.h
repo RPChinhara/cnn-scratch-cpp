@@ -2,7 +2,7 @@
 
 class tensor;
 
-tensor hyperbolic_tangent(const tensor& z_t);
+tensor hyperbolic_tangent(const tensor& x);
 tensor relu(const tensor& z);
 tensor sigmoid(const tensor& t);
 tensor softmax(const tensor& z);
