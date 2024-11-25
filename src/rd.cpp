@@ -13,11 +13,8 @@ tensor glorot_uniform(const size_t num_out, const size_t num_in) {
 tensor glorot_uniform(const std::vector<size_t>& shape) {
     assert(1 < shape.size());
 
-    size_t num_in = 1;
-    for (auto i = 0; i < shape.size() - 1; ++i)
-        num_in *= shape[i];
-
-    size_t num_out = shape.back();
+    size_t num_in = shape.back();
+    size_t num_out = shape[shape.size() - 2];
 
     auto limit = sqrt(6.0f / (num_in + num_out));
     return uniform_dist(shape, -limit, limit);
