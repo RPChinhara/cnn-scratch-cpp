@@ -14,7 +14,7 @@ std::string lower(const std::string& text) {
     for (auto c : text) {
         result += std::tolower(c);
     }
-    
+
     return result;
 }
 
@@ -32,31 +32,6 @@ tensor one_hot(const tensor& t, const size_t depth) {
 std::string regex_replace(const std::string& in, const std::string& pattern, const std::string& rewrite) {
     std::regex re(pattern);
     return std::regex_replace(in, re, rewrite);
-}
-
-train_test split_dataset(const tensor& x, const tensor& y, const float test_size, const size_t rd_state) {
-    tensor x_shuffled = shuffle(x, rd_state);
-    tensor y_shuffled = shuffle(y, rd_state);
-
-    train_test data;
-    data.x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    data.y_train = zeros({static_cast<size_t>(std::floorf(y.shape.front() * (1.0 - test_size))), y.shape.back()});
-    data.x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-    data.y_test = zeros({static_cast<size_t>(std::ceilf(y.shape.front() * test_size)), y.shape.back()});
-
-    for (auto i = 0; i < data.x_train.size; ++i)
-        data.x_train[i] = x_shuffled[i];
-
-    for (auto i = 0; i < data.y_train.size; ++i)
-        data.y_train[i] = y_shuffled[i];
-
-    for (auto i = data.x_train.size; i < x.size; ++i)
-        data.x_test[i - data.x_train.size] = x_shuffled[i];
-
-    for (auto i = data.y_train.size; i < y.size; ++i)
-        data.y_test[i - data.y_train.size] = y_shuffled[i];
-
-    return data;
 }
 
 std::vector<std::string> tokenizer(const std::string& text) {
