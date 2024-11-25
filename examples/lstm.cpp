@@ -342,7 +342,7 @@ int main() {
     for (auto i = 0; i < x_y_test.second.size; ++i)
         std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
 
-    std::cout << "Test  loss: " << test_loss << std::endl;
+    std::cout << "Test loss: " << test_loss << std::endl;
 
     return 0;
 }
