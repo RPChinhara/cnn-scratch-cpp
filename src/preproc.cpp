@@ -18,17 +18,6 @@ std::string lower(const std::string& text) {
     return result;
 }
 
-tensor one_hot(const tensor& t, const size_t depth) {
-    tensor t_new = zeros({t.size, depth});
-
-    for (size_t i = 0; i < t.size; ++i) {
-        size_t index = t[i] + (i * depth);
-        t_new[index] = 1.0f;
-    }
-
-    return t_new;
-}
-
 std::string regex_replace(const std::string& in, const std::string& pattern, const std::string& rewrite) {
     std::regex re(pattern);
     return std::regex_replace(in, re, rewrite);

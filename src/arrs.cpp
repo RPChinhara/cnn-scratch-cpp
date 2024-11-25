@@ -22,6 +22,17 @@ tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max) {
     return t_new;
 }
 
+tensor one_hot(const tensor& t, const size_t depth) {
+    tensor t_new = zeros({t.size, depth});
+
+    for (size_t i = 0; i < t.size; ++i) {
+        size_t index = t[i] + (i * depth);
+        t_new[index] = 1.0f;
+    }
+
+    return t_new;
+}
+
 tensor slice(const tensor& t, const size_t begin, const size_t size) {
     tensor t_new = zeros({size, t.shape.back()});
 
