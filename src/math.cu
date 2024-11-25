@@ -57,36 +57,6 @@ tensor exp(const tensor& t) {
     return t_new;
 }
 
-__global__ void log(float* t, float* t_new, size_t n) {
-    int id = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (id < n)
-        t_new[id] = logf(t[id]);
-}
-
-tensor log(const tensor& t) {
-    tensor t_new = t;
-
-    float* t_gpu, * t_gpu_new;
-    cudaMalloc((void**)&t_gpu, t.size * sizeof(float));
-    cudaMalloc((void**)&t_gpu_new, t.size * sizeof(float));
-    cudaMemcpy(t_gpu, t.elems, t.size * sizeof(float), cudaMemcpyHostToDevice);
-
-    constexpr int blockSize = 128;
-    int gridSize = (t.size + blockSize - 1) / blockSize;
-    log<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
-
-    cudaError_t cudaError = cudaGetLastError();
-    if (cudaError != cudaSuccess)
-        std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
-
-    cudaMemcpy(t_new.elems, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
-    cudaFree(t_gpu);
-    cudaFree(t_gpu_new);
-
-    return t_new;
-}
-
 tensor max(const tensor& t, const size_t axis) {
     assert(axis == 0 || axis == 1);
     tensor t_new;
