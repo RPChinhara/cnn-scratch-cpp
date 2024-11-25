@@ -6,7 +6,7 @@
 #include "lyrs.h"
 #include "math.hpp"
 #include "preproc.h"
-#include "rd.h"
+#include "rand.h"
 #include "tensor.h"
 
 #include <array>
