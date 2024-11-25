@@ -25,11 +25,11 @@ constexpr float  beta2       = 0.999f;
 constexpr float  epsilon     = 1e-7f;
 size_t           t           = 0;
 
-tensor w_f = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_i = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_c = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_o = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_y = glorot_uniform(output_size, hidden_size);
+tensor w_f = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_i = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_c = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_o = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_y = glorot_uniform({output_size, hidden_size});
 
 tensor b_f = zeros({hidden_size, 1});
 tensor b_i = zeros({hidden_size, 1});
