@@ -205,7 +205,6 @@ int main() {
 
     min_max_scaler scaler;
     scaler.fit(x_train_test.first);
-
     x_train_test.first = scaler.transform(x_train_test.first);
     x_train_test.second = scaler.transform(x_train_test.second);
 
