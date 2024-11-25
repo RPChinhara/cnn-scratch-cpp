@@ -19,20 +19,9 @@ std::string lower(const std::string& text) {
 tensor one_hot(const tensor& t, const size_t depth) {
     tensor t_new = zeros({t.size, depth});
 
-    std::vector<float> idx;
-
-    for (auto i = 0; i < t.size; ++i) {
-        if (i == 0)
-            idx.push_back(t[i]);
-        else
-            idx.push_back(t[i] + (i * depth));
-    }
-
-    for (auto i = 0; i < t_new.size; ++i) {
-        for (auto j : idx) {
-            if (i == j)
-                t_new[i] = 1.0f;
-        }
+    for (size_t i = 0; i < t.size; ++i) {
+        size_t index = t[i] + (i * depth);
+        t_new[index] = 1.0f;
     }
 
     return t_new;
