@@ -24,9 +24,9 @@ constexpr float  beta2       = 0.999f;
 constexpr float  epsilon     = 1e-7f;
 size_t           t           = 0;
 
-tensor w_xh = glorot_uniform(hidden_size, input_size);
-tensor w_hh = glorot_uniform(hidden_size, hidden_size);
-tensor w_hy = glorot_uniform(output_size, hidden_size);
+tensor w_xh = glorot_uniform({hidden_size, input_size});
+tensor w_hh = glorot_uniform({hidden_size, hidden_size});
+tensor w_hy = glorot_uniform({output_size, hidden_size});
 
 tensor b_h = zeros({hidden_size, 1});
 tensor b_y = zeros({output_size, 1});
@@ -223,7 +223,7 @@ int main() {
     for (auto i = 0; i < x_y_test.second.size; ++i)
         std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
 
-    std::cout << "Test  loss: " << test_loss << std::endl;
+    std::cout << "Test loss: " << test_loss << std::endl;
 
     return 0;
 }
