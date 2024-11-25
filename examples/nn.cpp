@@ -200,8 +200,8 @@ int main() {
 
     y = one_hot(y, 3);
 
-    auto x_train_test = split(x, 0.1f);
-    auto y_train_test = split(y, 0.1f);
+    auto x_train_test = split(x, 0.05f);
+    auto y_train_test = split(y, 0.05f);
 
     min_max_scaler scaler;
     scaler.fit(x_train_test.first);
