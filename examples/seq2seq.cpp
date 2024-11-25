@@ -37,10 +37,10 @@ enum Phase {
     TEST
 };
 
-tensor w_z = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_r = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_h = glorot_uniform(hidden_size, hidden_size + input_size);
-tensor w_y = glorot_uniform(output_size, hidden_size);
+tensor w_z = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_r = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_h = glorot_uniform({hidden_size, hidden_size + input_size});
+tensor w_y = glorot_uniform({output_size, hidden_size});
 
 tensor b_z = zeros({hidden_size, 1});
 tensor b_r = zeros({hidden_size, 1});
