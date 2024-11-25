@@ -10,9 +10,11 @@
 
 std::string lower(const std::string& text) {
     std::string result;
+
     for (auto c : text) {
         result += std::tolower(c);
     }
+    
     return result;
 }
 
