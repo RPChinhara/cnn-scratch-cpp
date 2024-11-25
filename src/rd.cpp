@@ -5,11 +5,6 @@
 #include <numeric>
 #include <random>
 
-tensor glorot_uniform(const size_t num_out, const size_t num_in) {
-    auto limit = sqrt(6.0f / (num_in + num_out));
-    return uniform_dist({num_out, num_in}, -limit, limit);
-}
-
 tensor glorot_uniform(const std::vector<size_t>& shape) {
     assert(1 < shape.size());
 
