@@ -1,7 +1,7 @@
 #include "lyrs.h"
 #include "arrs.h"
 #include "preproc.h"
-#include "rd.h"
+#include "rand.h"
 
 #include <cassert>
 #include <random>

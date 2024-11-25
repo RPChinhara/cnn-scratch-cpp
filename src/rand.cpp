@@ -1,4 +1,4 @@
-#include "rd.h"
+#include "rand.h"
 #include "tensor.h"
 
 #include <cassert>

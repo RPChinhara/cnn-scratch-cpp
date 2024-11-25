@@ -5,7 +5,7 @@
 #include "losses.h"
 #include "math.hpp"
 #include "preproc.h"
-#include "rd.h"
+#include "rand.h"
 #include "tensor.h"
 
 #include <chrono>
@@ -92,7 +92,7 @@ tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor
         for (size_t k = 0; k < num_kernels; ++k) {
             // auto kernel = slice(kernels, k * kernel_height, kernel_height);
             // TODO: I have to take kernels like before, and slice it like before...
-            
+
             for (size_t i = 0; i < output_height; ++i) {
                 for (size_t j = 0; j < output_width; ++j) {
                     float sum = 0.0;

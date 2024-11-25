@@ -1,7 +1,7 @@
 #include "preproc.h"
 #include "arrs.h"
 #include "math.hpp"
-#include "rd.h"
+#include "rand.h"
 
 #include <algorithm>
 #include <cwctype>
