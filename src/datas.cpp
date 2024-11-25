@@ -1,7 +1,7 @@
 #include "datas.h"
 #include "arrs.h"
 #include "lyrs.h"
-#include "preproc.h"
+#include "strings.h"
 
 #include <fstream>
 #include <iostream>
