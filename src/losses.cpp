@@ -17,7 +17,7 @@ float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
 
 float mean_squared_error(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
-    float n = static_cast<float>(y_true.shape.back());
+    float n = static_cast<float>(y_true.size);
 
     for (auto i = 0; i < y_true.size; ++i)
         sum += std::powf(y_true[i] - y_pred[i], 2.0f);
