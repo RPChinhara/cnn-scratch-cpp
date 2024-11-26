@@ -47,12 +47,12 @@ tensor matmul(const tensor& t1, const tensor& t2) {
 }
 
 static size_t get_batch_size(const std::vector<size_t>& shape) {
-    size_t batchSize = 1;
+    size_t batch_size = 1;
 
     for (auto i = 0; i < shape.size() - 2; ++i)
-        batchSize *= shape[i];
+        batch_size *= shape[i];
 
-    return batchSize;
+    return batch_size;
 }
 
 tensor transpose(const tensor& t) {
@@ -63,11 +63,11 @@ tensor transpose(const tensor& t) {
     for (auto i = 0; i < t.size; ++i)
         idx_rows.push_back(i * t.shape.back());
 
-    size_t batchSize = get_batch_size(t.shape);
+    size_t batch_size = get_batch_size(t.shape);
 
     size_t idx = 0;
 
-    for (auto i = 0; i < batchSize; ++i) {
+    for (auto i = 0; i < batch_size; ++i) {
         for (auto j = 0; j < t_new.shape[t_new.shape.size() - 2]; ++j) {
             for (auto k = 0; k < t_new.shape.back(); ++k) {
                 t_new[idx] = t[idx_rows[k + (i * t_new.shape.back())]];
