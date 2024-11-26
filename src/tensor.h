@@ -10,7 +10,6 @@ class tensor {
     float* elems = nullptr;
 
     tensor() = default;
-    tensor(const std::vector<size_t>& shape, const std::vector<float>& elems);
     ~tensor();
     tensor(const tensor& other);
     tensor(tensor&& other) noexcept;

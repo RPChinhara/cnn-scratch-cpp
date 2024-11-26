@@ -1,31 +1,8 @@
 #include "tensor.h"
 
-#include <cassert>
 #include <iomanip>
 #include <numeric>
 #include <string>
-
-tensor::tensor(const std::vector<size_t>& shape, const std::vector<float>& elems) {
-    assert(elems.size() != 0);
-
-    for (auto i : shape)
-        assert(i != 0);
-    this->shape = std::move(shape);
-
-    if (0 < this->shape.size())
-        size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
-    else
-        size = 1;
-
-    if (elems.size() == 1) {
-        this->elems = new float[size];
-        std::fill(this->elems, this->elems + size, *elems.data());
-    } else {
-        assert(size == elems.size());
-        this->elems = new float[size];
-        memcpy(this->elems, elems.data(), size * sizeof(float));
-    }
-}
 
 tensor::~tensor() {
     if (elems != nullptr)
