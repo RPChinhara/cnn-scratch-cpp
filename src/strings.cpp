@@ -1,10 +1,5 @@
 #include "string.h"
-#include "arrs.h"
-#include "math.hpp"
-#include "rand.h"
 
-#include <algorithm>
-#include <cwctype>
 #include <regex>
 #include <sstream>
 
