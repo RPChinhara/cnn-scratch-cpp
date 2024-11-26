@@ -18,11 +18,6 @@ __global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
 }
 
 tensor matmul(const tensor& t1, const tensor& t2) {
-    if (t1.shape.back() != t2.shape.front()) {
-        std::cerr << __FILE__ << "(" << __LINE__ << "): error: t1.shape.back() and t2.shape.front() have to much" << std::endl;
-        exit(1);
-    }
-
     tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
 
     int M = t1.shape.front();
@@ -52,11 +47,6 @@ tensor matmul(const tensor& t1, const tensor& t2) {
 }
 
 static size_t get_batch_size(const std::vector<size_t>& shape) {
-    if (!(1 < shape.size())) {
-        std::cerr << __FILE__ << "(" << __LINE__ << "): error: shape.size() has to be greater than 1" << std::endl;
-        exit(1);
-    }
-
     size_t batchSize = 1;
 
     for (auto i = 0; i < shape.size() - 2; ++i)
@@ -66,11 +56,6 @@ static size_t get_batch_size(const std::vector<size_t>& shape) {
 }
 
 tensor transpose(const tensor& t) {
-    if (!(2 <= t.shape.size())) {
-        std::cerr << __FILE__ << "(" << __LINE__ << "): error: shape of t has to at least 2-dimensional" << std::endl;
-        exit(1);
-    }
-
     tensor t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
 
     std::vector<size_t> idx_rows;
