@@ -20,7 +20,10 @@ __global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
 }
 
 tensor matmul(const tensor& t1, const tensor& t2) {
-    assert(t1.shape.back() == t2.shape.front());
+    if (t1.shape.back() != t2.shape.front()) {
+        std::cerr << __FILE__ << "(" << __LINE__ << "): error: t1.shape.back() and t2.shape.front() have to much" << std::endl;
+        exit(1);
+    }
 
     tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
 
