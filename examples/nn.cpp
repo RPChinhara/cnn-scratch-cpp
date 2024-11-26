@@ -24,7 +24,7 @@ class nn {
     loss_func loss;
     metric_func metric;
     float lr;
-    size_t epochs = 200;
+    size_t epochs = 80;
     size_t batch_size = 10;
     float momentum = 0.1f;
 
@@ -200,8 +200,8 @@ int main() {
 
     y = one_hot(y, 3);
 
-    auto x_train_test = split(x, 0.05f);
-    auto y_train_test = split(y, 0.05f);
+    auto x_train_test = split(x, 0.1f);
+    auto y_train_test = split(y, 0.1f);
 
     min_max_scaler scaler;
     scaler.fit(x_train_test.first);
