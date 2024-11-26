@@ -1,6 +1,5 @@
 #include "losses.h"
 #include "arrs.h"
-#include "math.hpp"
 #include "tensor.h"
 
 float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
