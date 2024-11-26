@@ -42,6 +42,19 @@ tensor slice(const tensor& t, const size_t begin, const size_t size) {
     return t_new;
 }
 
+std::pair<tensor, tensor> split(const tensor& x, const float test_size) {
+    tensor x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
+    tensor x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
+
+    for (auto i = 0; i < x_train.size; ++i)
+        x_train[i] = x[i];
+
+    for (auto i = x_train.size; i < x.size; ++i)
+        x_test[i - x_train.size] = x[i];
+
+    return std::make_pair(x_train, x_test);
+}
+
 tensor vslice(const tensor& t, const size_t col) {
     assert(t.shape.back() > col);
 
@@ -60,19 +73,6 @@ tensor vslice(const tensor& t, const size_t col) {
         t_new[i] = new_elems[i];
 
     return t_new;
-}
-
-std::pair<tensor, tensor> split(const tensor& x, const float test_size) {
-    tensor x_train = zeros({static_cast<size_t>(std::floorf(x.shape.front() * (1.0 - test_size))), x.shape.back()});
-    tensor x_test = zeros({static_cast<size_t>(std::ceilf(x.shape.front() * test_size)), x.shape.back()});
-
-    for (auto i = 0; i < x_train.size; ++i)
-        x_train[i] = x[i];
-
-    for (auto i = x_train.size; i < x.size; ++i)
-        x_test[i - x_train.size] = x[i];
-
-    return std::make_pair(x_train, x_test);
 }
 
 tensor vstack(const std::vector<tensor>& ts) {
