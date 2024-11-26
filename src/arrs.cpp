@@ -1,15 +1,9 @@
 #include "arrs.h"
 #include "tensor.h"
 
-#include <cassert>
 #include <numeric>
 
 tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max) {
-    if (clip_val_min > clip_val_max) {
-        std::cerr << __FILE__ << "(" << __LINE__ << "): error: 'clip_val_min' should not be greater than 'clip_val_max'" << std::endl;
-        exit(1);
-    }
-
     tensor t_new = t;
 
     for (auto i = 0; i < t.size; ++i) {
@@ -56,8 +50,6 @@ std::pair<tensor, tensor> split(const tensor& x, const float test_size) {
 }
 
 tensor vslice(const tensor& t, const size_t col) {
-    assert(t.shape.back() > col);
-
     tensor t_new = zeros({t.shape.front(), t.shape.back() - 1});
 
     std::vector<float> new_elems;
@@ -77,9 +69,6 @@ tensor vslice(const tensor& t, const size_t col) {
 
 tensor vstack(const std::vector<tensor>& ts) {
     size_t first_dim = ts.front().shape.back();
-
-    for (auto i = 1; i < ts.size(); ++i)
-        assert(first_dim == ts[i].shape.back());
 
     size_t num_rows = 0;
 
@@ -101,13 +90,6 @@ tensor vstack(const std::vector<tensor>& ts) {
 
 tensor zeros(const std::vector<size_t>& shape) {
     tensor t_new = tensor();
-
-    for (auto i : shape) {
-        if (i == 0) {
-            std::cerr << "error: dimension value cannot be zero" << std::endl;
-            exit(1);
-        }
-    }
 
     t_new.shape = shape;
 
