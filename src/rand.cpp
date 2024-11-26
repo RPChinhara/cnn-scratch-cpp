@@ -1,13 +1,10 @@
 #include "rand.h"
 #include "tensor.h"
 
-#include <cassert>
 #include <numeric>
 #include <random>
 
 tensor glorot_uniform(const std::vector<size_t>& shape) {
-    assert(1 < shape.size());
-
     size_t num_in = shape.back();
     size_t num_out = shape[shape.size() - 2];
 
@@ -17,9 +14,6 @@ tensor glorot_uniform(const std::vector<size_t>& shape) {
 
 tensor normal_dist(const std::vector<size_t>& shape, const float mean, const float std_dev) {
     tensor t_new = tensor();
-
-    for (auto i : shape)
-        assert(i != 0);
 
     t_new.shape = shape;
 
@@ -59,9 +53,6 @@ tensor shuffle(const tensor& t, const size_t rd_state) {
 
 tensor uniform_dist(const std::vector<size_t>& shape, const float min_val, const float max_val) {
     tensor t_new = tensor();
-
-    for (auto i : shape)
-        assert(i != 0);
 
     t_new.shape = shape;
 
