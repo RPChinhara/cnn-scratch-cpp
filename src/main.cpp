@@ -5,7 +5,6 @@
 #include "losses.h"
 #include "math.hpp"
 #include "rand.h"
-#include "strings.h"
 #include "tensor.h"
 
 #include <chrono>
