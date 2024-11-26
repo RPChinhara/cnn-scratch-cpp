@@ -21,12 +21,12 @@ constexpr size_t output_size  = 10;
 constexpr size_t num_kernels1 = 6;
 constexpr size_t num_kernels2 = 16;
 
-tensor kernel1 = normal_dist({6, 5, 5});
-tensor kernel2 = normal_dist({16, 5, 5});
+tensor kernel1 = glorot_uniform({6, 5, 5});
+tensor kernel2 = glorot_uniform({16, 5, 5});
 
-tensor w1 = normal_dist({hidden1_size, input_size});
-tensor w2 = normal_dist({hidden2_size, hidden1_size});
-tensor w3 = normal_dist({output_size, hidden2_size});
+tensor w1 = glorot_uniform({hidden1_size, input_size});
+tensor w2 = glorot_uniform({hidden2_size, hidden1_size});
+tensor w3 = glorot_uniform({output_size, hidden2_size});
 
 tensor b1 = zeros({hidden1_size, 1});
 tensor b2 = zeros({hidden2_size, 1});
