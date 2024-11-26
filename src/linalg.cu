@@ -54,7 +54,11 @@ tensor matmul(const tensor& t1, const tensor& t2) {
 }
 
 static size_t get_batch_size(const std::vector<size_t>& shape) {
-    assert(1 < shape.size());
+    if (!(1 < shape.size())) {
+        std::cerr << __FILE__ << "(" << __LINE__ << "): error: shape.size() has to be greater than 1" << std::endl;
+        exit(1);
+    }
+
     size_t batchSize = 1;
 
     for (auto i = 0; i < shape.size() - 2; ++i)
@@ -64,7 +68,10 @@ static size_t get_batch_size(const std::vector<size_t>& shape) {
 }
 
 tensor transpose(const tensor& t) {
-    assert(2 <= t.shape.size());
+    if (!(2 <= t.shape.size())) {
+        std::cerr << __FILE__ << "(" << __LINE__ << "): error: shape of t has to at least 2-dimensional" << std::endl;
+        exit(1);
+    }
 
     tensor t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
 
