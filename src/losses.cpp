@@ -6,7 +6,7 @@
 float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
     constexpr float epsilon = 1e-12f;
-    size_t num_samples = y_true.shape.front();
+    size_t num_samples = y_true.size;
     tensor y_pred_clipped = clip_by_value(y_pred, epsilon, 1.0f);
 
     for (auto i = 0; i < y_true.size; ++i)
