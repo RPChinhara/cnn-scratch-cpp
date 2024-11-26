@@ -3,8 +3,6 @@
 #include "math.hpp"
 #include "tensor.h"
 
-#include <cassert>
-
 __global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
