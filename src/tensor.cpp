@@ -88,16 +88,6 @@ const std::string tensor::get_shape() const {
     return shapes;
 }
 
-size_t tensor::get_size() const {
-    size_t size2 = 0;
-    if (0 < this->shape.size())
-        size2 = std::accumulate(shape.begin(), shape.end(), static_cast<size_t>(1), std::multiplies<size_t>());
-    else
-        size2 = 1;
-
-    return size2;
-}
-
 tensor& tensor::reshape(const std::vector<size_t>& new_shape) {
     size_t new_size = 1;
     for (size_t dim : new_shape)
