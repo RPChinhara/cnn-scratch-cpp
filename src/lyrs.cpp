@@ -3,14 +3,10 @@
 #include "rand.h"
 #include "strings.h"
 
-#include <cassert>
 #include <random>
 #include <unordered_map>
 
 embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const tensor& t) {
-    for (auto i = 0; i < t.size; ++i)
-        assert(t[i] < vocab_size);
-
     mat = uniform_dist({vocab_size, embedding_dim});
 
     dense_vecs = zeros({t.shape.front(), t.shape.back(), embedding_dim});
@@ -24,8 +20,6 @@ embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const 
 }
 
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len) {
-    assert(max_tokens > 2);
-
     std::unordered_map<std::string, float> vocab_map;
 
     for (auto text : vocab) {
