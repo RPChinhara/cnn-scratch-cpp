@@ -2,8 +2,6 @@
 #include "arrs.h"
 #include "tensor.h"
 
-#include <cassert>
-
 tensor argmax(const tensor& t) {
     tensor t_new = zeros({t.shape.front()});
 
@@ -58,7 +56,6 @@ tensor exp(const tensor& t) {
 }
 
 tensor max(const tensor& t, const size_t axis) {
-    assert(axis == 0 || axis == 1);
     tensor t_new;
 
     if (axis == 0) {
@@ -134,7 +131,6 @@ tensor square(const tensor& t) {
 }
 
 tensor sum(const tensor& t, const size_t axis) {
-    assert(axis == 0 || axis == 1);
     tensor t_new;
 
     if (t.shape.size() == 1 || t.shape.front() == 1) {
