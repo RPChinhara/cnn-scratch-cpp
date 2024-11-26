@@ -1,7 +1,6 @@
 #include "tensor.h"
 
 #include <iomanip>
-#include <numeric>
 #include <string>
 
 tensor::~tensor() {
