@@ -8,7 +8,6 @@
 #include "rand.h"
 #include "tensor.h"
 
-#include <cassert>
 #include <chrono>
 #include <functional>
 #include <random>
@@ -78,8 +77,6 @@ void nn::train(const tensor& x_train, const tensor& y_train, const tensor& x_val
         float accumulated_loss = 0.0f;
 
         for (auto j = 0; j < x_train.shape.front(); j += batch_size) {
-            assert(0 < batch_size && batch_size <= x_train.shape.front());
-
             if (x_train.shape.front() <= j + batch_size) {
                 x_batch = slice(x_shuffled, j, x_train.shape.front() - j);
                 y_batch = slice(y_shuffled, j, x_train.shape.front() - j);
