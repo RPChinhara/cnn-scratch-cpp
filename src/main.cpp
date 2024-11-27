@@ -94,12 +94,16 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                 }
             }
 
+            std::cout << 1 << std::endl;
+
             for (size_t i = 0; i < output.size; ++i)
                 outputs[idx * output.size + i] = output[i];
 
             ++idx;
         }
     }
+
+    std::cout << 2 << std::endl;
 
     return outputs;
 }
@@ -250,9 +254,9 @@ int main() {
     // (84, 60000)
     // (10, 60000)
 
-    tensor x1 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({2, 1, 3, 3}, 0.0f, 0.0000001f);
-    tensor x3 = uniform_dist({2, 3, 3}, 0.0f, 0.0000001f);
+    tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({3, 2, 2}, 0.0f, 0.0000001f);
+    tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
 
     tensor kernel = zeros({3, 2, 2});
     for (size_t i = 0; i < kernel.size; ++i) {
@@ -263,10 +267,9 @@ int main() {
     }
 
     std::cout << x1 << "\n";
-    std::cout << x2 << "\n";
-    std::cout << x3 << "\n";
     std::cout << kernel << "\n";
 
+    std::cout << lenet_convolution(x1, kernel) << "\n";
     std::cout << lenet_convolution(x2, kernel) << "\n";
 
     auto padded_x = pad(kernel, 2);
