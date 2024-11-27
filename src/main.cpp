@@ -256,20 +256,51 @@ int main() {
     tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
     tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
 
-    tensor kernel = zeros({2, 2, 2});
-    for (size_t i = 0; i < kernel.size; ++i) {
+    tensor kernel1 = zeros({2, 2, 2});
+    for (size_t i = 0; i < kernel1.size; ++i) {
         if (i < 4)
-            kernel[i] += 1.0f;
+            kernel1[i] += 1.0f;
         else
-            kernel[i] += 2.0f;
+            kernel1[i] += 2.0f;
+    }
+
+    tensor kernel2 = zeros({3, 2, 2});
+    for (size_t i = 0; i < kernel2.size; ++i) {
+        if (i < 4)
+            kernel2[i] += 1.0f;
+        else if (3 < i && i < 8)
+            kernel2[i] += 2.0f;
+        else
+            kernel2[i] += 3.0f;
     }
 
     std::cout << x1 << "\n";
-    std::cout << kernel << "\n";
+    std::cout << kernel1 << "\n";
 
-    std::cout << lenet_convolution(x1, kernel) << "\n";
+    std::cout << lenet_convolution(x1, kernel1) << "\n";
 
-    auto padded_x = pad(kernel, 2);
+    auto padded_x = pad(kernel1, 2);
 
     return 0;
 }
+
+// Tensor(
+// [[[[0.00000005 0.00000010]  -> (1)
+//    [0.00000005 0.00000000]]
+
+//   [[0.00000001 0.00000002]  -> (2)
+//    [0.00000002 0.00000008]]]], shape=(1, 2, 2, 2))
+// Tensor(
+// [[[1.00000000 1.00000000]   -> (3)
+//   [1.00000000 1.00000000]]
+
+//  [[2.00000000 2.00000000]   -> (4)
+//   [2.00000000 2.00000000]]
+
+//  [[3.00000000 3.00000000]   -> (5)
+//   [3.00000000 3.00000000]]], shape=(3, 2, 2))
+
+
+// The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
+// The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
+// Which is 2 next to 1.
