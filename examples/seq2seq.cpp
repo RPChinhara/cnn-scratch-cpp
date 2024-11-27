@@ -301,9 +301,6 @@ tensor gru_predict(const tensor& x) {
 std::vector<std::string> daily_dialog(const std::string& file_path) {
     std::ifstream file(file_path);
 
-    if (!file.is_open())
-        std::cerr << "Failed to open the file: " << file_path << std::endl;
-
     std::vector<std::string> data;
 
     std::string line;
