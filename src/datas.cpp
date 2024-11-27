@@ -12,9 +12,6 @@
 tensor load_aapl() {
     std::ifstream file("datas/aapl.csv");
 
-    if (!file.is_open())
-        std::cerr << "Failed to open the file." << std::endl;
-
     size_t idx = 0;
     size_t num_datas = 10409;
     size_t num_columns = 1;
@@ -45,9 +42,6 @@ tensor load_aapl() {
 
 imdb load_imdb() {
     std::ifstream file("datas/imdb.csv");
-
-    if (!file.is_open())
-        std::cerr << "Failed to open the file." << std::endl;
 
     std::cout << "Loading imdb dataset..." << std::endl;
 
@@ -110,9 +104,6 @@ imdb load_imdb() {
 iris load_iris() {
     std::ifstream file("datas/iris.csv");
 
-    if (!file.is_open())
-        std::cerr << "Failed to open the file." << std::endl;
-
     size_t idx_x = 0;
     size_t idx_y = 0;
 
@@ -167,9 +158,6 @@ iris load_iris() {
 tensor read_mnist_imgs(const std::string& file_path) {
     std::ifstream file(file_path, std::ios::binary);
 
-    if (!file.is_open())
-        std::cerr << "Failed to open the file." << std::endl;
-
     uint32_t magic_num, num_imgs, num_rows, num_cols;
 
     file.read(reinterpret_cast<char*>(&magic_num), sizeof(magic_num));
@@ -206,9 +194,6 @@ tensor read_mnist_imgs(const std::string& file_path) {
 
 tensor read_mnist_labels(const std::string& file_path) {
     std::ifstream file(file_path, std::ios::binary);
-
-    if (!file.is_open())
-        std::cerr << "Failed to open the file." << std::endl;
 
     uint32_t magic_num, num_labels;
 
