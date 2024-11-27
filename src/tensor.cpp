@@ -69,9 +69,6 @@ tensor& tensor::reshape(const std::vector<size_t>& new_shape) {
     for (size_t dim : new_shape)
         new_size *= dim;
 
-    if (new_size != size)
-        std::cerr << "New shape does not match tensor size" << std::endl;
-
     shape = new_shape;
     return *this;
 }
@@ -85,6 +82,7 @@ static bool ShapeEqual(const std::vector<size_t>& shape1, const std::vector<size
 
 tensor tensor::operator+(const tensor& other) const {
     tensor t_new = *this;
+
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] + other[i];
@@ -96,14 +94,14 @@ tensor tensor::operator+(const tensor& other) const {
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] + other[i % other.shape.back()];
-    } else {
-        std::cerr << "Shapes don't match." << std::endl;
     }
+
     return t_new;
 }
 
 tensor tensor::operator-(const tensor& other) const {
     tensor t_new = *this;
+
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] - other[i];
@@ -115,28 +113,28 @@ tensor tensor::operator-(const tensor& other) const {
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] - other[i % other.shape.back()];
-    } else {
-        std::cerr << "Shapes don't match." << std::endl;
     }
+
     return t_new;
 }
 
 tensor tensor::operator*(const tensor& other) const {
     tensor t_new = *this;
+
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] * other[i];
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] * other[i % other.shape.back()];
-    } else {
-        std::cerr << "Shapes don't match." << std::endl;
     }
+
     return t_new;
 }
 
 tensor tensor::operator/(const tensor& other) const {
     tensor t_new = *this;
+    
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] / other[i];
@@ -148,9 +146,8 @@ tensor tensor::operator/(const tensor& other) const {
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] / other[i % other.shape.back()];
-    } else {
-        std::cerr << "Shapes don't match." << std::endl;
     }
+
     return t_new;
 }
 
