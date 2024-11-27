@@ -304,3 +304,11 @@ int main() {
 // The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
 // The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
 // Which is 2 next to 1.
+// What is dot product between (2 x 2 x 2) and (2 x 2 x 2) of elements all 1?
+
+// just for loop i, j, and k ->
+// for(size_t i = 0; i < 1; ++i)
+//     for(size_t j = 0; j < 1; ++j)
+//         for(size_t k = 0; k < 1; ++k)
+// |2 2  2 2|   |2 2  2 2|
+// |2 2  2 2| x |2 2  2 2|
