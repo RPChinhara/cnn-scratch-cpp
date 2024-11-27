@@ -90,13 +90,9 @@ tensor vstack(const std::vector<tensor>& ts) {
 
 tensor zeros(const std::vector<size_t>& shape) {
     tensor t_new;
-
     t_new.shape = shape;
-
     t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
-
-    t_new.elems = new float[t_new.size];
-    std::fill(t_new.elems, t_new.elems + t_new.size, 0.0f);
+    t_new.elems = new float[t_new.size]();
 
     return t_new;
 }
