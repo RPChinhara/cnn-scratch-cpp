@@ -27,20 +27,19 @@ tensor one_hot(const tensor& t, const size_t depth) {
     return t_new;
 }
 
-tensor pad(const tensor& t, size_t paddings) {
+tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, size_t pad_right, float pad_value) {
+    size_t new_rows = t.shape.front() + pad_top + pad_bottom;
+    size_t new_cols = t.shape.back() + pad_left + pad_right;
 
+    tensor t_new = zeros({new_rows, new_cols});
 
+    for (size_t i = 0; i < t.shape.front(); ++i) {
+        for (size_t j = 0; j < t.shape.back(); ++j) {
+            t_new(i + pad_top, j + pad_left) = t(i, j);
+        }
+    }
 
-
-
-
-    //          0 0 0 0 0
-    // 1 1 1    0 1 1 1 0
-    // 1 1 1 -> 0 1 1 1 0
-    // 1 1 1    0 1 1 1 0
-    //          0 0 0 0 0
-
-    return tensor();
+    return t_new;
 }
 
 tensor slice(const tensor& t, const size_t begin, const size_t size) {
