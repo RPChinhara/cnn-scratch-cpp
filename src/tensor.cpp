@@ -4,8 +4,8 @@
 #include <string>
 
 tensor::~tensor() {
-    if (elems != nullptr)
-        delete[] elems;
+    delete[] elems;
+    elems = nullptr;
 }
 
 tensor::tensor(const tensor& other) {
