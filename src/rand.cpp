@@ -13,15 +13,9 @@ tensor glorot_uniform(const std::vector<size_t>& shape) {
 }
 
 tensor normal_dist(const std::vector<size_t>& shape, const float mean, const float std_dev) {
-    tensor t_new = tensor();
-
+    tensor t_new;
     t_new.shape = shape;
-
-    if (0 < t_new.shape.size())
-        t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
-    else
-        t_new.size = 1;
-
+    t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     t_new.elems = new float[t_new.size];
 
     std::random_device rd;
@@ -52,15 +46,9 @@ tensor shuffle(const tensor& t, const size_t rd_state) {
 }
 
 tensor uniform_dist(const std::vector<size_t>& shape, const float min_val, const float max_val) {
-    tensor t_new = tensor();
-
+    tensor t_new;
     t_new.shape = shape;
-
-    if (0 < t_new.shape.size())
-        t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
-    else
-        t_new.size = 1;
-
+    t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
     t_new.elems = new float[t_new.size];
 
     std::random_device rd;
