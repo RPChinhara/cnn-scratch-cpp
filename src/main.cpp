@@ -48,11 +48,6 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
 }
 
 tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
-    if (kernel.shape.size() != 2) {
-        std::cerr << __FILE__ << "(" << __LINE__ << "): error: kernel must be 2-dimensional" << std::endl;
-        exit(1);
-    }
-
     // Add padding to the input matrix here? For example,
     //        0 0 0 0
     // 1 1 -> 0 1 1 0
@@ -77,9 +72,6 @@ tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor
     } else if (x.shape.size() == 4) {
         num_img = x.shape.front() * x.shape[1];
         outputs = zeros({x.shape.front(), x.shape[1] * num_kernels, output_height, output_width});
-    } else {
-        std::cerr << __FILE__ << "(" << __LINE__ << "): error: the shape of 'x' is invalid" << std::endl;
-        exit(1);
     }
 
     size_t idx = 0;
@@ -235,23 +227,23 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    mnist data = load_mnist();
+    // mnist data = load_mnist();
 
-    constexpr size_t num_digits = 2;
-    print_imgs(data.train_imgs, num_digits);
+    // constexpr size_t num_digits = 2;
+    // print_imgs(data.train_imgs, num_digits);
 
-    for (auto i = 0; i < data.train_imgs.size; ++i)
-        data.train_imgs[i] /= 255.0f;
+    // for (auto i = 0; i < data.train_imgs.size; ++i)
+    //     data.train_imgs[i] /= 255.0f;
 
-    for (auto i = 0; i < data.test_imgs.size; ++i)
-        data.test_imgs[i] /= 255.0f;
+    // for (auto i = 0; i < data.test_imgs.size; ++i)
+    //     data.test_imgs[i] /= 255.0f;
 
-    data.train_labels = one_hot(data.train_labels, 10);
-    data.test_labels = one_hot(data.test_labels, 10);
+    // data.train_labels = one_hot(data.train_labels, 10);
+    // data.test_labels = one_hot(data.test_labels, 10);
 
-    lenet_train(data.train_imgs, data.train_labels);
-    auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
-    lenet_predict(data.test_imgs, data.test_labels);
+    // lenet_train(data.train_imgs, data.train_labels);
+    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    // lenet_predict(data.test_imgs, data.test_labels);
 
     // (60000, 28, 28)
     // (60000, 6, 24, 24)
@@ -262,54 +254,20 @@ int main() {
     // (84, 60000)
     // (10, 60000)
 
-    // tensor x1 = tensor(
-    //     {2, 2, 3, 3},
-    //     {
-    //        44,   2,  22,
-    //         4,   8,   6,
-    //         5,   4,  66,
+    tensor x1 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({2, 1, 3, 3}, 0.0f, 0.0000001f);
+    tensor x3 = uniform_dist({2, 3, 3}, 0.0f, 0.0000001f);
 
-    //         6,   5,   3,
-    //         4,   7,   8,
-    //         7,  32,   7,
+    tensor kernel = zeros({2, 2});
+    std::cout << kernel << "\n";
+    for (size_t i = 0; i < kernel.size; ++i)
+        kernel[i] += 1.0f;
 
-    //         1, 288,   8,
-    //         7,   4,   6,
-    //         5,  32,   6,
+    std::cout << x1 << "\n";
+    std::cout << x2 << "\n";
+    std::cout << x3 << "\n";
+    std::cout << kernel << "\n";
 
-    //        56,   1,  24,
-    //         4,   4,   6,
-    //        22,   5,   6
-    //     }
-    // );
-
-    // tensor x2 = tensor(
-    //     {2, 1, 3, 3},
-    //     {
-    //        44,   2,  22,
-    //         4,   8,   6,
-    //         5,   4,  66,
-
-    //        56,   1,  24,
-    //         4,   4,   6,
-    //        22,   5,   6
-    //     }
-    // );
-
-    // tensor x3 = tensor(
-    //     {2, 3, 3},
-    //     {
-    //        44,   2,  22,
-    //         4,   8,   6,
-    //         5,   4,  66,
-
-    //        56,   1,  24,
-    //         4,   4,   6,
-    //        22,   5,   6
-    //     }
-    // );
-
-    // tensor kernel = tensor({2, 2}, {1, 1, 1, 1});
     // std::cout << lenet_convolution(x2, 2, kernel) << "\n";
 
     return 0;
