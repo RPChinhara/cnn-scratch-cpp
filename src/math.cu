@@ -44,10 +44,6 @@ tensor exp(const tensor& t) {
     int gridSize = (t.size + blockSize - 1) / blockSize;
     exp<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
 
-    cudaError_t cudaError = cudaGetLastError();
-    if (cudaError != cudaSuccess)
-        std::cerr << "CUDA knl launch error. " + std::string(cudaGetErrorString(cudaError)) << std::endl;
-
     cudaMemcpy(t_new.elems, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
     cudaFree(t_gpu);
     cudaFree(t_gpu_new);
