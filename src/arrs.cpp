@@ -27,6 +27,22 @@ tensor one_hot(const tensor& t, const size_t depth) {
     return t_new;
 }
 
+tensor pad(const tensor& t, size_t paddings) {
+
+
+
+
+
+
+    //          0 0 0 0 0
+    // 1 1 1    0 1 1 1 0
+    // 1 1 1 -> 0 1 1 1 0
+    // 1 1 1    0 1 1 1 0
+    //          0 0 0 0 0
+
+    return tensor();
+}
+
 tensor slice(const tensor& t, const size_t begin, const size_t size) {
     tensor t_new = zeros({size, t.shape.back()});
 

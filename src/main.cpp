@@ -269,5 +269,7 @@ int main() {
 
     std::cout << lenet_convolution(x2, kernel) << "\n";
 
+    auto padded_x = pad(kernel, 2);
+
     return 0;
 }
