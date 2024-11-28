@@ -27,16 +27,29 @@ tensor one_hot(const tensor& t, const size_t depth) {
     return t_new;
 }
 
-tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, size_t pad_right, float pad_value) {
-    size_t new_rows = t.shape.front() + pad_top + pad_bottom;
-    size_t new_cols = t.shape.back() + pad_left + pad_right;
+tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, size_t pad_right) {
+    size_t depth = t.shape.front();
+    size_t rows = t.shape[1];
+    size_t cols = t.shape.back();
 
-    tensor t_new = zeros({new_rows, new_cols});
+    size_t new_rows = rows + pad_top + pad_bottom;
+    size_t new_cols = cols + pad_left + pad_right;
 
-    for (size_t i = 0; i < t.shape.front(); ++i) {
-        for (size_t j = 0; j < t.shape.back(); ++j) {
-            t_new(i + pad_top, j + pad_left) = t(i, j);
+    tensor t_new = zeros({depth, new_rows, new_cols});
+
+    for (size_t d = 0; d < depth; ++d) {
+        auto mat = slice(t, d * t.shape.front(), t.shape.front());
+
+        tensor new_mat = zeros({new_rows, new_cols});
+
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                new_mat(i + pad_top, j + pad_left) = mat(i, j);
+            }
         }
+
+         for (size_t i = 0; i < new_mat.size; ++i)
+                t_new[d * new_mat.size + i] = new_mat[i];
     }
 
     return t_new;
