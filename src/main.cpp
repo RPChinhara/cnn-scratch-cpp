@@ -288,6 +288,25 @@ int main() {
     std::cout << kernel2 << "\n";
     std::cout << pad(x, 2, 2, 2, 2) << "\n";
 
+    // NOTE: oprator+ code
+
+    // tensor x6 = zeros({1, 2});
+    // for (size_t i = 0; i < x.size; ++i) {
+    //     x[i] += 1.0f;
+    // }
+
+    // tensor x9 = zeros({2, 1});
+    // for (size_t i = 0; i < x.size; ++i) {
+    //     x[i] += 1.0f;
+    // }
+
+    // std::cout << x + x << "\n";
+    // std::cout << x + x6 << "\n";
+    // std::cout << x + x9 << "\n";
+
+    // std::cout << x6 + x << "\n";
+    // std::cout << x9 + x << "\n";
+
     return 0;
 }
 

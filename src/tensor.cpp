@@ -84,17 +84,22 @@ tensor tensor::operator+(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
+        // std::cout << 11111111111 << "\n";
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] + other[i];
     } else if (shape.front() == other.shape.front()) {
+        // std::cout << 22222222222 << "\n";
         for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
             t_new[i] = elems[i] + other[idx];
         }
     } else if (shape.back() == other.shape.back()) {
+        // std::cout << 33333333 << "\n";
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] + other[i % other.shape.back()];
     }
+
+    // NOTE: if given (2, 2) and (2, 1), make t_new with shape muches with bigger one in this case (2, 2)
 
     return t_new;
 }
@@ -134,7 +139,7 @@ tensor tensor::operator*(const tensor& other) const {
 
 tensor tensor::operator/(const tensor& other) const {
     tensor t_new = *this;
-    
+
     if (ShapeEqual(shape, other.shape)) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] / other[i];
