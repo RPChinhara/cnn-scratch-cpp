@@ -2,7 +2,7 @@
 
 class tensor;
 
-tensor add(const tensor& t);
+tensor add(const tensor& x, const tensor& y);
 tensor subtract(const tensor& t);
 tensor multiply(const tensor& t);
 tensor divide(const tensor& t);

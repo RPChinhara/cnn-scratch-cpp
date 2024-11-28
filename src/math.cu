@@ -2,8 +2,36 @@
 #include "arrs.h"
 #include "tensor.h"
 
-tensor add(const tensor& t) {
-    return tensor();
+__global__ void add(float *x, float *y, float *z, int size) {
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if (idx < size) {
+        z[idx] = x[idx] + y[idx];
+    }
+}
+
+tensor add(const tensor& x, const tensor& y) {
+    tensor t_new = x;
+
+    float *d_x, *d_y, *d_z;
+
+    cudaMalloc(&d_x, x.size * sizeof(float));
+    cudaMalloc(&d_y, x.size * sizeof(float));
+    cudaMalloc(&d_z, x.size * sizeof(float));
+
+    cudaMemcpy(d_x, x.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, y.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (x.size + threadsPerBlock - 1) / threadsPerBlock;
+    add<<<blocksPerGrid, threadsPerBlock>>>(d_x, d_y, d_z, x.size);
+
+    cudaMemcpy(t_new.elems, d_z, x.size * sizeof(float), cudaMemcpyDeviceToHost);
+
+    cudaFree(d_x);
+    cudaFree(d_y);
+    cudaFree(d_z);
+
+    return t_new;
 }
 
 tensor subtract(const tensor& t) {
