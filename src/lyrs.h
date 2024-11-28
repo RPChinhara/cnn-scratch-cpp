@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math.hpp"
+#include "math.h"
 #include "tensor.h"
 
 class embedding {

@@ -1,5 +1,5 @@
 #include "acts.h"
-#include "math.hpp"
+#include "math.h"
 #include "tensor.h"
 
 tensor hyperbolic_tangent(const tensor& x) {

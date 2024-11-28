@@ -3,7 +3,7 @@
 #include "datas.h"
 #include "linalg.h"
 #include "losses.h"
-#include "math.hpp"
+#include "math.h"
 #include "rand.h"
 #include "tensor.h"
 
@@ -223,7 +223,8 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // mnist data = load_mnist();
+    mnist data = load_mnist();
+    std::cout << data.train_imgs.get_shape() << std::endl;
 
     // constexpr size_t num_digits = 2;
     // print_imgs(data.train_imgs, num_digits);
@@ -279,7 +280,13 @@ int main() {
 
     std::cout << lenet_convolution(x1, kernel1) << "\n";
 
-    auto padded_x = pad(kernel1, 2);
+    tensor x = zeros({2, 2});
+    for (size_t i = 0; i < x.size; ++i) {
+        x[i] += 1.0f;
+    }
+
+    std::cout << kernel2 << "\n";
+    std::cout << pad(x, 2, 2, 2, 2) << "\n";
 
     return 0;
 }

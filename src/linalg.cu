@@ -1,6 +1,6 @@
 #include "linalg.h"
 #include "arrs.h"
-#include "math.hpp"
+#include "math.h"
 #include "tensor.h"
 
 __global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
