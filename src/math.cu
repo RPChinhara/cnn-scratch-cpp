@@ -2,27 +2,20 @@
 #include "arrs.h"
 #include "tensor.h"
 
-tensor argmax(const tensor& t) {
-    tensor t_new = zeros({t.shape.front()});
+tensor add(const tensor& t) {
+    return tensor();
+}
 
-    size_t idx = 0;
-    float max = std::numeric_limits<float>::lowest();
-    size_t max_idx = 0;
+tensor subtract(const tensor& t) {
+    return tensor();
+}
 
-    for (auto i = 0; i < t.shape.front(); ++i) {
-        for (auto j = 0; j < t.shape.back(); ++j) {
-            if (t[idx] > max) {
-                max = t[idx];
-                max_idx = j;
-            }
-            ++idx;
-        }
+tensor multiply(const tensor& t) {
+    return tensor();
+}
 
-        t_new[i] = max_idx;
-        max = std::numeric_limits<float>::lowest();
-    }
-
-    return t_new;
+tensor divide(const tensor& t) {
+    return tensor();
 }
 
 __global__ void exp(float* t, float* t_new, size_t n) {
@@ -49,6 +42,24 @@ tensor exp(const tensor& t) {
     cudaFree(t_gpu_new);
 
     return t_new;
+}
+
+tensor sqrt(const tensor& x) {
+    tensor y = x;
+
+    for (auto i = 0; i < x.size; ++i)
+        y.elems[i] = sqrtf(x.elems[i]);
+
+    return y;
+}
+
+tensor square(const tensor& t) {
+    tensor y = t;
+
+    for (auto i = 0; i < t.size; ++i)
+        y.elems[i] = t.elems[i] * t.elems[i];
+
+    return y;
 }
 
 tensor max(const tensor& t, const size_t axis) {
@@ -108,24 +119,6 @@ tensor min(const tensor& t) {
     return t_new;
 }
 
-tensor sqrt(const tensor& x) {
-    tensor y = x;
-
-    for (auto i = 0; i < x.size; ++i)
-        y.elems[i] = sqrtf(x.elems[i]);
-
-    return y;
-}
-
-tensor square(const tensor& t) {
-    tensor y = t;
-
-    for (auto i = 0; i < t.size; ++i)
-        y.elems[i] = t.elems[i] * t.elems[i];
-
-    return y;
-}
-
 tensor sum(const tensor& t, const size_t axis) {
     tensor t_new;
 
@@ -165,6 +158,29 @@ tensor sum(const tensor& t, const size_t axis) {
                 }
             }
         }
+    }
+
+    return t_new;
+}
+
+tensor argmax(const tensor& t) {
+    tensor t_new = zeros({t.shape.front()});
+
+    size_t idx = 0;
+    float max = std::numeric_limits<float>::lowest();
+    size_t max_idx = 0;
+
+    for (auto i = 0; i < t.shape.front(); ++i) {
+        for (auto j = 0; j < t.shape.back(); ++j) {
+            if (t[idx] > max) {
+                max = t[idx];
+                max_idx = j;
+            }
+            ++idx;
+        }
+
+        t_new[i] = max_idx;
+        max = std::numeric_limits<float>::lowest();
     }
 
     return t_new;
