@@ -2,10 +2,17 @@
 
 class tensor;
 
-tensor argmax(const tensor& t);
+tensor add(const tensor& t);
+tensor subtract(const tensor& t);
+tensor multiply(const tensor& t);
+tensor divide(const tensor& t);
+
 tensor exp(const tensor& t);
-tensor max(const tensor& t, const size_t axis);
-tensor min(const tensor& t);
 tensor sqrt(const tensor& x);
 tensor square(const tensor& t);
+
+tensor max(const tensor& t, const size_t axis);
+tensor min(const tensor& t);
 tensor sum(const tensor& t, const size_t axis);
+
+tensor argmax(const tensor& t);
