@@ -7,7 +7,7 @@ tensor subtract(const tensor& x, const tensor& y);
 tensor multiply(const tensor& x, const tensor& y);
 tensor divide(const tensor& x, const tensor& y);
 
-tensor exp(const tensor& t);
+tensor exp(const tensor& x);
 tensor sqrt(const tensor& x);
 tensor square(const tensor& t);
 

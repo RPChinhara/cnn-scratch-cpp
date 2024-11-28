@@ -137,19 +137,22 @@ __global__ void exp(float* t, float* t_new, size_t n) {
         t_new[id] = expf(t[id]);
 }
 
-tensor exp(const tensor& t) {
-    tensor t_new = t;
+tensor exp(const tensor& x) {
+    tensor t_new = x;
 
     float* t_gpu, * t_gpu_new;
-    cudaMalloc((void**)&t_gpu, t.size * sizeof(float));
-    cudaMalloc((void**)&t_gpu_new, t.size * sizeof(float));
-    cudaMemcpy(t_gpu, t.elems, t.size * sizeof(float), cudaMemcpyHostToDevice);
+    
+    cudaMalloc((void**)&t_gpu, x.size * sizeof(float));
+    cudaMalloc((void**)&t_gpu_new, x.size * sizeof(float));
+
+    cudaMemcpy(t_gpu, x.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
 
     constexpr int blockSize = 128;
-    int gridSize = (t.size + blockSize - 1) / blockSize;
-    exp<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, t.size);
+    int gridSize = (x.size + blockSize - 1) / blockSize;
+    exp<<<gridSize, blockSize>>>(t_gpu, t_gpu_new, x.size);
 
-    cudaMemcpy(t_new.elems, t_gpu_new, t.size * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(t_new.elems, t_gpu_new, x.size * sizeof(float), cudaMemcpyDeviceToHost);
+
     cudaFree(t_gpu);
     cudaFree(t_gpu_new);
 
