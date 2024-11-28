@@ -34,16 +34,100 @@ tensor add(const tensor& x, const tensor& y) {
     return t_new;
 }
 
-tensor subtract(const tensor& t) {
-    return tensor();
+__global__ void subtract(float *x, float *y, float *z, int size) {
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if (idx < size) {
+        z[idx] = x[idx] - y[idx];
+    }
 }
 
-tensor multiply(const tensor& t) {
-    return tensor();
+tensor subtract(const tensor& x, const tensor& y) {
+    tensor t_new = x;
+
+    float *d_x, *d_y, *d_z;
+
+    cudaMalloc(&d_x, x.size * sizeof(float));
+    cudaMalloc(&d_y, x.size * sizeof(float));
+    cudaMalloc(&d_z, x.size * sizeof(float));
+
+    cudaMemcpy(d_x, x.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, y.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (x.size + threadsPerBlock - 1) / threadsPerBlock;
+    subtract<<<blocksPerGrid, threadsPerBlock>>>(d_x, d_y, d_z, x.size);
+
+    cudaMemcpy(t_new.elems, d_z, x.size * sizeof(float), cudaMemcpyDeviceToHost);
+
+    cudaFree(d_x);
+    cudaFree(d_y);
+    cudaFree(d_z);
+
+    return t_new;
 }
 
-tensor divide(const tensor& t) {
-    return tensor();
+__global__ void multiply(float *x, float *y, float *z, int size) {
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if (idx < size) {
+        z[idx] = x[idx] * y[idx];
+    }
+}
+
+tensor multiply(const tensor& x, const tensor& y) {
+    tensor t_new = x;
+
+    float *d_x, *d_y, *d_z;
+
+    cudaMalloc(&d_x, x.size * sizeof(float));
+    cudaMalloc(&d_y, x.size * sizeof(float));
+    cudaMalloc(&d_z, x.size * sizeof(float));
+
+    cudaMemcpy(d_x, x.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, y.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (x.size + threadsPerBlock - 1) / threadsPerBlock;
+    multiply<<<blocksPerGrid, threadsPerBlock>>>(d_x, d_y, d_z, x.size);
+
+    cudaMemcpy(t_new.elems, d_z, x.size * sizeof(float), cudaMemcpyDeviceToHost);
+
+    cudaFree(d_x);
+    cudaFree(d_y);
+    cudaFree(d_z);
+
+    return t_new;
+}
+
+__global__ void divide(float *x, float *y, float *z, int size) {
+    int idx = threadIdx.x + blockIdx.x * blockDim.x;
+    if (idx < size) {
+        z[idx] = x[idx] / y[idx];
+    }
+}
+
+tensor divide(const tensor& x, const tensor& y) {
+    tensor t_new = x;
+
+    float *d_x, *d_y, *d_z;
+
+    cudaMalloc(&d_x, x.size * sizeof(float));
+    cudaMalloc(&d_y, x.size * sizeof(float));
+    cudaMalloc(&d_z, x.size * sizeof(float));
+
+    cudaMemcpy(d_x, x.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, y.elems, x.size * sizeof(float), cudaMemcpyHostToDevice);
+
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (x.size + threadsPerBlock - 1) / threadsPerBlock;
+    divide<<<blocksPerGrid, threadsPerBlock>>>(d_x, d_y, d_z, x.size);
+
+    cudaMemcpy(t_new.elems, d_z, x.size * sizeof(float), cudaMemcpyDeviceToHost);
+
+    cudaFree(d_x);
+    cudaFree(d_y);
+    cudaFree(d_z);
+
+    return t_new;
 }
 
 __global__ void exp(float* t, float* t_new, size_t n) {

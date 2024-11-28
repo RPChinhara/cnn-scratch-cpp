@@ -3,9 +3,9 @@
 class tensor;
 
 tensor add(const tensor& x, const tensor& y);
-tensor subtract(const tensor& t);
-tensor multiply(const tensor& t);
-tensor divide(const tensor& t);
+tensor subtract(const tensor& x, const tensor& y);
+tensor multiply(const tensor& x, const tensor& y);
+tensor divide(const tensor& x, const tensor& y);
 
 tensor exp(const tensor& t);
 tensor sqrt(const tensor& x);
