@@ -160,9 +160,12 @@ tensor tensor::operator/(const tensor& other) const {
     return t_new;
 }
 
-tensor tensor::operator+=(const tensor& other) const {
-    for (auto i = 0; i < size; ++i)
-        elems[i] += other[i];
+tensor& tensor::operator+=(const tensor& other) {
+    // for (auto i = 0; i < size; ++i)
+    //     elems[i] += other[i];
+    // return *this;
+
+    *this = add(*this, other);
     return *this;
 }
 

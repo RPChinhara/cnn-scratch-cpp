@@ -23,7 +23,7 @@ class tensor {
     tensor operator-(const tensor& other) const;
     tensor operator*(const tensor& other) const;
     tensor operator/(const tensor& other) const;
-    tensor operator+=(const tensor& other) const;
+    tensor& operator+=(const tensor& other);
     tensor operator-() const;
     float& operator[](const size_t idx) const;
     float& operator()(const size_t i, const size_t j);
