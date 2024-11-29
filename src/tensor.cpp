@@ -86,8 +86,6 @@ tensor tensor::operator+(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        // for (auto i = 0; i < size; ++i)
-        //     t_new[i] = elems[i] + other[i];
         t_new = add(*this, other);
     } else if (shape.front() == other.shape.front()) {
         // std::cout << 22222222222 << "\n";
@@ -110,8 +108,6 @@ tensor tensor::operator-(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        // for (auto i = 0; i < size; ++i)
-        //     t_new[i] = elems[i] - other[i];
         t_new = subtract(*this, other);
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
@@ -130,8 +126,6 @@ tensor tensor::operator*(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        // for (auto i = 0; i < size; ++i)
-        //     t_new[i] = elems[i] * other[i];
         t_new = multiply(*this, other);
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
@@ -145,8 +139,6 @@ tensor tensor::operator/(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        // for (auto i = 0; i < size; ++i)
-        //     t_new[i] = elems[i] / other[i];
         t_new = divide(*this, other);
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
@@ -162,10 +154,6 @@ tensor tensor::operator/(const tensor& other) const {
 }
 
 tensor& tensor::operator+=(const tensor& other) {
-    // for (auto i = 0; i < size; ++i)
-    //     elems[i] += other[i];
-    // return *this;
-
     *this = add(*this, other);
     return *this;
 }
