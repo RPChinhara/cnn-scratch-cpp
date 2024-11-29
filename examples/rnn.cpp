@@ -219,16 +219,13 @@ int main() {
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-
     std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
 
     auto test_loss = rnn_evaluate(x_y_test.first, x_y_test.second);
-
     std::cout << "Test loss:  " << test_loss << "\n\n";
 
     auto predict = scaler.inverse_transform(rnn_predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
-
     for (auto i = x_y_test.second.size - 15; i < x_y_test.second.size; ++i)
         std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
 
