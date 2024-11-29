@@ -168,11 +168,11 @@ tensor sqrt(const tensor& x) {
     return y;
 }
 
-tensor square(const tensor& t) {
-    tensor y = t;
+tensor square(const tensor& x) {
+    tensor y = x;
 
-    for (auto i = 0; i < t.size; ++i)
-        y.elems[i] = t.elems[i] * t.elems[i];
+    for (auto i = 0; i < x.size; ++i)
+        y.elems[i] = x.elems[i] * x.elems[i];
 
     return y;
 }
