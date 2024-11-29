@@ -30,8 +30,8 @@ tensor b2 = zeros({hidden2_size, 1});
 tensor b3 = zeros({output_size, 1});
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
-    constexpr size_t img_size = 784;
-    constexpr size_t img_dim = 28;
+    size_t img_size = imgs.shape[1] * imgs.shape.back();
+    size_t img_dim  = imgs.shape[1];
 
     for (auto i = 0; i < num_digits; ++i) {
         for (auto j = 0; j < img_size; ++j) {
@@ -224,10 +224,14 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 
 int main() {
     mnist data = load_mnist();
-    std::cout << data.train_imgs.get_shape() << std::endl;
 
-    // constexpr size_t num_digits = 2;
-    // print_imgs(data.train_imgs, num_digits);
+    constexpr size_t num_digits = 1;
+    print_imgs(data.train_imgs, num_digits);
+
+    data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
+    data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
+
+    print_imgs(data.train_imgs, num_digits);
 
     // for (auto i = 0; i < data.train_imgs.size; ++i)
     //     data.train_imgs[i] /= 255.0f;
@@ -253,39 +257,41 @@ int main() {
     // (84, 60000)
     // (10, 60000)
 
-    tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
-    tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
+    // NOTE: lenet_convolution() code
 
-    tensor kernel1 = zeros({2, 2, 2});
-    for (size_t i = 0; i < kernel1.size; ++i) {
-        if (i < 4)
-            kernel1[i] += 1.0f;
-        else
-            kernel1[i] += 2.0f;
-    }
+    // tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
+    // tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
+    // tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
 
-    tensor kernel2 = zeros({3, 2, 2});
-    for (size_t i = 0; i < kernel2.size; ++i) {
-        if (i < 4)
-            kernel2[i] += 1.0f;
-        else if (3 < i && i < 8)
-            kernel2[i] += 2.0f;
-        else
-            kernel2[i] += 3.0f;
-    }
+    // tensor kernel1 = zeros({2, 2, 2});
+    // for (size_t i = 0; i < kernel1.size; ++i) {
+    //     if (i < 4)
+    //         kernel1[i] += 1.0f;
+    //     else
+    //         kernel1[i] += 2.0f;
+    // }
 
-    std::cout << x1 << "\n";
-    std::cout << kernel1 << "\n";
+    // tensor kernel2 = zeros({3, 2, 2});
+    // for (size_t i = 0; i < kernel2.size; ++i) {
+    //     if (i < 4)
+    //         kernel2[i] += 1.0f;
+    //     else if (3 < i && i < 8)
+    //         kernel2[i] += 2.0f;
+    //     else
+    //         kernel2[i] += 3.0f;
+    // }
 
-    std::cout << lenet_convolution(x1, kernel1) << "\n";
+    // std::cout << x1 << "\n";
+    // std::cout << kernel1 << "\n";
 
-    tensor x = zeros({2, 2, 2});
+    // std::cout << lenet_convolution(x1, kernel1) << "\n";
+
+    tensor x = zeros({3, 2, 2});
     for (size_t i = 0; i < x.size; ++i) {
         x[i] += 1.0f;
     }
 
-    std::cout << kernel2 << "\n";
+    std::cout << x << "\n";
     std::cout << pad(x, 1, 1, 1, 1) << "\n";
 
     // NOTE: oprator+ code
