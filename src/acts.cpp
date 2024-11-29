@@ -21,8 +21,6 @@ tensor relu(const tensor& x) {
 }
 
 tensor sigmoid(const tensor& x) {
-    tensor y = x;
-
     return 1.0 / (1.0 + exp(-x));
 }
 
