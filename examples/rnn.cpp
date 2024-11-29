@@ -213,7 +213,13 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     rnn_train(x_y_train.first, x_y_train.second);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+
 
     auto test_loss = rnn_evaluate(x_y_test.first, x_y_test.second);
 
@@ -223,7 +229,8 @@ int main() {
     for (auto i = 0; i < x_y_test.second.size; ++i)
         std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
 
-    std::cout << "Test loss: " << test_loss << std::endl;
+    std::cout << "Test loss:  " << test_loss << std::endl;
+    std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
 
     return 0;
 }
