@@ -3,6 +3,18 @@
 
 #include <numeric>
 
+tensor fill(const std::vector<size_t>& shape, float val) {
+    tensor t_new;
+    t_new.shape = shape;
+    t_new.size = std::accumulate(shape.begin(), shape.end(), 1ULL, std::multiplies<size_t>());
+    t_new.elems = new float[t_new.size];
+
+    for (size_t i = 0; i < t_new.size; ++i)
+        t_new[i] = val;
+
+    return t_new;
+}
+
 tensor zeros(const std::vector<size_t>& shape) {
     tensor t_new;
     t_new.shape = shape;

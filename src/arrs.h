@@ -4,6 +4,7 @@
 
 class tensor;
 
+tensor fill(const std::vector<size_t>& shape, float val);
 tensor zeros(const std::vector<size_t>& shape);
 
 tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max);
