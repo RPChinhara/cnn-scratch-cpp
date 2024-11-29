@@ -9,7 +9,7 @@ tensor divide(const tensor& x, const tensor& y);
 
 tensor exp(const tensor& x);
 tensor sqrt(const tensor& x);
-tensor square(const tensor& t);
+tensor square(const tensor& x);
 
 tensor max(const tensor& t, const size_t axis);
 tensor min(const tensor& t);
