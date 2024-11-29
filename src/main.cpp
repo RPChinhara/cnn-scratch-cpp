@@ -156,26 +156,28 @@ tensor lenet_forward(const tensor& x) {
     tensor s2 = lenet_max_pool(c1);
     std::cout << s2.get_shape() << "\n";
 
-    tensor c3 = lenet_convolution(s2, kernel2);
-    c3 = relu(c3);
-    std::cout << c3.get_shape() << "\n";
+    // tensor c3 = lenet_convolution(s2, kernel2);
+    // c3 = relu(c3);
+    // std::cout << c3.get_shape() << "\n";
 
-    tensor s4 = lenet_max_pool(c3);
-    std::cout << s4.get_shape() << "\n";
+    // tensor s4 = lenet_max_pool(c3);
+    // std::cout << s4.get_shape() << "\n";
 
-    // TODO: Can I do x_conv2.reshape({25, 60000});?
-    s4.reshape({60000, 256});
+    // // TODO: Can I do x_conv2.reshape({25, 60000});?
+    // s4.reshape({60000, 256});
 
-    tensor f5 = matmul(w1, transpose(s4)) + b1;
-    std::cout << f5.get_shape() << "\n";
+    // tensor f5 = matmul(w1, transpose(s4)) + b1;
+    // std::cout << f5.get_shape() << "\n";
 
-    tensor f6 = matmul(w2, f5) + b2;
-    std::cout << f6.get_shape() << "\n";
+    // tensor f6 = matmul(w2, f5) + b2;
+    // std::cout << f6.get_shape() << "\n";
 
-    tensor y = softmax(matmul(w3, f6) + b3);
-    std::cout << y.get_shape() << "\n";
+    // tensor y = softmax(matmul(w3, f6) + b3);
+    // std::cout << y.get_shape() << "\n";
 
-    return y;
+    // return y;
+
+    return tensor();
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
