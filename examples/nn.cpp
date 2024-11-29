@@ -217,6 +217,7 @@ int main() {
     std::cout << std::endl << "Time taken: " << duration.count() << " seconds" << std::endl << std::endl;
 
     auto test_loss = model.evaluate(x_train_test.second, y_train_test.second);
+    
     auto pred = model.predict(x_train_test.second);
 
     std::cout << "Test loss: " << test_loss << std::endl;
