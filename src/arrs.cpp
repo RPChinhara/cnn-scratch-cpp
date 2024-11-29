@@ -74,8 +74,7 @@ tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, 
     tensor t_new = zeros({depth, new_rows, new_cols});
 
     for (size_t d = 0; d < depth; ++d) {
-        auto mat = slice(t, d * t.shape.front(), t.shape.front());
-
+        auto mat = slice(t, d * rows, rows);
         tensor new_mat = zeros({new_rows, new_cols});
 
         for (size_t i = 0; i < rows; ++i) {
