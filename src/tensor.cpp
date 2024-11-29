@@ -1,4 +1,5 @@
 #include "tensor.h"
+#include "arrs.h"
 #include "math.h"
 
 #include <iomanip>
@@ -189,46 +190,33 @@ const float& tensor::operator()(const size_t i, const size_t j) const {
 }
 
 tensor operator+(const float sca, const tensor& t) {
-    // NOTE: make fill with sca for example, fill(t, sca), and pass this and t to add()
-    tensor t_new = t;
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = sca + t[i];
-    return t_new;
+    tensor t_sca = fill(t.shape, sca);
+    return add(t_sca, t);
 }
 
 tensor operator-(const float sca, const tensor& t) {
-    tensor t_new = t;
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = sca - t[i];
-    return t_new;
+    tensor t_sca = fill(t.shape, sca);
+    return subtract(t_sca, t);
 }
 
 tensor operator*(const float sca, const tensor& t) {
-    tensor t_new = t;
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = sca * t[i];
-    return t_new;
+    tensor t_sca = fill(t.shape, sca);
+    return multiply(t_sca, t);
 }
 
 tensor operator/(const float sca, const tensor& t) {
-    tensor t_new = t;
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = sca / t[i];
-    return t_new;
+    tensor t_sca = fill(t.shape, sca);
+    return divide(t_sca, t);
 }
 
 tensor operator+(const tensor& t, const float sca) {
-    tensor t_new = t;
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = t[i] + sca;
-    return t_new;
+    tensor t_sca = fill(t.shape, sca);
+    return add(t, t_sca);
 }
 
 tensor operator/(const tensor& t, const float sca) {
-    tensor t_new = t;
-    for (auto i = 0; i < t.size; ++i)
-        t_new[i] = t[i] / sca;
-    return t_new;
+    tensor t_sca = fill(t.shape, sca);
+    return divide(t, t_sca);
 }
 
 static size_t get_num_elem_most_inner_mat(const std::vector<size_t>& shape) {
