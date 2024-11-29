@@ -233,14 +233,14 @@ int main() {
 
     print_imgs(data.train_imgs, num_digits);
 
-    // for (auto i = 0; i < data.train_imgs.size; ++i)
-    //     data.train_imgs[i] /= 255.0f;
+    for (auto i = 0; i < data.train_imgs.size; ++i)
+        data.train_imgs[i] /= 255.0f;
 
-    // for (auto i = 0; i < data.test_imgs.size; ++i)
-    //     data.test_imgs[i] /= 255.0f;
+    for (auto i = 0; i < data.test_imgs.size; ++i)
+        data.test_imgs[i] /= 255.0f;
 
-    // data.train_labels = one_hot(data.train_labels, 10);
-    // data.test_labels = one_hot(data.test_labels, 10);
+    data.train_labels = one_hot(data.train_labels, 10);
+    data.test_labels = one_hot(data.test_labels, 10);
 
     // lenet_train(data.train_imgs, data.train_labels);
     // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
