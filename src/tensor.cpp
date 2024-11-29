@@ -1,4 +1,5 @@
 #include "tensor.h"
+#include "math.h"
 
 #include <iomanip>
 #include <string>
@@ -84,9 +85,9 @@ tensor tensor::operator+(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        // std::cout << 11111111111 << "\n";
-        for (auto i = 0; i < size; ++i)
-            t_new[i] = elems[i] + other[i];
+        // for (auto i = 0; i < size; ++i)
+        //     t_new[i] = elems[i] + other[i];
+        t_new = add(*this, other);
     } else if (shape.front() == other.shape.front()) {
         // std::cout << 22222222222 << "\n";
         for (auto i = 0; i < size; ++i) {
@@ -108,8 +109,9 @@ tensor tensor::operator-(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        for (auto i = 0; i < size; ++i)
-            t_new[i] = elems[i] - other[i];
+        // for (auto i = 0; i < size; ++i)
+        //     t_new[i] = elems[i] - other[i];
+        t_new = subtract(*this, other);
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
@@ -127,8 +129,9 @@ tensor tensor::operator*(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        for (auto i = 0; i < size; ++i)
-            t_new[i] = elems[i] * other[i];
+        // for (auto i = 0; i < size; ++i)
+        //     t_new[i] = elems[i] * other[i];
+        t_new = multiply(*this, other);
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
             t_new[i] = elems[i] * other[i % other.shape.back()];
@@ -141,8 +144,9 @@ tensor tensor::operator/(const tensor& other) const {
     tensor t_new = *this;
 
     if (ShapeEqual(shape, other.shape)) {
-        for (auto i = 0; i < size; ++i)
-            t_new[i] = elems[i] / other[i];
+        // for (auto i = 0; i < size; ++i)
+        //     t_new[i] = elems[i] / other[i];
+        t_new = divide(*this, other);
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
             size_t idx = i / shape.back();
