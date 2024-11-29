@@ -182,6 +182,7 @@ const float& tensor::operator()(const size_t i, const size_t j) const {
 }
 
 tensor operator+(const float sca, const tensor& t) {
+    // NOTE: make fill with sca for example, fill(t, sca), and pass this and t to add()
     tensor t_new = t;
     for (auto i = 0; i < t.size; ++i)
         t_new[i] = sca + t[i];
