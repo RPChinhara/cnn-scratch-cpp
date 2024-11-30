@@ -64,6 +64,31 @@ tensor vslice(const tensor& t, const size_t col) {
     return t_new;
 }
 
+tensor broadcast_to(const tensor& t, const std::vector<size_t>& shape) {
+    tensor t_new = zeros(shape);
+
+    size_t idx = 0;
+
+    if (t.shape.front() > t.shape.back()) {
+        for (size_t i = 0; i < t_new.size; ++i) {
+            if (i % t.shape.front() == 0 && i != 0)
+                ++idx;
+
+            t_new[i] = t[idx];
+        }
+    } else {
+        for (size_t i = 0; i < t_new.size; ++i) {
+            if (idx == t.shape.back())
+                idx = 0;
+
+            t_new[i] = t[idx];
+            ++idx;
+        }
+    }
+
+    return t_new;
+}
+
 tensor one_hot(const tensor& t, const size_t depth) {
     tensor t_new = zeros({t.size, depth});
 
