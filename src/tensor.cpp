@@ -76,7 +76,7 @@ tensor& tensor::reshape(const std::vector<size_t>& new_shape) {
     return *this;
 }
 
-static bool ShapeEqual(const std::vector<size_t>& shape1, const std::vector<size_t>& shape2) {
+bool shape_equal(const std::vector<size_t>& shape1, const std::vector<size_t>& shape2) {
     bool equal = false;
     if (std::equal(shape1.begin(), shape1.end(), shape2.begin()))
         equal = true;
@@ -86,7 +86,7 @@ static bool ShapeEqual(const std::vector<size_t>& shape1, const std::vector<size
 tensor tensor::operator+(const tensor& other) const {
     tensor t_new;
 
-    if (ShapeEqual(shape, other.shape)) {
+    if (shape_equal(shape, other.shape)) {
         t_new = add(*this, other);
     } else if (size > other.size) {
         tensor other_broadcasted = broadcast_to(other, shape);
@@ -102,7 +102,7 @@ tensor tensor::operator+(const tensor& other) const {
 tensor tensor::operator-(const tensor& other) const {
     tensor t_new = *this;
 
-    if (ShapeEqual(shape, other.shape)) {
+    if (shape_equal(shape, other.shape)) {
         t_new = subtract(*this, other);
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
@@ -120,7 +120,7 @@ tensor tensor::operator-(const tensor& other) const {
 tensor tensor::operator*(const tensor& other) const {
     tensor t_new = *this;
 
-    if (ShapeEqual(shape, other.shape)) {
+    if (shape_equal(shape, other.shape)) {
         t_new = multiply(*this, other);
     } else if (shape.back() == other.shape.back()) {
         for (auto i = 0; i < size; ++i)
@@ -133,7 +133,7 @@ tensor tensor::operator*(const tensor& other) const {
 tensor tensor::operator/(const tensor& other) const {
     tensor t_new = *this;
 
-    if (ShapeEqual(shape, other.shape)) {
+    if (shape_equal(shape, other.shape)) {
         t_new = divide(*this, other);
     } else if (shape.front() == other.shape.front()) {
         for (auto i = 0; i < size; ++i) {
