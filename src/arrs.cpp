@@ -71,7 +71,7 @@ tensor broadcast_to(const tensor& t, const std::vector<size_t>& shape) {
 
     if (t.shape.front() > t.shape.back()) {
         for (size_t i = 0; i < t_new.size; ++i) {
-            if (i % t.shape.front() == 0 && i != 0)
+            if (i % t_new.shape.back() == 0 && i != 0)
                 ++idx;
 
             t_new[i] = t[idx];
