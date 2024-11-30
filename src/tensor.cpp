@@ -84,17 +84,33 @@ bool shape_equal(const std::vector<size_t>& shape1, const std::vector<size_t>& s
 }
 
 tensor tensor::operator+(const tensor& other) const {
-    tensor t_new;
+    tensor t_new = *this;
 
     if (shape_equal(shape, other.shape)) {
         t_new = add(*this, other);
-    } else if (size > other.size) {
-        tensor other_broadcasted = broadcast_to(other, shape);
-        t_new = add(*this, other_broadcasted);
-    } else {
-        tensor this_broadcasted = broadcast_to(*this, other.shape);
-        t_new = add(this_broadcasted, other);
+    } else if (shape.front() == other.shape.front()) {
+        // std::cout << 22222222222 << "\n";
+        for (auto i = 0; i < size; ++i) {
+            size_t idx = i / shape.back();
+            t_new[i] = elems[i] + other[idx];
+        }
+    } else if (shape.back() == other.shape.back()) {
+        // std::cout << 33333333 << "\n";
+        for (auto i = 0; i < size; ++i)
+            t_new[i] = elems[i] + other[i % other.shape.back()];
     }
+
+    // tensor t_new;
+
+    // if (ShapeEqual(shape, other.shape)) {
+    //     t_new = add(*this, other);
+    // } else if (size > other.size) {
+    //     tensor other_broadcasted = broadcast_to(other, shape);
+    //     t_new = add(*this, other_broadcasted);
+    // } else {
+    //     tensor this_broadcasted = broadcast_to(*this, other.shape);
+    //     t_new = add(this_broadcasted, other);
+    // }
 
     return t_new;
 }
