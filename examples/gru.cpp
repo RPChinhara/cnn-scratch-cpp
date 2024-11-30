@@ -295,17 +295,21 @@ int main() {
     auto x_y_train = create_sequences(train_test.first, 10);
     auto x_y_test = create_sequences(train_test.second, 10);
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     gru_train(x_y_train.first, x_y_train.second);
 
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
+
     auto test_loss = gru_evaluate(x_y_test.first, x_y_test.second);
+    std::cout << "Test loss:  " << test_loss << "\n\n";
 
     auto predict = scaler.inverse_transform(gru_predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
-
     for (auto i = 0; i < x_y_test.second.size; ++i)
         std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
-
-    std::cout << "Test loss: " << test_loss << std::endl;
 
     return 0;
 }
