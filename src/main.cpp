@@ -288,30 +288,6 @@ int main() {
 
     // std::cout << lenet_convolution(x1, kernel1) << "\n";
 
-    // NOTE: oprator+ code
-
-    tensor x1 = zeros({2, 2});
-    for (size_t i = 0; i < x1.size; ++i) {
-        x1[i] += 1.0f;
-    }
-
-    tensor x2 = zeros({1, 2});
-    for (size_t i = 0; i < x2.size; ++i) {
-        x2[i] += 1.0f;
-    }
-
-    tensor x3 = zeros({2, 1});
-    for (size_t i = 0; i < x3.size; ++i) {
-        x3[i] += 1.0f;
-    }
-
-    std::cout << x1 + x1 << "\n";
-    std::cout << x1 + x2 << "\n";
-    std::cout << x1 + x3 << "\n";
-
-    std::cout << x2 + x1 << "\n";
-    std::cout << x3 + x1 << "\n";
-
     return 0;
 }
 
