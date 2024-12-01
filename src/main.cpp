@@ -9,14 +9,14 @@
 
 #include <chrono>
 
-constexpr float  lr           = 0.01f;
-constexpr size_t batch_size   = 32;
-constexpr size_t epochs       = 10;
+constexpr float  lr = 0.01f;
+constexpr size_t batch_size = 32;
+constexpr size_t epochs = 10;
 
-constexpr size_t input_size   = 256;
+constexpr size_t input_size = 256;
 constexpr size_t hidden1_size = 120;
 constexpr size_t hidden2_size = 84;
-constexpr size_t output_size  = 10;
+constexpr size_t output_size = 10;
 
 tensor kernel1 = glorot_uniform({6, 5, 5});
 tensor kernel2 = glorot_uniform({16, 5, 5});
