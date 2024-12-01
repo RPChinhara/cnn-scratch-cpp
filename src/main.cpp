@@ -244,8 +244,17 @@ int main() {
     data.train_labels = one_hot(data.train_labels, 10);
     data.test_labels = one_hot(data.test_labels, 10);
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     // lenet_train(data.train_imgs, data.train_labels);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
+
     // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    // std::cout << "Test loss:  " << test_loss << "\n\n";
+
     // lenet_predict(data.test_imgs, data.test_labels);
 
     // NOTE: 1 to 2 is done?
