@@ -116,31 +116,32 @@ tensor tensor::operator-(const tensor& other) const {
 }
 
 tensor tensor::operator*(const tensor& other) const {
-    tensor t_new = *this;
+    tensor t_new;
 
     if (shape_equal(shape, other.shape)) {
         t_new = multiply(*this, other);
-    } else if (shape.back() == other.shape.back()) {
-        for (auto i = 0; i < size; ++i)
-            t_new[i] = elems[i] * other[i % other.shape.back()];
+    } else if (size > other.size) {
+        tensor other_broadcasted = broadcast_to(other, shape);
+        t_new = multiply(*this, other_broadcasted);
+    } else {
+        tensor this_broadcasted = broadcast_to(*this, other.shape);
+        t_new = multiply(this_broadcasted, other);
     }
 
     return t_new;
 }
 
 tensor tensor::operator/(const tensor& other) const {
-    tensor t_new = *this;
+    tensor t_new;
 
     if (shape_equal(shape, other.shape)) {
         t_new = divide(*this, other);
-    } else if (shape.front() == other.shape.front()) {
-        for (auto i = 0; i < size; ++i) {
-            size_t idx = i / shape.back();
-            t_new[i] = elems[i] / other[idx];
-        }
-    } else if (shape.back() == other.shape.back()) {
-        for (auto i = 0; i < size; ++i)
-            t_new[i] = elems[i] / other[i % other.shape.back()];
+    } else if (size > other.size) {
+        tensor other_broadcasted = broadcast_to(other, shape);
+        t_new = divide(*this, other_broadcasted);
+    } else {
+        tensor this_broadcasted = broadcast_to(*this, other.shape);
+        t_new = divide(this_broadcasted, other);
     }
 
     return t_new;
