@@ -20,28 +20,28 @@ __global__ void matmul(float* a, float* b, float* c, int m, int n, int p) {
 tensor matmul(const tensor& t1, const tensor& t2) {
     tensor t_new = zeros({t1.shape.front(), t2.shape.back()});
 
-    int M = t1.shape.front();
-    int N = t1.shape.back();
-    int P = t2.shape.back();
+    int m = t1.shape.front();
+    int n = t1.shape.back();
+    int p = t2.shape.back();
 
-    float* d_A, * d_B, * d_C;
-    cudaMalloc(&d_A, M * N * sizeof(float));
-    cudaMalloc(&d_B, N * P * sizeof(float));
-    cudaMalloc(&d_C, M * P * sizeof(float));
+    float* d_a, * d_b, * d_c;
+    cudaMalloc(&d_a, m * n * sizeof(float));
+    cudaMalloc(&d_b, n * p * sizeof(float));
+    cudaMalloc(&d_c, m * p * sizeof(float));
 
-    cudaMemcpy(d_A, t1.elems, M * N * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, t2.elems, N * P * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_a, t1.elems, m * n * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_b, t2.elems, n * p * sizeof(float), cudaMemcpyHostToDevice);
 
     dim3 threadsPerBlock(16, 16);
-    dim3 numBlocks((P + threadsPerBlock.x - 1) / threadsPerBlock.x,(M + threadsPerBlock.y - 1) / threadsPerBlock.y);
+    dim3 numBlocks((p + threadsPerBlock.x - 1) / threadsPerBlock.x,(m + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
-    matmul<<<numBlocks, threadsPerBlock>>>(d_A, d_B, d_C, M, N, P);
+    matmul<<<numBlocks, threadsPerBlock>>>(d_a, d_b, d_c, m, n, p);
 
-    cudaMemcpy(t_new.elems, d_C, M * P * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(t_new.elems, d_c, m * p * sizeof(float), cudaMemcpyDeviceToHost);
 
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
+    cudaFree(d_a);
+    cudaFree(d_b);
+    cudaFree(d_c);
 
     return t_new;
 }
