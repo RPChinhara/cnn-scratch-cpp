@@ -56,6 +56,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
     std::vector<tensor> h_sequence;
     std::vector<tensor> y_sequence;
 
+    // TODO: Daclare b_h and b_y without initializing above e.g., tensor b_h;, and set the size as below so that I don't have to use sum(), and broadcast_to() makes things simpler and faster.
     if (phase == Phase::TRAIN)
         batch_size = 8317;
     else
