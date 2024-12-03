@@ -45,12 +45,6 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
 }
 
 tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
-    // Add padding to the input matrix here? For example,
-    //        0 0 0 0
-    // 1 1 -> 0 1 1 0
-    // 1 1    0 1 1 0
-    //        0 0 0 0
-
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
