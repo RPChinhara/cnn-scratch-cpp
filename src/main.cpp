@@ -211,8 +211,10 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 }
 
 float lenet_evaluate(const tensor& x_test, const tensor& y_test) {
-    auto y = lenet_forward(x_test);
-    return categorical_cross_entropy(y_test, transpose(y));
+    // auto y = lenet_forward(x_test);
+    // return categorical_cross_entropy(y_test, transpose(y));
+
+    return 0.0f;
 }
 
 void lenet_predict(const tensor& x_test, const tensor& y_test) {
@@ -228,6 +230,8 @@ int main() {
     data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
     print_imgs(data.train_imgs, num_digits);
+
+    std::cout << data.train_imgs.get_shape() << std::endl;
 
     for (auto i = 0; i < data.train_imgs.size; ++i)
         data.train_imgs[i] /= 255.0f;
@@ -246,12 +250,13 @@ int main() {
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
     std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
 
-    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
-    // std::cout << "Test loss:  " << test_loss << "\n\n";
+    auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    std::cout << "Test loss:  " << test_loss << "\n\n";
 
-    // lenet_predict(data.test_imgs, data.test_labels);
+    lenet_predict(data.test_imgs, data.test_labels);
 
-    // NOTE: 1 to 2 is done?
+    // 1. Accepts a grayscale image of size 32x32x1. If the input image is smaller (e.g., MNIST images of 28x28), it is typically padded to 32x32. -> DONE
+
 
     // 1.(60000, 28, 28)
     // 2.(60000, 6, 24, 24)
@@ -261,8 +266,6 @@ int main() {
     // (120, 60000)
     // (84, 60000)
     // (10, 60000)
-
-    // NOTE: lenet_convolution() code
 
     // tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
     // tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
@@ -291,34 +294,34 @@ int main() {
 
     // std::cout << lenet_convolution(x1, kernel1) << "\n";
 
+    // Tensor(
+    // [[[[0.00000005 0.00000010]  -> (1)
+    //    [0.00000005 0.00000000]]
+
+    //   [[0.00000001 0.00000002]  -> (2)
+    //    [0.00000002 0.00000008]]]], shape=(1, 2, 2, 2))
+    // Tensor(
+    // [[[1.00000000 1.00000000]   -> (3)
+    //   [1.00000000 1.00000000]]
+
+    //  [[2.00000000 2.00000000]   -> (4)
+    //   [2.00000000 2.00000000]]
+
+    //  [[3.00000000 3.00000000]   -> (5)
+    //   [3.00000000 3.00000000]]], shape=(3, 2, 2))
+
+
+    // The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
+    // The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
+    // Which is 2 next to 1.
+    // What is dot product between (2 x 2 x 2) and (2 x 2 x 2) of elements all 1?
+
+    // just for loop i, j, and k ->
+    // for(size_t i = 0; i < 1; ++i)
+    //     for(size_t j = 0; j < 1; ++j)
+    //         for(size_t k = 0; k < 1; ++k)
+    // |2 2  2 2|   |2 2  2 2|
+    // |2 2  2 2| x |2 2  2 2|
+
     return 0;
 }
-
-// Tensor(
-// [[[[0.00000005 0.00000010]  -> (1)
-//    [0.00000005 0.00000000]]
-
-//   [[0.00000001 0.00000002]  -> (2)
-//    [0.00000002 0.00000008]]]], shape=(1, 2, 2, 2))
-// Tensor(
-// [[[1.00000000 1.00000000]   -> (3)
-//   [1.00000000 1.00000000]]
-
-//  [[2.00000000 2.00000000]   -> (4)
-//   [2.00000000 2.00000000]]
-
-//  [[3.00000000 3.00000000]   -> (5)
-//   [3.00000000 3.00000000]]], shape=(3, 2, 2))
-
-
-// The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
-// The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
-// Which is 2 next to 1.
-// What is dot product between (2 x 2 x 2) and (2 x 2 x 2) of elements all 1?
-
-// just for loop i, j, and k ->
-// for(size_t i = 0; i < 1; ++i)
-//     for(size_t j = 0; j < 1; ++j)
-//         for(size_t k = 0; k < 1; ++k)
-// |2 2  2 2|   |2 2  2 2|
-// |2 2  2 2| x |2 2  2 2|
