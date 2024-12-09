@@ -242,7 +242,7 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    lenet_train(data.train_imgs, data.train_labels);
+    // lenet_train(data.train_imgs, data.train_labels);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
@@ -257,32 +257,25 @@ int main() {
     // DONE: 2. C1: Convolutional Layer.
     // DONE: 3. S2: Subsampling (Pooling) Layer.
 
-    // tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
-    // tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
-    // tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
+    // (60000, 32, 32)
+    // (60000, 6, 28, 28)
+    // (60000, 6, 14, 14)
 
-    // tensor kernel1 = zeros({2, 2, 2});
-    // for (size_t i = 0; i < kernel1.size; ++i) {
-    //     if (i < 4)
-    //         kernel1[i] += 1.0f;
-    //     else
-    //         kernel1[i] += 2.0f;
-    // }
+    tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
+    tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
 
-    // tensor kernel2 = zeros({3, 2, 2});
-    // for (size_t i = 0; i < kernel2.size; ++i) {
-    //     if (i < 4)
-    //         kernel2[i] += 1.0f;
-    //     else if (3 < i && i < 8)
-    //         kernel2[i] += 2.0f;
-    //     else
-    //         kernel2[i] += 3.0f;
-    // }
+    tensor kernel1 = zeros({2, 2, 2});
+    for (size_t i = 0; i < kernel1.size; ++i) {
+        if (i < 4)
+            kernel1[i] += 1.0f;
+        else
+            kernel1[i] += 2.0f;
+    }
 
-    // std::cout << x1 << "\n";
-    // std::cout << kernel1 << "\n";
-
-    // std::cout << lenet_convolution(x1, kernel1) << "\n";
+    std::cout << x1 << "\n";
+    std::cout << kernel1 << "\n";
+    std::cout << lenet_convolution(x1, kernel1) << "\n";
 
     // Tensor(
     // [[[[0.00000005 0.00000010]  -> (1)
