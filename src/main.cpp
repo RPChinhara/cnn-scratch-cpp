@@ -256,6 +256,7 @@ int main() {
     // DONE: 1. Accepts a grayscale image of size 32x32x1. If the input image is smaller (e.g., MNIST images of 28x28), it is typically padded to 32x32.
     // DONE: 2. C1: Convolutional Layer.
     // DONE: 3. S2: Subsampling (Pooling) Layer.
+    // TODO: 4. C3: Convolutional Layer.
 
     // (60000, 32, 32)
     // (60000, 6, 28, 28)
