@@ -264,7 +264,6 @@ int main() {
 
     tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
     tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
-    tensor x3 = uniform_dist({3, 3}, 0.0f, 0.0000001f);
 
     tensor kernel1 = zeros({2, 2, 2});
     for (size_t i = 0; i < kernel1.size; ++i) {
