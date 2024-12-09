@@ -3,7 +3,6 @@
 #include "datas.h"
 #include "linalg.h"
 #include "losses.h"
-#include "lyrs.h"
 #include "math.h"
 #include "rand.h"
 #include "tensor.h"
