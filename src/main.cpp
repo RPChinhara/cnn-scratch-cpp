@@ -11,7 +11,7 @@
 
 constexpr float  lr = 0.01f;
 constexpr size_t batch_size = 32;
-constexpr size_t epochs = 10;
+constexpr size_t epochs = 1;
 
 constexpr size_t input_size = 256;
 constexpr size_t hidden1_size = 120;
@@ -142,12 +142,11 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 }
 
 tensor lenet_forward(const tensor& x) {
-    std::cout << x.get_shape() << "\n";
-    tensor c1 = lenet_convolution(x, kernel1);
-    c1 = relu(c1);
-    std::cout << c1.get_shape() << "\n";
-
+    tensor c1 = relu(lenet_convolution(x, kernel1));
     tensor s2 = lenet_max_pool(c1);
+
+    std::cout << x.get_shape() << "\n";
+    std::cout << c1.get_shape() << "\n";
     std::cout << s2.get_shape() << "\n";
 
     // tensor c3 = lenet_convolution(s2, kernel2);
@@ -180,7 +179,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor y = lenet_forward(x_train);
 
-        float error = categorical_cross_entropy(y_train, transpose(y));
+        // float error = categorical_cross_entropy(y_train, transpose(y));
+        float error = 0.0f;
 
         // tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
@@ -231,8 +231,6 @@ int main() {
 
     print_imgs(data.train_imgs, num_digits);
 
-    std::cout << data.train_imgs.get_shape() << std::endl;
-
     for (auto i = 0; i < data.train_imgs.size; ++i)
         data.train_imgs[i] /= 255.0f;
 
@@ -244,28 +242,20 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    // lenet_train(data.train_imgs, data.train_labels);
+    lenet_train(data.train_imgs, data.train_labels);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
 
     auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
     std::cout << "Test loss:  " << test_loss << "\n\n";
 
     lenet_predict(data.test_imgs, data.test_labels);
 
-    // 1. Accepts a grayscale image of size 32x32x1. If the input image is smaller (e.g., MNIST images of 28x28), it is typically padded to 32x32. -> DONE
-
-
-    // 1.(60000, 28, 28)
-    // 2.(60000, 6, 24, 24)
-    // 3.(60000, 6, 12, 12)
-    // (60000, 16, 8, 8)
-    // (60000, 16, 4, 4)
-    // (120, 60000)
-    // (84, 60000)
-    // (10, 60000)
+    // DONE: 1. Accepts a grayscale image of size 32x32x1. If the input image is smaller (e.g., MNIST images of 28x28), it is typically padded to 32x32.
+    // DONE: 2. C1: Convolutional Layer.
+    // DONE: 3. S2: Subsampling (Pooling) Layer.
 
     // tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
     // tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
