@@ -58,41 +58,41 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
     tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
     size_t num_img;
+    size_t idx = 0;
 
     if (x.shape.size() == 3) {
         num_img = x.shape.front();
+
+        for (size_t b = 0; b < num_img; ++b) {
+            auto img = slice(x, b * input_height, input_height);
+
+            tensor output = zeros({output_height, output_width});
+
+            for (size_t k = 0; k < num_kernels; ++k) {
+                auto kernel = slice(kernels, k * kernel_height, kernel_height);
+
+                for (size_t i = 0; i < output_height; ++i) {
+                    for (size_t j = 0; j < output_width; ++j) {
+                        float sum = 0.0;
+
+                        for (size_t m = 0; m < kernel_height; ++m) {
+                            for (size_t n = 0; n < kernel_width; ++n) {
+                                sum += img(i + m, j + n) * kernel(m, n);
+                            }
+                        }
+
+                        output(i, j) = sum;
+                    }
+                }
+
+                for (size_t i = 0; i < output.size; ++i)
+                    outputs[idx * output.size + i] = output[i];
+
+                ++idx;
+            }
+        }
     } else if (x.shape.size() == 4) {
         num_img = x.shape.front() * x.shape[1];
-    }
-
-    size_t idx = 0;
-    for (size_t b = 0; b < num_img; ++b) {
-        auto img = slice(x, b * input_height, input_height);
-
-        tensor output = zeros({output_height, output_width});
-
-        for (size_t k = 0; k < num_kernels; ++k) {
-            auto kernel = slice(kernels, k * kernel_height, kernel_height);
-
-            for (size_t i = 0; i < output_height; ++i) {
-                for (size_t j = 0; j < output_width; ++j) {
-                    float sum = 0.0;
-
-                    for (size_t m = 0; m < kernel_height; ++m) {
-                        for (size_t n = 0; n < kernel_width; ++n) {
-                            sum += img(i + m, j + n) * kernel(m, n);
-                        }
-                    }
-
-                    output(i, j) = sum;
-                }
-            }
-
-            for (size_t i = 0; i < output.size; ++i)
-                outputs[idx * output.size + i] = output[i];
-
-            ++idx;
-        }
     }
 
     return outputs;
