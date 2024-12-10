@@ -1,0 +1,184 @@
+#include "acts.h"
+#include "arrs.h"
+#include "datas.h"
+#include "linalg.h"
+#include "losses.h"
+#include "math.h"
+#include "rand.h"
+#include "tensor.h"
+
+#include <chrono>
+
+constexpr float  lr = 0.01f;
+constexpr size_t batch_size = 32;
+constexpr size_t epochs = 1;
+
+constexpr size_t input_size = 256;
+constexpr size_t hidden1_size = 120;
+constexpr size_t hidden2_size = 84;
+constexpr size_t output_size = 10;
+
+tensor kernel1 = glorot_uniform({6, 5, 5});
+tensor kernel2 = glorot_uniform({16, 5, 5});
+
+tensor w1 = glorot_uniform({hidden1_size, input_size});
+tensor w2 = glorot_uniform({hidden2_size, hidden1_size});
+tensor w3 = glorot_uniform({output_size, hidden2_size});
+
+tensor b1 = zeros({hidden1_size, 1});
+tensor b2 = zeros({hidden2_size, 1});
+tensor b3 = zeros({output_size, 1});
+
+void print_imgs(const tensor& imgs, size_t num_digits) {
+    size_t img_size = imgs.shape[1] * imgs.shape.back();
+    size_t img_dim  = imgs.shape[1];
+
+    for (auto i = 0; i < num_digits; ++i) {
+        for (auto j = 0; j < img_size; ++j) {
+            if (j % img_dim == 0 && j != 0)
+                std::cout << std::endl;
+
+            std::cout << imgs[i * img_size + j] << " ";
+        }
+        std::cout << "\n\n";
+    }
+}
+
+tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
+    size_t num_kernels = kernels.shape.front();
+    size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
+    size_t kernel_width = kernels.shape.back();
+
+    size_t input_height = x.shape[x.shape.size() - 2];
+    size_t input_width = x.shape.back();
+
+    size_t output_height = (input_height - kernel_height) / stride + 1;
+    size_t output_width = (input_width - kernel_width) / stride + 1;
+
+    tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
+
+    size_t num_img;
+    size_t idx = 0;
+
+    if (x.shape.size() == 3) {
+        num_img = x.shape.front();
+
+        for (size_t b = 0; b < num_img; ++b) {
+            auto img = slice(x, b * input_height, input_height);
+
+            tensor output = zeros({output_height, output_width});
+
+            for (size_t k = 0; k < num_kernels; ++k) {
+                auto kernel = slice(kernels, k * kernel_height, kernel_height);
+
+                for (size_t i = 0; i < output_height; ++i) {
+                    for (size_t j = 0; j < output_width; ++j) {
+                        float sum = 0.0;
+
+                        for (size_t m = 0; m < kernel_height; ++m) {
+                            for (size_t n = 0; n < kernel_width; ++n) {
+                                sum += img(i + m, j + n) * kernel(m, n);
+                            }
+                        }
+
+                        output(i, j) = sum;
+                    }
+                }
+
+                for (size_t i = 0; i < output.size; ++i)
+                    outputs[idx * output.size + i] = output[i];
+
+                ++idx;
+            }
+        }
+    } else if (x.shape.size() == 4) {
+        num_img = x.shape.front() * x.shape[1];
+
+        for (size_t b = 0; b < num_img; ++b) {
+            auto img = slice(x, b * input_height, input_height);
+
+            tensor output = zeros({output_height, output_width});
+            tensor output_sum = zeros({output_height, output_width});
+
+            for (size_t k = 0; k < num_kernels; ++k) {
+                auto kernel = slice(kernels, k * kernel_height, kernel_height);
+
+                for (size_t i = 0; i < output_height; ++i) {
+                    for (size_t j = 0; j < output_width; ++j) {
+                        float sum = 0.0;
+
+                        for (size_t m = 0; m < kernel_height; ++m) {
+                            for (size_t n = 0; n < kernel_width; ++n) {
+                                sum += img(i + m, j + n) * kernel(m, n);
+                            }
+                        }
+
+                        output(i, j) = sum;
+                    }
+                }
+
+                std::cout << output << std::endl;
+                output_sum += output;
+            }
+
+            for (size_t i = 0; i < output_sum.size; ++i)
+                outputs[idx * output_sum.size + i] = output_sum[i];
+
+            ++idx;
+        }
+    }
+
+    return outputs;
+}
+
+int main() {
+    tensor x1 = uniform_dist({1, 4, 4}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
+
+    tensor kernel1 = zeros({2, 2, 2});
+    for (size_t i = 0; i < kernel1.size; ++i) {
+        if (i < 4)
+            kernel1[i] += 1.0f;
+        else
+            kernel1[i] += 2.0f;
+    }
+
+    std::cout << x1 << "\n";
+    std::cout << x2 << "\n";
+
+    std::cout << kernel1 << "\n";
+
+    std::cout << lenet_convolution(x1, kernel1) << "\n";
+    std::cout << lenet_convolution(x2, kernel1) << "\n";
+
+    // Tensor(
+    // [[[[0.00000005 0.00000010]  -> (1)
+    //    [0.00000005 0.00000000]]
+
+    //   [[0.00000001 0.00000002]  -> (2)
+    //    [0.00000002 0.00000008]]]], shape=(1, 2, 2, 2))
+    // Tensor(
+    // [[[1.00000000 1.00000000]   -> (3)
+    //   [1.00000000 1.00000000]]
+
+    //  [[2.00000000 2.00000000]   -> (4)
+    //   [2.00000000 2.00000000]]
+
+    //  [[3.00000000 3.00000000]   -> (5)
+    //   [3.00000000 3.00000000]]], shape=(3, 2, 2))
+
+
+    // The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
+    // The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
+    // Which is 2 next to 1.
+    // What is dot product between (2 x 2 x 2) and (2 x 2 x 2) of elements all 1?
+
+    // just for loop i, j, and k ->
+    // for(size_t i = 0; i < 1; ++i)
+    //     for(size_t j = 0; j < 1; ++j)
+    //         for(size_t k = 0; k < 1; ++k)
+    // |2 2  2 2|   |2 2  2 2|
+    // |2 2  2 2| x |2 2  2 2|
+
+    return 0;
+}
