@@ -291,9 +291,5 @@ int main() {
     // DONE: 3. S2: Subsampling (Pooling) Layer.
     // TODO: 4. C3: Convolutional Layer.
 
-    // (60000, 32, 32)
-    // (60000, 6, 28, 28)
-    // (60000, 6, 14, 14)
-
     return 0;
 }
