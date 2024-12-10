@@ -117,7 +117,6 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                     }
                 }
 
-                std::cout << output << std::endl;
                 output_sum += output;
             }
 
@@ -295,54 +294,6 @@ int main() {
     // (60000, 32, 32)
     // (60000, 6, 28, 28)
     // (60000, 6, 14, 14)
-
-    tensor x1 = uniform_dist({1, 4, 4}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
-
-    tensor kernel1 = zeros({2, 2, 2});
-    for (size_t i = 0; i < kernel1.size; ++i) {
-        if (i < 4)
-            kernel1[i] += 1.0f;
-        else
-            kernel1[i] += 2.0f;
-    }
-
-    std::cout << x1 << "\n";
-    std::cout << x2 << "\n";
-
-    std::cout << kernel1 << "\n";
-
-    std::cout << lenet_convolution(x1, kernel1) << "\n";
-    std::cout << lenet_convolution(x2, kernel1) << "\n";
-
-    // Tensor(
-    // [[[[0.00000005 0.00000010]  -> (1)
-    //    [0.00000005 0.00000000]]
-
-    //   [[0.00000001 0.00000002]  -> (2)
-    //    [0.00000002 0.00000008]]]], shape=(1, 2, 2, 2))
-    // Tensor(
-    // [[[1.00000000 1.00000000]   -> (3)
-    //   [1.00000000 1.00000000]]
-
-    //  [[2.00000000 2.00000000]   -> (4)
-    //   [2.00000000 2.00000000]]
-
-    //  [[3.00000000 3.00000000]   -> (5)
-    //   [3.00000000 3.00000000]]], shape=(3, 2, 2))
-
-
-    // The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
-    // The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
-    // Which is 2 next to 1.
-    // What is dot product between (2 x 2 x 2) and (2 x 2 x 2) of elements all 1?
-
-    // just for loop i, j, and k ->
-    // for(size_t i = 0; i < 1; ++i)
-    //     for(size_t j = 0; j < 1; ++j)
-    //         for(size_t k = 0; k < 1; ++k)
-    // |2 2  2 2|   |2 2  2 2|
-    // |2 2  2 2| x |2 2  2 2|
 
     return 0;
 }
