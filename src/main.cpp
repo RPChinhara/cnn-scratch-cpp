@@ -93,6 +93,39 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
         }
     } else if (x.shape.size() == 4) {
         num_img = x.shape.front() * x.shape[1];
+
+        for (size_t b = 0; b < num_img; ++b) {
+            auto img = slice(x, b * input_height, input_height);
+
+            tensor output = zeros({output_height, output_width});
+            tensor output_sum = zeros({output_height, output_width});
+
+            for (size_t k = 0; k < num_kernels; ++k) {
+                auto kernel = slice(kernels, k * kernel_height, kernel_height);
+
+                for (size_t i = 0; i < output_height; ++i) {
+                    for (size_t j = 0; j < output_width; ++j) {
+                        float sum = 0.0;
+
+                        for (size_t m = 0; m < kernel_height; ++m) {
+                            for (size_t n = 0; n < kernel_width; ++n) {
+                                sum += img(i + m, j + n) * kernel(m, n);
+                            }
+                        }
+
+                        output(i, j) = sum;
+                    }
+                }
+
+                std::cout << output << std::endl;
+                output_sum += output;
+            }
+
+            for (size_t i = 0; i < output_sum.size; ++i)
+                outputs[idx * output_sum.size + i] = output_sum[i];
+
+            ++idx;
+        }
     }
 
     return outputs;
@@ -262,8 +295,8 @@ int main() {
     // (60000, 6, 28, 28)
     // (60000, 6, 14, 14)
 
-    tensor x1 = uniform_dist({1, 3, 3}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({1, 2, 2, 2}, 0.0f, 0.0000001f);
+    tensor x1 = uniform_dist({1, 4, 4}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
 
     tensor kernel1 = zeros({2, 2, 2});
     for (size_t i = 0; i < kernel1.size; ++i) {
@@ -274,8 +307,12 @@ int main() {
     }
 
     std::cout << x1 << "\n";
+    std::cout << x2 << "\n";
+
     std::cout << kernel1 << "\n";
+
     std::cout << lenet_convolution(x1, kernel1) << "\n";
+    std::cout << lenet_convolution(x2, kernel1) << "\n";
 
     // Tensor(
     // [[[[0.00000005 0.00000010]  -> (1)
