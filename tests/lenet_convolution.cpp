@@ -1,48 +1,6 @@
-#include "acts.h"
 #include "arrs.h"
-#include "datas.h"
-#include "linalg.h"
-#include "losses.h"
-#include "math.h"
 #include "rand.h"
 #include "tensor.h"
-
-#include <chrono>
-
-constexpr float  lr = 0.01f;
-constexpr size_t batch_size = 32;
-constexpr size_t epochs = 1;
-
-constexpr size_t input_size = 256;
-constexpr size_t hidden1_size = 120;
-constexpr size_t hidden2_size = 84;
-constexpr size_t output_size = 10;
-
-tensor kernel1 = glorot_uniform({6, 5, 5});
-tensor kernel2 = glorot_uniform({16, 5, 5});
-
-tensor w1 = glorot_uniform({hidden1_size, input_size});
-tensor w2 = glorot_uniform({hidden2_size, hidden1_size});
-tensor w3 = glorot_uniform({output_size, hidden2_size});
-
-tensor b1 = zeros({hidden1_size, 1});
-tensor b2 = zeros({hidden2_size, 1});
-tensor b3 = zeros({output_size, 1});
-
-void print_imgs(const tensor& imgs, size_t num_digits) {
-    size_t img_size = imgs.shape[1] * imgs.shape.back();
-    size_t img_dim  = imgs.shape[1];
-
-    for (auto i = 0; i < num_digits; ++i) {
-        for (auto j = 0; j < img_size; ++j) {
-            if (j % img_dim == 0 && j != 0)
-                std::cout << std::endl;
-
-            std::cout << imgs[i * img_size + j] << " ";
-        }
-        std::cout << "\n\n";
-    }
-}
 
 tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
     size_t num_kernels = kernels.shape.front();
