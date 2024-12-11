@@ -90,8 +90,8 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 }
 
 int main() {
-    tensor x1 = uniform_dist({1, 4, 4}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
+    tensor x1 = uniform_dist({2, 4, 4}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.0000001f);
 
     tensor kernel1 = zeros({2, 2, 2});
     for (size_t i = 0; i < kernel1.size; ++i) {
@@ -102,12 +102,16 @@ int main() {
     }
 
     std::cout << x1 << "\n";
-    std::cout << x2 << "\n";
+    // std::cout << x2 << "\n";
 
     std::cout << kernel1 << "\n";
 
     std::cout << lenet_convolution(x1, kernel1) << "\n";
-    std::cout << lenet_convolution(x2, kernel1) << "\n";
+    // std::cout << lenet_convolution(x2, kernel1) << "\n";
+
+    // (60000, 32, 32)
+    // (60000, 6, 28, 28)
+    // (60000, 6, 14, 14)
 
     // Tensor(
     // [[[[0.00000005 0.00000010]  -> (1)
