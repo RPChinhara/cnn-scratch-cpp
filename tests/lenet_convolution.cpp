@@ -2,6 +2,8 @@
 #include "rand.h"
 #include "tensor.h"
 
+#include <chrono>
+
 tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
@@ -101,13 +103,19 @@ int main() {
             kernel1[i] += 2.0f;
     }
 
-    std::cout << x1 << "\n";
-    // std::cout << x2 << "\n";
+    // std::cout << x1 << "\n";
+    std::cout << x2 << "\n";
 
     std::cout << kernel1 << "\n";
 
-    std::cout << lenet_convolution(x1, kernel1) << "\n";
-    // std::cout << lenet_convolution(x2, kernel1) << "\n";
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // std::cout << lenet_convolution(x1, kernel1) << "\n";
+    std::cout << lenet_convolution(x2, kernel1) << "\n";
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
 
     // (60000, 32, 32)
     // (60000, 6, 28, 28)
