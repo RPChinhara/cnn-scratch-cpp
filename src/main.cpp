@@ -176,16 +176,13 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 tensor lenet_forward(const tensor& x) {
     tensor c1 = relu(lenet_convolution(x, kernel1));
     tensor s2 = lenet_max_pool(c1);
+    tensor c3 = relu(lenet_convolution(s2, kernel2));
+    // tensor s4 = lenet_max_pool(c3);
 
     std::cout << x.get_shape() << "\n";
     std::cout << c1.get_shape() << "\n";
     std::cout << s2.get_shape() << "\n";
-
-    // tensor c3 = lenet_convolution(s2, kernel2);
-    // c3 = relu(c3);
-    // std::cout << c3.get_shape() << "\n";
-
-    // tensor s4 = lenet_max_pool(c3);
+    std::cout << c3.get_shape() << "\n";
     // std::cout << s4.get_shape() << "\n";
 
     // // TODO: Can I do x_conv2.reshape({25, 60000});?
@@ -275,7 +272,7 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    // lenet_train(data.train_imgs, data.train_labels);
+    lenet_train(data.train_imgs, data.train_labels);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
