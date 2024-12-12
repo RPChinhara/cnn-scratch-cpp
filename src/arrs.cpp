@@ -46,6 +46,20 @@ tensor slice(const tensor& t, const size_t begin, const size_t size) {
     return t_new;
 }
 
+// tensor slice(const tensor& t, const size_t begin, const size_t size) {
+//     size_t row_size = t.shape.back();
+//     tensor t_new = zeros({size, row_size});
+
+//     size_t start_index = begin * row_size;
+//     size_t end_index = start_index + size * row_size;
+
+//     for (size_t i = start_index, j = 0; i < end_index; ++i, ++j) {
+//         t_new[j] = t[i];
+//     }
+
+//     return t_new;
+// }
+
 tensor vslice(const tensor& t, const size_t col) {
     tensor t_new = zeros({t.shape.front(), t.shape.back() - 1});
 
