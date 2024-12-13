@@ -44,7 +44,7 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
     }
 }
 
-tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
+tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
@@ -256,7 +256,6 @@ int main() {
     constexpr size_t num_digits = 1;
     print_imgs(data.train_imgs, num_digits);
 
-    // TODO: Pad inside lenet_convolution()?
     data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
     data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
