@@ -17,12 +17,10 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 
     tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
-    size_t num_img;
     size_t idx = 0;
-    size_t num_channels = 0;
 
     if (x.shape.size() == 3) {
-        num_img = x.shape.front();
+        size_t num_img = x.shape.front();
 
         for (size_t b = 0; b < num_img; ++b) {
             tensor img = slice(x, b * input_height, input_height);
