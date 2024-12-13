@@ -53,68 +53,46 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
             }
         }
     } else if (x.shape.size() == 4) {
-        num_img = x.shape.front() * x.shape[1];
+        size_t idx2 = 0;
         size_t num_batches = x.shape.front();
         size_t num_channels = x.shape[1];
-        size_t num_imgs_processed = 0;
-
-        tensor output_sum = zeros({output_height, output_width});
-
-        // for (size_t b = 0; b < num_batches; ++b) {
-
-        //     for (size_t k = 0; k < num_kernels; ++k) {
-        //         auto kernel = slice(kernels, k * kernel_height, kernel_height);
-
-        //         for (size_t c = 0; c < 2; ++c) {
-        //             auto img = slice(x, b * input_height, input_height);
-        //             // ++num_imgs_processed;
-
-        //             std::cout << img << std::endl;
-
-        //             tensor output = zeros({output_height, output_width});
-
-        //             for (size_t i = 0; i < output_height; ++i) {
-        //                 for (size_t j = 0; j < output_width; ++j) {
-        //                     float sum = 0.0;
-
-        //                     for (size_t m = 0; m < kernel_height; ++m) {
-        //                         for (size_t n = 0; n < kernel_width; ++n) {
-        //                             sum += img(i + m, j + n) * kernel(m, n);
-        //                         }
-        //                     }
-
-        //                     output(i, j) = sum;
-        //                 }
-        //             }
-
-        //             // std::cout << output << std::endl;
-        //             output_sum += output;
-        //             ++num_channels;
-        //         }
-
-        //         if (num_channels == x.shape[1]) {
-        //             for (size_t i = 0; i < output_sum.size; ++i)
-        //                 outputs[idx * output_sum.size + i] = output_sum[i];
-
-        //             ++idx;
-        //             output_sum = zeros({output_height, output_width});
-        //             num_channels = 0;
-        //         }
-        //     }
-        // }
-
-        size_t idx2 = 0;
 
         for (size_t i = 0; i < num_batches; ++i) {
             idx2 = i * num_channels;
 
             for (size_t j = 0; j < num_kernels; ++j) {
-                for (size_t k = 0; k < num_channels; ++k) {
-                    auto img = slice(x, idx2 * input_height, input_height);
-                    ++idx2;
+                tensor kernel = slice(kernels, j * kernel_height, kernel_height);
+                tensor output_sum = zeros({output_height, output_width});
 
-                    std::cout << img << std::endl;
+                for (size_t k = 0; k < num_channels; ++k) {
+                    tensor img = slice(x, idx2 * input_height, input_height);
+
+                    tensor output = zeros({output_height, output_width});
+
+                    for (size_t i = 0; i < output_height; ++i) {
+                        for (size_t j = 0; j < output_width; ++j) {
+                            float sum = 0.0;
+
+                            for (size_t m = 0; m < kernel_height; ++m) {
+                                for (size_t n = 0; n < kernel_width; ++n) {
+                                    sum += img(i + m, j + n) * kernel(m, n);
+                                }
+                            }
+
+                            output(i, j) = sum;
+                        }
+                    }
+
+                    ++idx2;
+                    output_sum += output;
                 }
+
+                std::cout << output_sum << std::endl;
+
+                for (size_t i = 0; i < output_sum.size; ++i)
+                    outputs[idx * output_sum.size + i] = output_sum[i];
+
+                ++idx;
 
                 if (i == 0)
                     idx2 = 0;
@@ -130,7 +108,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 
 int main() {
     tensor x1 = uniform_dist({2, 4, 4}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
+    tensor x2 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.0000001f);
 
     tensor kernel1 = zeros({1, 2, 2});
     for (size_t i = 0; i < kernel1.size; ++i) {
@@ -146,12 +124,12 @@ int main() {
     }
 
     std::cout << x2 << "\n";
-    std::cout << kernel1 << "\n";
+    std::cout << kernel2 << "\n";
 
     auto start = std::chrono::high_resolution_clock::now();
 
     // std::cout << lenet_convolution(x1, kernel1) << "\n";
-    std::cout << lenet_convolution(x2, kernel1) << "\n";
+    std::cout << lenet_convolution(x2, kernel2) << "\n";
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
