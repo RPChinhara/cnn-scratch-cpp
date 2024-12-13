@@ -50,19 +50,17 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
             }
         }
     } else if (x.shape.size() == 4) {
-        size_t idx2 = 0;
         size_t num_batches = x.shape.front();
         size_t num_channels = x.shape[1];
 
         for (size_t i = 0; i < num_batches; ++i) {
-            idx2 = i * num_channels;
-
             for (size_t j = 0; j < num_kernels; ++j) {
                 tensor kernel = slice(kernels, j * kernel_height, kernel_height);
                 tensor output_sum = zeros({output_height, output_width});
 
                 for (size_t k = 0; k < num_channels; ++k) {
-                    tensor img = slice(x, idx2 * input_height, input_height);
+                    size_t idx = i * num_channels + k;
+                    tensor img = slice(x, idx * input_height, input_height);
                     tensor output = zeros({output_height, output_width});
 
                     for (size_t i = 0; i < output_height; ++i) {
@@ -79,7 +77,6 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                         }
                     }
 
-                    ++idx2;
                     output_sum += output;
                 }
 
@@ -89,14 +86,8 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                     outputs[idx * output_sum.size + i] = output_sum[i];
 
                 ++idx;
-
-                if (i == 0)
-                    idx2 = 0;
-                else
-                    idx2 = num_channels;
             }
         }
-
     }
 
     return outputs;
