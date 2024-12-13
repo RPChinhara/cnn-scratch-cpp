@@ -80,8 +80,6 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                     output_sum += output;
                 }
 
-                std::cout << output_sum << std::endl;
-
                 for (size_t i = 0; i < output_sum.size; ++i)
                     outputs[idx * output_sum.size + i] = output_sum[i];
 
@@ -110,13 +108,13 @@ int main() {
             kernel2[i] += 2.0f;
     }
 
-    std::cout << x2 << "\n";
-    std::cout << kernel2 << "\n";
+    std::cout << x1 << "\n";
+    std::cout << kernel1 << "\n";
 
     auto start = std::chrono::high_resolution_clock::now();
 
     // std::cout << lenet_convolution(x1, kernel1) << "\n";
-    std::cout << lenet_convolution(x2, kernel2) << "\n";
+    std::cout << lenet_convolution(x1, kernel2) << "\n";
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
