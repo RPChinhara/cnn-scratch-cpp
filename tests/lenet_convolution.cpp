@@ -53,6 +53,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
         size_t num_batches = x.shape.front();
         size_t num_channels = x.shape[1];
 
+        // TODO: Can I only use for loops twice like above when the x.shape.size() == 3?
         for (size_t i = 0; i < num_batches; ++i) {
             for (size_t j = 0; j < num_kernels; ++j) {
                 tensor kernel = slice(kernels, j * kernel_height, kernel_height);
@@ -61,6 +62,16 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                 for (size_t k = 0; k < num_channels; ++k) {
                     size_t idx = i * num_channels + k;
                     tensor img = slice(x, idx * input_height, input_height);
+
+                    // TODO: This could be optimized.
+                    // If the size of kernel was 2 x 2, and img was 3 x 3.
+                    // kernel, img
+                    //         0 1 2
+                    // 1 1     3 4 5
+                    // 1 1     6 7 8
+                    // (0) * (1), (1) * (1), (3) * (1), (4) * (1) -> this is dot product between top left corners.
+                    // (1) * (1), (2) * (1), (4) * (1), (5) * (1) -> this is dot product between top right corners.
+                    // This way I don't need to use 4 for loops like now.
 
                     for (size_t row = 0; row < output_height; ++row) {
                         for (size_t col = 0; col < output_width; ++col) {
