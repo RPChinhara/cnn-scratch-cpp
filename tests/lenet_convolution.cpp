@@ -57,7 +57,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
         for (size_t i = 0; i < num_batches; ++i) {
             for (size_t j = 0; j < num_kernels; ++j) {
                 tensor kernel = slice(kernels, j * kernel_height, kernel_height);
-                tensor output_sum = zeros({output_height, output_width});
+                tensor channels_sum = zeros({output_height, output_width});
 
                 for (size_t k = 0; k < num_channels; ++k) {
                     size_t idx = i * num_channels + k;
@@ -83,13 +83,13 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                                 }
                             }
 
-                            output_sum(row, col) += sum;
+                            channels_sum(row, col) += sum;
                         }
                     }
                 }
 
-                for (size_t i = 0; i < output_sum.size; ++i)
-                    outputs[idx * output_sum.size + i] = output_sum[i];
+                for (size_t i = 0; i < channels_sum.size; ++i)
+                    outputs[idx * channels_sum.size + i] = channels_sum[i];
 
                 ++idx;
             }
