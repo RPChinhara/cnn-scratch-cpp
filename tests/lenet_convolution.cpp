@@ -15,7 +15,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
+    tensor feature_maps = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
     size_t idx = 0;
 
@@ -44,7 +44,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                 }
 
                 for (size_t i = 0; i < output.size; ++i)
-                    outputs[idx * output.size + i] = output[i];
+                    feature_maps[idx * output.size + i] = output[i];
 
                 ++idx;
             }
@@ -89,14 +89,14 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                 }
 
                 for (size_t i = 0; i < channels_sum.size; ++i)
-                    outputs[idx * channels_sum.size + i] = channels_sum[i];
+                    feature_maps[idx * channels_sum.size + i] = channels_sum[i];
 
                 ++idx;
             }
         }
     }
 
-    return outputs;
+    return feature_maps;
 }
 
 int main() {
