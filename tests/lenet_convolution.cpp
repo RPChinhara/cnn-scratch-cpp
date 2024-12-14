@@ -4,7 +4,7 @@
 
 #include <chrono>
 
-tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1, const size_t padding = 0) {
+tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
@@ -61,23 +61,20 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
                 for (size_t k = 0; k < num_channels; ++k) {
                     size_t idx = i * num_channels + k;
                     tensor img = slice(x, idx * input_height, input_height);
-                    tensor output = zeros({output_height, output_width});
 
-                    for (size_t i = 0; i < output_height; ++i) {
-                        for (size_t j = 0; j < output_width; ++j) {
+                    for (size_t row = 0; row < output_height; ++row) {
+                        for (size_t col = 0; col < output_width; ++col) {
                             float sum = 0.0;
 
                             for (size_t m = 0; m < kernel_height; ++m) {
                                 for (size_t n = 0; n < kernel_width; ++n) {
-                                    sum += img(i + m, j + n) * kernel(m, n);
+                                    sum += img(row + m, col + n) * kernel(m, n);
                                 }
                             }
 
-                            output(i, j) = sum;
+                            output_sum(row, col) += sum;
                         }
                     }
-
-                    output_sum += output;
                 }
 
                 for (size_t i = 0; i < output_sum.size; ++i)
@@ -108,13 +105,13 @@ int main() {
             kernel2[i] += 2.0f;
     }
 
-    std::cout << x1 << "\n";
+    std::cout << x2 << "\n";
     std::cout << kernel1 << "\n";
 
     auto start = std::chrono::high_resolution_clock::now();
 
     // std::cout << lenet_convolution(x1, kernel1) << "\n";
-    std::cout << lenet_convolution(x1, kernel2) << "\n";
+    std::cout << lenet_convolution(x2, kernel2) << "\n";
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
