@@ -186,8 +186,8 @@ tensor lenet_forward(const tensor& x) {
 
     s4.reshape({60000, 400});
 
-    tensor f5 = matmul(w1, transpose(s4)) + b1;
-    tensor f6 = matmul(w2, f5) + b2;
+    tensor f5 = relu(matmul(w1, transpose(s4)) + b1);
+    tensor f6 = relu(matmul(w2, f5) + b2);
     tensor y = softmax(matmul(w3, f6) + b3);
 
     std::cout << x.get_shape() << "\n";
