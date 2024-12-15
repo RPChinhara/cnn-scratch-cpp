@@ -261,13 +261,12 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 int main() {
     mnist data = load_mnist();
 
-    constexpr size_t num_digits = 1;
-    print_imgs(data.train_imgs, num_digits);
+    print_imgs(data.train_imgs, 1);
 
     data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
     data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
-    print_imgs(data.train_imgs, num_digits);
+    print_imgs(data.train_imgs, 1);
 
     for (auto i = 0; i < data.train_imgs.size; ++i)
         data.train_imgs[i] /= 255.0f;
