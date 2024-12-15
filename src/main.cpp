@@ -9,7 +9,7 @@
 
 #include <chrono>
 
-constexpr size_t input_size = 256;
+constexpr size_t input_size = 400;
 constexpr size_t hidden1_size = 120;
 constexpr size_t hidden2_size = 84;
 constexpr size_t output_size = 10;
@@ -184,27 +184,22 @@ tensor lenet_forward(const tensor& x) {
     tensor c3 = relu(lenet_convolution(s2, kernel2));
     tensor s4 = lenet_max_pool(c3);
 
+    s4.reshape({60000, 400});
+
+    tensor f5 = matmul(w1, transpose(s4)) + b1;
+    tensor f6 = matmul(w2, f5) + b2;
+    tensor y = softmax(matmul(w3, f6) + b3);
+
     std::cout << x.get_shape() << "\n";
     std::cout << c1.get_shape() << "\n";
     std::cout << s2.get_shape() << "\n";
     std::cout << c3.get_shape() << "\n";
     std::cout << s4.get_shape() << "\n";
+    std::cout << f5.get_shape() << "\n";
+    std::cout << f6.get_shape() << "\n";
+    std::cout << y.get_shape() << "\n";
 
-    // // TODO: Can I do x_conv2.reshape({25, 60000});?
-    // s4.reshape({60000, 256});
-
-    // tensor f5 = matmul(w1, transpose(s4)) + b1;
-    // std::cout << f5.get_shape() << "\n";
-
-    // tensor f6 = matmul(w2, f5) + b2;
-    // std::cout << f6.get_shape() << "\n";
-
-    // tensor y = softmax(matmul(w3, f6) + b3);
-    // std::cout << y.get_shape() << "\n";
-
-    // return y;
-
-    return tensor();
+    return y;
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
@@ -217,8 +212,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor y = lenet_forward(x_train);
 
-        // float error = categorical_cross_entropy(y_train, transpose(y));
-        float error = 0.0f;
+        std::cout << y_train.get_shape() << "\n";
+
+        float error = categorical_cross_entropy(y_train, transpose(y));
 
         // tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
