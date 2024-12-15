@@ -9,10 +9,6 @@
 
 #include <chrono>
 
-constexpr float  lr = 0.01f;
-constexpr size_t batch_size = 32;
-constexpr size_t epochs = 1;
-
 constexpr size_t input_size = 256;
 constexpr size_t hidden1_size = 120;
 constexpr size_t hidden2_size = 84;
@@ -212,6 +208,10 @@ tensor lenet_forward(const tensor& x) {
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
+    constexpr size_t epochs = 1;
+    constexpr float  lr = 0.01f;
+    constexpr size_t batch_size = 32;
+
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
