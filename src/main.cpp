@@ -218,16 +218,16 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         // tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
 
-        // d_loss_d_kernel1;
-        // d_loss_d_kernel2;
+        tensor d_loss_d_kernel1 = zeros({6, 5, 5});
+        tensor d_loss_d_kernel2 = zeros({16, 5, 5});
 
-        // d_loss_d_w1;
-        // d_loss_d_w2;
-        // d_loss_d_w3;
+        tensor d_loss_d_w1 = zeros({hidden1_size, input_size});
+        tensor d_loss_d_w2 = zeros({hidden2_size, hidden1_size});
+        tensor d_loss_d_w3 = zeros({output_size, hidden2_size});
 
-        // d_loss_b1;
-        // d_loss_b2;
-        // d_loss_b3;
+        tensor d_loss_b1 = zeros({hidden1_size, 1});
+        tensor d_loss_b2 = zeros({hidden2_size, 1});
+        tensor d_loss_b3 = zeros({output_size, 1});
 
         // for (auto j = seq_length; j > 0; --j) {
         //     if (j == seq_length) {
