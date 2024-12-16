@@ -220,7 +220,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         tensor dl_dkernel2 = zeros({16, 5, 5});
 
         tensor dl_dw1 = zeros({hidden1_size, input_size});
-        tensor dl_dw2 = zeros({hidden2_size, hidden1_size});
+        tensor dl_dw2 = matmul(transpose(dl_dy), w3) f5); (10, 60000), (10, 84), (120, 60000) w2 = (84, 120)
         tensor dl_dw3 = matmul(dl_dy, transpose(f6));
 
         std::cout << dl_dw3.get_shape() << "\n";
@@ -240,7 +240,12 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         // b2 = b2 - lr * dl_b2;
         b3 = b3 - lr * dl_b3;
 
+        // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
+        // dl_dw2 = dl_dy * dy_df6 * df6_dw2
         // dl_dw3 = dl_dy * dy_dw3
+
+        // dl_db1 = dl_dy * dy_df6 * df6_df5 * df5_db1
+        // dl_db2 = dl_dy * dy_df6 * df6_db2
         // dl_db3 = dl_dy * dy_db3
 
         // x:  (60000, 32, 32)
