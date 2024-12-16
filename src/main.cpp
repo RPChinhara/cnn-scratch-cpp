@@ -220,24 +220,24 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         tensor dl_dkernel2 = zeros({16, 5, 5});
 
         tensor dl_dw1 = zeros({hidden1_size, input_size});
-        tensor dl_dw2 = matmul(transpose(dl_dy), w3) f5); (10, 60000), (10, 84), (120, 60000) w2 = (84, 120)
+        tensor dl_dw2 = matmul(transpose(matmul(transpose(dl_dy), w3)), transpose(f5)); // (10, 60000), (10, 84), (120, 60000) w2 = (84, 120)
         tensor dl_dw3 = matmul(dl_dy, transpose(f6));
 
-        std::cout << dl_dw3.get_shape() << "\n";
+        std::cout << dl_dw2.get_shape() << "\n";
 
         tensor dl_b1 = zeros({hidden1_size, 1});
-        tensor dl_b2 = zeros({hidden2_size, 1});
+        tensor dl_b2 = sum(transpose(matmul(transpose(dl_dy), w3)), 1);
         tensor dl_b3 = sum(dl_dy, 1);
 
         // kernel1 = kernel1 - lr * dl_dkernel1;
         // kernel2 = kernel2 - lr * dl_dkernel2;
 
         // w1 = w1 - lr * dl_dw1;
-        // w2 = w2 - lr * dl_dw2;
+        w2 = w2 - lr * dl_dw2;
         w3 = w3 - lr * dl_dw3;
 
         // b1 = b1 - lr * dl_b1;
-        // b2 = b2 - lr * dl_b2;
+        b2 = b2 - lr * dl_b2;
         b3 = b3 - lr * dl_b3;
 
         // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
