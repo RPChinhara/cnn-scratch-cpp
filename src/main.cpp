@@ -214,13 +214,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         float error = categorical_cross_entropy(y_train, transpose(y));
 
-        std::cout << y_train.get_shape() << "\n";
-        std::cout << y.get_shape() << "\n";
-
-        tensor dl_dy = transpose(y) - y_train;
+        tensor dl_dy = y - transpose(y_train);
         tensor dl_dz = dl_dy;
-
-        std::cout << dl_dz.get_shape() << "\n";
 
         tensor dl_dkernel1 = zeros({6, 5, 5});
         tensor dl_dkernel2 = zeros({16, 5, 5});
@@ -231,7 +226,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor dl_b1 = zeros({hidden1_size, 1});
         tensor dl_b2 = zeros({hidden2_size, 1});
-        tensor dl_b3 = zeros({output_size, 1});
+        tensor dl_b3 = sum(dl_dy, 1);
 
         // kernel1 = kernel1 - lr * dl_dkernel1;
         // kernel2 = kernel2 - lr * dl_dkernel2;
@@ -242,7 +237,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         // b1 = b1 - lr * dl_b1;
         // b2 = b2 - lr * dl_b2;
-        // b3 = b3 - lr * dl_b3;
+        b3 = b3 - lr * dl_b3;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
