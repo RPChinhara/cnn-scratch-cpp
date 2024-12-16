@@ -191,15 +191,6 @@ std::array<tensor, 4> lenet_forward(const tensor& x) {
     tensor f6 = relu(matmul(w2, f5) + b2);
     tensor y = softmax(matmul(w3, f6) + b3);
 
-    // std::cout << x.get_shape() << "\n";
-    // std::cout << c1.get_shape() << "\n";
-    // std::cout << s2.get_shape() << "\n";
-    // std::cout << c3.get_shape() << "\n";
-    // std::cout << s4.get_shape() << "\n";
-    // std::cout << f5.get_shape() << "\n";
-    // std::cout << f6.get_shape() << "\n";
-    // std::cout << y.get_shape() << "\n";
-
     std::array<tensor, 4> outputs;
 
     outputs[0] = s4;
@@ -230,7 +221,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor dl_dw1 = zeros({hidden1_size, input_size});
         tensor dl_dw2 = zeros({hidden2_size, hidden1_size});
-        tensor dl_dw3 = zeros({output_size, hidden2_size});
+        tensor dl_dw3 = matmul(dl_dy, transpose(f6));
+
+        std::cout << dl_dw3.get_shape() << "\n";
 
         tensor dl_b1 = zeros({hidden1_size, 1});
         tensor dl_b2 = zeros({hidden2_size, 1});
@@ -241,11 +234,23 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         // w1 = w1 - lr * dl_dw1;
         // w2 = w2 - lr * dl_dw2;
-        // w3 = w3 - lr * dl_dw3;
+        w3 = w3 - lr * dl_dw3;
 
         // b1 = b1 - lr * dl_b1;
         // b2 = b2 - lr * dl_b2;
         b3 = b3 - lr * dl_b3;
+
+        // dl_dw3 = dl_dy * dy_dw3
+        // dl_db3 = dl_dy * dy_db3
+
+        // x:  (60000, 32, 32)
+        // c1: (60000, 6, 28, 28)
+        // s2: (60000, 6, 14, 14)
+        // c3: (60000, 16, 10, 10)
+        // s4: (60000, 400)
+        // f5: (120, 60000)
+        // f6: (84, 60000)
+        // y:  (10, 60000)
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
