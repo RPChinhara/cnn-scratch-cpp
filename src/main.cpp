@@ -214,31 +214,31 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         float error = categorical_cross_entropy(y_train, transpose(y));
 
         tensor dl_dy = y - transpose(y_train);
-        tensor dl_dz = dl_dy;
 
-        tensor dl_dkernel1 = zeros({6, 5, 5});
-        tensor dl_dkernel2 = zeros({16, 5, 5});
-
-        tensor dl_dw1 = zeros({hidden1_size, input_size});
-        tensor dl_dw2 = matmul(transpose(matmul(transpose(dl_dy), w3)), transpose(f5)); // (10, 60000), (10, 84), (120, 60000) w2 = (84, 120)
         tensor dl_dw3 = matmul(dl_dy, transpose(f6));
+        tensor dl_dw2 = matmul(transpose(matmul(transpose(dl_dy), w3)), transpose(f5)); // (10, 60000), (10, 84), (120, 60000) w2 = (84, 120)
+        tensor dl_dw1 = matmul(transpose(matmul(matmul(transpose(dl_dy), w3), w2)), s4); // w1 = (120, 400)
 
-        std::cout << dl_dw2.get_shape() << "\n";
+        tensor dl_dkernel2 = zeros({16, 5, 5});
+        tensor dl_dkernel1 = zeros({6, 5, 5});
 
-        tensor dl_b1 = zeros({hidden1_size, 1});
-        tensor dl_b2 = sum(transpose(matmul(transpose(dl_dy), w3)), 1);
         tensor dl_b3 = sum(dl_dy, 1);
+        tensor dl_b2 = sum(transpose(matmul(transpose(dl_dy), w3)), 1);
+        tensor dl_b1 = sum(transpose(matmul(matmul(transpose(dl_dy), w3), w2)), 1);
 
         // kernel1 = kernel1 - lr * dl_dkernel1;
         // kernel2 = kernel2 - lr * dl_dkernel2;
 
-        // w1 = w1 - lr * dl_dw1;
+        w1 = w1 - lr * dl_dw1;
         w2 = w2 - lr * dl_dw2;
         w3 = w3 - lr * dl_dw3;
 
-        // b1 = b1 - lr * dl_b1;
+        b1 = b1 - lr * dl_b1;
         b2 = b2 - lr * dl_b2;
         b3 = b3 - lr * dl_b3;
+
+        // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_c3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
+        // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_c3 * dc3_dkernel2
 
         // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
         // dl_dw2 = dl_dy * dy_df6 * df6_dw2
