@@ -190,14 +190,14 @@ tensor lenet_forward(const tensor& x) {
     tensor f6 = relu(matmul(w2, f5) + b2);
     tensor y = softmax(matmul(w3, f6) + b3);
 
-    std::cout << x.get_shape() << "\n";
-    std::cout << c1.get_shape() << "\n";
-    std::cout << s2.get_shape() << "\n";
-    std::cout << c3.get_shape() << "\n";
-    std::cout << s4.get_shape() << "\n";
-    std::cout << f5.get_shape() << "\n";
-    std::cout << f6.get_shape() << "\n";
-    std::cout << y.get_shape() << "\n";
+    // std::cout << x.get_shape() << "\n";
+    // std::cout << c1.get_shape() << "\n";
+    // std::cout << s2.get_shape() << "\n";
+    // std::cout << c3.get_shape() << "\n";
+    // std::cout << s4.get_shape() << "\n";
+    // std::cout << f5.get_shape() << "\n";
+    // std::cout << f6.get_shape() << "\n";
+    // std::cout << y.get_shape() << "\n";
 
     return y;
 }
@@ -212,11 +212,15 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor y = lenet_forward(x_train);
 
-        std::cout << y_train.get_shape() << "\n";
-
         float error = categorical_cross_entropy(y_train, transpose(y));
 
-        // tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
+        std::cout << y_train.get_shape() << "\n";
+        std::cout << y.get_shape() << "\n";
+
+        tensor d_loss_d_y = transpose(y) - y_train;
+        tensor d_loss_d_z = d_loss_d_y;
+
+        std::cout << d_loss_d_z.get_shape() << "\n";
 
         tensor d_loss_d_kernel1 = zeros({6, 5, 5});
         tensor d_loss_d_kernel2 = zeros({16, 5, 5});
@@ -228,20 +232,6 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         tensor d_loss_b1 = zeros({hidden1_size, 1});
         tensor d_loss_b2 = zeros({hidden2_size, 1});
         tensor d_loss_b3 = zeros({output_size, 1});
-
-        // for (auto j = seq_length; j > 0; --j) {
-        //     if (j == seq_length) {
-        //         tensor d_y_d_h_10 = w_hy;
-        //         d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
-        //     } else {
-        //         d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(z_sequence[j])), w_hh);
-        //     }
-
-        //     d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), x_sequence[j - 1]);
-        //     d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), transpose(h_sequence[j - 1]));
-
-        //     d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
-        // }
 
         // kernel1 = kerne1 - lr * d_loss_d_kernel1;
         // kernel2 = kerne2 - lr * d_loss_d_kernel2;
