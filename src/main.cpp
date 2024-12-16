@@ -7,6 +7,7 @@
 #include "rand.h"
 #include "tensor.h"
 
+#include <array>
 #include <chrono>
 
 constexpr size_t input_size = 400;
@@ -178,7 +179,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-tensor lenet_forward(const tensor& x) {
+std::array<tensor, 4> lenet_forward(const tensor& x) {
     tensor c1 = relu(lenet_convolution(x, kernel1));
     tensor s2 = lenet_max_pool(c1);
     tensor c3 = relu(lenet_convolution(s2, kernel2));
@@ -199,18 +200,25 @@ tensor lenet_forward(const tensor& x) {
     // std::cout << f6.get_shape() << "\n";
     // std::cout << y.get_shape() << "\n";
 
-    return y;
+    std::array<tensor, 4> outputs;
+
+    outputs[0] = s4;
+    outputs[1] = f5;
+    outputs[2] = f6;
+    outputs[3] = y;
+
+    return outputs;
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
-    constexpr size_t epochs = 1;
+    constexpr size_t epochs = 10;
     constexpr float  lr = 0.01f;
     constexpr size_t batch_size = 32;
 
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        tensor y = lenet_forward(x_train);
+        auto [s4, f5, f6, y] = lenet_forward(x_train);
 
         float error = categorical_cross_entropy(y_train, transpose(y));
 
