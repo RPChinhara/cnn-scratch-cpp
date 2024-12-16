@@ -232,8 +232,16 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         //     d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
         // }
 
-        // w = w - lr * d_loss_d_w;
-        // b = b - lr * d_loss_d_y;
+        // kernel1 = kerne1 - lr * d_loss_d_kernel1;
+        // kernel2 = kerne2 - lr * d_loss_d_kernel2;
+
+        // w1 = w1 - lr * d_loss_d_w1;
+        // w2 = w2 - lr * d_loss_d_w2;
+        // w3 = w3 - lr * d_loss_d_w3;
+
+        // b1 = b1 - lr * d_loss_b1;
+        // b2 = b2 - lr * d_loss_b2;
+        // b3 = b3 - lr * d_loss_b3;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
