@@ -217,32 +217,32 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         std::cout << y_train.get_shape() << "\n";
         std::cout << y.get_shape() << "\n";
 
-        tensor d_loss_d_y = transpose(y) - y_train;
-        tensor d_loss_d_z = d_loss_d_y;
+        tensor dl_dy = transpose(y) - y_train;
+        tensor dl_dz = dl_dy;
 
-        std::cout << d_loss_d_z.get_shape() << "\n";
+        std::cout << dl_dz.get_shape() << "\n";
 
-        tensor d_loss_d_kernel1 = zeros({6, 5, 5});
-        tensor d_loss_d_kernel2 = zeros({16, 5, 5});
+        tensor dl_dkernel1 = zeros({6, 5, 5});
+        tensor dl_dkernel2 = zeros({16, 5, 5});
 
-        tensor d_loss_d_w1 = zeros({hidden1_size, input_size});
-        tensor d_loss_d_w2 = zeros({hidden2_size, hidden1_size});
-        tensor d_loss_d_w3 = zeros({output_size, hidden2_size});
+        tensor dl_dw1 = zeros({hidden1_size, input_size});
+        tensor dl_dw2 = zeros({hidden2_size, hidden1_size});
+        tensor dl_dw3 = zeros({output_size, hidden2_size});
 
-        tensor d_loss_b1 = zeros({hidden1_size, 1});
-        tensor d_loss_b2 = zeros({hidden2_size, 1});
-        tensor d_loss_b3 = zeros({output_size, 1});
+        tensor dl_b1 = zeros({hidden1_size, 1});
+        tensor dl_b2 = zeros({hidden2_size, 1});
+        tensor dl_b3 = zeros({output_size, 1});
 
-        // kernel1 = kerne1 - lr * d_loss_d_kernel1;
-        // kernel2 = kerne2 - lr * d_loss_d_kernel2;
+        // kernel1 = kernel1 - lr * dl_dkernel1;
+        // kernel2 = kernel2 - lr * dl_dkernel2;
 
-        // w1 = w1 - lr * d_loss_d_w1;
-        // w2 = w2 - lr * d_loss_d_w2;
-        // w3 = w3 - lr * d_loss_d_w3;
+        // w1 = w1 - lr * dl_dw1;
+        // w2 = w2 - lr * dl_dw2;
+        // w3 = w3 - lr * dl_dw3;
 
-        // b1 = b1 - lr * d_loss_b1;
-        // b2 = b2 - lr * d_loss_b2;
-        // b3 = b3 - lr * d_loss_b3;
+        // b1 = b1 - lr * dl_b1;
+        // b2 = b2 - lr * dl_b2;
+        // b3 = b3 - lr * dl_b3;
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
