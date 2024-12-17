@@ -230,17 +230,23 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             float error = categorical_cross_entropy(y_train, transpose(y));
 
             tensor dl_dy = y - transpose(y_train);
+            tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
+            tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
+            tensor dl_ds4 = matmul(transpose(relu_derivative(s4)), dl_df5);
+            tensor dl_c3;
+            tensor dl_ds2;
+            tensor dl_dc1;
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
-            tensor dl_dw2 = matmul(transpose(matmul(transpose(dl_dy), w3)), transpose(f5)); // (10, 60000), (10, 84), (120, 60000) w2 = (84, 120)
-            tensor dl_dw1 = matmul(transpose(matmul(matmul(transpose(dl_dy), w3), w2)), s4); // w1 = (120, 400)
+            tensor dl_dw2 = matmul(dl_df6, transpose(f5));
+            tensor dl_dw1 = matmul(dl_df5, s4);
 
-            tensor dl_dkernel2 = zeros({16, 5, 5});
-            tensor dl_dkernel1 = zeros({6, 5, 5});
+            tensor dl_dkernel2;
+            tensor dl_dkernel1;
 
-            tensor dl_b3 = sum(dl_dy, 1);
-            tensor dl_b2 = sum(transpose(matmul(transpose(dl_dy), w3)), 1);
-            tensor dl_b1 = sum(transpose(matmul(matmul(transpose(dl_dy), w3), w2)), 1);
+            tensor dl_db3 = sum(dl_dy, 1);
+            tensor dl_db2 = sum(dl_df6, 1);
+            tensor dl_db1 = sum(dl_df5, 1);
 
             // kernel1 = kernel1 - lr * dl_dkernel1;
             // kernel2 = kernel2 - lr * dl_dkernel2;
@@ -249,9 +255,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             w2 = w2 - lr * dl_dw2;
             w3 = w3 - lr * dl_dw3;
 
-            b1 = b1 - lr * dl_b1;
-            b2 = b2 - lr * dl_b2;
-            b3 = b3 - lr * dl_b3;
+            b1 = b1 - lr * dl_db1;
+            b2 = b2 - lr * dl_db2;
+            b3 = b3 - lr * dl_db3;
 
             // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_c3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
             // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_c3 * dc3_dkernel2
@@ -272,6 +278,14 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             // f5: (120, 60000)
             // f6: (84, 60000)
             // y:  (10, 60000)
+
+            // w1: (120, 400)
+            // w2: (84, 120)
+            // w3: (10, 84)
+
+            // b1: (120, 1)
+            // b2: (84, 1)
+            // b3: (10, 1)
 
             auto end_time = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
