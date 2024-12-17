@@ -353,26 +353,25 @@ int main() {
 
     size_t idx = 0;
     size_t idx2 = 0;
+    size_t num_imgs = 4;
+    size_t num_max_per_imgs = 4; // NOTE: or num_regiongs_pre_imgs?
 
-    for (size_t i = 0; i < 4; ++i) {
-        auto img = slice(x2, i * 4, 4);
+    for (size_t i = 0; i < num_imgs; ++i) {
+        size_t img_height = x2.shape[2];
+        auto img = slice(x2, i * img_height, img_height);
 
-        for (size_t j = 0; j < 4; ++j) {
+        for (size_t j = 0; j < num_max_per_imgs; ++j) {
             // TODO: Use eigther of things below
-
             // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-            ++idx;
-
             x2(idx2 + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+
+            ++idx;
         }
 
-        idx2 += 4;
+        idx2 += img_height;
     }
 
     std::cout << x2 << "\n";
-    std::cout << x2(4, 0) << "\n";
-    std::cout << x2(5, 1) << "\n";
-    std::cout << x2(6, 5) << "\n";
 
     return 0;
 }
