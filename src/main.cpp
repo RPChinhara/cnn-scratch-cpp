@@ -352,14 +352,27 @@ int main() {
     std::cout << lenet_max_pool(x1) << "\n";
 
     size_t idx = 0;
-    for (size_t i = 0; i < 8; ++i) {
-        x2(idx + max_indices[i].first, idx + max_indices[i].second) = 1.0f;
+    size_t idx2 = 0;
 
-        if (i > 3)
-        idx += 16;
+    for (size_t i = 0; i < 4; ++i) {
+        auto img = slice(x2, i * 4, 4);
+
+        for (size_t j = 0; j < 4; ++j) {
+            // TODO: Use eigther of things below
+
+            // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
+            ++idx;
+
+            x2(idx2 + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+        }
+
+        idx2 += 4;
     }
 
     std::cout << x2 << "\n";
+    std::cout << x2(4, 0) << "\n";
+    std::cout << x2(5, 1) << "\n";
+    std::cout << x2(6, 5) << "\n";
 
     return 0;
 }
