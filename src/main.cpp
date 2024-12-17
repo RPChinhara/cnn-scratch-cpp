@@ -21,6 +21,8 @@ tensor b1 = zeros({120, 1});
 tensor b2 = zeros({84, 1});
 tensor b3 = zeros({10, 1});
 
+std::vector<std::pair<size_t, size_t>> max_indices;
+
 void print_imgs(const tensor& imgs, size_t num_digits) {
     size_t img_size = imgs.shape[1] * imgs.shape.back();
     size_t img_dim  = imgs.shape[1];
@@ -153,17 +155,22 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
         for (size_t i = 0; i < output_height; ++i) {
             for (size_t j = 0; j < output_width; ++j) {
                 float max_val = -std::numeric_limits<float>::infinity();
+                std::pair<size_t, size_t> max_idx;
 
                 for (size_t m = 0; m < pool_size; ++m) {
                     for (size_t n = 0; n < pool_size; ++n) {
                         float val = img(i * stride + m, j * stride + n);
 
-                        if (val > max_val)
+                        if (val > max_val) {
+                            max_idx.first = i * stride + m;
+                            max_idx.second = j * stride + n;
                             max_val = val;
+                        }
                     }
                 }
 
                 output(i, j) = max_val;
+                max_indices.push_back(max_idx);
             }
         }
 
@@ -228,7 +235,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
             tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
-            tensor dl_c3;
+            tensor dl_c3; //  (60000, 16, 10, 10)?
             tensor dl_ds2;
             tensor dl_dc1;
 
@@ -307,36 +314,52 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    mnist data = load_mnist();
+    // mnist data = load_mnist();
 
-    print_imgs(data.train_imgs, 1);
+    // print_imgs(data.train_imgs, 1);
 
-    data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
-    data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
+    // data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
+    // data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
-    print_imgs(data.train_imgs, 1);
+    // print_imgs(data.train_imgs, 1);
 
-    for (auto i = 0; i < data.train_imgs.size; ++i)
-        data.train_imgs[i] /= 255.0f;
+    // for (auto i = 0; i < data.train_imgs.size; ++i)
+    //     data.train_imgs[i] /= 255.0f;
 
-    for (auto i = 0; i < data.test_imgs.size; ++i)
-        data.test_imgs[i] /= 255.0f;
+    // for (auto i = 0; i < data.test_imgs.size; ++i)
+    //     data.test_imgs[i] /= 255.0f;
 
-    data.train_labels = one_hot(data.train_labels, 10);
-    data.test_labels = one_hot(data.test_labels, 10);
+    // data.train_labels = one_hot(data.train_labels, 10);
+    // data.test_labels = one_hot(data.test_labels, 10);
 
-    auto start = std::chrono::high_resolution_clock::now();
+    // auto start = std::chrono::high_resolution_clock::now();
 
-    lenet_train(data.train_imgs, data.train_labels);
+    // lenet_train(data.train_imgs, data.train_labels);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
+    // auto end = std::chrono::high_resolution_clock::now();
+    // auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    // std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
 
-    auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
-    std::cout << "Test loss:  " << test_loss << "\n\n";
+    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    // std::cout << "Test loss:  " << test_loss << "\n\n";
 
-    lenet_predict(data.test_imgs, data.test_labels);
+    // lenet_predict(data.test_imgs, data.test_labels);
+
+    auto x1 = uniform_dist({2, 2, 4, 4}, 0.0f, 0.000001f);
+    auto x2 = zeros({2, 2, 4, 4});
+
+    std::cout << x1 << "\n";
+    std::cout << lenet_max_pool(x1) << "\n";
+
+    size_t idx = 0;
+    for (size_t i = 0; i < 8; ++i) {
+        x2(idx + max_indices[i].first, idx + max_indices[i].second) = 1.0f;
+
+        if (i > 3)
+        idx += 16;
+    }
+
+    std::cout << x2 << "\n";
 
     return 0;
 }
