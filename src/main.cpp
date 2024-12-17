@@ -232,10 +232,12 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor dl_dy = y - transpose(y_train);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
-            tensor dl_ds4 = matmul(transpose(relu_derivative(s4)), dl_df5);
+            tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
             tensor dl_c3;
             tensor dl_ds2;
             tensor dl_dc1;
+
+            std::cout << dl_ds4.get_shape() << "\n";
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6, transpose(f5));
@@ -274,7 +276,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             // c1: (60000, 6, 28, 28)
             // s2: (60000, 6, 14, 14)
             // c3: (60000, 16, 10, 10)
-            // s4: (60000, 400)
+            // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
             // f5: (120, 60000)
             // f6: (84, 60000)
             // y:  (10, 60000)
