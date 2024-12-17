@@ -10,21 +10,16 @@
 #include <array>
 #include <chrono>
 
-constexpr size_t input_size = 400;
-constexpr size_t hidden1_size = 120;
-constexpr size_t hidden2_size = 84;
-constexpr size_t output_size = 10;
-
 tensor kernel1 = glorot_uniform({6, 5, 5});
 tensor kernel2 = glorot_uniform({16, 5, 5});
 
-tensor w1 = glorot_uniform({hidden1_size, input_size});
-tensor w2 = glorot_uniform({hidden2_size, hidden1_size});
-tensor w3 = glorot_uniform({output_size, hidden2_size});
+tensor w1 = glorot_uniform({120, 400});
+tensor w2 = glorot_uniform({84, 120});
+tensor w3 = glorot_uniform({10, 84});
 
-tensor b1 = zeros({hidden1_size, 1});
-tensor b2 = zeros({hidden2_size, 1});
-tensor b3 = zeros({output_size, 1});
+tensor b1 = zeros({120, 1});
+tensor b2 = zeros({84, 1});
+tensor b3 = zeros({10, 1});
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
     size_t img_size = imgs.shape[1] * imgs.shape.back();
