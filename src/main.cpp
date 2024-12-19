@@ -353,14 +353,14 @@ int main() {
 
     size_t idx = 0;
     size_t cumulative_height = 0;
-    size_t num_imgs = 4;
-    size_t num_regions_per_img = 4; // NOTE: or num_regiongs_pre_imgs?
+    size_t num_imgs = x2.shape.front() * x2.shape[1]; // or lenet_max_pool(x1).shape.front() * lenet_max_pool(x1).shape[1];
+    size_t output_img_size = lenet_max_pool(x1).shape[2] * lenet_max_pool(x1).shape.back();
 
     for (size_t i = 0; i < num_imgs; ++i) {
         size_t img_height = x2.shape[2];
-        auto img = slice(x2, i * img_height, img_height);
+        // auto img = slice(x2, i * img_height, img_height);
 
-        for (size_t j = 0; j < num_regions_per_img; ++j) {
+        for (size_t j = 0; j < output_img_size; ++j) {
             // TODO: Use eigther of these below
             // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
             x2(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
