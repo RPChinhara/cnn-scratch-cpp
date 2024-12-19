@@ -183,7 +183,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-std::array<tensor, 4> lenet_forward(const tensor& x) {
+std::array<tensor, 5> lenet_forward(const tensor& x) {
     tensor c1 = relu(lenet_convolution(x, kernel1));
     tensor s2 = lenet_max_pool(c1);
     tensor c3 = relu(lenet_convolution(s2, kernel2));
@@ -195,12 +195,13 @@ std::array<tensor, 4> lenet_forward(const tensor& x) {
     tensor f6 = relu(matmul(w2, f5) + b2);
     tensor y = softmax(matmul(w3, f6) + b3);
 
-    std::array<tensor, 4> outputs;
+    std::array<tensor, 5> outputs;
 
-    outputs[0] = s4;
-    outputs[1] = f5;
-    outputs[2] = f6;
-    outputs[3] = y;
+    outputs[0] = c3;
+    outputs[1] = s4;
+    outputs[2] = f5;
+    outputs[3] = f6;
+    outputs[4] = y;
 
     return outputs;
 }
@@ -229,7 +230,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         //     tensor x_batch = slice(x_train, j * img_size, (j + 1) * img_size);
         //     std::cout << x_batch.get_shape() << "\n";
 
-            auto [s4, f5, f6, y] = lenet_forward(x_train);
+            auto [c3, s4, f5, f6, y] = lenet_forward(x_train);
 
             float error = categorical_cross_entropy(y_train, transpose(y));
 
@@ -237,7 +238,36 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
             tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
-            tensor dl_c3; //  (60000, 16, 10, 10)?
+
+            tensor dl_c3 = zeros({60000, 16, 10, 10});
+            // auto c3 = uniform_dist({2, 2, 6, 6}, 0.0f, 0.000001f);
+            // auto s4 = lenet_max_pool(c3);
+
+            // std::cout << c3 << "\n";
+            // std::cout << s4 << "\n";
+
+            size_t idx = 0;
+            size_t cumulative_height = 0;
+            size_t num_imgs = s4.shape.front() * s4.shape[1];
+            size_t output_img_size = s4.shape[2] * s4.shape.back();
+
+            for (size_t i = 0; i < num_imgs; ++i) {
+                size_t img_height = c3.shape[2];
+                // auto img = slice(x2, i * img_height, img_height);
+
+                for (size_t j = 0; j < output_img_size; ++j) {
+                    // TODO: Use eigther of these below
+                    // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
+                    dl_c3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+
+                    ++idx;
+                }
+
+                cumulative_height += img_height;
+            }
+
+            std::cout << dl_c3 << "\n";
+
             tensor dl_ds2;
             tensor dl_dc1;
 
