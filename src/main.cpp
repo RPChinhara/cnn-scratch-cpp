@@ -38,6 +38,7 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
     }
 }
 
+// TODO: Move this to the lyrs folders? Unlike rnn, gru, lstm, conv2d and max_pool2d will be all same? Also, I could make max_pool2d_derivative in the file as well.
 tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
@@ -133,6 +134,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
     return feature_maps;
 }
 
+// TODO: Move this to the lyrs folders?
 tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t num_kernels = x.shape[1];
 
