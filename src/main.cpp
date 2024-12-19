@@ -352,23 +352,23 @@ int main() {
     std::cout << lenet_max_pool(x1) << "\n";
 
     size_t idx = 0;
-    size_t idx2 = 0;
+    size_t cumulative_height = 0;
     size_t num_imgs = 4;
-    size_t num_max_per_imgs = 4; // NOTE: or num_regiongs_pre_imgs?
+    size_t num_regions_per_img = 4; // NOTE: or num_regiongs_pre_imgs?
 
     for (size_t i = 0; i < num_imgs; ++i) {
         size_t img_height = x2.shape[2];
         auto img = slice(x2, i * img_height, img_height);
 
-        for (size_t j = 0; j < num_max_per_imgs; ++j) {
-            // TODO: Use eigther of things below
+        for (size_t j = 0; j < num_regions_per_img; ++j) {
+            // TODO: Use eigther of these below
             // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-            x2(idx2 + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+            x2(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
 
             ++idx;
         }
 
-        idx2 += img_height;
+        cumulative_height += img_height;
     }
 
     std::cout << x2 << "\n";
