@@ -225,6 +225,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
     constexpr float lr = 0.01f;
 
     for (size_t i = 1; i <= epochs; ++i) {
+        std::cout << "Epoch " << i << "/" << epochs << std::endl;
+
         auto start_time = std::chrono::high_resolution_clock::now();
 
         auto [c1, s2, c3, s4, f5, f6, y] = lenet_forward(x_train);
@@ -321,7 +323,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
+        std::cout << "1/1 [==============================] - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
     }
 }
 
