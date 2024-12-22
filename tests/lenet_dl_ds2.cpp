@@ -99,14 +99,26 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 }
 
 int main () {
-    auto dl_ds4 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.000001f);
-    auto dl_dc3 = zeros({2, 2, 6, 6});
-    auto c3 = uniform_dist({2, 2, 6, 6}, 0.0f, 0.000001f);
-    auto s4 = lenet_max_pool(c3);
+    tensor s2 = uniform_dist({3, 6, 14, 14}, 0.0f, 0.000001f); // real shape = (60000, 6, 14, 14)
+    tensor dl_dc3 = uniform_dist({3, 16, 10, 10}, 0.0f, 0.000001f); // real shape = (60000, 16, 10, 10)
 
-    std::cout << c3 << "\n";
-    std::cout << s4 << "\n";
-    std::cout << dl_ds4 << "\n";
+    size_t num_imgs = 3 * 6;
+    size_t s2_img_heihgt = 14;
+    size_t dl_dc3_img_heihgt = 10;
+
+    for (size_t i = 0; i < num_imgs; ++i) {
+        // TODO: I have to slice only dl_dc3 using slice_3d into shape (16, 10, 10)
+        // auto img = slice(s2, i * s2_img_heihgt, s2_img_heihgt);
+        auto kernel = slice(dl_dc3, i * dl_dc3_img_heihgt, dl_dc3_img_heihgt);
+
+        // auto dl_dkernel2 = lenet_convolution(img, kernel);
+
+        std::cout << img << "\n";
+        std::cout << kernel << "\n";
+    }
+
+    std::cout << s2 << "\n";
+    // std::cout << dl_dc3 << "\n";
 
     return 0;
 }
