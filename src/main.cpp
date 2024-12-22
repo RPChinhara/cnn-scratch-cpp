@@ -183,7 +183,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-std::array<tensor, 5> lenet_forward(const tensor& x) {
+std::array<tensor, 7> lenet_forward(const tensor& x) {
     // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
     // tensor c1_z = lenet_convolution(x, kernel1);
     // tensor c1 = relu(c1_z);
@@ -201,13 +201,15 @@ std::array<tensor, 5> lenet_forward(const tensor& x) {
     tensor f6 = relu(matmul(w2, f5) + b2);
     tensor y = softmax(matmul(w3, f6) + b3);
 
-    std::array<tensor, 5> outputs;
+    std::array<tensor, 7> outputs;
 
-    outputs[0] = c3;
-    outputs[1] = s4;
-    outputs[2] = f5;
-    outputs[3] = f6;
-    outputs[4] = y;
+    outputs[0] = c1;
+    outputs[1] = s2;
+    outputs[2] = c3;
+    outputs[3] = s4;
+    outputs[4] = f5;
+    outputs[5] = f6;
+    outputs[6] = y;
 
     return outputs;
 }
@@ -236,7 +238,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         //     tensor x_batch = slice(x_train, j * img_size, (j + 1) * img_size);
         //     std::cout << x_batch.get_shape() << "\n";
 
-            auto [c3, s4, f5, f6, y] = lenet_forward(x_train);
+            auto [c1, s2, c3, s4, f5, f6, y] = lenet_forward(x_train);
 
             float error = categorical_cross_entropy(y_train, transpose(y));
 
@@ -270,7 +272,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
                 cumulative_height += img_height;
             }
 
-            tensor dl_ds2 = zeros({60000, 6, 14, 14});
+            // tensor dl_ds2 = zeros({60000, 6, 14, 14});
+            // tensor dl_ds2 = lenet_convolution(s2, dl_dc3);
+
             tensor dl_dc1 = zeros({60000, 6, 28, 28});
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
