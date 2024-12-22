@@ -247,6 +247,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         size_t num_imgs = s4.shape.front() * s4.shape[1];
         size_t output_img_size = s4.shape[2] * s4.shape.back();
 
+        // FIXME: This for loop terminates the program. Something wrong is happening.
         for (size_t i = 0; i < num_imgs; ++i) {
             size_t img_height = c3.shape[2];
             // auto img = slice(x2, i * img_height, img_height);
