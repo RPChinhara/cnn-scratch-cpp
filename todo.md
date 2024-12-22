@@ -1,7 +1,7 @@
 > LeNet
-- ResNet
 - AlexNet
 - VGG
+- ResNet
 - Seq2seq
 - Transformer
 - Autoencoder
