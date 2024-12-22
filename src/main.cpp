@@ -239,12 +239,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
             tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
 
-            tensor dl_c3 = zeros({60000, 16, 10, 10});
-            // auto c3 = uniform_dist({2, 2, 6, 6}, 0.0f, 0.000001f);
-            // auto s4 = lenet_max_pool(c3);
-
-            // std::cout << c3 << "\n";
-            // std::cout << s4 << "\n";
+            tensor dl_dc3 = zeros({60000, 16, 10, 10});
 
             size_t idx = 0;
             size_t cumulative_height = 0;
@@ -258,7 +253,10 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
                 for (size_t j = 0; j < output_img_size; ++j) {
                     // TODO: Use eigther of these below
                     // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-                    dl_c3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+
+                    // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
+                    // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+                    dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
 
                     ++idx;
                 }
@@ -266,12 +264,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
                 cumulative_height += img_height;
             }
 
-            std::cout << dl_c3 << "\n";
-
             tensor dl_ds2;
             tensor dl_dc1;
-
-            std::cout << dl_ds4.get_shape() << "\n";
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6, transpose(f5));
@@ -346,70 +340,36 @@ void lenet_predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // mnist data = load_mnist();
+    mnist data = load_mnist();
 
-    // print_imgs(data.train_imgs, 1);
+    print_imgs(data.train_imgs, 1);
 
-    // data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
-    // data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
+    data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
+    data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
-    // print_imgs(data.train_imgs, 1);
+    print_imgs(data.train_imgs, 1);
 
-    // for (auto i = 0; i < data.train_imgs.size; ++i)
-    //     data.train_imgs[i] /= 255.0f;
+    for (auto i = 0; i < data.train_imgs.size; ++i)
+        data.train_imgs[i] /= 255.0f;
 
-    // for (auto i = 0; i < data.test_imgs.size; ++i)
-    //     data.test_imgs[i] /= 255.0f;
+    for (auto i = 0; i < data.test_imgs.size; ++i)
+        data.test_imgs[i] /= 255.0f;
 
-    // data.train_labels = one_hot(data.train_labels, 10);
-    // data.test_labels = one_hot(data.test_labels, 10);
+    data.train_labels = one_hot(data.train_labels, 10);
+    data.test_labels = one_hot(data.test_labels, 10);
 
-    // auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
-    // lenet_train(data.train_imgs, data.train_labels);
+    lenet_train(data.train_imgs, data.train_labels);
 
-    // auto end = std::chrono::high_resolution_clock::now();
-    // auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-    // std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
 
-    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
-    // std::cout << "Test loss:  " << test_loss << "\n\n";
+    auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    std::cout << "Test loss:  " << test_loss << "\n\n";
 
-    // lenet_predict(data.test_imgs, data.test_labels);
-
-    auto dl_ds4 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.000001f);
-    auto dl_dc3 = zeros({2, 2, 6, 6});
-    auto c3 = uniform_dist({2, 2, 6, 6}, 0.0f, 0.000001f);
-    auto s4 = lenet_max_pool(c3);
-
-    std::cout << c3 << "\n";
-    std::cout << s4 << "\n";
-    std::cout << dl_ds4 << "\n";
-
-    size_t idx = 0;
-    size_t cumulative_height = 0;
-    size_t num_imgs = s4.shape.front() * s4.shape[1];
-    size_t output_img_size = s4.shape[2] * s4.shape.back();
-
-    for (size_t i = 0; i < num_imgs; ++i) {
-        size_t img_height = c3.shape[2];
-        // auto img = slice(x2, i * img_height, img_height);
-
-        for (size_t j = 0; j < output_img_size; ++j) {
-            // TODO: Use eigther of these below
-            // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-
-            // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
-            // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
-            dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
-
-            ++idx;
-        }
-
-        cumulative_height += img_height;
-    }
-
-    std::cout << dl_dc3 << "\n";
+    lenet_predict(data.test_imgs, data.test_labels);
 
     return 0;
 }
