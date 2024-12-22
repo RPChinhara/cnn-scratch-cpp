@@ -184,6 +184,10 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
 }
 
 std::array<tensor, 5> lenet_forward(const tensor& x) {
+    // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
+    // tensor c1_z = lenet_convolution(x, kernel1);
+    // tensor c1 = relu(c1_z);
+
     tensor c1 = relu(lenet_convolution(x, kernel1));
     tensor s2 = lenet_max_pool(c1);
     tensor c3 = relu(lenet_convolution(s2, kernel2));
@@ -270,6 +274,33 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6, transpose(f5));
             tensor dl_dw1 = matmul(dl_df5, s4);
+
+            // 1 1 1 1 1 1
+            // 1 1 1 1 1 1
+            // 1 1 1 1 1 1
+            // 1 1 1 1 1 1
+            // 1 1 1 1 1 1
+            // 1 1 1 1 1 1 -> c2 (s2 in my project)
+
+            // 1 1 1
+            // 1 1 1
+            // 1 1 1 -> kernel (kernel2 in my project)
+
+            // 1 1 1 1
+            // 1 1 1 1
+            // 1 1 1 1
+            // 1 1 1 1 -> c3
+
+            // 1 1 1 1
+            // 1 1 1 1
+            // 1 1 1 1
+            // 1 1 1 1 -> dl/dc3
+
+            // 1 1 1
+            // 1 1 1
+            // 1 1 1 -> dl/dkernel (dl/dkernel2 in my project)
+
+            // Apply dl/dc3 to s2 I would get a tensor that is same shape as kernel2
 
             tensor dl_dkernel2;
             tensor dl_dkernel1;
