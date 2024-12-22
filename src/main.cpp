@@ -265,8 +265,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             cumulative_height += img_height;
         }
 
-        // tensor dl_ds2 = zeros({60000, 6, 14, 14});
-        // tensor dl_ds2 = lenet_convolution(s2, dl_dc3);
+        tensor dl_ds2 = dl_dc3 * relu_derivative(c3_z);
 
         tensor dl_dc1 = zeros({60000, 6, 28, 28});
 
