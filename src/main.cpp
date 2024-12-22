@@ -188,6 +188,8 @@ std::array<tensor, 5> lenet_forward(const tensor& x) {
     // tensor c1_z = lenet_convolution(x, kernel1);
     // tensor c1 = relu(c1_z);
 
+    // NOTE: Do I need to biases for c1 to s4?
+
     tensor c1 = relu(lenet_convolution(x, kernel1));
     tensor s2 = lenet_max_pool(c1);
     tensor c3 = relu(lenet_convolution(s2, kernel2));
