@@ -224,151 +224,105 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t batch_size = 32;
     constexpr float lr = 0.01f;
 
-    // size_t iterations_per_epoch = x_train.shape.front() / batch_size;
-    // size_t remaining_samples = x_train.shape.front() % batch_size;
-
-    // std::cout << iterations_per_epoch << "\n";
-    // std::cout << remaining_samples << "\n";
-    // std::cout << x_train.shape.front() << "\n";
-    // std::cout << x_train.shape[1] << "\n";
-    // std::cout << x_train.shape[2] << "\n";
-
     for (size_t i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        // size_t img_size = x_train.shape[1] * x_train.shape[2];
+        auto [c1, s2, c3, s4, f5, f6, y] = lenet_forward(x_train);
 
-        // for (size_t j = 0; j < iterations_per_epoch; ++j) {
+        float error = categorical_cross_entropy(y_train, transpose(y));
 
-        //     tensor x_batch = slice(x_train, j * img_size, (j + 1) * img_size);
-        //     std::cout << x_batch.get_shape() << "\n";
+        tensor dl_dy = y - transpose(y_train);
+        tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
+        tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
+        tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
 
-            auto [c1, s2, c3, s4, f5, f6, y] = lenet_forward(x_train);
+        tensor dl_dc3 = zeros({60000, 16, 10, 10});
 
-            float error = categorical_cross_entropy(y_train, transpose(y));
+        size_t idx = 0;
+        size_t cumulative_height = 0;
+        size_t num_imgs = s4.shape.front() * s4.shape[1];
+        size_t output_img_size = s4.shape[2] * s4.shape.back();
 
-            tensor dl_dy = y - transpose(y_train);
-            tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
-            tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
-            tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
+        for (size_t i = 0; i < num_imgs; ++i) {
+            size_t img_height = c3.shape[2];
+            // auto img = slice(x2, i * img_height, img_height);
 
-            tensor dl_dc3 = zeros({60000, 16, 10, 10});
+            for (size_t j = 0; j < output_img_size; ++j) {
+                // TODO: Use eigther of these below
+                // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
 
-            size_t idx = 0;
-            size_t cumulative_height = 0;
-            size_t num_imgs = s4.shape.front() * s4.shape[1];
-            size_t output_img_size = s4.shape[2] * s4.shape.back();
+                // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
+                // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+                dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
 
-            for (size_t i = 0; i < num_imgs; ++i) {
-                size_t img_height = c3.shape[2];
-                // auto img = slice(x2, i * img_height, img_height);
-
-                for (size_t j = 0; j < output_img_size; ++j) {
-                    // TODO: Use eigther of these below
-                    // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-
-                    // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
-                    // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
-                    dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
-
-                    ++idx;
-                }
-
-                cumulative_height += img_height;
+                ++idx;
             }
 
-            // tensor dl_ds2 = zeros({60000, 6, 14, 14});
-            // tensor dl_ds2 = lenet_convolution(s2, dl_dc3);
-
-            tensor dl_dc1 = zeros({60000, 6, 28, 28});
-
-            tensor dl_dw3 = matmul(dl_dy, transpose(f6));
-            tensor dl_dw2 = matmul(dl_df6, transpose(f5));
-            tensor dl_dw1 = matmul(dl_df5, s4);
-
-            // 1 1 1 1 1 1
-            // 1 1 1 1 1 1
-            // 1 1 1 1 1 1
-            // 1 1 1 1 1 1
-            // 1 1 1 1 1 1
-            // 1 1 1 1 1 1 -> c2 (s2 in my project)
-
-            // 1 1 1
-            // 1 1 1
-            // 1 1 1 -> kernel (kernel2 in my project)
-
-            // 1 1 1 1
-            // 1 1 1 1
-            // 1 1 1 1
-            // 1 1 1 1 -> c3
-
-            // 1 1 1 1
-            // 1 1 1 1
-            // 1 1 1 1
-            // 1 1 1 1 -> dl/dc3
-
-            // 1 1 1
-            // 1 1 1
-            // 1 1 1 -> dl/dkernel (dl/dkernel2 in my project)
-
-            // Apply dl/dc3 to s2 I would get a tensor that is same shape as kernel2
-
-            tensor dl_dkernel2;
-            tensor dl_dkernel1;
-
-            tensor dl_db3 = sum(dl_dy, 1);
-            tensor dl_db2 = sum(dl_df6, 1);
-            tensor dl_db1 = sum(dl_df5, 1);
-
-            // kernel1 = kernel1 - lr * dl_dkernel1;
-            // kernel2 = kernel2 - lr * dl_dkernel2;
-
-            w1 = w1 - lr * dl_dw1;
-            w2 = w2 - lr * dl_dw2;
-            w3 = w3 - lr * dl_dw3;
-
-            b1 = b1 - lr * dl_db1;
-            b2 = b2 - lr * dl_db2;
-            b3 = b3 - lr * dl_db3;
-
-            // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
-            // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
-
-            // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
-            // dl_dw2 = dl_dy * dy_df6 * df6_dw2
-            // dl_dw3 = dl_dy * dy_dw3
-
-            // dl_db1 = dl_dy * dy_df6 * df6_df5 * df5_db1
-            // dl_db2 = dl_dy * dy_df6 * df6_db2
-            // dl_db3 = dl_dy * dy_db3
-
-            // x:  (60000, 32, 32)
-            // c1: (60000, 6, 28, 28)
-            // s2: (60000, 6, 14, 14)
-            // c3: (60000, 16, 10, 10)
-            // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
-            // f5: (120, 60000)
-            // f6: (84, 60000)
-            // y:  (10, 60000)
-
-            // w1: (120, 400)
-            // w2: (84, 120)
-            // w3: (10, 84)
-
-            // b1: (120, 1)
-            // b2: (84, 1)
-            // b3: (10, 1)
-
-            auto end_time = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-            auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-            auto remaining_ms = duration - seconds;
-
-            std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
+            cumulative_height += img_height;
         }
 
-        // if (remaining_samples > 0)
-        //     tensor x_batch = slice(x_train, x_train.shape() - img_size, end_idx);
+        // tensor dl_ds2 = zeros({60000, 6, 14, 14});
+        // tensor dl_ds2 = lenet_convolution(s2, dl_dc3);
+
+        tensor dl_dc1 = zeros({60000, 6, 28, 28});
+
+        tensor dl_dw3 = matmul(dl_dy, transpose(f6));
+        tensor dl_dw2 = matmul(dl_df6, transpose(f5));
+        tensor dl_dw1 = matmul(dl_df5, s4);
+
+        tensor dl_dkernel2;
+        tensor dl_dkernel1;
+
+        tensor dl_db3 = sum(dl_dy, 1);
+        tensor dl_db2 = sum(dl_df6, 1);
+        tensor dl_db1 = sum(dl_df5, 1);
+
+        // kernel1 = kernel1 - lr * dl_dkernel1;
+        // kernel2 = kernel2 - lr * dl_dkernel2;
+
+        w1 = w1 - lr * dl_dw1;
+        w2 = w2 - lr * dl_dw2;
+        w3 = w3 - lr * dl_dw3;
+
+        b1 = b1 - lr * dl_db1;
+        b2 = b2 - lr * dl_db2;
+        b3 = b3 - lr * dl_db3;
+
+        // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
+        // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
+
+        // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
+        // dl_dw2 = dl_dy * dy_df6 * df6_dw2
+        // dl_dw3 = dl_dy * dy_dw3
+
+        // dl_db1 = dl_dy * dy_df6 * df6_df5 * df5_db1
+        // dl_db2 = dl_dy * dy_df6 * df6_db2
+        // dl_db3 = dl_dy * dy_db3
+
+        // x:  (60000, 32, 32)
+        // c1: (60000, 6, 28, 28)
+        // s2: (60000, 6, 14, 14)
+        // c3: (60000, 16, 10, 10)
+        // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
+        // f5: (120, 60000)
+        // f6: (84, 60000)
+        // y:  (10, 60000)
+
+        // w1: (120, 400)
+        // w2: (84, 120)
+        // w3: (10, 84)
+
+        // b1: (120, 1)
+        // b2: (84, 1)
+        // b3: (10, 1)
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+        auto remaining_ms = duration - seconds;
+
+        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
+    }
 }
 
 float lenet_evaluate(const tensor& x_test, const tensor& y_test) {
