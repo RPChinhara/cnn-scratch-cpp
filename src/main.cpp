@@ -400,7 +400,8 @@ int main() {
             // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
 
             // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
-            dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+            // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+            dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
 
             ++idx;
         }
@@ -409,20 +410,6 @@ int main() {
     }
 
     std::cout << dl_dc3 << "\n";
-
-    for (const auto& i : max_indices)
-        std::cout << i.first << " " << i.second << "\n";
-
-    idx = 0;
-    for (size_t i = 0; i < dl_dc3.size; ++i) {
-        if (dl_dc3[i] == 1.0f) {
-            dl_dc3[i] = dl_ds4[idx];
-            ++idx;
-        }
-    }
-
-    std::cout << dl_dc3 << "\n";
-
 
     return 0;
 }
