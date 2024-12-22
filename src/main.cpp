@@ -399,7 +399,7 @@ int main() {
             // TODO: Use eigther of these below
             // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
 
-            // TODO: Write to notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
+            // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
             dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
 
             ++idx;
