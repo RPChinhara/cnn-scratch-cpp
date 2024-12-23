@@ -65,8 +65,8 @@ int main () {
 
     size_t idx = 0;
     size_t cumulative_height = 0;
-    size_t num_imgs = s4.shape.front() * s4.shape[1];
-    size_t output_img_size = s4.shape[2] * s4.shape.back();
+    size_t num_imgs = c3.shape.front() * c3.shape[1];
+    size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
 
     for (size_t i = 0; i < num_imgs; ++i) {
         size_t img_height = c3.shape[2];
