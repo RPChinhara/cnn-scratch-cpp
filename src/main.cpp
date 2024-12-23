@@ -247,6 +247,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         // c3 from lenet_forward(): (60000, 16, 10, 10)
         // s4 from lenet_forward(): (60000, 400)
 
+        // TODO: Make max_unpool()?
         size_t idx = 0;
         size_t cumulative_height = 0;
         size_t num_imgs = c3.shape.front() * c3.shape[1]; // TODO: Use constexpr hardcoding for better perf?
