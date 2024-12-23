@@ -252,7 +252,6 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         size_t num_imgs = c3.shape.front() * c3.shape[1]; // TODO: Use constexpr hardcoding for better perf?
         size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
 
-        // FIXME: This for loop terminates the program. Something wrong is happening.
         for (size_t i = 0; i < num_imgs; ++i) {
             size_t img_height = c3.shape[2];
             // auto img = slice(x2, i * img_height, img_height);
