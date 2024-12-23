@@ -21,6 +21,8 @@ tensor b1 = zeros({120, 1});
 tensor b2 = zeros({84, 1});
 tensor b3 = zeros({10, 1});
 
+// TODO: I have to have this for both s2 and s4
+// TODO: I have to call clear() somewhere for proper indices for gradients calculation.
 std::vector<std::pair<size_t, size_t>> max_indices;
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
@@ -242,10 +244,13 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor dl_dc3 = zeros({60000, 16, 10, 10});
 
+        // c3 from lenet_forward(): (60000, 16, 10, 10)
+        // s4 from lenet_forward(): (60000, 400)
+
         size_t idx = 0;
         size_t cumulative_height = 0;
-        size_t num_imgs = s4.shape.front() * s4.shape[1];
-        size_t output_img_size = s4.shape[2] * s4.shape.back();
+        size_t num_imgs = c3.shape.front() * c3.shape[1]; // TODO: Use constexpr hardcoding for better perf?
+        size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
 
         // FIXME: This for loop terminates the program. Something wrong is happening.
         for (size_t i = 0; i < num_imgs; ++i) {
