@@ -10,6 +10,7 @@
 - BART
 - Mamba
 - Diffusion models
+- YOLO
 - Vision transformer
 - Vision-Language Models
 - AlphaFold
