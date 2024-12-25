@@ -56,6 +56,51 @@ tensor slice_3d(const tensor& t, const size_t begin, const size_t size) {
     return t_new;
 }
 
+tensor slice_4d(const tensor& t, const size_t begin) {
+    tensor t_new = zeros({1, 1, t.shape[2], t.shape.back()});
+
+    for (size_t i = 0; i < t.shape[2] * t.shape.back(); ++i)
+        t_new[i] = t[begin + i];
+
+    return t_new;
+}
+
+tensor slice_test(const tensor& t, const std::vector<size_t>& begin, const std::vector<size_t>& size) {
+    int num_dims = t.shape.size();
+    std::vector<int> strides(num_dims, 1);
+    for (int i = num_dims - 2; i >= 0; --i) {
+        strides[i] = strides[i + 1] * t.shape[i + 1];
+    }
+
+    // Compute flattened indices for the slice
+    tensor t_new = zeros(size);
+    std::vector<float> result;
+    std::vector<size_t> current_indices = begin;
+    int total_elements = 1;
+    for (int s : size) total_elements *= s;
+
+    size_t idx = 0;
+    for (int i = 0; i < total_elements; ++i) {
+        // Calculate the flat index for the current slice position
+        int flat_index = 0;
+        for (int d = 0; d < num_dims; ++d) {
+            flat_index += current_indices[d] * strides[d];
+        }
+        // result.push_back(tensor_data[flat_index]);
+        t_new[idx] = t[flat_index];
+        ++idx;
+
+        // Increment the current indices
+        for (int d = num_dims - 1; d >= 0; --d) {
+            current_indices[d]++;
+            if (current_indices[d] < begin[d] + size[d]) break;
+            current_indices[d] = begin[d]; // Reset dimension
+        }
+    }
+
+    return t_new;
+}
+
 tensor vslice(const tensor& t, const size_t col) {
     tensor t_new = zeros({t.shape.front(), t.shape.back() - 1});
 
