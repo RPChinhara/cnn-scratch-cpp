@@ -1,5 +1,5 @@
 > LeNet
-- AlexNet
+- AlexNet (Use ImageNet as the model was made for the dataset? It seems this is the way)
 - VGG
 - ResNet
 - Seq2seq
