@@ -11,7 +11,7 @@
 #include <array>
 #include <chrono>
 
-constexpr float  lr          = 0.01f;
+constexpr float  lr          = 0.01f; // TODO: Use 0.001f as tensorflow does for Adam? Same for lstm and rnn.
 size_t           batch_size  = 0;
 constexpr size_t epochs      = 150;
 
