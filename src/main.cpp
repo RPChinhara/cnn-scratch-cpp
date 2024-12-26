@@ -241,8 +241,21 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
         tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
         tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
-
         tensor dl_dc3 = zeros({60000, 16, 10, 10});
+        tensor dl_dc3_z = dl_dc3 * relu_derivative(c3_z);
+        tensor dl_ds2 = zeros({60000, 6, 14, 14});
+        tensor dl_dc1 = zeros({60000, 6, 28, 28});
+
+        tensor dl_dkernel2 = zeros({16, 5, 5});
+        tensor dl_dkernel1;
+
+        tensor dl_dw3 = matmul(dl_dy, transpose(f6));
+        tensor dl_dw2 = matmul(dl_df6, transpose(f5));
+        tensor dl_dw1 = matmul(dl_df5, s4);
+
+        tensor dl_db3 = sum(dl_dy, 1);
+        tensor dl_db2 = sum(dl_df6, 1);
+        tensor dl_db1 = sum(dl_df5, 1);
 
         // c3 from lenet_forward(): (60000, 16, 10, 10)
         // s4 from lenet_forward(): (60000, 400)
@@ -271,12 +284,6 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             cumulative_height += img_height;
         }
 
-        tensor dl_dc3_z = dl_dc3 * relu_derivative(c3_z);
-
-        std::cout << dl_dc3_z.get_shape() << "\n";
-
-        tensor dl_dkernel2 = zeros({16, 5, 5});
-
         for (size_t i = 0; i < 3; ++i) {
             auto img = slice_4d(s2, i * s2.shape[1] * s2.shape[2] * s2.shape.back());
             auto kernel = slice_4d(dl_dc3_z, i * dl_dc3_z.shape[1] * dl_dc3_z.shape[2] * dl_dc3_z.shape.back());
@@ -284,21 +291,6 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
             dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});
         }
-
-        std::cout << dl_dkernel2.get_shape() << "\n";
-
-        tensor dl_ds2 = zeros({60000, 6, 14, 14});
-        tensor dl_dc1 = zeros({60000, 6, 28, 28});
-
-        tensor dl_dw3 = matmul(dl_dy, transpose(f6));
-        tensor dl_dw2 = matmul(dl_df6, transpose(f5));
-        tensor dl_dw1 = matmul(dl_df5, s4);
-
-        tensor dl_dkernel1;
-
-        tensor dl_db3 = sum(dl_dy, 1);
-        tensor dl_db2 = sum(dl_df6, 1);
-        tensor dl_db1 = sum(dl_df5, 1);
 
         // kernel1 = kernel1 - lr * dl_dkernel1;
         kernel2 = kernel2 - lr * dl_dkernel2;
