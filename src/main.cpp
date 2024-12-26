@@ -293,15 +293,15 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         }
 
         // kernel1 = kernel1 - lr * dl_dkernel1;
-        kernel2 = kernel2 - lr * dl_dkernel2;
+        // kernel2 = kernel2 - lr * dl_dkernel2;
 
-        w1 = w1 - lr * dl_dw1;
-        w2 = w2 - lr * dl_dw2;
-        w3 = w3 - lr * dl_dw3;
+        // w1 = w1 - lr * dl_dw1;
+        // w2 = w2 - lr * dl_dw2;
+        w3 = w3 - lr * dl_dw3; // NOTE: clear
 
-        b1 = b1 - lr * dl_db1;
-        b2 = b2 - lr * dl_db2;
-        b3 = b3 - lr * dl_db3;
+        // b1 = b1 - lr * dl_db1;
+        b2 = b2 - lr * dl_db2; 
+        b3 = b3 - lr * dl_db3; // NOTE: clear
 
         // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
         // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
