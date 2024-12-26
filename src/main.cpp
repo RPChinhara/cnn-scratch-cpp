@@ -185,7 +185,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-std::array<tensor, 9> lenet_forward(const tensor& x) {
+std::array<tensor, 10> lenet_forward(const tensor& x) {
     // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
     // tensor c1_z = lenet_convolution(x, kernel1);
     // tensor c1 = relu(c1_z);
@@ -205,10 +205,11 @@ std::array<tensor, 9> lenet_forward(const tensor& x) {
     s4.reshape({60000, 400});
 
     tensor f5 = relu(matmul(w1, transpose(s4)) + b1);
-    tensor f6 = relu(matmul(w2, f5) + b2);
+    tensor f6_z = matmul(w2, f5) + b2;
+    tensor f6 = relu(f6_z);
     tensor y = softmax(matmul(w3, f6) + b3);
 
-    std::array<tensor, 9> outputs;
+    std::array<tensor, 10> outputs;
 
     outputs[0] = c1_z;
     outputs[1] = c1;
@@ -217,8 +218,9 @@ std::array<tensor, 9> lenet_forward(const tensor& x) {
     outputs[4] = c3;
     outputs[5] = s4;
     outputs[6] = f5;
-    outputs[7] = f6;
-    outputs[8] = y;
+    outputs[7] = f6_z;
+    outputs[8] = f6;
+    outputs[9] = y;
 
     return outputs;
 }
@@ -233,7 +235,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [c1_z, c1, s2, c3_z, c3, s4, f5, f6, y] = lenet_forward(x_train);
+        auto [c1_z, c1, s2, c3_z, c3, s4, f5, f6_z, f6, y] = lenet_forward(x_train);
 
         float error = categorical_cross_entropy(y_train, transpose(y));
 
@@ -300,7 +302,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         w3 = w3 - lr * dl_dw3; // NOTE: clear
 
         // b1 = b1 - lr * dl_db1;
-        b2 = b2 - lr * dl_db2; 
+        b2 = b2 - lr * dl_db2;
         b3 = b3 - lr * dl_db3; // NOTE: clear
 
         // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1

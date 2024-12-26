@@ -4,8 +4,10 @@
 
 float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
-    float num_elm = static_cast<float>(y_true.size);
+    float num_elm = static_cast<float>(y_true.shape[0]);
     tensor y_pred_clipped = clip_by_value(y_pred, 1e-12f, 1.0f);
+
+    std::cout << y_true.shape[0] << "\n";
 
     for (auto i = 0; i < y_true.size; ++i)
         sum += y_true[i] * logf(y_pred_clipped[i]);
