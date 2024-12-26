@@ -241,7 +241,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         tensor dl_dy = y - transpose(y_train);
         tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
-        tensor dl_df5 = matmul(transpose(w2), dl_df6); // (120, 60000)
+        tensor dl_df6_z = dl_df6 * relu_derivative(f6_z);
+        tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
         tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
         tensor dl_dc3 = zeros({60000, 16, 10, 10});
         tensor dl_dc3_z = dl_dc3 * relu_derivative(c3_z);
@@ -256,7 +257,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         tensor dl_dw1 = matmul(dl_df5, s4);
 
         tensor dl_db3 = sum(dl_dy, 1);
-        tensor dl_db2 = sum(dl_df6, 1);
+        tensor dl_db2 = sum(dl_df6_z, 1);
         tensor dl_db1 = sum(dl_df5, 1);
 
         // c3 from lenet_forward(): (60000, 16, 10, 10)
