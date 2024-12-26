@@ -282,7 +282,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             auto kernel = slice_4d(dl_dc3_z, i * dl_dc3_z.shape[1] * dl_dc3_z.shape[2] * dl_dc3_z.shape.back());
             kernel.reshape({16, 10, 10});
 
-            dl_dkernel2 += lenet_convolution(img, kernel);
+            dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});
         }
 
         std::cout << dl_dkernel2.get_shape() << "\n";
