@@ -86,9 +86,15 @@ bool shape_equal(const std::vector<size_t>& shape1, const std::vector<size_t>& s
 tensor tensor::operator+(const tensor& other) const {
     tensor t_new;
 
+    // (2, 2)    -> 4
+    // (2, 1)    -> 3
+
+    // (2, 2)    -> 4
+    // (1, 2, 2) -> 5
+
     if (shape_equal(shape, other.shape)) {
         t_new = add(*this, other);
-    } else if (size > other.size) {
+    } else if (std::accumulate(shape.begin(), shape.end(), static_cast<size_t>(0)) > std::accumulate(other.shape.begin(), other.shape.end(), static_cast<size_t>(0))) {
         tensor other_broadcasted = broadcast_to(other, shape);
         t_new = add(*this, other_broadcasted);
     } else {
