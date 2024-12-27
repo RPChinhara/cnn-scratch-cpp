@@ -140,6 +140,7 @@ void rnn_train(const tensor& x_train, const tensor& y_train) {
         // v_b_y = beta2 * v_b_y + (1.0f - beta2) * sum(square(d_loss_d_y), 1);
         v_b_y = beta2 * v_b_y + (1.0f - beta2) * square(sum(d_loss_d_y, 1));
 
+        // TODO: I have to use sum() for 'd_loss_d_y' in gru.cpp and lstm.cpp as well.
         // 2, 2, 2, 2
         // 4, 4, 4, 4
         // 16
