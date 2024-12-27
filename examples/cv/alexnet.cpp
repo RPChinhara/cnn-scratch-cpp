@@ -9,6 +9,8 @@
 
 #include <chrono>
 
+// NOTE: I have to beat the time it took to train the original AlexNet.
+
 int main() {
 
 
