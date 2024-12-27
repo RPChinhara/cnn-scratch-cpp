@@ -111,6 +111,7 @@ tensor tensor::operator-(const tensor& other) const {
     if (shape_equal(shape, other.shape)) {
         t_new = subtract(*this, other);
     } else if (size > other.size) {
+        // NOTE: Intentionally, not changing 'else if' condition like above 'operator+' since this may not be the best solution. For all of these ops, I might just need to compute when the shapes are equal so broadcast before passing to these ops for perm reason and simplicity.
         tensor other_broadcasted = broadcast_to(other, shape);
         t_new = subtract(*this, other_broadcasted);
     } else {
