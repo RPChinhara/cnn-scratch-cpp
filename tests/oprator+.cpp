@@ -1,4 +1,5 @@
-
+#include "arrs.h"
+#include "tensor.h"
 
 int main() {
     tensor a = fill({2, 2}, 1);
