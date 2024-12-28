@@ -321,8 +321,8 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         }
 
         for (size_t i = 0; i < 3; ++i) {
-            auto img = slice_4d(s2, i * s2.shape[1] * s2.shape[2] * s2.shape.back());
-            auto kernel = slice_4d(dl_dc3_z, i * dl_dc3_z.shape[1] * dl_dc3_z.shape[2] * dl_dc3_z.shape.back());
+            auto img = slice_4d(s2, i);
+            auto kernel = slice_4d(dl_dc3_z, i);
             kernel.reshape({16, 10, 10});
 
             dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});

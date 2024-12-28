@@ -104,8 +104,8 @@ int main () {
     tensor dl_dkernel2 = zeros({16, 5, 5});
 
     for (size_t i = 0; i < 3; ++i) {
-        auto img = slice_4d(s2, i * s2.shape[1] * s2.shape[2] * s2.shape.back());
-        auto kernel = slice_4d(dl_dc3, i * dl_dc3.shape[1] * dl_dc3.shape[2] * dl_dc3.shape.back());
+        auto img = slice_4d(s2, i);
+        auto kernel = slice_4d(dl_dc3, i);
         kernel.reshape({16, 10, 10});
 
         dl_dkernel2 += lenet_convolution(img, kernel);
