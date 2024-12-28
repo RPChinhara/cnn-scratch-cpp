@@ -1,4 +1,6 @@
 #include "arrs.h"
+#include "rand.h"
+#include "tensor.h"
 
 int main() {
 
@@ -9,10 +11,6 @@ int main() {
     std::cout << slice_3d(a, 0, 3) << "\n";
     std::cout << slice_3d(a, 1, 2) << "\n";
     std::cout << slice_3d(a, 2, 3) << "\n";
-
-    std::cout << slice(a, 0, 1) << "\n";
-    std::cout << slice(a, 0, 2) << "\n";
-    std::cout << slice(a, 0, 3) << "\n";
 
     std::cout << a << "\n";
 
