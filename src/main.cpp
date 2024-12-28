@@ -228,13 +228,30 @@ std::array<tensor, 10> lenet_forward(const tensor& x) {
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 10;
-    constexpr size_t batch_size = 32;
+    constexpr float batch_size = 64;
     constexpr float lr = 0.01f;
 
     for (size_t i = 1; i <= epochs; ++i) {
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
 
         auto start_time = std::chrono::high_resolution_clock::now();
+
+        float batches = ceil(60000.0f / batch_size);
+
+        std::cout << batches << "\n"; // 938
+        std::cout << 60000 % static_cast<int>(batch_size) << "\n"; // 32
+
+        for (size_t j = 0; i < batches; ++j) {
+            if (j = batches - 1) {
+                if (60000 % static_cast<int>(batch_size) != 0) {
+                    // NOTE: x_batch will be 60000 mod 64 = 32 instead of 64 which is the batch_size set
+                }
+            }
+        }
+
+        // 64:  60000 / 64 = 937.5,    937 x 64 = 59968,  60000 mod 64 = 32
+        // 128: 60000 / 128 = 468.75,  468 x 128 = 59904, 60000 mod 128 = 96
+        // 256: 60000 / 256 = 234.375, 234 x 256 = 59904, 60000 mod 256 = 96
 
         auto [c1_z, c1, s2, c3_z, c3, s4, f5, f6_z, f6, y] = lenet_forward(x_train);
 
