@@ -59,7 +59,7 @@ tensor slice_4d(const tensor& t, const size_t begin) {
     tensor t_new = zeros({1, t.shape[1], t.shape[2], t.shape.back()});
 
     for (size_t i = 0; i < t.shape[1] * t.shape[2] * t.shape.back(); ++i)
-        t_new[i] = t[begin + i];
+        t_new[i] = t[begin * t.shape[1] * t.shape[2] * t.shape.back() + i];
 
     return t_new;
 }
