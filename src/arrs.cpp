@@ -46,12 +46,11 @@ tensor slice(const tensor& t, const size_t begin, const size_t size) {
     return t_new;
 }
 
-// TODO: I have to make slice that could slice (60000, 32, 32) -> (32, 32, 32), and eventualyy merge with above slice(), but now that's impossible as lenet_conv() and lenet_max_pool() were created so that it'd slice 3D to 2D, and 4D to 2D. It's pretty messed up. Maybe name slice2d and slice3d?
 tensor slice_3d(const tensor& t, const size_t begin, const size_t size) {
-    tensor t_new = zeros({size - begin, t.shape[1], t.shape.back()});
+    tensor t_new = zeros({size, t.shape[1], t.shape.back()});
 
-    for (auto i = begin * t.shape[1] * t.shape.back(); i < (begin * t.shape[1] * t.shape.back()) + (size * t.shape[1] * t.shape.back()); ++i)
-        t_new[i - (begin * t.shape[1] * t.shape.back())] = t[i];
+    for (size_t i = 0; i < size * t.shape[1] * t.shape.back(); ++i)
+        t_new[i] = t[begin * t.shape[1] * t.shape.back() + i];
 
     return t_new;
 }
