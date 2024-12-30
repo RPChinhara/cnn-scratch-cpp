@@ -16,5 +16,4 @@
 - AlphaFold
 - DALL·E
 - Quantum neural network
-- Develop my own architectures, algorithms, and models. Maybe tip is like Hopfield did use tools from physics, biology, chemistry, and so on as these represents/explains the nature. For instance, Newton's laws of motion?
-- Solve existing problems and discover new theories in mathematics and physics
+- AGI
