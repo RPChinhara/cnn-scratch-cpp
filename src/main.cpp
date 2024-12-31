@@ -242,16 +242,24 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             if (j == batches - 1) {
                 int remainder = 60000 % static_cast<int>(batch_size);
                 if (remainder != 0) {
-                    tensor batch = slice_3d(x_train, j * batch_size, remainder);
+                    tensor x_batch = slice_3d(x_train, j * batch_size, remainder);
+                    tensor y_batch = slice(y_train, j * batch_size, remainder);
 
-                    std::cout << batch.get_shape() << "\n";
+                    std::cout << x_batch.get_shape() << "\n";
+                    std::cout << y_batch.get_shape() << "\n";
                     break;
                 }
             }
 
-            tensor batch = slice_3d(x_train, j * batch_size, batch_size);
-            std::cout << batch.get_shape() << "\n";
+            tensor x_batch = slice_3d(x_train, j * batch_size, batch_size);
+            tensor y_batch = slice(y_train, j * batch_size, batch_size);
+
+            std::cout << x_batch.get_shape() << "\n";
+            std::cout << y_batch.get_shape() << "\n";
         }
+
+        std::cout << x_train.get_shape() << "\n";
+        std::cout << y_train.get_shape() << "\n";
 
         auto [c1_z, c1, s2, c3_z, c3, s4, f5, f6_z, f6, y] = lenet_forward(x_train);
 
