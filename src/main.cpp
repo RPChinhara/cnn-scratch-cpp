@@ -257,10 +257,6 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             std::cout << batch.get_shape() << "\n";
         }
 
-        // 64:  60000 / 64 = 937.5,    937 x 64 = 59968,  60000 mod 64 = 32
-        // 128: 60000 / 128 = 468.75,  468 x 128 = 59904, 60000 mod 128 = 96
-        // 256: 60000 / 256 = 234.375, 234 x 256 = 59904, 60000 mod 256 = 96
-
         auto [c1_z, c1, s2, c3_z, c3, s4, f5, f6_z, f6, y] = lenet_forward(x_train);
 
         float error = categorical_cross_entropy(y_train, transpose(y));
