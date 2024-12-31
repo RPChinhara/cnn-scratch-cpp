@@ -245,6 +245,10 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             if (j == batches - 1) {
                 if (60000 % static_cast<int>(batch_size) != 0) {
                     // NOTE: x_batch will be 60000 mod 64 = 32 instead of 64 which is the batch_size set
+                    size_t mod = 60000 % static_cast<size_t>(batch_size);
+                    tensor batch = slice_3d(x_train, j * batch_size, mod);
+
+                    std::cout << batch.get_shape() << "\n";
                     break;
                 }
             }
