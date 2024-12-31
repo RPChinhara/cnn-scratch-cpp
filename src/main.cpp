@@ -241,6 +241,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         for (size_t j = 0; j < batches; ++j) {
             if (j == batches - 1) {
                 int remainder = 60000 % static_cast<int>(batch_size);
+                
                 if (remainder != 0) {
                     tensor x_batch = slice_3d(x_train, j * batch_size, remainder);
                     tensor y_batch = slice(y_train, j * batch_size, remainder);
