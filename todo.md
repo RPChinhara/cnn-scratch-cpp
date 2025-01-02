@@ -16,4 +16,5 @@
 - AlphaFold
 - DALL·E
 - Quantum neural network
+- Multimodal learning
 - AGI
