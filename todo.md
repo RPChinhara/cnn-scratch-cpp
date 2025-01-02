@@ -16,5 +16,6 @@
 - AlphaFold
 - DALL·E
 - Quantum neural network
+- Story Visualization
 - Multimodal learning
 - AGI
