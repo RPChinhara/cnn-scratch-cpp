@@ -207,7 +207,7 @@ std::array<tensor, 11> lenet_forward(const tensor& x) {
 
     s4.reshape({static_cast<size_t>(batch_size), 400});
 
-    tensor f5_z = matmul(w1, transpose(s4)) + b1
+    tensor f5_z = matmul(w1, transpose(s4)) + b1;
     tensor f5 = sigmoid(f5_z);
     tensor f6_z = matmul(w2, f5) + b2;
     tensor f6 = sigmoid(f6_z);
@@ -269,19 +269,18 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
                 }
             }
 
+            // std::cout << x_batch.get_shape() << "\n";
+            // std::cout << y_batch.get_shape() << "\n";
+
+            // std::cout << x_train.shape() << "\n";
+            // std::cout << y_train.shape() << "\n";
+
             tensor x_batch = slice_3d(x_train, j * batch_size, batch_size);
             tensor y_batch = slice(y_train, j * batch_size, batch_size);
 
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = lenet_forward(x_batch);
 
-            // float error = categorical_cross_entropy(y_batch, transpose(y));
-
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
-
-            if (std::isnan(categorical_cross_entropy(y_batch, transpose(y)))) {
-               std::cerr << "Error: NaN value encountered. Exiting program." << std::endl;
-                exit(EXIT_FAILURE);  // Stop the program
-            }
 
             tensor dl_dy = y - transpose(y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
@@ -303,9 +302,6 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor dl_db3 = sum(dl_dy, 1);
             tensor dl_db2 = sum(dl_df6_z, 1);
             tensor dl_db1 = sum(dl_df5, 1);
-
-            // c3 from lenet_forward(): (60000, 16, 10, 10)
-            // s4 from lenet_forward(): (60000, 400)
 
             // TODO: Make max_unpool()?
             size_t idx = 0;
