@@ -21,7 +21,7 @@ tensor relu(const tensor& x) {
 }
 
 tensor sigmoid(const tensor& x) {
-    return 1.0 / (1.0 + exp(-x));
+    return 1.0f / (1.0f + exp(-x));
 }
 
 tensor softmax(const tensor& x) {
