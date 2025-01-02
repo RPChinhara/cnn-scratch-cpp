@@ -264,18 +264,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice_3d(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            std::cout << x_batch.get_shape() << "\n";
-            std::cout << y_batch.get_shape() << "\n";
-
-            // std::cout << x_train.shape() << "\n";
-            // std::cout << y_train.shape() << "\n";
-
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = lenet_forward(x_batch);
 
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
-
-            std::cout << y.get_shape() << "\n";
-            std::cout << y_batch.get_shape() << "\n";
 
             tensor dl_dy = y - transpose(y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
