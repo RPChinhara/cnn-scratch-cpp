@@ -236,16 +236,16 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 10;
     constexpr float lr = 0.01f;
 
+    const size_t num_batches = static_cast<size_t>(ceil(60000.0f / batch_size));
+
     for (size_t i = 1; i <= epochs; ++i) {
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
 
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        float batches = ceil(60000.0f / batch_size); // TODO: Move outside the loop
-
         float accumulated_loss = 0.0f;
 
-        for (size_t j = 0; j < batches; ++j) {
+        for (size_t j = 0; j < num_batches; ++j) {
             size_t start_idx = j * batch_size; // 937 x 64 = 59968
             size_t end_idx = std::min(start_idx + batch_size, 60000.0f);
 
@@ -359,7 +359,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "1/1 [==============================] - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / batches << std::endl;
+        std::cout << "1/1 [==============================] - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / num_batches << std::endl;
     }
 }
 
