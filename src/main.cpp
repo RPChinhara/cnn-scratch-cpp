@@ -209,19 +209,9 @@ std::array<tensor, 11> lenet_forward(const tensor& x) {
 
     tensor f5_z = matmul(w1, transpose(s4)) + b1;
     tensor f5 = sigmoid(f5_z);
+
     tensor f6_z = matmul(w2, f5) + b2;
     tensor f6 = sigmoid(f6_z);
-
-    // transpose(f6); // f6: (32, 84)
-
-    // auto transposed_f6 = transpose(f6);
-    // std::cout << transpose(f6).get_shape() << "\n";
-    // for (size_t k = 0; k < 2688; ++k) {
-    //     if (k % 84 == 0 && k != 0)
-    //         std::cout << std::endl;
-
-    //     std::cout << transposed_f6[k] << " ";
-    // }
 
     tensor y = softmax(matmul(w3, f6) + b3);
 
