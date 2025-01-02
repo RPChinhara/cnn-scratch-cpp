@@ -10,6 +10,8 @@
 #include <array>
 #include <chrono>
 
+constexpr float batch_size = 64;
+
 tensor kernel1 = glorot_uniform({6, 5, 5});
 tensor kernel2 = glorot_uniform({16, 5, 5});
 
@@ -186,7 +188,7 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-std::array<tensor, 10> lenet_forward(const tensor& x) {
+std::array<tensor, 11> lenet_forward(const tensor& x) {
     // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
     // tensor c1_z = lenet_convolution(x, kernel1);
     // tensor c1 = relu(c1_z);
@@ -194,23 +196,36 @@ std::array<tensor, 10> lenet_forward(const tensor& x) {
     // NOTE: Do I need to biases for c1 to s4?
 
     tensor c1_z = lenet_convolution(x, kernel1);
-    tensor c1 = relu(c1_z);
+    tensor c1 = sigmoid(c1_z);
 
     tensor s2 = lenet_max_pool(c1);
 
     tensor c3_z = lenet_convolution(s2, kernel2);
-    tensor c3 = relu(c3_z);
+    tensor c3 = sigmoid(c3_z);
 
     tensor s4 = lenet_max_pool(c3);
 
-    s4.reshape({60000, 400});
+    s4.reshape({static_cast<size_t>(batch_size), 400});
 
-    tensor f5 = relu(matmul(w1, transpose(s4)) + b1);
+    tensor f5_z = matmul(w1, transpose(s4)) + b1
+    tensor f5 = sigmoid(f5_z);
     tensor f6_z = matmul(w2, f5) + b2;
-    tensor f6 = relu(f6_z);
+    tensor f6 = sigmoid(f6_z);
+
+    // transpose(f6); // f6: (32, 84)
+
+    // auto transposed_f6 = transpose(f6);
+    // std::cout << transpose(f6).get_shape() << "\n";
+    // for (size_t k = 0; k < 2688; ++k) {
+    //     if (k % 84 == 0 && k != 0)
+    //         std::cout << std::endl;
+
+    //     std::cout << transposed_f6[k] << " ";
+    // }
+
     tensor y = softmax(matmul(w3, f6) + b3);
 
-    std::array<tensor, 10> outputs;
+    std::array<tensor, 11> outputs;
 
     outputs[0] = c1_z;
     outputs[1] = c1;
@@ -218,17 +233,17 @@ std::array<tensor, 10> lenet_forward(const tensor& x) {
     outputs[3] = c3_z;
     outputs[4] = c3;
     outputs[5] = s4;
-    outputs[6] = f5;
-    outputs[7] = f6_z;
-    outputs[8] = f6;
-    outputs[9] = y;
+    outputs[6] = f5_z;
+    outputs[7] = f5;
+    outputs[8] = f6_z;
+    outputs[9] = f6;
+    outputs[10] = y;
 
     return outputs;
 }
 
 void lenet_train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 10;
-    constexpr float batch_size = 64;
     constexpr float lr = 0.01f;
 
     for (size_t i = 1; i <= epochs; ++i) {
@@ -238,10 +253,12 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
         float batches = ceil(60000.0f / batch_size);
 
+        float accumulated_loss = 0.0f;
+
         for (size_t j = 0; j < batches; ++j) {
             if (j == batches - 1) {
                 int remainder = 60000 % static_cast<int>(batch_size);
-                
+
                 if (remainder != 0) {
                     tensor x_batch = slice_3d(x_train, j * batch_size, remainder);
                     tensor y_batch = slice(y_train, j * batch_size, remainder);
@@ -255,118 +272,119 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice_3d(x_train, j * batch_size, batch_size);
             tensor y_batch = slice(y_train, j * batch_size, batch_size);
 
-            std::cout << x_batch.get_shape() << "\n";
-            std::cout << y_batch.get_shape() << "\n";
-        }
+            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = lenet_forward(x_batch);
 
-        std::cout << x_train.get_shape() << "\n";
-        std::cout << y_train.get_shape() << "\n";
+            // float error = categorical_cross_entropy(y_batch, transpose(y));
 
-        auto [c1_z, c1, s2, c3_z, c3, s4, f5, f6_z, f6, y] = lenet_forward(x_train);
+            accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
 
-        float error = categorical_cross_entropy(y_train, transpose(y));
-
-        tensor dl_dy = y - transpose(y_train);
-        tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
-        tensor dl_df6_z = dl_df6 * relu_derivative(f6_z);
-        tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
-        tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({60000, 16, 5, 5});
-        tensor dl_dc3 = zeros({60000, 16, 10, 10});
-        tensor dl_dc3_z = dl_dc3 * relu_derivative(c3_z);
-        tensor dl_ds2 = zeros({60000, 6, 14, 14});
-        tensor dl_dc1 = zeros({60000, 6, 28, 28});
-
-        tensor dl_dkernel2 = zeros({16, 5, 5});
-        tensor dl_dkernel1;
-
-        tensor dl_dw3 = matmul(dl_dy, transpose(f6));
-        tensor dl_dw2 = matmul(dl_df6, transpose(f5));
-        tensor dl_dw1 = matmul(dl_df5, s4);
-
-        tensor dl_db3 = sum(dl_dy, 1);
-        tensor dl_db2 = sum(dl_df6_z, 1);
-        tensor dl_db1 = sum(dl_df5, 1);
-
-        // c3 from lenet_forward(): (60000, 16, 10, 10)
-        // s4 from lenet_forward(): (60000, 400)
-
-        // TODO: Make max_unpool()?
-        size_t idx = 0;
-        size_t cumulative_height = 0;
-        size_t num_imgs = c3.shape.front() * c3.shape[1]; // TODO: Use constexpr hardcoding for better perf?
-        size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
-
-        for (size_t i = 0; i < num_imgs; ++i) {
-            size_t img_height = c3.shape[2];
-            // auto img = slice(x2, i * img_height, img_height);
-
-            for (size_t j = 0; j < output_img_size; ++j) {
-                // TODO: Use eigther of these below
-                // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-
-                // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
-                // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
-                dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
-
-                ++idx;
+            if (std::isnan(categorical_cross_entropy(y_batch, transpose(y)))) {
+               std::cerr << "Error: NaN value encountered. Exiting program." << std::endl;
+                exit(EXIT_FAILURE);  // Stop the program
             }
 
-            cumulative_height += img_height;
+            tensor dl_dy = y - transpose(y_batch);
+            tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
+            tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
+            tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
+            tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
+            tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
+            tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
+            tensor dl_ds2 = zeros({static_cast<size_t>(batch_size), 6, 14, 14});
+            tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
+
+            tensor dl_dkernel2 = zeros({16, 5, 5});
+            tensor dl_dkernel1;
+
+            tensor dl_dw3 = matmul(dl_dy, transpose(f6));
+            tensor dl_dw2 = matmul(dl_df6, transpose(f5));
+            tensor dl_dw1 = matmul(dl_df5, s4);
+
+            tensor dl_db3 = sum(dl_dy, 1);
+            tensor dl_db2 = sum(dl_df6_z, 1);
+            tensor dl_db1 = sum(dl_df5, 1);
+
+            // c3 from lenet_forward(): (60000, 16, 10, 10)
+            // s4 from lenet_forward(): (60000, 400)
+
+            // TODO: Make max_unpool()?
+            size_t idx = 0;
+            size_t cumulative_height = 0;
+            size_t num_imgs = c3.shape.front() * c3.shape[1]; // TODO: Use constexpr hardcoding for better perf?
+            size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
+
+            for (size_t i = 0; i < num_imgs; ++i) {
+                size_t img_height = c3.shape[2];
+                // auto img = slice(x2, i * img_height, img_height);
+
+                for (size_t j = 0; j < output_img_size; ++j) {
+                    // TODO: Use eigther of these below
+                    // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
+
+                    // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
+                    // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+                    dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
+
+                    ++idx;
+                }
+
+                cumulative_height += img_height;
+            }
+
+            for (size_t i = 0; i < 3; ++i) {
+                auto img = slice_4d(s2, i);
+                auto kernel = slice_4d(dl_dc3_z, i);
+                kernel.reshape({16, 10, 10});
+
+                dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});
+            }
+
+            // kernel1 = kernel1 - lr * dl_dkernel1;
+            // kernel2 = kernel2 - lr * dl_dkernel2;
+
+            // w1 = w1 - lr * dl_dw1;
+            // w2 = w2 - lr * dl_dw2;
+            w3 = w3 - lr * dl_dw3; // NOTE: clear
+
+            // b1 = b1 - lr * dl_db1;
+            b2 = b2 - lr * dl_db2;
+            b3 = b3 - lr * dl_db3; // NOTE: clear
+
+            // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
+            // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
+
+            // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
+            // dl_dw2 = dl_dy * dy_df6 * df6_dw2
+            // dl_dw3 = dl_dy * dy_dw3
+
+            // dl_db1 = dl_dy * dy_df6 * df6_df5 * df5_db1
+            // dl_db2 = dl_dy * dy_df6 * df6_db2
+            // dl_db3 = dl_dy * dy_db3
+
+            // x:  (60000, 32, 32)
+            // c1: (60000, 6, 28, 28)
+            // s2: (60000, 6, 14, 14)
+            // c3: (60000, 16, 10, 10)
+            // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
+            // f5: (120, 60000)
+            // f6: (84, 60000)
+            // y:  (10, 60000)
+
+            // w1: (120, 400)
+            // w2: (84, 120)
+            // w3: (10, 84)
+
+            // b1: (120, 1)
+            // b2: (84, 1)
+            // b3: (10, 1)
         }
-
-        for (size_t i = 0; i < 3; ++i) {
-            auto img = slice_4d(s2, i);
-            auto kernel = slice_4d(dl_dc3_z, i);
-            kernel.reshape({16, 10, 10});
-
-            dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});
-        }
-
-        // kernel1 = kernel1 - lr * dl_dkernel1;
-        // kernel2 = kernel2 - lr * dl_dkernel2;
-
-        // w1 = w1 - lr * dl_dw1;
-        // w2 = w2 - lr * dl_dw2;
-        w3 = w3 - lr * dl_dw3; // NOTE: clear
-
-        // b1 = b1 - lr * dl_db1;
-        b2 = b2 - lr * dl_db2;
-        b3 = b3 - lr * dl_db3; // NOTE: clear
-
-        // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
-        // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
-
-        // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
-        // dl_dw2 = dl_dy * dy_df6 * df6_dw2
-        // dl_dw3 = dl_dy * dy_dw3
-
-        // dl_db1 = dl_dy * dy_df6 * df6_df5 * df5_db1
-        // dl_db2 = dl_dy * dy_df6 * df6_db2
-        // dl_db3 = dl_dy * dy_db3
-
-        // x:  (60000, 32, 32)
-        // c1: (60000, 6, 28, 28)
-        // s2: (60000, 6, 14, 14)
-        // c3: (60000, 16, 10, 10)
-        // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
-        // f5: (120, 60000)
-        // f6: (84, 60000)
-        // y:  (10, 60000)
-
-        // w1: (120, 400)
-        // w2: (84, 120)
-        // w3: (10, 84)
-
-        // b1: (120, 1)
-        // b2: (84, 1)
-        // b3: (10, 1)
 
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "1/1 [==============================] - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
+        std::cout << "1/1 [==============================] - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / batches << std::endl;
     }
 }
 
