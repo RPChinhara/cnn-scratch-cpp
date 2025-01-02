@@ -258,6 +258,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
 
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
 
+            std::cout << y_batch.get_shape() << std::endl;
+            std::cout << transpose(y).get_shape() << std::endl;
+
             tensor dl_dy = y - transpose(y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
@@ -285,11 +288,11 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             size_t num_imgs = c3.shape.front() * c3.shape[1]; // TODO: Use constexpr hardcoding for better perf?
             size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
 
-            for (size_t i = 0; i < num_imgs; ++i) {
+            for (size_t k = 0; k < num_imgs; ++k) {
                 size_t img_height = c3.shape[2];
                 // auto img = slice(x2, i * img_height, img_height);
 
-                for (size_t j = 0; j < output_img_size; ++j) {
+                for (size_t l = 0; l < output_img_size; ++l) {
                     // TODO: Use eigther of these below
                     // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
 
@@ -303,9 +306,9 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
                 cumulative_height += img_height;
             }
 
-            for (size_t i = 0; i < 3; ++i) {
-                auto img = slice_4d(s2, i);
-                auto kernel = slice_4d(dl_dc3_z, i);
+            for (size_t m = 0; m < 3; ++m) {
+                auto img = slice_4d(s2, m);
+                auto kernel = slice_4d(dl_dc3_z, m);
                 kernel.reshape({16, 10, 10});
 
                 dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});
