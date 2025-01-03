@@ -44,7 +44,7 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
 }
 
 // TODO: Move this to the lyrs folders? Unlike rnn, gru, lstm, conv2d and max_pool2d will be all same? Also, I could make max_pool2d_derivative in the file as well.
-tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
+tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
@@ -140,7 +140,7 @@ tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t st
 }
 
 // TODO: Move this to the lyrs folders?
-tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
+tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t num_kernels = x.shape[1];
 
     size_t input_height = x.shape[x.shape.size() - 2];
@@ -188,22 +188,22 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-std::array<tensor, 11> lenet_forward(const tensor& x) {
+std::array<tensor, 11> forward(const tensor& x) {
     // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
-    // tensor c1_z = lenet_convolution(x, kernel1);
+    // tensor c1_z = convolution(x, kernel1);
     // tensor c1 = relu(c1_z);
 
     // NOTE: Do I need to biases for c1 to s4?
 
-    tensor c1_z = lenet_convolution(x, kernel1);
+    tensor c1_z = convolution(x, kernel1);
     tensor c1 = sigmoid(c1_z);
 
-    tensor s2 = lenet_max_pool(c1);
+    tensor s2 = max_pool(c1);
 
-    tensor c3_z = lenet_convolution(s2, kernel2);
+    tensor c3_z = convolution(s2, kernel2);
     tensor c3 = sigmoid(c3_z);
 
-    tensor s4 = lenet_max_pool(c3);
+    tensor s4 = max_pool(c3);
 
     s4.reshape({static_cast<size_t>(batch_size), 400});
 
@@ -232,7 +232,7 @@ std::array<tensor, 11> lenet_forward(const tensor& x) {
     return outputs;
 }
 
-void lenet_train(const tensor& x_train, const tensor& y_train) {
+void train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 10;
     constexpr float lr = 0.01f;
 
@@ -254,7 +254,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice_3d(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = lenet_forward(x_batch);
+            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch);
 
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
 
@@ -311,7 +311,7 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
                 auto kernel = slice_4d(dl_dc3_z, m);
                 kernel.reshape({16, 10, 10});
 
-                dl_dkernel2 += lenet_convolution(img, kernel).reshape({16, 5, 5});
+                dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
             }
 
             // kernel1 = kernel1 - lr * dl_dkernel1;
@@ -363,14 +363,14 @@ void lenet_train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float lenet_evaluate(const tensor& x_test, const tensor& y_test) {
-    // auto y = lenet_forward(x_test);
+float evaluate(const tensor& x_test, const tensor& y_test) {
+    // auto y = forward(x_test);
     // return categorical_cross_entropy(y_test, transpose(y));
 
     return 0.0f;
 }
 
-void lenet_predict(const tensor& x_test, const tensor& y_test) {
+void predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
@@ -394,16 +394,16 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    lenet_train(data.train_imgs, data.train_labels);
+    train(data.train_imgs, data.train_labels);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
     std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
 
-    auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
+    auto test_loss = evaluate(data.test_imgs, data.test_labels);
     std::cout << "Test loss:  " << test_loss << "\n\n";
 
-    lenet_predict(data.test_imgs, data.test_labels);
+    predict(data.test_imgs, data.test_labels);
 
     return 0;
 }
