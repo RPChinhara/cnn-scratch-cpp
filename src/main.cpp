@@ -10,8 +10,6 @@
 #include <array>
 #include <chrono>
 
-constexpr float batch_size = 64;
-
 tensor kernel1 = glorot_uniform({6, 5, 5});
 tensor kernel2 = glorot_uniform({16, 5, 5});
 
@@ -188,7 +186,7 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
     return outputs;
 }
 
-std::array<tensor, 11> forward(const tensor& x) {
+std::array<tensor, 11> forward(const tensor& x, float batch_size) {
     // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
     // tensor c1_z = convolution(x, kernel1);
     // tensor c1 = relu(c1_z);
@@ -235,15 +233,18 @@ std::array<tensor, 11> forward(const tensor& x) {
 void train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 10;
     constexpr float lr = 0.01f;
+    float batch_size = 64.0f;
 
     const size_t num_batches = static_cast<size_t>(ceil(60000.0f / batch_size));
 
     for (size_t i = 1; i <= epochs; ++i) {
-        std::cout << "Epoch " << i << "/" << epochs << std::endl;
-
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        float accumulated_loss = 0.0f;
+        std::cout << "Epoch " << i << "/" << epochs << std::endl;
+
+        float accumulated_loss = 0.0f; // IDEA: loss_sum, sum_loss
+
+        batch_size = 64.0f;
 
         for (size_t j = 0; j < num_batches; ++j) {
             size_t start_idx = j * batch_size; // 937 x 64 = 59968
@@ -254,7 +255,12 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice_3d(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch);
+            if (j == num_batches - 1) {
+                batch_size = static_cast<float>(end_idx - start_idx);
+                std::cout << batch_size << std::endl;
+            }
+
+            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
 
