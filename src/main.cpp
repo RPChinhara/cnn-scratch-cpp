@@ -187,10 +187,6 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
 }
 
 std::array<tensor, 11> forward(const tensor& x, float batch_size) {
-    // TODO: I have to compute gradients dc1/dc1_z as below, same for other that use activation funcs
-    // tensor c1_z = convolution(x, kernel1);
-    // tensor c1 = relu(c1_z);
-
     // NOTE: Do I need to biases for c1 to s4?
 
     tensor c1_z = convolution(x, kernel1);
@@ -250,27 +246,26 @@ void train(const tensor& x_train, const tensor& y_train) {
             size_t start_idx = j * batch_size; // 937 x 64 = 59968
             size_t end_idx = std::min(start_idx + batch_size, 60000.0f);
 
-            std::cout << start_idx << " " << end_idx << std::endl;
-
             tensor x_batch = slice_3d(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
             if (j == num_batches - 1) {
                 batch_size = static_cast<float>(end_idx - start_idx);
-                std::cout << batch_size << std::endl;
+                std::cout << "batch_size: " << batch_size << std::endl;
             }
 
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
 
-            std::cout << y_batch.get_shape() << std::endl;
-            std::cout << transpose(y).get_shape() << std::endl;
+            // std::cout << y_batch.get_shape() << std::endl;
+            // std::cout << transpose(y).get_shape() << std::endl;
 
             tensor dl_dy = y - transpose(y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
+            // tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z)
             tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
             tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
             tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
