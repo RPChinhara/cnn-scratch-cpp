@@ -263,8 +263,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
-            // tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z)
-            tensor dl_ds4 = matmul(transpose(w1), dl_df5).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
+            tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
+            tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
             tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
             tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
             tensor dl_ds2 = zeros({static_cast<size_t>(batch_size), 6, 14, 14});
