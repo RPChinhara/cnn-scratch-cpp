@@ -249,10 +249,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice_3d(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            if (j == num_batches - 1) {
+            if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
-                std::cout << "batch_size: " << batch_size << std::endl;
-            }
 
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
@@ -318,13 +316,13 @@ void train(const tensor& x_train, const tensor& y_train) {
             // kernel1 = kernel1 - lr * dl_dkernel1;
             // kernel2 = kernel2 - lr * dl_dkernel2;
 
-            // w1 = w1 - lr * dl_dw1;
-            // w2 = w2 - lr * dl_dw2;
-            w3 = w3 - lr * dl_dw3; // NOTE: clear
+            w1 = w1 - lr * dl_dw1;
+            w2 = w2 - lr * dl_dw2;
+            w3 = w3 - lr * dl_dw3;
 
-            // b1 = b1 - lr * dl_db1;
+            b1 = b1 - lr * dl_db1;
             b2 = b2 - lr * dl_db2;
-            b3 = b3 - lr * dl_db3; // NOTE: clear
+            b3 = b3 - lr * dl_db3;
 
             // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
             // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
@@ -353,6 +351,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             // b1: (120, 1)
             // b2: (84, 1)
             // b3: (10, 1)
+
+            std::cout << "\r" << j + 1 << "/" << num_batches << std::flush;
         }
 
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -360,7 +360,7 @@ void train(const tensor& x_train, const tensor& y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "1/1 [==============================] - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / num_batches << std::endl;
+        std::cout << " - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / num_batches << std::endl;
     }
 }
 
