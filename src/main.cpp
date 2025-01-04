@@ -322,8 +322,9 @@ void train(const tensor& x_train, const tensor& y_train) {
             // std::cout << 6 << std::endl;
 
             for (size_t m = 0; m < batch_size; ++m) {
-                auto img = slice_4d(s2, m);
-                auto kernel = slice_4d(dl_dc3_z, m);
+                auto img = slice_4d(s2, m, 1);
+
+                auto kernel = slice_4d(dl_dc3_z, m, 1);
                 kernel.reshape({16, 10, 10});
 
                 dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
