@@ -233,9 +233,6 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             // std::cout << 4 << std::endl;
 
-            // std::cout << y_batch.get_shape() << std::endl;
-            // std::cout << transpose(y).get_shape() << std::endl;
-
             tensor dl_dy = y - transpose(y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
