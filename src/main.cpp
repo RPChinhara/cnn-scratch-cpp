@@ -192,8 +192,6 @@ std::array<tensor, 11> forward(const tensor& x, float batch_size) {
     tensor c1_z = convolution(x, kernel1);
     tensor c1 = sigmoid(c1_z);
 
-    std::cout << c1.get_shape() << " fuck" << std::endl;
-
     tensor s2 = max_pool(c1);
 
     tensor c3_z = convolution(s2, kernel2);
@@ -252,7 +250,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             size_t start_idx = j * batch_size; // 937 x 64 = 59968
             size_t end_idx = std::min(start_idx + batch_size, 60000.0f);
 
-            tensor x_batch = slice_3d(x_train, start_idx, end_idx - start_idx);
+            tensor x_batch = slice_4d(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
             if (j == num_batches - 1)
@@ -414,25 +412,12 @@ int main() {
     data.train_labels = one_hot(data.train_labels, 10);
     data.test_labels = one_hot(data.test_labels, 10);
 
+    data.train_imgs.reshape({60000, 1, 32, 32});
+    // data.test_imgs.reshape({60000, 1, 32, 32}); // TODO: Is it {10000, 1, 32, 32}?
+
     auto start = std::chrono::high_resolution_clock::now();
 
-    // std::cout << data.train_imgs.get_shape() << std::endl;
-    // std::cout << data.train_labels.get_shape() << std::endl;
-
-    // data.train_imgs.reshape({60000, 1, 32, 32});
-
     train(data.train_imgs, data.train_labels);
-
-    auto img = uniform_dist({1, 1, 4, 4}, 0.0f, 0.0000001f); // (1, 1, 32, 32)
-    auto img2 = uniform_dist({1, 4, 4}, 0.0f, 0.0000001f);  // (1, 32, 32)
-    auto kernel5 = fill({2, 2, 2}, 1.0f);
-
-    std::cout << img << std::endl;
-    std::cout << img.reshape({1, 4, 4}) << std::endl;
-    std::cout << kernel5 << std::endl;
-
-    std::cout << convolution(img, kernel5) << std::endl;
-    std::cout << convolution(img.reshape({1, 4, 4}), kernel5) << std::endl;
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
