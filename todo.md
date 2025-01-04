@@ -1,4 +1,6 @@
-> LeNet
+- LeNet
+    > Reshape the shape of x_train to (60000, 1, 32, 32) in the beginning? If convolution with (1, 1, 4, 4), and (1, 4, 4) with kernel of (1, 2, 2) produce same result, 'if (x.shape.size() == 3)' can be omitted in convolution().
+    - I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
     - Shape of kernel2 should be (16, 6, 5, 5) instead of (16, 5, 5)? The 6 channels in each filter contain different 5x5 kernels — each kernel corresponds to a different channel in the input.
     - When I compute dc3_z/ds2, transpose the kernel2 into (6, 16, 5, 5) so that when convoluted with dl/dc3_z, it'd be (6, 14, 14) which is the shape of s2. Transpose looks like below. I don't know if it's true though.
                                   [1, 2  [13, 14
@@ -11,8 +13,6 @@
      15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
 
     - I will fix convolution() so that it will support 4d kernel shape like follow (16, 6, 5, 5), but he I do this, how to get a shape (16, 6, 5, 5) for dl_dkernel2 in lenet_dl_dkernel2.cpp?
-    - Reshape the shape of x_train to (60000, 1, 32, 32) in the beginning? If convolution with (1, 1, 4, 4), and (1, 4, 4) with kernel of (1, 2, 2) produce same result, 'if (x.shape.size() == 3)' can be omitted in convolution().
-    - I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
 - AlexNet (Use ImageNet as the model was made for the dataset? It seems this is the way)
 - VGG
 - ResNet
