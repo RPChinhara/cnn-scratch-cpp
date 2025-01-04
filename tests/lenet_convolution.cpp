@@ -4,7 +4,7 @@
 
 #include <chrono>
 
-tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
+tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
@@ -121,8 +121,8 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    // std::cout << lenet_convolution(x1, kernel1) << "\n";
-    std::cout << lenet_convolution(x2, kernel2) << "\n";
+    // std::cout << convolution(x1, kernel1) << "\n";
+    std::cout << convolution(x2, kernel2) << "\n";
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
