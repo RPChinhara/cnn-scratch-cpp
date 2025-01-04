@@ -13,6 +13,7 @@
      15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
 
     - I will fix convolution() so that it will support 4d kernel shape like follow (16, 6, 5, 5), but he I do this, how to get a shape (16, 6, 5, 5) for dl_dkernel2 in lenet_dl_dkernel2.cpp?
+    - What is the correct order of applying multiple kernels to the image e.g., image has shape (2, 1, 4, 4), and kernel has (2, 2, 2).
 - AlexNet (Use ImageNet as the model was made for the dataset? It seems this is the way)
 - VGG
 - ResNet
