@@ -11,7 +11,7 @@ tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max);
 
 tensor slice(const tensor& t, const size_t begin, const size_t size); // TODO: Change to slice_2d()?
 tensor slice_3d(const tensor& t, const size_t begin, const size_t size); // TODO: Change to slice_3d_3d()?
-tensor slice_4d(const tensor& t, const size_t begin); // TODO: Change to slice_4d_4d()?
+tensor slice_4d(const tensor& t, const size_t begin, const size_t size); // TODO: Change to slice_4d_4d()?
 tensor slice_test(const tensor& t, const std::vector<size_t>& begin, const std::vector<size_t>& size);
 tensor vslice(const tensor& t, const size_t col);
 
