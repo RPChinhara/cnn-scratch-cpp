@@ -413,7 +413,7 @@ int main() {
     data.test_labels = one_hot(data.test_labels, 10);
 
     data.train_imgs.reshape({60000, 1, 32, 32});
-    // data.test_imgs.reshape({60000, 1, 32, 32}); // TODO: Is it {10000, 1, 32, 32}?
+    data.test_imgs.reshape({10000, 1, 32, 32});
 
     auto start = std::chrono::high_resolution_clock::now();
 
