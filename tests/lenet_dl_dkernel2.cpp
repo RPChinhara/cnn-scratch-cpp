@@ -3,7 +3,7 @@
 #include "tensor.h"
 
 // TODO: Move this to the lyrs folders? Unlike rnn, gru, lstm, conv2d and max_pool2d will be all same? Also, I could make max_pool2d_derivative in the file as well.
-tensor lenet_convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
+tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
@@ -104,19 +104,17 @@ int main () {
     tensor dl_dkernel2 = zeros({16, 5, 5});
 
     for (size_t i = 0; i < 3; ++i) {
-        auto img = slice_4d(s2, i);
-        auto kernel = slice_4d(dl_dc3, i);
+        auto img = slice_4d(s2, i, 1);
+
+        auto kernel = slice_4d(dl_dc3, i, 1);
         kernel.reshape({16, 10, 10});
 
-        dl_dkernel2 += lenet_convolution(img, kernel);
+        dl_dkernel2 += convolution(img, kernel);
 
-        std::cout << kernel << "\n";
         std::cout << img << "\n";
+        std::cout << kernel << "\n";
         std::cout << dl_dkernel2 << "\n";
-
     }
-
-    std::cout << dl_dkernel2 << "\n";
 
     return 0;
 }
