@@ -1,4 +1,7 @@
 > LeNet
+    - Shape of kernel2 should be (16, 6, 5, 5) instead of (16, 5, 5)?
+    - When I compute dc3_z/ds2, transpose the kernel2 into (6, 16, 5, 5) so that when convoluted with dl/dc3_z, it'd be (6, 14, 14) which is the shape of s2.
+    - Reshape the shape of x_train to (60000, 1, 32, 32) in the beginning? If convolution with (1, 1, 4, 4), and (1, 4, 4) with kernel of (1, 2, 2) produce same result, 'if (x.shape.size() == 3)' can be omitted in convolution().
 - AlexNet (Use ImageNet as the model was made for the dataset? It seems this is the way)
 - VGG
 - ResNet
