@@ -211,6 +211,8 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         batch_size = 64.0f;
 
+
+        // TODO: I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
         for (size_t j = 0; j < num_batches; ++j) {
             // std::cout << 1 << std::endl;
 
