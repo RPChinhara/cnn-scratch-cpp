@@ -99,6 +99,8 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 }
 
 int main () {
+    // NOTE: I have to pad dl_dc3_z from (10, 10) to (18, 18) spacial dimension.
+
                               // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                               // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                               // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -118,22 +120,19 @@ int main () {
     // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     // 1 1 1 1 1 1 1 1 1 1 -> // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
-
-
     tensor dl_dc3_z = uniform_dist({3, 16, 10, 10}, 0.0f, 0.0001f);
-    tensor kernel2 = zeros({16, 5, 5});
+    tensor kernel2 = glorot_uniform({16, 5, 5});
 
     size_t padding_size = kernel2.shape[1] - 1;
 
     tensor dl_dc3_z_padded = pad(dl_dc3_z, padding_size, padding_size, padding_size, padding_size);
 
-
     for (size_t i = 0; i < 3; ++i) {
-        auto img = slice_4d(s2, i);
-        auto kernel = slice_4d(dl_dc3, i);
-        kernel.reshape({16, 10, 10});
+        auto img = slice_4d(dl_dc3_z, i);
+        // auto kernel = slice_4d(dl_dc3, i);
+        // kernel.reshape({16, 10, 10});
 
-        dl_dkernel2 += convolution(img, kernel);
+        dl_dkernel2 += convolution(img, kernel2);
 
         std::cout << kernel << "\n";
         std::cout << img << "\n";
