@@ -236,6 +236,8 @@ void train(const tensor& x_train, const tensor& y_train) {
     for (size_t i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
+        // std::cout << 0 << std::endl;
+
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
 
         float accumulated_loss = 0.0f; // IDEA: loss_sum, sum_loss
@@ -243,6 +245,8 @@ void train(const tensor& x_train, const tensor& y_train) {
         batch_size = 64.0f;
 
         for (size_t j = 0; j < num_batches; ++j) {
+            // std::cout << 1 << std::endl;
+
             size_t start_idx = j * batch_size; // 937 x 64 = 59968
             size_t end_idx = std::min(start_idx + batch_size, 60000.0f);
 
@@ -252,9 +256,15 @@ void train(const tensor& x_train, const tensor& y_train) {
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
 
+            // std::cout << 2 << std::endl;
+
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
+            // std::cout << 3 << std::endl;
+
             accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
+
+            // std::cout << 4 << std::endl;
 
             // std::cout << y_batch.get_shape() << std::endl;
             // std::cout << transpose(y).get_shape() << std::endl;
@@ -274,12 +284,14 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_dkernel1;
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
-            tensor dl_dw2 = matmul(dl_df6, transpose(f5));
-            tensor dl_dw1 = matmul(dl_df5, s4);
+            tensor dl_dw2 = matmul(dl_df6_z, transpose(f5));
+            tensor dl_dw1 = matmul(dl_df5_z, s4);
 
             tensor dl_db3 = sum(dl_dy, 1);
             tensor dl_db2 = sum(dl_df6_z, 1);
-            tensor dl_db1 = sum(dl_df5, 1);
+            tensor dl_db1 = sum(dl_df5_z, 1);
+
+            // std::cout << 5 << std::endl;
 
             // TODO: Make max_unpool()?
             size_t idx = 0;
@@ -305,6 +317,8 @@ void train(const tensor& x_train, const tensor& y_train) {
                 cumulative_height += img_height;
             }
 
+            // std::cout << 6 << std::endl;
+
             for (size_t m = 0; m < batch_size; ++m) {
                 auto img = slice_4d(s2, m);
                 auto kernel = slice_4d(dl_dc3_z, m);
@@ -312,6 +326,8 @@ void train(const tensor& x_train, const tensor& y_train) {
 
                 dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
             }
+
+            // std::cout << 7 << std::endl;
 
             // kernel1 = kernel1 - lr * dl_dkernel1;
             kernel2 = kernel2 - lr * dl_dkernel2;
@@ -323,6 +339,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             b1 = b1 - lr * dl_db1;
             b2 = b2 - lr * dl_db2;
             b3 = b3 - lr * dl_db3;
+
+            // std::cout << 8 << std::endl;
 
             // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
             // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
