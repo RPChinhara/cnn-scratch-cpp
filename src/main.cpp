@@ -305,7 +305,7 @@ void train(const tensor& x_train, const tensor& y_train) {
                 cumulative_height += img_height;
             }
 
-            for (size_t m = 0; m < 3; ++m) {
+            for (size_t m = 0; m < batch_size; ++m) {
                 auto img = slice_4d(s2, m);
                 auto kernel = slice_4d(dl_dc3_z, m);
                 kernel.reshape({16, 10, 10});
@@ -314,7 +314,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             }
 
             // kernel1 = kernel1 - lr * dl_dkernel1;
-            // kernel2 = kernel2 - lr * dl_dkernel2;
+            kernel2 = kernel2 - lr * dl_dkernel2;
 
             w1 = w1 - lr * dl_dw1;
             w2 = w2 - lr * dl_dw2;
