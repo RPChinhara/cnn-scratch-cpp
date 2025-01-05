@@ -67,66 +67,32 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 }
 
 int main() {
-    tensor x1 = uniform_dist({2, 4, 4}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.0000001f);
+    tensor x = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
 
-    tensor kernel1 = zeros({1, 2, 2});
-    for (size_t i = 0; i < kernel1.size; ++i) {
-        kernel1[i] += 1.0f;
-    }
-
-    tensor kernel2 = zeros({2, 2, 2});
-    for (size_t i = 0; i < kernel2.size; ++i) {
+    // NOTE: (output_channels, input_channels, kernel_size[0], kernel_size[1])
+    // I guess this works as x and kernel input_channels much which are both 2 in this case.
+    tensor kernel = zeros({2, 2, 2, 2});
+    for (size_t i = 0; i < kernel.size; ++i) {
         if (i < 4)
-            kernel2[i] += 1.0f;
-        else
-            kernel2[i] += 2.0f;
+            kernel[i] += 1.0f;
+        else if (3 < i && i < 8)
+            kernel[i] += 2.0f;
+        else if (7 < i && i < 12)
+            kernel[i] += 3.0f;
+        else if (11 < i && i < 16)
+            kernel[i] += 4.0f;
     }
 
-    std::cout << x2 << "\n";
-    std::cout << kernel1 << "\n";
+    std::cout << x << "\n";
+    std::cout << kernel << "\n";
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    // std::cout << convolution(x1, kernel1) << "\n";
-    std::cout << convolution(x2, kernel2) << "\n";
+    std::cout << convolution(x, kernel) << "\n";
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
     std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
-
-    // (60000, 32, 32)
-    // (60000, 6, 28, 28)
-    // (60000, 6, 14, 14)
-
-    // Tensor(
-    // [[[[0.00000005 0.00000010]  -> (1)
-    //    [0.00000005 0.00000000]]
-
-    //   [[0.00000001 0.00000002]  -> (2)
-    //    [0.00000002 0.00000008]]]], shape=(1, 2, 2, 2))
-    // Tensor(
-    // [[[1.00000000 1.00000000]   -> (3)
-    //   [1.00000000 1.00000000]]
-
-    //  [[2.00000000 2.00000000]   -> (4)
-    //   [2.00000000 2.00000000]]
-
-    //  [[3.00000000 3.00000000]   -> (5)
-    //   [3.00000000 3.00000000]]], shape=(3, 2, 2))
-
-
-    // The shape of the result be (1, 3, 1, 1). How? First multiply 1, 2, 3, then, 1, 2, 4, and 1, 2, 5.
-    // The reason is that size of kernel is 2 x 2 x 2, the first 2 is 1 and 2D, but for the last it means 3D which came from channel dim of inputs.
-    // Which is 2 next to 1.
-    // What is dot product between (2 x 2 x 2) and (2 x 2 x 2) of elements all 1?
-
-    // just for loop i, j, and k ->
-    // for(size_t i = 0; i < 1; ++i)
-    //     for(size_t j = 0; j < 1; ++j)
-    //         for(size_t k = 0; k < 1; ++k)
-    // |2 2  2 2|   |2 2  2 2|
-    // |2 2  2 2| x |2 2  2 2|
 
     return 0;
 }
