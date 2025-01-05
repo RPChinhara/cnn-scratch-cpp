@@ -11,7 +11,7 @@
     [13, 14  [17, 18  [21, 22     [9, 10  [21, 22
      15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
 
-- AlexNet (Use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly.)
+- AlexNet (use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly)
 - VGG
 - ResNet
 - Seq2seq
@@ -30,4 +30,4 @@
 - Quantum neural network
 - Story Visualization
 - Multimodal learning
-- AGI
+- AGI (use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity)
