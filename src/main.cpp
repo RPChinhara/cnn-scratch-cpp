@@ -340,6 +340,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             std::cout << "\r" << j + 1 << "/" << num_batches << std::flush;
         }
 
+        // TODO: Log time like how lenet_convolution.cpp does? No more ms? second is enough?
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
