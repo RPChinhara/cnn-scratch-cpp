@@ -91,8 +91,8 @@ int main() {
     std::cout << convolution(x, kernel) << "\n";
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
+
+    std::cout << "Elapsed time: " << std::chrono::duration<double>(end - start).count() << " seconds\n";
 
     return 0;
 }
