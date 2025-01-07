@@ -10,7 +10,9 @@
     [13, 14  [17, 18  [21, 22     [9, 10  [21, 22
      15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
 
-- AlexNet (use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly)
+- AlexNet
+     - Use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly.
+     - I may not perfectly replicate AlexNet, VGG, and ResNet as these are just bigger version of LeNet so I might make similar models, but may not be exactly same.
 - VGG
 - ResNet
 - Seq2seq
