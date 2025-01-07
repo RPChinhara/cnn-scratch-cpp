@@ -5,7 +5,7 @@
 #include <chrono>
 
 tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
-    size_t num_kernels = kernels.shape.front();
+    size_t output_channels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
     size_t kernel_width = kernels.shape.back();
 
@@ -15,7 +15,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    tensor feature_maps = zeros({x.shape.front(), num_kernels, output_height, output_width});
+    tensor feature_maps = zeros({x.shape.front(), output_channels, output_height, output_width});
 
     size_t idx = 0;
     size_t num_batches = x.shape.front();
@@ -23,7 +23,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 
     // TODO: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
     for (size_t i = 0; i < num_batches; ++i) {
-        for (size_t j = 0; j < num_kernels; ++j) {
+        for (size_t j = 0; j < output_channels; ++j) {
             tensor kernel = slice(kernels, j * kernel_height, kernel_height);
             tensor channels_sum = zeros({output_height, output_width});
 
