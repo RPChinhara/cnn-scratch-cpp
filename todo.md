@@ -1,7 +1,6 @@
 - LeNet
-    > Shape of kernel2 should be (16, 6, 5, 5) instead of (16, 5, 5) because it's 4d. That said, kernel1 should be 4d asa well. The 6 channels in each filter contain different 5x5 kernels — each kernel corresponds to a different channel in the input.
-         - I will fix convolution() so that it will support 4d kernel shape like follow (16, 6, 5, 5), but if I do this, how to get a shape (16, 6, 5, 5) for dl_dkernel2 in lenet_dl_dkernel2.cpp?
-    - When I compute dc3_z/ds2, transpose the kernel2 into (6, 16, 5, 5) so that when convoluted with dl/dc3_z, it'd be (6, 14, 14) which is the shape of s2. Transpose looks like below. I don't know if it's true though.
+     > I will fix convolution() so that it will support 4d kernel shape like follow (16, 6, 5, 5), but if I do this, how to get a shape (16, 6, 5, 5) for dl_dkernel2 in lenet_dl_dkernel2.cpp?
+     - When I compute dc3_z/ds2, transpose the kernel2 into (6, 16, 5, 5) so that when convoluted with dl/dc3_z, it'd be (6, 14, 14) which is the shape of s2. Transpose looks like below. I don't know if it's true though.
                                   [1, 2  [13, 14
                                    3, 4], 15, 16]
 
