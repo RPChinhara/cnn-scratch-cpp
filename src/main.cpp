@@ -394,8 +394,7 @@ int main() {
 
     std::cout << "Elapsed time: " << std::chrono::duration<double>(end - start).count() << " seconds\n";
 
-    auto test_loss = evaluate(data.test_imgs, data.test_labels);
-    std::cout << "Test loss:  " << test_loss << "\n\n";
+    std::cout << "Test loss: " << evaluate(data.test_imgs, data.test_labels) << "\n\n";
 
     predict(data.test_imgs, data.test_labels);
 
