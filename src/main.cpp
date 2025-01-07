@@ -10,8 +10,8 @@
 #include <array>
 #include <chrono>
 
-tensor kernel1 = glorot_uniform({6, 1, 5, 5});  // TODO: should be either (1, 6, 5, 5) or (6, 1, 5, 5)
-tensor kernel2 = glorot_uniform({16, 6, 5, 5}); // TODO: should be either (6, 16, 5, 5) or (16, 6, 5, 5)
+tensor kernel1 = glorot_uniform({6, 1, 5, 5});
+tensor kernel2 = glorot_uniform({16, 6, 5, 5});
 
 tensor w1 = glorot_uniform({120, 400});
 tensor w2 = glorot_uniform({84, 120});
