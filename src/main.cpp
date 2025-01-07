@@ -343,12 +343,10 @@ void train(const tensor& x_train, const tensor& y_train) {
             // b2: (84, 1)
             // b3: (10, 1)
 
-            if (j == num_batches - 1) {
+            if (j == num_batches - 1)
                 std::cout << "\r\033[K";
-                break;
-            } else {
+            else
                 std::cout << "\r\033[K" << j + 1 << "/" << num_batches << " - loss: " << loss << std::flush;
-            }
         }
 
         auto end = std::chrono::high_resolution_clock::now();
