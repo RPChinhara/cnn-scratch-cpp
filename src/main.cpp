@@ -113,7 +113,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 
 // TODO: Move this to the lyrs folders?
 tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
-    size_t num_kernels = x.shape[1];
+    size_t num_kernels = x.shape[1]; // TODO: Change to input_channels
 
     size_t input_height = x.shape[x.shape.size() - 2];
     size_t input_width = x.shape.back();
@@ -121,6 +121,7 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
     size_t output_height = (input_height - pool_size) / stride + 1;
     size_t output_width = (input_width - pool_size) / stride + 1;
 
+    // TODO: Write like how it's written in covolution(), e.g., batch_size
     tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
     size_t batch_size = x.shape.front();
