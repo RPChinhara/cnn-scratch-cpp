@@ -10,8 +10,8 @@
 #include <array>
 #include <chrono>
 
-tensor kernel1 = glorot_uniform({6, 5, 5});  // TODO: should be either (1, 6, 5, 5) or (6, 1, 5, 5)
-tensor kernel2 = glorot_uniform({16, 5, 5}); // TODO: should be either (6, 16, 5, 5) or (16, 6, 5, 5)
+tensor kernel1 = glorot_uniform({6, 1, 5, 5});  // TODO: should be either (1, 6, 5, 5) or (6, 1, 5, 5)
+tensor kernel2 = glorot_uniform({16, 6, 5, 5}); // TODO: should be either (6, 16, 5, 5) or (16, 6, 5, 5)
 
 tensor w1 = glorot_uniform({120, 400});
 tensor w2 = glorot_uniform({84, 120});
@@ -43,33 +43,40 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
 
 // TODO: Move this to the lyrs folders? Unlike rnn, gru, lstm, conv2d and max_pool2d will be all same? Also, I could make max_pool2d_derivative in the file as well.
 tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
-    size_t num_kernels = kernels.shape.front();
-    size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
+    size_t input_channels = x.shape[1];
+    size_t output_channels = kernels.shape.front();
+
+    size_t kernel_height = kernels.shape[2];
     size_t kernel_width = kernels.shape.back();
 
-    size_t input_height = x.shape[x.shape.size() - 2];
+    size_t input_height = x.shape[2];
     size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    tensor feature_maps = zeros({x.shape.front(), num_kernels, output_height, output_width});
+    size_t batch_size = x.shape.front();
+
+    tensor feature_maps = zeros({batch_size, output_channels, output_height, output_width});
 
     size_t idx = 0;
-    size_t num_batches = x.shape.front();
-    size_t num_channels = x.shape[1];
 
-    // TODO: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
-    for (size_t i = 0; i < num_batches; ++i) {
-        for (size_t j = 0; j < num_kernels; ++j) {
-            tensor kernel = slice(kernels, j * kernel_height, kernel_height);
+    // Optimization: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
+    for (size_t i = 0; i < batch_size; ++i) {
+        for (size_t j = 0; j < output_channels; ++j) {
+            // tensor kernel_4d = slice_4d(kernels, j, 1); NOTE: Method2
             tensor channels_sum = zeros({output_height, output_width});
 
-            for (size_t k = 0; k < num_channels; ++k) {
-                size_t idx = i * num_channels + k;
-                tensor img = slice(x, idx * input_height, input_height);
+            // std::cout << kernel_4d << std::endl;
 
-                // TODO: This could be optimized.
+            for (size_t k = 0; k < input_channels; ++k) {
+                size_t idx = i * input_channels + k;
+                size_t idx2 = j * input_channels + k;
+                tensor img = slice(x, idx * input_height, input_height);
+                tensor kernel = slice(kernels, idx2 * kernel_height, kernel_height); // NOTE: Comment this out for 'Method2'
+                // tensor kernel_2d = slice(kernel_4d, k * kernel_height, kernel_height); NOTE: Method2
+
+                // Optimization: This could be optimized.
                 // If the size of kernel was 2 x 2, and img was 3 x 3.
                 // kernel, img
                 //         0 1 2
@@ -85,7 +92,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 
                         for (size_t m = 0; m < kernel_height; ++m) {
                             for (size_t n = 0; n < kernel_width; ++n) {
-                                sum += img(row + m, col + n) * kernel(m, n);
+                                sum += img(row + m, col + n) * kernel(m, n); // NOTE: kernel_2d(m, n) for 'Method2'
                             }
                         }
 
@@ -211,7 +218,6 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         batch_size = 64.0f;
 
-
         // TODO: I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
         for (size_t j = 0; j < num_batches; ++j) {
             // std::cout << 1 << std::endl;
@@ -246,8 +252,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_ds2 = zeros({static_cast<size_t>(batch_size), 6, 14, 14});
             tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
 
-            tensor dl_dkernel2 = zeros({16, 5, 5});
-            tensor dl_dkernel1;
+            tensor dl_dkernel2 = zeros({16, 6, 5, 5});
+            tensor dl_dkernel1 = zeros({6, 1, 5, 5});
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6_z, transpose(f5));
@@ -285,14 +291,14 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             // std::cout << 6 << std::endl;
 
-            for (size_t m = 0; m < batch_size; ++m) {
-                auto img = slice_4d(s2, m, 1);
+            // for (size_t m = 0; m < batch_size; ++m) {
+            //     auto img = slice_4d(s2, m, 1);
 
-                auto kernel = slice_4d(dl_dc3_z, m, 1);
-                kernel.reshape({16, 10, 10});
+            //     auto kernel = slice_4d(dl_dc3_z, m, 1);
+            //     kernel.reshape({16, 10, 10});
 
-                dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
-            }
+            //     dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
+            // }
 
             // std::cout << 7 << std::endl;
 
@@ -337,6 +343,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             // b2: (84, 1)
             // b3: (10, 1)
 
+            // TODO: I think I could just log here. Below, accumulated_loss must be devided because I'm logging
+            // per epochs. If I log per batches, I could just log the loss calculated in each batch.
             std::cout << "\r" << j + 1 << "/" << num_batches << std::flush;
         }
 
