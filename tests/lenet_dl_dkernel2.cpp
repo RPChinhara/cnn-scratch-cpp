@@ -72,21 +72,27 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 }
 
 int main () {
-    tensor s2 = uniform_dist({3, 6, 14, 14}, 0.0f, 0.0001f); // real shape = (60000, 6, 14, 14)
-    tensor dl_dc3 = uniform_dist({3, 16, 10, 10}, 0.0f, 0.0001f); // real shape = (60000, 16, 10, 10)
-    tensor dl_dkernel2 = zeros({16, 5, 5});
+    tensor s2 = uniform_dist({1, 6, 14, 14}, 0.0f, 0.0001f); // real shape = (64, 6, 14, 14)
+    tensor dl_dc3 = uniform_dist({1, 16, 10, 10}, 0.0f, 0.0001f); // real shape = (64, 16, 10, 10)
+    tensor dl_dkernel2 = zeros({16, 6, 5, 5});
 
-    for (size_t i = 0; i < 3; ++i) {
-        auto img = slice_4d(s2, i, 1);
-
+    for (size_t i = 0; i < 1; ++i) {
+        auto img_4d = slice_4d(s2, i, 1);
         auto kernel = slice_4d(dl_dc3, i, 1);
-        kernel.reshape({16, 10, 10});
 
-        dl_dkernel2 += convolution(img, kernel);
+        std::cout << img_4d << std::endl;
+        // std::cout << kernel << std::endl;
 
-        std::cout << img << "\n";
-        std::cout << kernel << "\n";
-        std::cout << dl_dkernel2 << "\n";
+        for (size_t j = 0; j < 16; ++j) {
+            auto kernel_2d = slice(kernel_4d, j * 10, 10);
+
+            for (size_t k = 0; k < 6; ++k) {
+                auto img_2d = slice(img_4d, k * 14, 14);
+                std::cout << img_2d << std::endl;
+
+                // dl_dkernel2 += convolution(img_2d, kernel_2d);
+            }
+        }
     }
 
     return 0;
