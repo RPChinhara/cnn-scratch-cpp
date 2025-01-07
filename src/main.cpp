@@ -389,12 +389,10 @@ int main() {
     data.test_imgs.reshape({10000, 1, 32, 32});
 
     auto start = std::chrono::high_resolution_clock::now();
-
     train(data.train_imgs, data.train_labels);
-
     auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
-    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
+
+    std::cout << "Elapsed time: " << std::chrono::duration<double>(end - start).count() << " seconds\n";
 
     auto test_loss = evaluate(data.test_imgs, data.test_labels);
     std::cout << "Test loss:  " << test_loss << "\n\n";
