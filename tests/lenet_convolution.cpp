@@ -5,33 +5,40 @@
 #include <chrono>
 
 tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
+    size_t input_channels = x.shape[1];
     size_t output_channels = kernels.shape.front();
-    size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
+
+    size_t kernel_height = kernels.shape[2];
     size_t kernel_width = kernels.shape.back();
 
-    size_t input_height = x.shape[x.shape.size() - 2];
+    size_t input_height = x.shape[2];
     size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    tensor feature_maps = zeros({x.shape.front(), output_channels, output_height, output_width});
+    size_t batch_size = x.shape.front();
+
+    tensor feature_maps = zeros({batch_size, output_channels, output_height, output_width});
 
     size_t idx = 0;
-    size_t num_batches = x.shape.front();
-    size_t num_channels = x.shape[1];
 
-    // TODO: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
-    for (size_t i = 0; i < num_batches; ++i) {
+    // Optimization: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
+    for (size_t i = 0; i < batch_size; ++i) {
         for (size_t j = 0; j < output_channels; ++j) {
-            tensor kernel = slice(kernels, j * kernel_height, kernel_height);
+            // tensor kernel_4d = slice_4d(kernels, j, 1); NOTE: Method2
             tensor channels_sum = zeros({output_height, output_width});
 
-            for (size_t k = 0; k < num_channels; ++k) {
-                size_t idx = i * num_channels + k;
-                tensor img = slice(x, idx * input_height, input_height);
+            // std::cout << kernel_4d << std::endl;
 
-                // TODO: This could be optimized.
+            for (size_t k = 0; k < input_channels; ++k) {
+                size_t idx = i * input_channels + k;
+                size_t idx2 = j * input_channels + k;
+                tensor img = slice(x, idx * input_height, input_height);
+                tensor kernel = slice(kernels, idx2 * kernel_height, kernel_height); // NOTE: Comment this out for 'Method2'
+                // tensor kernel_2d = slice(kernel_4d, k * kernel_height, kernel_height); NOTE: Method2
+
+                // Optimization: This could be optimized.
                 // If the size of kernel was 2 x 2, and img was 3 x 3.
                 // kernel, img
                 //         0 1 2
@@ -47,7 +54,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 
                         for (size_t m = 0; m < kernel_height; ++m) {
                             for (size_t n = 0; n < kernel_width; ++n) {
-                                sum += img(row + m, col + n) * kernel(m, n);
+                                sum += img(row + m, col + n) * kernel(m, n); // NOTE: kernel_2d(m, n) for 'Method2'
                             }
                         }
 
@@ -67,11 +74,14 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 }
 
 int main() {
-    tensor x = uniform_dist({1, 2, 3, 3}, 0.0f, 0.0000001f);
+    tensor x = zeros({2, 2, 3, 3});
+    for (size_t i = 0; i < x.size; ++i) {
+        x[i] += i;
+    }
 
     // NOTE: (output_channels, input_channels, kernel_size[0], kernel_size[1])
     // I guess this works as x and kernel input_channels much which are both 2 in this case.
-    tensor kernel = zeros({2, 2, 2, 2});
+    tensor kernel = zeros({3, 2, 2, 2});
     for (size_t i = 0; i < kernel.size; ++i) {
         if (i < 4)
             kernel[i] += 1.0f;
@@ -81,6 +91,10 @@ int main() {
             kernel[i] += 3.0f;
         else if (11 < i && i < 16)
             kernel[i] += 4.0f;
+        else if (15 < i && i < 20)
+            kernel[i] += 5.0f;
+        else if (19 < i && i < 24)
+            kernel[i] += 6.0f;
     }
 
     std::cout << x << "\n";
