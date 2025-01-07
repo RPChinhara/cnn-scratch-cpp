@@ -347,7 +347,7 @@ void train(const tensor& x_train, const tensor& y_train) {
                 std::cout << "\r\033[K";
                 break;
             } else {
-                std::cout << "\r" << j + 1 << "/" << num_batches << " - loss: " << loss << std::flush;
+                std::cout << "\r\033[K" << j + 1 << "/" << num_batches << " - loss: " << loss << std::flush;
             }
         }
 
