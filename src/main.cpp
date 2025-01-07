@@ -208,7 +208,7 @@ void train(const tensor& x_train, const tensor& y_train) {
     const size_t num_batches = static_cast<size_t>(ceil(60000.0f / batch_size));
 
     for (size_t i = 1; i <= epochs; ++i) {
-        auto start_time = std::chrono::high_resolution_clock::now();
+        auto start = std::chrono::high_resolution_clock::now();
 
         // std::cout << 0 << std::endl;
 
@@ -351,13 +351,9 @@ void train(const tensor& x_train, const tensor& y_train) {
             }
         }
 
-        // TODO: Log time like how lenet_convolution.cpp does? No more ms? second is enough?
-        auto end_time = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
-        auto remaining_ms = duration - seconds;
+        auto end = std::chrono::high_resolution_clock::now();
 
-        std::cout << num_batches << "/" << num_batches << " - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss << std::endl;
+        std::cout << num_batches << "/" << num_batches << " - " << std::chrono::duration<double>(end - start).count() << "s/step - loss: " << loss << std::endl;
     }
 }
 
