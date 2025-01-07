@@ -7,34 +7,28 @@
 #include "rand.h"
 #include "tensor.h"
 
+#include <array>
 #include <chrono>
 
-constexpr float  lr           = 0.01f;
-constexpr size_t batch_size   = 32;
-constexpr size_t epochs       = 10;
+tensor kernel1 = glorot_uniform({6, 5, 5});  // TODO: should be either (1, 6, 5, 5) or (6, 1, 5, 5)
+tensor kernel2 = glorot_uniform({16, 5, 5}); // TODO: should be either (6, 16, 5, 5) or (16, 6, 5, 5)
 
-constexpr size_t input_size   = 256;
-constexpr size_t hidden1_size = 120;
-constexpr size_t hidden2_size = 84;
-constexpr size_t output_size  = 10;
+tensor w1 = glorot_uniform({120, 400});
+tensor w2 = glorot_uniform({84, 120});
+tensor w3 = glorot_uniform({10, 84});
 
-constexpr size_t num_kernels1 = 6;
-constexpr size_t num_kernels2 = 16;
+tensor b1 = zeros({120, 1});
+tensor b2 = zeros({84, 1});
+tensor b3 = zeros({10, 1});
 
-tensor kernel1 = glorot_uniform({6, 5, 5});
-tensor kernel2 = glorot_uniform({16, 5, 5});
-
-tensor w1 = glorot_uniform({hidden1_size, input_size});
-tensor w2 = glorot_uniform({hidden2_size, hidden1_size});
-tensor w3 = glorot_uniform({output_size, hidden2_size});
-
-tensor b1 = zeros({hidden1_size, 1});
-tensor b2 = zeros({hidden2_size, 1});
-tensor b3 = zeros({output_size, 1});
+// TODO: I have to have this for both s2 and s4
+// TODO: I have to call clear() somewhere for proper indices for gradients calculation.
+// TODO: Make max_indices_s2, max_indices_s4, and assign temporal one inside max_pool() to them. This way no need for calling clear()
+std::vector<std::pair<size_t, size_t>> max_indices;
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
-    constexpr size_t img_size = 784;
-    constexpr size_t img_dim = 28;
+    size_t img_size = imgs.shape[1] * imgs.shape.back();
+    size_t img_dim  = imgs.shape[1];
 
     for (auto i = 0; i < num_digits; ++i) {
         for (auto j = 0; j < img_size; ++j) {
@@ -47,15 +41,11 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
     }
 }
 
-tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor& kernel, const size_t stride = 1, const size_t padding = 0) {
-    // Add padding to the input matrix here? For example,
-    //        0 0 0 0
-    // 1 1 -> 0 1 1 0
-    // 1 1    0 1 1 0
-    //        0 0 0 0
-
-    size_t kernel_height = kernel.shape.front();
-    size_t kernel_width = kernel.shape.back();
+// TODO: Move this to the lyrs folders? Unlike rnn, gru, lstm, conv2d and max_pool2d will be all same? Also, I could make max_pool2d_derivative in the file as well.
+tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
+    size_t num_kernels = kernels.shape.front();
+    size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
+    size_t kernel_width = kernels.shape.back();
 
     size_t input_height = x.shape[x.shape.size() - 2];
     size_t input_width = x.shape.back();
@@ -63,52 +53,59 @@ tensor lenet_convolution(const tensor& x, const size_t num_kernels, const tensor
     size_t output_height = (input_height - kernel_height) / stride + 1;
     size_t output_width = (input_width - kernel_width) / stride + 1;
 
-    size_t num_img;
-    tensor outputs;
-
-    if (x.shape.size() == 3) {
-        num_img = x.shape.front();
-        outputs = zeros({x.shape.front() * num_kernels, output_height, output_width});
-    } else if (x.shape.size() == 4) {
-        num_img = x.shape.front() * x.shape[1];
-        outputs = zeros({x.shape.front(), x.shape[1] * num_kernels, output_height, output_width});
-    }
+    tensor feature_maps = zeros({x.shape.front(), num_kernels, output_height, output_width});
 
     size_t idx = 0;
-    for (size_t b = 0; b < num_img; ++b) {
-        auto img = slice(x, b * input_height, input_height);
+    size_t num_batches = x.shape.front();
+    size_t num_channels = x.shape[1];
 
-        tensor output = zeros({output_height, output_width});
+    // TODO: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
+    for (size_t i = 0; i < num_batches; ++i) {
+        for (size_t j = 0; j < num_kernels; ++j) {
+            tensor kernel = slice(kernels, j * kernel_height, kernel_height);
+            tensor channels_sum = zeros({output_height, output_width});
 
-        for (size_t k = 0; k < num_kernels; ++k) {
-            // auto kernel = slice(kernels, k * kernel_height, kernel_height);
-            // TODO: I have to take kernels like before, and slice it like before...
+            for (size_t k = 0; k < num_channels; ++k) {
+                size_t idx = i * num_channels + k;
+                tensor img = slice(x, idx * input_height, input_height);
 
-            for (size_t i = 0; i < output_height; ++i) {
-                for (size_t j = 0; j < output_width; ++j) {
-                    float sum = 0.0;
+                // TODO: This could be optimized.
+                // If the size of kernel was 2 x 2, and img was 3 x 3.
+                // kernel, img
+                //         0 1 2
+                // 1 1     3 4 5
+                // 1 1     6 7 8
+                // (0) * (1), (1) * (1), (3) * (1), (4) * (1) -> this is dot product between top left corners.
+                // (1) * (1), (2) * (1), (4) * (1), (5) * (1) -> this is dot product between top right corners.
+                // This way I don't need to use 4 for loops like now.
 
-                    for (size_t m = 0; m < kernel_height; ++m) {
-                        for (size_t n = 0; n < kernel_width; ++n) {
-                            sum += img(i + m, j + n) * kernel(m, n);
+                for (size_t row = 0; row < output_height; ++row) {
+                    for (size_t col = 0; col < output_width; ++col) {
+                        float sum = 0.0;
+
+                        for (size_t m = 0; m < kernel_height; ++m) {
+                            for (size_t n = 0; n < kernel_width; ++n) {
+                                sum += img(row + m, col + n) * kernel(m, n);
+                            }
                         }
-                    }
 
-                    output(i, j) = sum;
+                        channels_sum(row, col) += sum;
+                    }
                 }
             }
 
-            for (size_t i = 0; i < output.size; ++i)
-                outputs[idx * output.size + i] = output[i];
-            // TODO: use 'b' instead of idx?
+            for (size_t i = 0; i < channels_sum.size; ++i)
+                feature_maps[idx * channels_sum.size + i] = channels_sum[i];
+
             ++idx;
         }
     }
 
-    return outputs;
+    return feature_maps;
 }
 
-tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
+// TODO: Move this to the lyrs folders?
+tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t num_kernels = x.shape[1];
 
     size_t input_height = x.shape[x.shape.size() - 2];
@@ -130,17 +127,22 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
         for (size_t i = 0; i < output_height; ++i) {
             for (size_t j = 0; j < output_width; ++j) {
                 float max_val = -std::numeric_limits<float>::infinity();
+                std::pair<size_t, size_t> max_idx;
 
                 for (size_t m = 0; m < pool_size; ++m) {
                     for (size_t n = 0; n < pool_size; ++n) {
                         float val = img(i * stride + m, j * stride + n);
 
-                        if (val > max_val)
+                        if (val > max_val) {
+                            max_idx.first = i * stride + m;
+                            max_idx.second = j * stride + n;
                             max_val = val;
+                        }
                     }
                 }
 
                 output(i, j) = max_val;
+                max_indices.push_back(max_idx);
             }
         }
 
@@ -151,124 +153,247 @@ tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t 
     return outputs;
 }
 
-tensor lenet_forward(const tensor& x) {
-    std::cout << x.get_shape() << "\n";
-    tensor c1 = lenet_convolution(x, num_kernels1, kernel1);
-    c1 = relu(c1);
-    std::cout << c1.get_shape() << "\n";
+std::array<tensor, 11> forward(const tensor& x, float batch_size) {
+    // NOTE: Do I need to biases for c1 to s4?
 
-    tensor s2 = lenet_max_pool(c1);
-    std::cout << s2.get_shape() << "\n";
+    tensor c1_z = convolution(x, kernel1);
+    tensor c1 = sigmoid(c1_z);
 
-    tensor c3 = lenet_convolution(s2, num_kernels2, kernel2);
-    c3 = relu(c3);
-    std::cout << c3.get_shape() << "\n";
+    tensor s2 = max_pool(c1);
 
-    tensor s4 = lenet_max_pool(c3);
-    std::cout << s4.get_shape() << "\n";
+    tensor c3_z = convolution(s2, kernel2);
+    tensor c3 = sigmoid(c3_z);
 
-    // TODO: Can I do x_conv2.reshape({25, 60000});?
-    s4.reshape({60000, 256});
+    tensor s4 = max_pool(c3);
 
-    tensor f5 = matmul(w1, transpose(s4)) + b1;
-    std::cout << f5.get_shape() << "\n";
+    s4.reshape({static_cast<size_t>(batch_size), 400});
 
-    tensor f6 = matmul(w2, f5) + b2;
-    std::cout << f6.get_shape() << "\n";
+    tensor f5_z = matmul(w1, transpose(s4)) + b1;
+    tensor f5 = sigmoid(f5_z);
+
+    tensor f6_z = matmul(w2, f5) + b2;
+    tensor f6 = sigmoid(f6_z);
 
     tensor y = softmax(matmul(w3, f6) + b3);
-    std::cout << y.get_shape() << "\n";
 
-    return y;
+    std::array<tensor, 11> outputs;
+
+    outputs[0] = c1_z;
+    outputs[1] = c1;
+    outputs[2] = s2;
+    outputs[3] = c3_z;
+    outputs[4] = c3;
+    outputs[5] = s4;
+    outputs[6] = f5_z;
+    outputs[7] = f5;
+    outputs[8] = f6_z;
+    outputs[9] = f6;
+    outputs[10] = y;
+
+    return outputs;
 }
 
-void lenet_train(const tensor& x_train, const tensor& y_train) {
-    for (auto i = 1; i <= epochs; ++i) {
+void train(const tensor& x_train, const tensor& y_train) {
+    constexpr size_t epochs = 10;
+    constexpr float lr = 0.01f;
+    float batch_size = 64.0f;
+
+    const size_t num_batches = static_cast<size_t>(ceil(60000.0f / batch_size));
+
+    for (size_t i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        tensor y = lenet_forward(x_train);
+        // std::cout << 0 << std::endl;
 
-        float error = categorical_cross_entropy(y_train, transpose(y));
+        std::cout << "Epoch " << i << "/" << epochs << std::endl;
 
-        // tensor d_loss_d_y = -2.0f / num_samples * (transpose(y_train) - y_sequence.front());
+        float accumulated_loss = 0.0f; // IDEA: loss_sum, sum_loss
 
-        // for (auto j = seq_length; j > 0; --j) {
-        //     if (j == seq_length) {
-        //         tensor d_y_d_h_10 = w_hy;
-        //         d_loss_d_h_t = matmul(transpose(d_loss_d_y), d_y_d_h_10);
-        //     } else {
-        //         d_loss_d_h_t = matmul(d_loss_d_h_t * transpose(relu_derivative(z_sequence[j])), w_hh);
-        //     }
+        batch_size = 64.0f;
 
-        //     d_loss_d_w_xh = d_loss_d_w_xh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), x_sequence[j - 1]);
-        //     d_loss_d_w_hh = d_loss_d_w_hh + matmul((transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1])), transpose(h_sequence[j - 1]));
 
-        //     d_loss_d_b_h  = d_loss_d_b_h + sum(transpose(d_loss_d_h_t) * relu_derivative(z_sequence[j - 1]), 1);
-        // }
+        // TODO: I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
+        for (size_t j = 0; j < num_batches; ++j) {
+            // std::cout << 1 << std::endl;
 
-        // w = w - lr * d_loss_d_w;
-        // b = b - lr * d_loss_d_y;
+            size_t start_idx = j * batch_size; // 937 x 64 = 59968
+            size_t end_idx = std::min(start_idx + batch_size, 60000.0f);
 
+            tensor x_batch = slice_4d(x_train, start_idx, end_idx - start_idx);
+            tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
+
+            if (j == num_batches - 1)
+                batch_size = static_cast<float>(end_idx - start_idx);
+
+            // std::cout << 2 << std::endl;
+
+            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
+
+            // std::cout << 3 << std::endl;
+
+            accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
+
+            // std::cout << 4 << std::endl;
+
+            tensor dl_dy = y - transpose(y_batch);
+            tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
+            tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
+            tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
+            tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
+            tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
+            tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
+            tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
+            tensor dl_ds2 = zeros({static_cast<size_t>(batch_size), 6, 14, 14});
+            tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
+
+            tensor dl_dkernel2 = zeros({16, 5, 5});
+            tensor dl_dkernel1;
+
+            tensor dl_dw3 = matmul(dl_dy, transpose(f6));
+            tensor dl_dw2 = matmul(dl_df6_z, transpose(f5));
+            tensor dl_dw1 = matmul(dl_df5_z, s4);
+
+            tensor dl_db3 = sum(dl_dy, 1);
+            tensor dl_db2 = sum(dl_df6_z, 1);
+            tensor dl_db1 = sum(dl_df5_z, 1);
+
+            // std::cout << 5 << std::endl;
+
+            // TODO: Make max_unpool()?
+            size_t idx = 0;
+            size_t cumulative_height = 0;
+            size_t num_imgs = c3.shape.front() * c3.shape[1];
+            size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
+
+            for (size_t k = 0; k < num_imgs; ++k) {
+                size_t img_height = c3.shape[2];
+                // auto img = slice(x2, i * img_height, img_height);
+
+                for (size_t l = 0; l < output_img_size; ++l) {
+                    // TODO: Use eigther of these below
+                    // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
+
+                    // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
+                    // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
+                    dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
+
+                    ++idx;
+                }
+
+                cumulative_height += img_height;
+            }
+
+            // std::cout << 6 << std::endl;
+
+            for (size_t m = 0; m < batch_size; ++m) {
+                auto img = slice_4d(s2, m, 1);
+
+                auto kernel = slice_4d(dl_dc3_z, m, 1);
+                kernel.reshape({16, 10, 10});
+
+                dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
+            }
+
+            // std::cout << 7 << std::endl;
+
+            // kernel1 = kernel1 - lr * dl_dkernel1;
+            kernel2 = kernel2 - lr * dl_dkernel2;
+
+            w1 = w1 - lr * dl_dw1;
+            w2 = w2 - lr * dl_dw2;
+            w3 = w3 - lr * dl_dw3;
+
+            b1 = b1 - lr * dl_db1;
+            b2 = b2 - lr * dl_db2;
+            b3 = b3 - lr * dl_db3;
+
+            // std::cout << 8 << std::endl;
+
+            // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
+            // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
+
+            // dl_dw1 = dl_dy * dy_df6 * df6_df5 * df5_dw1
+            // dl_dw2 = dl_dy * dy_df6 * df6_dw2
+            // dl_dw3 = dl_dy * dy_dw3
+
+            // dl_db1 = dl_dy * dy_df6 * df6_df5 * df5_db1
+            // dl_db2 = dl_dy * dy_df6 * df6_db2
+            // dl_db3 = dl_dy * dy_db3
+
+            // x:  (60000, 32, 32)
+            // c1: (60000, 6, 28, 28)
+            // s2: (60000, 6, 14, 14)
+            // c3: (60000, 16, 10, 10)
+            // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
+            // f5: (120, 60000)
+            // f6: (84, 60000)
+            // y:  (10, 60000)
+
+            // w1: (120, 400)
+            // w2: (84, 120)
+            // w3: (10, 84)
+
+            // b1: (120, 1)
+            // b2: (84, 1)
+            // b3: (10, 1)
+
+            std::cout << "\r" << j + 1 << "/" << num_batches << std::flush;
+        }
+
+        // TODO: Log time like how lenet_convolution.cpp does? No more ms? second is enough?
         auto end_time = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << "Epoch " << i << "/" << epochs << std::endl << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << error << std::endl;
+        std::cout << " - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / num_batches << std::endl;
     }
 }
 
-float lenet_evaluate(const tensor& x_test, const tensor& y_test) {
-    auto y = lenet_forward(x_test);
-    return categorical_cross_entropy(y_test, transpose(y));
+float evaluate(const tensor& x_test, const tensor& y_test) {
+    // auto y = forward(x_test);
+    // return categorical_cross_entropy(y_test, transpose(y));
+
+    return 0.0f;
 }
 
-void lenet_predict(const tensor& x_test, const tensor& y_test) {
+void predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // mnist data = load_mnist();
+    mnist data = load_mnist();
 
-    // constexpr size_t num_digits = 2;
-    // print_imgs(data.train_imgs, num_digits);
+    print_imgs(data.train_imgs, 1);
 
-    // for (auto i = 0; i < data.train_imgs.size; ++i)
-    //     data.train_imgs[i] /= 255.0f;
+    data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
+    data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
-    // for (auto i = 0; i < data.test_imgs.size; ++i)
-    //     data.test_imgs[i] /= 255.0f;
+    print_imgs(data.train_imgs, 1);
 
-    // data.train_labels = one_hot(data.train_labels, 10);
-    // data.test_labels = one_hot(data.test_labels, 10);
+    for (auto i = 0; i < data.train_imgs.size; ++i)
+        data.train_imgs[i] /= 255.0f;
 
-    // lenet_train(data.train_imgs, data.train_labels);
-    // auto test_loss = lenet_evaluate(data.test_imgs, data.test_labels);
-    // lenet_predict(data.test_imgs, data.test_labels);
+    for (auto i = 0; i < data.test_imgs.size; ++i)
+        data.test_imgs[i] /= 255.0f;
 
-    // (60000, 28, 28)
-    // (60000, 6, 24, 24)
-    // (60000, 6, 12, 12)
-    // (60000, 16, 8, 8)
-    // (60000, 16, 4, 4)
-    // (120, 60000)
-    // (84, 60000)
-    // (10, 60000)
+    data.train_labels = one_hot(data.train_labels, 10);
+    data.test_labels = one_hot(data.test_labels, 10);
 
-    tensor x1 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.0000001f);
-    tensor x2 = uniform_dist({2, 1, 3, 3}, 0.0f, 0.0000001f);
-    tensor x3 = uniform_dist({2, 3, 3}, 0.0f, 0.0000001f);
+    data.train_imgs.reshape({60000, 1, 32, 32});
+    data.test_imgs.reshape({10000, 1, 32, 32});
 
-    tensor kernel = zeros({2, 2});
-    std::cout << kernel << "\n";
-    for (size_t i = 0; i < kernel.size; ++i)
-        kernel[i] += 1.0f;
+    auto start = std::chrono::high_resolution_clock::now();
 
-    std::cout << x1 << "\n";
-    std::cout << x2 << "\n";
-    std::cout << x3 << "\n";
-    std::cout << kernel << "\n";
+    train(data.train_imgs, data.train_labels);
 
-    // std::cout << lenet_convolution(x2, 2, kernel) << "\n";
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+    std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n";
+
+    auto test_loss = evaluate(data.test_imgs, data.test_labels);
+    std::cout << "Test loss:  " << test_loss << "\n\n";
+
+    predict(data.test_imgs, data.test_labels);
 
     return 0;
 }
