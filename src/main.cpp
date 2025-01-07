@@ -214,7 +214,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
 
-        float accumulated_loss = 0.0f; // IDEA: loss_sum, sum_loss
+        float loss = 0.0f;
 
         batch_size = 64.0f;
 
@@ -237,7 +237,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             // std::cout << 3 << std::endl;
 
-            accumulated_loss += categorical_cross_entropy(y_batch, transpose(y));
+            loss = categorical_cross_entropy(y_batch, transpose(y));
 
             // std::cout << 4 << std::endl;
 
@@ -343,9 +343,12 @@ void train(const tensor& x_train, const tensor& y_train) {
             // b2: (84, 1)
             // b3: (10, 1)
 
-            // TODO: I think I could just log here. Below, accumulated_loss must be devided because I'm logging
-            // per epochs. If I log per batches, I could just log the loss calculated in each batch.
-            std::cout << "\r" << j + 1 << "/" << num_batches << std::flush;
+            if (j == num_batches - 1) {
+                std::cout << "\r\033[K";
+                break;
+            } else {
+                std::cout << "\r" << j + 1 << "/" << num_batches << " - loss: " << loss << std::flush;
+            }
         }
 
         // TODO: Log time like how lenet_convolution.cpp does? No more ms? second is enough?
@@ -354,7 +357,7 @@ void train(const tensor& x_train, const tensor& y_train) {
         auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
         auto remaining_ms = duration - seconds;
 
-        std::cout << " - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << accumulated_loss / num_batches << std::endl;
+        std::cout << num_batches << "/" << num_batches << " - " << seconds.count() << "s " << remaining_ms.count() << "ms/step - loss: " << loss << std::endl;
     }
 }
 
