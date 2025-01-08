@@ -298,7 +298,7 @@ void train(const tensor& x_train, const tensor& y_train) {
                 tensor s2_sample = slice_4d(s2, i, 1);
                 tensor dl_dc3_sample = slice_4d(dl_dc3_z, i, 1);
 
-                tensor dl_dkernel2_sample = zeros({16, 6, 5, 5});
+                tensor dl_dkernel2_partial = zeros({16, 6, 5, 5});
                 size_t idx = 0;
 
                 for (size_t j = 0; j < 16; ++j) {
@@ -312,13 +312,13 @@ void train(const tensor& x_train, const tensor& y_train) {
                         tensor dl_dkernel2_feature_map = convolution(s2_feature_map, dl_dc3_feature_map);
 
                         for (size_t l = 0; l < dl_dkernel2_feature_map.size; ++l)
-                            dl_dkernel2_sample[idx * dl_dkernel2_feature_map.size + l] = dl_dkernel2_feature_map[l];
+                            dl_dkernel2_partial[idx * dl_dkernel2_feature_map.size + l] = dl_dkernel2_feature_map[l];
 
                         ++idx;
                     }
                 }
 
-                dl_dkernel2 += dl_dkernel2_sample;
+                dl_dkernel2 += dl_dkernel2_partial;
             }
 
             // std::cout << 7 << std::endl;
