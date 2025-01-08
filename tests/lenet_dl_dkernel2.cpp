@@ -94,38 +94,38 @@ int main () {
     size_t output_channels = dl_dc3.shape[1];
 
     for (size_t i = 0; i < batch_size; ++i) {
-        tensor s2_4d = slice_4d(s2, i, 1);
-        tensor dl_dc3_4d = slice_4d(dl_dc3, i, 1);
+        tensor s2_sample = slice_4d(s2, i, 1);
+        tensor dl_dc3_sample = slice_4d(dl_dc3, i, 1);
 
-        tensor dl_dkernel2_batch = zeros({16, 6, 5, 5});
+        tensor dl_dkernel2_partial = zeros({16, 6, 5, 5});
         size_t idx = 0;
 
         for (size_t j = 0; j < 16; ++j) {
-            tensor dl_dc3_2d = slice(dl_dc3_4d, j * 10, 10);
-            dl_dc3_2d.reshape({1, 1, 10, 10});
+            tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 10, 10);
+            dl_dc3_feature_map.reshape({1, 1, 10, 10});
 
             // NOTE: Smaller shapes for test
             // tensor dl_dc3_2d = slice(dl_dc3_4d, j * 2, 2);
             // dl_dc3_2d.reshape({1, 1, 2, 2});
 
             for (size_t k = 0; k < 6; ++k) {
-                tensor s2_2d = slice(s2_4d, k * 14, 14);
-                s2_2d.reshape({1, 1, 14, 14});
+                tensor s2_feature_map = slice(s2_sample, k * 14, 14);
+                s2_feature_map.reshape({1, 1, 14, 14});
 
                 // NOTE: Smaller shapes for test
                 // tensor s2_2d = slice(s2_4d, k * 4, 4);
                 // s2_2d.reshape({1, 1, 4, 4});
 
-                tensor feature_map = convolution(s2_2d, dl_dc3_2d); // TODO: These are not 2d anymore so change names
+                tensor dl_dkernel2_feature_map = convolution(s2_feature_map, dl_dc3_feature_map);
 
-                for (size_t l = 0; l < feature_map.size; ++l)
-                    dl_dkernel2_batch[idx * feature_map.size + l] = feature_map[l];
+                for (size_t l = 0; l < dl_dkernel2_feature_map.size; ++l)
+                    dl_dkernel2_partial[idx * dl_dkernel2_feature_map.size + l] = dl_dkernel2_feature_map[l];
 
                 ++idx;
             }
         }
 
-        dl_dkernel2 += dl_dkernel2_batch;
+        dl_dkernel2 += dl_dkernel2_partial;
     }
 
     std::cout << dl_dkernel2 << std::endl;
