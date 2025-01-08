@@ -295,18 +295,18 @@ void train(const tensor& x_train, const tensor& y_train) {
             // std::cout << 6 << std::endl;
 
             for (size_t i = 0; i < batch_size; ++i) {
-                tensor s2_4d = slice_4d(s2, i, 1);
-                tensor dl_dc3_4d = slice_4d(dl_dc3_z, i, 1);
+                tensor s2_batch = slice_4d(s2, i, 1);
+                tensor dl_dc3_batch = slice_4d(dl_dc3_z, i, 1);
 
                 tensor dl_dkernel2_batch = zeros({16, 6, 5, 5});
                 size_t idx = 0;
 
                 for (size_t j = 0; j < 16; ++j) {
-                    tensor dl_dc3_feature_map = slice(dl_dc3_4d, j * 10, 10);
+                    tensor dl_dc3_feature_map = slice(dl_dc3_batch, j * 10, 10);
                     dl_dc3_feature_map.reshape({1, 1, 10, 10});
 
                     for (size_t k = 0; k < 6; ++k) {
-                        tensor s2_feature_map = slice(s2_4d, k * 14, 14);
+                        tensor s2_feature_map = slice(s2_batch, k * 14, 14);
                         s2_feature_map.reshape({1, 1, 14, 14});
 
                         tensor feature_map = convolution(s2_feature_map, dl_dc3_feature_map); // TODO: These are not 2d anymore so change names
