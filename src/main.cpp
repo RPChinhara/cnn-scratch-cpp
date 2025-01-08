@@ -249,7 +249,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
             tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
             tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
-            tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
+            tensor dl_dc3_z;
             tensor dl_ds2 = zeros({static_cast<size_t>(batch_size), 6, 14, 14});
             tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
 
@@ -290,16 +290,36 @@ void train(const tensor& x_train, const tensor& y_train) {
                 cumulative_height += img_height;
             }
 
+            dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
+
             // std::cout << 6 << std::endl;
 
-            // for (size_t m = 0; m < batch_size; ++m) {
-            //     auto img = slice_4d(s2, m, 1);
+            for (size_t i = 0; i < batch_size; ++i) {
+                tensor s2_4d = slice_4d(s2, i, 1);
+                tensor dl_dc3_4d = slice_4d(dl_dc3_z, i, 1);
 
-            //     auto kernel = slice_4d(dl_dc3_z, m, 1);
-            //     kernel.reshape({16, 10, 10});
+                tensor dl_dkernel2_batch = zeros({16, 6, 5, 5});
+                size_t idx = 0;
 
-            //     dl_dkernel2 += convolution(img, kernel).reshape({16, 5, 5});
-            // }
+                for (size_t j = 0; j < 16; ++j) {
+                    tensor dl_dc3_2d = slice(dl_dc3_4d, j * 10, 10);
+                    dl_dc3_2d.reshape({1, 1, 10, 10});
+
+                    for (size_t k = 0; k < 6; ++k) {
+                        tensor s2_2d = slice(s2_4d, k * 14, 14);
+                        s2_2d.reshape({1, 1, 14, 14});
+
+                        tensor feature_map = convolution(s2_2d, dl_dc3_2d); // TODO: These are not 2d anymore so change names
+
+                        for (size_t l = 0; l < feature_map.size; ++l)
+                            dl_dkernel2_batch[idx * feature_map.size + l] = feature_map[l];
+
+                        ++idx;
+                    }
+                }
+
+                dl_dkernel2 += dl_dkernel2_batch;
+            }
 
             // std::cout << 7 << std::endl;
 
