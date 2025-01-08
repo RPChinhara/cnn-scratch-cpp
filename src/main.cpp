@@ -309,10 +309,10 @@ void train(const tensor& x_train, const tensor& y_train) {
                         tensor s2_feature_map = slice(s2_batch, k * 14, 14);
                         s2_feature_map.reshape({1, 1, 14, 14});
 
-                        tensor feature_map = convolution(s2_feature_map, dl_dc3_feature_map); // TODO: These are not 2d anymore so change names
+                        tensor dl_dkernel2_feature_map = convolution(s2_feature_map, dl_dc3_feature_map); // TODO: These are not 2d anymore so change names
 
-                        for (size_t l = 0; l < feature_map.size; ++l)
-                            dl_dkernel2_batch[idx * feature_map.size + l] = feature_map[l];
+                        for (size_t l = 0; l < dl_dkernel2_feature_map.size; ++l)
+                            dl_dkernel2_batch[idx * dl_dkernel2_feature_map.size + l] = dl_dkernel2_feature_map[l];
 
                         ++idx;
                     }
