@@ -72,26 +72,29 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 }
 
 int main () {
-    size_t batch_size = 10;
+    size_t batch_size = 2;
 
-    tensor s2 = uniform_dist({batch_size, 6, 14, 14}, 0.0f, 0.0001f); // real shape = (64, 6, 14, 14)
-    tensor dl_dc3 = uniform_dist({batch_size, 16, 10, 10}, 0.0f, 0.0001f); // real shape = (64, 16, 10, 10)
-    tensor dl_dkernel2 = zeros({16, 6, 5, 5});
+    // tensor s2 = uniform_dist({batch_size, 6, 14, 14}, 0.0f, 0.0001f); // real shape = (64, 6, 14, 14)
+    // tensor dl_dc3 = uniform_dist({batch_size, 16, 10, 10}, 0.0f, 0.0001f); // real shape = (64, 16, 10, 10)
+    // tensor dl_dkernel2 = zeros({16, 6, 5, 5});
 
     // TODO: test if it does work after supporting batch size
     // NOTE: Smaller shapes for test
-    // tensor s2 = zeros({batch_size, 3, 4, 4});
-    // tensor dl_dc3 = zeros({batch_size, 2, 2, 2});
-    // tensor dl_dkernel2 = zeros({2, 3, 3, 3});
+    tensor s2 = zeros({batch_size, 3, 4, 4});
+    tensor dl_dc3 = zeros({batch_size, 2, 2, 2});
+    tensor dl_dkernel2 = zeros({2, 3, 3, 3});
 
-    // for (size_t i = 0; i < s2.size; ++i)
-    //     s2[i] = i;
+    for (size_t i = 0; i < s2.size; ++i)
+        s2[i] = i;
 
-    // for (size_t i = 0; i < dl_dc3.size; ++i)
-    //     dl_dc3[i] = i;
+    for (size_t i = 0; i < dl_dc3.size; ++i)
+        dl_dc3[i] = i;
 
     size_t input_channels = s2.shape[1];
     size_t output_channels = dl_dc3.shape[1];
+
+    std::cout << s2 << std::endl;
+    std::cout << dl_dc3 << std::endl;
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor s2_sample = slice_4d(s2, i, 1);
@@ -100,21 +103,25 @@ int main () {
         tensor dl_dkernel2_partial = zeros({16, 6, 5, 5});
         size_t idx = 0;
 
-        for (size_t j = 0; j < 16; ++j) {
-            tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 10, 10);
-            dl_dc3_feature_map.reshape({1, 1, 10, 10});
+        for (size_t j = 0; j < output_channels; ++j) {
+            // tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 10, 10);
+            // dl_dc3_feature_map.reshape({1, 1, 10, 10});
 
             // NOTE: Smaller shapes for test
-            // tensor dl_dc3_2d = slice(dl_dc3_4d, j * 2, 2);
-            // dl_dc3_2d.reshape({1, 1, 2, 2});
+            tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 2, 2);
+            dl_dc3_feature_map.reshape({1, 1, 2, 2});
 
-            for (size_t k = 0; k < 6; ++k) {
-                tensor s2_feature_map = slice(s2_sample, k * 14, 14);
-                s2_feature_map.reshape({1, 1, 14, 14});
+            std::cout << dl_dc3_feature_map << std::endl;
+
+            for (size_t k = 0; k < input_channels; ++k) {
+                // tensor s2_feature_map = slice(s2_sample, k * 14, 14);
+                // s2_feature_map.reshape({1, 1, 14, 14});
 
                 // NOTE: Smaller shapes for test
-                // tensor s2_2d = slice(s2_4d, k * 4, 4);
-                // s2_2d.reshape({1, 1, 4, 4});
+                tensor s2_feature_map = slice(s2_sample, k * 4, 4);
+                s2_feature_map.reshape({1, 1, 4, 4});
+
+                std::cout << s2_feature_map << std::endl;
 
                 tensor dl_dkernel2_feature_map = convolution(s2_feature_map, dl_dc3_feature_map);
 
