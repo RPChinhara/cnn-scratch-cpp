@@ -78,7 +78,6 @@ int main () {
     // tensor dl_dc3 = uniform_dist({batch_size, 16, 10, 10}, 0.0f, 0.0001f); // real shape = (64, 16, 10, 10)
     // tensor dl_dkernel2 = zeros({16, 6, 5, 5});
 
-    // TODO: test if it does work after supporting batch size
     // NOTE: Smaller shapes for test
     tensor s2 = zeros({batch_size, 3, 4, 4});
     tensor dl_dc3 = zeros({batch_size, 2, 2, 2});
