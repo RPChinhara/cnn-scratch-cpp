@@ -28,6 +28,7 @@ class tensor {
     float& operator[](const size_t idx) const;
     float& operator()(const size_t i, const size_t j);
     const float& operator()(const size_t i, const size_t j) const;
+    float get(const std::vector<int>& indices) const;
 
     friend tensor operator+(const float sca, const tensor& t);
     friend tensor operator-(const float sca, const tensor& t);

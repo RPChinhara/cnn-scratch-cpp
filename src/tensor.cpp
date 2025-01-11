@@ -178,6 +178,18 @@ const float& tensor::operator()(const size_t i, const size_t j) const {
     return elems[i * shape.back() + j];
 }
 
+float tensor::get(const std::vector<int>& indices) const {
+    int index = 0;
+    int stride = 1;
+
+    for (int i = shape.size() - 1; i >= 0; --i) {
+        index += indices[i] * stride;
+        stride *= shape[i];
+    }
+
+    return elems[index];
+}
+
 tensor operator+(const float sca, const tensor& t) {
     tensor t_sca = fill(t.shape, sca);
     return add(t_sca, t);
