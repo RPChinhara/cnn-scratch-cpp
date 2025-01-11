@@ -154,6 +154,7 @@ tensor one_hot(const tensor& t, const size_t depth) {
     return t_new;
 }
 
+// NOTE: Only supports 4D tensors!
 tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, size_t pad_right) {
     size_t batch_size = t.shape.front();
     size_t depth = t.shape[1];
