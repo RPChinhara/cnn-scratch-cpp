@@ -127,7 +127,8 @@ int main () {
 
     tensor kernel2 = glorot_uniform({16, 6, 5, 5});
 
-    size_t padding_size = kernel2.shape[1] - 1;
+    size_t kernel_size = kernel2.shape[2];
+    size_t padding_size = kernel_size - 1;
 
     tensor dl_dc3_z_padded = pad(dl_dc3_z, padding_size, padding_size, padding_size, padding_size);
 
