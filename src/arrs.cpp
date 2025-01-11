@@ -154,20 +154,24 @@ tensor one_hot(const tensor& t, const size_t depth) {
     return t_new;
 }
 
-// NOTE: Only supports 3d tensor!
 tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, size_t pad_right) {
-    size_t depth = t.shape.front();
-    size_t rows = t.shape[1];
+    size_t batch_size = t.shape.front();
+    size_t depth = t.shape[1];
+    size_t rows = t.shape[2];
     size_t cols = t.shape.back();
 
     size_t new_rows = rows + pad_top + pad_bottom;
     size_t new_cols = cols + pad_left + pad_right;
 
-    tensor t_new = zeros({depth, new_rows, new_cols});
+    tensor t_new = zeros({batch_size, depth, new_rows, new_cols});
 
-    for (size_t d = 0; d < depth; ++d) {
-        auto mat = slice(t, d * rows, rows);
+    size_t num_mats = batch_size * depth;
+
+    for (size_t b = 0; b < num_mats; ++b) {
+        auto mat = slice(t, b * rows, rows);
         tensor new_mat = zeros({new_rows, new_cols});
+
+        // std::cout << 1 << std::endl;
 
         for (size_t i = 0; i < rows; ++i) {
             for (size_t j = 0; j < cols; ++j) {
@@ -175,8 +179,14 @@ tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, 
             }
         }
 
-         for (size_t i = 0; i < new_mat.size; ++i)
-                t_new[d * new_mat.size + i] = new_mat[i];
+        // std::cout << 2 << std::endl;
+
+
+        for (size_t i = 0; i < new_mat.size; ++i)
+                t_new[b * new_mat.size + i] = new_mat[i];
+
+        // std::cout << 3 << std::endl;
+
     }
 
     return t_new;

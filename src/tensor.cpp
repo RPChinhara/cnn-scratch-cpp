@@ -343,5 +343,7 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
 
     os << "))";
 
+    os << std::fixed << std::setprecision(0);
+
     return os;
 }

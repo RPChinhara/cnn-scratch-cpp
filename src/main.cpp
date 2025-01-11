@@ -27,12 +27,12 @@ tensor b3 = zeros({10, 1});
 std::vector<std::pair<size_t, size_t>> max_indices;
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
-    size_t img_size = imgs.shape[1] * imgs.shape.back();
-    size_t img_dim  = imgs.shape[1];
+    size_t img_height = imgs.shape[imgs.shape.size() - 2];
+    size_t img_size = img_height * img_height;
 
     for (auto i = 0; i < num_digits; ++i) {
         for (auto j = 0; j < img_size; ++j) {
-            if (j % img_dim == 0 && j != 0)
+            if (j % img_height == 0 && j != 0)
                 std::cout << std::endl;
 
             std::cout << imgs[i * img_size + j] << " ";
@@ -391,6 +391,9 @@ int main() {
 
     print_imgs(data.train_imgs, 1);
 
+    data.train_imgs.reshape({60000, 1, 28, 28});
+    data.test_imgs.reshape({10000, 1, 28, 28});
+
     data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
     data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
 
@@ -404,9 +407,6 @@ int main() {
 
     data.train_labels = one_hot(data.train_labels, 10);
     data.test_labels = one_hot(data.test_labels, 10);
-
-    data.train_imgs.reshape({60000, 1, 32, 32});
-    data.test_imgs.reshape({10000, 1, 32, 32});
 
     auto start = std::chrono::high_resolution_clock::now();
     train(data.train_imgs, data.train_labels);
