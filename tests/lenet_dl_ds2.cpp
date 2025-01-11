@@ -141,7 +141,7 @@ int main () {
     for (size_t b = 0; b < num_kernels; ++b) {
         tensor kernel2_test_mat = slice(kernel2_test, b * kernel_rows, kernel_rows);
 
-        tensor transposed_kernel2_test_mat = zeros({kernel_rows, kernel_cols});
+        tensor transposed_kernel2_test_mat = zeros({kernel_rows, kernel_cols}); // TODO: Change to kernel2_test_mat_transposed?
 
         for (int i = 0; i < kernel_rows; ++i) {
             for (int j = 0; j < kernel_cols; ++j) {
@@ -154,6 +154,15 @@ int main () {
     }
 
     std::cout << kernel2_test << "\n";
+
+    tensor kernel2_test_transposed = zeros({3, 2, 2, 2});
+
+    for (size_t i = 0; i < kernel2_test_transposed; ++i) {
+        if (i < kernel_rows * kernel_rows)
+            kernel2_test_transposed[i] = kernel2_test[i];
+
+
+    }
 
     size_t kernel_size = kernel2.shape[2];
     size_t padding_size = kernel_size - 1;
