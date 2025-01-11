@@ -128,11 +128,32 @@ int main () {
     tensor kernel2 = zeros({16, 6, 5, 5});
     for (size_t i = 0; i < kernel2.size; ++i) kernel2[i] = i;
 
-    tensor kernel2_test = zeros({2, 2, 2});
+    tensor kernel2_test = zeros({2, 3, 2, 2});
     for (size_t i = 0; i < kernel2_test.size; ++i) kernel2_test[i] = i;
 
+    size_t num_kernels = kernel2_test.shape.front() * kernel2_test.shape[1];
+    size_t kernel_rows = kernel2_test.shape[2];
+    size_t kernel_cols = kernel2_test.shape.back();
+
     std::cout << kernel2_test << "\n";
-    std::cout << transpose(kernel2_test) << "\n";
+
+    // NOTE: Transposing each mats
+    for (size_t b = 0; b < num_kernels; ++b) {
+        tensor kernel2_test_mat = slice(kernel2_test, b * kernel_rows, kernel_rows);
+
+        tensor transposed_kernel2_test_mat = zeros({kernel_rows, kernel_cols});
+
+        for (int i = 0; i < kernel_rows; ++i) {
+            for (int j = 0; j < kernel_cols; ++j) {
+                transposed_kernel2_test_mat(j, i) = kernel2_test_mat(i, j);
+            }
+        }
+
+        for (size_t i = 0; i < transposed_kernel2_test_mat.size; ++i)
+            kernel2_test[b * transposed_kernel2_test_mat.size + i] = transposed_kernel2_test_mat[i];
+    }
+
+    std::cout << kernel2_test << "\n";
 
     size_t kernel_size = kernel2.shape[2];
     size_t padding_size = kernel_size - 1;
