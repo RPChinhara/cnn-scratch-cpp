@@ -28,7 +28,8 @@ class tensor {
     float& operator[](const size_t idx) const;
     float& operator()(const size_t i, const size_t j);
     const float& operator()(const size_t i, const size_t j) const;
-    float get(const std::vector<int>& indices) const;
+    float get(const std::vector<size_t>& indices) const;
+    void set(const std::vector<size_t>& indices, float value) const;
 
     friend tensor operator+(const float sca, const tensor& t);
     friend tensor operator-(const float sca, const tensor& t);
@@ -37,4 +38,7 @@ class tensor {
     friend tensor operator+(const tensor& t, const float sca);
     friend tensor operator/(const tensor& t, const float sca);
     friend std::ostream& operator<<(std::ostream& os, const tensor& t);
+
+  private:
+    size_t calculate_flat_index(const std::vector<size_t>& indices) const;
 };

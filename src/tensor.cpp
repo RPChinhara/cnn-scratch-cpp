@@ -170,6 +170,19 @@ float& tensor::operator[](const size_t idx) const {
     return elems[idx];
 }
 
+// NOTE: Able to overload the () operator to make accessing values more intuitive
+// double operator()(const std::vector<int>& indices) const {
+//     return get(indices);
+// }
+
+// void operator()(const std::vector<int>& indices, double value) {
+//     set(indices, value);
+// }
+
+// NOTE: Example
+// my_tensor({1, 2, 3, 4}) = 42.0;
+// double value = my_tensor({1, 2, 3, 4});
+
 float& tensor::operator()(const size_t i, const size_t j) {
     return elems[i * shape.back() + j];
 }
@@ -178,16 +191,45 @@ const float& tensor::operator()(const size_t i, const size_t j) const {
     return elems[i * shape.back() + j];
 }
 
-float tensor::get(const std::vector<int>& indices) const {
-    int index = 0;
-    int stride = 1;
+// Helper method to calculate the flattened index
+size_t tensor::calculate_flat_index(const std::vector<size_t>& indices) const {
+    size_t flat_index = 0;
+    size_t stride = 1;
 
+    // Calculate the flattened index using strides
     for (int i = shape.size() - 1; i >= 0; --i) {
-        index += indices[i] * stride;
+        flat_index += indices[i] * stride;
         stride *= shape[i];
     }
 
+    return flat_index;
+}
+
+// NOTE: Just in case used only for 4D tensor
+// double get(int n, int c, int h, int w) const {
+//     int index = n * shape[1] * shape[2] * shape[3] +
+//                 c * shape[2] * shape[3] +
+//                 h * shape[3] +
+//                 w;
+//     return elems[index];
+// }
+
+// void set(int n, int c, int h, int w, double value) {
+//     int index = n * shape[1] * shape[2] * shape[3] +
+//                 c * shape[2] * shape[3] +
+//                 h * shape[3] +
+//                 w;
+//     elems[index] = value;
+// }
+
+float tensor::get(const std::vector<size_t>& indices) const {
+    size_t index = calculate_flat_index(indices);
     return elems[index];
+}
+
+void tensor::set(const std::vector<size_t>& indices, float value) const {
+    size_t index = calculate_flat_index(indices);
+    elems[index] = value;
 }
 
 tensor operator+(const float sca, const tensor& t) {
