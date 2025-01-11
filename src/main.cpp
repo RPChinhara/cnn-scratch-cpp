@@ -86,6 +86,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
                 // (1) * (1), (2) * (1), (4) * (1), (5) * (1) -> this is dot product between top right corners.
                 // This way I don't need to use 4 for loops like now.
 
+                // OPTIMIZATION: Can I increase indexes at same like this? 	for (i = j = 0; j < old->count; i++, j++) {
                 for (size_t row = 0; row < output_height; ++row) {
                     for (size_t col = 0; col < output_width; ++col) {
                         float sum = 0.0;
