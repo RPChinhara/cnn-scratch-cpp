@@ -131,38 +131,25 @@ int main () {
     tensor kernel2_test = zeros({2, 3, 2, 2});
     for (size_t i = 0; i < kernel2_test.size; ++i) kernel2_test[i] = i;
 
-    size_t num_kernels = kernel2_test.shape.front() * kernel2_test.shape[1];
-    size_t kernel_rows = kernel2_test.shape[2];
-    size_t kernel_cols = kernel2_test.shape.back();
-
-    std::cout << kernel2_test << "\n";
-
-    // NOTE: Transposing each mats
-    for (size_t b = 0; b < num_kernels; ++b) {
-        tensor kernel2_test_mat = slice(kernel2_test, b * kernel_rows, kernel_rows);
-
-        tensor transposed_kernel2_test_mat = zeros({kernel_rows, kernel_cols}); // TODO: Change to kernel2_test_mat_transposed?
-
-        for (int i = 0; i < kernel_rows; ++i) {
-            for (int j = 0; j < kernel_cols; ++j) {
-                transposed_kernel2_test_mat(j, i) = kernel2_test_mat(i, j);
-            }
-        }
-
-        for (size_t i = 0; i < transposed_kernel2_test_mat.size; ++i)
-            kernel2_test[b * transposed_kernel2_test_mat.size + i] = transposed_kernel2_test_mat[i];
-    }
-
-    std::cout << kernel2_test << "\n";
-
     tensor kernel2_test_transposed = zeros({3, 2, 2, 2});
 
-    for (size_t i = 0; i < kernel2_test_transposed; ++i) {
-        if (i < kernel_rows * kernel_rows)
-            kernel2_test_transposed[i] = kernel2_test[i];
+    std::cout << kernel2_test << "\n";
 
+    for (size_t n = 0; n < kernel2_test.shape[0]; ++n) {
+        for (size_t c = 0; c < kernel2_test.shape[1]; ++c) {
+            for (size_t h = 0; h < kernel2_test.shape[2]; ++h) {
+                for (size_t w = 0; w < kernel2_test.shape[3]; ++w) {
+                    // Get the value from the original tensor
+                    float value = kernel2_test.get({n, c, h, w});
 
+                    // Set the value in the output tensor at the transposed position
+                    kernel2_test_transposed.set({c, n, w, h}, value);
+                }
+            }
+        }
     }
+
+    std::cout << kernel2_test_transposed << std::endl;
 
     size_t kernel_size = kernel2.shape[2];
     size_t padding_size = kernel_size - 1;
