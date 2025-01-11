@@ -1,4 +1,5 @@
 #include "arrs.h"
+#include "linalg.h"
 #include "rand.h"
 #include "tensor.h"
 
@@ -121,22 +122,24 @@ int main () {
     // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     // 1 1 1 1 1 1 1 1 1 1 -> // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
-    tensor dl_dc3_z = uniform_dist({3, 16, 10, 10}, 0.0f, 0.0001f);
-    for (size_t i = 0; i < dl_dc3_z.size; ++i)
-        dl_dc3_z[i] = i;
+    tensor dl_dc3_z = zeros({3, 16, 10, 10});
+    for (size_t i = 0; i < dl_dc3_z.size; ++i) dl_dc3_z[i] = i;
 
-    tensor kernel2 = glorot_uniform({16, 6, 5, 5});
+    tensor kernel2 = zeros({16, 6, 5, 5});
+    for (size_t i = 0; i < kernel2.size; ++i) kernel2[i] = i;
+
+    tensor kernel2_test = zeros({2, 2, 2});
+    for (size_t i = 0; i < kernel2_test.size; ++i) kernel2_test[i] = i;
+
+    std::cout << kernel2_test << "\n";
+    std::cout << transpose(kernel2_test) << "\n";
 
     size_t kernel_size = kernel2.shape[2];
     size_t padding_size = kernel_size - 1;
 
     tensor dl_dc3_z_padded = pad(dl_dc3_z, padding_size, padding_size, padding_size, padding_size);
 
-    // auto img = slice_4d(dl_dc3_z, i);
-
     // dl_dkernel2 += convolution(img, kernel2);
-
-    std::cout << dl_dc3_z_padded << "\n";
 
     return 0;
 }
