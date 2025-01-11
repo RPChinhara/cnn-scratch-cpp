@@ -171,22 +171,14 @@ tensor pad(const tensor& t, size_t pad_top, size_t pad_bottom, size_t pad_left, 
         auto mat = slice(t, b * rows, rows);
         tensor new_mat = zeros({new_rows, new_cols});
 
-        // std::cout << 1 << std::endl;
-
         for (size_t i = 0; i < rows; ++i) {
             for (size_t j = 0; j < cols; ++j) {
                 new_mat(i + pad_top, j + pad_left) = mat(i, j);
             }
         }
 
-        // std::cout << 2 << std::endl;
-
-
         for (size_t i = 0; i < new_mat.size; ++i)
                 t_new[b * new_mat.size + i] = new_mat[i];
-
-        // std::cout << 3 << std::endl;
-
     }
 
     return t_new;
