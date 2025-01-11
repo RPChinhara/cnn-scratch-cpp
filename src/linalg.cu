@@ -46,36 +46,16 @@ tensor matmul(const tensor& t1, const tensor& t2) {
     return t_new;
 }
 
-static size_t get_batch_size(const std::vector<size_t>& shape) {
-    size_t batch_size = 1;
-
-    for (auto i = 0; i < shape.size() - 2; ++i)
-        batch_size *= shape[i];
-
-    return batch_size;
-}
-
 tensor transpose(const tensor& t) {
-    tensor t_new = zeros({t.shape.back(), t.shape[t.shape.size() - 2]});
+    size_t rows = t.shape[0];
+    size_t cols = t.shape.back();
 
-    std::vector<size_t> idx_rows;
+    tensor t_new = zeros({cols, rows});
 
-    for (auto i = 0; i < t.size; ++i)
-        idx_rows.push_back(i * t.shape.back());
-
-    size_t batch_size = get_batch_size(t.shape);
-
-    size_t idx = 0;
-
-    for (auto i = 0; i < batch_size; ++i) {
-        for (auto j = 0; j < t_new.shape[t_new.shape.size() - 2]; ++j) {
-            for (auto k = 0; k < t_new.shape.back(); ++k) {
-                t_new[idx] = t[idx_rows[k + (i * t_new.shape.back())]];
-                idx_rows[k + (i * t_new.shape.back())] += 1;
-                ++idx;
-            }
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            t_new(j, i) = t(i, j);
         }
     }
-
     return t_new;
 }
