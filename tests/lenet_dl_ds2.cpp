@@ -100,27 +100,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 }
 
 int main () {
-    // NOTE: dl_ds2 = convolution(dl_dc3_z, kernel2); where dl_dc3_z is padded to (batch_size, 16, 18, 18), and kernel2 transposed to (6, 16, 5, 5)
-    // NOTE: Pad dl_dc3_z from (10, 10) to (18, 18) spacial dimension.
-
-                              // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                              // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                              // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                              // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                              // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-                              // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-                              // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-                              // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 1 1 1 1 1 1 1 1 1 1 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1    // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-    // 1 1 1 1 1 1 1 1 1 1 -> // 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+    // NOTE: dl_ds2 = convolution(dl_dc3_z, kernel2); where dl_dc3_z is padded to (batch_size, 16, 18, 18), and kernel2 transposed to (6, 16, 5, 5).
 
     tensor dl_dc3_z = zeros({3, 16, 10, 10});
     for (size_t i = 0; i < dl_dc3_z.size; ++i) dl_dc3_z[i] = i;
