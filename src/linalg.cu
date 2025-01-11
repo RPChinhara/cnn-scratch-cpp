@@ -52,8 +52,8 @@ tensor transpose(const tensor& t) {
 
     tensor t_new = zeros({cols, rows});
 
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
             t_new(j, i) = t(i, j);
         }
     }
