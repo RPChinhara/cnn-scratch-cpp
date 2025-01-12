@@ -1,5 +1,4 @@
 - LeNet
-     > I will fix convolution() so that it will support 4d kernel shape like follow (16, 6, 5, 5), but if I do this, how to get a shape (16, 6, 5, 5) for dl_dkernel2 in lenet_dl_dkernel2.cpp?
      - When I compute dc3_z/ds2, transpose the kernel2 into (6, 16, 5, 5) so that when convoluted with dl/dc3_z, it'd be (6, 14, 14) which is the shape of s2. Transpose looks like below. I don't know if it's true though. Also I have to transpose each matrix as well. I forgot how it is corellated to deconvolution or transpose of convolution that I'd have to take to get dc3_z/ds2.
                                   [1, 2  [13, 14
                                    3, 4], 15, 16]
