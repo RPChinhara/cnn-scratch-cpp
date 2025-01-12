@@ -101,6 +101,16 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 int main () {
     // NOTE: dl_ds2 = convolution(dl_dc3_z, kernel2); where dl_dc3_z is padded to (batch_size, 16, 18, 18), and kernel2 transposed to (6, 16, 5, 5).
 
+    // NOTE: Image showing the transposition of the kernel. (The spatial dimension is not transposed here!)
+    //                               [1, 2   [13, 14
+    //                                3, 4],  15, 16]
+
+    // [1,  2   [5,  6   [9,  10     [5, 6   [17, 18
+    //  3,  4],  7,  8],  11, 12]     7, 8],  19, 20]
+
+    // [13, 14  [17, 18  [21, 22     [9, 10  [21, 22
+    //  15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
+
     tensor dl_dc3_z = zeros({3, 16, 10, 10});
     for (size_t i = 0; i < dl_dc3_z.size; ++i) dl_dc3_z[i] = i;
 
