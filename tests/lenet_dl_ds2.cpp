@@ -3,7 +3,6 @@
 #include "rand.h"
 #include "tensor.h"
 
-// TODO: Move this to the lyrs folders? Unlike rnn, gru, lstm, conv2d and max_pool2d will be all same? Also, I could make max_pool2d_derivative in the file as well.
 tensor convolution(const tensor& x, const tensor& kernels, const size_t stride = 1) {
     size_t num_kernels = kernels.shape.front();
     size_t kernel_height = kernels.shape[kernels.shape.size() - 2];
