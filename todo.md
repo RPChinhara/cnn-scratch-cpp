@@ -6,8 +6,8 @@
 - ResNet
 - Seq2seq
 - Transformer
-- Autoencoder
 - BERT
+- Autoencoder
 - GAN
 - BART
 - Mamba
