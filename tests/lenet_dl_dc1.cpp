@@ -5,7 +5,7 @@
 std::vector<std::pair<size_t, size_t>> max_indices;
 
 // TODO: Move this to the lyrs folders?
-tensor lenet_max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
+tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t num_kernels = x.shape[1];
 
     size_t input_height = x.shape[x.shape.size() - 2];
