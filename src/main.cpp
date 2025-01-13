@@ -112,6 +112,29 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
     return feature_maps;
 }
 
+tensor deconvolution(const tensor& input, const tensor& kernels) {
+    size_t kernel_size = kernels.shape[2];
+    size_t padding_size = kernel_size - 1;
+
+    tensor padded_input = pad(input, padding_size, padding_size, padding_size, padding_size);
+
+    tensor transposed_kernels = zeros({kernels.shape[1], kernels.shape[0], kernels.shape[3], kernels.shape[2]});
+
+    for (size_t n = 0; n < kernels.shape[0]; ++n) {
+        for (size_t c = 0; c < kernels.shape[1]; ++c) {
+            for (size_t h = 0; h < kernels.shape[2]; ++h) {
+                for (size_t w = 0; w < kernels.shape[3]; ++w) {
+                    float value = kernels.get({n, c, h, w});
+
+                    transposed_kernels.set({c, n, w, h}, value);
+                }
+            }
+        }
+    }
+
+    return convolution(padded_input, transposed_kernels);
+}
+
 // TODO: Move this to the lyrs folders?
 tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t num_kernels = x.shape[1]; // TODO: Change to input_channels
@@ -251,7 +274,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
             tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
             tensor dl_dc3_z;
-            tensor dl_ds2 = zeros({static_cast<size_t>(batch_size), 6, 14, 14});
+            tensor dl_ds2;
             tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
 
             tensor dl_dkernel2 = zeros({16, 6, 5, 5});
@@ -323,6 +346,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             }
 
             // std::cout << 7 << std::endl;
+
+            dl_ds2 = deconvolution(dl_dc3_z, kernel2);
 
             // kernel1 = kernel1 - lr * dl_dkernel1;
             kernel2 = kernel2 - lr * dl_dkernel2;
