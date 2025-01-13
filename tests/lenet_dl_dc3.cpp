@@ -68,6 +68,7 @@ int main () {
     size_t idx = 0;
     size_t img_height = c3.shape[2];
 
+    // TODO: Make MaxUnpool2d(), and pass input and the indices of the maximal values. This is in PyTorch. This way I could use this for dl_dc1, and also for AlexNEt, VGG, and ResNet.
     for (size_t i = 0; i < num_imgs; ++i) {
         for (size_t j = 0; j < output_img_size; ++j) {
             dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
