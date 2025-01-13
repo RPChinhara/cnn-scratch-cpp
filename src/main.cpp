@@ -76,15 +76,17 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
                 tensor kernel = slice(kernels, idx2 * kernel_height, kernel_height); // NOTE: Comment this out for 'Method2'
                 // tensor kernel_2d = slice(kernel_4d, k * kernel_height, kernel_height); NOTE: Method2
 
-                // Optimization: This could be optimized.
-                // If the size of kernel was 2 x 2, and img was 3 x 3.
-                // kernel, img
-                //         0 1 2
-                // 1 1     3 4 5
-                // 1 1     6 7 8
-                // (0) * (1), (1) * (1), (3) * (1), (4) * (1) -> this is dot product between top left corners.
-                // (1) * (1), (2) * (1), (4) * (1), (5) * (1) -> this is dot product between top right corners.
-                // This way I don't need to use 4 for loops like now.
+                /*
+                 * Optimization: This could be optimized.
+                 * If the size of kernel was 2 x 2, and img was 3 x 3.
+                 * kernel,  img
+                 *          0 1 2
+                 * 1 1      3 4 5
+                 * 1 1      6 7 8
+                 * (0) * (1), (1) * (1), (3) * (1), (4) * (1) -> this is dot product between top left corners.
+                 * (1) * (1), (2) * (1), (4) * (1), (5) * (1) -> this is dot product between top right corners.
+                 * This way I don't need to use 4 for loops like now.
+                 */
 
                 // OPTIMIZATION: Can I increase indexes at same like this? 	for (i = j = 0; j < old->count; i++, j++) {
                 for (size_t row = 0; row < output_height; ++row) {
