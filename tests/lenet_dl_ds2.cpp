@@ -98,20 +98,31 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
     return feature_maps;
 }
 
-int main () {
-    // NOTE: dl_ds2 = convolution(dl_dc3_z, kernel2); where dl_dc3_z is padded to (batch_size, 16, 18, 18), and kernel2 transposed to (6, 16, 5, 5).
+tensor deconvolution(const tensor& input, const tensor& kernels) {
+    size_t kernel_size = kernels.shape[2];
+    size_t padding_size = kernel_size - 1;
 
-    /*
-     * NOTE: Image showing the transposition of the kernel. (The spatial dimension is not transposed here!)
-     *                               [1, 2   [13, 14
-     *                                3, 4],  15, 16]
-     *
-     * [1,  2   [5,  6   [9,  10     [5, 6   [17, 18
-     *  3,  4],  7,  8],  11, 12]     7, 8],  19, 20]
-     *
-     * [13, 14  [17, 18  [21, 22     [9, 10  [21, 22
-     *  15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
-     */
+    tensor padded_input = pad(input, padding_size, padding_size, padding_size, padding_size);
+
+    tensor transposed_kernels = zeros({kernels.shape[1], kernels.shape[0], kernels.shape[3], kernels.shape[2]});
+
+    for (size_t n = 0; n < kernels.shape[0]; ++n) {
+        for (size_t c = 0; c < kernels.shape[1]; ++c) {
+            for (size_t h = 0; h < kernels.shape[2]; ++h) {
+                for (size_t w = 0; w < kernels.shape[3]; ++w) {
+                    float value = kernels.get({n, c, h, w});
+
+                    transposed_kernels.set({c, n, w, h}, value);
+                }
+            }
+        }
+    }
+
+    return convolution(padded_input, transposed_kernels);
+}
+
+int main () {
+     // NOTE: dl_ds2 = convolution(dl_dc3_z, kernel2); dl_dc3_z is padded to (batch_size, 16, 18, 18), and kernel2 is transposed to (6, 16, 5, 5). Don't forget to transpose the spatial dimensions (the 5s) as well!
 
     size_t batch_size = 32;
 
@@ -121,35 +132,9 @@ int main () {
     tensor kernel2 = zeros({16, 6, 5, 5});
     for (size_t i = 0; i < kernel2.size; ++i) kernel2[i] = i;
 
-    tensor kernel2_transposed = zeros({6, 16, 5, 5});
+    tensor dl_ds2_test = deconvolution(dl_dc3_z, kernel2);
 
-    // tensor kernel2_test = zeros({2, 3, 2, 2});
-    // for (size_t i = 0; i < kernel2_test.size; ++i) kernel2_test[i] = i;
-
-    // tensor kernel2_test_transposed = zeros({3, 2, 2, 2});
-
-    for (size_t n = 0; n < kernel2.shape[0]; ++n) {
-        for (size_t c = 0; c < kernel2.shape[1]; ++c) {
-            for (size_t h = 0; h < kernel2.shape[2]; ++h) {
-                for (size_t w = 0; w < kernel2.shape[3]; ++w) {
-                    // Get the value from the original tensor
-                    float value = kernel2.get({n, c, h, w});
-
-                    // Set the value in the output tensor at the transposed position
-                    kernel2_transposed.set({c, n, w, h}, value);
-                }
-            }
-        }
-    }
-
-    size_t kernel_size = kernel2.shape[2];
-    size_t padding_size = kernel_size - 1;
-
-    tensor dl_dc3_z_padded = pad(dl_dc3_z, padding_size, padding_size, padding_size, padding_size);
-
-    tensor dl_ds2 = convolution(dl_dc3_z_padded, kernel2_transposed);
-
-    std::cout << dl_ds2.get_shape() << std::endl;
+    std::cout << dl_ds2_test.get_shape() << std::endl;
 
     return 0;
 }
