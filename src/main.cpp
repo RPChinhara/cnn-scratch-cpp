@@ -276,6 +276,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_dc3_z;
             tensor dl_ds2;
             tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
+            tensor dl_dc1_z;
 
             tensor dl_dkernel2 = zeros({16, 6, 5, 5});
             tensor dl_dkernel1 = zeros({6, 1, 5, 5});
