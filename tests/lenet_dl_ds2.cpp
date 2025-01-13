@@ -113,41 +113,43 @@ int main () {
      *  15, 16], 19, 20], 23, 24] -> 11, 12], 23, 24]
      */
 
-    tensor dl_dc3_z = zeros({3, 16, 10, 10});
+    size_t batch_size = 32;
+
+    tensor dl_dc3_z = zeros({batch_size, 16, 10, 10});
     for (size_t i = 0; i < dl_dc3_z.size; ++i) dl_dc3_z[i] = i;
 
     tensor kernel2 = zeros({16, 6, 5, 5});
     for (size_t i = 0; i < kernel2.size; ++i) kernel2[i] = i;
 
-    tensor kernel2_test = zeros({2, 3, 2, 2});
-    for (size_t i = 0; i < kernel2_test.size; ++i) kernel2_test[i] = i;
+    tensor kernel2_transposed = zeros({6, 16, 5, 5});
 
-    tensor kernel2_test_transposed = zeros({3, 2, 2, 2});
+    // tensor kernel2_test = zeros({2, 3, 2, 2});
+    // for (size_t i = 0; i < kernel2_test.size; ++i) kernel2_test[i] = i;
 
-    std::cout << kernel2_test << "\n";
+    // tensor kernel2_test_transposed = zeros({3, 2, 2, 2});
 
-    for (size_t n = 0; n < kernel2_test.shape[0]; ++n) {
-        for (size_t c = 0; c < kernel2_test.shape[1]; ++c) {
-            for (size_t h = 0; h < kernel2_test.shape[2]; ++h) {
-                for (size_t w = 0; w < kernel2_test.shape[3]; ++w) {
+    for (size_t n = 0; n < kernel2.shape[0]; ++n) {
+        for (size_t c = 0; c < kernel2.shape[1]; ++c) {
+            for (size_t h = 0; h < kernel2.shape[2]; ++h) {
+                for (size_t w = 0; w < kernel2.shape[3]; ++w) {
                     // Get the value from the original tensor
-                    float value = kernel2_test.get({n, c, h, w});
+                    float value = kernel2.get({n, c, h, w});
 
                     // Set the value in the output tensor at the transposed position
-                    kernel2_test_transposed.set({c, n, w, h}, value);
+                    kernel2_transposed.set({c, n, w, h}, value);
                 }
             }
         }
     }
-
-    std::cout << kernel2_test_transposed << std::endl;
 
     size_t kernel_size = kernel2.shape[2];
     size_t padding_size = kernel_size - 1;
 
     tensor dl_dc3_z_padded = pad(dl_dc3_z, padding_size, padding_size, padding_size, padding_size);
 
-    // dl_dkernel2 += convolution(img, kernel2);
+    tensor dl_ds2 = convolution(dl_dc3_z_padded, kernel2_transposed);
+
+    std::cout << dl_ds2.get_shape() << std::endl;
 
     return 0;
 }
