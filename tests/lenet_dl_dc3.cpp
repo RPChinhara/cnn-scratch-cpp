@@ -53,34 +53,43 @@ std::pair<tensor, std::vector<std::pair<size_t, size_t>>> max_pool(const tensor&
     return {outputs, max_indices};
 }
 
+tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size_t>>& indices) {
+    size_t input_height = input.shape[2];
+    size_t input_width = input.shape.back();
+
+    // NOTE: This is if following values are used in max pooling. Kernel size = 2, Stride = 2, and Padding = 0.
+    size_t output_height = 2 * input_height;
+    size_t output_width = 2 * input_width;
+
+    size_t num_imgs = input.shape.front() * input.shape[1];
+    size_t pooled_img_size = input.shape[2] * input.shape.back();
+
+    tensor output = zeros({input.shape.front(), input.shape[1], output_height, output_width});
+
+    size_t idx = 0;
+
+    for (size_t i = 0; i < num_imgs; ++i) {
+        for (size_t j = 0; j < pooled_img_size; ++j) {
+            output(i * output_height + indices[idx].first, indices[idx].second) = input[idx];
+            ++idx;
+        }
+    }
+
+    return output;
+}
+
 int main () {
-    auto dl_ds4 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.000001f);
-    auto dl_dc3 = zeros({2, 2, 6, 6});
     auto c3 = uniform_dist({2, 2, 6, 6}, 0.0f, 0.000001f);
     auto [s4, indices] = max_pool(c3);
+
+    auto dl_ds4 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.000001f);
+    auto dl_dc3 = zeros({2, 2, 6, 6});
 
     std::cout << c3 << "\n";
     std::cout << s4 << "\n";
     std::cout << dl_ds4 << "\n";
 
-    size_t num_imgs = c3.shape.front() * c3.shape[1];
-    size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
-    size_t cumulative_height = 0;
-    size_t idx = 0;
-    size_t img_height = c3.shape[2];
-
-    // TODO: Make MaxUnpool2d(), and pass input and the indices of the maximal values. This is in PyTorch. This way I could use this for dl_dc1, and also for AlexNEt, VGG, and ResNet.
-    for (size_t i = 0; i < num_imgs; ++i) {
-        for (size_t j = 0; j < output_img_size; ++j) {
-            dl_dc3(cumulative_height + indices[idx].first, indices[idx].second) = dl_ds4[idx];
-
-            ++idx;
-        }
-
-        cumulative_height += img_height;
-    }
-
-    std::cout << dl_dc3 << "\n";
+    std::cout << max_unpool(dl_ds4, indices) << "\n";
 
     return 0;
 }
