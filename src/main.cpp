@@ -187,6 +187,31 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
     return outputs;
 }
 
+tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size_t>>& indices) {
+    size_t input_height = input.shape[2];
+    size_t input_width = input.shape.back();
+
+    // NOTE: This is if following values are used in max pooling. Kernel size = 2, Stride = 2, and Padding = 0.
+    size_t output_height = 2 * input_height;
+    size_t output_width = 2 * input_width;
+
+    size_t num_imgs = input.shape.front() * input.shape[1];
+    size_t pooled_img_size = input.shape[2] * input.shape.back();
+
+    tensor output = zeros({input.shape.front(), input.shape[1], output_height, output_width});
+
+    size_t idx = 0;
+
+    for (size_t i = 0; i < num_imgs; ++i) {
+        for (size_t j = 0; j < pooled_img_size; ++j) {
+            output(i * output_height + indices[idx].first, indices[idx].second) = input[idx];
+            ++idx;
+        }
+    }
+
+    return output;
+}
+
 std::array<tensor, 11> forward(const tensor& x, float batch_size) {
     // NOTE: Do I need to biases for c1 to s4?
 
