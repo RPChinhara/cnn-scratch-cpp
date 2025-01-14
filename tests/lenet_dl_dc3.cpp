@@ -2,9 +2,7 @@
 #include "rand.h"
 #include "tensor.h"
 
-std::vector<std::pair<size_t, size_t>> max_indices;
-
-tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
+std::pair<tensor, std::vector<std::pair<size_t, size_t>>> max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t input_channels = x.shape[1];
 
     size_t input_height = x.shape[2];
@@ -18,6 +16,8 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
     tensor outputs = zeros({batch_size, input_channels, output_height, output_width});
 
     size_t num_img = batch_size * input_channels;
+
+    std::vector<std::pair<size_t, size_t>> max_indices;
 
     for (size_t b = 0; b < num_img; ++b) {
         auto img = slice(x, b * input_height, input_height);
@@ -50,14 +50,14 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
             outputs[b * output.size + i] = output[i];
     }
 
-    return outputs;
+    return {outputs, max_indices};
 }
 
 int main () {
     auto dl_ds4 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.000001f);
     auto dl_dc3 = zeros({2, 2, 6, 6});
     auto c3 = uniform_dist({2, 2, 6, 6}, 0.0f, 0.000001f);
-    auto s4 = max_pool(c3);
+    auto [s4, indices] = max_pool(c3);
 
     std::cout << c3 << "\n";
     std::cout << s4 << "\n";
@@ -72,7 +72,7 @@ int main () {
     // TODO: Make MaxUnpool2d(), and pass input and the indices of the maximal values. This is in PyTorch. This way I could use this for dl_dc1, and also for AlexNEt, VGG, and ResNet.
     for (size_t i = 0; i < num_imgs; ++i) {
         for (size_t j = 0; j < output_img_size; ++j) {
-            dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
+            dl_dc3(cumulative_height + indices[idx].first, indices[idx].second) = dl_ds4[idx];
 
             ++idx;
         }
