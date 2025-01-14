@@ -5,18 +5,19 @@
 std::vector<std::pair<size_t, size_t>> max_indices;
 
 tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
-    size_t num_kernels = x.shape[1];
+    size_t input_channels = x.shape[1];
 
-    size_t input_height = x.shape[x.shape.size() - 2];
+    size_t input_height = x.shape[2];
     size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - pool_size) / stride + 1;
     size_t output_width = (input_width - pool_size) / stride + 1;
 
-    tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
-
     size_t batch_size = x.shape.front();
-    size_t num_img = batch_size * num_kernels;
+
+    tensor outputs = zeros({batch_size, input_channels, output_height, output_width});
+
+    size_t num_img = batch_size * input_channels;
 
     for (size_t b = 0; b < num_img; ++b) {
         auto img = slice(x, b * input_height, input_height);
