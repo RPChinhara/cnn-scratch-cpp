@@ -83,13 +83,14 @@ int main () {
     auto [s4, indices] = max_pool(c3);
 
     auto dl_ds4 = uniform_dist({2, 2, 3, 3}, 0.0f, 0.000001f);
-    auto dl_dc3 = zeros({2, 2, 6, 6});
 
     std::cout << c3 << "\n";
     std::cout << s4 << "\n";
     std::cout << dl_ds4 << "\n";
 
-    std::cout << max_unpool(dl_ds4, indices) << "\n";
+    auto dl_dc3 = max_unpool(dl_ds4, indices);
+
+    std::cout << dl_dc3 << "\n";
 
     return 0;
 }
