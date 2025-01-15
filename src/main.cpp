@@ -303,8 +303,8 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_dc3 = max_unpool(dl_ds4, indices_c3);
             tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
             tensor dl_ds2 = deconvolution(dl_dc3_z, kernel2);
-            tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
-            tensor dl_dc1_z;
+            tensor dl_dc1 = max_unpool(dl_ds2, indices_c1);
+            tensor dl_dc1_z = dl_dc1 * sigmoid_derivative(c1_z);
 
             tensor dl_dkernel2 = zeros({16, 6, 5, 5});
             tensor dl_dkernel1 = zeros({6, 1, 5, 5});
