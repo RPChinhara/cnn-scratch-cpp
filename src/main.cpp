@@ -138,6 +138,7 @@ tensor deconvolution(const tensor& input, const tensor& kernels) {
 }
 
 // TODO: Move this to the lyrs folders?
+// NOTE: What happens if there were two max values in the region, which one should it pick?
 tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
     size_t num_kernels = x.shape[1]; // TODO: Change to input_channels
 
