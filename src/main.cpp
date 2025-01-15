@@ -21,9 +21,6 @@ tensor b1 = zeros({120, 1});
 tensor b2 = zeros({84, 1});
 tensor b3 = zeros({10, 1});
 
-// TODO: I have to have this for both s2 and s4
-// TODO: I have to call clear() somewhere for proper indices for gradients calculation.
-// TODO: Make max_indices_s2, max_indices_s4, and assign temporal one inside max_pool() to them. This way no need for calling clear()
 std::vector<std::pair<size_t, size_t>> max_indices;
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
