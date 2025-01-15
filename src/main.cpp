@@ -261,6 +261,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         // std::cout << 0 << std::endl;
 
+        // TODO: Use "\n"
         std::cout << "Epoch " << i << "/" << epochs << std::endl;
 
         float loss = 0.0f;
@@ -296,9 +297,9 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
             tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
             tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
-            tensor dl_dc3 = zeros({static_cast<size_t>(batch_size), 16, 10, 10});
-            tensor dl_dc3_z;
-            tensor dl_ds2;
+            tensor dl_dc3 = max_unpool(dl_ds4, max_indices);
+            tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
+            tensor dl_ds2 = deconvolution(dl_dc3_z, kernel2);
             tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
             tensor dl_dc1_z;
 
@@ -314,34 +315,6 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_db1 = sum(dl_df5_z, 1);
 
             // std::cout << 5 << std::endl;
-
-            // TODO: Make max_unpool()?
-            size_t idx = 0;
-            size_t cumulative_height = 0;
-            size_t num_imgs = c3.shape.front() * c3.shape[1];
-            size_t output_img_size = dl_ds4.shape[2] * dl_ds4.shape.back();
-
-            for (size_t k = 0; k < num_imgs; ++k) {
-                size_t img_height = c3.shape[2];
-                // auto img = slice(x2, i * img_height, img_height);
-
-                for (size_t l = 0; l < output_img_size; ++l) {
-                    // TODO: Use eigther of these below
-                    // img(max_indices[idx].first, max_indices[idx].second) = 1.0f;
-
-                    // TODO: Write notes.txt that I omitted to assign 1.0f, and directly assigned dl_ds4
-                    // dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = 1.0f;
-                    dl_dc3(cumulative_height + max_indices[idx].first, max_indices[idx].second) = dl_ds4[idx];
-
-                    ++idx;
-                }
-
-                cumulative_height += img_height;
-            }
-
-            dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
-
-            // std::cout << 6 << std::endl;
 
             for (size_t i = 0; i < batch_size; ++i) {
                 tensor s2_sample = slice_4d(s2, i, 1);
@@ -370,9 +343,7 @@ void train(const tensor& x_train, const tensor& y_train) {
                 dl_dkernel2 += dl_dkernel2_partial;
             }
 
-            // std::cout << 7 << std::endl;
-
-            dl_ds2 = deconvolution(dl_dc3_z, kernel2);
+            // std::cout << 6 << std::endl;
 
             // kernel1 = kernel1 - lr * dl_dkernel1;
             kernel2 = kernel2 - lr * dl_dkernel2;
@@ -385,7 +356,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             b2 = b2 - lr * dl_db2;
             b3 = b3 - lr * dl_db3;
 
-            // std::cout << 8 << std::endl;
+            // std::cout << 7 << std::endl;
 
             // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
             // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
