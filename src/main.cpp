@@ -21,7 +21,7 @@ tensor b1 = zeros({120, 1});
 tensor b2 = zeros({84, 1});
 tensor b3 = zeros({10, 1});
 
-std::vector<std::pair<size_t, size_t>> max_indices;
+std::vector<std::pair<size_t, size_t>> indices_c1, indices_c3;
 
 void print_imgs(const tensor& imgs, size_t num_digits) {
     size_t img_height = imgs.shape[imgs.shape.size() - 2];
@@ -135,20 +135,22 @@ tensor deconvolution(const tensor& input, const tensor& kernels) {
 }
 
 // NOTE: What happens if there were two max values in the region, which one should it pick?
-tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
-    size_t num_kernels = x.shape[1]; // TODO: Change to input_channels
+std::pair<tensor, std::vector<std::pair<size_t, size_t>>> max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride = 2) {
+    size_t input_channels = x.shape[1];
 
-    size_t input_height = x.shape[x.shape.size() - 2];
+    size_t input_height = x.shape[2];
     size_t input_width = x.shape.back();
 
     size_t output_height = (input_height - pool_size) / stride + 1;
     size_t output_width = (input_width - pool_size) / stride + 1;
 
-    // TODO: Write like how it's written in covolution(), e.g., batch_size
-    tensor outputs = zeros({x.shape.front(), num_kernels, output_height, output_width});
-
     size_t batch_size = x.shape.front();
-    size_t num_img = batch_size * num_kernels;
+
+    tensor outputs = zeros({batch_size, input_channels, output_height, output_width});
+
+    size_t num_img = batch_size * input_channels;
+
+    std::vector<std::pair<size_t, size_t>> max_indices;
 
     for (size_t b = 0; b < num_img; ++b) {
         auto img = slice(x, b * input_height, input_height);
@@ -181,7 +183,7 @@ tensor max_pool(const tensor& x, const size_t pool_size = 2, const size_t stride
             outputs[b * output.size + i] = output[i];
     }
 
-    return outputs;
+    return {outputs, max_indices};
 }
 
 tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size_t>>& indices) {
@@ -215,12 +217,14 @@ std::array<tensor, 11> forward(const tensor& x, float batch_size) {
     tensor c1_z = convolution(x, kernel1);
     tensor c1 = sigmoid(c1_z);
 
-    tensor s2 = max_pool(c1);
+    auto [s2, indices_c1_temp] = max_pool(c1);
+    indices_c1 = indices_c1_temp;
 
     tensor c3_z = convolution(s2, kernel2);
     tensor c3 = sigmoid(c3_z);
 
-    tensor s4 = max_pool(c3);
+    auto [s4, indices_c3_temp] = max_pool(c3);
+    indices_c3 = indices_c3_temp;
 
     s4.reshape({static_cast<size_t>(batch_size), 400});
 
@@ -296,7 +300,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
             tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
             tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
-            tensor dl_dc3 = max_unpool(dl_ds4, max_indices);
+            tensor dl_dc3 = max_unpool(dl_ds4, indices_c3);
             tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
             tensor dl_ds2 = deconvolution(dl_dc3_z, kernel2);
             tensor dl_dc1 = zeros({static_cast<size_t>(batch_size), 6, 28, 28});
