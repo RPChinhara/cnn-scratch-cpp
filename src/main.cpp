@@ -30,7 +30,7 @@ void print_imgs(const tensor& imgs, size_t num_digits) {
     for (auto i = 0; i < num_digits; ++i) {
         for (auto j = 0; j < img_size; ++j) {
             if (j % img_height == 0 && j != 0)
-                std::cout << std::endl;
+                std::cout << "\n";
 
             std::cout << imgs[i * img_size + j] << " ";
         }
@@ -261,8 +261,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         // std::cout << 0 << std::endl;
 
-        // TODO: Use "\n"
-        std::cout << "Epoch " << i << "/" << epochs << std::endl;
+        std::cout << "Epoch " << i << "/" << epochs << "\n";
 
         float loss = 0.0f;
 
@@ -395,7 +394,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         auto end = std::chrono::high_resolution_clock::now();
 
-        std::cout << num_batches << "/" << num_batches << " - " << std::chrono::duration<double>(end - start).count() << "s/step - loss: " << loss << std::endl;
+        std::cout << num_batches << "/" << num_batches << " - " << std::chrono::duration<double>(end - start).count() << "s/step - loss: " << loss << "\n";
     }
 }
 
