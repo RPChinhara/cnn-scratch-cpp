@@ -319,7 +319,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             // std::cout << 5 << std::endl;
 
-            // TODO: Make this a function for readability?
+            // TODO: Make this a function for readability? I think it'd be useful for the future as well!
             for (size_t i = 0; i < batch_size; ++i) {
                 tensor s2_sample = slice_4d(s2, i, 1);
                 tensor dl_dc3_sample = slice_4d(dl_dc3_z, i, 1);
