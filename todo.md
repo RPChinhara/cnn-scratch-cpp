@@ -21,3 +21,4 @@
 - Story Visualization
 - Multimodal learning
 - AGI (use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity)
+     - I might need Fugaku or cloud computing for this.
