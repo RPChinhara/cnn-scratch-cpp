@@ -265,8 +265,6 @@ void train(const tensor& x_train, const tensor& y_train) {
     for (size_t i = 1; i <= epochs; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
 
-        // std::cout << 0 << std::endl;
-
         std::cout << "Epoch " << i << "/" << epochs << "\n";
 
         float loss = 0.0f;
@@ -275,8 +273,6 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         // TODO: I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
         for (size_t j = 0; j < num_batches; ++j) {
-            // std::cout << 1 << std::endl;
-
             size_t start_idx = j * batch_size; // 937 x 64 = 59968
             size_t end_idx = std::min(start_idx + batch_size, 60000.0f);
 
@@ -285,8 +281,6 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
-
-            // std::cout << 2 << std::endl;
 
             auto [c1_z, s2, c3_z, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
@@ -299,10 +293,6 @@ void train(const tensor& x_train, const tensor& y_train) {
                 std::cout << y[s] << " ";
 
             loss = categorical_cross_entropy(y_batch, y);
-
-            // std::cout << 4 << std::endl;
-            // std::cout << y_batch.get_shape() << std::endl;
-            // std::cout << y.get_shape() << std::endl;
 
             tensor dl_dy = transpose(y - y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
@@ -326,8 +316,6 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_db3 = sum(dl_dy, 1);
             tensor dl_db2 = sum(dl_df6_z, 1);
             tensor dl_db1 = sum(dl_df5_z, 1);
-
-            // std::cout << 5 << std::endl;
 
             // TODO: Make this a function for readability? I think it'd be useful for the future as well!
             for (size_t i = 0; i < batch_size; ++i) {
@@ -384,8 +372,6 @@ void train(const tensor& x_train, const tensor& y_train) {
                 dl_dkernel1 += dl_dkernel1_partial;
             }
 
-            // std::cout << 6 << std::endl;
-
             kernel1 = kernel1 - lr * dl_dkernel1;
             kernel2 = kernel2 - lr * dl_dkernel2;
 
@@ -396,8 +382,6 @@ void train(const tensor& x_train, const tensor& y_train) {
             b1 = b1 - lr * dl_db1;
             b2 = b2 - lr * dl_db2;
             b3 = b3 - lr * dl_db3;
-
-            // std::cout << 7 << std::endl;
 
             // dl_dkernel1 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_ds2 * ds2_dc1 * dc1_dkernel1
             // dl_dkernel2 = dl_dy * dy_df6 * df6_df5 * df5_ds4 * ds4_dc3 * dc3_dkernel2
