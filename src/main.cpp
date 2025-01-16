@@ -214,6 +214,9 @@ tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size
 std::array<tensor, 11> forward(const tensor& x, float batch_size) {
     // NOTE: Do I need to biases for c1 to s4?
 
+    indices_c1.clear();
+    indices_c3.clear();
+
     tensor c1_z = convolution(x, kernel1);
     tensor c1 = sigmoid(c1_z);
 
