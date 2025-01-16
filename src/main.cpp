@@ -211,7 +211,7 @@ tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size
     return output;
 }
 
-std::array<tensor, 11> forward(const tensor& x, float batch_size) {
+std::array<tensor, 9> forward(const tensor& x, float batch_size) {
     // NOTE: Do I need to biases for c1 to s4?
 
     indices_c1.clear();
@@ -239,19 +239,17 @@ std::array<tensor, 11> forward(const tensor& x, float batch_size) {
 
     tensor y = softmax(transpose(matmul(w3, f6) + b3));
 
-    std::array<tensor, 11> outputs;
+    std::array<tensor, 9> outputs;
 
     outputs[0] = c1_z;
-    outputs[1] = c1;
-    outputs[2] = s2;
-    outputs[3] = c3_z;
-    outputs[4] = c3;
-    outputs[5] = s4;
-    outputs[6] = f5_z;
-    outputs[7] = f5;
-    outputs[8] = f6_z;
-    outputs[9] = f6;
-    outputs[10] = y;
+    outputs[1] = s2;
+    outputs[2] = c3_z;
+    outputs[3] = s4;
+    outputs[4] = f5_z;
+    outputs[5] = f5;
+    outputs[6] = f6_z;
+    outputs[7] = f6;
+    outputs[8] = y;
 
     return outputs;
 }
@@ -290,7 +288,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             // std::cout << 2 << std::endl;
 
-            auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
+            auto [c1_z, s2, c3_z, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
             for (size_t s = 0; s < 10; ++s)
                 std::cout << y_batch[s] << " ";
