@@ -288,8 +288,13 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
-            for (size_t u = 0; u < 10; ++u)
-                std::cout << y_batch[u] << " " << y[u] << "\n";
+            for (size_t s = 0; s < 10; ++s)
+                std::cout << y_batch[s] << " ";
+
+            std::cout << "  ";
+
+            for (size_t s = 0; s < 10; ++s)
+                std::cout << y[s] << " ";
 
             loss = categorical_cross_entropy(y_batch, y);
 
