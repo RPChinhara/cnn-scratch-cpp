@@ -451,8 +451,9 @@ void predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // DEBUG: Shapes of datasets seems fine
-    // DEBUG: Datasets before padding seems fine
+    // Check: Shapes of datasets
+    // Check: Datasets before padding
+    // Check: Normalized datasets
     mnist data = load_mnist();
 
     print_imgs(data.train_imgs, 1);
@@ -460,16 +461,16 @@ int main() {
     data.train_imgs.reshape({60000, 1, 28, 28});
     data.test_imgs.reshape({10000, 1, 28, 28});
 
-    data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
-    data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
-
-    print_imgs(data.train_imgs, 1);
-
     for (auto i = 0; i < data.train_imgs.size; ++i)
         data.train_imgs[i] /= 255.0f;
 
     for (auto i = 0; i < data.test_imgs.size; ++i)
         data.test_imgs[i] /= 255.0f;
+
+    data.train_imgs = pad(data.train_imgs, 2, 2, 2, 2);
+    data.test_imgs = pad(data.test_imgs, 2, 2, 2, 2);
+
+    print_imgs(data.train_imgs, 2);
 
     data.train_labels = one_hot(data.train_labels, 10);
     data.test_labels = one_hot(data.test_labels, 10);
