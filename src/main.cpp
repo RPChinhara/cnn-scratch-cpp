@@ -346,7 +346,7 @@ void train(const tensor& x_train, const tensor& y_train) {
                 tensor dl_dkernel1_partial = zeros({2, 1, 5, 5});
                 size_t idx = 0;
 
-                for (size_t j = 0; j < 1; ++j) {
+                for (size_t j = 0; j < 2; ++j) {
                     tensor dl_dc1_z_feature_map = slice(dl_dc1_z_sample, j * 28, 28);
                     dl_dc1_z_feature_map.reshape({1, 1, 28, 28});
 
