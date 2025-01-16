@@ -280,8 +280,6 @@ static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t>& sh
 }
 
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
-    os << std::fixed << std::setprecision(8);
-
     size_t idx = 0;
 
     if (t.shape.size() == 0) {
