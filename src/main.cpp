@@ -451,6 +451,7 @@ void predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
+    // DEBUG: Shapes of datasets seems fine
     mnist data = load_mnist();
 
     print_imgs(data.train_imgs, 1);
