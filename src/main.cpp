@@ -10,10 +10,10 @@
 #include <array>
 #include <chrono>
 
-tensor kernel1 = glorot_uniform({6, 1, 5, 5});
+tensor kernel1 = glorot_uniform({2, 1, 5, 5});
 tensor kernel2 = glorot_uniform({16, 6, 5, 5});
 
-tensor w1 = glorot_uniform({120, 400});
+tensor w1 = glorot_uniform({120, 392});
 tensor w2 = glorot_uniform({84, 120});
 tensor w3 = glorot_uniform({10, 84});
 
@@ -211,7 +211,7 @@ tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size
     return output;
 }
 
-std::array<tensor, 9> forward(const tensor& x, float batch_size) {
+std::array<tensor, 7> forward(const tensor& x, float batch_size) {
     // NOTE: Do I need to biases for c1 to s4?
 
     indices_c1.clear();
@@ -223,33 +223,26 @@ std::array<tensor, 9> forward(const tensor& x, float batch_size) {
     auto [s2, indices_c1_temp] = max_pool(c1);
     indices_c1 = indices_c1_temp;
 
-    tensor c3_z = convolution(s2, kernel2);
-    tensor c3 = sigmoid(c3_z);
+    // TODO: Replace this hardcoded value with a configurable parameter or calculate it dynamically.
+    s2.reshape({static_cast<size_t>(batch_size), 392}); // s2: (batch_size, 1, 14, 14) so 6 x 14 x 14 = 196
 
-    auto [s4, indices_c3_temp] = max_pool(c3);
-    indices_c3 = indices_c3_temp;
-
-    s4.reshape({static_cast<size_t>(batch_size), 400});
-
-    tensor f5_z = matmul(w1, transpose(s4)) + b1;
+    tensor f5_z = matmul(w1, transpose(s2)) + b1; // w1: (120, 196)
     tensor f5 = sigmoid(f5_z);
 
-    tensor f6_z = matmul(w2, f5) + b2;
+    tensor f6_z = matmul(w2, f5) + b2; // w2: (84, 120)
     tensor f6 = sigmoid(f6_z);
 
-    tensor y = softmax(transpose(matmul(w3, f6) + b3));
+    tensor y = softmax(transpose(matmul(w3, f6) + b3)); // w3: (10, 84)
 
-    std::array<tensor, 9> outputs;
+    std::array<tensor, 7> outputs;
 
     outputs[0] = c1_z;
     outputs[1] = s2;
-    outputs[2] = c3_z;
-    outputs[3] = s4;
-    outputs[4] = f5_z;
-    outputs[5] = f5;
-    outputs[6] = f6_z;
-    outputs[7] = f6;
-    outputs[8] = y;
+    outputs[2] = f5_z;
+    outputs[3] = f5;
+    outputs[4] = f6_z;
+    outputs[5] = f6;
+    outputs[6] = y;
 
     return outputs;
 }
@@ -282,69 +275,78 @@ void train(const tensor& x_train, const tensor& y_train) {
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
 
-            auto [c1_z, s2, c3_z, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
+            auto [c1_z, s2, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
+
+            std::cout << "    ";
+
+            for (size_t s = 0; s < 10; ++s)
+                std::cout << y_batch[s] << " ";
+
+            std::cout << "    ";
+
+            for (size_t s = 0; s < 10; ++s)
+                std::cout << y[s] << " ";
 
             loss = categorical_cross_entropy(y_batch, y);
 
             tensor dl_dy = transpose(y - y_batch);
-            tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
+            tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, batch_size) = (84, batch_size)
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
-            tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
+            tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, batch_size)
             tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
-            tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
-            tensor dl_dc3 = max_unpool(dl_ds4, indices_c3);
-            tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
-            tensor dl_ds2 = deconvolution(dl_dc3_z, kernel2);
+            tensor dl_ds2 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 2, 14, 14}); // TODO: Replace this hardcoded value with a configurable parameter or calculate it dynamically.
+
             tensor dl_dc1 = max_unpool(dl_ds2, indices_c1);
             tensor dl_dc1_z = dl_dc1 * sigmoid_derivative(c1_z);
 
-            tensor dl_dkernel2 = zeros({16, 6, 5, 5});
-            tensor dl_dkernel1 = zeros({6, 1, 5, 5});
+            // TODO: Replace this hardcoded value with a configurable parameter or calculate it dynamically.
+            // tensor dl_dkernel2 = zeros({16, 6, 5, 5});
+            tensor dl_dkernel1 = zeros({2, 1, 5, 5});
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6_z, transpose(f5));
-            tensor dl_dw1 = matmul(dl_df5_z, s4);
+            tensor dl_dw1 = matmul(dl_df5_z, s2);
 
             tensor dl_db3 = sum(dl_dy, 1);
             tensor dl_db2 = sum(dl_df6_z, 1);
             tensor dl_db1 = sum(dl_df5_z, 1);
 
             // TODO: Make this a function for readability? I think it'd be useful for the future as well!
-            for (size_t i = 0; i < batch_size; ++i) {
-                tensor s2_sample = slice_4d(s2, i, 1);
-                tensor dl_dc3_sample = slice_4d(dl_dc3_z, i, 1);
+            // for (size_t i = 0; i < batch_size; ++i) {
+            //     tensor s2_sample = slice_4d(s2, i, 1);
+            //     tensor dl_dc3_sample = slice_4d(dl_dc3_z, i, 1);
 
-                tensor dl_dkernel2_partial = zeros({16, 6, 5, 5});
-                size_t idx = 0;
+            //     tensor dl_dkernel2_partial = zeros({16, 6, 5, 5});
+            //     size_t idx = 0;
 
-                for (size_t j = 0; j < 16; ++j) {
-                    tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 10, 10);
-                    dl_dc3_feature_map.reshape({1, 1, 10, 10});
+            //     for (size_t j = 0; j < 16; ++j) {
+            //         tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 10, 10);
+            //         dl_dc3_feature_map.reshape({1, 1, 10, 10});
 
-                    for (size_t k = 0; k < 6; ++k) {
-                        tensor s2_feature_map = slice(s2_sample, k * 14, 14);
-                        s2_feature_map.reshape({1, 1, 14, 14});
+            //         for (size_t k = 0; k < 6; ++k) {
+            //             tensor s2_feature_map = slice(s2_sample, k * 14, 14);
+            //             s2_feature_map.reshape({1, 1, 14, 14});
 
-                        tensor dl_dkernel2_feature_map = convolution(s2_feature_map, dl_dc3_feature_map);
+            //             tensor dl_dkernel2_feature_map = convolution(s2_feature_map, dl_dc3_feature_map);
 
-                        for (size_t l = 0; l < dl_dkernel2_feature_map.size; ++l)
-                            dl_dkernel2_partial[idx * dl_dkernel2_feature_map.size + l] = dl_dkernel2_feature_map[l];
+            //             for (size_t l = 0; l < dl_dkernel2_feature_map.size; ++l)
+            //                 dl_dkernel2_partial[idx * dl_dkernel2_feature_map.size + l] = dl_dkernel2_feature_map[l];
 
-                        ++idx;
-                    }
-                }
+            //             ++idx;
+            //         }
+            //     }
 
-                dl_dkernel2 += dl_dkernel2_partial;
-            }
+            //     dl_dkernel2 += dl_dkernel2_partial;
+            // }
 
             for (size_t i = 0; i < batch_size; ++i) {
                 tensor x_sample = slice_4d(x_batch, i, 1);
                 tensor dl_dc1_z_sample = slice_4d(dl_dc1_z, i, 1);
 
-                tensor dl_dkernel1_partial = zeros({6, 1, 5, 5});
+                tensor dl_dkernel1_partial = zeros({2, 1, 5, 5});
                 size_t idx = 0;
 
-                for (size_t j = 0; j < 6; ++j) {
+                for (size_t j = 0; j < 1; ++j) {
                     tensor dl_dc1_z_feature_map = slice(dl_dc1_z_sample, j * 28, 28);
                     dl_dc1_z_feature_map.reshape({1, 1, 28, 28});
 
@@ -365,7 +367,7 @@ void train(const tensor& x_train, const tensor& y_train) {
             }
 
             kernel1 = kernel1 - lr * dl_dkernel1;
-            kernel2 = kernel2 - lr * dl_dkernel2;
+            // kernel2 = kernel2 - lr * dl_dkernel2;
 
             w1 = w1 - lr * dl_dw1;
             w2 = w2 - lr * dl_dw2;
@@ -386,14 +388,12 @@ void train(const tensor& x_train, const tensor& y_train) {
             // dl_db2 = dl_dy * dy_df6 * df6_db2
             // dl_db3 = dl_dy * dy_db3
 
-            // x:  (60000, 32, 32)
-            // c1: (60000, 6, 28, 28)
-            // s2: (60000, 6, 14, 14)
-            // c3: (60000, 16, 10, 10)
-            // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
-            // f5: (120, 60000)
-            // f6: (84, 60000)
-            // y:  (10, 60000)
+            // x:  (batch_size, 1, 32, 32)
+            // c1: (batch_size, 1, 28, 28)
+            // s2: before reshape -> (batch_size, 1, 14, 14), after reshape -> (batch_size, 196)
+            // f5: (120, batch_size)
+            // f6: (84, batch_size)
+            // y:  (10, batch_size)
 
             // w1: (120, 400)
             // w2: (84, 120)
