@@ -4,6 +4,7 @@
 
 class tensor;
 
+tensor variable(const std::vector<size_t>& shape, const std::vector<float>& vals);
 tensor fill(const std::vector<size_t>& shape, float val);
 tensor zeros(const std::vector<size_t>& shape);
 
