@@ -257,6 +257,7 @@ std::array<tensor, 11> forward(const tensor& x, float batch_size) {
 }
 
 void train(const tensor& x_train, const tensor& y_train) {
+    // CHECK: Done up to here
     constexpr size_t epochs = 100;
     constexpr float lr = 0.01f;
     float batch_size = 64.0f;
@@ -451,11 +452,11 @@ void predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // Check: Shapes of datasets
-    // Check: Datasets before padding
-    // Check: Normalized datasets
-    // Check: Shapes of y after one hot encoded
-    // Check: y after one hot encoded
+    // CHECK: Shapes of datasets
+    // CHECK: Datasets before padding
+    // CHECK: Normalized datasets
+    // CHECK: Shapes of y after one hot encoded
+    // CHECK: y after one hot encoded
     mnist data = load_mnist();
 
     print_imgs(data.train_imgs, 1);
