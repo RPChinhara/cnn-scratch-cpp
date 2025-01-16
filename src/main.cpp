@@ -234,7 +234,7 @@ std::array<tensor, 11> forward(const tensor& x, float batch_size) {
     tensor f6_z = matmul(w2, f5) + b2;
     tensor f6 = sigmoid(f6_z);
 
-    tensor y = softmax(matmul(w3, f6) + b3);
+    tensor y = softmax(transpose(matmul(w3, f6) + b3));
 
     std::array<tensor, 11> outputs;
 
@@ -254,7 +254,7 @@ std::array<tensor, 11> forward(const tensor& x, float batch_size) {
 }
 
 void train(const tensor& x_train, const tensor& y_train) {
-    constexpr size_t epochs = 10;
+    constexpr size_t epochs = 100;
     constexpr float lr = 0.01f;
     float batch_size = 64.0f;
 
@@ -288,13 +288,16 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             auto [c1_z, c1, s2, c3_z, c3, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
-            // std::cout << 3 << std::endl;
+            for (size_t u = 0; u < 10; ++u)
+                std::cout << y_batch[u] << " " << y[u] << "\n";
 
-            loss = categorical_cross_entropy(y_batch, transpose(y));
+            loss = categorical_cross_entropy(y_batch, y);
 
             // std::cout << 4 << std::endl;
+            // std::cout << y_batch.get_shape() << std::endl;
+            // std::cout << y.get_shape() << std::endl;
 
-            tensor dl_dy = y - transpose(y_batch);
+            tensor dl_dy = transpose(y - y_batch);
             tensor dl_df6 = matmul(transpose(w3), dl_dy); // (84, 10), (10, 60000) = (84, 60000)
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
@@ -347,9 +350,36 @@ void train(const tensor& x_train, const tensor& y_train) {
                 dl_dkernel2 += dl_dkernel2_partial;
             }
 
+            for (size_t i = 0; i < batch_size; ++i) {
+                tensor x_sample = slice_4d(x_batch, i, 1);
+                tensor dl_dc1_z_sample = slice_4d(dl_dc1_z, i, 1);
+
+                tensor dl_dkernel1_partial = zeros({6, 1, 5, 5});
+                size_t idx = 0;
+
+                for (size_t j = 0; j < 6; ++j) {
+                    tensor dl_dc1_z_feature_map = slice(dl_dc1_z_sample, j * 28, 28);
+                    dl_dc1_z_feature_map.reshape({1, 1, 28, 28});
+
+                    for (size_t k = 0; k < 1; ++k) {
+                        tensor x_feature_map = slice(x_sample, k * 32, 32);
+                        x_feature_map.reshape({1, 1, 32, 32});
+
+                        tensor dl_dkernel1_feature_map = convolution(x_feature_map, dl_dc1_z_feature_map);
+
+                        for (size_t l = 0; l < dl_dkernel1_feature_map.size; ++l)
+                            dl_dkernel1_partial[idx * dl_dkernel1_feature_map.size + l] = dl_dkernel1_feature_map[l];
+
+                        ++idx;
+                    }
+                }
+
+                dl_dkernel1 += dl_dkernel1_partial;
+            }
+
             // std::cout << 6 << std::endl;
 
-            // kernel1 = kernel1 - lr * dl_dkernel1;
+            kernel1 = kernel1 - lr * dl_dkernel1;
             kernel2 = kernel2 - lr * dl_dkernel2;
 
             w1 = w1 - lr * dl_dw1;
