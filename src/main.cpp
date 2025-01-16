@@ -454,6 +454,8 @@ int main() {
     // Check: Shapes of datasets
     // Check: Datasets before padding
     // Check: Normalized datasets
+    // Check: Shapes of y after one hot encoded
+    // Check: y after one hot encoded
     mnist data = load_mnist();
 
     print_imgs(data.train_imgs, 1);
