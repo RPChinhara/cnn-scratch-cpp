@@ -233,6 +233,7 @@ std::array<tensor, 7> forward(const tensor& x, float batch_size) {
     tensor f6_z = matmul(w2, f5) + b2; // w2: (84, 120)
     tensor f6 = sigmoid(f6_z);
 
+    // NOTE: Inputs have to be transposed so that dimension muchs with how softmax is created.
     tensor y = softmax(transpose(matmul(w3, f6) + b3)); // w3: (10, 84)
 
     std::array<tensor, 7> outputs;
