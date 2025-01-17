@@ -1,4 +1,8 @@
 > LeNet
+     - Do I really need to implement other similar models like AlexNet, VGG, ResNet? They only differ by number of convolutions and pooling. Just AlexNet is enough? Search the difference. Also, search about all the CS and CNNs (Are all the other bigger models, fundamentally same with what I've been working on? Just bigger?).
+     - Check if 2 convs and 2 pooling works, if it is deconvolution() is working Thus, whole things are working?
+          - First, try with input and output channels of 1.
+     - Why is it working now? Is it because model is simply smaller?
 - AlexNet
      - Use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly.
      - I may not perfectly replicate AlexNet, VGG, and ResNet as these are just bigger version of LeNet so I might make similar models, but may not be exactly same.
