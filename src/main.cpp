@@ -212,7 +212,8 @@ tensor max_unpool(const tensor& input,  const std::vector<std::pair<size_t, size
 }
 
 std::array<tensor, 7> forward(const tensor& x, float batch_size) {
-    // NOTE: Do I need to biases for c1 to s4?
+    // NOTE: Do I need biases convolution?
+    // NOTE: Do I need to make sequential model like tensorflow does? I realised it was fine when working with sequential models like lstm, gru, but for models like nn and cnn, might be useful?
 
     indices_c1.clear();
     indices_c3.clear();
