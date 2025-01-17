@@ -2,6 +2,7 @@
      - Do I really need to implement other similar models like AlexNet, VGG, ResNet? They only differ by number of convolutions and pooling. Just AlexNet is enough? Search the difference. Also, search about all the CS and CNNs (Are all the other bigger models, fundamentally same with what I've been working on? Just bigger?). If all fundamentally same, implement AlexNet, and move on to next todo which is Seq2seq?
      - Check if 2 convs and 2 pooling works, if it is deconvolution() is working Thus, whole things are working?
           - First, try with input and output channels of 1.
+     - What if I increase number of output channels for first conv? Even if I only use 1 conv like I do now. Maybe, increase to 5 to 50?
      - Why is it working now? Is it because model is simply smaller?
 - AlexNet
      - Use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly.
