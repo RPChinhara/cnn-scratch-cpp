@@ -4,7 +4,6 @@
           - First, try with input and output channels of 1.
           - Reduce number of neurons used in fully connected layers or fully connected layers itself.
      - What if I increase number of output channels for first conv? Even if I only use 1 conv like I do now. Maybe, increase to 5 to 50?
-     - Make notes.txt inside docs for overall thoughts about AI and ML for acheiving AGI?
 - AlexNet
      - Use ImageNet as the model was made for the dataset? It seems this is the way. -> I guess I can just use MNIST or other dataset that is less computation heavy so that I could proceed forward quickly. MNIST might be too small, so choose greyed image dataset like MNIST, but the size of dataset is as close to ImageNet so that model would generalize?
      - I may not perfectly replicate AlexNet, VGG, and ResNet as these are just bigger version of LeNet so I might make similar models, but may not be exactly same.
@@ -26,5 +25,5 @@
 - Quantum neural network
 - Story Visualization
 - Multimodal learning
-- AGI (use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity)
+- AGI
      - I might need Fugaku or cloud computing for this.
