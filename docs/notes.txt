@@ -6,5 +6,6 @@ AGI
         - Wave function
         - Near the black hole
         - Space time
+- I might need Fugaku or cloud computing for this.
 
 TODO: This file could be called AGI.txt. This applies to other notes.txt in other folders.

@@ -26,4 +26,3 @@
 - Story Visualization
 - Multimodal learning
 - AGI
-     - I might need Fugaku or cloud computing for this.
