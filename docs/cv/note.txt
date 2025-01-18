@@ -4,4 +4,5 @@ Analysis:
 - With 1 convolution (kernel size = (5, 1, 5, 5)) and max polling, the model is able to generalize.
 - With 1 convolution (kernel size = (20, 1, 5, 5)) and max polling, the model is able to generalize. Though, loss is better when the number of output channels were 5. Loss started increasing after 5th epoch from 0.0447699 to 0.0619511, and to 0.0789601 at 6th epoch.
 - With 1 convolution (kernel size = (50, 1, 5, 5)) and max polling, the model is able to generalize. However, it takes longer than previous two models.
+- With 1 convolution (kernel size = (100, 1, 5, 5)) and max polling, the model is able to generalize. ???
 - Losses around 0.06 ~ 0.07 indicated models have generalized to datasets?
