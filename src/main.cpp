@@ -250,7 +250,7 @@ std::array<tensor, 7> forward(const tensor& x, float batch_size) {
 }
 
 void train(const tensor& x_train, const tensor& y_train) {
-    constexpr size_t epochs = 100;
+    constexpr size_t epochs = 10;
     constexpr float lr = 0.01f;
     float batch_size = 64.0f;
 
@@ -343,14 +343,14 @@ void train(const tensor& x_train, const tensor& y_train) {
                 tensor x_sample = slice_4d(x_batch, i, 1);
                 tensor dl_dc1_z_sample = slice_4d(dl_dc1_z, i, 1);
 
-                tensor dl_dkernel1_partial = zeros({2, 1, 5, 5});
+                tensor dl_dkernel1_partial = zeros({kernel1.shape[0], kernel1.shape[1], kernel1.shape[2], kernel1.shape[3]});
                 size_t idx = 0;
 
-                for (size_t j = 0; j < 2; ++j) {
+                for (size_t j = 0; j < kernel1.shape[0]; ++j) {
                     tensor dl_dc1_z_feature_map = slice(dl_dc1_z_sample, j * 28, 28);
                     dl_dc1_z_feature_map.reshape({1, 1, 28, 28});
 
-                    for (size_t k = 0; k < 1; ++k) {
+                    for (size_t k = 0; k < kernel1.shape[1]; ++k) {
                         tensor x_feature_map = slice(x_sample, k * 32, 32);
                         x_feature_map.reshape({1, 1, 32, 32});
 
