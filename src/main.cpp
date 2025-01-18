@@ -13,7 +13,9 @@
 tensor kernel1 = glorot_uniform({2, 1, 5, 5});
 tensor kernel2 = glorot_uniform({16, 6, 5, 5});
 
-tensor w1 = glorot_uniform({120, 392});
+size_t num_neurons = kernel1.shape[0] * 14 * 14;
+
+tensor w1 = glorot_uniform({120, num_neurons});
 tensor w2 = glorot_uniform({84, 120});
 tensor w3 = glorot_uniform({10, 84});
 
@@ -224,10 +226,9 @@ std::array<tensor, 7> forward(const tensor& x, float batch_size) {
     auto [s2, indices_c1_temp] = max_pool(c1);
     indices_c1 = indices_c1_temp;
 
-    size_t num_neurons = kernel1.shape[0] * 14 * 14;
     s2.reshape({static_cast<size_t>(batch_size), num_neurons});
 
-    tensor f5_z = matmul(w1, transpose(s2)) + b1; // w1: (120, 196)
+    tensor f5_z = matmul(w1, transpose(s2)) + b1; // w1: (120, num_neurons)
     tensor f5 = sigmoid(f5_z);
 
     tensor f6_z = matmul(w2, f5) + b2; // w2: (84, 120)
