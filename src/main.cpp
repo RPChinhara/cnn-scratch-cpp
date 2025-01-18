@@ -58,7 +58,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
 
     size_t idx = 0;
 
-    // Optimization: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
+    // OPTIMIZE: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
     for (size_t i = 0; i < batch_size; ++i) {
         for (size_t j = 0; j < output_channels; ++j) {
             // tensor kernel_4d = slice_4d(kernels, j, 1); NOTE: Method2
@@ -74,7 +74,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
                 // tensor kernel_2d = slice(kernel_4d, k * kernel_height, kernel_height); NOTE: Method2
 
                 /*
-                 * Optimization: This could be optimized.
+                 * OPTIMIZE: This could be optimized.
                  * If the size of kernel was 2 x 2, and img was 3 x 3.
                  * kernel,  img
                  *          0 1 2
@@ -85,7 +85,7 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
                  * This way I don't need to use 4 for loops like now.
                  */
 
-                // OPTIMIZATION: Can I increase indexes at same like this? 	for (i = j = 0; j < old->count; i++, j++) {
+                // OPTIMIZE: Can I increase indexes at same like this? 	for (i = j = 0; j < old->count; i++, j++) {
                 for (size_t row = 0; row < output_height; ++row) {
                     for (size_t col = 0; col < output_width; ++col) {
                         float sum = 0.0;
