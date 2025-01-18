@@ -10,7 +10,7 @@
 #include <vector>
 
 tensor load_aapl() {
-    std::ifstream file("datas/aapl.csv");
+    std::ifstream file("datasets/aapl.csv");
 
     size_t idx = 0;
     size_t num_datas = 10409;
@@ -41,7 +41,7 @@ tensor load_aapl() {
 }
 
 imdb load_imdb() {
-    std::ifstream file("datas/imdb.csv");
+    std::ifstream file("datasets/imdb.csv");
 
     std::cout << "Loading imdb dataset..." << std::endl;
 
@@ -102,7 +102,7 @@ imdb load_imdb() {
 }
 
 iris load_iris() {
-    std::ifstream file("datas/iris.csv");
+    std::ifstream file("datasets/iris.csv");
 
     size_t idx_x = 0;
     size_t idx_y = 0;
@@ -222,10 +222,10 @@ tensor read_mnist_labels(const std::string& file_path) {
 
 mnist load_mnist() {
     mnist data;
-    data.train_imgs = read_mnist_imgs("datas/mnist/train-images-idx3-ubyte");
-    data.train_labels = read_mnist_labels("datas/mnist/train-labels-idx1-ubyte");
-    data.test_imgs = read_mnist_imgs("datas/mnist/t10k-images-idx3-ubyte");
-    data.test_labels = read_mnist_labels("datas/mnist/t10k-labels-idx1-ubyte");
+    data.train_imgs = read_mnist_imgs("datasets/mnist/train-images-idx3-ubyte");
+    data.train_labels = read_mnist_labels("datasets/mnist/train-labels-idx1-ubyte");
+    data.test_imgs = read_mnist_imgs("datasets/mnist/t10k-images-idx3-ubyte");
+    data.test_labels = read_mnist_labels("datasets/mnist/t10k-labels-idx1-ubyte");
 
     return data;
 }
