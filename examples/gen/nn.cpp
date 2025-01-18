@@ -1,6 +1,6 @@
 #include "acts.h"
 #include "arrs.h"
-#include "datas.h"
+#include "datasets.h"
 #include "linalg.h"
 #include "losses.h"
 #include "lyrs.h"
