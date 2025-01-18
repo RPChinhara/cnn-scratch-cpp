@@ -224,8 +224,8 @@ std::array<tensor, 7> forward(const tensor& x, float batch_size) {
     auto [s2, indices_c1_temp] = max_pool(c1);
     indices_c1 = indices_c1_temp;
 
-    // TODO: Replace this hardcoded value with a configurable parameter or calculate it dynamically.
-    s2.reshape({static_cast<size_t>(batch_size), 392}); // s2: (batch_size, 1, 14, 14) so 6 x 14 x 14 = 196
+    size_t num_neurons = kernel1.shape[0] * 14 * 14;
+    s2.reshape({static_cast<size_t>(batch_size), num_neurons});
 
     tensor f5_z = matmul(w1, transpose(s2)) + b1; // w1: (120, 196)
     tensor f5 = sigmoid(f5_z);
@@ -295,14 +295,13 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, batch_size)
             tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
-            tensor dl_ds2 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 2, 14, 14}); // TODO: Replace this hardcoded value with a configurable parameter or calculate it dynamically.
+            tensor dl_ds2 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), kernel1.shape[0], 14, 14});
 
             tensor dl_dc1 = max_unpool(dl_ds2, indices_c1);
             tensor dl_dc1_z = dl_dc1 * sigmoid_derivative(c1_z);
 
-            // TODO: Replace this hardcoded value with a configurable parameter or calculate it dynamically.
-            // tensor dl_dkernel2 = zeros({16, 6, 5, 5});
-            tensor dl_dkernel1 = zeros({2, 1, 5, 5});
+            // tensor dl_dkernel2 = zeros({kernel2.shape[0], kernel2.shape[1], kernel2.shape[2], kernel2.shape[3]});
+            tensor dl_dkernel1 = zeros({kernel1.shape[0], kernel1.shape[1], kernel1.shape[2], kernel1.shape[3]});
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6_z, transpose(f5));
