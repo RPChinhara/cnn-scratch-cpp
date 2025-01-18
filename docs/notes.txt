@@ -1,0 +1,10 @@
+AGI
+----------------
+- Use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity.
+    - Given text, image, and video datasets as a multimodal inputs, predict next tokens. For instance, predict various unknown phenomena in unsolved physics problems.
+    - Things to predict
+        - Wave function
+        - Near the black hole
+        - Space time
+
+TODO: This file could be called AGI.txt. This applies to other notes.txt in other folders.
