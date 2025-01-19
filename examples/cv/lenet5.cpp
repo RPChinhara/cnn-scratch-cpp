@@ -10,10 +10,12 @@
 #include <array>
 #include <chrono>
 
-tensor kernel1 = glorot_uniform({6, 1, 5, 5});
-tensor kernel2 = glorot_uniform({16, 6, 5, 5});
+tensor kernel1 = glorot_uniform({1, 1, 5, 5});
+tensor kernel2 = glorot_uniform({1, 1, 5, 5});
 
-tensor w1 = glorot_uniform({120, 400});
+size_t num_neurons = kernel2.shape[0] * 5 * 5;
+
+tensor w1 = glorot_uniform({120, num_neurons});
 tensor w2 = glorot_uniform({84, 120});
 tensor w3 = glorot_uniform({10, 84});
 
@@ -229,7 +231,7 @@ std::array<tensor, 9> forward(const tensor& x, float batch_size) {
     auto [s4, indices_c3_temp] = max_pool(c3);
     indices_c3 = indices_c3_temp;
 
-    s4.reshape({static_cast<size_t>(batch_size), 400});
+    s4.reshape({static_cast<size_t>(batch_size), num_neurons});
 
     tensor f5_z = matmul(w1, transpose(s4)) + b1;
     tensor f5 = sigmoid(f5_z);
@@ -284,6 +286,16 @@ void train(const tensor& x_train, const tensor& y_train) {
 
             auto [c1_z, s2, c3_z, s4, f5_z, f5, f6_z, f6, y] = forward(x_batch, batch_size);
 
+            std::cout << "    ";
+
+            for (size_t s = 0; s < 10; ++s)
+                std::cout << y_batch[s] << " ";
+
+            std::cout << "    ";
+
+            for (size_t s = 0; s < 10; ++s)
+                std::cout << y[s] << " ";
+
             loss = categorical_cross_entropy(y_batch, y);
 
             tensor dl_dy = transpose(y - y_batch);
@@ -291,15 +303,15 @@ void train(const tensor& x_train, const tensor& y_train) {
             tensor dl_df6_z = dl_df6 * sigmoid_derivative(f6_z);
             tensor dl_df5 = matmul(transpose(w2), dl_df6_z); // (120, 60000)
             tensor dl_df5_z = dl_df5 * sigmoid_derivative(f5_z);
-            tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 16, 5, 5});
+            tensor dl_ds4 = matmul(transpose(w1), dl_df5_z).reshape({static_cast<size_t>(batch_size), 1, 5, 5});
             tensor dl_dc3 = max_unpool(dl_ds4, indices_c3);
             tensor dl_dc3_z = dl_dc3 * sigmoid_derivative(c3_z);
             tensor dl_ds2 = deconvolution(dl_dc3_z, kernel2);
             tensor dl_dc1 = max_unpool(dl_ds2, indices_c1);
             tensor dl_dc1_z = dl_dc1 * sigmoid_derivative(c1_z);
 
-            tensor dl_dkernel2 = zeros({16, 6, 5, 5});
-            tensor dl_dkernel1 = zeros({6, 1, 5, 5});
+            tensor dl_dkernel2 = zeros({kernel2.shape[0], kernel2.shape[1], kernel2.shape[2], kernel2.shape[3]});
+            tensor dl_dkernel1 = zeros({kernel1.shape[0], kernel1.shape[1], kernel1.shape[2], kernel1.shape[3]});
 
             tensor dl_dw3 = matmul(dl_dy, transpose(f6));
             tensor dl_dw2 = matmul(dl_df6_z, transpose(f5));
@@ -314,14 +326,14 @@ void train(const tensor& x_train, const tensor& y_train) {
                 tensor s2_sample = slice_4d(s2, i, 1);
                 tensor dl_dc3_sample = slice_4d(dl_dc3_z, i, 1);
 
-                tensor dl_dkernel2_partial = zeros({16, 6, 5, 5});
+                tensor dl_dkernel2_partial = zeros({kernel2.shape[0], kernel2.shape[1], kernel2.shape[2], kernel2.shape[3]});
                 size_t idx = 0;
 
-                for (size_t j = 0; j < 16; ++j) {
+                for (size_t j = 0; j < kernel2.shape[0]; ++j) {
                     tensor dl_dc3_feature_map = slice(dl_dc3_sample, j * 10, 10);
                     dl_dc3_feature_map.reshape({1, 1, 10, 10});
 
-                    for (size_t k = 0; k < 6; ++k) {
+                    for (size_t k = 0; k < kernel2.shape[1]; ++k) {
                         tensor s2_feature_map = slice(s2_sample, k * 14, 14);
                         s2_feature_map.reshape({1, 1, 14, 14});
 
@@ -341,14 +353,14 @@ void train(const tensor& x_train, const tensor& y_train) {
                 tensor x_sample = slice_4d(x_batch, i, 1);
                 tensor dl_dc1_z_sample = slice_4d(dl_dc1_z, i, 1);
 
-                tensor dl_dkernel1_partial = zeros({6, 1, 5, 5});
+                tensor dl_dkernel1_partial = zeros({kernel1.shape[0], kernel1.shape[1], kernel1.shape[2], kernel1.shape[3]});
                 size_t idx = 0;
 
-                for (size_t j = 0; j < 6; ++j) {
+                for (size_t j = 0; j < kernel1.shape[0]; ++j) {
                     tensor dl_dc1_z_feature_map = slice(dl_dc1_z_sample, j * 28, 28);
                     dl_dc1_z_feature_map.reshape({1, 1, 28, 28});
 
-                    for (size_t k = 0; k < 1; ++k) {
+                    for (size_t k = 0; k < kernel1.shape[1]; ++k) {
                         tensor x_feature_map = slice(x_sample, k * 32, 32);
                         x_feature_map.reshape({1, 1, 32, 32});
 
@@ -386,10 +398,13 @@ void train(const tensor& x_train, const tensor& y_train) {
             // dl_db2 = dl_dy * dy_df6 * df6_db2
             // dl_db3 = dl_dy * dy_db3
 
+            // s2: (60000, 6, 14, 14) and c3: (60000, 16, 10, 10) -> kernel2: (16, 6, 5, 5)
+            // c3: (60000, 16, 10, 10) and kernel2: (16, 6, 5, 5) -> s2: (60000, 6, 14, 14)
+
             // x:  (60000, 32, 32)
             // c1: (60000, 6, 28, 28)
             // s2: (60000, 6, 14, 14)
-            // c3: (60000, 16, 10, 10)
+            // c3: (60000, 16, 10, 10) (16, 6, 5, 5)
             // s4: before reshape -> (60000, 16, 5, 5), after reshape -> (60000, 400)
             // f5: (120, 60000)
             // f6: (84, 60000)
