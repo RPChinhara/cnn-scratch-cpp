@@ -10,6 +10,8 @@
 #include <array>
 #include <chrono>
 
+// NOTE: This and other files were supposed to be named lenet.cpp or lenet5.cpp, but now I consider all CNNs are same that they only differs by number of convolution layers and pooling, and some new techniques like skip connections in ResNet or the fact VGGNet uses small 3 x 3 filters and so on.
+
 tensor kernel1 = glorot_uniform({2, 1, 5, 5});
 tensor kernel2 = glorot_uniform({16, 6, 5, 5});
 
