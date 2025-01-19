@@ -12,6 +12,8 @@
 
 // NOTE: This and other files were supposed to be named lenet.cpp or lenet5.cpp, but now I consider all CNNs are same that they only differs by number of convolution layers and pooling, and some new techniques like skip connections in ResNet or the fact VGGNet uses small 3 x 3 filters and so on.
 
+// NOTE: I could just have a one file callled cnn.cpp by unifying all the files, but I guess it's fine for now for experiments. Also, I could refactor and do some clean ups by making Sequential class like the one in TF so that I could make a model with different hyperparameters without manually doing it right now which is pretty tedious. I could do some optimization stuff as well. There are bunch of stuff I could do to make it better, however in order for me to proceed forward, I guess I'd just leave it as it is for now, and come back later when I need to use CNNs in the future.
+
 tensor kernel1 = glorot_uniform({2, 1, 5, 5});
 tensor kernel2 = glorot_uniform({16, 6, 5, 5});
 
