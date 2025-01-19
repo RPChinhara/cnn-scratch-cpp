@@ -10,6 +10,8 @@
 #include <array>
 #include <chrono>
 
+// TODO: Implement more advanced CNNs like AlexNet, ResNet later. Perhaps, when I make GAN or multimodal models to generate high quality images or videos?
+
 tensor kernel1 = glorot_uniform({6, 1, 5, 5});
 tensor kernel2 = glorot_uniform({10, 6, 5, 5});
 
@@ -59,6 +61,8 @@ tensor convolution(const tensor& x, const tensor& kernels, const size_t stride =
     tensor feature_maps = zeros({batch_size, output_channels, output_height, output_width});
 
     size_t idx = 0;
+
+    // TODO: Do I need to flip the kernel 180 degrees before taking dot products with images? In deconvolution() as well?
 
     // Optimization: Can I only use for loops twice similar to when I had 'if (x.shape.size() == 3)'?
     for (size_t i = 0; i < batch_size; ++i) {
@@ -426,6 +430,7 @@ void train(const tensor& x_train, const tensor& y_train) {
 
         auto end = std::chrono::high_resolution_clock::now();
 
+        // TODO: I need accuracy function like one from TensorFlow
         std::cout << num_batches << "/" << num_batches << " - " << std::chrono::duration<double>(end - start).count() << "s/step - loss: " << loss << "\n";
     }
 }
