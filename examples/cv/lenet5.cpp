@@ -131,6 +131,7 @@ tensor deconvolution(const tensor& input, const tensor& kernels) {
                 for (size_t w = 0; w < kernels.shape[3]; ++w) {
                     float value = kernels.get({n, c, h, w});
 
+                    // NOTE: Not transposing spatial dimensions is correct? The loss is decreasing very smoothly (no sudden jumps). Also, loss almost never increases, but decreases (unless, it's overfitting)? It's just looks healthy way of decreasing.
                     transposed_kernels.set({c, n, h, w}, value);
                 }
             }
