@@ -16,9 +16,9 @@
 constexpr size_t vocab_size = 5000;
 constexpr size_t max_len = 25;
 
+constexpr size_t epochs = 250;
 constexpr float lr = 0.01f;
 size_t batch_size = 0;
-constexpr size_t epochs = 250;
 
 constexpr size_t embedding_dim = 50;
 
