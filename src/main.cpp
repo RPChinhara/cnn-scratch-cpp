@@ -13,24 +13,24 @@
 #include <chrono>
 #include <fstream>
 
-constexpr size_t vocab_size    = 5000;
-constexpr size_t max_len       = 25;
+constexpr size_t vocab_size = 5000;
+constexpr size_t max_len = 25;
 
-constexpr float  lr            = 0.01f;
-size_t           batch_size    = 0;
-constexpr size_t epochs        = 250;
+constexpr float lr = 0.01f;
+size_t batch_size = 0;
+constexpr size_t epochs = 250;
 
 constexpr size_t embedding_dim = 50;
 
-constexpr size_t seq_length    = 25;
-constexpr size_t input_size    = embedding_dim;
-constexpr size_t hidden_size   = 50;
-constexpr size_t output_size   = 25;
+constexpr size_t seq_length = 25;
+constexpr size_t input_size = embedding_dim;
+constexpr size_t hidden_size = 50;
+constexpr size_t output_size = 25;
 
-constexpr float  beta1         = 0.9f;
-constexpr float  beta2         = 0.999f;
-constexpr float  epsilon       = 1e-7f;
-size_t           t             = 0;
+constexpr float  beta1 = 0.9f;
+constexpr float  beta2 = 0.999f;
+constexpr float  epsilon = 1e-7f;
+size_t t = 0;
 
 enum Phase {
     TRAIN,
