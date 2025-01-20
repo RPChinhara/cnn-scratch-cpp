@@ -263,7 +263,7 @@ std::array<tensor, 9> forward(const tensor& x, float batch_size) {
 
 void train(const tensor& x_train, const tensor& y_train) {
     // CHECK: Done up to here
-    constexpr size_t epochs = 100;
+    constexpr size_t epochs = 10;
     constexpr float lr = 0.0001f;
     float batch_size = 64.0f;
 
@@ -437,13 +437,13 @@ void train(const tensor& x_train, const tensor& y_train) {
 }
 
 float evaluate(const tensor& x_test, const tensor& y_test) {
-    // auto y = forward(x_test);
-    // return categorical_cross_entropy(y_test, transpose(y));
-
-    return 0.0f;
+    auto [c1_z, s2, c3_z, s4, f5_z, f5, f6_z, f6, y] = forward(x_test, x_test.shape.front());
+    return categorical_cross_entropy(y_test, y);
 }
 
-void predict(const tensor& x_test, const tensor& y_test) {
+tensor predict(const tensor& x_test, const tensor& y_test) {
+    auto [c1_z, s2, c3_z, s4, f5_z, f5, f6_z, f6, y] = forward(x_test, x_test.shape.front());
+    return y;
 }
 
 int main() {
@@ -481,7 +481,21 @@ int main() {
 
     std::cout << "Test loss: " << evaluate(data.test_imgs, data.test_labels) << "\n\n";
 
-    predict(data.test_imgs, data.test_labels);
+    tensor test_predictions = predict(data.test_imgs, data.test_labels);
+
+    for (size_t i = 0; i < 100; ++i) {
+        if (i != 0 && i % 10 == 0)
+            std::cout << "\n";
+        std::cout << data.test_labels[i] << " ";
+    }
+
+    std::cout << "\n\n";
+
+    for (size_t i = 0; i < 100; ++i) {
+        if (i != 0 && i % 10 == 0)
+            std::cout << "\n";
+        std::cout << test_predictions[i] <<  " ";
+    }
 
     return 0;
 }
