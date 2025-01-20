@@ -8,5 +8,6 @@ AGI
         - Space time
 - I might need Fugaku or cloud computing for this.
 - Will quantum neural network really work?
+    - It needs quantum computers, and as of now it's an experimental stuff.
 
 TODO: This file could be called AGI.txt. This applies to other notes.txt in other folders.
