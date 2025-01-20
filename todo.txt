@@ -1,5 +1,4 @@
-> Seq2seq
-- Transformer
+> Transformer
 - BERT
 - Autoencoder
 - GAN
