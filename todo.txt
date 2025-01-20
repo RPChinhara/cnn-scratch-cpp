@@ -1,8 +1,8 @@
 > Transformer
 - BERT
+- BART
 - Autoencoder
 - GAN
-- BART
 - Mamba
 - Diffusion models
 - YOLO
