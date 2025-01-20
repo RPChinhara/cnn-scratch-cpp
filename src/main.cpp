@@ -5,10 +5,6 @@
 constexpr size_t vocab_size = 5000;
 constexpr size_t max_len = 25;
 
-constexpr size_t epochs = 250;
-constexpr float lr = 0.01f;
-size_t batch_size = 0;
-
 constexpr size_t embedding_dim = 50;
 
 tensor forward(const tensor& x_test, const tensor& y_test) {
@@ -16,6 +12,10 @@ tensor forward(const tensor& x_test, const tensor& y_test) {
 }
 
 tensor train(const tensor& x_test, const tensor& y_test) {
+    constexpr size_t epochs = 10;
+    constexpr float lr = 0.01f;
+    size_t batch_size = 0;
+
     return tensor();
 }
 
