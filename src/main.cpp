@@ -5,8 +5,8 @@
 #include "losses.h"
 #include "lyrs.h"
 #include "math.h"
-#include "preproc.h"
 #include "rand.h"
+#include "strings.h"
 #include "tensor.h"
 
 #include <array>
@@ -80,7 +80,7 @@ std::array<std::vector<tensor>, 6> gru_forward(const tensor& x, enum Phase phase
     else
         batch_size = 15211;
 
-    tensor ones = tensor({hidden_size, batch_size}, {1.0f});
+    tensor ones = fill({hidden_size, batch_size}, 1.0f);
 
     tensor h_t = zeros({hidden_size, batch_size});
     h_sequence.push_back(h_t);
