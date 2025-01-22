@@ -32,6 +32,7 @@ int main() {
     auto input = load_daily_dialog("datasets/daily_dialog/daily_dialog_input.csv");
     auto target = load_daily_dialog("datasets/daily_dialog/daily_dialog_target.csv");
 
+    // TODO: If I make text_vectorization() a class, runtime will be 1/2 of now as I only need to create the vocabulary once for "input_target". I don't need to do it twice.
     tensor input_token = text_vectorization(input_target, input, vocab_size, max_len);
     tensor target_token = text_vectorization(input_target, target, vocab_size, max_len);
 
