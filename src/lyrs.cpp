@@ -48,7 +48,7 @@ tensor text_vectorization(const std::vector<std::string>& vocab, const std::vect
     vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("", 0.0f));
 
-    // for (auto i = 0; i < 20; ++i)
+    // for (size_t i = 0; i < vocab_vec.size(); ++i)
     //   std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << std::endl;
 
     tensor t_new = zeros({in.size(), max_len});
@@ -56,6 +56,7 @@ tensor text_vectorization(const std::vector<std::string>& vocab, const std::vect
     size_t idx = 0;
     const float oov_token = vocab_vec[1].second;
 
+    // NOTE: In TensorFlow, the max_tokens (or vocabulary size) is max_tokens - 2 when output_mode == "int", because 0 is reserved for padding tokens and 1 is reserved for OOV (out-of-vocabulary) tokens.
     if (max_tokens > vocab_vec.size())
         max_tokens = vocab_vec.size();
 
