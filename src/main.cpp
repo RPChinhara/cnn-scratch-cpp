@@ -19,7 +19,6 @@ tensor positional_encoding(const size_t seq_len, const size_t dim) {
     for (size_t i = 0; i < seq_len; ++i) {
         for (size_t j = 0; j < dim / 2; ++j) {
             float denominator = pow(10000, 2.0f * j / dim);
-            std::cout << denominator << "\n";
             output(i, 2 * j) = sin(i / denominator);
             output(i, 2 * j + 1) = cos(i / denominator);
         }
@@ -53,10 +52,17 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            embedding lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
+            embedding embedding_lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
             tensor position_encoded_tesnor = positional_encoding(seq_len, model_dim);
 
-            std::cout << position_encoded_tesnor << "\n";
+            // Adding embeddings and po position_encoded_tesnor
+            size_t idx = 0;
+            for (size_t k = 0; k < embedding_lyr.dense_vecs.size; ++k) {
+                if (k == embedding_lyr.dense_vecs.shape[1] * embedding_lyr.dense_vecs.shape[2])
+                    idx = 0;
+                embedding_lyr.dense_vecs[k] = embedding_lyr.dense_vecs[k] + position_encoded_tesnor[idx];
+                ++idx;
+            }
 
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
