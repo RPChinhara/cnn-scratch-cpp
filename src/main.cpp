@@ -5,12 +5,27 @@
 #include <chrono>
 
 constexpr size_t vocab_size = 5000;
-constexpr size_t max_len = 25;
-
-constexpr size_t embedding_dim = 50;
+constexpr size_t seq_len = 25;
+constexpr size_t model_dim = 5;
 
 tensor forward(const tensor& x, float batch_size) {
     return tensor();
+}
+
+// TODO: Move to lyrs.h since it's one of the layer
+tensor positional_encoding(const size_t seq_len, const size_t dim) {
+    tensor output = zeros({seq_len, dim});
+
+    for (size_t i = 0; i < seq_len; ++i) {
+        for (size_t j = 0; j < dim / 2; ++j) {
+            float denominator = pow(10000, 2.0f * j / dim);
+            std::cout << denominator << "\n";
+            output(i, 2 * j) = sin(i / denominator);
+            output(i, 2 * j + 1) = cos(i / denominator);
+        }
+    }
+
+    return output;
 }
 
 tensor train(const tensor& x_train, const tensor& y_train) {
@@ -38,10 +53,10 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            embedding lyr = embedding(5000, 5, x_batch);
+            embedding lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
+            tensor position_encoded_tesnor = positional_encoding(seq_len, model_dim);
 
-            std::cout << lyr.mat.get_shape() << "\n";
-            std::cout << lyr.dense_vecs.get_shape() << "\n";
+            std::cout << position_encoded_tesnor << "\n";
 
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
@@ -82,11 +97,11 @@ int main() {
 
     // OPTIMIZE: If I make text_vectorization() a class, runtime will be 1/2 of now as I only need to create the vocabulary once for "input_target". I don't need to do it twice.
     // TODO: I may need to use subword tokenizers for better results. I'm using a simple tokenizer.
-    // tensor input_token = text_vectorization(input_target, input, vocab_size, max_len);
-    // tensor target_token = text_vectorization(input_target, target, vocab_size, max_len);
+    // tensor input_token = text_vectorization(input_target, input, vocab_size, seq_len);
+    // tensor target_token = text_vectorization(input_target, target, vocab_size, seq_len);
 
-    tensor dammy_input_token = zeros({60, 25});
-    tensor dammy_target_token = fill({60, 25}, 2.0f);
+    tensor dammy_input_token = zeros({60, seq_len});
+    tensor dammy_target_token = fill({60, seq_len}, 2.0f);
 
     auto input_token_train_test = split(dammy_input_token, 0.2f);
     auto target_token_train_test = split(dammy_target_token, 0.2f);
