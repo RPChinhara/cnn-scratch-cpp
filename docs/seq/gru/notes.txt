@@ -1,5 +1,5 @@
--------------------- GRU BPTT --------------------
-
+GRU BPTT:
+----------------
 dL/dw_h: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dw_h
          (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dw_h
 
@@ -8,3 +8,108 @@ dL/dw_r: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dw_r
 
 dL/dw_z: (dL/dy * dy/dh_10) * dh_10/dz_10 * dz_10/dw_z
          (dL/dy * dy/dh_10 * dh_10/dz_10 * dz_10/dh_9) * dh_9/dz_9 * dz_9/dw_z
+
+Python code for GRU:
+----------------
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import SimpleRNN, Dense, LSTM, GRU, Bidirectional
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from google.colab import files
+import os
+
+def find_files(filename, search_path):
+    result = []
+    for root, dirs, files in os.walk(search_path):
+        if filename in files:
+            result.append(os.path.join(root, filename))
+    return result
+
+files_found = find_files('aapl.csv', '/content')
+
+if files_found:
+  # Load and preprocess the dataset
+  df = pd.read_csv('aapl.csv')  # Replace 'your_dataset.csv' with your actual dataset filename
+else:
+  files.upload()
+  df = pd.read_csv('aapl.csv')
+
+# Use 'Close' prices for simplicity, you can choose other features as needed
+data = df['Close'].values.reshape(-1, 1)
+
+# # Normalize the dataset
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaled_data = scaler.fit_transform(data)
+
+
+# Split data into training and testing sets
+train_size = int(len(scaled_data) * 0.8)
+train_data, test_data = scaled_data[:train_size], scaled_data[train_size:]
+
+# Function to create sequences for RNN
+def create_sequences(data, seq_length):
+    xs, ys = [], []
+    for i in range(len(data) - seq_length):
+        x = data[i:(i + seq_length)]
+        y = data[i + seq_length]
+        xs.append(x)
+        ys.append(y)
+    return np.array(xs), np.array(ys)
+
+# Set sequence length
+seq_length = 10
+
+# Create sequences for training and testing
+X_train, y_train = create_sequences(train_data, seq_length)
+X_test, y_test = create_sequences(test_data, seq_length)
+
+print(X_test.shape)
+# Build the RNN model
+model = Sequential()
+model.add(GRU(units=25, return_sequences=True, input_shape=(seq_length, 1)))  # First GRU layer with return_sequences=True
+model.add(GRU(units=25))  # Last GRU layer without return_sequences
+# model.add(Bidirectional(GRU(units=50), input_shape=(seq_length, 1)))
+model.add(Dense(units=1))
+
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
+
+model.compile(optimizer=optimizer, loss='mean_squared_error')
+
+# Train the model
+# model.fit(X_train, y_train, epochs=250, batch_size=len(X_train), validation_split=0.2)
+model.fit(X_train, y_train, epochs=10, batch_size=16, validation_split=0.2)
+
+# Evaluate the model
+train_loss = model.evaluate(X_train, y_train)
+test_loss = model.evaluate(X_test, y_test)
+
+print(f"Train Loss: {train_loss}")
+print(f"Test Loss: {test_loss}")
+
+# Predictions
+predicted = model.predict(X_test)
+predicted_prices = scaler.inverse_transform(predicted)
+original_prices = scaler.inverse_transform(y_test)
+
+print(X_train.shape)
+print(y_train.shape)
+print(X_test.shape)
+print(y_test.shape)
+print(predicted_prices.shape)
+
+for i in range(0, predicted_prices.size):
+  print(original_prices[i], " ", predicted_prices[i])
+
+# Plotting
+plt.figure(figsize=(14, 7))
+plt.plot(df.index[-len(predicted_prices):], df['Close'].values[-len(predicted_prices):], label='Actual Prices')
+plt.plot(df.index[-len(predicted_prices):], predicted_prices, label='Predicted Prices')
+plt.title('Stock Price Prediction using Simple RNN')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.legend()
+plt.grid(True)
+plt.show()
