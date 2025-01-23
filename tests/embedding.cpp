@@ -5,10 +5,10 @@
 #include <iostream>
 
 int main() {
-    auto a = variable({2, 3}, {1, 2, 3,
-                               1, 2, 3});
-    auto v = embedding(10, 3, a);
+    auto input = variable({2, 3}, {0, 2, 3,
+                                   7, 4, 8});
+    embedding lyr = embedding(10, 3, input);
 
-    std::cout << v.mat << "\n";
-    std::cout << v.dense_vecs << "\n";
+    std::cout << lyr.mat << "\n";
+    std::cout << lyr.dense_vecs << "\n";
 }
