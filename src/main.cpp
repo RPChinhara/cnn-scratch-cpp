@@ -38,7 +38,10 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            // Embedding here
+            auto xgg = embedding(5000, 5, x_batch);
+
+            std::cout << xgg.mat.get_shape() << "\n";
+            std::cout << xgg.dense_vecs.get_shape() << "\n";
 
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
@@ -84,9 +87,6 @@ int main() {
 
     tensor dammy_input_token = zeros({60, 25});
     tensor dammy_target_token = fill({60, 25}, 2.0f);
-
-    std::cout << dammy_input_token << "\n";
-    std::cout << dammy_target_token << "\n";
 
     auto input_token_train_test = split(dammy_input_token, 0.2f);
     auto target_token_train_test = split(dammy_target_token, 0.2f);
