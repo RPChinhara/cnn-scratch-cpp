@@ -38,6 +38,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
+            // Embedding here
+
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
 
