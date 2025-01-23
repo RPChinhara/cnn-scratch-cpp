@@ -280,6 +280,8 @@ static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t>& sh
 }
 
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
+    std::cout << std::setprecision(8) << std::fixed;
+
     size_t idx = 0;
 
     if (t.shape.size() == 0) {
@@ -299,9 +301,9 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
         if (t.size == 1) {
             for (auto i = 0; i < t.size; ++i) {
                 if (i == t.size - 1)
-                    os << t[i];
+                    os << std::setw(11) << t[i];
                 else
-                    os << t[i] << " ";
+                    os << std::setw(11) << t[i] << " ";
             }
         } else {
             std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
@@ -357,7 +359,7 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
                 }
 
                 if (i == t.size - 1) {
-                    os << t[i];
+                    os << std::setw(11) << t[i];
                     continue;
                 }
 
@@ -365,12 +367,12 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
                     idx = 0;
 
                 if (t.shape.back() == 1) {
-                    os << t[i];
+                    os << std::setw(11) << t[i];
                 } else {
                     if (idx % (t.shape.back() - 1) == 0 && idx != 0)
-                        os << t[i];
+                        os << std::setw(11) << t[i];
                     else
-                        os << t[i] << " ";
+                        os << std::setw(11) << t[i] << " ";
                 }
 
                 ++idx;
