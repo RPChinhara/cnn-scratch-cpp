@@ -38,10 +38,10 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            auto xgg = embedding(5000, 5, x_batch);
+            embedding lyr = embedding(5000, 5, x_batch);
 
-            std::cout << xgg.mat.get_shape() << "\n";
-            std::cout << xgg.dense_vecs.get_shape() << "\n";
+            std::cout << lyr.mat.get_shape() << "\n";
+            std::cout << lyr.dense_vecs.get_shape() << "\n";
 
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
