@@ -10,19 +10,19 @@
 
 #include <chrono>
 
-constexpr float  lr          = 0.01f;
-constexpr size_t epochs      = 150;
-size_t           batch_size  = 0;
+constexpr float lr = 0.01f;
+constexpr size_t epochs = 150;
+size_t batch_size = 0;
 
-constexpr size_t seq_length  = 10;
-constexpr size_t input_size  = 1;
+constexpr size_t seq_length = 10;
+constexpr size_t input_size = 1;
 constexpr size_t hidden_size = 50;
 constexpr size_t output_size = 1;
 
-constexpr float  beta1       = 0.9f;
-constexpr float  beta2       = 0.999f;
-constexpr float  epsilon     = 1e-7f;
-size_t           t           = 0;
+constexpr float beta1 = 0.9f;
+constexpr float beta2 = 0.999f;
+constexpr float epsilon = 1e-7f;
+size_t t = 0;
 
 tensor w_xh = glorot_uniform({hidden_size, input_size});
 tensor w_hh = glorot_uniform({hidden_size, hidden_size});
