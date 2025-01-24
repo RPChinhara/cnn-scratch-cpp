@@ -18,3 +18,4 @@ AGI
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
 - Mamba is superior to Transformer.
 - So once again how and why Transformer replaced RNNs? Should I really use Transformer? Why can't I go with RNNs?
+    - The first for loop in forward() in rnn.cpp, which goes through number of seq_length which is 10 in this case, will only loop one time in Transformer I guess since it could be parallelized, and that is significant improvement.
