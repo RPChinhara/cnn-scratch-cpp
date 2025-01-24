@@ -17,5 +17,6 @@ AGI
     - However, sizes of weights and biases won't be same for all the models. What should I do?
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
 - Mamba is superior to Transformer.
+- So once again how Transformer replaced RNNs?
 
 TODO: This file could be called AGI.txt. This applies to other notes.txt in other folders.
