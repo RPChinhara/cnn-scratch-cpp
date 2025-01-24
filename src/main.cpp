@@ -9,6 +9,8 @@ constexpr size_t seq_len = 25;
 constexpr size_t model_dim = 5;
 
 tensor encoder(const tensor& x, float batch_size) {
+    // Layer normalization
+    // Multiheaded attention
     return tensor();
 }
 
