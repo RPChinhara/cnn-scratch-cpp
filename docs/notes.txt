@@ -12,5 +12,6 @@ AGI
 - If I made a best NLP model, and train it for a year, will it surpass or be as close as chatGPT?
 - In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
+- Mamba is superior to Transformer.
 
 TODO: This file could be called AGI.txt. This applies to other notes.txt in other folders.
