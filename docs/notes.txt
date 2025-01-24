@@ -14,6 +14,7 @@ AGI
     - I need to do this as soon as one can. Train a best model using same parameters, and keep updating these. I think once I created transformer I need to do this.
     - What happens if the model is overfitted? Add more training data so that losses will probably increase since model hasn't seen the datasets.
     - Search on what kind of datasets is chatGPT is trained on? Use these datasets to train mine.
+    - However, sizes of weights and biases won't be same for all the models. What should I do?
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
 - Mamba is superior to Transformer.
 
