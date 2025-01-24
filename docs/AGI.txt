@@ -17,4 +17,4 @@ AGI
     - However, sizes of weights and biases won't be same for all the models. What should I do?
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
 - Mamba is superior to Transformer.
-- So once again how and why Transformer replaced RNNs?
+- So once again how and why Transformer replaced RNNs? Should I really use Transformer? Why can't I go with RNNs?
