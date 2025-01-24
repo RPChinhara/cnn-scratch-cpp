@@ -8,7 +8,11 @@ constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
 constexpr size_t model_dim = 5;
 
-tensor forward(const tensor& x, float batch_size) {
+tensor encoder(const tensor& x, float batch_size) {
+    return tensor();
+}
+
+tensor decoder(const tensor& x, float batch_size) {
     return tensor();
 }
 
@@ -67,7 +71,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             if (j == num_batches - 1)
                 batch_size = static_cast<float>(end_idx - start_idx);
 
-            tensor y = forward(x_batch, batch_size); // TODO: I may not need to change batch size as this was only required in the CNN
+            tensor outputs = encoder(x_batch, batch_size); // TODO: I may not need to change batch size as this was only required in the CNN
+            tensor y = decoder(outputs, batch_size); // TODO: I may not need to change batch size as this was only required in the CNN
 
             // loss = categorical_cross_entropy(y_batch, y);
 
