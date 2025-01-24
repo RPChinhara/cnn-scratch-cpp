@@ -50,7 +50,7 @@ enum Phase {
     TEST
 };
 
-std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> rnn_forward(const tensor& x, enum Phase phase) {
+std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::vector<tensor>> forward(const tensor& x, enum Phase phase) {
     std::vector<tensor> x_sequence;
     std::vector<tensor> z_sequence;
     std::vector<tensor> h_sequence;
@@ -90,11 +90,11 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
     return std::make_tuple(x_sequence, z_sequence, h_sequence, y_sequence);
 }
 
-void rnn_train(const tensor& x_train, const tensor& y_train) {
+void train(const tensor& x_train, const tensor& y_train) {
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
-        auto [x_sequence, z_sequence, h_sequence, y_sequence] = rnn_forward(x_train, Phase::TRAIN);
+        auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x_train, Phase::TRAIN);
 
         float error = mean_squared_error(transpose(y_train), y_sequence.front());
 
@@ -184,13 +184,13 @@ void rnn_train(const tensor& x_train, const tensor& y_train) {
     }
 }
 
-float rnn_evaluate(const tensor& x, const tensor& y) {
-    auto [x_sequence, z_sequence, h_sequence, y_sequence] = rnn_forward(x, Phase::TEST);
+float evaluate(const tensor& x, const tensor& y) {
+    auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return mean_squared_error(transpose(y), y_sequence.front());
 }
 
-tensor rnn_predict(const tensor& x) {
-    auto [x_sequence, z_sequence, h_sequence, y_sequence] = rnn_forward(x, Phase::TEST);
+tensor predict(const tensor& x) {
+    auto [x_sequence, z_sequence, h_sequence, y_sequence] = forward(x, Phase::TEST);
     return transpose(y_sequence.front());
 }
 
@@ -226,19 +226,19 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    rnn_train(x_y_train.first, x_y_train.second);
+    train(x_y_train.first, x_y_train.second);
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
     std::cout << std::endl << "Time taken: " << duration.count() << " seconds\n\n";
 
-    auto test_loss = rnn_evaluate(x_y_test.first, x_y_test.second);
+    auto test_loss = evaluate(x_y_test.first, x_y_test.second);
     std::cout << "Test loss:  " << test_loss << "\n\n";
 
-    auto predict = scaler.inverse_transform(rnn_predict(x_y_test.first));
+    auto outputs = scaler.inverse_transform(predict(x_y_test.first));
     x_y_test.second = scaler.inverse_transform(x_y_test.second);
     for (auto i = x_y_test.second.size - 15; i < x_y_test.second.size; ++i)
-        std::cout << x_y_test.second[i] << " " << predict[i] << std::endl;
+        std::cout << x_y_test.second[i] << " " << outputs[i] << std::endl;
 
     return 0;
 }
