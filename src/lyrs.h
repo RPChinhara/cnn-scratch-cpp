@@ -35,3 +35,4 @@ class min_max_scaler {
 };
 
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len);
+tensor layer_normalization(const tensor& x);

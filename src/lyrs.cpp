@@ -96,3 +96,20 @@ tensor text_vectorization(const std::vector<std::string>& vocab, const std::vect
 
     return t_new;
 }
+
+tensor layer_normalization(const tensor& x) {
+    const size_t features = x.shape.back();
+
+    float epsilon = 1e-5f;
+    tensor gamma = fill({1, features}, 1.0f);
+    tensor beta = zeros({1, features});
+
+    tensor average = mean(x);
+    tensor var = variance(x);
+
+    tensor x_hat = (x - average) / sqrt(var + epsilon);
+
+    tensor y = gamma * x_hat + beta;
+
+    return y;
+}
