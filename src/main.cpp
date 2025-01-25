@@ -8,25 +8,8 @@ constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
 constexpr size_t model_dim = 5;
 
-tensor layer_normalization(const tensor& x) {
-    const size_t features = x.shape.back();
-
-    float epsilon = 1e-5f;
-    tensor gamma = fill({1, features}, 1.0f);
-    tensor beta = zeros({1, features});
-
-    tensor average = mean(x);
-    tensor var = variance(x);
-
-    tensor x_hat = (x - average) / sqrt(var + epsilon);
-
-    tensor y = gamma * x_hat + beta;
-
-    return y;
-}
-
 tensor encoder(const tensor& x, float batch_size) {
-    tensor foo = variable({2, 4}, {1, 2, 3, 4, 5, 6, 7, 8});
+    tensor foo = variable({2, 4}, {10, 11, 12, 13, 0.2, 0.3, 0.2, 0.111});
 
     tensor a = layer_normalization(foo);
 
