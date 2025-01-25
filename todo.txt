@@ -7,7 +7,7 @@
 - Mamba
 - Diffusion models
 - YOLO
-- Vision transformer
+- Vision transformer (I think use MNIST for the dataset)
 - Vision-Language Models
 - AlphaFold
 - DALL·E
