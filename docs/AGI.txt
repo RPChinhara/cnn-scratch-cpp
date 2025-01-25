@@ -19,3 +19,6 @@ AGI
 - Mamba is superior to Transformer.
 - So once again how and why Transformer replaced RNNs? Should I really use Transformer? Why can't I go with RNNs?
     - The first for loop in forward() in rnn.cpp, which goes through number of seq_length which is 10 in this case, will only loop one time in Transformer I guess since it could be parallelized, and that is significant improvement.
+    - So the improvement on the transformer is just speed that it became faster than RNNs? If I make a model faster than transformer, then it's superior to it? Is speed that essential for my physics goal?
+- Study about physics, and write on this file.
+- All the language models like chatGPT, unless prompts are give, it won't initiate by itself, and this won't make a new theory like why gravity warps spacetime.
