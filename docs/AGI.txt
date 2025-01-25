@@ -15,6 +15,8 @@ AGI
     - What happens if the model is overfitted? Add more training data so that losses will probably increase since model hasn't seen the datasets.
     - Search on what kind of datasets is chatGPT is trained on? Use these datasets to train mine.
     - However, sizes of weights and biases won't be same for all the models. What should I do?
+    - I need to train for cv, nlp, rl?
+        - I have to train using ImageNet for computer vision?
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
 - Mamba is superior to Transformer.
 - So once again how and why Transformer replaced RNNs? Should I really use Transformer? Why can't I go with RNNs?
