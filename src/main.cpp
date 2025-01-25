@@ -9,11 +9,7 @@ constexpr size_t seq_len = 25;
 constexpr size_t model_dim = 5;
 
 tensor encoder(const tensor& x, float batch_size) {
-    tensor foo = variable({2, 4}, {10, 11, 12, 13, 0.2, 0.3, 0.2, 0.111});
-
-    tensor a = layer_normalization(foo);
-
-    std::cout << a << "\n";
+    tensor x_norm = layer_normalization(x);
 
     // Multiheaded attention
     return tensor();
