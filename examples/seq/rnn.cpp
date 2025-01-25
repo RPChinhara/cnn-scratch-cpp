@@ -10,8 +10,6 @@
 
 #include <chrono>
 
-constexpr float lr = 0.01f;
-constexpr size_t epochs = 150;
 size_t batch_size = 0;
 
 constexpr size_t seq_length = 10;
@@ -91,6 +89,9 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
 }
 
 void train(const tensor& x_train, const tensor& y_train) {
+    constexpr float lr = 0.01f;
+    constexpr size_t epochs = 150;
+
     for (auto i = 1; i <= epochs; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
