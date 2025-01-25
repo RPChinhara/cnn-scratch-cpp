@@ -278,6 +278,46 @@ tensor sum(const tensor& t, const size_t axis) {
     return t_new;
 }
 
+tensor mean(const tensor& t) {
+    size_t rows = t.shape.front();
+    size_t cols = t.shape.back();
+    tensor t_new = zeros({rows, 1});
+
+    for (size_t i = 0; i < rows; ++i) {
+        float sum = 0.0f;
+        for (size_t j = 0; j < cols; ++j) {
+            sum += t(i, j);
+        }
+        t_new(i, 0) = sum / cols;
+    }
+
+    return t_new;
+}
+
+tensor variance(const tensor& t) {
+    size_t rows = t.shape.front();
+    size_t cols = t.shape.back();
+    tensor t_new = zeros({rows, 1});
+
+    for (size_t i = 0; i < rows; ++i) {
+        float sum = 0.0f;
+        for (size_t j = 0; j < cols; ++j) {
+            sum += t(i, j);
+        }
+        float mean = sum / cols;
+
+        float variance_sum = 0.0f;
+        for (size_t j = 0; j < cols; ++j) {
+            float diff = t(i, j) - mean;
+            variance_sum += diff * diff;
+        }
+
+        t_new(i, 0) = variance_sum / cols;
+    }
+
+    return t_new;
+}
+
 tensor argmax(const tensor& t) {
     tensor t_new = zeros({t.shape.front()});
 
