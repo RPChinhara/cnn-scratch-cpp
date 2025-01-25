@@ -15,4 +15,7 @@ tensor max(const tensor& t, const size_t axis);
 tensor min(const tensor& t);
 tensor sum(const tensor& t, const size_t axis);
 
+tensor mean(const tensor& t);
+tensor variance(const tensor& t);
+
 tensor argmax(const tensor& t);
