@@ -62,6 +62,7 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             embedding embedding_lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
             tensor position_encoded_tesnor = positional_encoding(seq_len, model_dim);
 
+            // TODO: Should I do this inside the positional_encoding()?
             // Adding embeddings and po position_encoded_tesnor
             size_t idx = 0;
             for (size_t k = 0; k < embedding_lyr.dense_vecs.size; ++k) {
