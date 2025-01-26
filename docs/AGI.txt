@@ -1,4 +1,5 @@
-- If I made a best NLP model (maybe GPT), and train it for a year, will it surpass or be as close as chatGPT?
+Plans:
+----------------
 - In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
     - I need to do this as soon as one can. Train a best model using same parameters, and keep updating these. I think once I created transformer I need to do this.
     - What happens if the model is overfitted? Add more training data so that losses will probably increase since model hasn't seen the datasets.
@@ -6,6 +7,10 @@
     - However, sizes of weights and biases won't be same for all the models. What should I do?
     - I need to train for cv, nlp, rl?
         - I have to train using ImageNet for computer vision?
+- If I made a best NLP model (maybe GPT), and train it for a year, will it surpass or be as close as chatGPT?
+
+Comparisons:
+----------------
 - Obviously, RNNs are replaced by the Transformer, but are CNNs as well?
 - Mamba is superior to Transformer.
 - So once again how and why Transformer replaced RNNs? Should I really use Transformer? Why can't I go with RNNs?
@@ -13,7 +18,7 @@
     - So the improvement on the transformer is just speed that it became faster than RNNs? If I make a model faster than transformer, then it's superior to it? Is speed that essential for my physics goal?
     - In RNNs, unable to capture infos/semantics if the sequence of long was big, but transformer solved this.
 
-Performance:
+Performance Optimization:
 ----------------
 - An alternative to backprop will increase perf.
 - Why do we need all these parameters. Alternatives to it? Alternative ways to train models?
