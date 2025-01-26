@@ -1,3 +1,4 @@
+#include "acts.h"
 #include "arrs.h"
 #include "datasets.h"
 #include "linalg.h"
@@ -31,7 +32,6 @@ tensor multihead_attention(const tensor& x) {
     // TODO: I want to make a operator extract a matrix from 3D or 4D tensor -> this is fundamentally same as slicing 3D/4D tensor to extract matrices so...
     // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level. However, for now, handle it as I always do when dealing with 3D/4D tensors.
 
-    // Prepare q, k, and v
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
 
@@ -39,19 +39,22 @@ tensor multihead_attention(const tensor& x) {
         tensor k_mat = matmul(x_mat, w_k);
         tensor v_mat = matmul(x_mat, w_v);
 
+        // Compute Attention Scores (Scaled Dot-Product Attention)
+        tensor attention_scores = matmul(q_mat, transpose(k_mat));
+        tensor scaled_scores = attention_scores / sqrt(head_dim);
+        tensor attention_weights = softmax(scaled_scores);
+
+        // Compute the Weighted Sum (Apply Attention)
+        tensor output = matmul(attention_weights, v_mat);
+
+        std::cout << output.get_shape() << "\n";
+
         for (size_t j = 0; j < q_mat.size; ++j) {
             q[idx * q_mat.size + i] = q_mat[i];
             k[idx * q_mat.size + i] = k_mat[i];
             v[idx * q_mat.size + i] = v_mat[i];
         }
     }
-
-    // Compute Attention Scores (Scaled Dot-Product Attention)
-
-    std::cout << x.get_shape() << "\n";
-    std::cout << q.get_shape() << "\n";
-    std::cout << k.get_shape() << "\n";
-    std::cout << v.get_shape() << "\n";
 
     return tensor();
 }
