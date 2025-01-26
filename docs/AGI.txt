@@ -1,14 +1,3 @@
-AGI
-----------------
-- Use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity.
-    - Given text, image, and video datasets as a multimodal inputs, predict next tokens. For instance, predict various unknown phenomena in unsolved physics problems.
-    - Things to predict
-        - Wave function
-        - Near the black hole
-        - Space time
-- I might need Fugaku or cloud computing for this.
-- Will quantum neural network really work?
-    - It needs quantum computers, and as of now it's an experimental stuff.
 - If I made a best NLP model (maybe GPT), and train it for a year, will it surpass or be as close as chatGPT?
 - In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
     - I need to do this as soon as one can. Train a best model using same parameters, and keep updating these. I think once I created transformer I need to do this.
@@ -23,14 +12,26 @@ AGI
     - The first for loop in forward() in rnn.cpp, which goes through number of seq_length which is 10 in this case, will only loop one time in Transformer I guess since it could be parallelized, and that is significant improvement.
     - So the improvement on the transformer is just speed that it became faster than RNNs? If I make a model faster than transformer, then it's superior to it? Is speed that essential for my physics goal?
     - In RNNs, unable to capture infos/semantics if the sequence of long was big, but transformer solved this.
-- Study about physics, and write on this file.
-- All the language models like chatGPT, unless prompts are give, it won't initiate by itself, and this won't make a new theory like why gravity warps spacetime.
-- Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
-    - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
-        - Find or develop faster opration than it? This is essentially in math field.
-    - I've implemented NNs, RNNs, CNNs, and now transformer, and I think they are pretty much same, yet from NNs, models are just getting more complex. Like programming language C, can we just use NNs to acheive things that other advanced models can? This simple NNs could be way faster...
 
 Performance:
 ----------------
 - An alternative to backprop will increase perf.
 - Why do we need all these parameters. Alternatives to it? Alternative ways to train models?
+- I might need Fugaku or cloud computing for this.
+- Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
+    - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
+        - Find or develop faster opration than it? This is essentially in math field.
+    - I've implemented NNs, RNNs, CNNs, and now transformer, and I think they are pretty much same, yet from NNs, models are just getting more complex. Like programming language C, can we just use NNs to acheive things that other advanced models can? This simple NNs could be way faster...
+
+Physics:
+----------------
+- Use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity.
+    - Given text, image, and video datasets as a multimodal inputs, predict next tokens. For instance, predict various unknown phenomena in unsolved physics problems.
+    - Things to predict
+        - Wave function
+        - Near the black hole
+        - Space time
+- Will quantum neural network really work?
+    - It needs quantum computers, and as of now it's an experimental stuff.
+- Study about physics, and write on this file.
+- All the language models like chatGPT, unless prompts are give, it won't initiate by itself, and this won't make a new theory like why gravity warps spacetime.
