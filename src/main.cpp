@@ -13,6 +13,7 @@ constexpr size_t model_dim = 5;
 tensor multihead_attention(const tensor& x) {
     constexpr size_t head_dim = 3;
     size_t batch_size = x.shape.front();
+    size_t idx = 0;
 
     // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment.
     tensor w_q = glorot_uniform({model_dim, head_dim});
@@ -27,29 +28,23 @@ tensor multihead_attention(const tensor& x) {
     // TODO: I want to make a operator extract a matrix from 3D or 4D tensor
     // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level.
     for (size_t i = 0; i < batch_size; ++i) {
-        tensor sentence = slice(x, i * seq_len, seq_len);
+        tensor x_mat = slice(x, i * seq_len, seq_len);
 
-        tensor q = matmul(sentence, w_q);
-        tensor k = matmul(sentence, w_k);
-        tensor v = matmul(sentence, w_v);
+        tensor q_mat = matmul(x_mat, w_q);
+        tensor k_mat = matmul(x_mat, w_k);
+        tensor v_mat = matmul(x_mat, w_v);
 
-        // for (size_t i = 0; i < q.size; ++i) {
-        //     q[idx * channels_sum.size + i] = channels_sum[i];
-        //     k[idx * channels_sum.size + i] = channels_sum[i];
-        //     v[idx * channels_sum.size + i] = channels_sum[i];
-        // }
-
-        // std::cout << sentence.get_shape() << "\n";
+        for (size_t j = 0; j < q_mat.size; ++j) {
+            q[idx * q_mat.size + i] = q_mat[i];
+            k[idx * q_mat.size + i] = k_mat[i];
+            v[idx * q_mat.size + i] = v_mat[i];
+        }
     }
 
-
-
-
-
     std::cout << x.get_shape() << "\n";
-    // std::cout << q.get_shape() << "\n";
-    // std::cout << k.get_shape() << "\n";
-    // std::cout << v.get_shape() << "\n";
+    std::cout << q.get_shape() << "\n";
+    std::cout << k.get_shape() << "\n";
+    std::cout << v.get_shape() << "\n";
 
     return tensor();
 }
