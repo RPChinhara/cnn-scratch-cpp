@@ -20,6 +20,10 @@ tensor multihead_attention(const tensor& x) {
     tensor w_k = glorot_uniform({model_dim, head_dim});
     tensor w_v = glorot_uniform({model_dim, head_dim});
 
+    tensor b_q = glorot_uniform({model_dim, head_dim});
+    tensor b_k = glorot_uniform({model_dim, head_dim});
+    tensor b_v = glorot_uniform({model_dim, head_dim});
+
     tensor q = zeros({batch_size, seq_len, head_dim});
     tensor k = zeros({batch_size, seq_len, head_dim});
     tensor v = zeros({batch_size, seq_len, head_dim});
