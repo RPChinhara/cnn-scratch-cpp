@@ -33,13 +33,13 @@ tensor multihead_attention(const tensor& x) {
         tensor k = matmul(sentence, w_k);
         tensor v = matmul(sentence, w_v);
 
-        for (size_t i = 0; i < q.size; ++i) {
-            q[idx * channels_sum.size + i] = channels_sum[i];
-            k[idx * channels_sum.size + i] = channels_sum[i];
-            v[idx * channels_sum.size + i] = channels_sum[i];
-        }
+        // for (size_t i = 0; i < q.size; ++i) {
+        //     q[idx * channels_sum.size + i] = channels_sum[i];
+        //     k[idx * channels_sum.size + i] = channels_sum[i];
+        //     v[idx * channels_sum.size + i] = channels_sum[i];
+        // }
 
-        std::cout << sentence.get_shape() << "\n";
+        // std::cout << sentence.get_shape() << "\n";
     }
 
 
@@ -54,14 +54,14 @@ tensor multihead_attention(const tensor& x) {
     return tensor();
 }
 
-tensor encoder(const tensor& x, float batch_size) {
+tensor encoder(const tensor& x) {
     tensor x_norm = layer_normalization(x);
     tensor output = multihead_attention(x_norm);
 
     return tensor();
 }
 
-tensor decoder(const tensor& x, float batch_size) {
+tensor decoder(const tensor& x) {
     return tensor();
 }
 
@@ -95,8 +95,6 @@ tensor train(const tensor& x_train, const tensor& y_train) {
 
         float loss = 0.0f;
 
-        batch_size = 10.0f;
-
         // TODO: I have to process multiple batches simultaneously in order to speed up training lol That is why batach training is faster right?
         for (size_t j = 0; j < num_batches; ++j) {
             size_t start_idx = j * batch_size;
@@ -118,11 +116,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
                 ++idx;
             }
 
-            if (j == num_batches - 1)
-                batch_size = static_cast<float>(end_idx - start_idx);
-
-            tensor outputs = encoder(embedding_lyr.dense_vecs, batch_size); // TODO: I may not need to change batch size as this was only required in the CNN
-            tensor y = decoder(outputs, batch_size); // TODO: I may not need to change batch size as this was only required in the CNN
+            tensor outputs = encoder(embedding_lyr.dense_vecs); // TODO: I may not need to change batch size as this was only required in the CNN
+            tensor y = decoder(outputs); // TODO: I may not need to change batch size as this was only required in the CNN
 
             // loss = categorical_cross_entropy(y_batch, y);
 
