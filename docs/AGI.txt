@@ -29,3 +29,8 @@ AGI
     - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
         - Find or develop faster opration than it? This is essentially in math field.
     - I've implemented NNs, RNNs, CNNs, and now transformer, and I think they are pretty much same, yet from NNs, models are just getting more complex. Like programming language C, can we just use NNs to acheive things that other advanced models can? This simple NNs could be way faster...
+
+Performance:
+----------------
+- An alternative to backprop will increase perf.
+- Why do we need all these parameters. Alternatives to it? Alternative ways to train models?
