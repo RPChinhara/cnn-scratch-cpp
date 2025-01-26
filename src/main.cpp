@@ -25,7 +25,7 @@ tensor multihead_attention(const tensor& x) {
     tensor v = zeros({batch_size, seq_len, head_dim});
 
     // NOTE: For now, handle it as I always do when dealing with 3D/4D tensors.
-    // TODO: I want to make a operator extract a matrix from 3D or 4D tensor
+    // TODO: I want to make a operator extract a matrix from 3D or 4D tensor -> this is fundamentally same as slicing 3D/4D tensor to extract matrices so...
     // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level.
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
@@ -40,6 +40,8 @@ tensor multihead_attention(const tensor& x) {
             v[idx * q_mat.size + i] = v_mat[i];
         }
     }
+
+    // Next, Q, K, and V, are passed into the multihead attention mechanism
 
     std::cout << x.get_shape() << "\n";
     std::cout << q.get_shape() << "\n";
