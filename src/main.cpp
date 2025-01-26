@@ -10,6 +10,7 @@
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
 constexpr size_t model_dim = 5;
+constexpr size_t num_heads = 4;
 
 tensor multihead_attention(const tensor& x) {
     constexpr size_t head_dim = 3;
