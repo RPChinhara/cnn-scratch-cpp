@@ -8,6 +8,7 @@ Plans:
     - I need to train for cv, nlp, rl?
         - I have to train using ImageNet for computer vision?
 - If I made a best NLP model (maybe GPT), and train it for a year, will it surpass or be as close as chatGPT?
+- I need to train embedding in order to create my own Word2Vec?
 
 Comparisons:
 ----------------
