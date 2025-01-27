@@ -1,3 +1,6 @@
+- How did they come up with attention or multiHeadAttention such as multiplying q and k, and later with v.
+- What are weaknesses of the transformer?
+
 Plans:
 ----------------
 - In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
