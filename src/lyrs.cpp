@@ -11,10 +11,10 @@ embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const 
 
     embedded_tokens = zeros({t.shape.front(), t.shape.back(), embedding_dim});
 
-    for (auto i = 0; i < t.size; ++i) {
-        auto embedding_vec = slice(embedding_mat, t[i], 1);
+    for (size_t i = 0; i < t.size; ++i) {
+        tensor embedding_vec = slice(embedding_mat, t[i], 1);
 
-        for (auto j = 0; j < embedding_vec.size; ++j) {
+        for (size_t j = 0; j < embedding_vec.size; ++j) {
             embedded_tokens[i * embedding_dim + j] = embedding_vec[j];
         }
     }
