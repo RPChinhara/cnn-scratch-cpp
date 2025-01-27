@@ -10,9 +10,9 @@ int main() {
 
     auto input = variable({2, 3}, {0, 2, 3,
                                    7, 4, 9});
-                                   
+
     embedding lyr = embedding(vocab_size, embedding_dim, input);
 
-    std::cout << lyr.mat << "\n";
-    std::cout << lyr.dense_vecs << "\n";
+    std::cout << lyr.embedding_mat << "\n";
+    std::cout << lyr.embedded_tokens << "\n";
 }
