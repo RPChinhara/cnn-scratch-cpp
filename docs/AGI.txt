@@ -14,6 +14,7 @@ Plans:
         - I have to train using ImageNet for computer vision?
 - If I made a best NLP model (maybe GPT), and train it for a year, will it surpass or be as close as chatGPT?
 - I need to train embedding in order to create my own Word2Vec?
+- I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
 
 Comparisons:
 ----------------
