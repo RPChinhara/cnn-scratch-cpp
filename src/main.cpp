@@ -71,21 +71,6 @@ tensor decoder(const tensor& x) {
     return tensor();
 }
 
-// TODO: Move to lyrs.h since it's one of the layer
-tensor positional_encoding(const size_t seq_len, const size_t dim) {
-    tensor output = zeros({seq_len, dim});
-
-    for (size_t i = 0; i < seq_len; ++i) {
-        for (size_t j = 0; j < dim / 2; ++j) {
-            float denominator = pow(10000, 2.0f * j / dim);
-            output(i, 2 * j) = sin(i / denominator);
-            output(i, 2 * j + 1) = cos(i / denominator);
-        }
-    }
-
-    return output;
-}
-
 tensor train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 5;
     constexpr float lr = 0.01f;
@@ -95,7 +80,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
 
     // TODO: Embedding matrix is updated during backpropagation, similar to other model weights.
-    embedding embedding_lyr = embedding(vocab_size, model_dim);
+    auto embedding_lyr = embedding(vocab_size, model_dim);
+    auto positional_encoding_lyr = positional_encoding(seq_len, model_dim);
 
     for (size_t i = 1; i <= epochs; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
@@ -113,22 +99,10 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
             tensor embedded_tokens = embedding_lyr.adapt(x_batch);
-
-            // TODO: I think positional_encoding() should be called before epoch for loop?
-            tensor position_encoded_tensor = positional_encoding(seq_len, model_dim);
-
-            // TODO: Should I do this inside the positional_encoding()?
-            // Adding embeddings and po position_encoded_tesnor
-            size_t idx = 0;
-            const size_t block_size = embedded_tokens.shape[1] * embedded_tokens.shape[2];
-
-            for (size_t k = 0; k < embedded_tokens.size; ++k) {
-                embedded_tokens[k] += position_encoded_tensor[idx];
-                idx = (k + 1) % block_size == 0 ? 0 : idx + 1;
-            }
+            tensor pe = positional_encoding_lyr.adapt(embedded_tokens);
 
             // TODO: I run these functions simultaneously?
-            tensor outputs = encoder(embedded_tokens);
+            tensor outputs = encoder(pe);
             tensor y = decoder(outputs);
 
             // loss = categorical_cross_entropy(y_batch, y);
