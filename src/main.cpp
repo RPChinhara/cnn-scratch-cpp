@@ -94,6 +94,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
     float num_samples = x_train.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
 
+    embedding embedding_lyr = embedding(vocab_size, model_dim);
+
     for (size_t i = 1; i <= epochs; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -109,21 +111,23 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            embedding lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
-            tensor position_encoded_tesnor = positional_encoding(seq_len, model_dim);
+            tensor embedded_tokens = embedding_lyr.adapt(x_batch);
+
+            // TODO: I think positional_encoding() should be called before epoch for loop?
+            tensor position_encoded_tensor = positional_encoding(seq_len, model_dim);
 
             // TODO: Should I do this inside the positional_encoding()?
             // Adding embeddings and po position_encoded_tesnor
             size_t idx = 0;
-            for (size_t k = 0; k < lyr.embedded_tokens.size; ++k) {
-                if (k == lyr.embedded_tokens.shape[1] * lyr.embedded_tokens.shape[2])
-                    idx = 0;
-                lyr.embedded_tokens[k] = lyr.embedded_tokens[k] + position_encoded_tesnor[idx];
-                ++idx;
+            const size_t block_size = embedded_tokens.shape[1] * embedded_tokens.shape[2];
+            
+            for (size_t k = 0; k < embedded_tokens.size; ++k) {
+                embedded_tokens[k] += position_encoded_tensor[idx];
+                idx = (k + 1) % block_size == 0 ? 0 : idx + 1;
             }
 
             // TODO: I run these functions simultaneously?
-            tensor outputs = encoder(lyr.embedded_tokens);
+            tensor outputs = encoder(embedded_tokens);
             tensor y = decoder(outputs);
 
             // loss = categorical_cross_entropy(y_batch, y);
