@@ -6,10 +6,13 @@
 #include <random>
 #include <unordered_map>
 
-embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const tensor& t) {
+embedding::embedding(const size_t vocab_size, const size_t embedding_dim) {
+    this->embedding_dim = embedding_dim;
     embedding_mat = uniform_dist({vocab_size, embedding_dim});
+}
 
-    embedded_tokens = zeros({t.shape.front(), t.shape.back(), embedding_dim});
+tensor embedding::adapt(const tensor& t) {
+    tensor embedded_tokens = zeros({t.shape.front(), t.shape.back(), embedding_dim});
 
     for (size_t i = 0; i < t.size; ++i) {
         tensor embedding_vec = slice(embedding_mat, t[i], 1);
@@ -18,6 +21,8 @@ embedding::embedding(const size_t vocab_size, const size_t embedding_dim, const 
             embedded_tokens[i * embedding_dim + j] = embedding_vec[j];
         }
     }
+
+    return embedded_tokens;
 }
 
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len) {
