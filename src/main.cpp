@@ -122,8 +122,9 @@ tensor train(const tensor& x_train, const tensor& y_train) {
                 ++idx;
             }
 
-            tensor outputs = encoder(lyr.embedded_tokens); // TODO: I may not need to change batch size as this was only required in the CNN
-            tensor y = decoder(outputs); // TODO: I may not need to change batch size as this was only required in the CNN
+            // TODO: I run these functions simultaneously?
+            tensor outputs = encoder(lyr.embedded_tokens);
+            tensor y = decoder(outputs);
 
             // loss = categorical_cross_entropy(y_batch, y);
 
