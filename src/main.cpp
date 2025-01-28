@@ -9,7 +9,7 @@
 
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
-constexpr size_t d_model = 5;
+constexpr size_t d_model = 128;
 constexpr size_t num_heads = 4;
 
 tensor multihead_attention(const tensor& x) {
