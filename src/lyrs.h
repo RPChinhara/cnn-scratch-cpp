@@ -14,6 +14,7 @@ class embedding {
 
 class positional_encoding {
   private:
+    // NOTE: They say that these days, pe is also trained similar to training embedding matrix, but not sure.
     tensor pe;
 
   public:
