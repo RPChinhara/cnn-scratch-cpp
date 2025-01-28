@@ -5,10 +5,11 @@
 
 class embedding {
   public:
+    size_t embedding_dim;
     tensor embedding_mat;
-    tensor embedded_tokens;
 
-    embedding(const size_t vocab_size, const size_t embedding_dim, const tensor& t);
+    embedding(const size_t vocab_size, const size_t embedding_dim);
+    tensor adapt(const tensor& t);
 };
 
 class min_max_scaler {
