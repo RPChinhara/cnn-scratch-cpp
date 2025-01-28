@@ -12,6 +12,15 @@ class embedding {
     tensor adapt(const tensor& t);
 };
 
+class positional_encoding {
+  private:
+    tensor pe;
+
+  public:
+    positional_encoding(const size_t seq_len, const size_t dim);
+    tensor adapt(tensor& embedded_tokens);
+};
+
 class min_max_scaler {
   private:
     tensor data_min;
