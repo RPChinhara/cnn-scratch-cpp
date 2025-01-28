@@ -9,10 +9,12 @@ int main() {
     size_t embedding_dim = 3;
 
     auto input = variable({2, 3}, {0, 2, 3,
+
                                    7, 4, 9});
 
-    embedding lyr = embedding(vocab_size, embedding_dim, input);
+    auto lyr = embedding(vocab_size, embedding_dim);
+    tensor embedded_tokens = lyr.adapt(input);
 
     std::cout << lyr.embedding_mat << "\n";
-    std::cout << lyr.embedded_tokens << "\n";
+    std::cout << embedded_tokens << "\n";
 }
