@@ -115,14 +115,14 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             // TODO: Should I do this inside the positional_encoding()?
             // Adding embeddings and po position_encoded_tesnor
             size_t idx = 0;
-            for (size_t k = 0; k < embedding_lyr.dense_vecs.size; ++k) {
-                if (k == embedding_lyr.dense_vecs.shape[1] * embedding_lyr.dense_vecs.shape[2])
+            for (size_t k = 0; k < embedding_lyr.embedded_tokens.size; ++k) {
+                if (k == embedding_lyr.embedded_tokens.shape[1] * embedding_lyr.embedded_tokens.shape[2])
                     idx = 0;
-                embedding_lyr.dense_vecs[k] = embedding_lyr.dense_vecs[k] + position_encoded_tesnor[idx];
+                embedding_lyr.embedded_tokens[k] = embedding_lyr.embedded_tokens[k] + position_encoded_tesnor[idx];
                 ++idx;
             }
 
-            tensor outputs = encoder(embedding_lyr.dense_vecs); // TODO: I may not need to change batch size as this was only required in the CNN
+            tensor outputs = encoder(embedding_lyr.embedded_tokens); // TODO: I may not need to change batch size as this was only required in the CNN
             tensor y = decoder(outputs); // TODO: I may not need to change batch size as this was only required in the CNN
 
             // loss = categorical_cross_entropy(y_batch, y);
