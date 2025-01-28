@@ -74,7 +74,7 @@ tensor train(const tensor& x_train, const tensor& y_train) {
     float num_samples = x_train.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
 
-    // TODO: Embedding matrix is updated during backpropagation, similar to other model weights.
+    // NOTE: Embedding matrix is updated during backpropagation, similar to other model weights.
     auto embedding_lyr = embedding(vocab_size, d_model);
     auto positional_encoding_lyr = positional_encoding(seq_len, d_model);
 
