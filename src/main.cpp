@@ -99,10 +99,10 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
             tensor embedded_tokens = embedding_lyr.adapt(x_batch);
-            tensor pe = positional_encoding_lyr.adapt(embedded_tokens);
+            tensor input_embeddings = positional_encoding_lyr.adapt(embedded_tokens);
 
             // TODO: I run these functions simultaneously?
-            tensor outputs = encoder(pe);
+            tensor outputs = encoder(input_embeddings);
             tensor y = decoder(outputs);
 
             // loss = categorical_cross_entropy(y_batch, y);
