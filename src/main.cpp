@@ -109,20 +109,20 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
             tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
 
-            embedding embedding_lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
+            embedding lyr = embedding(5000, model_dim, x_batch); // TODO: I think embedding() and positional_encoding() should be called before epoch for loop?
             tensor position_encoded_tesnor = positional_encoding(seq_len, model_dim);
 
             // TODO: Should I do this inside the positional_encoding()?
             // Adding embeddings and po position_encoded_tesnor
             size_t idx = 0;
-            for (size_t k = 0; k < embedding_lyr.embedded_tokens.size; ++k) {
-                if (k == embedding_lyr.embedded_tokens.shape[1] * embedding_lyr.embedded_tokens.shape[2])
+            for (size_t k = 0; k < lyr.embedded_tokens.size; ++k) {
+                if (k == lyr.embedded_tokens.shape[1] * lyr.embedded_tokens.shape[2])
                     idx = 0;
-                embedding_lyr.embedded_tokens[k] = embedding_lyr.embedded_tokens[k] + position_encoded_tesnor[idx];
+                lyr.embedded_tokens[k] = lyr.embedded_tokens[k] + position_encoded_tesnor[idx];
                 ++idx;
             }
 
-            tensor outputs = encoder(embedding_lyr.embedded_tokens); // TODO: I may not need to change batch size as this was only required in the CNN
+            tensor outputs = encoder(lyr.embedded_tokens); // TODO: I may not need to change batch size as this was only required in the CNN
             tensor y = decoder(outputs); // TODO: I may not need to change batch size as this was only required in the CNN
 
             // loss = categorical_cross_entropy(y_batch, y);
