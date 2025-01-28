@@ -25,6 +25,30 @@ tensor embedding::adapt(const tensor& t) {
     return embedded_tokens;
 }
 
+positional_encoding::positional_encoding(const size_t seq_len, const size_t dim) {
+    pe = zeros({seq_len, dim});
+
+    for (size_t i = 0; i < seq_len; ++i) {
+        for (size_t j = 0; j < dim / 2; ++j) {
+            float denominator = pow(10000, 2.0f * j / dim);
+            pe(i, 2 * j) = sin(i / denominator);
+            pe(i, 2 * j + 1) = cos(i / denominator);
+        }
+    }
+}
+
+tensor positional_encoding::adapt(tensor& embedded_tokens) {
+    size_t idx = 0;
+    const size_t block_size = embedded_tokens.shape[1] * embedded_tokens.shape[2];
+
+    for (size_t k = 0; k < embedded_tokens.size; ++k) {
+        embedded_tokens[k] += pe[idx];
+        idx = (k + 1) % block_size == 0 ? 0 : idx + 1;
+    }
+
+    return embedded_tokens;
+}
+
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len) {
     std::unordered_map<std::string, float> vocab_map;
 
