@@ -94,6 +94,7 @@ tensor train(const tensor& x_train, const tensor& y_train) {
     float num_samples = x_train.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
 
+    // TODO: Embedding matrix is updated during backpropagation, similar to other model weights.
     embedding embedding_lyr = embedding(vocab_size, model_dim);
 
     for (size_t i = 1; i <= epochs; ++i) {
@@ -120,7 +121,7 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             // Adding embeddings and po position_encoded_tesnor
             size_t idx = 0;
             const size_t block_size = embedded_tokens.shape[1] * embedded_tokens.shape[2];
-            
+
             for (size_t k = 0; k < embedded_tokens.size; ++k) {
                 embedded_tokens[k] += position_encoded_tensor[idx];
                 idx = (k + 1) % block_size == 0 ? 0 : idx + 1;
