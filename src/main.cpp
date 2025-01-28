@@ -9,7 +9,7 @@
 
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
-constexpr size_t model_dim = 5;
+constexpr size_t d_model = 5;
 constexpr size_t num_heads = 4;
 
 tensor multihead_attention(const tensor& x) {
@@ -18,13 +18,13 @@ tensor multihead_attention(const tensor& x) {
     size_t idx = 0;
 
     // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment.
-    tensor w_q = glorot_uniform({model_dim, head_dim});
-    tensor w_k = glorot_uniform({model_dim, head_dim});
-    tensor w_v = glorot_uniform({model_dim, head_dim});
+    tensor w_q = glorot_uniform({d_model, head_dim});
+    tensor w_k = glorot_uniform({d_model, head_dim});
+    tensor w_v = glorot_uniform({d_model, head_dim});
 
-    tensor b_q = glorot_uniform({model_dim, head_dim});
-    tensor b_k = glorot_uniform({model_dim, head_dim});
-    tensor b_v = glorot_uniform({model_dim, head_dim});
+    tensor b_q = glorot_uniform({d_model, head_dim});
+    tensor b_k = glorot_uniform({d_model, head_dim});
+    tensor b_v = glorot_uniform({d_model, head_dim});
 
     tensor q = zeros({batch_size, seq_len, head_dim});
     tensor k = zeros({batch_size, seq_len, head_dim});
@@ -80,8 +80,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
 
     // TODO: Embedding matrix is updated during backpropagation, similar to other model weights.
-    auto embedding_lyr = embedding(vocab_size, model_dim);
-    auto positional_encoding_lyr = positional_encoding(seq_len, model_dim);
+    auto embedding_lyr = embedding(vocab_size, d_model);
+    auto positional_encoding_lyr = positional_encoding(seq_len, d_model);
 
     for (size_t i = 1; i <= epochs; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
