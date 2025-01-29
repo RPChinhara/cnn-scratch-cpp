@@ -49,34 +49,13 @@ tensor multihead_attention(const tensor& x) {
         tensor k_mat = matmul(x_mat, w_k); // (25, 128)
         tensor v_mat = matmul(x_mat, w_v); // (25, 128)
 
-        std::vector<std::vector<tensor>> heads;
-        std::vector<tensor> head1;
-        std::vector<tensor> head2;
-        std::vector<tensor> head3;
-        std::vector<tensor> head4;
-
-        head1.push_back(q_mat.slice_cols(0, 32));
-        head1.push_back(k_mat.slice_cols(0, 32));
-        head1.push_back(v_mat.slice_cols(0, 32));
-
-        head2.push_back(q_mat.slice_cols(32, 64));
-        head2.push_back(k_mat.slice_cols(32, 64));
-        head2.push_back(v_mat.slice_cols(32, 64));
-
-        head3.push_back(q_mat.slice_cols(64, 96));
-        head3.push_back(k_mat.slice_cols(64, 96));
-        head3.push_back(v_mat.slice_cols(64, 96));
-
-        head4.push_back(q_mat.slice_cols(96, 128));
-        head4.push_back(k_mat.slice_cols(96, 128));
-        head4.push_back(v_mat.slice_cols(96, 128));
-
-        heads.push_back(head1);
-        heads.push_back(head2);
-        heads.push_back(head3);
-        heads.push_back(head4);
+        std::vector<std::vector<tensor>> heads(num_heads);
 
         for (size_t j = 0; j < num_heads; ++j) {
+            heads[j].push_back(q_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
+            heads[j].push_back(k_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
+            heads[j].push_back(v_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
+
             for (size_t k = 0; k < 3; ++k) {
                 // Compute Attention Scores (Scaled Dot-Product Attention)
                 tensor attention_scores = matmul(heads[j][k], transpose(heads[j][k]));
