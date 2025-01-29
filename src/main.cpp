@@ -66,7 +66,7 @@ tensor multihead_attention(const tensor& x) {
             output_heads.push_back(output);
         }
 
-        // Concatenate the outputs of all the head. (25, 32), (25, 32), (25, 32), (25, 32) -> (25, 128)
+        // TODO: Concatenate the outputs of all the head. (25, 32), (25, 32), (25, 32), (25, 32) -> (25, 128)
         // Project the concatenated output using w_o. -> matmul(concatenate_heads, w_o);
 
         // for (size_t k = 0; k < output.size; ++k)
