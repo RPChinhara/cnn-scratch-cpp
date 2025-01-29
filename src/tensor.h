@@ -28,8 +28,13 @@ class tensor {
     float& operator[](const size_t idx) const;
     float& operator()(const size_t i, const size_t j);
     const float& operator()(const size_t i, const size_t j) const;
+
     float get(const std::vector<size_t>& indices) const;
     void set(const std::vector<size_t>& indices, float value) const;
+
+    tensor slice(size_t row_start, size_t row_end, size_t col_start, size_t col_end) const;
+    tensor slice_rows(size_t row_start, size_t row_end) const;
+    tensor slice_cols(size_t col_start, size_t col_end) const;
 
     friend tensor operator+(const float sca, const tensor& t);
     friend tensor operator-(const float sca, const tensor& t);
