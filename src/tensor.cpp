@@ -232,6 +232,29 @@ void tensor::set(const std::vector<size_t>& indices, float value) const {
     elems[index] = value;
 }
 
+tensor tensor::slice(size_t row_start, size_t row_end, size_t col_start, size_t col_end) const { // NOTE: Only supports 2D tensor
+    size_t new_rows = row_end - row_start;
+    size_t new_cols = col_end - col_start;
+    tensor result = zeros({new_rows, new_cols});
+
+    for (size_t i = row_start; i < row_end; ++i) {
+        for (size_t j = col_start; j < col_end; ++j) {
+            result(i - row_start, j - col_start) = this->operator()(i, j);
+        }
+    }
+    return result;
+}
+
+tensor tensor::slice_rows(size_t row_start, size_t row_end) const { // NOTE: Only supports 2D tensor
+    size_t cols = this->shape.back();
+    return slice(row_start, row_end, 0, cols);
+}
+
+tensor tensor::slice_cols(size_t col_start, size_t col_end) const { // NOTE: Only supports 2D tensor
+    size_t rows = this->shape.front();
+    return slice(0, rows, col_start, col_end);
+}
+
 tensor operator+(const float sca, const tensor& t) {
     tensor t_sca = fill(t.shape, sca);
     return add(t_sca, t);
