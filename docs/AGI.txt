@@ -13,6 +13,7 @@ Plans:
     - I need to train for cv, nlp, rl?
         - I have to train using ImageNet for computer vision?
     - When I train it, do it on copy of dora, this way I can work on my project simultaneously.
+    - Is transfer learning used repeadely to improve the model or just use pretrained model to train using unseen dataset to make a new model?
 - If I made a best NLP model (maybe GPT), and train it for a year, will it surpass or be as close as chatGPT?
 - I need to train embedding in order to create my own Word2Vec?
 - I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
