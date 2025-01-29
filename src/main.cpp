@@ -9,56 +9,67 @@
 
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
-constexpr size_t d_model = 128;
+constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
 constexpr size_t num_heads = 4;
 
 tensor multihead_attention(const tensor& x) {
-    constexpr size_t head_dim = 3;
     size_t batch_size = x.shape.front();
-    tensor outputs = zeros({batch_size, seq_len, head_dim});
+    size_t head_dim;
+
+    if (num_heads == 1)
+        head_dim = d_model;
+    else
+        head_dim = d_model / num_heads;
+
+    tensor outputs = zeros({batch_size, seq_len, d_model});
 
     // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment.
-    std::vector<tensor> q_mat, k_mat, v_mat;
-    std::vector<tensor> w_q, w_k, w_v, b_q, b_k, b_v;
-    std::vector<tensor> w_o; // TODO: What is the dimension?
+    tensor w_q = glorot_uniform({d_model, d_model});
+    tensor w_k = glorot_uniform({d_model, d_model});
+    tensor w_v = glorot_uniform({d_model, d_model});
 
-    for (size_t i = 0; i < num_heads; ++i) {
-        q_mat.push_back(zeros({seq_len, d_model}));
-        k_mat.push_back(zeros({seq_len, d_model}));
-        v_mat.push_back(zeros({seq_len, d_model}));
+    tensor b_q = glorot_uniform({d_model, 1}); // NOTE: For perf, daclare it with shape of (d_model, head_dim)?
+    tensor b_k = glorot_uniform({d_model, 1});
+    tensor b_v = glorot_uniform({d_model, 1});
 
-        w_q.push_back(glorot_uniform({d_model, head_dim}));
-        w_k.push_back(glorot_uniform({d_model, head_dim}));
-        w_v.push_back(glorot_uniform({d_model, head_dim}));
-
-        b_q.push_back(glorot_uniform({d_model, 1})); // NOTE: For perf, daclare it with shape of (d_model, head_dim)?
-        b_k.push_back(glorot_uniform({d_model, 1}));
-        b_v.push_back(glorot_uniform({d_model, 1}));
-    }
+    tensor w_o = glorot_uniform({d_model, d_model});
 
     // TODO: I want to make a operator extract a matrix from 3D or 4D tensor -> this is fundamentally same as slicing 3D/4D tensor to extract matrices so...
     // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level. However, for now, handle it as I always do when dealing with 3D/4D tensors.
 
+    // x: (10, 25, 128) or (8, 25, 128)
+    // x_mat: (25, 128)
+    // q_mat, k_mat, v_mat: (25, 32)
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
+        std::vector<tensor> outputs_heads;
 
-        for (size_t j = 0; j < num_heads; ++j) {
-            q_mat[j] = matmul(x_mat, w_q[j]); // x_mat: (25, 128) -> (25, 32), (25, 32), (25, 32), (25, 32)
-            k_mat[j] = matmul(x_mat, w_k[j]);
-            v_mat[j] = matmul(x_mat, w_v[j]);
+        tensor q_mat = matmul(x_mat, w_q); // (25, 128)
+        tensor k_mat = matmul(x_mat, w_k); // (25, 128)
+        tensor v_mat = matmul(x_mat, w_v); // (25, 128)
 
-            // Compute Attention Scores (Scaled Dot-Product Attention)
-            tensor attention_scores = matmul(q_mat[j], transpose(k_mat[j]));
-            tensor scaled_scores = attention_scores / sqrt(head_dim);
-            tensor attention_weights = softmax(scaled_scores);
+        // split q_mat, k_mat, and v_mat to 4 tensors of (25, 32)
 
-            // Compute the Weighted Sum (Apply Attention)
-            tensor output = matmul(attention_weights, v_mat[j]);
-        }
+        std::cout << q_mat.slice_cols(0, 32).get_shape() << "\n";
+        std::cout << q_mat.slice_cols(32, 64).get_shape() << "\n";
+        std::cout << q_mat.slice_cols(64, 96).get_shape() << "\n";
+        std::cout << q_mat.slice_cols(96, 128).get_shape() << "\n";
+        std::cout << "fuck\n";
+
+        // for (size_t j = 0; j < num_heads; ++j) {
+        //     // Compute Attention Scores (Scaled Dot-Product Attention)
+        //     tensor attention_scores = matmul(q_mat[j], transpose(k_mat[j]));
+        //     tensor scaled_scores = attention_scores / sqrt(head_dim);
+        //     tensor attention_weights = softmax(scaled_scores);
+
+        //     // Compute the Weighted Sum (Apply Attention)
+        //     tensor output = matmul(attention_weights, v_mat[j]);
+        //     outputs_heads.push_back(output);
+        // }
 
         // Concatenate the outputs of all the head. (25, 32), (25, 32), (25, 32), (25, 32) -> (25, 128)
-        // Project the concatenated output using w_o. matmul(concatenate_heads,
+        // Project the concatenated output using w_o. -> matmul(concatenate_heads, w_o);
 
         // for (size_t k = 0; k < output.size; ++k)
         //     outputs[i * output.size + k] = output[k];
