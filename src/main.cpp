@@ -51,6 +51,7 @@ tensor multihead_attention(const tensor& x) {
 
         std::vector<std::vector<tensor>> heads(num_heads);
 
+        // TODO: I think I need to threading for this?
         for (size_t j = 0; j < num_heads; ++j) {
             heads[j].push_back(q_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
             heads[j].push_back(k_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
