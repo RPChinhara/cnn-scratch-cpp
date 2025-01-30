@@ -49,6 +49,43 @@ tensor clip_by_value(const tensor& t, float clip_val_min, float clip_val_max) {
     return t_new;
 }
 
+tensor concat(const std::vector<tensor>& tensors, int axis) {
+    std::vector<size_t> new_shape = tensors[0].shape;
+
+    new_shape[axis] = 0;
+    for (const auto& t : tensors)
+        new_shape[axis] += t.shape[axis];
+
+    tensor result = zeros(new_shape);
+
+    int offset = 0;
+    for (const auto& t : tensors) {
+        if (axis == 0) {
+            int row_offset = 0;
+            for (const auto& t : tensors) {
+                for (int i = 0; i < t.shape[0]; ++i) {
+                    for (int j = 0; j < t.shape[1]; ++j) {
+                        result(row_offset + i, j) = t(i, j);
+                    }
+                }
+                row_offset += t.shape[0];
+            }
+        } else if (axis == 1) {
+            int col_offset = 0;
+            for (const auto& t : tensors) {
+                for (int i = 0; i < t.shape[0]; ++i) {
+                    for (int j = 0; j < t.shape[1]; ++j) {
+                        result(i, col_offset + j) = t(i, j);
+                    }
+                }
+                col_offset += t.shape[1];
+            }
+        }
+    }
+
+    return result;
+}
+
 tensor slice(const tensor& t, const size_t begin, const size_t size) {
     tensor t_new = zeros({size, t.shape.back()});
 
