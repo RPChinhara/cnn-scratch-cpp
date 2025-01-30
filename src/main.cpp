@@ -39,7 +39,6 @@ tensor multihead_attention(const tensor& x) {
 
     // x: (10, 25, 128) or (8, 25, 128)
     // x_mat: (25, 128)
-    // q_mat, k_mat, v_mat: (25, 32)
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
@@ -80,6 +79,8 @@ tensor multihead_attention(const tensor& x) {
 tensor encoder(const tensor& x) {
     tensor x_norm = layer_normalization(x);
     tensor output = multihead_attention(x_norm);
+    // feedforward here
+    // tensor y = (matmul(w3, output) + b3));
 
     return tensor();
 }
