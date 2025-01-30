@@ -42,7 +42,7 @@ tensor multihead_attention(const tensor& x) {
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
-        std::vector<tensor> output_heads;
+        std::vector<tensor> attention_heads;
 
         tensor q_mat = matmul(x_mat, w_q); // (25, 128)
         tensor k_mat = matmul(x_mat, w_k); // (25, 128)
@@ -56,21 +56,19 @@ tensor multihead_attention(const tensor& x) {
             heads[j].push_back(k_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
             heads[j].push_back(v_mat.slice_cols(j * head_dim, (j + 1) * head_dim));
 
-            // Compute Attention Scores (Scaled Dot-Product Attention)
             tensor attention_scores = matmul(heads[j][0], transpose(heads[j][1]));
             tensor scaled_scores = attention_scores / sqrt(head_dim);
             tensor attention_weights = softmax(scaled_scores);
 
-            // Compute the Weighted Sum (Apply Attention)
-            tensor output = matmul(attention_weights, heads[j][2]);
-            output_heads.push_back(output);
+            tensor weighted_sum = matmul(attention_weights, heads[j][2]);
+            attention_heads.push_back(weighted_sum);
         }
 
-        // TODO: Concatenate the outputs of all the head. (25, 32), (25, 32), (25, 32), (25, 32) -> (25, 128)
-        // Project the concatenated output using w_o. -> matmul(concatenate_heads, w_o);
+        tensor concatenated_heads = concat(attention_heads, 1);
+        tensor output = matmul(concatenated_heads, w_o);
 
-        // for (size_t k = 0; k < output.size; ++k)
-        //     outputs[i * output.size + k] = output[k];
+        for (size_t j = 0; j < output.size; ++j)
+            outputs[i * output.size + j] = output[j];
     }
 
     return outputs;
