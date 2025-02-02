@@ -12,11 +12,17 @@ constexpr size_t seq_len = 25;
 constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
 constexpr size_t num_heads = 4;
 
-tensor w_1 = glorot_uniform({d_model, 32}); // TODO: intermidiate size should be bigger than d_model?
+tensor w_1 = glorot_uniform({d_model, 32});
 tensor w_2 = glorot_uniform({32, d_model});
 
 tensor b_1 = glorot_uniform({seq_len, 1});
 tensor b_2 = glorot_uniform({seq_len, 1});
+
+std::vector<tensor> w = {
+    glorot_uniform({d_model, d_model}),
+    glorot_uniform({d_model, d_model}),
+    glorot_uniform({d_model, d_model})
+};
 
 tensor multihead_attention(const tensor& x) {
     size_t batch_size = x.shape.front();
