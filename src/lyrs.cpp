@@ -1,5 +1,7 @@
 #include "lyrs.h"
+#include "acts.h"
 #include "arrs.h"
+#include "linalg.h"
 #include "rand.h"
 #include "strings.h"
 
@@ -142,4 +144,68 @@ tensor layer_normalization(const tensor& x) {
     tensor y = gamma * x_hat + beta;
 
     return y;
+}
+
+tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, const size_t seq_len, const size_t d_model) {
+    constexpr size_t num_heads = 4;
+    size_t batch_size = x.shape.front();
+    size_t head_dim;
+
+    if (num_heads == 1)
+        head_dim = d_model;
+    else
+        head_dim = d_model / num_heads;
+
+    tensor outputs = zeros({batch_size, seq_len, d_model});
+
+    // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment. I think this function can use these params even if I move it to lyrs file.
+
+    // TODO: I may need each weights and biases for number of heads
+    tensor w_q = glorot_uniform({d_model, d_model});
+    tensor w_k = glorot_uniform({d_model, d_model});
+    tensor w_v = glorot_uniform({d_model, d_model});
+
+    tensor b_q = glorot_uniform({d_model, 1}); // NOTE: For perf, daclare it with shape of (d_model, head_dim)?
+    tensor b_k = glorot_uniform({d_model, 1});
+    tensor b_v = glorot_uniform({d_model, 1});
+
+    tensor w_o = glorot_uniform({d_model, d_model});
+
+    // TODO: I want to make a operator extract a matrix from 3D or 4D tensor -> this is fundamentally same as slicing 3D/4D tensor to extract matrices so...
+    // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level. However, for now, handle it as I always do when dealing with 3D/4D tensors.
+
+    // x: (10, 25, 128) or (8, 25, 128)
+    // x_mat: (25, 128)
+
+    for (size_t i = 0; i < batch_size; ++i) {
+        tensor x_mat = slice(x, i * seq_len, seq_len);
+        std::vector<tensor> attention_heads;
+        tensor output;
+
+        std::vector<std::vector<tensor>> heads(num_heads);
+
+        // TODO: I think I need Multithreading for this?
+        for (size_t j = 0; j < num_heads; ++j) {
+            tensor q_mat = matmul(x_mat, w[j][0]);
+            tensor k_mat = matmul(x_mat, w[j][1]);
+            tensor v_mat = matmul(x_mat, w[j][2]);
+
+            tensor attention_scores = matmul(q_mat, transpose(k_mat));
+            tensor scaled_scores = attention_scores / sqrt(head_dim);
+            tensor attention_weights = softmax(scaled_scores);
+
+            // TODO: Add mask here to attention_weights?
+
+            tensor weighted_sum = matmul(attention_weights, v_mat);
+            attention_heads.push_back(weighted_sum);
+        }
+
+        tensor concatenated_heads = concat(attention_heads, 1);
+        output = matmul(concatenated_heads, w[num_heads][0]);
+
+        for (size_t j = 0; j < output.size; ++j)
+            outputs[i * output.size + j] = output[j];
+    }
+
+    return outputs;
 }
