@@ -158,19 +158,6 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 
-    // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment. I think this function can use these params even if I move it to lyrs file.
-
-    // TODO: I may need each weights and biases for number of heads
-    tensor w_q = glorot_uniform({d_model, d_model});
-    tensor w_k = glorot_uniform({d_model, d_model});
-    tensor w_v = glorot_uniform({d_model, d_model});
-
-    tensor b_q = glorot_uniform({d_model, 1}); // NOTE: For perf, daclare it with shape of (d_model, head_dim)?
-    tensor b_k = glorot_uniform({d_model, 1});
-    tensor b_v = glorot_uniform({d_model, 1});
-
-    tensor w_o = glorot_uniform({d_model, d_model});
-
     // TODO: I want to make a operator extract a matrix from 3D or 4D tensor -> this is fundamentally same as slicing 3D/4D tensor to extract matrices so...
     // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level. However, for now, handle it as I always do when dealing with 3D/4D tensors.
 
