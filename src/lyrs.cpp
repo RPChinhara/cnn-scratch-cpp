@@ -180,9 +180,6 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
         std::vector<tensor> attention_heads;
-        tensor output;
-
-        std::vector<std::vector<tensor>> heads(num_heads);
 
         // TODO: I think I need Multithreading for this?
         for (size_t j = 0; j < num_heads; ++j) {
@@ -201,7 +198,7 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
         }
 
         tensor concatenated_heads = concat(attention_heads, 1);
-        output = matmul(concatenated_heads, w[num_heads][0]);
+        tensor output = matmul(concatenated_heads, w[num_heads][0]);
 
         for (size_t j = 0; j < output.size; ++j)
             outputs[i * output.size + j] = output[j];
