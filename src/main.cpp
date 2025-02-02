@@ -12,6 +12,12 @@ constexpr size_t seq_len = 25;
 constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
 constexpr size_t num_heads = 4;
 
+tensor w_1 = glorot_uniform({d_model, 32}); // TODO: intermidiate size should be bigger than d_model?
+tensor w_2 = glorot_uniform({32, d_model});
+
+tensor b_1 = glorot_uniform({seq_len, 1});
+tensor b_2 = glorot_uniform({seq_len, 1});
+
 tensor multihead_attention(const tensor& x) {
     size_t batch_size = x.shape.front();
     size_t head_dim;
@@ -23,7 +29,9 @@ tensor multihead_attention(const tensor& x) {
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 
-    // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment.
+    // TODO: These should be daclared at the top of translation unit as always, but I want this function to be impelmented in lyrs files. I don't know what to do at the moment. I think this function can use these params even if I move it to lyrs file.
+
+    // TODO: I may need each weights and biases for number of heads
     tensor w_q = glorot_uniform({d_model, d_model});
     tensor w_k = glorot_uniform({d_model, d_model});
     tensor w_v = glorot_uniform({d_model, d_model});
@@ -44,9 +52,9 @@ tensor multihead_attention(const tensor& x) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
         std::vector<tensor> attention_heads;
 
-        tensor q_mat = matmul(x_mat, w_q); // (25, 128)
-        tensor k_mat = matmul(x_mat, w_k); // (25, 128)
-        tensor v_mat = matmul(x_mat, w_v); // (25, 128)
+        tensor q_mat = matmul(x_mat, w_q);
+        tensor k_mat = matmul(x_mat, w_k);
+        tensor v_mat = matmul(x_mat, w_v);
 
         std::vector<std::vector<tensor>> heads(num_heads);
 
@@ -59,6 +67,8 @@ tensor multihead_attention(const tensor& x) {
             tensor attention_scores = matmul(heads[j][0], transpose(heads[j][1]));
             tensor scaled_scores = attention_scores / sqrt(head_dim);
             tensor attention_weights = softmax(scaled_scores);
+
+            // TODO: Add mask here to attention_weights?
 
             tensor weighted_sum = matmul(attention_weights, heads[j][2]);
             attention_heads.push_back(weighted_sum);
@@ -75,12 +85,26 @@ tensor multihead_attention(const tensor& x) {
 }
 
 tensor encoder(const tensor& x) {
-    tensor x_norm = layer_normalization(x);
-    tensor output = multihead_attention(x_norm);
-    // feedforward here
-    // tensor y = (matmul(w3, output) + b3));
+    tensor output = multihead_attention(x);
+    tensor attention_output = layer_normalization(output + x);
 
-    return tensor();
+    // attention_output: (10, 25, 128) or (8, 25, 128)
+
+    size_t batch_size = x.shape.front();
+
+    tensor outputs = zeros({batch_size, seq_len, d_model});
+
+    // TODO: How to deal with matmul with shape 3D/4D? Do it as always or make new system?
+    for (size_t i = 0; i < batch_size; ++i) {
+        tensor attention_output_mat = slice(attention_output, i * seq_len, seq_len);
+        tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2; // (25, 128) x (128, 32) x (32, 128) = (25, 128)
+        tensor y = (ffn + attention_output_mat); // TODO: Add biases // (25, 128) x (25, 128)
+
+        for (size_t j = 0; j < y.size; ++j)
+            outputs[i * y.size + j] = y[j];
+    }
+
+    return outputs;
 }
 
 tensor decoder(const tensor& x) {
