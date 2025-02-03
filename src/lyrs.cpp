@@ -152,8 +152,6 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 
-    // TODO: Should I modify matmul() to support 3D or even 4D tensors like NumPy does? There's no concept of 3D matrix multiplication in traditional math, so it would essentially be the same whether the 3D handling is done in matmul() or at this level. However, for now, handle it as I always do when dealing with 3D/4D tensors.
-
     // x: (10, 25, 128) or (8, 25, 128)
     // x_mat: (25, 128)
 
