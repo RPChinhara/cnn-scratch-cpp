@@ -146,15 +146,9 @@ tensor layer_normalization(const tensor& x) {
     return y;
 }
 
-tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, const size_t seq_len, const size_t d_model) {
-    constexpr size_t num_heads = 4;
+tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, const size_t seq_len, const size_t d_model, const size_t num_heads) {
     size_t batch_size = x.shape.front();
-    size_t head_dim;
-
-    if (num_heads == 1)
-        head_dim = d_model;
-    else
-        head_dim = d_model / num_heads;
+    size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 

@@ -15,9 +15,9 @@ size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
 std::vector<std::vector<tensor>> w = {
     {
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim})
+        glorot_uniform({d_model, head_dim}), // w_q
+        glorot_uniform({d_model, head_dim}), // w_k
+        glorot_uniform({d_model, head_dim})  // w_v
     },
     {
         glorot_uniform({d_model, head_dim}),
@@ -35,7 +35,7 @@ std::vector<std::vector<tensor>> w = {
         glorot_uniform({d_model, head_dim})
     },
     {
-        glorot_uniform({d_model, d_model})
+        glorot_uniform({d_model, d_model}) // w_o
     }
 };
 
@@ -46,7 +46,7 @@ tensor b_1 = glorot_uniform({seq_len, 1});
 tensor b_2 = glorot_uniform({seq_len, 1});
 
 tensor encoder(const tensor& x) {
-    tensor output = multihead_attention(x, w, seq_len, d_model);
+    tensor output = multihead_attention(x, w, seq_len, d_model, num_heads);
     tensor attention_output = layer_normalization(output + x);
 
     // attention_output: (10, 25, 128) or (8, 25, 128)
