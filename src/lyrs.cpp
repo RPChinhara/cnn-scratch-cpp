@@ -179,7 +179,7 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
         }
 
         tensor concatenated_heads = concat(attention_heads, 1);
-        tensor output = matmul(concatenated_heads, w[num_heads][0]);
+        tensor output = matmul(concatenated_heads, w[w.size() - 1][0]);
 
         for (size_t j = 0; j < output.size; ++j)
             outputs[i * output.size + j] = output[j];
