@@ -55,7 +55,6 @@ tensor encoder(const tensor& x) {
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 
-    // TODO: How to deal with matmul with shape 3D/4D? Do it as always or make new system?
     for (size_t i = 0; i < batch_size; ++i) {
         tensor attention_output_mat = slice(attention_output, i * seq_len, seq_len);
         tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2; // (25, 128) x (128, 32) x (32, 128) = (25, 128)
