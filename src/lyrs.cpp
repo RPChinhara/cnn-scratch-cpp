@@ -31,10 +31,11 @@ positional_encoding::positional_encoding(const size_t seq_len, const size_t dim)
     pe = zeros({seq_len, dim});
 
     for (size_t i = 0; i < seq_len; ++i) {
+        float pos = static_cast<float>(i);
         for (size_t j = 0; j < dim / 2; ++j) {
-            float denominator = pow(10000, 2.0f * j / dim);
-            pe(i, 2 * j) = sin(i / denominator);
-            pe(i, 2 * j + 1) = cos(i / denominator);
+            float denominator = pow(10000.0f, 2.0f * j / dim);
+            pe(i, 2 * j) = sin(pos / denominator);
+            pe(i, 2 * j + 1) = cos(pos / denominator);
         }
     }
 }
