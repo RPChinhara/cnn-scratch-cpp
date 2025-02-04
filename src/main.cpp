@@ -61,9 +61,7 @@ tensor encoder(const tensor& x) {
         std::copy(ffn.elems, ffn.elems + ffn.size, ffn_output.elems + i * ffn.size);
     }
 
-    tensor y = layer_normalization(ffn_output + attention_output);
-
-    return y;
+    return layer_normalization(ffn_output + attention_output);
 }
 
 tensor decoder(const tensor& x) {
