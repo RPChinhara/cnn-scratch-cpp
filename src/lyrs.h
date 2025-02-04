@@ -3,25 +3,6 @@
 #include "math.h"
 #include "tensor.h"
 
-class embedding {
-  public:
-    size_t embedding_dim;
-    tensor embedding_mat;
-
-    embedding(const size_t vocab_size, const size_t embedding_dim);
-    tensor adapt(const tensor& t);
-};
-
-class positional_encoding {
-  private:
-    // NOTE: They say that these days, pe is also trained similar to training embedding matrix, but not sure.
-    tensor pe;
-
-  public:
-    positional_encoding(const size_t seq_len, const size_t dim);
-    tensor adapt(tensor& embedded_tokens);
-};
-
 class min_max_scaler {
   private:
     tensor data_min;
@@ -43,6 +24,25 @@ class min_max_scaler {
         return scaled_data * (data_max - data_min) + data_min;
     }
 
+};
+
+class embedding {
+  public:
+    size_t embedding_dim;
+    tensor embedding_mat;
+
+    embedding(const size_t vocab_size, const size_t embedding_dim);
+    tensor adapt(const tensor& t);
+};
+
+class positional_encoding {
+  private:
+    // NOTE: They say that these days, pe is also trained similar to training embedding matrix, but not sure.
+    tensor pe;
+
+  public:
+    positional_encoding(const size_t seq_len, const size_t dim);
+    tensor adapt(tensor& embedded_tokens);
 };
 
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len);
