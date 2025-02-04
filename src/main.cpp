@@ -52,17 +52,18 @@ tensor encoder(const tensor& x) {
 
     size_t batch_size = x.shape.front();
 
-    tensor outputs = zeros({batch_size, seq_len, d_model});
+    tensor ffn_output = zeros({batch_size, seq_len, d_model});
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor attention_output_mat = slice(attention_output, i * seq_len, seq_len);
         tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2;
-        tensor y = layer_normalization(ffn + attention_output_mat);
 
-        std::copy(y.elems, y.elems + y.size, outputs.elems + i * y.size);
+        std::copy(ffn.elems, ffn.elems + ffn.size, ffn_output.elems + i * ffn.size);
     }
 
-    return outputs;
+    tensor y = layer_normalization(ffn_output + attention_output);
+
+    return y;
 }
 
 tensor decoder(const tensor& x) {
