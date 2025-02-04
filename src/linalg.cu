@@ -52,6 +52,7 @@ tensor matmul(const tensor& t1, const tensor& t2) {
         return matmul_cuda(t1, t2);
     }
 
+    // NOTE: This supports matmul between 3D matrices, but it has not use cases for now. It was created for ffn in transformer encoder.
     size_t batch_size = 1;
     for (size_t i = 0; i < t1.shape.size() - 2; ++i) {
         batch_size *= t1.shape[i];
