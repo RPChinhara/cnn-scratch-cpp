@@ -43,14 +43,12 @@ std::vector<std::vector<tensor>> w = {
 tensor w_1 = glorot_uniform({d_model, d_ff});
 tensor w_2 = glorot_uniform({d_ff, d_model});
 
-tensor b_1 = glorot_uniform({seq_len, 1});
-tensor b_2 = glorot_uniform({seq_len, 1});
+tensor b_1 = glorot_uniform({1, d_ff});
+tensor b_2 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
     tensor output = multihead_attention(x, w, seq_len, d_model, num_heads);
     tensor attention_output = layer_normalization(output + x);
-
-    // attention_output: (10, 25, 128) or (8, 25, 128)
 
     size_t batch_size = x.shape.front();
 
@@ -58,8 +56,8 @@ tensor encoder(const tensor& x) {
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor attention_output_mat = slice(attention_output, i * seq_len, seq_len);
-        tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2; // (25, 128) x (128, 32) x (32, 128) = (25, 128)
-        tensor y = (ffn + attention_output_mat); // TODO: Add biases // (25, 128) x (25, 128)
+        tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2;
+        tensor y = (ffn + attention_output_mat); // TODO: Add biases
 
         std::copy(y.elems, y.elems + y.size, outputs.elems + i * y.size);
     }
