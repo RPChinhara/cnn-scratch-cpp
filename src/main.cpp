@@ -47,6 +47,7 @@ tensor b_1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but i
 tensor b_2 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
+    // NOTE: using postnorm, but there is prenorm as well
     tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads);
     tensor attention_output = layer_normalization(mha + x);
 
