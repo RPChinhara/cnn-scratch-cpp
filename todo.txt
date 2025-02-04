@@ -2,17 +2,18 @@
 - BERT
 - GPT
 - BART
+- Llama
+- Vision-Language Models
+- DeepSeek
+- MoE
+- Story Visualization
 - Autoencoder
 - GAN
 - Mamba
 - Diffusion models
 - YOLO
 - Vision transformer (MNIST for the dataset?)
-- Vision-Language Models
 - AlphaFold
 - DALL·E
-- Story Visualization
 - Multimodal learning
-- MoE
-- DeepSeek
 - AGI (Physics)
