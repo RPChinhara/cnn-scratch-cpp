@@ -15,4 +15,4 @@
 - Multimodal learning
 - MoE
 - DeepSeek
-- AGI
+- AGI (Physics)
