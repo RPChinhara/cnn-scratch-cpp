@@ -41,6 +41,7 @@ Performance Optimization:
 - What can I do to increase perf? Make custom library for array and vector? Search it. I mean in general in CS, what can I do other than optimizing models.
 - Is backprop parallelizable? What's standard?
     - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
+- Dependency is really bad, weather it's from RNNs, CNNs or backprop. Operate everything in parallel if possible for performance.
 
 Physics:
 ----------------
