@@ -73,7 +73,7 @@ std::tuple<std::vector<tensor>, std::vector<tensor>, std::vector<tensor>, std::v
             idx += seq_length;
         }
 
-        // TODO: The correct and common order is xW (post-multipication). Most deep learning libraries (TensorFlow, PyTorch, NumPy) use batch-first order, meaning xW is the natural choice.
+        // TODO: The correct and common order is xW (post-multipication). Most deep learning libraries (TensorFlow, PyTorch, NumPy) use batch-first order, meaning xW is the natural choice. I think the order in this code is Wx because I'm ignoring batch dimension is this model.
 
         tensor z_t = matmul(w_xh, transpose(x_t)) + matmul(w_hh, h_t) + b_h;
         h_t = relu(z_t);
