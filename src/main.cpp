@@ -47,8 +47,8 @@ tensor b_1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but i
 tensor b_2 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
-    tensor output = multihead_attention(x, w, seq_len, d_model, num_heads);
-    tensor attention_output = layer_normalization(output + x);
+    tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads);
+    tensor attention_output = layer_normalization(mha + x);
 
     size_t batch_size = x.shape.front();
 
