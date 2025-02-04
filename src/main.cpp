@@ -7,6 +7,8 @@
 
 #include <chrono>
 
+constexpr float batch_size = 10.0f;
+
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
 constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
@@ -50,10 +52,7 @@ tensor encoder(const tensor& x) {
     // NOTE: using postnorm, but there is prenorm as well
     tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads);
     tensor x1 = layer_normalization(x + mha);
-
-    size_t batch_size = x.shape.front();
-
-    tensor x2 = zeros({batch_size, seq_len, d_model});
+    tensor x2 = zeros({(size_t)batch_size, seq_len, d_model});
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x1_mat = slice(x1, i * seq_len, seq_len);
@@ -72,7 +71,6 @@ tensor decoder(const tensor& x) {
 tensor train(const tensor& x_train, const tensor& y_train) {
     constexpr size_t epochs = 5;
     constexpr float lr = 0.01f;
-    float batch_size = 10.0f;
 
     float num_samples = x_train.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
