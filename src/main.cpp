@@ -10,6 +10,7 @@
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len = 25;
 constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
+constexpr size_t d_ff = 512; // NOTE: often 4x larger than d_model
 constexpr size_t num_heads = 4;
 size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
@@ -39,8 +40,8 @@ std::vector<std::vector<tensor>> w = {
     }
 };
 
-tensor w_1 = glorot_uniform({d_model, 32});
-tensor w_2 = glorot_uniform({32, d_model});
+tensor w_1 = glorot_uniform({d_model, d_ff});
+tensor w_2 = glorot_uniform({d_ff, d_model});
 
 tensor b_1 = glorot_uniform({seq_len, 1});
 tensor b_2 = glorot_uniform({seq_len, 1});
@@ -60,8 +61,7 @@ tensor encoder(const tensor& x) {
         tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2; // (25, 128) x (128, 32) x (32, 128) = (25, 128)
         tensor y = (ffn + attention_output_mat); // TODO: Add biases // (25, 128) x (25, 128)
 
-        for (size_t j = 0; j < y.size; ++j)
-            outputs[i * y.size + j] = y[j];
+        std::copy(y.elems, y.elems + y.size, outputs.elems + i * y.size);
     }
 
     return outputs;
