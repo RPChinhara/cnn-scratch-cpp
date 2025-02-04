@@ -57,7 +57,7 @@ tensor encoder(const tensor& x) {
     for (size_t i = 0; i < batch_size; ++i) {
         tensor attention_output_mat = slice(attention_output, i * seq_len, seq_len);
         tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2;
-        tensor y = (ffn + attention_output_mat); // TODO: Add biases
+        tensor y = layer_normalization(ffn + attention_output_mat);
 
         std::copy(y.elems, y.elems + y.size, outputs.elems + i * y.size);
     }
