@@ -43,7 +43,7 @@ std::vector<std::vector<tensor>> w = {
 tensor w_1 = glorot_uniform({d_model, d_ff});
 tensor w_2 = glorot_uniform({d_ff, d_model});
 
-tensor b_1 = glorot_uniform({1, d_ff});
+tensor b_1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but it'd be inefficient for memory specially when the seq_len, d_model, and d_ff get much bigger.
 tensor b_2 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
