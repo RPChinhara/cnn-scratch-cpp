@@ -49,20 +49,20 @@ tensor b_2 = glorot_uniform({1, d_model});
 tensor encoder(const tensor& x) {
     // NOTE: using postnorm, but there is prenorm as well
     tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads);
-    tensor attention_output = layer_normalization(mha + x);
+    tensor x1 = layer_normalization(x + mha);
 
     size_t batch_size = x.shape.front();
 
-    tensor ffn_output = zeros({batch_size, seq_len, d_model});
+    tensor x2 = zeros({batch_size, seq_len, d_model});
 
     for (size_t i = 0; i < batch_size; ++i) {
-        tensor attention_output_mat = slice(attention_output, i * seq_len, seq_len);
-        tensor ffn = matmul(relu(matmul(attention_output_mat, w_1) + b_1), w_2) + b_2;
+        tensor x1_mat = slice(x1, i * seq_len, seq_len);
+        tensor x2_mat = matmul(relu(matmul(x1_mat, w_1) + b_1), w_2) + b_2;
 
-        std::copy(ffn.elems, ffn.elems + ffn.size, ffn_output.elems + i * ffn.size);
+        std::copy(x2_mat.elems, x2_mat.elems + x2_mat.size, x2.elems + i * x2_mat.size);
     }
 
-    return layer_normalization(ffn_output + attention_output);
+    return layer_normalization(x1 + x2);
 }
 
 tensor decoder(const tensor& x) {
