@@ -17,6 +17,7 @@ constexpr size_t num_heads = 4;
 constexpr size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
 std::vector<std::vector<tensor>> w = {
+    // NOTE: Should I init each w_q, w_k, w_v to differing vals using glorot_uniform? Since now they are all same.
     std::vector<tensor>(3, glorot_uniform({d_model, head_dim})), // w_q, w_k, w_v
     std::vector<tensor>(3, glorot_uniform({d_model, head_dim})),
     std::vector<tensor>(3, glorot_uniform({d_model, head_dim})),
