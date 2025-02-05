@@ -17,29 +17,11 @@ constexpr size_t num_heads = 4;
 constexpr size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
 std::vector<std::vector<tensor>> w = {
-    {
-        glorot_uniform({d_model, head_dim}), // w_q
-        glorot_uniform({d_model, head_dim}), // w_k
-        glorot_uniform({d_model, head_dim})  // w_v
-    },
-    {
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim})
-    },
-    {
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim})
-    },
-    {
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim}),
-        glorot_uniform({d_model, head_dim})
-    },
-    {
-        glorot_uniform({d_model, d_model}) // w_o
-    }
+    std::vector<tensor>(3, glorot_uniform({d_model, head_dim})), // w_q, w_k, w_v
+    std::vector<tensor>(3, glorot_uniform({d_model, head_dim})),
+    std::vector<tensor>(3, glorot_uniform({d_model, head_dim})),
+    std::vector<tensor>(3, glorot_uniform({d_model, head_dim})),
+    {glorot_uniform({d_model, d_model})} // w_o
 };
 
 tensor w_1 = glorot_uniform({d_model, d_ff});
