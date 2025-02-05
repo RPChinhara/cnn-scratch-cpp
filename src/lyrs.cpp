@@ -153,9 +153,6 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 
-    // x: (10, 25, 128) or (8, 25, 128)
-    // x_mat: (25, 128)
-
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x_mat = slice(x, i * seq_len, seq_len);
         std::vector<tensor> attention_heads;
