@@ -7,14 +7,14 @@
 
 #include <chrono>
 
-constexpr float batch_size = 10.0f;
+constexpr float  batch_size = 10.0f;
 
 constexpr size_t vocab_size = 5000;
-constexpr size_t seq_len = 25;
-constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
-constexpr size_t d_ff = 512; // NOTE: often 4x larger than d_model
-constexpr size_t num_heads = 4;
-constexpr size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
+constexpr size_t seq_len    = 25;
+constexpr size_t d_model    = 128; // NOTE: must be divisible by num_heads
+constexpr size_t d_ff       = 512; // NOTE: often 4x larger than d_model
+constexpr size_t num_heads  = 4;
+constexpr size_t head_dim   = (num_heads == 1) ? d_model : d_model / num_heads;
 
 std::vector<std::vector<tensor>> w = {
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})}, // w_q, w_k, w_v
