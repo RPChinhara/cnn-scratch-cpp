@@ -14,7 +14,7 @@ constexpr size_t seq_len = 25;
 constexpr size_t d_model = 128; // NOTE: must be divisible by num_heads
 constexpr size_t d_ff = 512; // NOTE: often 4x larger than d_model
 constexpr size_t num_heads = 4;
-size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
+constexpr size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
 std::vector<std::vector<tensor>> w = {
     {
