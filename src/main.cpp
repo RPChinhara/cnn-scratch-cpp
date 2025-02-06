@@ -24,11 +24,11 @@ std::vector<std::vector<tensor>> w = {
     {glorot_uniform({d_model, d_model})} // w_o
 };
 
-tensor w_1 = glorot_uniform({d_model, d_ff});
-tensor w_2 = glorot_uniform({d_ff, d_model});
+tensor w1 = glorot_uniform({d_model, d_ff});
+tensor w2 = glorot_uniform({d_ff, d_model});
 
-tensor b_1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but it'd be inefficient for memory specially when the seq_len, d_model, and d_ff get much bigger.
-tensor b_2 = glorot_uniform({1, d_model});
+tensor b1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but it'd be inefficient for memory specially when the seq_len, d_model, and d_ff get much bigger.
+tensor b2 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
     // NOTE: using postnorm, but there is prenorm as well
@@ -38,7 +38,7 @@ tensor encoder(const tensor& x) {
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x1_mat = slice(x1, i * seq_len, seq_len);
-        tensor x2_mat = matmul(relu(matmul(x1_mat, w_1) + b_1), w_2) + b_2;
+        tensor x2_mat = matmul(relu(matmul(x1_mat, w1) + b1), w2) + b2;
 
         std::copy(x2_mat.elems, x2_mat.elems + x2_mat.size, x2.elems + i * x2_mat.size);
     }
