@@ -1,6 +1,6 @@
 > Transformer
-- BERT(No Decoder: Transformer ecoder-only model)
-- GPT (No Encoder: Transformer decoder-only model)
+- BERT, RoBERTa, ALBERT (No Decoder: Encoder-Only Transformers)
+- GPT (No Encoder: Transformer Decoder-Only Transformers)
 - BART
 - Llama
 - Vision-Language Models
