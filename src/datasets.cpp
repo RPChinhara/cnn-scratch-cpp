@@ -50,7 +50,7 @@ std::vector<std::string> load_daily_dialog(const std::string& file_path) {
 
     std::getline(file, line);  // Skip header
 
-    static const std::regex special_chars(R"([.,!?#$%&()*+/:;<=>@\[\]\^_`{|}~\\-])");
+    static const std::regex special_chars(R"([.,!#$%&()*+/:;<=>@\[\]\^_`{|}~\\-])");
     static const std::regex special_chars2(R"(")");
     static const std::regex non_ascii(R"([^ -~])"); // Faster ASCII check
     static const std::regex extra_spaces(R"(\s+)");
