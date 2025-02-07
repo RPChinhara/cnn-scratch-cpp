@@ -68,6 +68,7 @@ std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::st
     static const std::regex quotation_mark(R"(")");
     static const std::regex hyphen(R"(\s-\s)"); // Removes hyphens only between spaces
     static const std::regex non_ascii(R"([^ -~])"); // Faster ASCII check
+    static const std::regex extra_spaces(R"(\s+)");
 
     while (std::getline(file, line)) {
         // Apply regex transformations
@@ -83,7 +84,6 @@ std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::st
         for (size_t i = 0; i < turns.size(); ++i) {
             std::string turn = lower(turns[i]);
 
-
             // Trim trailing spaces
             if (!turn.empty() && turn.back() == ' ') {
                 turn.pop_back();
@@ -96,6 +96,7 @@ std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::st
             std::string tgt = (i + 1 < turns.size()) ? turns[i + 1] : "";
             tgt = lower(tgt); // Apply lower() to tgt as well
             tgt = "<SOS> " + tgt + " <EOS>";
+            tgt = std::regex_replace(tgt, extra_spaces, " ");
 
             // Store the src and tgt pair
             dialog_pairs.emplace_back(std::move(src), std::move(tgt));
