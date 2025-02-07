@@ -1,7 +1,7 @@
 > Transformer
-- BERT, RoBERTa, ALBERT (No Decoder: Encoder-Only Transformers)
-- GPT (No Encoder: Transformer Decoder-Only Transformers)
-- BART
+- BERT, RoBERTa, ALBERT (Encoder-Only Transformers)
+- GPT (GPT-2, GPT-3, GPT-4, ChatGPT), LLaMA (Decoder-Only Transformers)
+- T5, BART, mT5 (Encoder-Decoder Transformers)
 - Llama
 - Vision-Language Models
 - DeepSeek
@@ -9,11 +9,17 @@
 - Story Visualization
 - Autoencoder
 - GAN
-- Mamba
-- Diffusion models
 - YOLO
+- Mamba
+- Diffusion Transformers
+    - DiT, UViT
+    - Diffusion models
+    - DALL·E
 - Vision transformer (MNIST for the dataset?)
+    - ViT, Swin Transformer, DeiT
 - AlphaFold
-- DALL·E
-- Multimodal learning
+- Hybrid Transformers (Vision + NLP)
+    - Multimodal learning (text + image)
+    - Visual question answering
+    - CLIP, DINO, Flamingo
 - AGI (Physics)
