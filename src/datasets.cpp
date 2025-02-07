@@ -62,7 +62,7 @@ std::vector<std::string> load_daily_dialog(const std::string& file_path) {
         // value = regex_replace(value, "'", "");
         value = regex_replace(value, "\\s+", " ");
         value = regex_replace(value, "\\s+$", "");
-        value = value.insert(0, "[START] ");
+        value = "[START] " + value;
 
         data.push_back(value);
     }
