@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <stdio.h>
 #include <vector>
@@ -42,33 +43,39 @@ tensor load_aapl() {
 
 std::vector<std::string> load_daily_dialog(const std::string& file_path) {
     std::ifstream file(file_path);
+    if (!file) return {};  // Handle file open failure.
 
     std::vector<std::string> data;
-
     std::string line;
-    std::getline(file, line);
+
+    std::getline(file, line);  // Skip header
+
+    static const std::regex special_chars(R"([.,!?#$%&()*+/:;<=>@\[\]\^_`{|}~\\-])");
+    static const std::regex special_chars2(R"(")");
+    static const std::regex non_ascii(R"([^ -~])"); // Faster ASCII check
+    static const std::regex extra_spaces(R"(\s+)");
 
     while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string value;
+        // Convert to lowercase (assuming lower() is defined)
+        line = lower(line);
 
-        std::getline(ss, value);
-
-        value = lower(value);
-        value = regex_replace(value, "[.,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
-        value = regex_replace(value, "\"", "");
-        value = regex_replace(value, "\\s*[^\\x00-\\x7f]\\s*", "");
-        value = regex_replace(value, "[^\\x00-\\x7f]", "");
+        // Apply regex transformations
+        line = std::regex_replace(line, special_chars, " ");
+        line = std::regex_replace(line, special_chars2, "");
         // value = regex_replace(value, "'", "");
-        value = regex_replace(value, "\\s+", " ");
-        value = regex_replace(value, "\\s+$", "");
-        value = "<SOS> " + value;
-        value += " <EOS>";
+        line = std::regex_replace(line, non_ascii, "");
+        line = std::regex_replace(line, extra_spaces, " ");
 
-        data.push_back(value);
+        // Trim trailing spaces
+        if (!line.empty() && line.back() == ' ') {
+            line.pop_back();
+        }
+
+        // Add SOS and EOS
+        line = "<SOS> " + line + " <EOS>";
+
+        data.push_back(std::move(line));
     }
-
-    file.close();
 
     return data;
 }
