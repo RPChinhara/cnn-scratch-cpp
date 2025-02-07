@@ -50,8 +50,9 @@ std::vector<std::string> load_daily_dialog(const std::string& file_path) {
 
     std::getline(file, line);  // Skip header
 
-    static const std::regex special_chars(R"([.,!#$%&()*+/:;<=>@\[\]\^_`{|}~\\-])");
-    static const std::regex special_chars2(R"(")");
+    static const std::regex special_chars(R"([.,!#$%&()*+/:;<=>@\[\]\^_`{|}~\\])");
+    static const std::regex quotation_mark(R"(")");
+    static const std::regex hyphen(R"(\s-\s)"); // Removes hyphens only between spaces
     static const std::regex non_ascii(R"([^ -~])"); // Faster ASCII check
     static const std::regex extra_spaces(R"(\s+)");
 
@@ -61,7 +62,8 @@ std::vector<std::string> load_daily_dialog(const std::string& file_path) {
 
         // Apply regex transformations
         line = std::regex_replace(line, special_chars, " ");
-        line = std::regex_replace(line, special_chars2, "");
+        line = std::regex_replace(line, quotation_mark, "");
+        line = std::regex_replace(line, hyphen, " ");
         // value = regex_replace(value, "'", "");
         line = std::regex_replace(line, non_ascii, "");
         line = std::regex_replace(line, extra_spaces, " ");
