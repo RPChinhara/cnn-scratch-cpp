@@ -1,4 +1,4 @@
-> Transformer
+> Standard Transformer (Original)
 - BERT, RoBERTa, ALBERT (Encoder-Only Transformers)
 - GPT (GPT-2, GPT-3, GPT-4, ChatGPT), LLaMA (Decoder-Only Transformers)
 - T5, BART, mT5 (Encoder-Decoder Transformers)
