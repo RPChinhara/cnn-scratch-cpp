@@ -3,6 +3,7 @@
     - Fix it, and make better one.
 - What is Efficient Transformers?
 - Do we really need encoders and decoders? Can I get rid of it?
+- Can we make models without using datasets?
 
 Plans:
 ----------------
