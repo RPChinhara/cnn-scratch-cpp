@@ -55,11 +55,12 @@ std::vector<std::string> split_text(const std::string& text, const std::string& 
     return result;
 }
 
-std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::string& file_path) {
+std::pair<std::vector<std::string>, std::vector<std::string>> load_daily_dialog(const std::string& file_path) {
     std::ifstream file(file_path);
     if (!file) return {};  // Handle file open failure.
 
-    std::vector<std::pair<std::string, std::string>> dialog_pairs;
+    std::vector<std::string> sources;
+    std::vector<std::string> targets;
     std::string line;
 
     std::getline(file, line);  // Skip header
@@ -68,7 +69,6 @@ std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::st
     static const std::regex quotation_mark(R"(")");
     static const std::regex hyphen(R"(\s-\s)"); // Removes hyphens only between spaces
     static const std::regex non_ascii(R"([^ -~])"); // Faster ASCII check
-    static const std::regex extra_spaces(R"(\s+)");
 
     while (std::getline(file, line)) {
         // Apply regex transformations
@@ -82,28 +82,22 @@ std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::st
 
         // Preprocess each turn
         for (size_t i = 0; i < turns.size(); ++i) {
-            std::string turn = lower(turns[i]);
+            std::string src = lower(turns[i]);
 
-            // Trim trailing spaces
-            if (!turn.empty() && turn.back() == ' ') {
-                turn.pop_back();
-            }
-
-            // Set src to the current turn (no SOS/EOS for src)
-            std::string src = turn;
+            src.erase(src.find_last_not_of(' ') + 1);  // Trim trailing spaces
 
             // Set tgt to the next turn if available, with SOS and EOS added
-            std::string tgt = (i + 1 < turns.size()) ? turns[i + 1] : "";
-            tgt = lower(tgt); // Apply lower() to tgt as well
+            std::string tgt = (i + 1 < turns.size()) ? lower(turns[i + 1]) : "";
+            tgt.erase(tgt.find_last_not_of(' ') + 1);  // Trim trailing spaces
             tgt = "<SOS> " + tgt + " <EOS>";
-            tgt = std::regex_replace(tgt, extra_spaces, " ");
 
-            // Store the src and tgt pair
-            dialog_pairs.emplace_back(std::move(src), std::move(tgt));
+            // Store in separate vectors
+            sources.push_back(std::move(src));
+            targets.push_back(std::move(tgt));
         }
     }
 
-    return dialog_pairs;
+    return {std::move(sources), std::move(targets)};
 }
 
 imdb load_imdb() {

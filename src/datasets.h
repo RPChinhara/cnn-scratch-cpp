@@ -23,7 +23,7 @@ struct mnist {
 };
 
 tensor load_aapl();
-std::vector<std::pair<std::string, std::string>> load_daily_dialog(const std::string& file_path);
+std::pair<std::vector<std::string>, std::vector<std::string>> load_daily_dialog(const std::string& file_path);
 imdb load_imdb();
 iris load_iris();
 mnist load_mnist();
