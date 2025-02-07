@@ -59,8 +59,9 @@ tensor text_vectorization(const std::vector<std::string>& vocab, const std::vect
         auto tokens = tokenizer(text);
 
         for (auto token : tokens) {
-            token = lower(token);
-            token = regex_replace(token, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
+            // TODO: I think I don't need these preprocessing sicne each dataset have different characters, it's so uncertain what to prepreprocess (remove). Best practice is to handle it in each load dataset functions e.g., load_daily_dialog(). text_vectorization() in TF remove all punctuations which is insane. All important ones like ?, !, and . as well.
+            // token = lower(token);
+            // token = regex_replace(token, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
 
             if (vocab_map.find(token) != vocab_map.end())
                 vocab_map[token] += 1.0f;
@@ -81,8 +82,9 @@ tensor text_vectorization(const std::vector<std::string>& vocab, const std::vect
     vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("[UNK]", 1.0f));
     vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("", 0.0f));
 
-    // for (size_t i = 0; i < 50; ++i)
-    //   std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << "\n";
+    // NOTE: this will log first 50 vacabs in the list
+    for (size_t i = 0; i < 50; ++i)
+      std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << "\n";
 
     tensor t_new = zeros({in.size(), max_len});
 
@@ -104,8 +106,9 @@ tensor text_vectorization(const std::vector<std::string>& vocab, const std::vect
         for (auto word : words) {
             ++words_processed;
 
-            word = lower(word);
-            word = regex_replace(word, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
+            // TODO: I think I don't need these preprocessing sicne each dataset have different characters, it's so uncertain what to prepreprocess (remove). Best practice is to handle it in each load dataset functions e.g., load_daily_dialog(). text_vectorization() in TF remove all punctuations which is insane. All important ones like ?, !, and . as well.
+            // word = lower(word);
+            // word = regex_replace(word, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
 
             bool found = false;
 
