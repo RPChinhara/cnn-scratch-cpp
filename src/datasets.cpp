@@ -152,7 +152,7 @@ imdb load_imdb() {
     const size_t max_len = 200;
 
     imdb data;
-    data.x = text_vectorization(train, reviews, max_tokens, max_len);
+    // data.x = text_vectorization(train, reviews, max_tokens, max_len);
     data.y = zeros({sentiments.size(), 1});
 
     for (auto i = 0; i < sentiments.size(); ++i)
