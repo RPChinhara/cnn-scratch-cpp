@@ -48,8 +48,8 @@ void text_vectorizer::build_vocab(const std::vector<std::string>& data) {
             return a.first > b.first;
     });
 
-    vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("[UNK]", 1.0f));
-    vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("", 0.0f));
+    vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("[UNK]", 1.0f)); // TODO: change to <UNK>?
+    vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("", 0.0f)); // TODO: change to <PAD>?
 
     // NOTE: this will log first 50 vacabs in the list
     for (size_t i = 0; i < vocab_vec.size(); ++i)
