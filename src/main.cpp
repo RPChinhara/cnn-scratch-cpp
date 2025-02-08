@@ -124,7 +124,7 @@ int main() {
 
     // OPTIMIZE: Should I make vocabulary using Wikipedia, Common Crawl, OpenWebText, and ArXiv Papers or use pretrained ones such as BERT Vocabulary, GPT-2 Vocabulary.
     // TODO: I may need to use subword tokenizers for better results. I'm using a simple tokenizer.
-    text_vectorization vectorizer(vocab_size, seq_len);
+    text_vectorizer vectorizer(vocab_size, seq_len);
     vectorizer.build_vocab(vocab);
 
     tensor input_token = vectorizer.vectorize(data.first);

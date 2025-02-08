@@ -52,7 +52,7 @@ tensor positional_encoding::adapt(tensor& embedded_tokens) {
     return embedded_tokens;
 }
 
-void text_vectorization::build_vocab(const std::vector<std::string>& data) {
+void text_vectorizer::build_vocab(const std::vector<std::string>& data) {
     std::unordered_map<std::string, float> vocab_map;
 
     for (auto text : data) {
@@ -87,7 +87,7 @@ void text_vectorization::build_vocab(const std::vector<std::string>& data) {
       std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << "\n";
 }
 
-tensor text_vectorization::vectorize(const std::vector<std::string>& input) {
+tensor text_vectorizer::vectorize(const std::vector<std::string>& input) {
     tensor t_new = zeros({input.size(), seq_len});
 
     size_t idx = 0;
