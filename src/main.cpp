@@ -5,7 +5,6 @@
 #include "lyrs.h"
 #include "rand.h"
 
-#include <algorithm>
 #include <chrono>
 
 constexpr float  batch_size = 10.0f;
