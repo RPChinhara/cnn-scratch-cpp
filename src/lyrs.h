@@ -45,6 +45,18 @@ class positional_encoding {
     tensor adapt(tensor& embedded_tokens);
 };
 
+class text_vectorization2 {
+  public:
+    text_vectorization2(size_t vocab_size, size_t seq_len) : vocab_size(vocab_size), seq_len(seq_len) {}
+    void build_vocab(const std::vector<std::string>& data);
+    tensor vectorize(const std::vector<std::string>& input);
+
+  private:
+    size_t vocab_size;
+    size_t seq_len;
+    std::vector<std::pair<std::string, float>> vocab_vec;
+};
+
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len);
 tensor layer_normalization(const tensor& x);
 tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, const size_t seq_len, const size_t d_model, const size_t num_heads);

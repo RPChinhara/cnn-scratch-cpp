@@ -52,6 +52,89 @@ tensor positional_encoding::adapt(tensor& embedded_tokens) {
     return embedded_tokens;
 }
 
+void text_vectorization2::build_vocab(const std::vector<std::string>& data) {
+    std::unordered_map<std::string, float> vocab_map;
+
+    for (auto text : data) {
+        auto tokens = tokenizer(text);
+
+        for (auto token : tokens) {
+            // TODO: I think I don't need these preprocessing sicne each dataset have different characters, it's so uncertain what to prepreprocess (remove). Best practice is to handle it in each load dataset functions e.g., load_daily_dialog(). text_vectorization() in TF remove all punctuations which is insane. All important ones like ?, !, and . as well.
+            // token = lower(token);
+            // token = regex_replace(token, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
+
+            if (vocab_map.find(token) != vocab_map.end())
+                vocab_map[token] += 1.0f;
+            else
+                vocab_map.insert(std::pair<std::string, float>(token, 1.0f));
+        }
+    }
+
+    vocab_vec.assign(vocab_map.begin(), vocab_map.end());
+
+    std::sort(vocab_vec.begin(), vocab_vec.end(), [](const std::pair<std::string, float> &a, const std::pair<std::string, float> &b) {
+        if (a.second != b.second)
+            return a.second > b.second;
+        else
+            return a.first > b.first;
+    });
+
+    vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("[UNK]", 1.0f));
+    vocab_vec.insert(vocab_vec.begin(), std::pair<std::string, float>("", 0.0f));
+
+    // NOTE: this will log first 50 vacabs in the list
+    for (size_t i = 0; i < 50; ++i)
+      std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << "\n";
+}
+
+tensor text_vectorization2::vectorize(const std::vector<std::string>& input) {
+    tensor t_new = zeros({input.size(), seq_len});
+
+    size_t idx = 0;
+    const float oov_token = vocab_vec[1].second;
+
+    // NOTE: In TensorFlow, the max_tokens (or vocabulary size) is max_tokens - 2 when output_mode == "int", because 0 is reserved for padding tokens and 1 is reserved for OOV (out-of-vocabulary) tokens.
+    if (vocab_size > vocab_vec.size())
+    vocab_size = vocab_vec.size();
+
+    for (auto i = 0; i < input.size(); ++i) {
+        auto words = tokenizer(input[i]);
+
+        if (i != 0)
+            idx = i * seq_len;
+
+        size_t words_processed = 0;
+
+        for (auto word : words) {
+            ++words_processed;
+
+            // TODO: I think I don't need these preprocessing sicne each dataset have different characters, it's so uncertain what to prepreprocess (remove). Best practice is to handle it in each load dataset functions e.g., load_daily_dialog(). text_vectorization() in TF remove all punctuations which is insane. All important ones like ?, !, and . as well.
+            // word = lower(word);
+            // word = regex_replace(word, "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", "");
+
+            bool found = false;
+
+            for (auto k = 0; k < vocab_size; ++k) {
+                if (word == vocab_vec[k].first) {
+                    t_new[idx] = k;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                t_new[idx] = oov_token;
+
+            if (words_processed == seq_len)
+              break;
+
+            ++idx;
+        }
+    }
+
+    return t_new;
+}
+
 tensor text_vectorization(const std::vector<std::string>& vocab, const std::vector<std::string>& in, size_t max_tokens, const size_t max_len) {
     std::unordered_map<std::string, float> vocab_map;
 
