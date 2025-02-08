@@ -11,19 +11,9 @@ class min_max_scaler {
   public:
     min_max_scaler() = default;
 
-    void fit(const tensor& data) {
-        data_min = min(data);
-        data_max = max(data, 0);
-    }
-
-    tensor transform(const tensor& data) {
-        return (data - data_min) / (data_max - data_min);
-    }
-
-    tensor inverse_transform(const tensor& scaled_data) {
-        return scaled_data * (data_max - data_min) + data_min;
-    }
-
+    void fit(const tensor& data);
+    tensor transform(const tensor& data);
+    tensor inverse_transform(const tensor& scaled_data);
 };
 
 class embedding {

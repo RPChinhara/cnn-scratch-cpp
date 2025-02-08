@@ -8,6 +8,19 @@
 #include <random>
 #include <unordered_map>
 
+void min_max_scaler::fit(const tensor& data) {
+    data_min = min(data);
+    data_max = max(data, 0);
+}
+
+tensor min_max_scaler::transform(const tensor& data) {
+    return (data - data_min) / (data_max - data_min);
+}
+
+tensor min_max_scaler::inverse_transform(const tensor& scaled_data) {
+    return scaled_data * (data_max - data_min) + data_min;
+}
+
 embedding::embedding(const size_t vocab_size, const size_t embedding_dim) {
     this->embedding_dim = embedding_dim;
     embedding_mat = uniform_dist({vocab_size, embedding_dim});
