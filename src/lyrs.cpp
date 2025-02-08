@@ -21,50 +21,6 @@ tensor min_max_scaler::inverse_transform(const tensor& scaled_data) {
     return scaled_data * (data_max - data_min) + data_min;
 }
 
-embedding::embedding(const size_t vocab_size, const size_t embedding_dim) {
-    this->embedding_dim = embedding_dim;
-    embedding_mat = uniform_dist({vocab_size, embedding_dim});
-}
-
-tensor embedding::adapt(const tensor& t) {
-    tensor embedded_tokens = zeros({t.shape.front(), t.shape.back(), embedding_dim});
-
-    for (size_t i = 0; i < t.size; ++i) {
-        tensor embedding_vec = slice(embedding_mat, t[i], 1);
-
-        for (size_t j = 0; j < embedding_vec.size; ++j) {
-            embedded_tokens[i * embedding_dim + j] = embedding_vec[j];
-        }
-    }
-
-    return embedded_tokens;
-}
-
-positional_encoding::positional_encoding(const size_t seq_len, const size_t dim) {
-    pe = zeros({seq_len, dim});
-
-    for (size_t i = 0; i < seq_len; ++i) {
-        float pos = static_cast<float>(i);
-        for (size_t j = 0; j < dim / 2; ++j) {
-            float denominator = pow(10000.0f, 2.0f * j / dim);
-            pe(i, 2 * j) = sin(pos / denominator);
-            pe(i, 2 * j + 1) = cos(pos / denominator);
-        }
-    }
-}
-
-tensor positional_encoding::adapt(tensor& embedded_tokens) {
-    size_t idx = 0;
-    const size_t block_size = embedded_tokens.shape[1] * embedded_tokens.shape[2];
-
-    for (size_t k = 0; k < embedded_tokens.size; ++k) {
-        embedded_tokens[k] += pe[idx];
-        idx = (k + 1) % block_size == 0 ? 0 : idx + 1;
-    }
-
-    return embedded_tokens;
-}
-
 void text_vectorizer::build_vocab(const std::vector<std::string>& data) {
     std::unordered_map<std::string, float> vocab_map;
 
@@ -146,6 +102,50 @@ tensor text_vectorizer::vectorize(const std::vector<std::string>& input) {
     }
 
     return t_new;
+}
+
+embedding::embedding(const size_t vocab_size, const size_t embedding_dim) {
+    this->embedding_dim = embedding_dim;
+    embedding_mat = uniform_dist({vocab_size, embedding_dim});
+}
+
+tensor embedding::adapt(const tensor& t) {
+    tensor embedded_tokens = zeros({t.shape.front(), t.shape.back(), embedding_dim});
+
+    for (size_t i = 0; i < t.size; ++i) {
+        tensor embedding_vec = slice(embedding_mat, t[i], 1);
+
+        for (size_t j = 0; j < embedding_vec.size; ++j) {
+            embedded_tokens[i * embedding_dim + j] = embedding_vec[j];
+        }
+    }
+
+    return embedded_tokens;
+}
+
+positional_encoding::positional_encoding(const size_t seq_len, const size_t dim) {
+    pe = zeros({seq_len, dim});
+
+    for (size_t i = 0; i < seq_len; ++i) {
+        float pos = static_cast<float>(i);
+        for (size_t j = 0; j < dim / 2; ++j) {
+            float denominator = pow(10000.0f, 2.0f * j / dim);
+            pe(i, 2 * j) = sin(pos / denominator);
+            pe(i, 2 * j + 1) = cos(pos / denominator);
+        }
+    }
+}
+
+tensor positional_encoding::adapt(tensor& embedded_tokens) {
+    size_t idx = 0;
+    const size_t block_size = embedded_tokens.shape[1] * embedded_tokens.shape[2];
+
+    for (size_t k = 0; k < embedded_tokens.size; ++k) {
+        embedded_tokens[k] += pe[idx];
+        idx = (k + 1) % block_size == 0 ? 0 : idx + 1;
+    }
+
+    return embedded_tokens;
 }
 
 tensor layer_normalization(const tensor& x) {

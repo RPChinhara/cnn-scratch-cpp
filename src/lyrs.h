@@ -16,6 +16,18 @@ class min_max_scaler {
     tensor inverse_transform(const tensor& scaled_data);
 };
 
+class text_vectorizer {
+  public:
+    text_vectorizer(size_t vocab_size, size_t seq_len) : vocab_size(vocab_size), seq_len(seq_len) {}
+    void build_vocab(const std::vector<std::string>& data);
+    tensor vectorize(const std::vector<std::string>& input);
+
+  private:
+    size_t vocab_size;
+    size_t seq_len;
+    std::vector<std::pair<std::string, float>> vocab_vec;
+};
+
 class embedding {
   public:
     size_t embedding_dim;
@@ -33,18 +45,6 @@ class positional_encoding {
   public:
     positional_encoding(const size_t seq_len, const size_t dim);
     tensor adapt(tensor& embedded_tokens);
-};
-
-class text_vectorizer {
-  public:
-    text_vectorizer(size_t vocab_size, size_t seq_len) : vocab_size(vocab_size), seq_len(seq_len) {}
-    void build_vocab(const std::vector<std::string>& data);
-    tensor vectorize(const std::vector<std::string>& input);
-
-  private:
-    size_t vocab_size;
-    size_t seq_len;
-    std::vector<std::pair<std::string, float>> vocab_vec;
 };
 
 tensor layer_normalization(const tensor& x);
