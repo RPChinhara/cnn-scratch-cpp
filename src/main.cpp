@@ -5,6 +5,7 @@
 #include "lyrs.h"
 #include "rand.h"
 
+#include <algorithm>
 #include <chrono>
 
 constexpr float  batch_size = 10.0f;
@@ -110,27 +111,46 @@ tensor predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    // OPTIMIZE: If I make load_daily_dialog() return input and target by utlizing " in the datset, I only need to call this function once which improve performance a lot.
-    // auto input_target = load_daily_dialog("datasets/daily_dialog/daily_dialog.csv");
-    // auto input = load_daily_dialog("datasets/daily_dialog/daily_dialog_input.csv");
-    // auto target = load_daily_dialog("datasets/daily_dialog/daily_dialog_target.csv");
+    auto data = load_daily_dialog("datasets/daily_dialog/daily_dialog.csv");
 
-    // OPTIMIZE: If I make text_vectorization() a class, runtime will be 1/2 of now as I only need to create the vocabulary once for "input_target". I don't need to do it twice.
+    // NOTE: Should I do this inside load_daily_dialog()? I should make vocab already elsewhere using different dataset so that it could be used for different models. What is the standard?
+    std::vector<std::string> vocab;
+    vocab.reserve(data.first.size());
+
+    for (const auto& str : data.first)
+        vocab.emplace_back("<SOS> " + str + " <EOS>");
+
+    for (size_t i = 0; i < 20; ++i)
+        std::cout << "src: " << data.first[i] << "\ntgt: " << data.second[i] << "\n";
+
+    // OPTIMIZE: If I !make text_vectorization() a class, runtime will be 1/2 of now as I only need to create the vocabulary once for "input_target". I don't need to do it twice.
     // TODO: I may need to use subword tokenizers for better results. I'm using a simple tokenizer.
-    // tensor input_token = text_vectorization(input_target, input, vocab_size, seq_len);
-    // tensor target_token = text_vectorization(input_target, target, vocab_size, seq_len);
+    tensor input_token = text_vectorization(vocab, data.first, vocab_size, seq_len);
+    tensor target_token = text_vectorization(vocab, data.second, vocab_size, seq_len);
 
-    tensor dammy_input_token = zeros({60, seq_len});
-    tensor dammy_target_token = fill({60, seq_len}, 2.0f);
+    for (size_t i = 0; i < 100; ++i) {
+        if (i % seq_len == 0)
+            std::cout << "\n";
+        std::cout << input_token[i] << "\n";
+    }
 
-    auto input_token_train_test = split(dammy_input_token, 0.2f);
-    auto target_token_train_test = split(dammy_target_token, 0.2f);
+    for (size_t i = 0; i < 100; ++i) {
+        if (i % seq_len == 0)
+            std::cout << "\n";
+        std::cout << target_token[i] << "\n";
+    }
 
-    train(input_token_train_test.first, target_token_train_test.first);
+    // tensor dammy_input_token = zeros({60, seq_len});
+    // tensor dammy_target_token = fill({60, seq_len}, 2.0f);
 
-    std::cout << "Test loss: " << evaluate(input_token_train_test.second, target_token_train_test.second) << "\n\n";
+    // auto input_token_train_test = split(dammy_input_token, 0.2f);
+    // auto target_token_train_test = split(dammy_target_token, 0.2f);
 
-    tensor test_predictions = predict(input_token_train_test.second, target_token_train_test.second);
+    // train(input_token_train_test.first, target_token_train_test.first);
+
+    // std::cout << "Test loss: " << evaluate(input_token_train_test.second, target_token_train_test.second) << "\n\n";
+
+    // tensor test_predictions = predict(input_token_train_test.second, target_token_train_test.second);
 
     return 0;
 }
