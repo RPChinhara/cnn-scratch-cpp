@@ -45,9 +45,9 @@ class positional_encoding {
     tensor adapt(tensor& embedded_tokens);
 };
 
-class text_vectorization2 {
+class text_vectorization {
   public:
-    text_vectorization2(size_t vocab_size, size_t seq_len) : vocab_size(vocab_size), seq_len(seq_len) {}
+    text_vectorization(size_t vocab_size, size_t seq_len) : vocab_size(vocab_size), seq_len(seq_len) {}
     void build_vocab(const std::vector<std::string>& data);
     tensor vectorize(const std::vector<std::string>& input);
 
