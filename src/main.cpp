@@ -122,7 +122,7 @@ int main() {
     for (size_t i = 0; i < 20; ++i)
         std::cout << "src: " << data.first[i] << "\ntgt: " << data.second[i] << "\n";
 
-    // OPTIMIZE: If I make text_vectorization() a class, runtime will be 1/2 of now as I only need to create the vocabulary once.
+    // OPTIMIZE: If I make text_vectorization() a class, runtime will be 1/2 of now as I only need to create the vocabulary once. Should I make vocabulary using Wikipedia, Common Crawl, OpenWebText, and ArXiv Papers or use pretrained ones such as BERT Vocabulary, GPT-2 Vocabulary.
     // TODO: I may need to use subword tokenizers for better results. I'm using a simple tokenizer.
     tensor input_token = text_vectorization(vocab, data.first, vocab_size, seq_len);
     tensor target_token = text_vectorization(vocab, data.second, vocab_size, seq_len);
