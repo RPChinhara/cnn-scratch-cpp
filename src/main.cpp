@@ -75,14 +75,17 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
             size_t end_idx = std::min(start_idx + batch_size, num_samples);
 
             tensor src_input_batch = slice(src_input, start_idx, end_idx - start_idx);
-            tensor y_batch = slice(tgt_input, start_idx, end_idx - start_idx);
+            tensor tgt_input_batch = slice(tgt_input, start_idx, end_idx - start_idx);
 
-            tensor token_embeddings = embedding_lyr.adapt(src_input_batch);
-            tensor positional_embeddings = positional_encoding_lyr.adapt(token_embeddings);
+            tensor src_token_embeddings = embedding_lyr.adapt(src_input_batch);
+            tensor src_positional_embeddings = positional_encoding_lyr.adapt(src_token_embeddings);
+
+            tensor tgt_token_embeddings = embedding_lyr.adapt(tgt_input_batch);
+            tensor tgt_positional_embeddings = positional_encoding_lyr.adapt(tgt_token_embeddings);
 
             // TODO: I run these functions simultaneously?
-            tensor outputs = encoder(positional_embeddings);
-            tensor y = decoder(outputs);
+            tensor outputs = encoder(src_positional_embeddings);
+            tensor y = decoder(tgt_positional_embeddings);
 
             // loss = categorical_cross_entropy(y_batch, y);
 
