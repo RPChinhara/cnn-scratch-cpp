@@ -2,6 +2,7 @@
 
 #include "tensor.h"
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -23,7 +24,7 @@ struct mnist {
 };
 
 tensor load_aapl();
-std::pair<std::vector<std::string>, std::vector<std::string>> load_daily_dialog(const std::string& file_path);
+std::array<std::vector<std::string>, 3> load_daily_dialog();
 imdb load_imdb();
 iris load_iris();
 mnist load_mnist();
