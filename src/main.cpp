@@ -50,11 +50,11 @@ tensor decoder(const tensor& x) {
     return tensor();
 }
 
-tensor train(const tensor& x_train, const tensor& y_train) {
+tensor train(const tensor& src_input, const tensor& tgt_input) {
     constexpr size_t epochs = 5;
     constexpr float lr = 0.01f;
 
-    float num_samples = x_train.shape.front();
+    float num_samples = src_input.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
 
     // NOTE: Embedding matrix is updated during backpropagation, similar to other model weights.
@@ -73,8 +73,8 @@ tensor train(const tensor& x_train, const tensor& y_train) {
             size_t start_idx = j * batch_size;
             size_t end_idx = std::min(start_idx + batch_size, num_samples);
 
-            tensor x_batch = slice(x_train, start_idx, end_idx - start_idx);
-            tensor y_batch = slice(y_train, start_idx, end_idx - start_idx);
+            tensor x_batch = slice(src_input, start_idx, end_idx - start_idx);
+            tensor y_batch = slice(tgt_input, start_idx, end_idx - start_idx);
 
             tensor embedded_tokens = embedding_lyr.adapt(x_batch);
             tensor input_embeddings = positional_encoding_lyr.adapt(embedded_tokens);
