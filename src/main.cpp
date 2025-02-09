@@ -110,36 +110,43 @@ tensor predict(const tensor& x_test, const tensor& y_test) {
 }
 
 int main() {
-    auto data = load_daily_dialog("datasets/daily_dialog/daily_dialog.csv");
+    auto data = load_daily_dialog();
 
     // NOTE: Should I do this inside load_daily_dialog()? I should make vocab already elsewhere using different dataset so that it could be used for different models. What is the standard?
     std::vector<std::string> vocab;
-    vocab.reserve(data.first.size());
+    vocab.reserve(data[0].size());
 
-    for (const auto& str : data.first)
+    for (const auto& str : data[0])
         vocab.emplace_back("<SOS> " + str + " <EOS>");
 
     for (size_t i = 0; i < 20; ++i)
-        std::cout << "src: " << data.first[i] << "\ntgt: " << data.second[i] << "\n";
+        std::cout << "src_input: " << data[0][i] << "\ntgt_input: " << data[1][i] << "\ntgt_output: " << data[2][i] << "\n";
 
     // OPTIMIZE: Should I make vocabulary using Wikipedia, Common Crawl, OpenWebText, and ArXiv Papers or use pretrained ones such as BERT Vocabulary, GPT-2 Vocabulary.
     // TODO: I may need to use subword tokenizers for better results. I'm using a simple tokenizer.
     text_vectorizer vectorizer(vocab_size, seq_len);
     vectorizer.build_vocab(vocab);
 
-    tensor input_token = vectorizer.vectorize(data.first);
-    tensor target_token = vectorizer.vectorize(data.second);
+    tensor src_input = vectorizer.vectorize(data[0]);
+    tensor tgt_input = vectorizer.vectorize(data[1]);
+    tensor tgt_output = vectorizer.vectorize(data[2]);
 
     for (size_t i = 0; i < 100; ++i) {
         if (i % seq_len == 0)
             std::cout << "\n";
-        std::cout << input_token[i] << "\n";
+        std::cout << src_input[i] << "\n";
     }
 
     for (size_t i = 0; i < 100; ++i) {
         if (i % seq_len == 0)
             std::cout << "\n";
-        std::cout << target_token[i] << "\n";
+        std::cout << tgt_input[i] << "\n";
+    }
+
+    for (size_t i = 0; i < 100; ++i) {
+        if (i % seq_len == 0)
+            std::cout << "\n";
+        std::cout << tgt_output[i] << "\n";
     }
 
     // tensor dammy_input_token = zeros({60, seq_len});
