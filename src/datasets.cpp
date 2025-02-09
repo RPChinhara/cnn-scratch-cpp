@@ -55,12 +55,13 @@ std::vector<std::string> split_text(const std::string& text, const std::string& 
     return result;
 }
 
-std::pair<std::vector<std::string>, std::vector<std::string>> load_daily_dialog(const std::string& file_path) {
-    std::ifstream file(file_path);
+std::array<std::vector<std::string>, 3> load_daily_dialog() {
+    std::ifstream file("datasets/daily_dialog/daily_dialog.csv");
     if (!file) return {};  // Handle file open failure.
 
-    std::vector<std::string> sources;
-    std::vector<std::string> targets;
+    std::vector<std::string> sources_input;
+    std::vector<std::string> targets_input;
+    std::vector<std::string> targets_output;
     std::string line;
 
     std::getline(file, line);  // Skip header
@@ -87,17 +88,22 @@ std::pair<std::vector<std::string>, std::vector<std::string>> load_daily_dialog(
             src.erase(src.find_last_not_of(' ') + 1);  // Trim trailing spaces
 
             // Set tgt to the next turn if available, with SOS and EOS added
-            std::string tgt = (i + 1 < turns.size()) ? lower(turns[i + 1]) : "";
-            tgt.erase(tgt.find_last_not_of(' ') + 1);  // Trim trailing spaces
-            tgt = "<SOS> " + tgt + " <EOS>";
+            std::string tgt_input = (i + 1 < turns.size()) ? lower(turns[i + 1]) : "";
+            tgt_input.erase(tgt_input.find_last_not_of(' ') + 1);  // Trim trailing spaces
+            tgt_input = "<SOS> " + tgt_input;
+
+            std::string tgt_output = (i + 1 < turns.size()) ? lower(turns[i + 1]) : "";
+            tgt_output.erase(tgt_output.find_last_not_of(' ') + 1);  // Trim trailing spaces
+            tgt_output = tgt_output + " <EOS>";
 
             // Store in separate vectors
-            sources.push_back(std::move(src));
-            targets.push_back(std::move(tgt));
+            sources_input.push_back(std::move(src));
+            targets_input.push_back(std::move(tgt_input));
+            targets_output.push_back(std::move(tgt_output));
         }
     }
 
-    return {std::move(sources), std::move(targets)};
+    return {std::move(sources_input), std::move(targets_input), std::move(targets_output)};
 }
 
 imdb load_imdb() {
