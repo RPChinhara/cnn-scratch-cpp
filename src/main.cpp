@@ -50,7 +50,7 @@ tensor decoder(const tensor& x) {
     return tensor();
 }
 
-tensor train(const tensor& src_input, const tensor& tgt_input) {
+tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt_output) {
     constexpr size_t epochs = 5;
     constexpr float lr = 0.01f;
 
