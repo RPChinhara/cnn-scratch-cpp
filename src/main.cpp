@@ -7,8 +7,6 @@
 
 #include <chrono>
 
-constexpr float  batch_size = 10.0f;
-
 constexpr size_t vocab_size = 5000;
 constexpr size_t seq_len    = 25;
 constexpr size_t d_model    = 128; // NOTE: must be divisible by num_heads
@@ -31,10 +29,12 @@ tensor b1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but it
 tensor b2 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
+    size_t batch_size = x.shape.front();
+
     // NOTE: using postnorm, but there is prenorm as well
     tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads);
     tensor x1 = layer_normalization(x + mha);
-    tensor x2 = zeros({(size_t)batch_size, seq_len, d_model});
+    tensor x2 = zeros({batch_size, seq_len, d_model});
 
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x1_mat = slice(x1, i * seq_len, seq_len);
@@ -53,6 +53,7 @@ tensor decoder(const tensor& x) {
 tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt_output) {
     constexpr size_t epochs = 5;
     constexpr float lr = 0.01f;
+    constexpr float  batch_size = 32.0f;
 
     float num_samples = src_input.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
