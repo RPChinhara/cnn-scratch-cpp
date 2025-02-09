@@ -74,10 +74,10 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
             size_t start_idx = j * batch_size;
             size_t end_idx = std::min(start_idx + batch_size, num_samples);
 
-            tensor x_batch = slice(src_input, start_idx, end_idx - start_idx);
+            tensor src_input_batch = slice(src_input, start_idx, end_idx - start_idx);
             tensor y_batch = slice(tgt_input, start_idx, end_idx - start_idx);
 
-            tensor token_embeddings = embedding_lyr.adapt(x_batch);
+            tensor token_embeddings = embedding_lyr.adapt(src_input_batch);
             tensor positional_embeddings = positional_encoding_lyr.adapt(token_embeddings);
 
             // TODO: I run these functions simultaneously?
