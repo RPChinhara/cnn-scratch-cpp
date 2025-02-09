@@ -59,9 +59,9 @@ std::array<std::vector<std::string>, 3> load_daily_dialog() {
     std::ifstream file("datasets/daily_dialog/daily_dialog.csv");
     if (!file) return {};  // Handle file open failure.
 
-    std::vector<std::string> sources_input;
-    std::vector<std::string> targets_input;
-    std::vector<std::string> targets_output;
+    std::vector<std::string> src_inputs;
+    std::vector<std::string> tgt_inputs;
+    std::vector<std::string> tgt_outputs;
     std::string line;
 
     std::getline(file, line);  // Skip header
@@ -83,9 +83,9 @@ std::array<std::vector<std::string>, 3> load_daily_dialog() {
 
         // Preprocess each turn
         for (size_t i = 0; i < turns.size(); ++i) {
-            std::string src = lower(turns[i]);
+            std::string src_input = lower(turns[i]);
 
-            src.erase(src.find_last_not_of(' ') + 1);  // Trim trailing spaces
+            src_input.erase(src_input.find_last_not_of(' ') + 1);  // Trim trailing spaces
 
             // Set tgt to the next turn if available, with SOS and EOS added
             std::string tgt_input = (i + 1 < turns.size()) ? lower(turns[i + 1]) : "";
@@ -97,13 +97,13 @@ std::array<std::vector<std::string>, 3> load_daily_dialog() {
             tgt_output = tgt_output + " <EOS>";
 
             // Store in separate vectors
-            sources_input.push_back(std::move(src));
-            targets_input.push_back(std::move(tgt_input));
-            targets_output.push_back(std::move(tgt_output));
+            src_inputs.push_back(std::move(src_input));
+            tgt_inputs.push_back(std::move(tgt_input));
+            tgt_outputs.push_back(std::move(tgt_output));
         }
     }
 
-    return {std::move(sources_input), std::move(targets_input), std::move(targets_output)};
+    return {std::move(src_inputs), std::move(tgt_inputs), std::move(tgt_outputs)};
 }
 
 imdb load_imdb() {
