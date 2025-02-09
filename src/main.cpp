@@ -127,13 +127,15 @@ int main() {
     tensor tgt_input = vectorizer.vectorize(data[1]);
     tensor tgt_output = vectorizer.vectorize(data[2]);
 
-    // tensor dammy_input_token = zeros({60, seq_len});
-    // tensor dammy_target_token = fill({60, seq_len}, 2.0f);
+    auto src_input_train_test = split(src_input, 0.001f); // TODO: put back to 0.2f
+    auto tgt_input_train_test = split(tgt_input, 0.001f);
+    auto tgt_output_train_test = split(tgt_output, 0.001f);
 
-    // auto input_token_train_test = split(dammy_input_token, 0.2f);
-    // auto target_token_train_test = split(dammy_target_token, 0.2f);
+    // src_input_train_test:  (88821, 25), (89, 25)
+    // tgt_input_train_test:  (88821, 25), (89, 25)
+    // tgt_output_train_test: (88821, 25), (89, 25)
 
-    // train(input_token_train_test.first, target_token_train_test.first);
+    train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.second);
 
     // std::cout << "Test loss: " << evaluate(input_token_train_test.second, target_token_train_test.second) << "\n\n";
 
