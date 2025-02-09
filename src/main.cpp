@@ -127,13 +127,10 @@ int main() {
     tensor tgt_input = vectorizer.vectorize(data[1]);
     tensor tgt_output = vectorizer.vectorize(data[2]);
 
-    auto src_input_train_test = split(src_input, 0.001f); // TODO: put back to 0.2f
-    auto tgt_input_train_test = split(tgt_input, 0.001f);
-    auto tgt_output_train_test = split(tgt_output, 0.001f);
-
-    // src_input_train_test:  (88821, 25), (89, 25)
-    // tgt_input_train_test:  (88821, 25), (89, 25)
-    // tgt_output_train_test: (88821, 25), (89, 25)
+    // TODO: put back to 0.2f
+    auto src_input_train_test = split(src_input, 0.001f);   // (88821, 25), (89, 25)
+    auto tgt_input_train_test = split(tgt_input, 0.001f);   // (88821, 25), (89, 25)
+    auto tgt_output_train_test = split(tgt_output, 0.001f); // (88821, 25), (89, 25)
 
     train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.second);
 
