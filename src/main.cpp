@@ -80,7 +80,6 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
             tensor src_token_embeddings = embedding_lyr.adapt(src_input_batch);
             tensor src_positional_embeddings = positional_encoding_lyr.adapt(src_token_embeddings);
 
-            // TODO: Need separete embedding_lyr and positional_encoding_lyr? Or just reuse them?
             tensor tgt_token_embeddings = embedding_lyr.adapt(tgt_input_batch);
             tensor tgt_positional_embeddings = positional_encoding_lyr.adapt(tgt_token_embeddings);
 
