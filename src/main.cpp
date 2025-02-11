@@ -138,6 +138,7 @@ int main() {
 
     train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.second);
 
+    // TODO: Combine evaluate() and predict()?
     // std::cout << "Test loss: " << evaluate(input_token_train_test.second, target_token_train_test.second) << "\n\n";
 
     // tensor test_predictions = predict(input_token_train_test.second, target_token_train_test.second);
