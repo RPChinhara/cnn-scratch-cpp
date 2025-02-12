@@ -165,6 +165,7 @@ tensor layer_normalization(const tensor& x) {
     return y;
 }
 
+// NOTE: This is causal/self-attention mask, but are there other types of masks?
 tensor create_causal_mask(size_t seq_len) {
     tensor mask = fill({seq_len, seq_len}, 1.0f);
     for (size_t i = 0; i < seq_len; ++i)
