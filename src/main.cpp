@@ -47,7 +47,11 @@ tensor encoder(const tensor& x) {
 }
 
 tensor decoder(const tensor& x) {
-    return tensor();
+    size_t batch_size = x.shape.front();
+
+    tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
+
+    return mha;
 }
 
 tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt_output) {
