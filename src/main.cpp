@@ -52,9 +52,10 @@ tensor decoder(const tensor& x, const tensor& encoder_output) {
     // TODO: Do I need different w or I can reuse w?
     tensor masked_mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
     tensor x1 = layer_normalization(x + masked_mha);
-    tensor cross_attention = multihead_attention(x, w, seq_len, d_model, num_heads);
+    tensor cross_attention = multihead_cross_attention(x1, encoder_output, encoder_output, w, seq_len, d_model, num_heads);
+    tensor x2 = layer_normalization(x1 + cross_attention);
 
-    return x1;
+    return x2;
 }
 
 tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt_output) {
