@@ -49,6 +49,7 @@ tensor encoder(const tensor& x) {
 tensor decoder(const tensor& x) {
     size_t batch_size = x.shape.front();
 
+    // TODO: Do I need different w or I can reuse w?
     tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
 
     return mha;
