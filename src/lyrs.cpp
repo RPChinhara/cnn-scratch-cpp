@@ -201,7 +201,7 @@ tensor multihead_attention(const tensor& x, const std::vector<std::vector<tensor
 
             tensor attention_weights = softmax(scaled_scores);
             tensor weighted_sum = matmul(attention_weights, v_mat);
-            
+
             attention_heads.push_back(weighted_sum);
         }
 
