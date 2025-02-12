@@ -46,12 +46,13 @@ tensor encoder(const tensor& x) {
     return layer_normalization(x1 + x2);
 }
 
-tensor decoder(const tensor& x) {
+tensor decoder(const tensor& x, const tensor& encoder_output) {
     size_t batch_size = x.shape.front();
 
     // TODO: Do I need different w or I can reuse w?
     tensor masked_mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
     tensor x1 = layer_normalization(x + masked_mha);
+    tensor cross_attention = multihead_attention(x, w, seq_len, d_model, num_heads);
 
     return x1;
 }
@@ -90,8 +91,8 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
             tensor tgt_positional_embeddings = positional_encoding_lyr.adapt(tgt_token_embeddings);
 
             // TODO: I run these functions simultaneously?
-            tensor outputs = encoder(src_positional_embeddings);
-            tensor y = decoder(tgt_positional_embeddings);
+            tensor output = encoder(src_positional_embeddings);
+            tensor y = decoder(tgt_positional_embeddings, output);
 
             // loss = categorical_cross_entropy(y_batch, y);
 
