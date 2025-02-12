@@ -236,6 +236,7 @@ tensor multihead_cross_attention(const tensor& query, const tensor& key, const t
             tensor k_mat = matmul(key_mat, w[j][1]);
             tensor v_mat = matmul(value_mat, w[j][2]);
 
+            // TODO: From here could be refactored in both here and one in multihead_attention(), and name the func attention()
             tensor attention_scores = matmul(q_mat, transpose(k_mat));
             tensor scaled_scores = attention_scores / sqrt(head_dim);
 
