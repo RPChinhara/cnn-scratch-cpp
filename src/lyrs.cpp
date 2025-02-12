@@ -169,7 +169,7 @@ tensor create_causal_mask(size_t seq_len) {
     tensor mask = fill({seq_len, seq_len}, 1.0f);
     for (size_t i = 0; i < seq_len; ++i)
         for (size_t j = i + 1; j < seq_len; ++j)
-            mask[i * seq_len + j] = 0;  // Zero out future positions
+            mask(i, j) = 0.0f; // Zero out future positions
     return mask;
 }
 
