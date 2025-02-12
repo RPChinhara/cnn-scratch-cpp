@@ -233,6 +233,7 @@ tensor multihead_cross_attention(const tensor& query, const tensor& key, const t
 
         // TODO: I think I need Multithreading for this?
         for (size_t j = 0; j < num_heads; ++j) {
+            // TODO: Is this really correct that making q, k, and v from decoder for q, and encoder output for k an v
             tensor q_mat = matmul(query_mat, w[j][0]);
             tensor k_mat = matmul(key_mat, w[j][1]);
             tensor v_mat = matmul(value_mat, w[j][2]);
