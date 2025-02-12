@@ -50,9 +50,10 @@ tensor decoder(const tensor& x) {
     size_t batch_size = x.shape.front();
 
     // TODO: Do I need different w or I can reuse w?
-    tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
+    tensor masked_mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
+    tensor x1 = layer_normalization(x + masked_mha);
 
-    return mha;
+    return x1;
 }
 
 tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt_output) {
