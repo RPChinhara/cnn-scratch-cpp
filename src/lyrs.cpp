@@ -214,3 +214,47 @@ tensor multihead_attention(const tensor& x, const std::vector<std::vector<tensor
 
     return outputs;
 }
+
+tensor multihead_cross_attention(const tensor& query, const tensor& key, const tensor& value, const std::vector<std::vector<tensor>>& w, size_t seq_len, size_t d_model, size_t num_heads, bool mask) {
+    size_t batch_size = query.shape.front();
+    size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
+
+    tensor mask_mat = create_causal_mask(seq_len);
+
+    tensor outputs = zeros({batch_size, seq_len, d_model});
+
+    for (size_t i = 0; i < batch_size; ++i) {
+        tensor query_mat = slice(query, i * seq_len, seq_len);
+        tensor key_mat = slice(key, i * seq_len, seq_len);
+        tensor value_mat = slice(value, i * seq_len, seq_len);
+
+        std::vector<tensor> attention_heads;
+
+        // TODO: I think I need Multithreading for this?
+        for (size_t j = 0; j < num_heads; ++j) {
+            tensor q_mat = matmul(query_mat, w[j][0]);
+            tensor k_mat = matmul(key_mat, w[j][1]);
+            tensor v_mat = matmul(value_mat, w[j][2]);
+
+            tensor attention_scores = matmul(q_mat, transpose(k_mat));
+            tensor scaled_scores = attention_scores / sqrt(head_dim);
+
+            if (mask)
+                for (size_t k = 0; k < mask_mat.size; ++k)
+                    if (mask_mat[k] == 0.0f)
+                        scaled_scores[k] = -INFINITY; // NOTE: Instead of -INFINITY, I could use large negative values to avoid NaNs
+
+            tensor attention_weights = softmax(scaled_scores);
+            tensor weighted_sum = matmul(attention_weights, v_mat);
+
+            attention_heads.push_back(weighted_sum);
+        }
+
+        tensor concatenated_heads = concat(attention_heads, 1);
+        tensor output = matmul(concatenated_heads, w[w.size() - 1][0]);
+
+        std::copy(output.elems, output.elems + output.size, outputs.elems + i * output.size);
+    }
+
+    return outputs;
+}

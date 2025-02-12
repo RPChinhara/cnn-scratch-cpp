@@ -49,3 +49,4 @@ class positional_encoding {
 
 tensor layer_normalization(const tensor& x);
 tensor multihead_attention(const tensor& x, const std::vector<std::vector<tensor>>& w, size_t seq_len, size_t d_model, size_t num_heads, bool mask = false);
+tensor multihead_cross_attention(const tensor& query, const tensor& key, const tensor& value, const std::vector<std::vector<tensor>>& w, size_t seq_len, size_t d_model, size_t num_heads, bool mask = false);
