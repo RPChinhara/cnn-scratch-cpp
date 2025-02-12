@@ -165,9 +165,19 @@ tensor layer_normalization(const tensor& x) {
     return y;
 }
 
-tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, const size_t seq_len, const size_t d_model, const size_t num_heads) {
+tensor create_causal_mask(size_t seq_len) {
+    tensor mask = fill({seq_len, seq_len}, 1.0f);
+    for (size_t i = 0; i < seq_len; ++i)
+        for (size_t j = i + 1; j < seq_len; ++j)
+            mask[i * seq_len + j] = 0;  // Zero out future positions
+    return mask;
+}
+
+tensor multihead_attention(const tensor& x, const std::vector<std::vector<tensor>>& w, size_t seq_len, size_t d_model, size_t num_heads, bool mask) {
     size_t batch_size = x.shape.front();
     size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
+
+    tensor mask_mat = create_causal_mask(seq_len);
 
     tensor outputs = zeros({batch_size, seq_len, d_model});
 
@@ -183,11 +193,15 @@ tensor multihead_attention(const tensor& x, std::vector<std::vector<tensor>> w, 
 
             tensor attention_scores = matmul(q_mat, transpose(k_mat));
             tensor scaled_scores = attention_scores / sqrt(head_dim);
+
+            if (mask)
+                for (size_t k = 0; k < mask_mat.size; ++k)
+                    if (mask_mat[k] == 0.0f)
+                        scaled_scores[k] = -INFINITY;
+
             tensor attention_weights = softmax(scaled_scores);
-
-            // TODO: Add mask here to attention_weights?
-
             tensor weighted_sum = matmul(attention_weights, v_mat);
+            
             attention_heads.push_back(weighted_sum);
         }
 
