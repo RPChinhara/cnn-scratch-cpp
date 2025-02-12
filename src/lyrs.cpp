@@ -198,7 +198,7 @@ tensor multihead_attention(const tensor& x, const std::vector<std::vector<tensor
             if (mask)
                 for (size_t k = 0; k < mask_mat.size; ++k)
                     if (mask_mat[k] == 0.0f)
-                        scaled_scores[k] = -INFINITY;
+                        scaled_scores[k] = -INFINITY; // NOTE: Instead of -INFINITY, I could use large negative values to avoid NaNs
 
             tensor attention_weights = softmax(scaled_scores);
             tensor weighted_sum = matmul(attention_weights, v_mat);
