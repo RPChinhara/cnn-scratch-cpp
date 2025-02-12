@@ -175,6 +175,7 @@ tensor create_causal_mask(size_t seq_len) {
 }
 
 tensor multihead_attention(const tensor& x, const std::vector<std::vector<tensor>>& w, size_t seq_len, size_t d_model, size_t num_heads, bool mask) {
+    // TODO: since shape of x is (32, 25, 128) which contains "seq_len" and "d_model", avoid passing it explicitly and instead compute it inside the function.
     size_t batch_size = x.shape.front();
     size_t head_dim = (num_heads == 1) ? d_model : d_model / num_heads;
 
