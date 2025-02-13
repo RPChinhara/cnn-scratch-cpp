@@ -10,6 +10,7 @@ Issues:
     - Use bits as weights and biases?
     - Use one integet to represent 10 weights since maximum value for a variable of type int is 2147483647 which has 10 digits each act as weights.
     - Use smaller floating values
+    - Just increase number of lyrs used? so each lyrs holds 1000 params times 1000 lyrs becomes 1000000 total params.
 
 Plans:
 ----------------
