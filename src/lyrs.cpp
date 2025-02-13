@@ -56,7 +56,7 @@ void text_vectorizer::build_vocab(const std::vector<std::string>& data) {
     //   std::cout << vocab_vec[i].first << " " << vocab_vec[i].second << "\n";
 }
 
-tensor text_vectorizer::vectorize(const std::vector<std::string>& input) {
+tensor text_vectorizer::adapt(const std::vector<std::string>& input) {
     tensor t_new = zeros({input.size(), seq_len});
 
     size_t idx = 0;

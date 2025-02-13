@@ -135,9 +135,9 @@ int main() {
     text_vectorizer vectorizer(vocab_size, seq_len);
     vectorizer.build_vocab(vocab);
 
-    tensor src_input = vectorizer.vectorize(data[0]);
-    tensor tgt_input = vectorizer.vectorize(data[1]);
-    tensor tgt_output = vectorizer.vectorize(data[2]);
+    tensor src_input = vectorizer.adapt(data[0]);
+    tensor tgt_input = vectorizer.adapt(data[1]);
+    tensor tgt_output = vectorizer.adapt(data[2]);
 
     // TODO: put back to 0.2f
     auto src_input_train_test = split(src_input, 0.001f);   // (88821, 25), (89, 25)

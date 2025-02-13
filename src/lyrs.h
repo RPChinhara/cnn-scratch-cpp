@@ -20,7 +20,7 @@ class text_vectorizer {
   public:
     text_vectorizer(size_t vocab_size, size_t seq_len) : vocab_size(vocab_size), seq_len(seq_len) {}
     void build_vocab(const std::vector<std::string>& data);
-    tensor vectorize(const std::vector<std::string>& input);
+    tensor adapt(const std::vector<std::string>& input);
 
   private:
     size_t vocab_size;

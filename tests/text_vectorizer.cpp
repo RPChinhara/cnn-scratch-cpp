@@ -10,7 +10,7 @@ int main() {
     text_vectorizer vectorizer(vocab_size, seq_len);
     vectorizer.build_vocab(vocab);
 
-    std::cout << vectorizer.vectorize(in) << "\n";
+    std::cout << vectorizer.adapt(in) << "\n";
 
     return 0;
 }
