@@ -25,8 +25,14 @@ std::vector<std::vector<tensor>> w = {
 tensor w1 = glorot_uniform({d_model, d_ff});
 tensor w2 = glorot_uniform({d_ff, d_model});
 
+tensor w3 = glorot_uniform({d_model, d_ff});
+tensor w4 = glorot_uniform({d_ff, d_model});
+
 tensor b1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but it'd be inefficient for memory specially when the seq_len, d_model, and d_ff get much bigger.
 tensor b2 = glorot_uniform({1, d_model});
+
+tensor b3 = glorot_uniform({1, d_ff});
+tensor b4 = glorot_uniform({1, d_model});
 
 tensor encoder(const tensor& x) {
     size_t batch_size = x.shape.front();
@@ -54,8 +60,16 @@ tensor decoder(const tensor& x, const tensor& encoder_output) {
     tensor x1 = layer_normalization(x + masked_mha);
     tensor cross_attention = multihead_cross_attention(x1, encoder_output, encoder_output, w, seq_len, d_model, num_heads);
     tensor x2 = layer_normalization(x1 + cross_attention);
+    tensor x3 = zeros({batch_size, seq_len, d_model});
 
-    return x2;
+    for (size_t i = 0; i < batch_size; ++i) {
+        tensor x2_mat = slice(x2, i * seq_len, seq_len);
+        tensor x3_mat = matmul(relu(matmul(x2_mat, w3) + b3), w4) + b4;
+
+        std::copy(x3_mat.elems, x3_mat.elems + x3_mat.size, x3.elems + i * x3_mat.size);
+    }
+
+    return layer_normalization(x2 + x3);
 }
 
 tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt_output) {
