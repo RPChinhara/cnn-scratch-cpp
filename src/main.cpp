@@ -130,14 +130,14 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
             size_t batch_size = dec_output.shape.front();
 
-            tensor y = zeros({batch_size, seq_len, vocab_size});
+            tensor probs = zeros({batch_size, seq_len, vocab_size});
 
             for (size_t i = 0; i < batch_size; ++i) {
                 tensor dec_output_mat = slice(dec_output, i * seq_len, seq_len); // (25, 128)
                 tensor logits_mat = matmul(dec_output_mat, w_o) + b_o;
-                tensor y_mat = softmax(logits_mat);
+                tensor probs_mat = softmax(logits_mat);
 
-                std::copy(y_mat.elems, y_mat.elems + y_mat.size, y.elems + i * y_mat.size);
+                std::copy(probs_mat.elems, probs_mat.elems + probs_mat.size, probs.elems + i * probs_mat.size);
             }
 
             // Backpropagation
