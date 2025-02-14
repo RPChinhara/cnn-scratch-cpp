@@ -121,8 +121,8 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
             tensor tgt_positional_embeddings = positional_encoding_lyr.adapt(tgt_token_embeddings);
 
             // TODO: I run these functions simultaneously?
-            tensor output = encoder(src_positional_embeddings);
-            tensor y = decoder(tgt_positional_embeddings, output);
+            tensor enc_output = encoder(src_positional_embeddings);
+            tensor dec_output = decoder(tgt_positional_embeddings, enc_output); // (32, 25, 128)
 
             // loss = categorical_cross_entropy(y_batch, y);
 
