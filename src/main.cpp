@@ -14,12 +14,28 @@ constexpr size_t d_ff       = 512; // NOTE: often 4x larger than d_model
 constexpr size_t num_heads  = 4;
 constexpr size_t head_dim   = (num_heads == 1) ? d_model : d_model / num_heads;
 
-std::vector<std::vector<tensor>> w = {
+std::vector<std::vector<tensor>> w_enc = {
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})}, // w_q, w_k, w_v
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
     {glorot_uniform({d_model, d_model})} // w_o
+};
+
+std::vector<std::vector<tensor>> w_dec_self = {
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, d_model})}
+};
+
+std::vector<std::vector<tensor>> w_dec_cross = {
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
+    {glorot_uniform({d_model, d_model})}
 };
 
 tensor w1 = glorot_uniform({d_model, d_ff});
@@ -38,7 +54,7 @@ tensor encoder(const tensor& x) {
     size_t batch_size = x.shape.front();
 
     // NOTE: using postnorm, but there is prenorm as well
-    tensor mha = multihead_attention(x, w, seq_len, d_model, num_heads);
+    tensor mha = multihead_attention(x, w_enc, seq_len, d_model, num_heads);
     tensor x1 = layer_normalization(x + mha);
     tensor x2 = zeros({batch_size, seq_len, d_model});
 
@@ -56,9 +72,9 @@ tensor decoder(const tensor& x, const tensor& encoder_output) {
     size_t batch_size = x.shape.front();
 
     // TODO: Do I need different w or I can reuse w?
-    tensor masked_mha = multihead_attention(x, w, seq_len, d_model, num_heads, true);
+    tensor masked_mha = multihead_attention(x, w_dec_self, seq_len, d_model, num_heads, true);
     tensor x1 = layer_normalization(x + masked_mha);
-    tensor cross_attention = multihead_cross_attention(x1, encoder_output, encoder_output, w, seq_len, d_model, num_heads);
+    tensor cross_attention = multihead_cross_attention(x1, encoder_output, encoder_output, w_dec_cross, seq_len, d_model, num_heads);
     tensor x2 = layer_normalization(x1 + cross_attention);
     tensor x3 = zeros({batch_size, seq_len, d_model});
 
