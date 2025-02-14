@@ -130,16 +130,15 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
             size_t batch_size = dec_output.shape.front();
 
-            tensor logits = zeros({batch_size, seq_len, vocab_size});
+            tensor y = zeros({batch_size, seq_len, vocab_size});
 
             for (size_t i = 0; i < batch_size; ++i) {
                 tensor dec_output_mat = slice(dec_output, i * seq_len, seq_len); // (25, 128)
                 tensor logits_mat = matmul(dec_output_mat, w_o) + b_o;
+                tensor y_mat = softmax(logits_mat);
 
-                std::copy(logits_mat.elems, logits_mat.elems + logits_mat.size, logits.elems + i * logits_mat.size);
+                std::copy(y_mat.elems, y_mat.elems + y_mat.size, y.elems + i * y_mat.size);
             }
-
-            // loss = categorical_cross_entropy(y_batch, y);
 
             // Backpropagation
 
