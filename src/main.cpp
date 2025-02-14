@@ -38,6 +38,7 @@ std::vector<std::vector<tensor>> w_dec_cross = {
     {glorot_uniform({d_model, d_model})}
 };
 
+// TODO: change to proper names only 1 and 2 should be used
 tensor w1 = glorot_uniform({d_model, d_ff});
 tensor w2 = glorot_uniform({d_ff, d_model});
 
