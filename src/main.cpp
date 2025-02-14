@@ -44,11 +44,15 @@ tensor w2 = glorot_uniform({d_ff, d_model});
 tensor w3 = glorot_uniform({d_model, d_ff});
 tensor w4 = glorot_uniform({d_ff, d_model});
 
+tensor w_o = glorot_uniform({d_model, vocab_size});
+
 tensor b1 = glorot_uniform({1, d_ff}); // NOTE: Could be (seq_len, d_ff), but it'd be inefficient for memory specially when the seq_len, d_model, and d_ff get much bigger.
 tensor b2 = glorot_uniform({1, d_model});
 
 tensor b3 = glorot_uniform({1, d_ff});
 tensor b4 = glorot_uniform({1, d_model});
+
+tensor b_o = glorot_uniform({1, vocab_size});
 
 tensor encoder(const tensor& x) {
     size_t batch_size = x.shape.front();
@@ -123,6 +127,17 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
             // TODO: I run these functions simultaneously?
             tensor enc_output = encoder(src_positional_embeddings);
             tensor dec_output = decoder(tgt_positional_embeddings, enc_output); // (32, 25, 128)
+
+            size_t batch_size = dec_output.shape.front();
+
+            tensor logits = zeros({batch_size, seq_len, vocab_size});
+
+            for (size_t i = 0; i < batch_size; ++i) {
+                tensor dec_output_mat = slice(dec_output, i * seq_len, seq_len); // (25, 128)
+                tensor logits_mat = matmul(dec_output_mat, w_o) + b_o;
+
+                std::copy(logits_mat.elems, logits_mat.elems + logits_mat.size, logits.elems + i * logits_mat.size);
+            }
 
             // loss = categorical_cross_entropy(y_batch, y);
 
