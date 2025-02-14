@@ -71,7 +71,6 @@ tensor encoder(const tensor& x) {
 tensor decoder(const tensor& x, const tensor& encoder_output) {
     size_t batch_size = x.shape.front();
 
-    // TODO: Do I need different w or I can reuse w?
     tensor masked_mha = multihead_attention(x, w_dec_self, seq_len, d_model, num_heads, true);
     tensor x1 = layer_normalization(x + masked_mha);
     tensor cross_attention = multihead_cross_attention(x1, encoder_output, encoder_output, w_dec_cross, seq_len, d_model, num_heads);
