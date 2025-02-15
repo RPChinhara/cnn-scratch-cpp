@@ -23,4 +23,5 @@
     - Multimodal learning (text + image)
     - Visual question answering
     - CLIP, DINO, Flamingo
+- Reasoning
 - AGI (Physics)
