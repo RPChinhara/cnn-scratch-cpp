@@ -291,7 +291,7 @@ static size_t get_mat_size(const std::vector<size_t>& shape) {
 
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
     os << std::setprecision(8) << std::fixed;
-    os << "Tensor(" << (t.size == 1 ? "[" : "\n["); // TODO: If I don't use 1D tensors at all, then remove logics that supports 1D tensors.
+    os << "Tensor(\n[";
 
     size_t mat_size = get_mat_size(t.shape);
 
