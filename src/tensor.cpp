@@ -55,7 +55,7 @@ tensor& tensor::operator=(tensor&& other) noexcept {
 const std::string tensor::get_shape() const {
     std::string shapes = "(";
 
-    for (auto i = 0; i < shape.size(); ++i) {
+    for (size_t i = 0; i < shape.size(); ++i) {
         if (i == shape.size() - 1)
             shapes += std::to_string(shape[i]);
         else
@@ -161,7 +161,7 @@ tensor& tensor::operator+=(const tensor& other) {
 
 tensor tensor::operator-() const {
     tensor t_new = *this;
-    for (auto i = 0; i < size; ++i)
+    for (size_t i = 0; i < size; ++i)
         t_new[i] = -elems[i];
     return t_new;
 }
