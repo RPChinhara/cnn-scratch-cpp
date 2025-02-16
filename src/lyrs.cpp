@@ -152,7 +152,7 @@ tensor layer_normalization(const tensor& x) {
     const size_t features = x.shape.back();
 
     float epsilon = 1e-5f;
-    tensor gamma = fill({1, features}, 1.0f);
+    tensor gamma = fill({1, features}, 1.0f); // TODO: These should be vectors instead of matrices? For instance, it should be fill({features}, 1.0f)? Same for beta.
     tensor beta = zeros({1, features});
 
     tensor average = mean(x);
