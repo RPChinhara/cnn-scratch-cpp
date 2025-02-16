@@ -295,7 +295,10 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
         if (i && i % t.shape.back() == 0) os << "\n ";
         if (i && i % mat_size == 0) os << "\n ";
 
-        os << std::setw(12) << std::right << t[i];  // Increased width to handle negative numbers
+        if (i == t.size - 1)
+            os << std::setw(11) << std::right << t[i];
+        else
+            os << std::setw(11) << std::right << t[i] << " ";
     }
 
     os << " ] - shape=(";
