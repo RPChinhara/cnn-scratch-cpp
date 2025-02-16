@@ -2,6 +2,7 @@
 #include "arrs.h"
 #include "datasets.h"
 #include "linalg.h"
+#include "losses.h"
 #include "lyrs.h"
 #include "rand.h"
 
@@ -118,6 +119,7 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
             tensor src_input_batch = slice(src_input, start_idx, end_idx - start_idx);
             tensor tgt_input_batch = slice(tgt_input, start_idx, end_idx - start_idx);
+            tensor tgt_output_batch = slice(tgt_output, start_idx, end_idx - start_idx);
 
             tensor src_token_embeddings = embedding_lyr.adapt(src_input_batch);
             tensor src_positional_embeddings = positional_encoding_lyr.adapt(src_token_embeddings);
@@ -140,6 +142,16 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
                 std::copy(probs_mat.elems, probs_mat.elems + probs_mat.size, probs.elems + i * probs_mat.size);
             }
+
+            // TODO: Do I need autoregressive like for inference?
+
+            std::cout << tgt_output_batch.get_shape() << "\n";
+            std::cout << probs.get_shape() << "\n";
+
+            tensor a = variable({2, 3}, {1, 2, 3, 4, 5, 6});
+            std::cout << argmax(a) << "\n";
+
+            loss = categorical_cross_entropy(tgt_output, probs);
 
             // Backpropagation
 
