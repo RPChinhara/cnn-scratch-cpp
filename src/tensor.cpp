@@ -285,14 +285,14 @@ tensor operator/(const tensor& t, const float sca) {
     return divide(t, t_sca);
 }
 
-static size_t get_num_elem_most_inner_mat(const std::vector<size_t>& shape) {
+static size_t get_mat_size(const std::vector<size_t>& shape) {
     size_t last_shape = shape[shape.size() - 1];
     size_t second_last_shape = shape[shape.size() - 2];
     return second_last_shape * last_shape;
 }
 
 static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t>& shape) {
-    size_t num_elem = get_num_elem_most_inner_mat(shape);
+    size_t num_elem = get_mat_size(shape);
     std::vector<size_t> num_elem_each_batch;
 
     for (auto it = std::rbegin(shape) + 2; it != std::rend(shape); ++it) {
@@ -330,7 +330,7 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
             }
         } else {
             std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
-            size_t num_elem_most_inner_mat = get_num_elem_most_inner_mat(t.shape);
+            size_t num_elem_most_inner_mat = get_mat_size(t.shape);
 
             for (auto i = 0; i < t.size; ++i) {
                 bool num_elem_each_batch_done = false;
