@@ -285,15 +285,11 @@ tensor operator/(const tensor& t, const float sca) {
     return divide(t, t_sca);
 }
 
-static size_t get_mat_size(const std::vector<size_t>& shape) {
-    return shape.size() < 2 ? 1 : shape[shape.size() - 2] * shape.back();
-}
-
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
     os << std::setprecision(8) << std::fixed;
     os << "Tensor(\n[";
 
-    size_t mat_size = get_mat_size(t.shape);
+    size_t mat_size = t.shape.size() < 2 ? 1 : t.shape[t.shape.size() - 2] * t.shape.back();
 
     for (size_t i = 0; i < t.size; ++i) {
         if (i && i % t.shape.back() == 0) os << "\n ";
