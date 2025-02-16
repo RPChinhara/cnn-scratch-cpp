@@ -318,12 +318,9 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
     }
 
     if (t.size == 1) {
-        for (auto i = 0; i < t.size; ++i) {
-            if (i == t.size - 1)
-                os << std::setw(11) << t[i];
-            else
-                os << std::setw(11) << t[i] << " ";
-        }
+        for (auto i = 0; i < t.size; ++i)
+            os << std::setw(11) << t[i];
+        
     } else {
         std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
         size_t mat_size = get_mat_size(t.shape);
