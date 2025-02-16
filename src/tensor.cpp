@@ -287,7 +287,7 @@ tensor operator/(const tensor& t, const float sca) {
 
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
     os << std::setprecision(8) << std::fixed;
-    os << "Tensor(\n[";
+    os << "[";
 
     size_t mat_size = t.shape.size() < 2 ? 1 : t.shape[t.shape.size() - 2] * t.shape.back();
 
@@ -298,10 +298,10 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
         os << std::setw(12) << std::right << t[i];  // Increased width to handle negative numbers
     }
 
-    os << " ], shape=(";
+    os << " ] - shape=(";
     for (size_t i = 0; i < t.shape.size(); ++i)
         os << t.shape[i] << (i < t.shape.size() - 1 ? ", " : (t.shape.size() == 1 ? "," : ""));
 
-    os << "))";
+    os << ")";
     return os;
 }
