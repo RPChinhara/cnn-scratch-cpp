@@ -330,7 +330,7 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
             }
         } else {
             std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
-            size_t num_elem_most_inner_mat = get_mat_size(t.shape);
+            size_t mat_size = get_mat_size(t.shape);
 
             for (auto i = 0; i < t.size; ++i) {
                 bool num_elem_each_batch_done = false;
@@ -346,14 +346,14 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
                     }
                 }
 
-                if (i % t.shape.back() == 0 && i != 0 && !(i % num_elem_most_inner_mat == 0)) {
+                if (i % t.shape.back() == 0 && i != 0 && !(i % mat_size == 0)) {
                     os << "]\n";
 
                     for (auto i = 0; i < t.shape.size() - 1; ++i)
                         os << " ";
 
                     os << "[";
-                } else if (i % num_elem_most_inner_mat == 0 && i != 0) {
+                } else if (i % mat_size == 0 && i != 0) {
                     if (num_elem_each_batch_done) {
                         os << "]";
                         for (auto i = 0; i < num_square_brackets; ++i)
@@ -365,7 +365,7 @@ std::ostream& operator<<(std::ostream& os, const tensor& t) {
                     }
                 }
 
-                if (i % num_elem_most_inner_mat == 0 && i != 0) {
+                if (i % mat_size == 0 && i != 0) {
                     if (num_elem_each_batch_done) {
                         for (auto i = 0; i < num_square_brackets; ++i)
                             os << "\n";
