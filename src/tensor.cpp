@@ -286,49 +286,26 @@ tensor operator/(const tensor& t, const float sca) {
 }
 
 static size_t get_mat_size(const std::vector<size_t>& shape) {
-    size_t last_shape = shape[shape.size() - 1];
-    size_t second_last_shape = shape[shape.size() - 2];
-    return second_last_shape * last_shape;
+    return shape.size() < 2 ? 1 : shape[shape.size() - 2] * shape.back();
 }
 
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
-    std::cout << std::setprecision(8) << std::fixed;
+    os << std::setprecision(8) << std::fixed;
+    os << "Tensor(" << (t.size == 1 ? "[" : "\n[");
 
-    if (t.size == 1)
-        os << "Tensor([";
-    else
-        os << "Tensor(\n[";
+    size_t mat_size = get_mat_size(t.shape);
 
-    if (t.size == 1) {
-        for (size_t i = 0; i < t.size; ++i)
-            os << std::setw(11) << t[i];
+    for (size_t i = 0; i < t.size; ++i) {
+        if (i && i % t.shape.back() == 0) os << "\n ";
+        if (i && i % mat_size == 0 && i != 0) os << "\n ";
 
-    } else {
-        size_t mat_size = get_mat_size(t.shape);
-
-        for (size_t i = 0; i < t.size; ++i) {
-            if (i != 0 && i % t.shape.back() == 0)
-                std::cout << "\n ";
-
-            if (i != 0 && i % mat_size == 0)
-                std::cout << "\n ";
-
-            std::cout << std::setw(11) << t[i] << " ";
-        }
+        os << std::setw(12) << std::right << t[i];  // Increased width to handle negative numbers
     }
 
-    os << "], shape=(";
-
-    for (size_t i = 0; i < t.shape.size(); ++i) {
-        if (i != t.shape.size() - 1)
-            os << t.shape[i] << ", ";
-        else if (t.shape.size() == 1)
-            os << t.shape[i] << ",";
-        else
-            os << t.shape[i];
-    }
+    os << " ], shape=(";
+    for (size_t i = 0; i < t.shape.size(); ++i)
+        os << t.shape[i] << (i < t.shape.size() - 1 ? ", " : (t.shape.size() == 1 ? "," : ""));
 
     os << "))";
-
     return os;
 }
