@@ -291,117 +291,35 @@ static size_t get_mat_size(const std::vector<size_t>& shape) {
     return second_last_shape * last_shape;
 }
 
-static std::vector<size_t> get_num_elem_each_batch(const std::vector<size_t>& shape) {
-    size_t num_elem = get_mat_size(shape);
-    std::vector<size_t> num_elem_each_batch;
-
-    for (auto it = std::rbegin(shape) + 2; it != std::rend(shape); ++it) {
-        num_elem *= *it;
-        num_elem_each_batch.push_back(num_elem);
-    }
-    return num_elem_each_batch;
-}
-
 std::ostream& operator<<(std::ostream& os, const tensor& t) {
     std::cout << std::setprecision(8) << std::fixed;
 
-    size_t idx = 0;
+    if (t.size == 1)
+        os << "Tensor([";
+    else
+        os << "Tensor(\n[";
 
     if (t.size == 1) {
-        os << "Tensor(";
-        for (auto i = 0; i < t.shape.size(); ++i)
-            os << "[";
-    } else {
-        os << "Tensor(\n";
-        for (auto i = 0; i < t.shape.size(); ++i)
-            os << "[";
-    }
-
-    if (t.size == 1) {
-        for (auto i = 0; i < t.size; ++i)
+        for (size_t i = 0; i < t.size; ++i)
             os << std::setw(11) << t[i];
 
     } else {
-        std::vector<size_t> num_elem_each_batch = get_num_elem_each_batch(t.shape);
         size_t mat_size = get_mat_size(t.shape);
 
-        for (auto i = 0; i < t.size; ++i) {
-            bool num_elem_each_batch_done = false;
-            size_t num_square_brackets = 0;
+        for (size_t i = 0; i < t.size; ++i) {
+            if (i != 0 && i % t.shape.back() == 0)
+                std::cout << "\n ";
 
-            if (2 < t.shape.size()) {
-                for (auto j = num_elem_each_batch.size() - 1; 0 < j; --j) {
-                    if (i % num_elem_each_batch[j] == 0 && i != 0) {
-                        num_elem_each_batch_done = true;
-                        num_square_brackets = j + 2;
-                        break;
-                    }
-                }
-            }
+            if (i != 0 && i % mat_size == 0)
+                std::cout << "\n ";
 
-            if (i % t.shape.back() == 0 && i != 0 && !(i % mat_size == 0)) {
-                os << "]\n";
-
-                for (auto i = 0; i < t.shape.size() - 1; ++i)
-                    os << " ";
-
-                os << "[";
-            } else if (i % mat_size == 0 && i != 0) {
-                if (num_elem_each_batch_done) {
-                    os << "]";
-                    for (auto i = 0; i < num_square_brackets; ++i)
-                        os << "]";
-
-                    os << "\n";
-                } else {
-                    os << "]]\n";
-                }
-            }
-
-            if (i % mat_size == 0 && i != 0) {
-                if (num_elem_each_batch_done) {
-                    for (auto i = 0; i < num_square_brackets; ++i)
-                        os << "\n";
-                    for (auto i = 0; i < t.shape.size() - num_square_brackets - 1; ++i)
-                        os << " ";
-                    for (auto i = 0; i < num_square_brackets + 1; ++i)
-                        os << "[";
-                } else {
-                    os << "\n";
-                    for (auto i = 0; i < t.shape.size() - 2; ++i)
-                        os << " ";
-                    os << "[[";
-                }
-            }
-
-            if (i == t.size - 1) {
-                os << std::setw(11) << t[i];
-                continue;
-            }
-
-            if (idx == t.shape.back())
-                idx = 0;
-
-            if (t.shape.back() == 1) {
-                os << std::setw(11) << t[i];
-            } else {
-                if (idx % (t.shape.back() - 1) == 0 && idx != 0)
-                    os << std::setw(11) << t[i];
-                else
-                    os << std::setw(11) << t[i] << " ";
-            }
-
-            ++idx;
-            num_elem_each_batch_done = false;
+            std::cout << std::setw(11) << t[i] << " ";
         }
     }
 
-    for (auto i = 0; i < t.shape.size(); ++i)
-        os << "]";
+    os << "], shape=(";
 
-    os << ", shape=(";
-
-    for (auto i = 0; i < t.shape.size(); ++i) {
+    for (size_t i = 0; i < t.shape.size(); ++i) {
         if (i != t.shape.size() - 1)
             os << t.shape[i] << ", ";
         else if (t.shape.size() == 1)
