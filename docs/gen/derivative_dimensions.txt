@@ -1,0 +1,26 @@
+Derivative dimensions:
+----------------
+When I do calculation for partial derivative it is always confuses me since it have to much dimensions with parameters like w_xh, w_hh, and so on.
+However, the key might use element-wise multiplication along with matmul, but maybe never sum(). Reason is that when you use sum() it will average out all the gradients from the batch which
+will leads to losing precision, and then you add this averaged gradients to parameters like w_xh which is not precise. So, it's almost always recommended to much dimentions using element-wise multiplication.
+
+Another insight for muching Dimensions
+Imagine following 3 matrices for below shapes,
+
+batch_size  = 1
+hidden_size = 50
+
+(1, 50), (50, 1), (50, 50)
+
+I have to multiply these to get final shape of (1, 50), so it will be either
+
+element-wise multiplication on (1, 50) and transpose(50, 1), and take matmul on previous result and (50, 50) or,
+element-wise multiplication on transpose(1, 50) and (50, 1), and take matmul on transpose of previous result and (50, 50).
+
+It's obviously clear that matmul on (1, 50) and (50, 1) is wrong since it'd result in (1, 1), then I won't be able to take matmul with (50, 50) although I could just multiply (1, 1) and (50, 50), but it won't lead to (1, 50).
+
+What I want to say here is that I think you don't want to mess with hidden_size ever. You don't want to counduct operations that destroy shape for hidden_size just keep shape for hidden_size, however I could mess with shapes for batch_size. I think when I matmul on (1, 50) and (50, 1) it's just destroying hidden layers as if there are no more hidden layers exist in the model. I mean just think about it what does the result (1, 1) even mean considering below forward progation. I never got this shape! Also, I guess you can't mess with size of input_size as well for the same reason.
+
+50 1, 1 8316 = 50 8316 -> 50 50, 50 8316 = 50 8316 -> 1 50, 50 8316 = 1 8316
+matmul(50 1, 1 8316) -> 50 8316 + matmul(50 50, 50 8316) -> 50 8316
+matmul(1 50, 50 8316) -> 1 8316

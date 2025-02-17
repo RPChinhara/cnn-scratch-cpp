@@ -1,0 +1,12 @@
+Forward pass:
+----------------
+z1 = matmul(w1, x);
+a1 = matmul(z1);
+
+z2 = matmul(w2, a1);
+a2 = matmul(z2);
+
+z3 = matmul(w3, a2);
+a3 = matmul(z3);
+
+dl/da3 da3/dz3 dz3/da2

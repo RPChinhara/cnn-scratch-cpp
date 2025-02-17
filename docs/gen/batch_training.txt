@@ -1,0 +1,5 @@
+Batch training:
+----------------
+64 batch size:  60000 / 64 = 937.5,    937 x 64 = 59968,  60000 mod 64 = 32  -> Total batches are 938, where each batch size is 64, but batch size for last batch is 32.
+128 batch size: 60000 / 128 = 468.75,  468 x 128 = 59904, 60000 mod 128 = 96 -> Total batches are 469, where each batch size is 128, but batch size for last batch is 96.
+256 batch size: 60000 / 256 = 234.375, 234 x 256 = 59904, 60000 mod 256 = 96 -> Total batches are 235, where each batch size is 256, but batch size for last batch is 96.

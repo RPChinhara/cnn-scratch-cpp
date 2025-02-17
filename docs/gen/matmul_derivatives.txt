@@ -1,0 +1,31 @@
+Matmul derivatives:
+----------------
+[Why use matmul when taking partial derivatives respect to some parameters?]
+
+When batch size is 8317:
+output_size = 1
+batch_size  = 8317
+hidden_size = 50
+
+dl_d_y_pred = (output_size, batch_size)  d_y_pred_d_w_hy = (batch_size, hidden_size)
+[ 1 2 3 ... 8317 ]                       [ 1 2 3 ... 50 ]
+    imagine these as gradients(slope) -> / 2 .
+                                      -> \ 3   .
+                                      -> \ .     .
+                                      -> / .       .
+                                      -> \ .         .
+                                         [ 8317         ]
+
+When batch size is 1:
+output_size = 1
+batch_size  = 1
+hidden_size = 50
+
+dl_d_y_pred = (output_size, batch_size)  d_y_pred_d_w_hy = (batch_size, hidden_size)
+[ 1 ]                                    [ 1 2 3 ... 50 ]
+
+Imagine I have to calculate dl_d_why. In order to do that I have to get dl_d_y_pred and d_y_pred_d_w_hy, and then I have to take matmul on them, but why?
+It is easier to imagine why matmul is used when batch size is 1. Since dl_d_y_pred is just a scaler in this case (1, 1). I'd just multiply this scaler into (1, 50) d_y_pred_d_w_hy.
+Then I will get dl_d_why. It's pretty simple. However, things get bit different when the batch size is greater than 1, in this case 8317. The shape of result is same (1, 50).
+I want to think of this calculation as adding gradients for each example as w_hy is used for all the examples. I add each examples(batch) so that it is taking account how each examples
+affect w_hy which also affect loss. Also just remember that whenever I encounter batch_size in shape, most likely I should use matmul based on this assumption.
