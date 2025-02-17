@@ -1,4 +1,4 @@
-GRU BPTT:
+BPTT:
 ----------------
 dL/dw_h: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dw_h
          (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dw_h
