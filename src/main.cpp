@@ -62,8 +62,8 @@ tensor encoder(const tensor& x) {
     // NOTE: using postnorm, but there is prenorm as well
     tensor mha = multihead_attention(x, w_enc, seq_len, d_model, num_heads);
     tensor x1 = layer_normalization(x + mha);
-    tensor x2 = zeros({batch_size, seq_len, d_model});
 
+    tensor x2 = zeros({batch_size, seq_len, d_model});
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x1_mat = slice(x1, i * seq_len, seq_len);
         tensor x2_mat = matmul(relu(matmul(x1_mat, w1) + b1), w2) + b2;
@@ -81,8 +81,8 @@ tensor decoder(const tensor& x, const tensor& encoder_output) {
     tensor x1 = layer_normalization(x + masked_mha);
     tensor cross_attention = multihead_cross_attention(x1, encoder_output, encoder_output, w_dec_cross, seq_len, d_model, num_heads);
     tensor x2 = layer_normalization(x1 + cross_attention);
-    tensor x3 = zeros({batch_size, seq_len, d_model});
 
+    tensor x3 = zeros({batch_size, seq_len, d_model});
     for (size_t i = 0; i < batch_size; ++i) {
         tensor x2_mat = slice(x2, i * seq_len, seq_len);
         tensor x3_mat = matmul(relu(matmul(x2_mat, w3) + b3), w4) + b4;
