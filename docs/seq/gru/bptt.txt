@@ -1,0 +1,10 @@
+GRU BPTT:
+----------------
+dL/dw_h: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dw_h
+         (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dw_h
+
+dL/dw_r: (dL/dy * dy/dh_10) * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dw_r
+         (dL/dy * dy/dh_10 * dh_10/dh_hat_10 * dh_hat_10/dr_10 * dr_10/dh_9) * dh_9/dh_hat_9 * dh_hat_9/dr_9 * dr_9/dw_r
+
+dL/dw_z: (dL/dy * dy/dh_10) * dh_10/dz_10 * dz_10/dw_z
+         (dL/dy * dy/dh_10 * dh_10/dz_10 * dz_10/dh_9) * dh_9/dz_9 * dz_9/dw_z
