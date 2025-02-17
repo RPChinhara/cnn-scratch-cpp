@@ -41,6 +41,12 @@ Comparisons:
     - The first for loop in forward() in rnn.cpp, which goes through number of seq_length which is 10 in this case, will only loop one time in Transformer I guess since it could be parallelized, and that is significant improvement.
     - So the improvement on the transformer is just speed that it became faster than RNNs? If I make a model faster than transformer, then it's superior to it? Is speed that essential for my physics goal?
     - In RNNs, unable to capture infos/semantics if the sequence of long was big, but transformer solved this.
+- number of neurons
+    - fly     = 139,255
+    - gorilla = 33.4 billion
+    - human   = 100 billion
+    - GPT-3   = 175 billion
+    - GPT-4   = 1.76 trillion
 
 Performance Optimization:
 ----------------
