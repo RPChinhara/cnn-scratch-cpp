@@ -1,4 +1,4 @@
-Matmul derivatives:
+Matmul Derivatives:
 ----------------
 [Why use matmul when taking partial derivatives respect to some parameters?]
 

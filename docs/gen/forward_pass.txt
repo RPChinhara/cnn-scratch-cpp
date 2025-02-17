@@ -1,4 +1,4 @@
-Forward pass:
+Forward Pass:
 ----------------
 z1 = matmul(w1, x);
 a1 = matmul(z1);

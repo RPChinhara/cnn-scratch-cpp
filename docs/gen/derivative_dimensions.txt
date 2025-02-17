@@ -1,4 +1,4 @@
-Derivative dimensions:
+Derivative Dimensions:
 ----------------
 When I do calculation for partial derivative it is always confuses me since it have to much dimensions with parameters like w_xh, w_hh, and so on.
 However, the key might use element-wise multiplication along with matmul, but maybe never sum(). Reason is that when you use sum() it will average out all the gradients from the batch which
