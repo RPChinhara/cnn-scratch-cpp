@@ -2,6 +2,7 @@
 #include "arrs.h"
 #include "tensor.h"
 
+// TODO: what is CategoricalFocalCrossentropy() in TF?
 float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
     float num_elm = static_cast<float>(y_true.shape.front());
