@@ -4,8 +4,8 @@
 
 // TODO: what is CategoricalFocalCrossentropy() in TF?
 float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
-    float sum = 0.0f;
-    float num_elm = static_cast<float>(y_true.shape.front());
+    float sum = 0.0f; // TODO: should be loss?
+    float num_elm = static_cast<float>(y_true.shape.front()); // TODO: should be batch_size?
     tensor y_pred_clipped = clip_by_value(y_pred, 1e-12f, 1.0f);
 
     for (auto i = 0; i < y_true.size; ++i)
@@ -27,8 +27,8 @@ float sparse_categorical_cross_entropy(const tensor& y_true, const tensor& y_pre
 }
 
 float mean_squared_error(const tensor& y_true, const tensor& y_pred) {
-    float sum = 0.0f;
-    float num_elm = static_cast<float>(y_true.shape.front());
+    float sum = 0.0f; // TODO: should be loss?
+    float num_elm = static_cast<float>(y_true.shape.front()); // TODO: should be batch_size?
 
     for (auto i = 0; i < y_true.size; ++i)
         sum += std::powf(y_true[i] - y_pred[i], 2.0f);
