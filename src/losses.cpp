@@ -13,6 +13,18 @@ float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
     return -sum / num_elm;
 }
 
+float sparse_categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
+    float batch_size = static_cast<float>(y_true.size);
+    float loss = 0.0f;
+
+    for (auto i = 0; i < batch_size; ++i) {
+        float true_class = y_true[i];
+        loss -= log(y_pred(i, true_class));
+    }
+
+    return loss / batch_size;
+}
+
 float mean_squared_error(const tensor& y_true, const tensor& y_pred) {
     float sum = 0.0f;
     float num_elm = static_cast<float>(y_true.shape.front());
