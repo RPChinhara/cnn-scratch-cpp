@@ -155,7 +155,7 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
         auto end = std::chrono::high_resolution_clock::now();
 
-        std::cout << num_batches << "/" << num_batches << " - " << std::chrono::duration<double>(end - start).count() << "s/step - loss: " << 0.0f << "\n";
+        std::cout << num_batches << "/" << num_batches << " - " << std::chrono::duration<double>(end - start).count() << "s/step - loss: " << loss << "\n";
     }
 
     return tensor();
