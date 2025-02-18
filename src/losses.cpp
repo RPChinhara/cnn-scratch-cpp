@@ -12,7 +12,6 @@ float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
 
     for (size_t i = 0; i < batch_size; ++i) {
         for (size_t j = 0; j <num_classes; ++j) {
-            std::cout << j << "\n";
             if (y_true(i, j) == 1.0f) {
                 loss -= log(y_pred_clipped(i, j));
                 break;
