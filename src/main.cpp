@@ -56,6 +56,10 @@ tensor b4 = glorot_uniform({1, d_model});
 
 tensor b_o = glorot_uniform({1, vocab_size});
 
+// NOTE: Embedding matrix is updated during backpropagation, similar to other model weights.
+auto embedding_lyr = embedding(vocab_size, d_model);
+auto positional_encoding_lyr = positional_encoding(seq_len, d_model);
+
 tensor encoder(const tensor& x) {
     size_t batch_size = x.shape.front();
 
@@ -100,10 +104,6 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
     float num_samples = src_input.shape.front();
     const size_t num_batches = static_cast<size_t>(ceil(num_samples / batch_size));
-
-    // NOTE: Embedding matrix is updated during backpropagation, similar to other model weights.
-    auto embedding_lyr = embedding(vocab_size, d_model);
-    auto positional_encoding_lyr = positional_encoding(seq_len, d_model);
 
     for (size_t i = 1; i <= epochs; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
