@@ -11,7 +11,7 @@ float categorical_cross_entropy(const tensor& y_true, const tensor& y_pred) {
     tensor y_pred_clipped = clip_by_value(y_pred, 1e-12f, 1.0f);
 
     for (size_t i = 0; i < batch_size; ++i) {
-        for (size_t j = 0; j <num_classes; ++j) {
+        for (size_t j = 0; j < num_classes; ++j) {
             if (y_true(i, j) == 1.0f) {
                 loss -= log(y_pred_clipped(i, j));
                 break;
@@ -26,7 +26,7 @@ float sparse_categorical_cross_entropy(const tensor& y_true, const tensor& y_pre
     float batch_size = static_cast<float>(y_true.size);
     float loss = 0.0f;
 
-    for (auto i = 0; i < batch_size; ++i) {
+    for (size_t i = 0; i < batch_size; ++i) {
         float true_class = y_true[i];
         loss -= log(y_pred(i, true_class));
     }
