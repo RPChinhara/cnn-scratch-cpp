@@ -86,6 +86,7 @@ tensor concat(const std::vector<tensor>& tensors, int axis) {
     return result;
 }
 
+// TODO: change to subtensor()
 tensor slice(const tensor& t, const size_t begin, const size_t size) {
     tensor t_new = zeros({size, t.shape.back()});
 
