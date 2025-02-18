@@ -133,25 +133,17 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
             size_t batch_size = dec_output.shape.front();
 
-            tensor probs = zeros({batch_size, seq_len, vocab_size});
+            tensor probs = zeros({batch_size, seq_len});
 
-            for (size_t i = 0; i < batch_size; ++i) {
+            for (size_t i = 0; i < batch_size; ++i) { // TODO: change idx to k
                 tensor dec_output_mat = slice(dec_output, i * seq_len, seq_len); // (25, 128)
                 tensor logits_mat = matmul(dec_output_mat, w_o) + b_o;
-                tensor probs_mat = softmax(logits_mat);
+                tensor probs_mat = argmax(softmax(logits_mat));
 
                 std::copy(probs_mat.elems, probs_mat.elems + probs_mat.size, probs.elems + i * probs_mat.size);
             }
 
-            // TODO: Do I need autoregressive like for inference?
-
-            std::cout << tgt_output_batch.get_shape() << "\n";
-            std::cout << probs.get_shape() << "\n";
-
-            tensor a = variable({2, 3}, {1, 2, 3, 4, 5, 6});
-            std::cout << argmax(a) << "\n";
-
-            loss = categorical_cross_entropy(tgt_output, probs);
+            loss = categorical_cross_entropy(tgt_output_batch, probs);
 
             // Backpropagation
 
@@ -174,6 +166,8 @@ float evaluate(const tensor& x_test, const tensor& y_test) {
 }
 
 tensor predict(const tensor& x_test, const tensor& y_test) {
+    // You generate tokens one at a time (autoregressively).
+    // At each step, you take the argmax of the last token's probability distribution (from softmax) and feed it back as the next input.
     return tensor();
 }
 
