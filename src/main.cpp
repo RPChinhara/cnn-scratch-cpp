@@ -133,17 +133,20 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
             size_t batch_size = dec_output.shape.front();
 
-            tensor probs = zeros({batch_size, seq_len});
+            tensor probs = zeros({batch_size, seq_len, vocab_size});
 
             for (size_t k = 0; k < batch_size; ++k) {
                 tensor dec_output_mat = slice(dec_output, k * seq_len, seq_len); // (25, 128)
                 tensor logits_mat = matmul(dec_output_mat, w_o) + b_o; // TODO: Why it's called logits?
-                tensor probs_mat = argmax(softmax(logits_mat));
+                tensor probs_mat = softmax(logits_mat);
 
                 std::copy(probs_mat.elems, probs_mat.elems + probs_mat.size, probs.elems + k * probs_mat.size);
             }
 
-            loss = categorical_cross_entropy(tgt_output_batch, probs);
+            tgt_output_batch.reshape({batch_size * seq_len});
+            probs.reshape({batch_size * seq_len, vocab_size});
+
+            loss = sparse_categorical_cross_entropy(tgt_output_batch, probs);
 
             // Backpropagation
 
