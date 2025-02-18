@@ -135,12 +135,12 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
 
             tensor probs = zeros({batch_size, seq_len});
 
-            for (size_t i = 0; i < batch_size; ++i) { // TODO: change idx to k
-                tensor dec_output_mat = slice(dec_output, i * seq_len, seq_len); // (25, 128)
+            for (size_t k = 0; k < batch_size; ++k) {
+                tensor dec_output_mat = slice(dec_output, k * seq_len, seq_len); // (25, 128)
                 tensor logits_mat = matmul(dec_output_mat, w_o) + b_o;
                 tensor probs_mat = argmax(softmax(logits_mat));
 
-                std::copy(probs_mat.elems, probs_mat.elems + probs_mat.size, probs.elems + i * probs_mat.size);
+                std::copy(probs_mat.elems, probs_mat.elems + probs_mat.size, probs.elems + k * probs_mat.size);
             }
 
             loss = categorical_cross_entropy(tgt_output_batch, probs);
