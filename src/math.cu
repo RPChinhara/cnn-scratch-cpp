@@ -319,7 +319,7 @@ tensor variance(const tensor& t) {
 }
 
 tensor argmax(const tensor& t) {
-    tensor t_new = zeros({t.shape.front(), 1});
+    tensor t_new = zeros({t.shape.front()});
 
     size_t idx = 0;
     float max = std::numeric_limits<float>::lowest();
