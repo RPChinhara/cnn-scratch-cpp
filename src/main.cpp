@@ -169,8 +169,21 @@ float evaluate(const tensor& x_test, const tensor& y_test) {
 }
 
 tensor predict(const tensor& x_test, const tensor& y_test) {
-    // You generate tokens one at a time (autoregressively).
-    // At each step, you take the argmax of the last token's probability distribution (from softmax) and feed it back as the next input.
+    // NOTE: Process for encoder is same as during training
+    // TODO: I have to prepare input to decoder differently inside this function
+    // TODO: Since decoder output would be (batch_size, t, d_model) I have to modify mha() so that size for seq_len is flexible.
+    // TODO: I need to use timesteps unlike during training
+
+    // tensor src_token_embeddings = embedding_lyr.adapt(src_input_batch);
+    // tensor src_positional_embeddings = positional_encoding_lyr.adapt(src_token_embeddings);
+
+    // tensor tgt_token_embeddings = embedding_lyr.adapt(tgt_input_batch);
+    // tensor tgt_positional_embeddings = positional_encoding_lyr.adapt(tgt_token_embeddings);
+
+    // // TODO: I run these functions simultaneously?
+    // tensor enc_output = encoder(src_positional_embeddings);
+    // tensor dec_output = decoder(tgt_positional_embeddings, enc_output); // (32, 25, 128)
+    
     return tensor();
 }
 
