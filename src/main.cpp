@@ -206,7 +206,7 @@ int main() {
     auto tgt_input_train_test = split(tgt_input, 0.001f);   // (88821, 25), (89, 25)
     auto tgt_output_train_test = split(tgt_output, 0.001f); // (88821, 25), (89, 25)
 
-    train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.second);
+    train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.first);
 
     // tensor test_predictions = predict(input_token_train_test.second, target_token_train_test.second);
 
