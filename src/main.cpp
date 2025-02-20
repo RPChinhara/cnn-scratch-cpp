@@ -164,10 +164,6 @@ tensor train(const tensor& src_input, const tensor& tgt_input, const tensor& tgt
     return tensor();
 }
 
-float evaluate(const tensor& x_test, const tensor& y_test) {
-    return 0.0f;
-}
-
 tensor predict(const tensor& x_test, const tensor& y_test) {
     // NOTE: Process for encoder is same as during training
     // TODO: I have to prepare input to decoder differently inside this function
@@ -183,7 +179,7 @@ tensor predict(const tensor& x_test, const tensor& y_test) {
     // // TODO: I run these functions simultaneously?
     // tensor enc_output = encoder(src_positional_embeddings);
     // tensor dec_output = decoder(tgt_positional_embeddings, enc_output); // (32, 25, 128)
-    
+
     return tensor();
 }
 
@@ -211,9 +207,6 @@ int main() {
     auto tgt_output_train_test = split(tgt_output, 0.001f); // (88821, 25), (89, 25)
 
     train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.second);
-
-    // TODO: Combine evaluate() and predict()?
-    // std::cout << "Test loss: " << evaluate(input_token_train_test.second, target_token_train_test.second) << "\n\n";
 
     // tensor test_predictions = predict(input_token_train_test.second, target_token_train_test.second);
 
