@@ -168,6 +168,15 @@ tensor vslice(const tensor& t, const size_t col) {
     return t_new;
 }
 
+tensor col(const tensor& t, const size_t col) {
+    tensor t_new = zeros({t.shape.front(), 1});
+
+    for (size_t i = 0; i < t.shape.front(); ++i)
+        t_new[i] = t(i, col);
+
+    return t_new;
+}
+
 tensor broadcast_to(const tensor& t, const std::vector<size_t>& shape) {
     tensor t_new = zeros(shape);
 

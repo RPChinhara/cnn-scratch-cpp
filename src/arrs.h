@@ -21,5 +21,6 @@ tensor slice_3d(const tensor& t, const size_t begin, const size_t size); // TODO
 tensor slice_4d(const tensor& t, const size_t begin, const size_t size); // TODO: Change to slice_4d_4d()?
 tensor slice_test(const tensor& t, const std::vector<size_t>& begin, const std::vector<size_t>& size);
 tensor vslice(const tensor& t, const size_t col);
+tensor col(const tensor& t, const size_t col);
 
 std::pair<tensor, tensor> split(const tensor& t, const float test_size);
