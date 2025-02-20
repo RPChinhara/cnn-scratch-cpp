@@ -208,7 +208,7 @@ int main() {
 
     train(src_input_train_test.second, tgt_input_train_test.second, tgt_output_train_test.first);
 
-    // tensor test_predictions = predict(input_token_train_test.second, target_token_train_test.second);
+    tensor predictions = predict(src_input_train_test.second, tgt_input_train_test.second);
 
     return 0;
 }
