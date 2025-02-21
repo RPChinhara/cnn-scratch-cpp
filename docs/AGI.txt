@@ -13,6 +13,7 @@ Issues:
     - Just increase number of lyrs used? so each lyrs holds 1000 params times 1000 lyrs becomes 1000000 total params.
     - On average, human brain contains roughly 1000 billion neurons, but what about smart people like albert einstein. Are these ppl have more neurons?
 - Make a pre-trained level models for image classification like ResNet and NLP like Llama
+- Make a continuous & adaptive model rather than needs retraining on large datasets similar to current models?
 
 Plans:
 ----------------
