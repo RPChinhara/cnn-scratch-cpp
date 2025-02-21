@@ -11,6 +11,17 @@ tensor synapse3 = glorot_uniform({32, 32});
 tensor synapse4 = glorot_uniform({32, 32});
 
 // NOTE: I don't need a memory since it's not stored in a single neuron or location—it is distributed across neurons and synapses in a network-like structure
+// Right now, AI only has short-term recall (via attention mechanisms). Humans, however, have:
+
+// Working memory (holds temporary thoughts).
+// Long-term memory (consolidates knowledge).
+// Episodic memory (stores past experiences).
+// ✅ What to do?
+
+// Implement memory consolidation: Store long-term knowledge gradually.
+// Add attention-based recall: Retrieve only relevant memories.
+// Use adaptive forgetting: Remove unimportant details over time.
+// 🔹 Why? This allows AI to store knowledge persistently, like humans do.
 
 // NOTE: Rougly, each neuron has 1162.79069767 synapses because human has ~86 billion neurons and ~100 trillion synapses so 100 trillion / 86 billion = 1162.79069767. These synapses are strengthen or weaken when new knowledge is stored similar to how weights and biases are updated during the backprop.
 
