@@ -18,6 +18,7 @@ int main() {
     while (true) {
         std::cout << "Processing inputs...\n";
         std::this_thread::sleep_for(std::chrono::seconds(5));
+
         // TODO: Add new synapses (neurogenesis)
         // TODO: Rewires neurons (synapses) dynamically (neuroplasticity)
         // TODO: Stochastic firing: neurons fire randomly, even without direct input.
@@ -32,6 +33,7 @@ int main() {
         // TODO: Build a dynamic neural network that adds/removes connections like the brain.
         // TODO: Study Neuro-Symbolic AI to combine logic + deep learning.
         // TODO: Explore spiking neural networks (SNNs) for biologically accurate learning.
+        // TODO: Modular Networks → Different specialized subnetworks for vision, language, reasoning, etc.
         std::cout << "Backpropagating...\n\n";
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
