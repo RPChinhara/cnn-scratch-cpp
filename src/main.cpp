@@ -20,6 +20,12 @@ int main() {
         std::this_thread::sleep_for(std::chrono::seconds(5));
         // TODO: Add new synapses (neurogenesis)
         // TODO: Rewires neurons (synapses) dynamically (neuroplasticity)
+        // TODO: Stochastic firing: neurons fire randomly, even without direct input.
+        //  - This adds "noise" to brain activity, helping with creativity, problem-solving, and flexibility.
+        //  - It prevents the brain from getting stuck in fixed patterns (unlike AI, which follows strict mathematical rules).
+        //  - AI models only activate when given input (no random self-firing).
+        //  - AI doesn’t have spontaneous thought generation—it only predicts based on patterns.
+        // TODO: Instead of full network updates using gradient-based weight updates, each neuron should updates its own weights.
         std::cout << "Backpropagating...\n\n";
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
