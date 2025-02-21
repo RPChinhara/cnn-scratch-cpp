@@ -5,10 +5,12 @@
 #include "rand.h"
 #include "tensor.h"
 
-tensor w1 = glorot_uniform({32, 32});
-tensor w2 = glorot_uniform({32, 32});
-tensor w3 = glorot_uniform({32, 32});
-tensor w4 = glorot_uniform({32, 32});
+tensor synapse1 = glorot_uniform({32, 32});
+tensor synapse2 = glorot_uniform({32, 32});
+tensor synapse3 = glorot_uniform({32, 32});
+tensor synapse4 = glorot_uniform({32, 32});
+
+tensor memory = glorot_uniform({32, 32});
 
 // NOTE: Rougly, each neuron has 1162.79069767 synapses because human has ~86 billion neurons and ~100 trillion synapses so 100 trillion / 86 billion = 1162.79069767. These synapses are strengthen or weaken when new knowledge is stored similar to how weights and biases are updated during the backprop.
 
