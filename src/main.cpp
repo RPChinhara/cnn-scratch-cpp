@@ -45,6 +45,8 @@ int main() {
         // TODO: Study Neuro-Symbolic AI to combine logic + deep learning.
         // TODO: Explore spiking neural networks (SNNs) for biologically accurate learning.
         // TODO: Modular Networks → Different specialized subnetworks for vision, language, reasoning, etc.
+        // TODO: Use pc as enviroment for the model.
+        // TODO: Implement adaptive forgetting (removing useless data to free memory).
         std::cout << "Backpropagating...\n\n";
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
