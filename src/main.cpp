@@ -26,6 +26,12 @@ int main() {
         //  - AI models only activate when given input (no random self-firing).
         //  - AI doesn’t have spontaneous thought generation—it only predicts based on patterns.
         // TODO: Instead of full network updates using gradient-based weight updates, each neuron should updates its own weights.
+        // TODO: Try dynamic neural architectures (where connections form and break like neuroplasticity).
+        // TODO: Consider graph-based AI models instead of just dense layers as it more similar to how neurons in brain are connected?
+        // TODO: Experiment with Hebbian learning rules instead of backpropagation.
+        // TODO: Build a dynamic neural network that adds/removes connections like the brain.
+        // TODO: Study Neuro-Symbolic AI to combine logic + deep learning.
+        // TODO: Explore spiking neural networks (SNNs) for biologically accurate learning.
         std::cout << "Backpropagating...\n\n";
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
