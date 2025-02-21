@@ -9,10 +9,6 @@ tensor synapse2 = glorot_uniform({32, 32});
 tensor synapse3 = glorot_uniform({32, 32});
 tensor synapse4 = glorot_uniform({32, 32});
 
-// NOTE: I don't need a memory since it's not stored in a single neuron or location—it is distributed across neurons and synapses in a network-like structure
-
-// NOTE: Rougly, each neuron has 1162.79069767 synapses because human has ~86 billion neurons and ~100 trillion synapses so 100 trillion / 86 billion = 1162.79069767. These synapses are strengthen or weaken when new knowledge is stored similar to how weights and biases are updated during the backprop.
-
 int main() {
     while (true) {
         std::cout << "Processing inputs...\n";
