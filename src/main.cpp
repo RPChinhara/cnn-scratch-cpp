@@ -4,7 +4,6 @@
 #include "rand.h"
 #include "tensor.h"
 
-// TODO: Dynamic Synapses: Instead of fixed 32x32 matrices, let synapses grow or shrink based on activity (like neuroplasticity).
 tensor synapse1 = glorot_uniform({32, 32});
 tensor synapse2 = glorot_uniform({32, 32});
 tensor synapse3 = glorot_uniform({32, 32});

@@ -39,6 +39,7 @@ Issues:
     - Working memory (holds temporary thoughts).
     - Long-term memory (consolidates knowledge).
     - Episodic memory (stores past experiences).
+- Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity (like neuroplasticity).
 
 Plans:
 ----------------
