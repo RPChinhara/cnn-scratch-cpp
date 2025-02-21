@@ -14,6 +14,32 @@ Issues:
     - On average, human brain contains roughly 1000 billion neurons, but what about smart people like albert einstein. Are these ppl have more neurons?
 - Make a pre-trained level models for image classification like ResNet and NLP like Llama
 
+- Add new synapses (neurogenesis)
+- Rewires neurons (synapses) dynamically (neuroplasticity)
+- Stochastic firing: neurons fire randomly, even without direct input.
+    - This adds "noise" to brain activity, helping with creativity, problem-solving, and flexibility.
+    - It prevents the brain from getting stuck in fixed patterns (unlike AI, which follows strict mathematical rules).
+    - AI models only activate when given input (no random self-firing).
+    - AI doesn’t have spontaneous thought generation—it only predicts based on patterns.
+- Instead of full network updates using gradient-based weight updates, each neuron should updates its own weights.
+- Try dynamic neural architectures (where connections form and break like neuroplasticity).
+- Consider graph-based AI models instead of just dense layers as it more similar to how neurons in brain are connected?
+- Experiment with Hebbian learning rules instead of backpropagation.
+- Build a dynamic neural network that adds/removes connections like the brain.
+- Study Neuro-Symbolic AI to combine logic + deep learning.
+- Explore spiking neural networks (SNNs) for biologically accurate learning.
+- Modular Networks → Different specialized subnetworks for vision, language, reasoning, etc.
+- Use pc as enviroment for the model.
+- Implement adaptive forgetting (removing useless data to free memory).
+- Implement memory consolidation: Store long-term knowledge gradually.
+- Add attention-based recall: Retrieve only relevant memories.
+- Use adaptive forgetting: Remove unimportant details over time.
+    - This allows AI to store knowledge persistently, like humans do.
+    - Right now, AI only has short-term recall (via attention mechanisms). Humans, however, have:
+    - Working memory (holds temporary thoughts).
+    - Long-term memory (consolidates knowledge).
+    - Episodic memory (stores past experiences).
+
 Plans:
 ----------------
 - Find weaknesses of existing models, and fix it to make new modesl.
