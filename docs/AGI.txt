@@ -30,7 +30,6 @@ Plans:
 - I need to train embedding in order to create my own Word2Vec?
 - I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
-- Learn about the DeepSeek model.
 - Make a system discards seen datasets so that it won't overfit with my method.
 
 Comparisons:
