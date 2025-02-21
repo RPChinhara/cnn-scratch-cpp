@@ -14,6 +14,7 @@ Issues:
     - On average, human brain contains roughly 1000 billion neurons, but what about smart people like albert einstein. Are these ppl have more neurons?
 - Make a pre-trained level models for image classification like ResNet and NLP like Llama
 - Make a continuous & adaptive model rather than needs retraining on large datasets similar to current models?
+- Make a model form new neurons or change dynamically like real neurons.
 
 Plans:
 ----------------
