@@ -5,10 +5,16 @@
 #include "rand.h"
 #include "tensor.h"
 
-tensor synapse1 = glorot_uniform({32, 32});
-tensor synapse2 = glorot_uniform({32, 32});
-tensor synapse3 = glorot_uniform({32, 32});
-tensor synapse4 = glorot_uniform({32, 32});
+size_t synapse1 = 32;
+size_t synapse2 = 32;
+size_t synapse3 = 32;
+size_t synapse4 = 32;
+size_t synapse5 = 32;
+
+tensor neuron1 = glorot_uniform({synapse1, synapse2});
+tensor neuron2 = glorot_uniform({synapse2, synapse3});
+tensor neuron3 = glorot_uniform({synapse3, synapse4});
+tensor neuron4 = glorot_uniform({synapse4, synapse5});
 
 // TODO: I have to make env in 3D...
 
