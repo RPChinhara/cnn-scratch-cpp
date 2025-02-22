@@ -9,6 +9,8 @@ tensor synapse2 = glorot_uniform({32, 32});
 tensor synapse3 = glorot_uniform({32, 32});
 tensor synapse4 = glorot_uniform({32, 32});
 
+// TODO: I have to make env in 3D...
+
 int main() {
     while (true) {
         std::cout << "Processing inputs...\n";
