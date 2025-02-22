@@ -1,0 +1,35 @@
+Attention:
+----------------
+tensor q_mat = matmul(x_mat, w[j][0]); // What am I looking for?"
+tensor k_mat = matmul(x_mat, w[j][1]); // "What do I have to offer?"
+tensor v_mat = matmul(x_mat, w[j][2]); // holds the actual information.
+
+// q_mat: (25, 128) transposed(k_mat): (128, 25) = (25, 25) -> (25, 25) x v_mat: (25, 128)
+
+// "The cat (key) sat (query) on the mat."
+
+// The word "sat" (query) might look at "cat" (key) to understand what performed the action.
+// The attention score between "sat" and "cat" will be high.
+// "Sat" will then extract information from "cat" using its value.
+
+"cat" is in 2nd row
+"sat" is in 3rd row
+
+matmul(attention_weights, v_mat)
+attention_weights: (25, 25)   v_mat: (25, 128)
+1 2 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+1 2 3 4 5 6 7 8 9...          1x 2x 3x 4x 5x 6x 7x 8x 9x...
+1 x 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+1 2 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+1 2 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+1 2 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+1 2 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+1 2 3 4 5 6 7 8 9...          1  2  3  4  5  6  7  8  9...
+
+x is ralatavily high because "sat" and "cat" are relevant.
+In this matmul "sat" which is in 3rd row is attending to "cat" in 2nd row.
+
+tensor attention_scores = matmul(q_mat, transpose(k_mat));
+tensor scaled_scores = attention_scores / sqrt(head_dim);
+tensor attention_weights = softmax(scaled_scores);
+tensor weighted_sum = matmul(attention_weights, v_mat);
