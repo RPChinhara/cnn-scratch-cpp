@@ -25,3 +25,6 @@
     - CLIP, DINO, Flamingo
 - Reasoning
 - AGI (Physics)
+
+- I have to make 3D env
+- Implement best rl model maybe dqn?

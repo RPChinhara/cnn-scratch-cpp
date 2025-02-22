@@ -16,8 +16,6 @@ tensor neuron2 = glorot_uniform({synapse2, synapse3});
 tensor neuron3 = glorot_uniform({synapse3, synapse4});
 tensor neuron4 = glorot_uniform({synapse4, synapse5});
 
-// TODO: I have to make env in 3D...
-
 // Window Procedure: Handles window events
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
