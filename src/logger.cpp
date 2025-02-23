@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "logger.h"
+#include "tensor.h"
 
 std::ofstream logger::log_file;
 
@@ -10,6 +11,13 @@ void logger::init() {
     freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
 
     // log_file.open("debug_log.txt");
+}
+
+void logger::log(const tensor& t) {
+    std::cout << t << std::endl;
+
+    // if (log_file.is_open())
+    //     log_file << message << std::endl;
 }
 
 void logger::log(const std::string& message) {
