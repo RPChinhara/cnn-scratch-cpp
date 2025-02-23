@@ -2,6 +2,9 @@
 
 #include "renderer.h"
 
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+
 renderer::renderer(HWND hwnd) : hwnd(hwnd) {}
 
 renderer::~renderer() {
