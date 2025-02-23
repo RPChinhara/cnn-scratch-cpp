@@ -6,7 +6,7 @@
 
 class renderer {
 public:
-    renderer();
+    renderer() = default;
     ~renderer();
 
     bool init();

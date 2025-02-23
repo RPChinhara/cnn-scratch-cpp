@@ -1,7 +1,5 @@
 #include "renderer.h"
 
-renderer::renderer() {}
-
 renderer::~renderer() {
     shutdown();
 }
@@ -28,12 +26,11 @@ bool renderer::init() {
     );
 
     if (FAILED(hr)) {
-        OutputDebugString("Failed to initialize Direct3D 11 device.\n");
+        std::cerr << "Failed to initialize Direct3D 11 device.\n";
         return false;
     }
 
-    OutputDebugString("Direct3D 11 device initialized successfully!\n");
-    MessageBox(NULL, "Direct3D 11 device initialized successfully!", "Message", MB_OK);
+    std::cout << "Direct3D 11 device initialized successfully!\n";
 
     return true;
 }
