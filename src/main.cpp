@@ -24,7 +24,6 @@ tensor neuron2 = glorot_uniform({synapse2, synapse3});
 tensor neuron3 = glorot_uniform({synapse3, synapse4});
 tensor neuron4 = glorot_uniform({synapse4, synapse5});
 
-// Window Procedure: Handles window events
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
         case WM_CLOSE:
@@ -32,37 +31,39 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             return 0;
         case WM_DESTROY:
             return 0;
+        default:
+            return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    // Define window class
     const char CLASS_NAME[] = "MyWindowClass";
 
-    WNDCLASS wc = {};
+    WNDCLASSEX wc = {};
+    wc.cbSize = sizeof(WNDCLASSEX);
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
     wc.lpszClassName = CLASS_NAME;
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
-    RegisterClass(&wc);
+    if (!RegisterClassEx(&wc)) return 0;
 
-    // Create the window
     HWND hwnd = CreateWindowEx(
         0, CLASS_NAME, "", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, // x, y, width, height
-        NULL, NULL, hInstance, NULL);
+        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
+        NULL, NULL, hInstance, NULL
+    );
 
     if (!hwnd) return 0;
 
     ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
 
-    // Message loop
-    MSG msg = {};
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 
-    return 0;
+    return static_cast<int>(msg.wParam);
 }
