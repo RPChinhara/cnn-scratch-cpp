@@ -30,7 +30,7 @@ bool renderer::create_device_and_swap_chain() {
         std::cerr << "Failed to create Direct3D 11 device and swap.\n";
         return false;
     }
-    
+
     return true;
 }
 
@@ -59,7 +59,7 @@ bool renderer::init() {
 }
 
 void renderer::render() {
-    float clear_color[] = { 255.0f, 0.0f, 90.0f, 1.0f };
+    float clear_color[] = { 1.0f, 0.0f, 0.352941f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
     swap_chain->Present(1, 0);
 }
