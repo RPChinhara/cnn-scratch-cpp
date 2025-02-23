@@ -20,11 +20,7 @@ bool renderer::create_device_and_swap_chain() {
     sc_desc.SampleDesc.Count = 1;
     sc_desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-    HRESULT hr = D3D11CreateDeviceAndSwapChain(
-        nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0,
-        D3D11_SDK_VERSION, &sc_desc, swap_chain.GetAddressOf(),
-        device.GetAddressOf(), nullptr, device_context.GetAddressOf()
-    );
+    HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sc_desc, swap_chain.GetAddressOf(), device.GetAddressOf(), nullptr, device_context.GetAddressOf());
 
     if (FAILED(hr)) {
         std::cerr << "Failed to create Direct3D 11 device and swap.\n";
