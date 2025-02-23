@@ -2,7 +2,6 @@
 
 #include <d3d11.h>
 #include <wrl/client.h>  // For Microsoft::WRL::ComPtr
-#include <iostream>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")

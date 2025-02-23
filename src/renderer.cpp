@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "renderer.h"
 
 renderer::~renderer() {
