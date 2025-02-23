@@ -11,6 +11,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 
 #include "rand.h"
+#include "renderer.h"
 #include "tensor.h"
 #include "window.h"
 
@@ -28,8 +29,14 @@ tensor neuron4 = glorot_uniform({synapse4, synapse5});
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     window window(hInstance);
 
+    renderer renderer;
+
+    if (!renderer.init()) {
+        return -1;
+    }
+
     while (window.process_messages()) {
-        // Game loop or application logic here
+        renderer.render();
     }
 
     return 0;
