@@ -22,4 +22,5 @@ private:
 
     bool create_device_and_swap_chain();
     bool create_render_target();
+    void create_viewport(float window_width, float window_height);
 };

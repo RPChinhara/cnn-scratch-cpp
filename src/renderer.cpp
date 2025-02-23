@@ -51,11 +51,24 @@ bool renderer::create_render_target() {
     return true;
 }
 
+void renderer::create_viewport(float window_width, float window_height) {
+    D3D11_VIEWPORT viewport = {};
+    viewport.Width = window_width;
+    viewport.Height = window_height;
+    viewport.MinDepth = 0.0f;  // Closest depth (near plane)
+    viewport.MaxDepth = 1.0f;  // Farthest depth (far plane)
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+
+    device_context->RSSetViewports(1, &viewport);
+}
+
 bool renderer::init() {
     cleanup();
 
     if (!create_device_and_swap_chain()) return false;
     if (!create_render_target()) return false;
+    create_viewport(800.0f, 600.0f);
 
     return true;
 }
