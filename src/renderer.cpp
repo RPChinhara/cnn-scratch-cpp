@@ -40,7 +40,7 @@ bool renderer::create_render_target() {
 
     hr = device->CreateRenderTargetView(back_buffer.Get(), nullptr, render_target.GetAddressOf());
     if (FAILED(hr)) {
-        std::cerr << "Failed to create render render target.\n";
+        std::cerr << "Failed to create render target.\n";
         return false;
     }
 
