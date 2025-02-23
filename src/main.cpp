@@ -12,6 +12,7 @@
 
 #include "rand.h"
 #include "tensor.h"
+#include "window.h"
 
 size_t synapse1 = 32;
 size_t synapse2 = 32;
@@ -24,46 +25,12 @@ tensor neuron2 = glorot_uniform({synapse2, synapse3});
 tensor neuron3 = glorot_uniform({synapse3, synapse4});
 tensor neuron4 = glorot_uniform({synapse4, synapse5});
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
-        case WM_CLOSE:
-            PostQuitMessage(0);
-            return 0;
-        case WM_DESTROY:
-            return 0;
-        default:
-            return DefWindowProc(hwnd, uMsg, wParam, lParam);
-    }
-}
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    const char CLASS_NAME[] = "MyWindowClass";
+    window window(hInstance);
 
-    WNDCLASSEX wc = {};
-    wc.cbSize = sizeof(WNDCLASSEX);
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = CLASS_NAME;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-
-    if (!RegisterClassEx(&wc)) return 0;
-
-    HWND hwnd = CreateWindowEx(
-        0, CLASS_NAME, "", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
-        NULL, NULL, hInstance, NULL
-    );
-
-    if (!hwnd) return 0;
-
-    ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd);
-
-    MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0) > 0) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+    while (window.process_messages()) {
+        // Game loop or application logic here
     }
 
-    return static_cast<int>(msg.wParam);
+    return 0;
 }
