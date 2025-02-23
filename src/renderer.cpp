@@ -10,6 +10,7 @@ bool renderer::init() {
         D3D_FEATURE_LEVEL_10_1,
         D3D_FEATURE_LEVEL_10_0
     };
+    
     D3D_FEATURE_LEVEL feature_level_out;
 
     HRESULT hr = D3D11CreateDevice(
