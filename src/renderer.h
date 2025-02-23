@@ -22,4 +22,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context;
     Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target;
+
+    bool create_device_and_swap_chain();
+    bool create_render_target();
 };
