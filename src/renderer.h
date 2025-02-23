@@ -18,10 +18,10 @@ public:
 private:
     HWND hwnd;
 
-    Microsoft::WRL::ComPtr<ID3D11Device> device;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context;
-    Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target;
+    Microsoft::WRL::ComPtr<ID3D11Device> device; // creates resources
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context; // tells the GPU what to do with the resources
+    Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain; // handles the back buffer for double-buffered rendering
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target; // A view that allows DirectX to draw to the back buffer
 
     bool create_device_and_swap_chain();
     bool create_render_target();
