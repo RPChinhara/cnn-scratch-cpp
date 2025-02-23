@@ -5,24 +5,15 @@ renderer::~renderer() {
 }
 
 bool renderer::init() {
-    D3D_FEATURE_LEVEL feature_levels[] = {
-        D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0
-    };
-    
-    D3D_FEATURE_LEVEL feature_level_out;
-
     HRESULT hr = D3D11CreateDevice(
-        nullptr,
-        D3D_DRIVER_TYPE_HARDWARE,
-        nullptr,
-        0,
-        feature_levels,
-        _countof(feature_levels),
+        nullptr,                      // Default adapter
+        D3D_DRIVER_TYPE_HARDWARE,     // Use GPU
+        nullptr,                      // No software renderer
+        0,                            // No special flags
+        nullptr, 0,                   // Auto-select feature level
         D3D11_SDK_VERSION,
         device.GetAddressOf(),
-        &feature_level_out,
+        nullptr,                      // Don't need feature level output
         device_context.GetAddressOf()
     );
 
