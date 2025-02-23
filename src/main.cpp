@@ -1,6 +1,5 @@
 #include "logger.h"
 #include "renderer.h"
-#include "tensor.h"
 #include "window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
