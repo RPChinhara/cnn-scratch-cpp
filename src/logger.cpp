@@ -1,0 +1,25 @@
+#include <windows.h>
+
+#include "logger.h"
+
+std::ofstream logger::log_file;
+
+void logger::initialize() {
+    AllocConsole();
+    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+    freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
+
+    // log_file.open("debug_log.txt");
+}
+
+void logger::log(const std::string& message) {
+    std::cout << message << std::endl;
+
+    // if (log_file.is_open())
+    //     log_file << message << std::endl;
+}
+
+void logger::close() {
+    // if (log_file.is_open())
+    //     log_file.close();
+}

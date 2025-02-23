@@ -1,20 +1,17 @@
-#include "rand.h"
+#include "logger.h"
 #include "renderer.h"
 #include "tensor.h"
 #include "window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    AllocConsole();
-    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-    freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
+    logger::initialize();
 
     window window(hInstance);
 
     renderer renderer;
 
-    if (!renderer.init()) {
+    if (!renderer.init())
         return -1;
-    }
 
     while (window.process_messages()) {
         renderer.render();

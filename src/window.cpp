@@ -43,7 +43,7 @@ bool window::process_messages() {
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         if (msg.message == WM_QUIT)
             return false;
-        
+
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
