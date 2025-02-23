@@ -52,6 +52,7 @@ bool renderer::create_render_target() {
 }
 
 void renderer::create_viewport(float window_width, float window_height) {
+    // NOTE:  Defines the area where DirectX will draw graphics inside the window because by default, DirectX does not know where to draw. We need to tell it how large the rendering area is.
     D3D11_VIEWPORT viewport = {};
     viewport.Width = window_width;
     viewport.Height = window_height;
