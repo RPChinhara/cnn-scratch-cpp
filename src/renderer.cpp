@@ -2,8 +2,9 @@
 
 #include "renderer.h"
 
+renderer::renderer(HWND hwnd) : hwnd(hwnd) {}
+
 renderer::~renderer() {
-    shutdown();
 }
 
 bool renderer::init() {
@@ -30,8 +31,4 @@ bool renderer::init() {
 }
 
 void renderer::render() {
-}
-
-void renderer::shutdown() {
-    // ComPtr automatically releases resources, so no need to manually release.
 }

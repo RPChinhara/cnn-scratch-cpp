@@ -50,3 +50,7 @@ bool window::process_messages() {
 
     return true;
 }
+
+HWND window::get_hwnd() {
+    return hwnd;
+}
