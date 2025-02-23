@@ -53,8 +53,11 @@ bool renderer::create_render_target() {
 }
 
 bool renderer::init() {
+    cleanup();
+
     if (!create_device_and_swap_chain()) return false;
     if (!create_render_target()) return false;
+    
     return true;
 }
 
