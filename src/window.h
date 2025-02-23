@@ -2,6 +2,9 @@
 
 #include <windows.h>
 
+#pragma comment(lib, "user32.lib")
+#pragma comment(lib, "gdi32.lib")
+
 class window {
 public:
     window(HINSTANCE hInstance);

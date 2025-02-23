@@ -4,6 +4,9 @@
 #include <wrl/client.h>  // For Microsoft::WRL::ComPtr
 #include <iostream>
 
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+
 class renderer {
 public:
     renderer() = default;
