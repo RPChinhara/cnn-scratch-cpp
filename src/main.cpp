@@ -27,6 +27,10 @@ tensor neuron3 = glorot_uniform({synapse3, synapse4});
 tensor neuron4 = glorot_uniform({synapse4, synapse5});
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    AllocConsole();
+    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+    freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
+
     window window(hInstance);
 
     renderer renderer;
