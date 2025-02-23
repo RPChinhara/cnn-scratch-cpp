@@ -4,7 +4,7 @@
 #include "window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    logger::initialize();
+    logger::init();
 
     window window(hInstance);
 

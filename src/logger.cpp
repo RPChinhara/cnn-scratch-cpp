@@ -4,7 +4,7 @@
 
 std::ofstream logger::log_file;
 
-void logger::initialize() {
+void logger::init() {
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
     freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);

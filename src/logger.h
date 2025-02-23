@@ -5,7 +5,7 @@
 
 class logger {
 public:
-    static void initialize();
+    static void init();
     static void log(const std::string& message);
     static void close();
 
