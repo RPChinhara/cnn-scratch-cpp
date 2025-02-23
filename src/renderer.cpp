@@ -34,7 +34,7 @@ bool renderer::create_render_target() {
     Microsoft::WRL::ComPtr<ID3D11Texture2D> back_buffer; // The off-screen buffer where DirectX draws the next frame
     HRESULT hr = swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)back_buffer.GetAddressOf());
     if (FAILED(hr)) {
-        std::cerr << "Failed to get buffer.\n";
+        std::cerr << "Failed to get back buffer.\n";
         return false;
     }
 
