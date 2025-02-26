@@ -35,14 +35,13 @@
     - Use like NumPy memmap – Loads large arrays from disk on demand. Called "Out-of-Core Computing" and "Memory Management Techniques".
 
 - Add new synapses (neurogenesis)
-- Rewires neurons (synapses) dynamically (neuroplasticity)
+- Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity where connections form and break like neuroplasticity (like neuroplasticity).
 - Stochastic firing: neurons fire randomly, even without direct input.
     - This adds "noise" to brain activity, helping with creativity, problem-solving, and flexibility.
     - It prevents the brain from getting stuck in fixed patterns (unlike AI, which follows strict mathematical rules).
     - AI models only activate when given input (no random self-firing).
     - AI doesn’t have spontaneous thought generation—it only predicts based on patterns.
 - Instead of full network updates using gradient-based weight updates, each neuron should updates its own weights.
-- Try dynamic neural architectures (where connections form and break like neuroplasticity).
 - Consider graph-based AI models instead of just dense layers as it more similar to how neurons in brain are connected?
 - Experiment with Hebbian learning rules instead of backpropagation.
 - Build a dynamic neural network that adds/removes connections like the brain.
@@ -58,7 +57,6 @@
     - Working memory (holds temporary thoughts).
     - Long-term memory (consolidates knowledge).
     - Episodic memory (stores past experiences).
-- Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity (like neuroplasticity).
 
 - Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
 - I need to train embedding in order to create my own Word2Vec?
