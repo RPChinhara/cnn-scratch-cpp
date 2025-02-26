@@ -59,4 +59,3 @@
     - Episodic memory (stores past experiences).
 
 - Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
-- If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
