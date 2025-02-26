@@ -33,7 +33,6 @@
     - Use one integet to represent 10 weights since maximum value for a variable of type int is 2147483647 which has 10 digits each act as weights.
     - Use smaller floating values
     - Use like NumPy memmap – Loads large arrays from disk on demand. Called "Out-of-Core Computing" and "Memory Management Techniques".
-- Make a pre-trained level models for image classification like ResNet and NLP like Llama
 
 - Add new synapses (neurogenesis)
 - Rewires neurons (synapses) dynamically (neuroplasticity)
