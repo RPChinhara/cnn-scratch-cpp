@@ -57,6 +57,7 @@ tensor b4 = glorot_uniform({1, d_model});
 tensor b_o = glorot_uniform({1, vocab_size});
 
 // NOTE: Embedding matrix is updated during backpropagation, similar to other model weights.
+// TODO: Do I need to train embedding in order to create my own Word2Vec?
 auto embedding_lyr = embedding(vocab_size, d_model);
 auto positional_encoding_lyr = positional_encoding(seq_len, d_model);
 
