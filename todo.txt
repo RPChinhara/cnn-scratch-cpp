@@ -82,9 +82,4 @@
 - I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - Final goal: solve problems in physics e.g., quantum gravity, time and entropy
-
-- Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
-    - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
-        - Find or develop faster opration than it? This is essentially in math field.
-    - I've implemented NNs, RNNs, CNNs, and now transformer, and I think they are pretty much same, yet from NNs, models are just getting more complex. Like programming language C, can we just use NNs to acheive things that other advanced models can? This simple NNs could be way faster...
 - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
