@@ -60,5 +60,4 @@
 
 - Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
 - I need to train embedding in order to create my own Word2Vec?
-- I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
