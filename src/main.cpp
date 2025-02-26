@@ -24,11 +24,6 @@ TODOS:
     - AlphaFold
     - AGI (Physics: Quantum gravity, time, entropy)
 
-    - Handling Large Parameters:
-        - Optimize weights (bit-based, int-based compression)
-        - Use NumPy memmap for large arrays (Out-of-Core Computing)
-        - Consider cloud computing (Linux/Unix support? OpenGL?)
-
     - Brain-Inspired AI:
         - Neurogenesis: Add new synapses dynamically
         - Dynamic Synapses: Grow/shrink based on activity (neuroplasticity)
