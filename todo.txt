@@ -65,6 +65,7 @@
     - Long-term memory (consolidates knowledge).
     - Episodic memory (stores past experiences).
 - Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity (like neuroplasticity).
+
 - Can hard disk make it up for insufficient size of ram?
 - Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
 - Find weaknesses of existing models, and fix it to make new modesl.
