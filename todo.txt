@@ -32,7 +32,6 @@
 - What are weaknesses of the transformer?
     - Fix it, and make better one.
 - What is Efficient Transformers?
-- Do we really need encoders and decoders? Can I get rid of it?
 - How to solve needs billions of parameters (weights, biasese)?
     - Use bits as weights and biases?
     - Use one integet to represent 10 weights since maximum value for a variable of type int is 2147483647 which has 10 digits each act as weights.
