@@ -73,7 +73,6 @@
     - When I train it, do it on copy of dora, this way I can work on my project simultaneously.
     - Is transfer learning used repeadely to improve the model or just use pretrained model to train using unseen dataset to make a new model?
 - I need to train embedding in order to create my own Word2Vec?
-- I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - Final goal: solve problems in physics e.g., quantum gravity, time and entropy
 - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
