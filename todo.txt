@@ -48,7 +48,6 @@
 - Build a dynamic neural network that adds/removes connections like the brain.
 - Study Neuro-Symbolic AI to combine logic + deep learning.
 - Explore spiking neural networks (SNNs) for biologically accurate learning.
-- Modular Networks → Different specialized subnetworks for vision, language, reasoning, etc.
 - Implement adaptive forgetting (removing useless data to free memory).
 - Implement memory consolidation: Store long-term knowledge gradually.
 - Add attention-based recall: Retrieve only relevant memories.
