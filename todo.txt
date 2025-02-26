@@ -1,5 +1,6 @@
 > Standard Transformer (Original)
 - Stacked standard Transformer (Original)?
+- Best rl model (dqn?)
 - BERT, RoBERTa, ALBERT (Encoder-Only Transformers)
 - GPT (GPT-2, GPT-3, GPT-4, ChatGPT), LLaMA (Decoder-Only Transformers)
 - T5, BART, mT5 (Encoder-Decoder Transformers)
@@ -25,8 +26,6 @@
     - CLIP, DINO, Flamingo
 - Reasoning
 - AGI (Physics)
-
-- Implement best rl model maybe dqn?
 
 - How did they come up with attention or multiHeadAttention such as multiplying q and k, and later with v.
 - What is Efficient Transformers?
