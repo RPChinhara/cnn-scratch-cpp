@@ -28,3 +28,70 @@
 
 - I have to make 3D env
 - Implement best rl model maybe dqn?
+
+- How did they come up with attention or multiHeadAttention such as multiplying q and k, and later with v.
+- What are weaknesses of the transformer?
+    - Fix it, and make better one.
+- What is Efficient Transformers?
+- Do we really need encoders and decoders? Can I get rid of it?
+- How to solve needs billions of parameters (weights, biasese)?
+    - Use bits as weights and biases?
+    - Use one integet to represent 10 weights since maximum value for a variable of type int is 2147483647 which has 10 digits each act as weights.
+    - Use smaller floating values
+    - Just increase number of lyrs used? so each lyrs holds 1000 params times 1000 lyrs becomes 1000000 total params.
+    - On average, human brain contains roughly 1000 billion neurons, but what about smart people like albert einstein. Are these ppl have more neurons?
+- Make a pre-trained level models for image classification like ResNet and NLP like Llama
+
+- Add new synapses (neurogenesis)
+- Rewires neurons (synapses) dynamically (neuroplasticity)
+- Stochastic firing: neurons fire randomly, even without direct input.
+    - This adds "noise" to brain activity, helping with creativity, problem-solving, and flexibility.
+    - It prevents the brain from getting stuck in fixed patterns (unlike AI, which follows strict mathematical rules).
+    - AI models only activate when given input (no random self-firing).
+    - AI doesn’t have spontaneous thought generation—it only predicts based on patterns.
+- Instead of full network updates using gradient-based weight updates, each neuron should updates its own weights.
+- Try dynamic neural architectures (where connections form and break like neuroplasticity).
+- Consider graph-based AI models instead of just dense layers as it more similar to how neurons in brain are connected?
+- Experiment with Hebbian learning rules instead of backpropagation.
+- Build a dynamic neural network that adds/removes connections like the brain.
+- Study Neuro-Symbolic AI to combine logic + deep learning.
+- Explore spiking neural networks (SNNs) for biologically accurate learning.
+- Modular Networks → Different specialized subnetworks for vision, language, reasoning, etc.
+- Implement adaptive forgetting (removing useless data to free memory).
+- Implement memory consolidation: Store long-term knowledge gradually.
+- Add attention-based recall: Retrieve only relevant memories.
+- Use adaptive forgetting: Remove unimportant details over time.
+    - This allows AI to store knowledge persistently, like humans do.
+    - Right now, AI only has short-term recall (via attention mechanisms). Humans, however, have:
+    - Working memory (holds temporary thoughts).
+    - Long-term memory (consolidates knowledge).
+    - Episodic memory (stores past experiences).
+- Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity (like neuroplasticity).
+- Can hard disk make it up for insufficient size of ram?
+- Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
+- Find weaknesses of existing models, and fix it to make new modesl.
+- In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
+    - I need to do this as soon as one can. Train a best model using same parameters, and keep updating these. I think once I created transformer I need to do this.
+    - What happens if the model is overfitted? Add more training data so that losses will probably increase since model hasn't seen the datasets.
+    - Search on what kind of datasets is chatGPT is trained on? Use these datasets to train mine.
+    - However, sizes of weights and biases won't be same for all the models. What should I do?
+    - I need to train for cv, nlp, rl?
+        - I have to train using ImageNet for computer vision?
+    - When I train it, do it on copy of dora, this way I can work on my project simultaneously.
+    - Is transfer learning used repeadely to improve the model or just use pretrained model to train using unseen dataset to make a new model?
+- I need to train embedding in order to create my own Word2Vec?
+- I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
+- I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
+- Make a system discards seen datasets so that it won't overfit with my method.
+- Final goal: solve problems in physics e.g., quantum gravity, time and entropy
+- Is CV = temporal lobe?
+
+- An alternative to backprop will increase perf.
+- Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
+    - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
+        - Find or develop faster opration than it? This is essentially in math field.
+    - I've implemented NNs, RNNs, CNNs, and now transformer, and I think they are pretty much same, yet from NNs, models are just getting more complex. Like programming language C, can we just use NNs to acheive things that other advanced models can? This simple NNs could be way faster...
+- What can I do to increase perf? Make custom library for array and vector? Search it. I mean in general in CS, what can I do other than optimizing models.
+- Is backprop parallelizable? What's standard?
+    - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
+- Dependency is really bad, weather it's from RNNs, CNNs or backprop. Operate everything in parallel if possible for performance.
