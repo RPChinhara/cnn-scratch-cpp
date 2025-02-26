@@ -57,11 +57,7 @@ Issues:
 - Final goal: solve problems in physics e.g., quantum gravity, time and entropy
 - Is CV = temporal lobe?
 
-Performance Optimization:
-----------------
 - An alternative to backprop will increase perf.
-- Why do we need all these parameters. Alternatives to it? Alternative ways to train models?
-- I might need Fugaku or cloud computing for this.
 - Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
     - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
         - Find or develop faster opration than it? This is essentially in math field.
