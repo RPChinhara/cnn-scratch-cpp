@@ -54,6 +54,7 @@ Issues:
 - I could implement traditional seq2seq for learning purpose comparing it with transformer so that I could comprehend why attention is emerged.
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - Make a system discards seen datasets so that it won't overfit with my method.
+- Final goal: solve problems in physics e.g., quantum gravity, time and entropy
 
 Comparisons:
 ----------------
@@ -90,16 +91,3 @@ Performance Optimization:
 - Is backprop parallelizable? What's standard?
     - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
 - Dependency is really bad, weather it's from RNNs, CNNs or backprop. Operate everything in parallel if possible for performance.
-
-Physics:
-----------------
-- Use a multimodal model to predict physical phenomena and solve unsolved problems, e.g., predict quantum gravity.
-    - Given text, image, and video datasets as a multimodal inputs, predict next tokens. For instance, predict various unknown phenomena in unsolved physics problems.
-    - Things to predict
-        - Wave function
-        - Near the black hole
-        - Space time
-- Will quantum neural network really work?
-    - It needs quantum computers, and as of now it's an experimental stuff.
-- Study about physics, and write on this file.
-- All the language models like chatGPT, unless prompts are give, it won't initiate by itself, and this won't make a new theory like why gravity warps spacetime.
