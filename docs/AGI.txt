@@ -39,7 +39,7 @@ Issues:
     - Episodic memory (stores past experiences).
 - Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity (like neuroplasticity).
 - Can hard disk make it up for insufficient size of ram?
-- Maybe use cloud computig to train the model in the future, possibly resources will be limited later so...
+- Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
 - Find weaknesses of existing models, and fix it to make new modesl.
 - In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
     - I need to do this as soon as one can. Train a best model using same parameters, and keep updating these. I think once I created transformer I need to do this.
