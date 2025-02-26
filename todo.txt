@@ -26,7 +26,6 @@
 - Reasoning
 - AGI (Physics)
 
-- I have to make 3D env
 - Implement best rl model maybe dqn?
 
 - How did they come up with attention or multiHeadAttention such as multiplying q and k, and later with v.
