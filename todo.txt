@@ -33,6 +33,7 @@
     - Use one integet to represent 10 weights since maximum value for a variable of type int is 2147483647 which has 10 digits each act as weights.
     - Use smaller floating values
     - Use like NumPy memmap – Loads large arrays from disk on demand. Called "Out-of-Core Computing" and "Memory Management Techniques".
+    - Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
 
 - Add new synapses (neurogenesis)
 - Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity where connections form and break like neuroplasticity (like neuroplasticity).
@@ -57,5 +58,3 @@
     - Working memory (holds temporary thoughts).
     - Long-term memory (consolidates knowledge).
     - Episodic memory (stores past experiences).
-
-- Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
