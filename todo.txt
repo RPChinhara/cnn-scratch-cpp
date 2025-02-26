@@ -83,7 +83,6 @@
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - Make a system discards seen datasets so that it won't overfit with my method.
 - Final goal: solve problems in physics e.g., quantum gravity, time and entropy
-- Is CV = temporal lobe?
 
 - An alternative to backprop will increase perf.
 - Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
