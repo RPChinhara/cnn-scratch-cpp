@@ -64,15 +64,6 @@
 - Dynamic Synapses: Instead of fixed 32x32 weight matrices, let synapses grow or shrink based on activity (like neuroplasticity).
 
 - Maybe use cloud computig to train the model in the future, possibly resources will be limited later. Is that mean my code needs to be support Linux/Unix? Also, Use OpenGL?
-- In the future, I need to save parameters like weights and biases, and keep updating these to make a better model like how transfer learning works.
-    - I need to do this as soon as one can. Train a best model using same parameters, and keep updating these. I think once I created transformer I need to do this.
-    - What happens if the model is overfitted? Add more training data so that losses will probably increase since model hasn't seen the datasets.
-    - Search on what kind of datasets is chatGPT is trained on? Use these datasets to train mine.
-    - However, sizes of weights and biases won't be same for all the models. What should I do?
-    - I need to train for cv, nlp, rl?
-        - I have to train using ImageNet for computer vision?
-    - When I train it, do it on copy of dora, this way I can work on my project simultaneously.
-    - Is transfer learning used repeadely to improve the model or just use pretrained model to train using unseen dataset to make a new model?
 - I need to train embedding in order to create my own Word2Vec?
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
