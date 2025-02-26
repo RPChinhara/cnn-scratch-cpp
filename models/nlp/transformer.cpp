@@ -15,6 +15,8 @@ constexpr size_t d_ff       = 512; // NOTE: often 4x larger than d_model
 constexpr size_t num_heads  = 4;
 constexpr size_t head_dim   = (num_heads == 1) ? d_model : d_model / num_heads;
 
+// TODO: Optimize weights (bit-based, int-based compression)
+// TODO: Use NumPy memmap for large arrays (Out-of-Core Computing)
 std::vector<std::vector<tensor>> w_enc = {
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})}, // w_q, w_k, w_v
     {glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim}), glorot_uniform({d_model, head_dim})},
