@@ -55,12 +55,6 @@ Issues:
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - Make a system discards seen datasets so that it won't overfit with my method.
 - Final goal: solve problems in physics e.g., quantum gravity, time and entropy
-
-Notes:
-----------------
-- I don't need a memory since it's not stored in a single neuron or location—it is distributed across neurons and synapses in a network-like structure
-
-- Rougly, each neuron has 1162.79069767 synapses because human has ~86 billion neurons and ~100 trillion synapses so 100 trillion / 86 billion = 1162.79069767. These synapses are strengthen or weaken when new knowledge is stored similar to how weights and biases are updated during the backprop.
 - Is CV = temporal lobe?
 
 Performance Optimization:
