@@ -83,7 +83,6 @@
 - I have to benchmark my model for different tasks, e.g., English (MMLU (EM), DROP (3-shot F1)), Code (HumanEval-Mul (Pass@1)), and Math (AIME 2024 (Pass@1)).
 - Final goal: solve problems in physics e.g., quantum gravity, time and entropy
 
-- An alternative to backprop will increase perf.
 - Attention and multiHeadAttention are just simple matmul ops, but in MultiHeadAttention, it processes inputs utilizing multile heads unlike RNNs which process sequentially which is pretty slow even though operations used are quite identical to simple matmul ops. For instance, simple rnn uses way less and simpler ops than multiHeadAttention.
     - Matmul is the key? -> It's kind of amazing how it's used so a lot, also transpose(). I thought, other ops in linalg are used.
         - Find or develop faster opration than it? This is essentially in math field.
@@ -91,4 +90,3 @@
 - What can I do to increase perf? Make custom library for array and vector? Search it. I mean in general in CS, what can I do other than optimizing models.
 - Is backprop parallelizable? What's standard?
     - If we can't parallelize backprop since each gradients depends on prevous ones because of the chain rule from math, we shouldn't be using it. Make alternative one.
-- Dependency is really bad, weather it's from RNNs, CNNs or backprop. Operate everything in parallel if possible for performance.
