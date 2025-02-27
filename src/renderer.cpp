@@ -96,6 +96,26 @@ bool renderer::create_viewport(float window_width, float window_height) {
     return true;
 }
 
+bool renderer::create_input_layout(const void* shader_bytecode, size_t bytecode_size) {
+    // NOTE: DirectX needs to know how to interpret vertex data (like position, color, texture coordinates). This is called an Input Layout.
+
+    D3D11_INPUT_ELEMENT_DESC layout_desc[] = {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+    };
+
+    if (FAILED(device->CreateInputLayout(
+        layout_desc,
+        ARRAYSIZE(layout_desc),
+        shader_bytecode,
+        bytecode_size,
+        input_layout.ReleaseAndGetAddressOf()
+    ))) {
+        return false;
+    }
+
+    return true;
+}
+
 bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
     std::ifstream file(filename, std::ios::binary);
     if (!file) {
@@ -120,6 +140,10 @@ bool renderer::load_shaders() {
     if (FAILED(hr)) {
         return false;
     }
+
+    // Create input layout using the vertex shader blob data
+    if (!create_input_layout(vs_data.data(), vs_data.size()))
+    return false;
 
     // Load compiled pixel shader
     std::vector<char> ps_data;
@@ -180,9 +204,16 @@ Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
 }
 
 void renderer::render() {
-    float clear_color[] = { 1.0f, 0.0f, 0.352941f, 1.0f };
+    float clear_color[4] = { 0.1f, 0.1f, 0.3f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
+    device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+    device_context->IASetInputLayout(input_layout.Get());  // <-- Set input layout here
+
+    // Draw your mesh here (this depends on how your mesh class works)
+
     swap_chain->Present(1, 0);
+
 }
 
 void renderer::cleanup() {

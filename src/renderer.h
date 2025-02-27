@@ -34,10 +34,13 @@ private:
     Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader; // processes each vertex (position, color, etc.)
     Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader; // decides what color each pixel should be
 
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> input_layout;
+
     bool create_device_and_swap_chain();
     bool create_render_target();
     bool create_depth_buffer(int width, int height);
     bool create_viewport(float window_width, float window_height);
+    bool create_input_layout(const void* shader_bytecode, size_t bytecode_size);
     bool read_file(const std::string& filename, std::vector<char>& data);
     bool load_shaders();
 };
