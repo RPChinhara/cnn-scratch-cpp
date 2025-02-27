@@ -14,12 +14,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     renderer renderer(window.get_hwnd());
     if (!renderer.init()) return -1;
 
-    mesh player_mesh;
-    if (!player_mesh.initialize(&renderer))
+    mesh agent;
+    if (!agent.initialize(&renderer))
         return -1;
 
     while (window.process_messages()) {
         renderer.render();
+
+        // renderer.begin_frame();
+        agent.render(&renderer);
+        // renderer.end_frame();
     }
 
     return 0;

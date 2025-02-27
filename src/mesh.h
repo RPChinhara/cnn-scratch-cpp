@@ -9,6 +9,7 @@ class mesh
 {
 public:
     bool initialize(renderer* r);
+    void render(renderer* r);
 
 private:
     ID3D11Buffer* vertex_buffer;
