@@ -9,12 +9,9 @@ bool mesh::initialize(renderer* r)
 {
     vertex vertices[] = {
         {-0.5f, -0.5f, 0.0f}, // Bottom left
-        {0.5f, -0.5f, 0.0f},  // Bottom right
+        {-0.5f, 0.5f, 0.0f},  // Bottom right
+        {0.5f,  -0.5f, 0.0f},  // Top right
         {0.5f,  0.5f, 0.0f},  // Top right
-
-        {-0.5f, -0.5f, 0.0f}, // Bottom left
-        {0.5f,  0.5f, 0.0f},  // Top right
-        {-0.5f,  0.5f, 0.0f}  // Top left
     };
 
     vertex_count = ARRAYSIZE(vertices);
@@ -33,7 +30,7 @@ void mesh::render(renderer* r) {
     UINT stride = sizeof(vertex);
     UINT offset = 0;
     context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
-    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
     context->Draw(vertex_count, 0);
 }
