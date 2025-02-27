@@ -1,8 +1,9 @@
 #include "arrs.h"
 #include "logger.h"
+#include "player.h"
 #include "renderer.h"
-#include "window.h"
 #include "tensor.h"
+#include "window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     logger::init();
@@ -12,6 +13,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     renderer renderer(window.get_hwnd());
     if (!renderer.init()) return -1;
+
+    mesh player_mesh;
+    if (!player_mesh.initialize(&renderer))
+        return -1;
 
     while (window.process_messages()) {
         renderer.render();
