@@ -19,8 +19,12 @@ private:
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context; // tells the GPU what to do with the resources
     Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain; // handles the back buffer for double-buffered rendering
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target; // A view that allows DirectX to draw to the back buffer
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;  // Depth buffer
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> depth_stencil_buffer;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
 
     bool create_device_and_swap_chain();
     bool create_render_target();
     void create_viewport(float window_width, float window_height);
+    void create_depth_buffer(int width, int height);
 };

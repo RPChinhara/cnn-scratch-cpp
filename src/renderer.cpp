@@ -64,11 +64,39 @@ void renderer::create_viewport(float window_width, float window_height) {
     device_context->RSSetViewports(1, &viewport);
 }
 
+void renderer::create_depth_buffer(int width, int height) {
+    // NOTE: Ensures correct depth sorting so that closer objects appear in front of farther objects. Without it, objects might overlap incorrectly, ignoring their depth. Essential for 3D rendering (not needed for 2D).
+
+    // 1️⃣ Create a depth buffer texture
+    D3D11_TEXTURE2D_DESC depth_desc = {};
+    depth_desc.Width = width;
+    depth_desc.Height = height;
+    depth_desc.MipLevels = 1;
+    depth_desc.ArraySize = 1;
+    depth_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;  // 24-bit depth, 8-bit stencil
+    depth_desc.SampleDesc.Count = 1;  // No MSAA
+    depth_desc.Usage = D3D11_USAGE_DEFAULT;
+    depth_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+    device->CreateTexture2D(&depth_desc, nullptr, depth_stencil_buffer.GetAddressOf());
+
+    // 2️⃣ Create depth stencil view
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
+    dsv_desc.Format = depth_desc.Format;
+    dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+
+    device->CreateDepthStencilView(depth_stencil_buffer.Get(), &dsv_desc, depth_stencil_view.GetAddressOf());
+
+    // 3️⃣ Bind depth buffer
+    device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
+}
+
 bool renderer::init() {
     cleanup();
 
     if (!create_device_and_swap_chain()) return false;
     if (!create_render_target()) return false;
+    create_depth_buffer(800, 600); 
     create_viewport(800.0f, 600.0f);
 
     return true;
