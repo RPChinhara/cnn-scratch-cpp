@@ -84,7 +84,7 @@ bool renderer::create_depth_buffer(int width, int height) {
         return false;
     }
 
-    // 2️⃣ Create depth stencil view
+    // 2️⃣ Create depth stencil view - Converts the depth buffer texture into a depth-stencil view. This is necessary because DirectX doesn’t use raw textures directly—it needs views to read/write depth data.
     D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
     dsv_desc.Format = depth_desc.Format;
     dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -95,7 +95,7 @@ bool renderer::create_depth_buffer(int width, int height) {
         return false;
     }
 
-    // 3️⃣ Bind depth buffer
+    // 3️⃣ Bind depth buffer to the pipeline
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
     return true;
 }
