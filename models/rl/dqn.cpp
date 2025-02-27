@@ -1,7 +1,7 @@
 #include "tensor.h"
 
 // NOTE: Use this style instead of weights or w this is more intuitive?
- // TODO: Consider graph-based AI models instead of just dense layers as it more similar to how neurons in brain are connected?
+// TODO: Consider graph-based AI models instead of just dense layers as it more similar to how neurons in brain are connected?
 size_t synapse1 = 32;
 size_t synapse2 = 32;
 size_t synapse3 = 32;
