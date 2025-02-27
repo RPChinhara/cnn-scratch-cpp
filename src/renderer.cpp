@@ -112,7 +112,7 @@ bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
 bool renderer::load_shaders() {
     // Load compiled vertex shader
     std::vector<char> vs_data;
-    if (!read_file("shaders/basic_vs.cso", vs_data)) {
+    if (!read_file("shaders/compiled/basic_vs.cso", vs_data)) {
         return false;
     }
 
@@ -123,7 +123,7 @@ bool renderer::load_shaders() {
 
     // Load compiled pixel shader
     std::vector<char> ps_data;
-    if (!read_file("shaders/basic_ps.cso", ps_data)) {
+    if (!read_file("shaders/compiled/basic_ps.cso", ps_data)) {
         return false;
     }
 
@@ -150,8 +150,8 @@ bool renderer::init() {
         return false;
     if (!create_viewport(800.0f, 600.0f))
         return false;
-    // if (!load_shaders())
-    //     return false;
+    if (!load_shaders())
+        return false;
 
     return true;
 }
