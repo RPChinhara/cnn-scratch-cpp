@@ -96,11 +96,46 @@ void renderer::create_viewport(float window_width, float window_height) {
 }
 
 bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
-
+    std::ifstream file(filename, std::ios::binary);
+    if (!file) {
+        return false;
+    }
+    file.seekg(0, std::ios::end);
+    size_t file_size = file.tellg();
+    file.seekg(0, std::ios::beg);
+    data.resize(file_size);
+    file.read(data.data(), file_size);
+    return true;
 }
 
 bool renderer::load_shaders() {
+    // Load compiled vertex shader
+    std::vector<char> vs_data;
+    if (!read_file("shaders/basic_vs.cso", vs_data)) {
+        return false;
+    }
 
+    HRESULT hr = device->CreateVertexShader(vs_data.data(), vs_data.size(), nullptr, vertex_shader.GetAddressOf());
+    if (FAILED(hr)) {
+        return false;
+    }
+
+    // Load compiled pixel shader
+    std::vector<char> ps_data;
+    if (!read_file("shaders/basic_ps.cso", ps_data)) {
+        return false;
+    }
+
+    hr = device->CreatePixelShader(ps_data.data(), ps_data.size(), nullptr, pixel_shader.GetAddressOf());
+    if (FAILED(hr)) {
+        return false;
+    }
+
+    // Bind shaders to pipeline (you usually do this before drawing, but for now just do it once)
+    device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
+    device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
+
+    return true;
 }
 
 bool renderer::init() {
@@ -112,7 +147,11 @@ bool renderer::init() {
         return false;
     if (!create_depth_buffer(800, 600))
         return false;
+    
     create_viewport(800.0f, 600.0f);
+
+    if (!load_shaders())
+        return false;
 
     return true;
 }

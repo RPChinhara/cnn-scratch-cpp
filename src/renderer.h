@@ -1,7 +1,9 @@
 #pragma once
 
 #include <d3d11.h>
-#include <wrl/client.h> // For Microsoft::WRL::ComPtr
+#include <fstream>
+#include <vector>
+#include <wrl/client.h>
 
 class renderer {
 public:
