@@ -25,6 +25,6 @@ private:
 
     bool create_device_and_swap_chain();
     bool create_render_target();
+    bool create_depth_buffer(int width, int height);
     void create_viewport(float window_width, float window_height);
-    void create_depth_buffer(int width, int height);
 };
