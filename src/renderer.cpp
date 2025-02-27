@@ -25,12 +25,7 @@ bool renderer::create_device_and_swap_chain() {
 
     HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sc_desc, swap_chain.GetAddressOf(), device.GetAddressOf(), nullptr, device_context.GetAddressOf());
 
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create Direct3D 11 device and swap.\n";
-        return false;
-    }
-
-    return true;
+    return SUCCEEDED(hr);
 }
 
 bool renderer::create_render_target() {
@@ -103,9 +98,12 @@ bool renderer::create_depth_buffer(int width, int height) {
 bool renderer::init() {
     cleanup();
 
-    if (!create_device_and_swap_chain()) return false;
-    if (!create_render_target()) return false;
-    create_depth_buffer(800, 600);
+    if (!create_device_and_swap_chain())
+        return false;
+    if (!create_render_target())
+        return false;
+    if (!create_depth_buffer(800, 600))
+        return false;
     create_viewport(800.0f, 600.0f);
 
     return true;
