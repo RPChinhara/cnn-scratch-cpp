@@ -67,7 +67,7 @@ void renderer::create_viewport(float window_width, float window_height) {
 void renderer::create_depth_buffer(int width, int height) {
     // NOTE: Ensures correct depth sorting so that closer objects appear in front of farther objects. Without it, objects might overlap incorrectly, ignoring their depth. Essential for 3D rendering (not needed for 2D).
 
-    // 1️⃣ Create a depth buffer texture
+    // 1️⃣ Create a depth buffer texture - a texture that stores depth values
     D3D11_TEXTURE2D_DESC depth_desc = {};
     depth_desc.Width = width;
     depth_desc.Height = height;
@@ -96,7 +96,7 @@ bool renderer::init() {
 
     if (!create_device_and_swap_chain()) return false;
     if (!create_render_target()) return false;
-    create_depth_buffer(800, 600); 
+    create_depth_buffer(800, 600);
     create_viewport(800.0f, 600.0f);
 
     return true;
