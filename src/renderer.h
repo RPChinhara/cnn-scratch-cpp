@@ -26,8 +26,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Texture2D> depth_stencil_buffer;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
 
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader;
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader; // processes each vertex (position, color, etc.)
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader; // decides what color each pixel should be
 
     bool create_device_and_swap_chain();
     bool create_render_target();
