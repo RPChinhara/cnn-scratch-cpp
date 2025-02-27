@@ -17,11 +17,17 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Device> device; // creates resources
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context; // tells the GPU what to do with the resources
+
     Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain; // handles the back buffer for double-buffered rendering
+
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target; // A view that allows DirectX to draw to the back buffer
+
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;  // Depth buffer
     Microsoft::WRL::ComPtr<ID3D11Texture2D> depth_stencil_buffer;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
+
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader;
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader;
 
     bool create_device_and_swap_chain();
     bool create_render_target();
