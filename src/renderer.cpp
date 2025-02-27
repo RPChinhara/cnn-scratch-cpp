@@ -156,6 +156,25 @@ bool renderer::init() {
     return true;
 }
 
+bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count)
+{
+    D3D11_BUFFER_DESC buffer_desc = {};
+    buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+    buffer_desc.ByteWidth = vertex_size * vertex_count;
+    buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    buffer_desc.CPUAccessFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA init_data = {};
+    init_data.pSysMem = vertex_data;
+
+    HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
+    if (FAILED(hr)) {
+        return false;
+    }
+    
+    return true;
+}
+
 void renderer::render() {
     float clear_color[] = { 1.0f, 0.0f, 0.352941f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);

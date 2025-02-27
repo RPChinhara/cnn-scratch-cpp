@@ -11,6 +11,7 @@ public:
     ~renderer();
 
     bool init();
+    bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
     void render();
     void cleanup();
 
