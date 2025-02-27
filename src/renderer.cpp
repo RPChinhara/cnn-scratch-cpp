@@ -46,27 +46,6 @@ bool renderer::create_render_target() {
     return true;
 }
 
-void renderer::create_viewport(float window_width, float window_height) {
-    // NOTE:  Defines the area where DirectX will draw graphics inside the window because by default, DirectX does not know where to draw. We need to tell it how large the rendering area is.
-    D3D11_VIEWPORT viewport = {};
-    viewport.Width = window_width;
-    viewport.Height = window_height;
-    viewport.MinDepth = 0.0f;  // Closest depth (near plane)
-    viewport.MaxDepth = 1.0f;  // Farthest depth (far plane)
-    viewport.TopLeftX = 0;
-    viewport.TopLeftY = 0;
-
-    device_context->RSSetViewports(1, &viewport);
-}
-
-bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
-
-}
-
-bool renderer::load_shaders() {
-    
-}
-
 bool renderer::create_depth_buffer(int width, int height) {
     // NOTE: Ensures correct depth sorting so that closer objects appear in front of farther objects. Without it, objects might overlap incorrectly, ignoring their depth. Essential for 3D rendering (not needed for 2D).
 
@@ -101,6 +80,27 @@ bool renderer::create_depth_buffer(int width, int height) {
     // 3️⃣ Bind depth buffer to the pipeline
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
     return true;
+}
+
+void renderer::create_viewport(float window_width, float window_height) {
+    // NOTE:  Defines the area where DirectX will draw graphics inside the window because by default, DirectX does not know where to draw. We need to tell it how large the rendering area is.
+    D3D11_VIEWPORT viewport = {};
+    viewport.Width = window_width;
+    viewport.Height = window_height;
+    viewport.MinDepth = 0.0f;  // Closest depth (near plane)
+    viewport.MaxDepth = 1.0f;  // Farthest depth (far plane)
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+
+    device_context->RSSetViewports(1, &viewport);
+}
+
+bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
+
+}
+
+bool renderer::load_shaders() {
+
 }
 
 bool renderer::init() {
