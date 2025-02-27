@@ -80,7 +80,7 @@ bool renderer::create_depth_buffer(int width, int height) {
 
     HRESULT hr = device->CreateTexture2D(&depth_desc, nullptr, depth_stencil_buffer.GetAddressOf());
     if (FAILED(hr)) {
-        std::cerr << "Failed to create render target.\n";
+        std::cerr << "Failed to create texture2D.\n";
         return false;
     }
 
@@ -91,7 +91,7 @@ bool renderer::create_depth_buffer(int width, int height) {
 
     hr = device->CreateDepthStencilView(depth_stencil_buffer.Get(), &dsv_desc, depth_stencil_view.GetAddressOf());
     if (FAILED(hr)) {
-        std::cerr << "Failed to create render target.\n";
+        std::cerr << "Failed to create depth stencil view.\n";
         return false;
     }
 
