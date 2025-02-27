@@ -59,6 +59,14 @@ void renderer::create_viewport(float window_width, float window_height) {
     device_context->RSSetViewports(1, &viewport);
 }
 
+bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
+
+}
+
+bool renderer::load_shaders() {
+    
+}
+
 bool renderer::create_depth_buffer(int width, int height) {
     // NOTE: Ensures correct depth sorting so that closer objects appear in front of farther objects. Without it, objects might overlap incorrectly, ignoring their depth. Essential for 3D rendering (not needed for 2D).
 

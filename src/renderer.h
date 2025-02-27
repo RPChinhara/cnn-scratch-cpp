@@ -33,4 +33,6 @@ private:
     bool create_render_target();
     bool create_depth_buffer(int width, int height);
     void create_viewport(float window_width, float window_height);
+    bool read_file(const std::string& filename, std::vector<char>& data);
+    bool load_shaders();
 };
