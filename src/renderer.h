@@ -12,8 +12,10 @@ public:
 
     bool init();
     bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> get_context();
     void render();
     void cleanup();
+
 
 private:
     HWND hwnd;

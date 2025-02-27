@@ -171,8 +171,12 @@ bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_da
     if (FAILED(hr)) {
         return false;
     }
-    
+
     return true;
+}
+
+Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
+    return device_context;
 }
 
 void renderer::render() {
