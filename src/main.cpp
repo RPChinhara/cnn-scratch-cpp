@@ -21,9 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     while (window.process_messages()) {
         renderer.render();
 
-        // renderer.begin_frame();
         agent.render(&renderer);
-        // renderer.end_frame();
     }
 
     return 0;

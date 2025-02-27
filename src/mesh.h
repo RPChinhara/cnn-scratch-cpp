@@ -2,6 +2,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include <wrl/client.h>
 
 #include "renderer.h"
 
@@ -12,5 +13,6 @@ public:
     void render(renderer* r);
 
 private:
-    ID3D11Buffer* vertex_buffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> vertex_buffer;
+    UINT vertex_count = 0;
 };

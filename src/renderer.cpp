@@ -210,10 +210,9 @@ void renderer::render() {
 
     device_context->IASetInputLayout(input_layout.Get());  // <-- Set input layout here
 
-    // Draw your mesh here (this depends on how your mesh class works)
+    // No direct draw here — the mesh will handle its own draw
 
     swap_chain->Present(1, 0);
-
 }
 
 void renderer::cleanup() {
