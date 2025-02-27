@@ -82,7 +82,7 @@ bool renderer::create_depth_buffer(int width, int height) {
     return true;
 }
 
-void renderer::create_viewport(float window_width, float window_height) {
+bool renderer::create_viewport(float window_width, float window_height) {
     // NOTE:  Defines the area where DirectX will draw graphics inside the window because by default, DirectX does not know where to draw. We need to tell it how large the rendering area is.
     D3D11_VIEWPORT viewport = {};
     viewport.Width = window_width;
@@ -93,6 +93,7 @@ void renderer::create_viewport(float window_width, float window_height) {
     viewport.TopLeftY = 0;
 
     device_context->RSSetViewports(1, &viewport);
+    return true;
 }
 
 bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
@@ -147,11 +148,10 @@ bool renderer::init() {
         return false;
     if (!create_depth_buffer(800, 600))
         return false;
-    
-    create_viewport(800.0f, 600.0f);
-
-    if (!load_shaders())
+    if (!create_viewport(800.0f, 600.0f))
         return false;
+    // if (!load_shaders())
+    //     return false;
 
     return true;
 }
