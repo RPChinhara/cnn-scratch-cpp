@@ -177,6 +177,20 @@ bool renderer::init() {
     if (!load_shaders())
         return false;
 
+    // Set up the camera (view matrix)
+    view_matrix = DirectX::XMMatrixLookAtLH(
+        {0.0f, 0.0f, -3.0f},  // Camera position (behind the object)
+        {0.0f, 0.0f, 0.0f},   // Looking at origin
+        {0.0f, 1.0f, 0.0f}    // Up vector
+    );
+
+    // Set projection matrix
+    projection_matrix = DirectX::XMMatrixPerspectiveFovLH(
+        DirectX::XMConvertToRadians(60.0f), // FOV
+        800.0f / 600.0f,                    // Aspect ratio
+        0.1f, 100.0f                        // Near & far planes
+    );
+
     return true;
 }
 
