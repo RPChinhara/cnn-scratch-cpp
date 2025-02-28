@@ -11,12 +11,14 @@ public:
     ~renderer();
 
     bool init();
-    bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> get_context();
-    void begin_frame();
-    void end_frame();
     void cleanup();
 
+    void begin_frame();
+    void end_frame();
+
+    bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
+
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> get_context();
 
 private:
     HWND hwnd;
@@ -34,7 +36,6 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader; // processes each vertex (position, color, etc.)
     Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader; // decides what color each pixel should be
-
     Microsoft::WRL::ComPtr<ID3D11InputLayout> input_layout;
 
     bool create_device_and_swap_chain();
