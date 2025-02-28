@@ -1,5 +1,6 @@
 #pragma once
 
+#include <directxmath.h>
 #include <d3d11.h>
 #include <fstream>
 #include <vector>
@@ -37,6 +38,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader; // processes each vertex (position, color, etc.)
     Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader; // decides what color each pixel should be
     Microsoft::WRL::ComPtr<ID3D11InputLayout> input_layout;
+
+    DirectX::XMMATRIX view_matrix;
+    DirectX::XMMATRIX projection_matrix;
 
     bool create_device_and_swap_chain();
     bool create_render_target();
