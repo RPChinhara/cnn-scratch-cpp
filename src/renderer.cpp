@@ -194,8 +194,7 @@ bool renderer::init() {
     return true;
 }
 
-bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count)
-{
+bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count) {
     D3D11_BUFFER_DESC buffer_desc = {};
     buffer_desc.Usage = D3D11_USAGE_DEFAULT;
     buffer_desc.ByteWidth = vertex_size * vertex_count;
@@ -204,6 +203,24 @@ bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_da
 
     D3D11_SUBRESOURCE_DATA init_data = {};
     init_data.pSysMem = vertex_data;
+
+    HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
+    if (FAILED(hr)) {
+        return false;
+    }
+
+    return true;
+}
+
+bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_data, UINT index_count) {
+    D3D11_BUFFER_DESC buffer_desc = {};
+    buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+    buffer_desc.ByteWidth = sizeof(uint32_t) * index_count;
+    buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+    buffer_desc.CPUAccessFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA init_data = {};
+    init_data.pSysMem = index_data;
 
     HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
     if (FAILED(hr)) {
