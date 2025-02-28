@@ -100,7 +100,7 @@ bool renderer::create_input_layout(const void* shader_bytecode, size_t bytecode_
     // NOTE: DirectX needs to know how to interpret vertex data (like position, color, texture coordinates). This is called an Input Layout.
 
     D3D11_INPUT_ELEMENT_DESC layout_desc[] = {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
     };
 
     if (FAILED(device->CreateInputLayout(
