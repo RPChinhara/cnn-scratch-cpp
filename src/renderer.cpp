@@ -206,6 +206,7 @@ Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
 void renderer::begin_frame() {
     float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
+    
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     device_context->IASetInputLayout(input_layout.Get());  // <-- Set input layout here
