@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "renderer.h"
+#include "logger.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -79,6 +80,20 @@ bool renderer::create_depth_buffer(int width, int height) {
 
     // 3️⃣ Bind depth buffer to the pipeline
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
+    return true;
+}
+
+bool renderer::create_rasterizer_state() {
+    D3D11_RASTERIZER_DESC rasterizer_desc = {};
+    rasterizer_desc.FillMode = D3D11_FILL_SOLID;
+    rasterizer_desc.CullMode = D3D11_CULL_BACK;
+    rasterizer_desc.FrontCounterClockwise = FALSE;  // For clockwise winding
+
+    HRESULT hr = device->CreateRasterizerState(&rasterizer_desc, rasterizer_state.GetAddressOf());
+    if (FAILED(hr)) {
+        return false;
+    }
+
     return true;
 }
 
@@ -172,6 +187,8 @@ bool renderer::init() {
         return false;
     if (!create_depth_buffer(800, 600))
         return false;
+    if (!create_rasterizer_state())
+        return false;
     if (!create_viewport(800.0f, 600.0f))
         return false;
     if (!load_shaders())
@@ -206,6 +223,7 @@ bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_da
 
     HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
     if (FAILED(hr)) {
+        logger::log("Failed to create buffer for vertex");
         return false;
     }
 
@@ -224,6 +242,7 @@ bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_
 
     HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
     if (FAILED(hr)) {
+        logger::log("Failed to create buffer for index");
         return false;
     }
 
@@ -248,6 +267,8 @@ void renderer::begin_frame() {
     // 4️⃣ Set the render target and depth buffer again (this is optional if you are 100% sure they didn’t change between frames)
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
 
+    device_context->RSSetState(rasterizer_state.Get());
+
     // World Matrix
     DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();  // Start with identity (no transform)
 
@@ -260,10 +281,10 @@ void renderer::begin_frame() {
     DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
 
     // Upload this WVP matrix to the vertex shader constant buffer
-    // device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp, 0, 0);
+    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp, 0, 0);
 
     // Set the constant buffer to the vertex shader
-    // device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
     // 5️⃣ Now ready to issue draw calls (Draw, DrawIndexed, etc.)
 }

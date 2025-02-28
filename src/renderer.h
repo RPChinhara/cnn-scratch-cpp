@@ -42,12 +42,15 @@ private:
 
     Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer; // buffer that stores WVP matrix for the shader
 
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizer_state;
+
     DirectX::XMMATRIX view_matrix;
     DirectX::XMMATRIX projection_matrix;
 
     bool create_device_and_swap_chain();
     bool create_render_target();
     bool create_depth_buffer(int width, int height);
+    bool create_rasterizer_state();
     bool create_viewport(float window_width, float window_height);
     bool create_input_layout(const void* shader_bytecode, size_t bytecode_size);
     bool read_file(const std::string& filename, std::vector<char>& data);

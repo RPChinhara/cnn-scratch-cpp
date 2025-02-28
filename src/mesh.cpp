@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include "logger.h"
 
 struct vertex {
     float x, y, z;     // position
@@ -40,11 +41,15 @@ bool mesh::initialize(renderer* r)
     vertex_count = ARRAYSIZE(cube_vertices);
     index_count = ARRAYSIZE(indices);
 
-    if (!r->create_vertex_buffer(&vertex_buffer, cube_vertices, sizeof(vertex), vertex_count))
+    if (!r->create_vertex_buffer(&vertex_buffer, cube_vertices, sizeof(vertex), vertex_count)) {
+        logger::log("Failed to create vertex buffer");
         return false;
+    }
 
-    if (!r->create_index_buffer(&index_buffer, indices, ARRAYSIZE(indices)))
+    if (!r->create_index_buffer(&index_buffer, indices, ARRAYSIZE(indices))) {
+        logger::log("Failed to create index buffer");
         return false;
+    }
 
     return true;
 }
