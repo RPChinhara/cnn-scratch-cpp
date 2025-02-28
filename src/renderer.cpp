@@ -231,6 +231,23 @@ void renderer::begin_frame() {
     // 4️⃣ Set the render target and depth buffer again (this is optional if you are 100% sure they didn’t change between frames)
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
 
+    // World Matrix
+    DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();  // Start with identity (no transform)
+
+    // Example: rotate it slowly
+    static float angle = 0.0f;
+    angle += 0.01f;
+    world_matrix = DirectX::XMMatrixRotationY(angle);
+
+    // Combine World * View * Projection into final matrix
+    DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
+
+    // Upload this WVP matrix to the vertex shader constant buffer
+    // device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp, 0, 0);
+
+    // Set the constant buffer to the vertex shader
+    // device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+
     // 5️⃣ Now ready to issue draw calls (Draw, DrawIndexed, etc.)
 }
 

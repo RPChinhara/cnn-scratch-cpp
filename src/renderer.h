@@ -39,6 +39,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader; // decides what color each pixel should be
     Microsoft::WRL::ComPtr<ID3D11InputLayout> input_layout;
 
+    Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer; // buffer that stores WVP matrix for the shader
+
     DirectX::XMMATRIX view_matrix;
     DirectX::XMMATRIX projection_matrix;
 
