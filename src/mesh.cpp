@@ -37,12 +37,14 @@ bool mesh::initialize(renderer* r)
         2, 3, 6,  6, 3, 7  // Right
     };
 
-    vertex_count = ARRAYSIZE(rect_vertices);
+    vertex_count = ARRAYSIZE(cube_vertices);
+    index_count = ARRAYSIZE(indices);
 
-    if (!r->create_vertex_buffer(&vertex_buffer, rect_vertices, sizeof(vertex), vertex_count))
+    if (!r->create_vertex_buffer(&vertex_buffer, cube_vertices, sizeof(vertex), vertex_count))
         return false;
 
-    // TODO: Optionally create an Index Buffer (if using indexed drawing).
+    if (!r->create_index_buffer(&index_buffer, indices, ARRAYSIZE(indices)))
+        return false;
 
     return true;
 }
@@ -53,8 +55,11 @@ void mesh::render(renderer* r) {
     UINT stride = sizeof(vertex);
     UINT offset = 0;
     context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
-    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    context->IASetIndexBuffer(index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-    // context->DrawIndexed(36, 0, 0); // 36 indices
-    context->Draw(vertex_count, 0);
+    // context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // Use TriangleList for indexed geometry
+
+    context->DrawIndexed(index_count, 0, 0);  // 36 for the cube
+    // context->Draw(vertex_count, 0);
 }
