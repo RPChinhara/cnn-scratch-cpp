@@ -55,5 +55,6 @@ void mesh::render(renderer* r) {
     context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
+    // context->DrawIndexed(36, 0, 0); // 36 indices
     context->Draw(vertex_count, 0);
 }
