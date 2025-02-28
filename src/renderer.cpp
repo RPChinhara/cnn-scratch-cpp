@@ -209,9 +209,6 @@ void renderer::begin_frame() {
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     device_context->IASetInputLayout(input_layout.Get());  // <-- Set input layout here
-
-
-    // swap_chain->Present(1, 0);
 }
 
 void renderer::end_frame() {
