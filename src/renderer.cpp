@@ -204,12 +204,20 @@ Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
 }
 
 void renderer::begin_frame() {
-    float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    // 1️⃣ Clear the render target (color buffer)
+    float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };  // white background
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
-    
-    device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-    device_context->IASetInputLayout(input_layout.Get());  // <-- Set input layout here
+    // 2️⃣ Clear the depth/stencil buffer
+    device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
+
+    // 3️⃣ Set the input layout (before drawing anything, ensures vertex format matches shader expectations)
+    device_context->IASetInputLayout(input_layout.Get());
+
+    // 4️⃣ Set the render target and depth buffer again (this is optional if you are 100% sure they didn’t change between frames)
+    device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
+
+    // 5️⃣ Now ready to issue draw calls (Draw, DrawIndexed, etc.)
 }
 
 void renderer::end_frame() {
