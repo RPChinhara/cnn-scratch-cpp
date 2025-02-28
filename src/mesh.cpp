@@ -28,6 +28,15 @@ bool mesh::initialize(renderer* r)
         {  0.5f,  0.5f,  0.5f }
     };
 
+    uint32_t indices[] = {
+        0, 1, 2,  1, 3, 2, // Front
+        4, 6, 5,  5, 6, 7, // Back
+        0, 2, 4,  4, 2, 6, // Bottom
+        1, 5, 3,  3, 5, 7, // Top
+        0, 4, 1,  1, 4, 5, // Left
+        2, 3, 6,  6, 3, 7  // Right
+    };
+
     vertex_count = ARRAYSIZE(rect_vertices);
 
     if (!r->create_vertex_buffer(&vertex_buffer, rect_vertices, sizeof(vertex), vertex_count))
