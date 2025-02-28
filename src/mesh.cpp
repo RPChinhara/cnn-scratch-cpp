@@ -7,16 +7,30 @@ struct vertex {
 
 bool mesh::initialize(renderer* r)
 {
-    vertex vertices[] = {
+    vertex rect_vertices[] = {
         {-0.5f, -0.5f, 0.0f}, // Bottom left
         {-0.5f, 0.5f, 0.0f},  // Bottom right
         {0.5f,  -0.5f, 0.0f},  // Top right
         {0.5f,  0.5f, 0.0f},  // Top right
     };
 
-    vertex_count = ARRAYSIZE(vertices);
+    vertex cube_vertices[] = {
+        // Front face
+        { -0.5f, -0.5f, -0.5f },  // bottom-left-front
+        { -0.5f,  0.5f, -0.5f },  // top-left-front
+        {  0.5f, -0.5f, -0.5f },  // bottom-right-front
+        {  0.5f,  0.5f, -0.5f },  // top-right-front
 
-    if (!r->create_vertex_buffer(&vertex_buffer, vertices, sizeof(vertex), vertex_count))
+        // Back face
+        { -0.5f, -0.5f,  0.5f },
+        { -0.5f,  0.5f,  0.5f },
+        {  0.5f, -0.5f,  0.5f },
+        {  0.5f,  0.5f,  0.5f }
+    };
+
+    vertex_count = ARRAYSIZE(rect_vertices);
+
+    if (!r->create_vertex_buffer(&vertex_buffer, rect_vertices, sizeof(vertex), vertex_count))
         return false;
 
     // TODO: Optionally create an Index Buffer (if using indexed drawing).
