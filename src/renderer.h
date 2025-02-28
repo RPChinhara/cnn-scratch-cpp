@@ -50,6 +50,7 @@ private:
     bool create_device_and_swap_chain();
     bool create_render_target();
     bool create_depth_buffer(int width, int height);
+    bool create_depth_stencil_state();
     bool create_rasterizer_state();
     bool create_viewport(float window_width, float window_height);
     bool create_input_layout(const void* shader_bytecode, size_t bytecode_size);

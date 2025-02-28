@@ -83,6 +83,24 @@ bool renderer::create_depth_buffer(int width, int height) {
     return true;
 }
 
+bool renderer::create_depth_stencil_state() {
+    D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+    dsDesc.DepthEnable = true;                          // 🔥 Enable depth testing
+    dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // Write to depth buffer
+    dsDesc.DepthFunc = D3D11_COMPARISON_LESS;           // Closer pixels pass
+    dsDesc.StencilEnable = false;                       // Optional, if not using stencil
+
+    HRESULT hr = device->CreateDepthStencilState(&dsDesc, depth_stencil_state.GetAddressOf());
+    if (FAILED(hr)) {
+        std::cerr << "Failed to create depth stencil state.\n";
+        return false;
+    }
+
+    // Bind this state to the pipeline
+    device_context->OMSetDepthStencilState(depth_stencil_state.Get(), 0);
+    return true;
+}
+
 bool renderer::create_rasterizer_state() {
     D3D11_RASTERIZER_DESC rasterizer_desc = {};
     rasterizer_desc.FillMode = D3D11_FILL_SOLID;
@@ -186,6 +204,8 @@ bool renderer::init() {
     if (!create_render_target())
         return false;
     if (!create_depth_buffer(800, 600))
+        return false;
+    if (!create_depth_stencil_state())
         return false;
     if (!create_rasterizer_state())
         return false;
