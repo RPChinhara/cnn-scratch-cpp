@@ -2,7 +2,7 @@
 #include "logger.h"
 
 struct vertex {
-    float x, y, z;     // position
+    float x, y, z;
 };
 
 bool mesh::initialize(renderer* r)
