@@ -1,14 +1,14 @@
+cbuffer TransformBuffer : register(b0) {
+    // float4x4 wvp;
+    matrix wvp;
+};
+
 struct VS_INPUT {
     float3 pos : POSITION;
 };
 
 struct VS_OUTPUT {
     float4 pos : SV_POSITION;
-};
-
-cbuffer TransformBuffer : register(b0) {
-    float4x4 wvp;
-    // matrix mvp;
 };
 
 VS_OUTPUT main(VS_INPUT input) {
