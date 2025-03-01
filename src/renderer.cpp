@@ -213,6 +213,8 @@ bool renderer::init() {
         return false;
     if (!load_shaders())
         return false;
+    if (!create_constant_buffer(&constant_buffer))
+        return false;
 
     // Set up the camera (view matrix)
     view_matrix = DirectX::XMMatrixLookAtLH(
@@ -269,6 +271,20 @@ bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_
     return true;
 }
 
+bool renderer::create_constant_buffer(ID3D11Buffer** buffer) {
+    D3D11_BUFFER_DESC cbd = {};
+    cbd.Usage = D3D11_USAGE_DEFAULT;
+    cbd.ByteWidth = sizeof(DirectX::XMMATRIX);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbd.CPUAccessFlags = 0;
+
+    HRESULT hr = device->CreateBuffer(&cbd, nullptr, constant_buffer.GetAddressOf());
+    if (FAILED(hr)) {
+        // Handle error (log, assert, etc.)
+    }
+    return true;
+}
+
 Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
     return device_context;
 }
@@ -299,17 +315,6 @@ void renderer::begin_frame() {
 
     // Combine World * View * Projection into final matrix
     DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
-
-    D3D11_BUFFER_DESC cbd = {};
-    cbd.Usage = D3D11_USAGE_DEFAULT;
-    cbd.ByteWidth = sizeof(DirectX::XMMATRIX);
-    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cbd.CPUAccessFlags = 0;
-
-    HRESULT hr = device->CreateBuffer(&cbd, nullptr, constant_buffer.GetAddressOf());
-    if (FAILED(hr)) {
-        // Handle error (log, assert, etc.)
-    }
 
     // Upload this WVP matrix to the vertex shader constant buffer
     device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp, 0, 0);
