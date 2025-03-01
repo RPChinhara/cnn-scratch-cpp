@@ -3,6 +3,7 @@
 #include "math.h"
 #include "tensor.h"
 
+// TODO: Use FP16 instead of FP32 (float)
 __global__ void matmul_kernel(float* a, float* b, float* c, int m, int n, int p) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
