@@ -15,10 +15,10 @@ bool mesh::init(renderer* r) {
 
     vertex cube_vertices[] = {
         // Front face
-        { -0.5f, -0.5f, -0.5f },  // bottom-left-front
-        { -0.5f,  0.5f, -0.5f },  // top-left-front
-        {  0.5f, -0.5f, -0.5f },  // bottom-right-front
-        {  0.5f,  0.5f, -0.5f },  // top-right-front
+        { -0.5f, -0.5f, -0.5f }, // bottom-left-front
+        { -0.5f,  0.5f, -0.5f }, // top-left-front
+        {  0.5f, -0.5f, -0.5f }, // bottom-right-front
+        {  0.5f,  0.5f, -0.5f }, // top-right-front
 
         // Back face
         { -0.5f, -0.5f,  0.5f },
