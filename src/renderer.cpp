@@ -135,6 +135,7 @@ bool renderer::create_input_layout(const void* shader_bytecode, size_t bytecode_
 
     D3D11_INPUT_ELEMENT_DESC layout_desc[] = {
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
+
     };
 
     if (FAILED(device->CreateInputLayout(
@@ -219,9 +220,9 @@ bool renderer::init() {
 
     // Set up the camera (view matrix)
     view_matrix = DirectX::XMMatrixLookAtLH(
-        {0.0f, 0.0f, -15.0f}, // Camera position (behind the object)
-        {0.0f, 0.0f, 0.0f},   // Looking at origin
-        {0.0f, 1.0f, 0.0f}    // Up vector
+        {0.0f, 0.0f, -3.0f}, // Camera position (behind the object)
+        {0.0f, 0.0f,  0.0f},   // Looking at origin
+        {0.0f, 1.0f,  0.0f}    // Up vector
     );
 
     // Set projection matrix
@@ -316,9 +317,10 @@ void renderer::begin_frame() {
 
     // Combine World * View * Projection into final matrix
     DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
+    DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
 
     // Upload this WVP matrix to the vertex shader constant buffer
-    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp, 0, 0);
+    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp_transposed, 0, 0);
 
     // Set the constant buffer to the vertex shader
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
