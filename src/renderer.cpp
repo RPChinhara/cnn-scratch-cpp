@@ -307,6 +307,13 @@ void renderer::begin_frame() {
 
     device_context->RSSetState(rasterizer_state.Get());
 
+    // Draw the floor (world matrix = identity for now, just flat at y = -0.5f)
+    DirectX::XMMATRIX floor_world = DirectX::XMMatrixIdentity();
+
+    // Set floor's transform to the constant buffer
+    DirectX::XMMATRIX floor_wvp = floor_world * view_matrix * projection_matrix;
+    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &floor_wvp, 0, 0);
+
     // World Matrix
     DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();  // Start with identity (no transform)
 
