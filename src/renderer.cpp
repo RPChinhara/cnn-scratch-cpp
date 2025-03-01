@@ -50,7 +50,7 @@ bool renderer::create_render_target() {
 bool renderer::create_depth_buffer(int width, int height) {
     // NOTE: Ensures correct depth sorting so that closer objects appear in front of farther objects. Without it, objects might overlap incorrectly, ignoring their depth. Essential for 3D rendering (not needed for 2D).
 
-    // 1️⃣ Create a depth buffer texture - a texture that stores depth values
+    // 1. Create a depth buffer texture - a texture that stores depth values
     D3D11_TEXTURE2D_DESC depth_desc = {};
     depth_desc.Width = width;
     depth_desc.Height = height;
@@ -67,7 +67,7 @@ bool renderer::create_depth_buffer(int width, int height) {
         return false;
     }
 
-    // 2️⃣ Create depth stencil view - Converts the depth buffer texture into a depth-stencil view. This is necessary because DirectX doesn’t use raw textures directly—it needs views to read/write depth data.
+    // 2. Create depth stencil view - Converts the depth buffer texture into a depth-stencil view. This is necessary because DirectX doesn’t use raw textures directly—it needs views to read/write depth data.
     D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
     dsv_desc.Format = depth_desc.Format;
     dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -78,14 +78,14 @@ bool renderer::create_depth_buffer(int width, int height) {
         return false;
     }
 
-    // 3️⃣ Bind depth buffer to the pipeline
+    // 3. Bind depth buffer to the pipeline
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
     return true;
 }
 
 bool renderer::create_depth_stencil_state() {
     D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-    dsDesc.DepthEnable = true;                          // 🔥 Enable depth testing
+    dsDesc.DepthEnable = true;                          // Enable depth testing
     dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // Write to depth buffer
     dsDesc.DepthFunc = D3D11_COMPARISON_LESS;           // Closer pixels pass
     dsDesc.StencilEnable = false;                       // Optional, if not using stencil
@@ -292,17 +292,17 @@ Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
 }
 
 void renderer::begin_frame() {
-    // 1️⃣ Clear the render target (color buffer)
+    // 1. Clear the render target (color buffer)
     float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };  // white background
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
 
-    // 2️⃣ Clear the depth/stencil buffer
+    // 2. Clear the depth/stencil buffer
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
 
-    // 3️⃣ Set the input layout (before drawing anything, ensures vertex format matches shader expectations)
+    // 3. Set the input layout (before drawing anything, ensures vertex format matches shader expectations)
     device_context->IASetInputLayout(input_layout.Get());
 
-    // 4️⃣ Set the render target and depth buffer again (this is optional if you are 100% sure they didn’t change between frames)
+    // 4. Set the render target and depth buffer again (this is optional if you are 100% sure they didn’t change between frames)
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
 
     device_context->RSSetState(rasterizer_state.Get());
