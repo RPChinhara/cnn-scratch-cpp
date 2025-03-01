@@ -322,8 +322,6 @@ void renderer::begin_frame() {
 
     // Set the constant buffer to the vertex shader
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-
-    // 5️⃣ Now ready to issue draw calls (Draw, DrawIndexed, etc.)
 }
 
 void renderer::end_frame() {
