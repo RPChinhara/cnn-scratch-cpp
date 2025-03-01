@@ -300,6 +300,17 @@ void renderer::begin_frame() {
     // Combine World * View * Projection into final matrix
     DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
 
+    D3D11_BUFFER_DESC cbd = {};
+    cbd.Usage = D3D11_USAGE_DEFAULT;
+    cbd.ByteWidth = sizeof(DirectX::XMMATRIX);
+    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cbd.CPUAccessFlags = 0;
+
+    HRESULT hr = device->CreateBuffer(&cbd, nullptr, constant_buffer.GetAddressOf());
+    if (FAILED(hr)) {
+        // Handle error (log, assert, etc.)
+    }
+
     // Upload this WVP matrix to the vertex shader constant buffer
     device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp, 0, 0);
 
