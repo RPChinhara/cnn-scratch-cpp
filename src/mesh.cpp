@@ -3,7 +3,6 @@
 
 struct vertex {
     float x, y, z;     // position
-    float r, g, b, a;  // color (optional)
 };
 
 bool mesh::initialize(renderer* r)
