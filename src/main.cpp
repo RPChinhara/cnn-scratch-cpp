@@ -15,7 +15,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!r.init()) return -1;
 
     mesh agent;
-    if (!agent.initialize(&r))
+    if (!agent.init(&r))
         return -1;
 
     while (window.process_messages()) {

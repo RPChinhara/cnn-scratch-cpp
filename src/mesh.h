@@ -6,10 +6,9 @@
 
 #include "renderer.h"
 
-class mesh
-{
+class mesh {
 public:
-    bool initialize(renderer* r);
+    bool init(renderer* r);
     void render(renderer* r);
 
 private:

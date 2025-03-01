@@ -5,8 +5,7 @@ struct vertex {
     float x, y, z;
 };
 
-bool mesh::initialize(renderer* r)
-{
+bool mesh::init(renderer* r) {
     vertex rect_vertices[] = {
         { -0.5f, -0.5f, 0.0f }, // Bottom left
         { -0.5f,  0.5f, 0.0f }, // Bottom right
