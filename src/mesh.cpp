@@ -9,10 +9,10 @@ struct vertex {
 bool mesh::initialize(renderer* r)
 {
     vertex rect_vertices[] = {
-        {-0.5f, -0.5f, 0.0f}, // Bottom left
-        {-0.5f, 0.5f, 0.0f},  // Bottom right
-        {0.5f,  -0.5f, 0.0f},  // Top right
-        {0.5f,  0.5f, 0.0f},  // Top right
+        { -0.5f, -0.5f, 0.0f }, // Bottom left
+        { -0.5f,  0.5f, 0.0f },  // Bottom right
+        {  0.5f, -0.5f, 0.0f },  // Top right
+        {  0.5f,  0.5f, 0.0f },  // Top right
     };
 
     vertex cube_vertices[] = {
