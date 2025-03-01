@@ -6,7 +6,7 @@ struct vertex {
 };
 
 bool mesh::init(renderer* r) {
-    vertex rect_vertices[] = {
+    vertex floor_vertices[] = {
         { -0.5f, -0.5f, 0.0f }, // Bottom left
         { -0.5f,  0.5f, 0.0f }, // Bottom right
         {  0.5f, -0.5f, 0.0f }, // Top right
@@ -36,6 +36,10 @@ bool mesh::init(renderer* r) {
         2, 3, 6,  6, 3, 7  // Right
     };
 
+    uint32_t floor_indices[] = {
+        0, 1, 2, 2, 1, 3  // Two triangles forming a quad
+    };
+
     vertex_count = ARRAYSIZE(cube_vertices);
     index_count = ARRAYSIZE(indices);
 
@@ -45,6 +49,19 @@ bool mesh::init(renderer* r) {
     }
 
     if (!r->create_index_buffer(&index_buffer, indices, ARRAYSIZE(indices))) {
+        logger::log("Failed to create index buffer");
+        return false;
+    }
+
+    vertex_count2 = ARRAYSIZE(floor_vertices);
+    index_count2 = ARRAYSIZE(floor_indices);
+
+    if (!r->create_vertex_buffer(&vertex_buffer2, floor_vertices, sizeof(vertex), vertex_count2)) {
+        logger::log("Failed to create vertex buffer");
+        return false;
+    }
+
+    if (!r->create_index_buffer(&index_buffer2, floor_indices, ARRAYSIZE(floor_indices))) {
         logger::log("Failed to create index buffer");
         return false;
     }
