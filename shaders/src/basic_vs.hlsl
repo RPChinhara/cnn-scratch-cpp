@@ -1,6 +1,5 @@
 cbuffer TransformBuffer : register(b0) {
-    // float4x4 wvp;
-    matrix wvp;
+    float4x4 wvp;
 };
 
 struct VS_INPUT {
