@@ -298,8 +298,6 @@ void renderer::begin_frame() {
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
 
-    device_context->IASetInputLayout(input_layout.Get());
-
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
 
     device_context->RSSetState(rasterizer_state.Get());
@@ -338,6 +336,8 @@ void renderer::begin_frame() {
         0, 1, 2, 2, 1, 3  // Two triangles forming a quad
     };
 
+    device_context->IASetInputLayout(input_layout.Get());
+
     mesh floor(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
     if (!floor.init(this))
         logger::log("Failed to init the floor");
@@ -350,6 +350,8 @@ void renderer::begin_frame() {
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
     floor.render(device_context);
+
+    device_context->IASetInputLayout(input_layout.Get());
 
     mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
     if (!agent.init(this))
