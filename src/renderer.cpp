@@ -355,13 +355,13 @@ void renderer::begin_frame() {
     if (!agent.init(this))
         logger::log("Failed to init the agent");
 
-    DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();
+    DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
 
     static float angle = 0.0f;
     angle += 0.01f;
-    world_matrix = DirectX::XMMatrixRotationY(angle);
+    agent_world = DirectX::XMMatrixRotationY(angle);
 
-    DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
+    DirectX::XMMATRIX wvp = agent_world * view_matrix * projection_matrix;
     DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
 
     device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp_transposed, 0, 0);
