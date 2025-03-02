@@ -299,38 +299,40 @@ void renderer::begin_frame(const std::vector<mesh>& meshes) {
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
     device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-    DirectX::XMMATRIX floor_world = DirectX::XMMatrixIdentity();
-    DirectX::XMMATRIX floor_wvp = floor_world * view_matrix * projection_matrix;
-    DirectX::XMMATRIX floor_wvp_transposed = DirectX::XMMatrixTranspose(floor_wvp);
-    constant_buffer_data cb = {};
-    cb.wvp = floor_wvp_transposed;
-    cb.objectColor = {0.1f, 0.1f, 0.1f, 1.0f};
-
-    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &cb, 0, 0);
-
-    // Set constant buffers again after updating (this can be necessary on some drivers)
-    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-    device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-
-    meshes[0].render(device_context);
-
-    device_context->IASetInputLayout(input_layout.Get());
-
-    DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
+    // Define a set of world matrices and colors for each mesh
+    std::vector<DirectX::XMMATRIX> world_matrices = {
+        DirectX::XMMatrixIdentity(),      // floor mesh
+        DirectX::XMMatrixIdentity()       // agent mesh (will be rotated)
+    };
 
     static float angle = 0.0f;
     angle += 0.01f;
-    agent_world = DirectX::XMMatrixRotationY(angle);
+    world_matrices[1] = DirectX::XMMatrixRotationY(angle);
 
-    DirectX::XMMATRIX wvp = agent_world * view_matrix * projection_matrix;
-    DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
-    cb.wvp = wvp_transposed;
-    cb.objectColor = {1.0f, 1.0f, 0.8f, 1.0f};
-    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &cb, 0, 0);
-    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-    device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+    std::vector<DirectX::XMFLOAT4> colors = {
+        {0.1f, 0.1f, 0.1f, 1.0f},         // floor color
+        {1.0f, 1.0f, 0.8f, 1.0f}          // agent color
+    };
 
-    meshes[1].render(device_context);
+    for (size_t i = 0; i < meshes.size(); ++i) {
+        DirectX::XMMATRIX wvp = world_matrices[i] * view_matrix * projection_matrix;
+        DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
+
+        constant_buffer_data cb = {};
+        cb.wvp = wvp_transposed;
+        cb.objectColor = colors[i];
+
+        device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &cb, 0, 0);
+
+        // Set constant buffers again after updating (this can be necessary on some drivers)
+        device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+        device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+
+        meshes[i].render(device_context);
+
+        // Reapply input layout just in case any mesh state change affects it (some meshes may have different layouts)
+        device_context->IASetInputLayout(input_layout.Get());
+    }
 }
 
 void renderer::end_frame() {
