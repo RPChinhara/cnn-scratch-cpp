@@ -292,7 +292,6 @@ Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
 }
 
 void renderer::begin_frame() {
-    // Clear the screen
     float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
@@ -302,8 +301,7 @@ void renderer::begin_frame() {
     device_context->IASetInputLayout(input_layout.Get());
 
     mesh floor(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
-    if (!floor.init(this))
-        logger::log("Failed to init the floor");
+    if (!floor.init(this)) logger::log("Failed to init the floor");
 
     DirectX::XMMATRIX floor_world = DirectX::XMMatrixIdentity();
 
@@ -317,8 +315,7 @@ void renderer::begin_frame() {
     device_context->IASetInputLayout(input_layout.Get());
 
     mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
-    if (!agent.init(this))
-        logger::log("Failed to init the agent");
+    if (!agent.init(this)) logger::log("Failed to init the agent");
 
     DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
 
