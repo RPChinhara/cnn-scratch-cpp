@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "renderer.h"
+#include "geometry_data.h"
 #include "logger.h"
 #include "mesh.h"
 
@@ -297,40 +298,6 @@ void renderer::begin_frame() {
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
     device_context->RSSetState(rasterizer_state.Get());
-
-    vertex floor_vertices[] = {
-        { -5.0f, 0.0f, -5.0f }, // Bottom left
-        { -5.0f, 0.0f,  5.0f }, // Top left
-        {  5.0f, 0.0f, -5.0f }, // Bottom right
-        {  5.0f, 0.0f,  5.0f }  // Top right
-    };
-
-    vertex cube_vertices[] = {
-        // Front face
-        { -2.5f, -2.5f, -2.5f }, // bottom-left-front
-        { -2.5f,  2.5f, -2.5f }, // top-left-front
-        {  2.5f, -2.5f, -2.5f }, // bottom-right-front
-        {  2.5f,  2.5f, -2.5f }, // top-right-front
-
-        // Back face
-        { -2.5f, -2.5f,  2.5f },
-        { -2.5f,  2.5f,  2.5f },
-        {  2.5f, -2.5f,  2.5f },
-        {  2.5f,  2.5f,  2.5f }
-    };
-
-    uint32_t cube_indices[] = {
-        0, 1, 2,  1, 3, 2, // Front
-        4, 6, 5,  5, 6, 7, // Back
-        0, 2, 4,  4, 2, 6, // Bottom
-        1, 5, 3,  3, 5, 7, // Top
-        0, 4, 1,  1, 4, 5, // Left
-        2, 3, 6,  6, 3, 7  // Right
-    };
-
-    uint32_t floor_indices[] = {
-        0, 1, 2, 2, 1, 3  // Two triangles forming a quad
-    };
 
     device_context->IASetInputLayout(input_layout.Get());
 

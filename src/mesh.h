@@ -4,11 +4,8 @@
 #include <d3d11.h>
 #include <wrl/client.h>
 
+#include "geometry_data.h"
 #include "renderer.h"
-
-struct vertex {
-    float x, y, z;
-};
 
 class mesh {
 public:
