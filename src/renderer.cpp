@@ -2,6 +2,7 @@
 
 #include "renderer.h"
 #include "logger.h"
+#include "mesh.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -303,10 +304,56 @@ void renderer::begin_frame() {
 
     device_context->RSSetState(rasterizer_state.Get());
 
+    vertex floor_vertices[] = {
+        { -5.0f, 0.0f, -5.0f }, // Bottom left
+        { -5.0f, 0.0f,  5.0f }, // Top left
+        {  5.0f, 0.0f, -5.0f }, // Bottom right
+        {  5.0f, 0.0f,  5.0f }  // Top right
+    };
+
+    vertex cube_vertices[] = {
+        // Front face
+        { -2.5f, -2.5f, -2.5f }, // bottom-left-front
+        { -2.5f,  2.5f, -2.5f }, // top-left-front
+        {  2.5f, -2.5f, -2.5f }, // bottom-right-front
+        {  2.5f,  2.5f, -2.5f }, // top-right-front
+
+        // Back face
+        { -2.5f, -2.5f,  2.5f },
+        { -2.5f,  2.5f,  2.5f },
+        {  2.5f, -2.5f,  2.5f },
+        {  2.5f,  2.5f,  2.5f }
+    };
+
+    uint32_t cube_indices[] = {
+        0, 1, 2,  1, 3, 2, // Front
+        4, 6, 5,  5, 6, 7, // Back
+        0, 2, 4,  4, 2, 6, // Bottom
+        1, 5, 3,  3, 5, 7, // Top
+        0, 4, 1,  1, 4, 5, // Left
+        2, 3, 6,  6, 3, 7  // Right
+    };
+
+    uint32_t floor_indices[] = {
+        0, 1, 2, 2, 1, 3  // Two triangles forming a quad
+    };
+
+    mesh floor(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
+    if (!floor.init(this))
+        logger::log("Failed to init the floor");
+
     DirectX::XMMATRIX floor_world = DirectX::XMMatrixIdentity();
 
     DirectX::XMMATRIX floor_wvp = floor_world * view_matrix * projection_matrix;
-    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &floor_wvp, 0, 0);
+    DirectX::XMMATRIX floor_wvp_transposed = DirectX::XMMatrixTranspose(floor_wvp);
+    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &floor_wvp_transposed, 0, 0);
+    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+
+    floor.render(device_context);
+
+    mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
+    if (!agent.init(this))
+        logger::log("Failed to init the agent");
 
     DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();
 
@@ -315,11 +362,12 @@ void renderer::begin_frame() {
     world_matrix = DirectX::XMMatrixRotationY(angle);
 
     DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
-    DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(floor_wvp);
+    DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
 
     device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp_transposed, 0, 0);
-
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+
+    agent.render(device_context);
 }
 
 void renderer::end_frame() {
