@@ -301,8 +301,8 @@ void renderer::begin_frame(const std::vector<mesh>& meshes) {
 
     // Define a set of world matrices and colors for each mesh
     std::vector<DirectX::XMMATRIX> world_matrices = {
-        DirectX::XMMatrixIdentity(),      // floor mesh
-        DirectX::XMMatrixIdentity()       // agent mesh (will be rotated)
+        DirectX::XMMatrixIdentity(), // TODO: Should be inside the mesh class
+        DirectX::XMMatrixIdentity()
     };
 
     static float angle = 0.0f;
@@ -310,8 +310,8 @@ void renderer::begin_frame(const std::vector<mesh>& meshes) {
     world_matrices[1] = DirectX::XMMatrixRotationY(angle);
 
     std::vector<DirectX::XMFLOAT4> colors = {
-        {0.1f, 0.1f, 0.1f, 1.0f},         // floor color
-        {1.0f, 1.0f, 0.8f, 1.0f}          // agent color
+        {0.1f, 0.1f, 0.1f, 1.0f}, // TODO: Should be inside the mesh class
+        {1.0f, 1.0f, 0.8f, 1.0f}  // TODO: Should be inside the mesh class
     };
 
     for (size_t i = 0; i < meshes.size(); ++i) {
