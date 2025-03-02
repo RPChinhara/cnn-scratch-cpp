@@ -297,37 +297,28 @@ void renderer::begin_frame() {
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
 
-    // 3. Set the input layout (before drawing anything, ensures vertex format matches shader expectations)
     device_context->IASetInputLayout(input_layout.Get());
 
-    // 4. Set the render target and depth buffer again (this is optional if you are 100% sure they didn’t change between frames)
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
 
     device_context->RSSetState(rasterizer_state.Get());
 
-    // Draw the floor (world matrix = identity for now, just flat at y = -0.5f)
     DirectX::XMMATRIX floor_world = DirectX::XMMatrixIdentity();
 
-    // Set floor's transform to the constant buffer
     DirectX::XMMATRIX floor_wvp = floor_world * view_matrix * projection_matrix;
     device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &floor_wvp, 0, 0);
 
-    // World Matrix
-    DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();  // Start with identity (no transform)
+    DirectX::XMMATRIX world_matrix = DirectX::XMMatrixIdentity();
 
-    // Example: rotate it slowly
     static float angle = 0.0f;
     angle += 0.01f;
     world_matrix = DirectX::XMMatrixRotationY(angle);
 
-    // Combine World * View * Projection into final matrix
     DirectX::XMMATRIX wvp = world_matrix * view_matrix * projection_matrix;
     DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(floor_wvp);
 
-    // Upload this WVP matrix to the vertex shader constant buffer
     device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp_transposed, 0, 0);
 
-    // Set the constant buffer to the vertex shader
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 }
 
