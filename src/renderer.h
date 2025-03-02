@@ -21,8 +21,6 @@ public:
     bool create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_data, UINT index_count);
     bool create_constant_buffer(ID3D11Buffer** buffer);
 
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> get_context();
-
 private:
     HWND hwnd;
 

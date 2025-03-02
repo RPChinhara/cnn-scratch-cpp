@@ -287,10 +287,6 @@ bool renderer::create_constant_buffer(ID3D11Buffer** buffer) {
     return true;
 }
 
-Microsoft::WRL::ComPtr<ID3D11DeviceContext> renderer::get_context() {
-    return device_context;
-}
-
 void renderer::begin_frame() {
     float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
