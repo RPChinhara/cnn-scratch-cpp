@@ -11,7 +11,7 @@ class mesh {
 public:
     mesh(const vertex* vertices, size_t vertex_count, const uint32_t* indices, size_t index_count);
     bool init(renderer* r);
-    void render(Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context);
+    void render(Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context) const;
 
 private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> vertex_buffer;
