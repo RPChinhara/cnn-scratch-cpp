@@ -1,5 +1,6 @@
 #include "mesh.h"
 #include "logger.h"
+#include "renderer.h"
 
 mesh::mesh(const vertex* vertices, size_t vertex_count, const uint32_t* indices, size_t index_count) {
     this->vertices.assign(vertices, vertices + vertex_count);
@@ -20,7 +21,7 @@ bool mesh::init(renderer* r) {
     return true;
 }
 
-void mesh::render(Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context) {
+void mesh::render(Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context) const {
     UINT stride = sizeof(vertex);
     UINT offset = 0;
     device_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
