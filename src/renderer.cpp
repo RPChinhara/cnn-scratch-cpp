@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "renderer.h"
-#include "geometry_data.h"
 #include "logger.h"
 #include "mesh.h"
 
@@ -194,8 +193,7 @@ bool renderer::load_shaders() {
     }
 
     // Bind shaders to pipeline (you usually do this before drawing, but for now just do it once)
-    device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
-    device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
+
 
     return true;
 }
@@ -287,7 +285,7 @@ bool renderer::create_constant_buffer(ID3D11Buffer** buffer) {
     return true;
 }
 
-void renderer::begin_frame() {
+void renderer::begin_frame(const std::vector<mesh>& mesh) {
     float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
@@ -295,37 +293,47 @@ void renderer::begin_frame() {
     device_context->RSSetState(rasterizer_state.Get());
 
     device_context->IASetInputLayout(input_layout.Get());
+    device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
+    device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
 
-    mesh floor(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
-    if (!floor.init(this)) logger::log("Failed to init the floor");
+    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+    device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
     DirectX::XMMATRIX floor_world = DirectX::XMMatrixIdentity();
-
     DirectX::XMMATRIX floor_wvp = floor_world * view_matrix * projection_matrix;
     DirectX::XMMATRIX floor_wvp_transposed = DirectX::XMMatrixTranspose(floor_wvp);
-    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &floor_wvp_transposed, 0, 0);
+    constant_buffer_data cb = {};
+    cb.wvp = floor_wvp_transposed;
+    cb.objectColor = {0.1f, 0.1f, 0.1f, 1.0f};
+
+    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &cb, 0, 0);
+
+    // Set constant buffers again after updating (this can be necessary on some drivers)
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+    device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-    floor.render(device_context);
+    mesh[0].render(device_context);
 
-    device_context->IASetInputLayout(input_layout.Get());
+    // device_context->IASetInputLayout(input_layout.Get());
 
-    mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
-    if (!agent.init(this)) logger::log("Failed to init the agent");
+    // mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
+    // if (!agent.init(this)) logger::log("Failed to init the agent");
 
-    DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
+    // DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
 
-    static float angle = 0.0f;
-    angle += 0.01f;
-    agent_world = DirectX::XMMatrixRotationY(angle);
+    // static float angle = 0.0f;
+    // angle += 0.01f;
+    // agent_world = DirectX::XMMatrixRotationY(angle);
 
-    DirectX::XMMATRIX wvp = agent_world * view_matrix * projection_matrix;
-    DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
+    // DirectX::XMMATRIX wvp = agent_world * view_matrix * projection_matrix;
+    // DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
+    // data.wvp = wvp_transposed;
+    // data.color = {1.0f, 1.0f, 0.8f, 1.0f};
+    // device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &data, 0, 0);
+    // device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+    // device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &wvp_transposed, 0, 0);
-    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-
-    agent.render(device_context);
+    // agent.render(device_context);
 }
 
 void renderer::end_frame() {

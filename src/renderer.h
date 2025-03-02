@@ -6,6 +6,13 @@
 #include <vector>
 #include <wrl/client.h>
 
+class mesh;
+
+struct constant_buffer_data {
+    DirectX::XMMATRIX wvp;
+    DirectX::XMFLOAT4 objectColor;
+};
+
 class renderer {
 public:
     renderer(HWND hwnd);
@@ -14,7 +21,7 @@ public:
     bool init();
     void cleanup();
 
-    void begin_frame();
+    void begin_frame(const std::vector<mesh>& mesh);
     void end_frame();
 
     bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
