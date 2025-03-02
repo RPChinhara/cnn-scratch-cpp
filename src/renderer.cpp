@@ -314,26 +314,23 @@ void renderer::begin_frame(const std::vector<mesh>& mesh) {
 
     mesh[0].render(device_context);
 
-    // device_context->IASetInputLayout(input_layout.Get());
+    device_context->IASetInputLayout(input_layout.Get());
 
-    // mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
-    // if (!agent.init(this)) logger::log("Failed to init the agent");
+    DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
 
-    // DirectX::XMMATRIX agent_world = DirectX::XMMatrixIdentity();
+    static float angle = 0.0f;
+    angle += 0.01f;
+    agent_world = DirectX::XMMatrixRotationY(angle);
 
-    // static float angle = 0.0f;
-    // angle += 0.01f;
-    // agent_world = DirectX::XMMatrixRotationY(angle);
+    DirectX::XMMATRIX wvp = agent_world * view_matrix * projection_matrix;
+    DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
+    cb.wvp = wvp_transposed;
+    cb.objectColor = {1.0f, 1.0f, 0.8f, 1.0f};
+    device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &cb, 0, 0);
+    device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
+    device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-    // DirectX::XMMATRIX wvp = agent_world * view_matrix * projection_matrix;
-    // DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
-    // data.wvp = wvp_transposed;
-    // data.color = {1.0f, 1.0f, 0.8f, 1.0f};
-    // device_context->UpdateSubresource(constant_buffer.Get(), 0, nullptr, &data, 0, 0);
-    // device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-    // device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
-
-    // agent.render(device_context);
+    mesh[1].render(device_context);
 }
 
 void renderer::end_frame() {
