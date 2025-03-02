@@ -7,10 +7,10 @@ struct vertex {
 
 bool mesh::init(renderer* r) {
     vertex floor_vertices[] = {
-        { -0.5f, 0.0f, -0.5f }, // Bottom left
-        { -0.5f, 0.0f,  0.5f }, // Top left
-        {  0.5f, 0.0f, -0.5f }, // Bottom right
-        {  0.5f, 0.0f,  0.5f }  // Top right
+        { -5.0f, 0.0f, -5.0f }, // Bottom left
+        { -5.0f, 0.0f,  5.0f }, // Top left
+        {  5.0f, 0.0f, -5.0f }, // Bottom right
+        {  5.0f, 0.0f,  5.0f }  // Top right
     };
 
     vertex cube_vertices[] = {
@@ -77,13 +77,13 @@ void mesh::render(renderer* r) {
     context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
     context->IASetIndexBuffer(index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-    // context->IASetVertexBuffers(0, 1, vertex_buffer2.GetAddressOf(), &stride, &offset);
-    // context->IASetIndexBuffer(index_buffer2.Get(), DXGI_FORMAT_R32_UINT, 0);
+    context->IASetVertexBuffers(0, 1, vertex_buffer2.GetAddressOf(), &stride, &offset);
+    context->IASetIndexBuffer(index_buffer2.Get(), DXGI_FORMAT_R32_UINT, 0);
 
     // context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // Use TriangleList for indexed geometry
 
-    context->DrawIndexed(index_count, 0, 0);  // 36 for the cube
-    // context->DrawIndexed(index_count2, 0, 0);
+    // context->DrawIndexed(index_count, 0, 0);  // 36 for the cube
+    context->DrawIndexed(index_count2, 0, 0);
     // context->Draw(vertex_count, 0);
 }
