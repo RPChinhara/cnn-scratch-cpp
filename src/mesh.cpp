@@ -21,7 +21,7 @@ bool mesh::init(renderer* r) {
     return true;
 }
 
-void mesh::render(Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context) const {
+void mesh::render(const Microsoft::WRL::ComPtr<ID3D11DeviceContext>& device_context) const {
     UINT stride = sizeof(vertex);
     UINT offset = 0;
     device_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
