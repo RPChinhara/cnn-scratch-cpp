@@ -21,7 +21,7 @@ public:
     bool init();
     void cleanup();
 
-    void begin_frame(const std::vector<mesh>& mesh);
+    void begin_frame(const std::vector<mesh>& meshes);
     void end_frame();
 
     bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);

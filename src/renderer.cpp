@@ -285,7 +285,7 @@ bool renderer::create_constant_buffer(ID3D11Buffer** buffer) {
     return true;
 }
 
-void renderer::begin_frame(const std::vector<mesh>& mesh) {
+void renderer::begin_frame(const std::vector<mesh>& meshes) {
     float clear_color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     device_context->ClearRenderTargetView(render_target.Get(), clear_color);
     device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);  // 1.0 = farthest depth (default clear)
@@ -312,7 +312,7 @@ void renderer::begin_frame(const std::vector<mesh>& mesh) {
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
     device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-    mesh[0].render(device_context);
+    meshes[0].render(device_context);
 
     device_context->IASetInputLayout(input_layout.Get());
 
@@ -330,7 +330,7 @@ void renderer::begin_frame(const std::vector<mesh>& mesh) {
     device_context->VSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
     device_context->PSSetConstantBuffers(0, 1, constant_buffer.GetAddressOf());
 
-    mesh[1].render(device_context);
+    meshes[1].render(device_context);
 }
 
 void renderer::end_frame() {
