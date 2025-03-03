@@ -6,6 +6,8 @@
 #include <vector>
 #include <wrl/client.h>
 
+#include "camera.h"
+
 class mesh;
 
 struct constant_buffer_data {
@@ -52,6 +54,8 @@ private:
 
     DirectX::XMMATRIX view_matrix;
     DirectX::XMMATRIX projection_matrix;
+
+    camera cam;
 
     bool create_device_and_swap_chain();
     bool create_render_target();

@@ -218,12 +218,6 @@ bool renderer::init() {
     if (!create_constant_buffer(&constant_buffer))
         return false;
 
-    view_matrix = DirectX::XMMatrixLookAtLH(
-        {0.0f, 40.0f, -40.0f}, // Camera position (behind the object)
-        {0.0f, 0.0f,   0.0f}, // Looking at origin
-        {0.0f, 1.0f,   0.0f}  // Up vector
-    );
-
     projection_matrix = DirectX::XMMatrixPerspectiveFovLH(
         DirectX::XMConvertToRadians(60.0f), // FOV
         800.0f / 600.0f,                    // Aspect ratio
@@ -315,7 +309,7 @@ void renderer::begin_frame(const std::vector<mesh>& meshes) {
     };
 
     for (size_t i = 0; i < meshes.size(); ++i) {
-        DirectX::XMMATRIX wvp = world_matrices[i] * view_matrix * projection_matrix;
+        DirectX::XMMATRIX wvp = world_matrices[i] * cam.get_view_matrix() * projection_matrix;
         DirectX::XMMATRIX wvp_transposed = DirectX::XMMatrixTranspose(wvp);
 
         constant_buffer_data cb = {};
