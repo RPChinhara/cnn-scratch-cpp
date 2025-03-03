@@ -6,6 +6,20 @@
 #include "tensor.h"
 #include "window.h"
 
+static POINT last_mouse_pos = {};
+
+void handle_mouse(camera& cam) {
+    POINT current_mouse_pos;
+    GetCursorPos(&current_mouse_pos);
+
+    float delta_x = (current_mouse_pos.x - last_mouse_pos.x) * 0.002f;
+    float delta_y = (current_mouse_pos.y - last_mouse_pos.y) * 0.002f;
+
+    cam.rotate(delta_x, -delta_y);  // Invert Y for natural look controls
+
+    last_mouse_pos = current_mouse_pos;  // Update for next frame
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     logger::init();
     logger::log(fill({2, 3}, 1.0f));
@@ -25,13 +39,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     while (window.process_messages()) {
         if (GetAsyncKeyState(0x41))
-            cam.move(-0.1f, 0.0f);
-        if (GetAsyncKeyState(0x44))
             cam.move(0.1f, 0.0f);
+        if (GetAsyncKeyState(0x44))
+            cam.move(-0.1f, 0.0f);
         if (GetAsyncKeyState(0x57))
             cam.move(0.0f, 0.1f);
         if (GetAsyncKeyState(0x53))
             cam.move(0.0f, -0.1f);
+        handle_mouse(cam);
 
         r.begin_frame({floor, agent}, cam);
         r.end_frame();
