@@ -192,9 +192,6 @@ bool renderer::load_shaders() {
         return false;
     }
 
-    // Bind shaders to pipeline (you usually do this before drawing, but for now just do it once)
-
-
     return true;
 }
 
