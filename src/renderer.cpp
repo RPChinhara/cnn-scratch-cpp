@@ -274,7 +274,7 @@ bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_
 bool renderer::create_constant_buffer(ID3D11Buffer** buffer) {
     D3D11_BUFFER_DESC cbd = {};
     cbd.Usage = D3D11_USAGE_DEFAULT;
-    cbd.ByteWidth = sizeof(DirectX::XMMATRIX);
+    cbd.ByteWidth = sizeof(constant_buffer_data);
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbd.CPUAccessFlags = 0;
 
@@ -310,7 +310,7 @@ void renderer::begin_frame(const std::vector<mesh>& meshes) {
     world_matrices[1] = DirectX::XMMatrixRotationY(angle);
 
     std::vector<DirectX::XMFLOAT4> colors = {
-        {0.1f, 0.1f, 0.1f, 1.0f}, // TODO: Should be inside the mesh class
+        {1.0f, 0.1f, 0.1f, 1.0f}, // TODO: Should be inside the mesh class
         {1.0f, 1.0f, 0.8f, 1.0f}  // TODO: Should be inside the mesh class
     };
 
