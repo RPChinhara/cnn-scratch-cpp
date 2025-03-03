@@ -26,8 +26,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!agent.init(&r)) logger::log("Failed to init the agent");
 
     while (window.process_messages()) {
-        input.update(cam);  // One clean call handles all inputs
-
+        input.update(cam);
         r.begin_frame({floor, agent}, cam);
         r.end_frame();
     }
