@@ -28,7 +28,7 @@ const vertex agent_vertices[] = {
     {  2.5f,  5.0f,  2.5f }
 };
 
-const uint32_t agent_indices[] = {
+const uint32_t agent_indices[] = { // TODO: Could use same indices for all cubes?
     0, 1, 2,  1, 3, 2,
     4, 6, 5,  5, 6, 7,
     0, 2, 4,  4, 2, 6,
