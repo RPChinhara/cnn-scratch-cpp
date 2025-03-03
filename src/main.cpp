@@ -4,6 +4,7 @@
 #include "logger.h"
 #include "mesh.h"
 #include "renderer.h"
+#include "scene.h"
 #include "tensor.h"
 #include "window.h"
 
@@ -19,16 +20,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     input_handler input;
     camera cam;
 
-    mesh floor = mesh(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
-    if (!floor.init(&r)) logger::log("Failed to init the floor");
-
-    mesh agent(cube_vertices, std::size(cube_vertices), cube_indices, std::size(cube_indices));
-    if (!agent.init(&r)) logger::log("Failed to init the agent");
+    scene main_scene;
+    if (!main_scene.load(&r)) return -1;
 
     while (window.process_messages()) {
         input.update(cam);
-        r.begin_frame({floor, agent}, cam);
-        r.end_frame();
+        main_scene.draw(r, cam);
     }
 
     return 0;
