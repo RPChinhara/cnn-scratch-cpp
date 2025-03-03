@@ -33,22 +33,22 @@ public:
 private:
     HWND hwnd;
 
-    Microsoft::WRL::ComPtr<ID3D11Device> device; // creates resources
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context; // tells the GPU what to do with the resources
+    Microsoft::WRL::ComPtr<ID3D11Device> device;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> device_context;
 
-    Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain; // handles the back buffer for double-buffered rendering
+    Microsoft::WRL::ComPtr<IDXGISwapChain> swap_chain;
 
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target; // A view that allows DirectX to draw to the back buffer
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> render_target;
 
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;  // Depth buffer
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depth_stencil_view;
     Microsoft::WRL::ComPtr<ID3D11Texture2D> depth_stencil_buffer;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depth_stencil_state;
 
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader; // processes each vertex (position, color, etc.)
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader; // decides what color each pixel should be
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertex_shader;
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixel_shader;
     Microsoft::WRL::ComPtr<ID3D11InputLayout> input_layout;
 
-    Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer; // buffer that stores WVP matrix for the shader
+    Microsoft::WRL::ComPtr<ID3D11Buffer> constant_buffer;
 
     Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizer_state;
 
