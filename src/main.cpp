@@ -1,6 +1,6 @@
 #include "arrs.h"
-#include "input_handler.h"
 #include "camera.h"
+#include "input_handler.h"
 #include "logger.h"
 #include "mesh.h"
 #include "renderer.h"
