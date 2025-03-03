@@ -105,14 +105,12 @@ bool renderer::create_depth_stencil_state() {
 bool renderer::create_rasterizer_state() {
     D3D11_RASTERIZER_DESC rasterizer_desc = {};
     rasterizer_desc.FillMode = D3D11_FILL_SOLID;
-    // rasterizer_desc.CullMode = D3D11_CULL_BACK;
-    rasterizer_desc.CullMode = D3D11_CULL_NONE;  // Disable culling to see all faces
+    rasterizer_desc.CullMode = D3D11_CULL_BACK;
     rasterizer_desc.FrontCounterClockwise = FALSE;  // For clockwise winding
 
     HRESULT hr = device->CreateRasterizerState(&rasterizer_desc, rasterizer_state.GetAddressOf());
-    if (FAILED(hr)) {
+    if (FAILED(hr))
         return false;
-    }
 
     return true;
 }
