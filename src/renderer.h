@@ -26,9 +26,9 @@ public:
     void begin_frame(const std::vector<mesh>& meshes, const camera& cam);
     void end_frame();
 
-    bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
-    bool create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_data, UINT index_count);
-    bool create_constant_buffer(ID3D11Buffer** buffer);
+    bool create_vertex_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
+    bool create_index_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, const uint32_t* index_data, UINT index_count);
+    bool create_constant_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer);
 
 private:
     HWND hwnd;

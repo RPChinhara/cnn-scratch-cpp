@@ -8,12 +8,12 @@ mesh::mesh(const vertex* vertices, size_t vertex_count, const uint32_t* indices,
 }
 
 bool mesh::init(renderer* r) {
-    if (!r->create_vertex_buffer(&vertex_buffer, vertices.data(), sizeof(vertex), vertices.size())) {
+    if (!r->create_vertex_buffer(vertex_buffer, vertices.data(), sizeof(vertex), vertices.size())) {
         logger::log("Failed to create vertex buffer");
         return false;
     }
 
-    if (!r->create_index_buffer(&index_buffer, indices.data(), indices.size())) {
+    if (!r->create_index_buffer(index_buffer, indices.data(), indices.size())) {
         logger::log("Failed to create index buffer");
         return false;
     }

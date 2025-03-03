@@ -215,7 +215,7 @@ bool renderer::init() {
         return false;
     if (!load_shaders())
         return false;
-    if (!create_constant_buffer(&constant_buffer))
+    if (!create_constant_buffer(constant_buffer))
         return false;
 
     projection_matrix = DirectX::XMMatrixPerspectiveFovLH(
@@ -227,7 +227,7 @@ bool renderer::init() {
     return true;
 }
 
-bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count) {
+bool renderer::create_vertex_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count) {
     D3D11_BUFFER_DESC buffer_desc = {};
     buffer_desc.Usage = D3D11_USAGE_DEFAULT;
     buffer_desc.ByteWidth = vertex_size * vertex_count;
@@ -237,7 +237,7 @@ bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_da
     D3D11_SUBRESOURCE_DATA init_data = {};
     init_data.pSysMem = vertex_data;
 
-    HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
+    HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer.GetAddressOf());
     if (FAILED(hr)) {
         logger::log("Failed to create buffer for vertex");
         return false;
@@ -246,7 +246,7 @@ bool renderer::create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_da
     return true;
 }
 
-bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_data, UINT index_count) {
+bool renderer::create_index_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer, const uint32_t* index_data, UINT index_count) {
     D3D11_BUFFER_DESC buffer_desc = {};
     buffer_desc.Usage = D3D11_USAGE_DEFAULT;
     buffer_desc.ByteWidth = sizeof(uint32_t) * index_count;
@@ -256,7 +256,7 @@ bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_
     D3D11_SUBRESOURCE_DATA init_data = {};
     init_data.pSysMem = index_data;
 
-    HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer);
+    HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer.GetAddressOf());
     if (FAILED(hr)) {
         logger::log("Failed to create buffer for index");
         return false;
@@ -265,14 +265,14 @@ bool renderer::create_index_buffer(ID3D11Buffer** buffer, const uint32_t* index_
     return true;
 }
 
-bool renderer::create_constant_buffer(ID3D11Buffer** buffer) {
+bool renderer::create_constant_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer) {
     D3D11_BUFFER_DESC cbd = {};
     cbd.Usage = D3D11_USAGE_DEFAULT;
     cbd.ByteWidth = sizeof(constant_buffer_data);
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbd.CPUAccessFlags = 0;
 
-    HRESULT hr = device->CreateBuffer(&cbd, nullptr, constant_buffer.GetAddressOf());
+    HRESULT hr = device->CreateBuffer(&cbd, nullptr, buffer.GetAddressOf());
     if (FAILED(hr)) {
         // Handle error (log, assert, etc.)
     }
