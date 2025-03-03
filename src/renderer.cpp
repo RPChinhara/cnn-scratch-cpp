@@ -274,6 +274,8 @@ void renderer::begin_frame(const std::vector<mesh>& meshes, const camera& cam) {
     // Define a set of world matrices and colors for each mesh
     std::vector<DirectX::XMMATRIX> world_matrices = {
         DirectX::XMMatrixIdentity(), // TODO: Should be inside the mesh class
+        DirectX::XMMatrixIdentity(),
+        DirectX::XMMatrixIdentity(),
         DirectX::XMMatrixIdentity()
     };
 
@@ -283,7 +285,9 @@ void renderer::begin_frame(const std::vector<mesh>& meshes, const camera& cam) {
 
     std::vector<DirectX::XMFLOAT4> colors = {
         {0.196f, 0.804f, 0.196f, 1.0f}, // TODO: Should be inside the mesh class
-        {1.0f, 1.0f, 1.0f, 1.0f}  // TODO: Should be inside the mesh class
+        {1.0f, 1.0f, 1.0f, 1.0f},
+        {0.0f, 0.8f, 1.0f, 1.0f},
+        {0.7f, 0.2f, 0.2f, 1.0f}
     };
 
     for (size_t i = 0; i < meshes.size(); ++i) {

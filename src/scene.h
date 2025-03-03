@@ -12,4 +12,6 @@ public:
 private:
     mesh floor;
     mesh agent;
+    mesh water;
+    mesh food;
 };
