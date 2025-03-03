@@ -152,7 +152,7 @@ bool renderer::create_input_layout(const void* shader_bytecode, size_t bytecode_
     return true;
 }
 
-bool renderer::read_file(const std::string& filename, std::vector<char>& data) {
+static bool read_file(const std::string& filename, std::vector<char>& data) {
     std::ifstream file(filename, std::ios::binary);
     if (!file) {
         return false;
