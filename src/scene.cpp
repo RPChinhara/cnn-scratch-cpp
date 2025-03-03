@@ -1,7 +1,7 @@
 #include "scene.h"
 
 bool scene::load(renderer* r) {
-    floor = mesh(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
+    floor = mesh(floor_vertices, std::size(floor_vertices), rect_indices, std::size(rect_indices));
     if (!floor.init(r))
         return false;
 

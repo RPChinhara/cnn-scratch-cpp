@@ -13,7 +13,7 @@ const vertex floor_vertices[] = {
     {  500.0f, 0.0f,  500.0f }
 };
 
-const uint32_t floor_indices[] = {
+const uint32_t rect_indices[] = {
     0, 1, 2, 2, 1, 3
 };
 
