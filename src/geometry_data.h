@@ -7,10 +7,10 @@ struct vertex {
 };
 
 const vertex floor_vertices[] = {
-    { -100.0f, 0.0f, -100.0f },
-    { -100.0f, 0.0f,  100.0f },
-    {  100.0f, 0.0f, -100.0f },
-    {  100.0f, 0.0f,  100.0f }
+    { -500.0f, 0.0f, -500.0f },
+    { -500.0f, 0.0f,  500.0f },
+    {  500.0f, 0.0f, -500.0f },
+    {  500.0f, 0.0f,  500.0f }
 };
 
 const uint32_t floor_indices[] = {
