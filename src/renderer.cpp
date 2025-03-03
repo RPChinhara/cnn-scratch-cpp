@@ -166,31 +166,24 @@ static bool read_file(const std::string& filename, std::vector<char>& data) {
 }
 
 bool renderer::load_shaders() {
-    // Load compiled vertex shader
     std::vector<char> vs_data;
-    if (!read_file("shaders/compiled/basic_vs.cso", vs_data)) {
+    if (!read_file("shaders/compiled/basic_vs.cso", vs_data))
         return false;
-    }
 
     HRESULT hr = device->CreateVertexShader(vs_data.data(), vs_data.size(), nullptr, vertex_shader.GetAddressOf());
-    if (FAILED(hr)) {
+    if (FAILED(hr))
         return false;
-    }
 
-    // Create input layout using the vertex shader blob data
     if (!create_input_layout(vs_data.data(), vs_data.size()))
-    return false;
-
-    // Load compiled pixel shader
-    std::vector<char> ps_data;
-    if (!read_file("shaders/compiled/basic_ps.cso", ps_data)) {
         return false;
-    }
+
+    std::vector<char> ps_data;
+    if (!read_file("shaders/compiled/basic_ps.cso", ps_data))
+        return false;
 
     hr = device->CreatePixelShader(ps_data.data(), ps_data.size(), nullptr, pixel_shader.GetAddressOf());
-    if (FAILED(hr)) {
+    if (FAILED(hr))
         return false;
-    }
 
     return true;
 }
