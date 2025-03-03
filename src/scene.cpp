@@ -5,15 +5,15 @@ bool scene::load(renderer* r) {
     if (!floor.init(r))
         return false;
 
-    agent = mesh(agent_vertices, std::size(agent_vertices), agent_indices, std::size(agent_indices));
+    agent = mesh(agent_vertices, std::size(agent_vertices), cube_indices, std::size(cube_indices));
     if (!agent.init(r))
         return false;
 
-    water = mesh(water_vertices, std::size(water_vertices), water_indices, std::size(water_indices));
+    water = mesh(water_vertices, std::size(water_vertices), cube_indices, std::size(cube_indices));
     if (!water.init(r))
         return false;
 
-    food = mesh(food_vertices, std::size(food_vertices), food_indices, std::size(food_indices));
+    food = mesh(food_vertices, std::size(food_vertices), cube_indices, std::size(cube_indices));
     if (!food.init(r))
         return false;
 
