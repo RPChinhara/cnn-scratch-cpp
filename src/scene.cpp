@@ -17,10 +17,14 @@ bool scene::load(renderer* r) {
     if (!food.init(r))
         return false;
 
+    predator = mesh(predator_vertices, std::size(predator_vertices), cube_indices, std::size(cube_indices));
+    if (!predator.init(r))
+        return false;
+
     return true;
 }
 
 void scene::draw(renderer& r, const camera& cam) {
-    r.begin_frame({floor, agent, water, food}, cam);
+    r.begin_frame({ floor, agent, water, food, predator }, cam);
     r.end_frame();
 }

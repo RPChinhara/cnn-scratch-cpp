@@ -14,4 +14,5 @@ private:
     mesh agent;
     mesh water;
     mesh food;
+    mesh predator;
 };

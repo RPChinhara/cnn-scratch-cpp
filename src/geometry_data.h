@@ -50,6 +50,17 @@ const vertex food_vertices[] = {
     { 100.0f, 5.0f, 100.0f }
 };
 
+const vertex predator_vertices[] = {
+    { 45.0f, 0.0f, 45.0f },
+    { 45.0f, 5.0f, 45.0f },
+    { 50.0f, 0.0f, 45.0f },
+    { 50.0f, 5.0f, 45.0f },
+    { 45.0f, 0.0f, 50.0f },
+    { 45.0f, 5.0f, 50.0f },
+    { 50.0f, 0.0f, 50.0f },
+    { 50.0f, 5.0f, 50.0f }
+};
+
 const uint32_t cube_indices[] = {
     0, 1, 2,  1, 3, 2, // Front face
     4, 6, 5,  5, 6, 7, // Back face
