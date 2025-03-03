@@ -310,7 +310,7 @@ void renderer::begin_frame(const std::vector<mesh>& meshes) {
     world_matrices[1] = DirectX::XMMatrixRotationY(angle);
 
     std::vector<DirectX::XMFLOAT4> colors = {
-        {1.0f, 0.1f, 0.1f, 1.0f}, // TODO: Should be inside the mesh class
+        {0.196f, 0.804f, 0.196f, 1.0f}, // TODO: Should be inside the mesh class
         {1.0f, 1.0f, 0.8f, 1.0f}  // TODO: Should be inside the mesh class
     };
 
