@@ -24,13 +24,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!agent.init(&r)) logger::log("Failed to init the agent");
 
     while (window.process_messages()) {
-        if (GetAsyncKeyState(VK_LEFT))
+        if (GetAsyncKeyState(0x41))
             cam.move(-0.1f, 0.0f);
-        if (GetAsyncKeyState(VK_RIGHT))
+        if (GetAsyncKeyState(0x44))
             cam.move(0.1f, 0.0f);
-        if (GetAsyncKeyState(VK_UP))
+        if (GetAsyncKeyState(0x57))
             cam.move(0.0f, 0.1f);
-        if (GetAsyncKeyState(VK_DOWN))
+        if (GetAsyncKeyState(0x53))
             cam.move(0.0f, -0.1f);
 
         r.begin_frame({floor, agent}, cam);
