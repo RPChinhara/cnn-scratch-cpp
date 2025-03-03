@@ -219,7 +219,7 @@ bool renderer::init() {
         return false;
 
     view_matrix = DirectX::XMMatrixLookAtLH(
-        {0.0f, 3.0f, -15.0f}, // Camera position (behind the object)
+        {0.0f, 40.0f, -40.0f}, // Camera position (behind the object)
         {0.0f, 0.0f,   0.0f}, // Looking at origin
         {0.0f, 1.0f,   0.0f}  // Up vector
     );
