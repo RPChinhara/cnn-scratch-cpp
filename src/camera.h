@@ -1,5 +1,7 @@
 #pragma once
 
+#include <directxmath.h>
+
 struct camera {
     DirectX::XMVECTOR position = DirectX::XMVectorSet(0.0f, 40.0f, -40.0f, 1.0f); // Start further back
     DirectX::XMVECTOR target = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);      // Looking at origin

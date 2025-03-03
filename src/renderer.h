@@ -23,7 +23,7 @@ public:
     bool init();
     void cleanup();
 
-    void begin_frame(const std::vector<mesh>& meshes);
+    void begin_frame(const std::vector<mesh>& meshes, const camera& cam);
     void end_frame();
 
     bool create_vertex_buffer(ID3D11Buffer** buffer, const void* vertex_data, UINT vertex_size, UINT vertex_count);
@@ -54,8 +54,6 @@ private:
 
     DirectX::XMMATRIX view_matrix;
     DirectX::XMMATRIX projection_matrix;
-
-    camera cam;
 
     bool create_device_and_swap_chain();
     bool create_render_target();

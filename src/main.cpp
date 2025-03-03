@@ -1,4 +1,5 @@
 #include "arrs.h"
+#include "camera.h"
 #include "logger.h"
 #include "mesh.h"
 #include "renderer.h"
@@ -14,6 +15,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     renderer r(window.get_hwnd());
     if (!r.init()) return -1;
 
+    camera cam;
+
     mesh floor = mesh(floor_vertices, std::size(floor_vertices), floor_indices, std::size(floor_indices));
     if (!floor.init(&r)) logger::log("Failed to init the floor");
 
@@ -21,7 +24,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!agent.init(&r)) logger::log("Failed to init the agent");
 
     while (window.process_messages()) {
-        r.begin_frame({floor, agent});
+        if (GetAsyncKeyState(VK_LEFT))
+            cam.move(-0.1f, 0.0f);
+        if (GetAsyncKeyState(VK_RIGHT))
+            cam.move(0.1f, 0.0f);
+        if (GetAsyncKeyState(VK_UP))
+            cam.move(0.0f, 0.1f);
+        if (GetAsyncKeyState(VK_DOWN))
+            cam.move(0.0f, -0.1f);
+
+        r.begin_frame({floor, agent}, cam);
         r.end_frame();
     }
 
