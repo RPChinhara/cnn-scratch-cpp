@@ -199,7 +199,7 @@ bool renderer::init() {
     projection_matrix = DirectX::XMMatrixPerspectiveFovLH(
         DirectX::XMConvertToRadians(60.0f), // FOV
         800.0f / 600.0f,                    // Aspect ratio
-        0.1f, 100.0f                        // Near & far planes
+        0.1f, 10000.0f                      // Near & far planes
     );
 
     return true;
