@@ -1,20 +1,30 @@
-#include "arrs.h"
-#include "logger.h"
+#include "camera.h"
+#include "input_handler.h"
+#include "mesh.h"
 #include "renderer.h"
-#include "window.h"
+#include "scene.h"
 #include "tensor.h"
+#include "window.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    logger::init();
-    logger::log(fill({2, 3}, 1.0f));
+    AllocConsole();
+    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
     window window(hInstance);
+    renderer r(window.get_hwnd());
+    camera cam;
+    input_handler input;
+    scene main_scene;
 
-    renderer renderer(window.get_hwnd());
-    if (!renderer.init()) return -1;
+    if (!r.init())
+        return -1;
+
+    if (!main_scene.load(&r))
+        return -1;
 
     while (window.process_messages()) {
-        renderer.render();
+        input.update(cam);
+        main_scene.draw(r, cam);
     }
 
     return 0;
