@@ -2,7 +2,6 @@
 
 #include "mesh.h"
 #include "renderer.h"
-#include "logger.h"
 
 class scene {
 public:
