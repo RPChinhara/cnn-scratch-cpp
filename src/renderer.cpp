@@ -19,7 +19,7 @@ bool renderer::create_device_and_swap_chain() {
     sc_desc.BufferDesc.Height = 600;
     sc_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     sc_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sc_desc.BufferCount = 1;
+    sc_desc.BufferCount = 2;
     sc_desc.OutputWindow = hwnd;
     sc_desc.Windowed = TRUE;
     sc_desc.SampleDesc.Count = 1;
@@ -57,7 +57,7 @@ bool renderer::create_depth_buffer(int width, int height) {
     depth_desc.Height = height;
     depth_desc.MipLevels = 1;
     depth_desc.ArraySize = 1;
-    depth_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;  // 24-bit depth, 8-bit stencil
+    depth_desc.Format = DXGI_FORMAT_D32_FLOAT;
     depth_desc.SampleDesc.Count = 1;  // No MSAA
     depth_desc.Usage = D3D11_USAGE_DEFAULT;
     depth_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
