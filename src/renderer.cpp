@@ -1,7 +1,7 @@
+#include <fstream>
 #include <iostream>
 
 #include "renderer.h"
-#include "logger.h"
 #include "mesh.h"
 
 #pragma comment(lib, "d3d11.lib")
@@ -33,16 +33,12 @@ bool renderer::create_device_and_swap_chain() {
 bool renderer::create_render_target() {
     Microsoft::WRL::ComPtr<ID3D11Texture2D> back_buffer; // The off-screen buffer where DirectX draws the next frame
     HRESULT hr = swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)back_buffer.GetAddressOf());
-    if (FAILED(hr)) {
-        std::cerr << "Failed to get back buffer.\n";
+    if (FAILED(hr))
         return false;
-    }
 
     hr = device->CreateRenderTargetView(back_buffer.Get(), nullptr, render_target.GetAddressOf());
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create render target.\n";
+    if (FAILED(hr))
         return false;
-    }
 
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), nullptr);
     return true;
@@ -63,10 +59,8 @@ bool renderer::create_depth_buffer(int width, int height) {
     depth_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
     HRESULT hr = device->CreateTexture2D(&depth_desc, nullptr, depth_stencil_buffer.GetAddressOf());
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create texture2D.\n";
+    if (FAILED(hr))
         return false;
-    }
 
     // 2. Create depth stencil view - Converts the depth buffer texture into a depth-stencil view. This is necessary because DirectX doesn’t use raw textures directly—it needs views to read/write depth data.
     D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
@@ -74,10 +68,8 @@ bool renderer::create_depth_buffer(int width, int height) {
     dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 
     hr = device->CreateDepthStencilView(depth_stencil_buffer.Get(), &dsv_desc, depth_stencil_view.GetAddressOf());
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create depth stencil view.\n";
+    if (FAILED(hr))
         return false;
-    }
 
     // 3. Bind depth buffer to the pipeline
     device_context->OMSetRenderTargets(1, render_target.GetAddressOf(), depth_stencil_view.Get());
@@ -92,10 +84,8 @@ bool renderer::create_depth_stencil_state() {
     dsDesc.StencilEnable = false;                       // Optional, if not using stencil
 
     HRESULT hr = device->CreateDepthStencilState(&dsDesc, depth_stencil_state.GetAddressOf());
-    if (FAILED(hr)) {
-        std::cerr << "Failed to create depth stencil state.\n";
+    if (FAILED(hr))
         return false;
-    }
 
     // Bind this state to the pipeline
     device_context->OMSetDepthStencilState(depth_stencil_state.Get(), 0);
@@ -218,10 +208,8 @@ bool renderer::create_vertex_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer
     init_data.pSysMem = vertex_data;
 
     HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer.GetAddressOf());
-    if (FAILED(hr)) {
-        logger::log("Failed to create buffer for vertex");
+    if (FAILED(hr))
         return false;
-    }
 
     return true;
 }
@@ -237,10 +225,8 @@ bool renderer::create_index_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buffer,
     init_data.pSysMem = index_data;
 
     HRESULT hr = device->CreateBuffer(&buffer_desc, &init_data, buffer.GetAddressOf());
-    if (FAILED(hr)) {
-        logger::log("Failed to create buffer for index");
+    if (FAILED(hr))
         return false;
-    }
 
     return true;
 }
@@ -253,9 +239,9 @@ bool renderer::create_constant_buffer(Microsoft::WRL::ComPtr<ID3D11Buffer>& buff
     cbd.CPUAccessFlags = 0;
 
     HRESULT hr = device->CreateBuffer(&cbd, nullptr, buffer.GetAddressOf());
-    if (FAILED(hr)) {
-        // Handle error (log, assert, etc.)
-    }
+    if (FAILED(hr))
+        return false;
+
     return true;
 }
 
