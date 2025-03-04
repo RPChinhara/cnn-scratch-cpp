@@ -112,6 +112,8 @@ bool renderer::create_rasterizer_state() {
     if (FAILED(hr))
         return false;
 
+    device_context->RSSetState(rasterizer_state.Get());
+
     return true;
 }
 
