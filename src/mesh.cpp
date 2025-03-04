@@ -1,5 +1,4 @@
 #include "mesh.h"
-#include "logger.h"
 #include "renderer.h"
 
 mesh::mesh(const vertex* vertices, size_t vertex_count, const uint32_t* indices, size_t index_count) {
@@ -8,15 +7,11 @@ mesh::mesh(const vertex* vertices, size_t vertex_count, const uint32_t* indices,
 }
 
 bool mesh::init(renderer* r) {
-    if (!r->create_vertex_buffer(vertex_buffer, vertices.data(), sizeof(vertex), vertices.size())) {
-        logger::log("Failed to create vertex buffer");
+    if (!r->create_vertex_buffer(vertex_buffer, vertices.data(), sizeof(vertex), vertices.size()))
         return false;
-    }
 
-    if (!r->create_index_buffer(index_buffer, indices.data(), indices.size())) {
-        logger::log("Failed to create index buffer");
+    if (!r->create_index_buffer(index_buffer, indices.data(), indices.size()))
         return false;
-    }
 
     return true;
 }
