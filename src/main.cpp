@@ -1,5 +1,4 @@
 #include "camera.h"
-#include "input_handler.h"
 #include "mesh.h"
 #include "renderer.h"
 #include "scene.h"
@@ -13,7 +12,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     window win(hInstance);
     renderer r(win.get_hwnd());
     camera cam;
-    input_handler input;
     scene main_scene;
 
     if (!r.init())
