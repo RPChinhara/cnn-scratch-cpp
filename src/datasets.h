@@ -6,11 +6,6 @@
 #include <string>
 #include <vector>
 
-struct imdb {
-    tensor x;
-    tensor y;
-};
-
 struct iris {
     tensor x;
     tensor y;
