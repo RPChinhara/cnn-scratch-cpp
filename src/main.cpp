@@ -10,8 +10,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
-    window window(hInstance);
-    renderer r(window.get_hwnd());
+    window win(hInstance);
+    renderer r(win.get_hwnd());
     camera cam;
     input_handler input;
     scene main_scene;
@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     if (!main_scene.load(&r))
         return -1;
 
-    while (window.process_messages()) {
+    while (win.process_messages()) {
         input.update(cam);
         main_scene.draw(r, cam);
     }
