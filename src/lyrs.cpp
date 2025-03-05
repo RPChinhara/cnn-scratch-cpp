@@ -3,7 +3,6 @@
 #include "arrs.h"
 #include "linalg.h"
 #include "rand.h"
-#include "strings.h"
 
 #include <random>
 #include <sstream>
