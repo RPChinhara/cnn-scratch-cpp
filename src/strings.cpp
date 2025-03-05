@@ -3,17 +3,6 @@
 #include <regex>
 #include <sstream>
 
-// TODO: I may not need this file string because first regex_replace() is definetely redundant, and lower() and tokenizer is used in certain files.
-std::string lower(const std::string& text) {
-    std::string result;
-
-    for (auto c : text) {
-        result += std::tolower(c);
-    }
-
-    return result;
-}
-
 std::string regex_replace(const std::string& in, const std::string& pattern, const std::string& rewrite) {
     std::regex re(pattern);
     return std::regex_replace(in, re, rewrite);

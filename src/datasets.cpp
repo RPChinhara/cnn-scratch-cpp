@@ -55,6 +55,16 @@ std::vector<std::string> split_text(const std::string& text, const std::string& 
     return result;
 }
 
+std::string lower(const std::string& text) {
+    std::string result;
+
+    for (auto c : text) {
+        result += std::tolower(c);
+    }
+
+    return result;
+}
+
 std::array<std::vector<std::string>, 3> load_daily_dialog() {
     std::ifstream file("datasets/daily_dialog/daily_dialog.csv");
     if (!file) return {};  // Handle file open failure.
