@@ -23,7 +23,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return -1;
 
     while (win.process_messages()) {
-        input.update(cam);
+        win.update_camera(cam);
+        win.handle_mouse(cam);
         main_scene.draw(r, cam);
     }
 
