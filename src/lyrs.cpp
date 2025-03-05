@@ -6,6 +6,7 @@
 #include "strings.h"
 
 #include <random>
+#include <sstream>
 #include <unordered_map>
 
 void min_max_scaler::fit(const tensor& data) {
@@ -19,6 +20,18 @@ tensor min_max_scaler::transform(const tensor& data) {
 
 tensor min_max_scaler::inverse_transform(const tensor& scaled_data) {
     return scaled_data * (data_max - data_min) + data_min;
+}
+
+std::vector<std::string> tokenizer(const std::string& text) {
+    std::vector<std::string> tokens;
+    std::stringstream ss(text);
+    std::string token;
+
+    while (ss >> token) {
+        tokens.push_back(token);
+    }
+
+    return tokens;
 }
 
 void text_vectorizer::build_vocab(const std::vector<std::string>& data) {
