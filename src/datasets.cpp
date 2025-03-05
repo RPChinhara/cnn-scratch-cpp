@@ -116,67 +116,6 @@ std::array<std::vector<std::string>, 3> load_daily_dialog() {
     return {std::move(src_inputs), std::move(tgt_inputs), std::move(tgt_outputs)};
 }
 
-imdb load_imdb() {
-    std::ifstream file("datasets/imdb.csv");
-
-    std::cout << "Loading imdb dataset..." << std::endl;
-
-    std::vector<std::string> reviews;
-    std::vector<float> sentiments;
-
-    std::string line;
-    std::getline(file, line);
-
-    while (std::getline(file, line)) {
-        size_t end_pos;
-        size_t end_pos_positive = line.find(",positive");
-        size_t end_pos_negative = line.find(",negative");
-
-        if (end_pos_positive != std::string::npos) {
-            end_pos = end_pos_positive;
-            sentiments.push_back(1.0f);
-        } else if (end_pos_negative != std::string::npos) {
-            end_pos = end_pos_negative;
-            sentiments.push_back(0.0f);
-        }
-
-        std::string text = line.substr(0, end_pos - 0);
-        reviews.push_back(text);
-    }
-
-    file.close();
-
-    for (auto i = 0; i < reviews.size(); ++i) {
-        reviews[i] = lower(reviews[i]);
-        reviews[i] = regex_replace(reviews[i], R"((https?:\/\/|www\.)\S+)", "");
-        reviews[i] = regex_replace(reviews[i], "<[^>]*>", " ");
-        reviews[i] = regex_replace(reviews[i], "\"", "");
-        reviews[i] = regex_replace(reviews[i], "[\".,!?#$%&()*+/:;<=>@\\[\\]\\^_`{|}~\\\\-]", " ");
-        reviews[i] = regex_replace(reviews[i], "[^\\x00-\\x7f]", " ");
-        reviews[i] = regex_replace(reviews[i], "[\xE2\x98\x80-\xE2\x9B\xBF]", "");
-        reviews[i] = regex_replace(reviews[i], "\\s+", " ");
-        reviews[i] = reviews[i].insert(0, "[START] ");
-
-        auto end_pos = std::find_if(reviews[i].rbegin(), reviews[i].rend(), [](char ch) { return !std::isspace(ch); }).base();
-        reviews[i].erase(end_pos, reviews[i].end());
-    }
-
-    size_t num_train = std::min(reviews.size(), static_cast<size_t>(25000));
-    std::vector<std::string> train(reviews.begin(), reviews.begin() + num_train);
-
-    const size_t max_tokens = 10000;
-    const size_t max_len = 200;
-
-    imdb data;
-    // data.x = text_vectorization(train, reviews, max_tokens, max_len);
-    data.y = zeros({sentiments.size(), 1});
-
-    for (auto i = 0; i < sentiments.size(); ++i)
-        data.y[i] = sentiments[i];
-
-    return data;
-}
-
 iris load_iris() {
     std::ifstream file("datasets/iris.csv");
 

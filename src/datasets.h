@@ -25,6 +25,5 @@ struct mnist {
 
 tensor load_aapl();
 std::array<std::vector<std::string>, 3> load_daily_dialog();
-imdb load_imdb();
 iris load_iris();
 mnist load_mnist();
